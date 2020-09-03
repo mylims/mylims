@@ -1,13 +1,11 @@
 
 import { UserProviderContract, ProviderUserContract } from '@ioc:Adonis/Addons/Auth'
 import { IocContract, inject } from '@adonisjs/fold'
-
 import * as ldap from 'ldapjs'
-import { HashContract } from '@ioc:Adonis/Core/Hash'
 
-@inject([null, null, 'Adonis/Core/Hash'])
+@inject([null, null])
 export class LDAPUser implements ProviderUserContract<any>{
-  constructor (public user: any, public config: LDAPProviderConfig, private hash: HashContract){}
+  constructor (public user: any, public config: LDAPProviderConfig){}
 
   public getId (): string | number | null {
     return this.user[this.config.uid] as string
@@ -18,7 +16,7 @@ export class LDAPUser implements ProviderUserContract<any>{
   public getRememberMeToken (): string | null {
     return null
   }
-  public setRememberMeToken (token: string): void {}
+  public setRememberMeToken (): void {}
 }
 
 export class LDAPAuthProvider implements UserProviderContract<LDAPUser> {
@@ -35,9 +33,6 @@ export class LDAPAuthProvider implements UserProviderContract<LDAPUser> {
     return this.container.make(LDAPUser, [user, this.config])
   }
   public findById (id: string | number): Promise<ProviderUserContract<LDAPUser>> {
-    throw new Error('Method not implemented.')
-  }
-  public findByUid (id: string): Promise<ProviderUserContract<LDAPUser>> {
     return new Promise((resolve, reject) => {
       this.ldapClient.search(this.config.baseDN, {
         filter: `(${this.config.uid}=*${id}*)`,
@@ -62,6 +57,9 @@ export class LDAPAuthProvider implements UserProviderContract<LDAPUser> {
         })
       })
     })
+  }
+  public findByUid (id: string): Promise<ProviderUserContract<LDAPUser>> {
+    return this.findById(id)
   }
   public findByRememberMeToken (_userId: string | number, _token: string): Promise<ProviderUserContract<LDAPUser>> {
     throw new Error('Method not implemented.')
