@@ -9,8 +9,7 @@
     "App": "app",
     "Contracts": "contracts",
     "Config": "config",
-    "Database": "database",
-    "Addons": "addons"
+    "Database": "database"
   },
   "preloads": [
     "./start/routes",
@@ -18,7 +17,9 @@
   ],
   "providers": [
     "./providers/AppProvider",
-    "@adonisjs/core"
+    "@adonisjs/core",
+    "@adonisjs/auth",
+    "@adonisjs/session"
   ],
   "metaFiles": [
     ".env",
