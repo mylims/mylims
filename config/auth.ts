@@ -33,7 +33,9 @@ const authConfig: AuthConfig = {
       driver: 'session',
       provider: {
         driver: 'ldap',
-        baseDN: 'ou=users,dc=example,dc=org',
+        appDN: 'cn=admin,dc=example,dc=org',
+        appPassword: 'adminpassword',
+        baseUserDN: 'ou=users,dc=example,dc=org',
         uid: 'uid',
       },
     },

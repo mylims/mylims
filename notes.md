@@ -1,2 +1,2 @@
 # Start LDAP
-docker run --rm --name openldap -p 1389:1389 -p 1636:1636 -e LDAP_ADMIN_USERNAME=admin -e LDAP_ADMIN_PASSWORD=admin -e LDAP_USERS=xavier,michael -e LDAP_PASSWORDS=123,456 bitnami/openldap:latest
+docker run --rm --name openldap -p 1389:1389 -p 1636:1636 bitnami/openldap:latest

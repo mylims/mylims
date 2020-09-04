@@ -1,7 +1,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/login', async ({ auth }) => {
-  return auth.attempt('xavier', '123')
+  return auth.attempt('user01', 'bitnami1')
 })
 
 Route.get('/user', async ({ auth }) => {
