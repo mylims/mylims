@@ -20,6 +20,9 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+import * as fs from 'fs'
+import * as path from 'path'
+
 Route.get('/login', async ({ auth }) => {
   const x = await auth.attempt('xavier', '123')
   console.log(x)
@@ -30,3 +33,7 @@ Route.get('/logged', async ({ auth }) => {
 
   return user
 })
+
+// Require route from addons
+const addons = fs.readdirSync(path.join('..', 'addons'))
+addons.map(addon => require(path.join('..', 'addons', addon, 'routes')))
