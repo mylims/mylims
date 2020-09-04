@@ -1,6 +1,4 @@
 import { IocContract } from '@adonisjs/fold'
-import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth'
-import { LDAPAuthProvider } from './LDAPAuthProvider'
 
 export default class AppProvider {
   constructor (protected container: IocContract) {
@@ -12,9 +10,6 @@ export default class AppProvider {
 
   public boot () {
     // IoC container is ready
-    this.container.with(['Adonis/Addons/Auth'], (Auth: AuthManagerContract) => {
-      Auth.extend('provider', 'ldap', (container, config) => new LDAPAuthProvider(container, config))
-    })
   }
 
   public shutdown () {

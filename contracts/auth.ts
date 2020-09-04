@@ -5,7 +5,7 @@
  * file.
  */
 
-import { LDAPProviderConfig, LDAPUser } from 'providers/LDAPAuthProvider'
+import { LDAPProviderConfig, LDAPUser } from '../addons/ldap/LDAPAuthProvider'
 
 declare module '@ioc:Adonis/Addons/Auth' {
   /*

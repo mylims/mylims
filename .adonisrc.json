@@ -17,6 +17,7 @@
   ],
   "providers": [
     "./providers/AppProvider",
+    "./addons/ldap/providers/LDAPProvider",
     "@adonisjs/core",
     "@adonisjs/auth",
     "@adonisjs/session"

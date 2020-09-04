@@ -23,15 +23,8 @@ import Route from '@ioc:Adonis/Core/Route'
 import * as fs from 'fs'
 import * as path from 'path'
 
-Route.get('/login', async ({ auth }) => {
-  const x = await auth.attempt('xavier', '123')
-  console.log(x)
-})
-Route.get('/logged', async ({ auth }) => {
-  const user = await auth.authenticate()
-  console.log(user)
-
-  return user
+Route.get('/', async () => {
+  return { hello: 'world' }
 })
 
 // Require route from addons
