@@ -6,9 +6,11 @@ import * as ldap from 'ldapjs'
 
 @inject([null, null])
 export class LDAPUser implements ProviderUserContract<any>{
-  private userClient = ldap.createClient({ url: 'ldap://127.0.0.1:1389' })
+  private userClient: ldap.Client
 
-  constructor (public user: any, public config: LDAPProviderConfig){}
+  constructor (public user: any, public config: LDAPProviderConfig){
+    this.userClient = ldap.createClient({ url: this.config.url })
+  }
 
   public getId (): string | number | null {
     return this.user[this.config.uid] as string
@@ -27,7 +29,7 @@ export class LDAPUser implements ProviderUserContract<any>{
 }
 
 export class LDAPAuthProvider implements UserProviderContract<LDAPUser> {
-  private adminClient = ldap.createClient({ url: 'ldap://127.0.0.1:1389' })
+  private adminClient: ldap.Client
   private adminBound = false
 
   private container: IocContract<ldap.SearchEntryObject>
@@ -36,6 +38,7 @@ export class LDAPAuthProvider implements UserProviderContract<LDAPUser> {
   constructor (container: IocContract, config: LDAPProviderConfig) {
     this.container = container
     this.config = config
+    this.adminClient = ldap.createClient({ url: this.config.url })
   }
 
   public getUserFor (user: any): ProviderUserContract<any> {
@@ -100,5 +103,6 @@ export interface LDAPProviderConfig {
   appDN: string
   appPassword: string
   baseUserDN: string
-  uid: string
+  uid: string,
+  url: string
 }
