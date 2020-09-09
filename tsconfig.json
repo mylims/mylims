@@ -27,6 +27,9 @@
       "@adonisjs/auth",
       "@adonisjs/session",
       "@zakodium/adonis-mongodb"
+    ],
+    "lib": [
+      "ES2019.Array"
     ]
   }
 }
