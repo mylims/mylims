@@ -1,9 +1,11 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/login', async ({ auth }) => {
-  return auth.attempt('user01', 'bitnami1')
+  const x = await auth.attempt('user02', 'bitnami2')
+  console.log(x)
+  return { test: true }
 })
 
 Route.get('/user', async ({ auth }) => {
-  return auth.authenticate()
-})
+  console.log(auth.user)
+}).middleware('auth')

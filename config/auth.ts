@@ -37,6 +37,8 @@ const authConfig: AuthConfig = {
         appPassword: 'adminpassword',
         baseUserDN: 'ou=users,dc=example,dc=org',
         uid: 'uid',
+        id: 'uid',
+        url: 'ldap://127.0.0.1:1389',
       },
     },
   },

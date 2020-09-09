@@ -2,7 +2,8 @@
   "typescript": true,
   "commands": [
     "./commands",
-    "@adonisjs/core/build/commands"
+    "@adonisjs/core/build/commands",
+    "@zakodium/adonis-mongodb/lib/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -17,10 +18,12 @@
   ],
   "providers": [
     "./providers/AppProvider",
-    "./addons/ldap/providers/LDAPProvider",
     "@adonisjs/core",
     "@adonisjs/auth",
-    "@adonisjs/session"
+    "@adonisjs/session",
+    "@zakodium/adonis-mongodb",
+    "./addons/ldap/providers/LDAPProvider",
+    "./addons/user/providers/UserProvider"
   ],
   "metaFiles": [
     ".env",

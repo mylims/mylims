@@ -3,6 +3,7 @@ import { UserProviderContract, ProviderUserContract } from '@ioc:Adonis/Addons/A
 import { IocContract, inject } from '@adonisjs/fold'
 
 import * as ldap from 'ldapjs'
+import { UserManager } from 'addons/user/UserManager'
 
 @inject([null, null])
 export class LDAPUser implements ProviderUserContract<any>{
@@ -13,11 +14,11 @@ export class LDAPUser implements ProviderUserContract<any>{
   }
 
   public getId (): string | number | null {
-    return this.user[this.config.uid] as string
+    return this.user['ldap_auth'] as string
   }
   public verifyPassword (_plainPassword: string) {
     return new Promise<boolean>(resolve => {
-      this.userClient.bind(`cn=${this.user[this.config.uid]},${this.config.baseUserDN}`, _plainPassword, err => {
+      this.userClient.bind(`cn=${this.user['ldap_auth']},${this.config.baseUserDN}`, _plainPassword, err => {
         resolve(err ? false : true)
       })
     })
@@ -35,7 +36,7 @@ export class LDAPAuthProvider implements UserProviderContract<LDAPUser> {
   private container: IocContract<ldap.SearchEntryObject>
   private config: LDAPProviderConfig
 
-  constructor (container: IocContract, config: LDAPProviderConfig) {
+  constructor (container: IocContract, config: LDAPProviderConfig, private UserManager: UserManager) {
     this.container = container
     this.config = config
     this.adminClient = ldap.createClient({ url: this.config.url })
@@ -45,7 +46,7 @@ export class LDAPAuthProvider implements UserProviderContract<LDAPUser> {
     return this.container.make(LDAPUser, [user, this.config])
   }
 
-  public findById (id: string | number): Promise<ProviderUserContract<LDAPUser>> {
+  public findById (id: string): Promise<ProviderUserContract<LDAPUser>> {
     return new Promise(resolve => {
       this._adminBind(err => {
         if(err) {
@@ -53,7 +54,7 @@ export class LDAPAuthProvider implements UserProviderContract<LDAPUser> {
         }
 
         this.adminClient.search(this.config.baseUserDN, {
-          filter: `(${this.config.uid}=*${id}*)`,
+          filter: `(${this.config.id}=*${id}*)`,
           scope: 'sub',
         }, (err, res) => {
           if(err) {
@@ -64,15 +65,54 @@ export class LDAPAuthProvider implements UserProviderContract<LDAPUser> {
             foundEntries.push(entry.object)
           })
           res.on('end', () => {
-            resolve(this.getUserFor(foundEntries[0]))
+            if(foundEntries.length > 0) {
+              this.UserManager.getUser('ldap', id)
+                .then(user => resolve(this.getUserFor(user)))
+                .catch(err => {
+                  throw err
+                })
+            } else {
+              resolve(undefined)
+            }
           })
         })
       })
     })
   }
 
-  public findByUid (id: string): Promise<ProviderUserContract<LDAPUser>> {
-    return this.findById(id)
+  public findByUid (uid: string): Promise<ProviderUserContract<LDAPUser>> {
+    return new Promise(resolve => {
+      this._adminBind(err => {
+        if(err) {
+          return resolve(undefined)
+        }
+
+        this.adminClient.search(this.config.baseUserDN, {
+          filter: `(${this.config.uid}=*${uid}*)`,
+          scope: 'sub',
+        }, (err, res) => {
+          if(err) {
+            return resolve(undefined)
+          }
+          const foundEntries: ldap.SearchEntryObject[] = []
+          res.on('searchEntry', entry => {
+            foundEntries.push(entry.object)
+          })
+          res.on('end', () => {
+            console.log(foundEntries.length)
+            if(foundEntries.length > 0) {
+              this.UserManager.getUser('ldap', foundEntries[0][this.config.id] as string)
+                .then(user => resolve(this.getUserFor(user)))
+                .catch(err => {
+                  throw err
+                })
+            } else {
+              resolve(undefined)
+            }
+          })
+        })
+      })
+    })
   }
   public findByRememberMeToken (_userId: string | number, _token: string): Promise<ProviderUserContract<LDAPUser>> {
     throw new Error('Method not implemented.')
@@ -104,5 +144,6 @@ export interface LDAPProviderConfig {
   appPassword: string
   baseUserDN: string
   uid: string,
+  id: string,
   url: string
 }
