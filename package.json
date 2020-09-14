@@ -5,8 +5,7 @@
   "scripts": {
     "build": "node ace build",
     "start": "node ace serve --watch",
-    "lint": "eslint . --ext=.ts",
-    "postinstall": "node postinstall.js"
+    "lint": "eslint . --ext=.ts"
   },
   "devDependencies": {
     "@types/npm": "^2.0.31",
