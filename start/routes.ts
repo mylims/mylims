@@ -31,3 +31,5 @@ Route.get('/', async () => {
 const addons = fs.readdirSync(path.join('..', 'build', 'addons'))
 console.log(addons)
 addons.map(addon => require(path.join('..', 'build', 'addons', addon, 'routes')))
+
+Route.get('/addons', async () => addons)
