@@ -5,9 +5,6 @@
  * file.
  */
 
-import { LDAPProviderConfig } from '../addons/ldap/LDAPAuthProvider'
-import { UserBuilder } from 'providers/user/UserModel'
-
 declare module '@ioc:Adonis/Addons/Auth' {
   /*
   |--------------------------------------------------------------------------
@@ -34,9 +31,9 @@ declare module '@ioc:Adonis/Addons/Auth' {
     | different database tables.
     |
     */
-    ldapUser: {
-      implementation: UserProviderContract<ReturnType<typeof UserBuilder>>,
-      config: LDAPProviderConfig
+    user: {
+      implementation: UserProviderContract<any>,
+      config: {}
     }
   }
 
@@ -66,9 +63,9 @@ declare module '@ioc:Adonis/Addons/Auth' {
     | the `user` provider for fetching user details.
     |
     */
-    ldap: {
-      implementation: SessionGuardContract<'ldapUser', 'ldap'>,
-      config: SessionGuardConfig<'ldapUser'>
+    user: {
+      implementation: SessionGuardContract<'user', 'user'>,
+      config: SessionGuardConfig<'user'>
     }
   }
 }

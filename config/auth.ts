@@ -17,28 +17,12 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth'
 |
 */
 const authConfig: AuthConfig = {
-  guard: 'ldap',
+  guard: 'user',
   list: {
-    /*
-    |--------------------------------------------------------------------------
-    | Web Guard
-    |--------------------------------------------------------------------------
-    |
-    | Web guard uses classic old school sessions for authenticating users.
-    | If you are building a standard web application, it is recommended to
-    | use web guard with session driver
-    |
-    */
-    ldap: {
+    user: {
       driver: 'session',
       provider: {
-        driver: 'ldap',
-        appDN: 'cn=admin,dc=example,dc=org',
-        appPassword: 'adminpassword',
-        baseUserDN: 'ou=users,dc=example,dc=org',
-        uid: 'uid',
-        id: 'uid',
-        url: 'ldap://127.0.0.1:1389',
+        driver: '',
       },
     },
   },

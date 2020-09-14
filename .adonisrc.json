@@ -22,8 +22,7 @@
     "@adonisjs/core",
     "@adonisjs/auth",
     "@adonisjs/session",
-    "@zakodium/adonis-mongodb",
-    "./addons/ldap/providers/LDAPProvider"
+    "@zakodium/adonis-mongodb"
   ],
   "metaFiles": [
     ".env",
