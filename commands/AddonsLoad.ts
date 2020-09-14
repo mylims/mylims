@@ -17,6 +17,7 @@ export default class AddonsLoad extends BaseCommand {
 
     await this.registerProviders(addons).catch(err => this.logger.error(`Error while registering addons providers : ${err}`))
     await this.installDependencies(addons).catch(() => this.logger.error('Error while installing addons dependencies.'))
+    await this.unexcludeAddonsTs().catch(() => this.logger.error('Failed to unexclude addons folder.'))
 
     this.logger.success('Successfully loaded addons.')
   }
@@ -78,5 +79,11 @@ export default class AddonsLoad extends BaseCommand {
     )
     await fs.writeFile('.adonisrc.json', JSON.stringify(rc, null, 2))
     this.logger.success('Registered addons providers')
+  }
+
+  private async unexcludeAddonsTs() {
+    const tsConfig = JSON.parse(await fs.readFile('tsconfig.json', { encoding: 'utf-8' }))
+    tsConfig.exclude = tsConfig.exclude.filter(excluded => excluded !== 'addons')
+    await fs.writeFile('tsconfig.json', JSON.stringify(tsConfig, null, 2))
   }
 }
