@@ -1,6 +1,6 @@
 import { IocContract } from '@adonisjs/fold'
-import { UserManager } from '../UserManager'
-import { UserBuilder } from '../UserModel'
+import { UserManager } from './UserManager'
+import { UserBuilder } from './UserModel'
 
 export default class UserProvider {
   constructor (protected container: IocContract) {

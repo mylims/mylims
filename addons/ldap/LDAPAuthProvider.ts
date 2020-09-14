@@ -1,10 +1,10 @@
 
 import { UserProviderContract, ProviderUserContract } from '@ioc:Adonis/Addons/Auth'
 import { IocContract, inject } from '@adonisjs/fold'
+import { UserBuilder } from 'providers/user/UserModel'
 
 import * as ldap from 'ldapjs'
-import { UserManager } from 'addons/user/UserManager'
-import { UserBuilder } from 'addons/user/UserModel'
+import { UserManager } from 'providers/user/UserManager'
 
 type MongoUser = InstanceType<ReturnType<typeof UserBuilder>>
 

@@ -1,4 +1,4 @@
-import { UserBuilder} from './UserModel'
+import { UserBuilder } from './UserModel'
 
 export class UserManager {
   constructor (private User: ReturnType<typeof UserBuilder>){ }

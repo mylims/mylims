@@ -6,7 +6,7 @@
  */
 
 import { LDAPProviderConfig } from '../addons/ldap/LDAPAuthProvider'
-import { UserBuilder } from 'addons/user/UserModel'
+import { UserBuilder } from 'providers/user/UserModel'
 
 declare module '@ioc:Adonis/Addons/Auth' {
   /*
