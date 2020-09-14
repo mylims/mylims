@@ -28,6 +28,5 @@ Route.get('/', async () => {
 })
 
 // Require route from addons
-/*const addons = fs.readdirSync(path.join('..', 'addons'))
+const addons = fs.readdirSync(path.join('..', 'addons'))
 addons.map(addon => require(path.join('..', 'addons', addon, 'routes')))
-*/
