@@ -19,17 +19,11 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-
-import * as fs from 'fs'
-import * as path from 'path'
+import AddonsManager from 'App/AddonsManager'
 
 Route.get('/', async ({ }) => {
   return { hello: 'world' }
 })
 
 // Require route from addons
-const base = path.resolve(path.join('.'))
-const addons = fs.readdirSync(path.join(base, 'addons'))
-addons.map(addon => require(path.join(base, 'addons', addon, 'routes')))
-
-Route.get('/addons', async () => addons)
+AddonsManager.registerRoutes()
