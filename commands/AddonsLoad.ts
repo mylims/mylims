@@ -4,6 +4,7 @@ import { RcFile } from '@ioc:Adonis/Core/Application'
 import * as fs from 'fs/promises'
 import * as path from 'path'
 import * as cp from 'child_process'
+import { win32 } from 'path'
 
 export default class AddonsLoad extends BaseCommand {
   public static commandName = 'addons:load'
@@ -53,7 +54,7 @@ export default class AddonsLoad extends BaseCommand {
       await fs.writeFile('package.json', JSON.stringify(elnManifest, null, 2))
       this.logger.info('Merged addons dependencies')
       this.logger.info('Installing dependencies')
-      const result = cp.spawnSync('npm.cmd', ['install'], { cwd: '.' })
+      const result = cp.spawnSync(`npm${process.platform === 'win32' ? '.cmd' : ''}`, ['install'], { cwd: '.' })
       if(result.status !== 0) {
         throw new Error('Fail to install dependencies')
       }
@@ -81,7 +82,7 @@ export default class AddonsLoad extends BaseCommand {
     this.logger.success('Registered addons providers')
   }
 
-  private async unexcludeAddonsTs() {
+  private async unexcludeAddonsTs () {
     const tsConfig = JSON.parse(await fs.readFile('tsconfig.json', { encoding: 'utf-8' }))
     tsConfig.exclude = tsConfig.exclude.filter(excluded => excluded !== 'addons')
     await fs.writeFile('tsconfig.json', JSON.stringify(tsConfig, null, 2))

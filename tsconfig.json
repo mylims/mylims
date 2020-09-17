@@ -10,7 +10,7 @@
   "compilerOptions": {
     "outDir": "build",
     "rootDir": "./",
-    "sourceMap": true,
+    "sourceMap": false,
     "paths": {
       "App/*": [
         "./app/*"
@@ -26,7 +26,8 @@
       "@adonisjs/core",
       "@adonisjs/auth",
       "@adonisjs/session",
-      "@zakodium/adonis-mongodb"
+      "@zakodium/adonis-mongodb",
+      "node"
     ],
     "lib": [
       "ES2019.Array"
