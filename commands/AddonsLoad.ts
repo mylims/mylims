@@ -4,7 +4,6 @@ import { RcFile } from '@ioc:Adonis/Core/Application'
 import * as fs from 'fs/promises'
 import * as path from 'path'
 import * as cp from 'child_process'
-import { win32 } from 'path'
 
 export default class AddonsLoad extends BaseCommand {
   public static commandName = 'addons:load'

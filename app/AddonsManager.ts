@@ -10,12 +10,6 @@ export default class AddonsManager {
     return fs.readdirSync(path.join(AddonsManager.base, 'addons'))
   }
 
-  private static getRoutesFiles () {
-    return AddonsManager.getAddons()
-      .map(addon => path.join(AddonsManager.base, 'addons', addon, 'routes'))
-      .filter(routeFile => fs.existsSync(routeFile))
-  }
-
   public static registerRoutes () {
     AddonsManager.getRoutesFiles().map(require)
   }
@@ -24,5 +18,11 @@ export default class AddonsManager {
     return AddonsManager.getAddons()
       .filter((addon) => fs.existsSync(path.join(AddonsManager.base, 'addons', addon, 'migrations')))
       .map((addon) => path.join('addons', addon, 'migrations'))
+  }
+
+  private static getRoutesFiles () {
+    return AddonsManager.getAddons()
+      .map(addon => path.join(AddonsManager.base, 'addons', addon, 'routes'))
+      .filter(routeFile => fs.existsSync(routeFile))
   }
 }
