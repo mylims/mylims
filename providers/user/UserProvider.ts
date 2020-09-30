@@ -1,27 +1,25 @@
-import { IocContract } from '@adonisjs/fold'
-import { UserManager } from './UserManager'
-import { UserBuilder } from './UserModel'
+import { IocContract } from '@adonisjs/fold';
+
+import { UserManager } from './UserManager';
+import { UserBuilder } from './UserModel';
 
 export default class UserProvider {
-  constructor (protected container: IocContract) {
-  }
+  public constructor(protected container: IocContract) {}
 
-  public register () {
+  public register() {
     this.container.singleton('Zakodium/User', () => {
-      const { Model: model } = this.container.use('Mongodb/Model')
-      return new UserManager(UserBuilder(model))
-    })
+      const { Model: model } = this.container.use('Mongodb/Model');
+      return new UserManager(UserBuilder(model));
+    });
   }
 
-  public boot () {
+  public boot() {}
 
-  }
-
-  public shutdown () {
+  public shutdown() {
     // Cleanup, since app is going down
   }
 
-  public ready () {
+  public ready() {
     // App is ready
   }
 }

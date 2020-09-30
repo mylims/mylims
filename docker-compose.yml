@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   mongo:
     image: mongo:4.4
@@ -7,10 +7,12 @@ services:
       - 127.0.0.1:27017:27017
     volumes:
       - mongo-data:/data/db
+
   openldap:
     image: bitnami/openldap:latest
     ports:
       - 1389:1389
       - 1636:1636
+
 volumes:
   mongo-data:
