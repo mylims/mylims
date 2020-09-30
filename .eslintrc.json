@@ -1,5 +1,3 @@
 {
-  "extends": [
-    "plugin:adonis/typescriptApp"
-  ]
+  "extends": ["@zakodium/eslint-config/adonis"]
 }
