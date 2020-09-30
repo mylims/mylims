@@ -8,6 +8,7 @@
     "lint": "eslint . --ext=.ts"
   },
   "devDependencies": {
+    "@types/ldapjs": "^1.0.9",
     "@types/node": "^14.10.3",
     "@types/npm": "^2.0.31",
     "adonis-preset-ts": "^1.0.4",
@@ -29,6 +30,7 @@
     "@zakodium/adonis-mongodb": "^0.2.1",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "ldapjs": "^2.1.1"
   }
 }
