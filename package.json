@@ -28,13 +28,13 @@
     "@adonisjs/assembler": "^2.1.5",
     "@adonisjs/auth": "^4.3.1",
     "@adonisjs/core": "^5.0.0-preview-rc-1.12",
-    "@adonisjs/fold": "^6.4.0",
+    "@adonisjs/fold": "^6.4.1",
     "@adonisjs/session": "^3.1.2",
     "@zakodium/adonis-mongodb": "^0.2.1",
+    "ldapjs": "^2.1.1",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
-    "source-map-support": "^0.5.19",
-    "ldapjs": "^2.1.1"
+    "source-map-support": "^0.5.19"
   },
   "prettier": {
     "arrowParens": "always",

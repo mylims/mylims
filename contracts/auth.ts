@@ -32,9 +32,9 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     user: {
-      implementation: UserProviderContract<any>,
-      config: {}
-    }
+      implementation: UserProviderContract<any>;
+      config: {};
+    };
   }
 
   /*
@@ -64,8 +64,8 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     user: {
-      implementation: SessionGuardContract<'user', 'user'>,
-      config: SessionGuardConfig<'user'>
-    }
+      implementation: SessionGuardContract<'user', 'user'>;
+      config: SessionGuardConfig<'user'>;
+    };
   }
 }

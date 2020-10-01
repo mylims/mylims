@@ -1,5 +1,5 @@
-import { MongodbConfig } from '@ioc:Mongodb/Database'
-import Env from '@ioc:Adonis/Core/Env'
+import Env from '@ioc:Adonis/Core/Env';
+import { MongodbConfig } from '@ioc:Mongodb/Database';
 
 const config: MongodbConfig = {
   default: 'mongodb',
@@ -9,6 +9,6 @@ const config: MongodbConfig = {
       database: Env.getOrFail('MONGODB_DATABASE') as string,
     },
   },
-}
+};
 
-export default config
+export default config;

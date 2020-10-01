@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ldapjs": "^2.1.1"
+    "ldapjs": "^2.1.1",
+    "@adonisjs/fold": "^6.4.1"
   },
   "devDependencies": {
     "@types/ldapjs": "^1.0.9"

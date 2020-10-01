@@ -1,31 +1,35 @@
-import { IocContract } from '@adonisjs/fold'
-import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth'
-import { LDAPAuthProvider } from '../LDAPAuthProvider'
-import { UserManager } from 'providers/user/UserManager'
+import { IocContract } from '@adonisjs/fold';
+import { UserManager } from 'providers/user/UserManager';
+
+import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
+
+import { LDAPAuthProvider } from '../LDAPAuthProvider';
 
 export default class LDAPProvider {
-  constructor (protected container: IocContract) {
-  }
+  public constructor(protected container: IocContract) {}
 
-  public register () {
+  public register() {}
 
-  }
-
-  public boot () {
+  public boot() {
     // IoC container is ready
     this.container.with(
       ['Adonis/Addons/Auth', 'Zakodium/User'],
       (Auth: AuthManagerContract, UserManager: UserManager) => {
-        Auth.extend('provider', 'ldap', (container, config) => new LDAPAuthProvider(container, config, UserManager))
-      }
-    )
+        Auth.extend(
+          'provider',
+          'ldap',
+          (container, config) =>
+            new LDAPAuthProvider(container, config, UserManager),
+        );
+      },
+    );
   }
 
-  public shutdown () {
+  public shutdown() {
     // Cleanup, since app is going down
   }
 
-  public ready () {
+  public ready() {
     // App is ready
   }
 }
