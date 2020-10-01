@@ -10,6 +10,9 @@ import {
 
 type MongoUser = InstanceType<ReturnType<typeof UserBuilder>>;
 
+/**
+ * LDAP user works a bridge between the provider and the guard
+ */
 @inject([null, null])
 export class LDAPUser implements ProviderUserContract<MongoUser> {
   private userClient: ldap.Client;
@@ -19,14 +22,22 @@ export class LDAPUser implements ProviderUserContract<MongoUser> {
     public config: LDAPProviderConfig,
   ) {
     this.userClient = ldap.createClient({ url: this.config.url });
+    this.user = user;
   }
 
+  /**
+   * Returns the value of the user id
+   */
   public getId(): string | null {
     if (this.user === null || this.user['ldap_auth'] === null) {
       return null;
     }
     return this.user['ldap_auth'] as string;
   }
+
+  /**
+   * Verifies the user password
+   */
   public verifyPassword(_plainPassword: string) {
     console.log('verifyPassword');
     return new Promise<boolean>((resolve) => {
@@ -39,12 +50,25 @@ export class LDAPUser implements ProviderUserContract<MongoUser> {
       );
     });
   }
+
+  /**
+   * Returns the user remember me token or null
+   */
   public getRememberMeToken(): string | null {
     return null;
   }
-  public setRememberMeToken(): void {}
+
+  /**
+   * Updates user remember me token
+   */
+  public setRememberMeToken(_token: string): void {
+    throw new Error('Method not implemented.');
+  }
 }
 
+/**
+ * Database provider to lookup users inside the LDAP
+ */
 export class LDAPAuthProvider implements UserProviderContract<MongoUser> {
   private adminClient: ldap.Client;
   private adminBound = false;
@@ -62,11 +86,17 @@ export class LDAPAuthProvider implements UserProviderContract<MongoUser> {
     this.adminClient = ldap.createClient({ url: this.config.url });
   }
 
+  /**
+   * Returns an instance of provider user
+   */
   public getUserFor(user: InstanceType<ReturnType<typeof UserBuilder>>) {
     console.log('getUserFor');
     return this.container.make(LDAPUser, [user, this.config]);
   }
 
+  /**
+   * Returns the user row using the primary key
+   */
   public findById(id: string): Promise<ProviderUserContract<MongoUser>> {
     console.log('findById');
     return new Promise((resolve) => {
@@ -106,6 +136,10 @@ export class LDAPAuthProvider implements UserProviderContract<MongoUser> {
     });
   }
 
+  /**
+   * Returns the user row by searching the uidValue against
+   * their defined uids.
+   */
   public findByUid(uid: string): Promise<ProviderUserContract<MongoUser>> {
     console.log('findByUid');
     return new Promise((resolve) => {
@@ -148,12 +182,20 @@ export class LDAPAuthProvider implements UserProviderContract<MongoUser> {
       });
     });
   }
+
+  /**
+   * Returns a user from their remember me token
+   */
   public findByRememberMeToken(
     _userId: string | number,
     _token: string,
   ): Promise<ProviderUserContract<MongoUser>> {
     throw new Error('Method not implemented.');
   }
+
+  /**
+   * Updates the user remember me token
+   */
   public updateRememberMeToken(
     _authenticatable: ProviderUserContract<MongoUser>,
   ): Promise<void> {
