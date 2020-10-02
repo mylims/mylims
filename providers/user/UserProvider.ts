@@ -12,14 +12,4 @@ export default class UserProvider {
       return new UserManager(UserBuilder(model));
     });
   }
-
-  public boot() {}
-
-  public shutdown() {
-    // Cleanup, since app is going down
-  }
-
-  public ready() {
-    // App is ready
-  }
 }

@@ -15,7 +15,6 @@
   "preloads": ["./start/routes", "./start/kernel"],
   "providers": [
     "./addons/ldap/providers/LDAPProvider",
-    "./providers/AppProvider",
     "./providers/user/UserProvider",
     "@adonisjs/core",
     "@adonisjs/auth",

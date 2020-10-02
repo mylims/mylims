@@ -8,8 +8,6 @@ import { LDAPAuthProvider } from '../LDAPAuthProvider';
 export default class LDAPProvider {
   public constructor(protected container: IocContract) {}
 
-  public register() {}
-
   public boot() {
     // IoC container is ready
     this.container.with(

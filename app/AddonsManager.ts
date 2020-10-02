@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+// TODO: not use a class for this
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class AddonsManager {
   private static base = path.resolve(path.join('.'));
 
