@@ -1,10 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+import Application from '@ioc:Adonis/Core/Application';
+
 // TODO: not use a class for this
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class AddonsManager {
-  private static base = path.resolve(path.join('.'));
+  private static base = Application.makePath('.');
 
   private constructor() {}
 
@@ -28,7 +30,9 @@ export default class AddonsManager {
 
   private static getRoutesFiles() {
     return AddonsManager.getAddons()
-      .map((addon) => path.join(AddonsManager.base, 'addons', addon, 'routes'))
+      .map((addon) =>
+        path.join(AddonsManager.base, 'addons', addon, 'routes.js'),
+      )
       .filter((routeFile) => fs.existsSync(routeFile));
   }
 }
