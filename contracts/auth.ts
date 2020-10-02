@@ -1,3 +1,8 @@
+import {
+  LDAPAuthProvider,
+  LDAPProviderConfig,
+} from 'addons/ldap/LDAPAuthProvider';
+
 /**
  * Contract source: https://git.io/JvyKD
  *
@@ -32,9 +37,14 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     user: {
-      implementation: UserProviderContract<any>,
-      config: {}
-    }
+      implementation: UserProviderContract<any>;
+      config: any;
+    };
+
+    ldap: {
+      implementation: LDAPAuthProvider;
+      config: LDAPProviderConfig;
+    };
   }
 
   /*
@@ -64,8 +74,13 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     user: {
-      implementation: SessionGuardContract<'user', 'user'>,
-      config: SessionGuardConfig<'user'>
-    }
+      implementation: SessionGuardContract<'user', 'user'>;
+      config: SessionGuardConfig<'user'>;
+    };
+
+    ldap: {
+      implementation: SessionGuardContract<'ldap', 'ldap'>;
+      config: SessionGuardConfig<'ldap'>;
+    };
   }
 }

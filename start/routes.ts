@@ -18,12 +18,13 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
-import AddonsManager from 'App/AddonsManager'
+import Route from '@ioc:Adonis/Core/Route';
 
-Route.get('/', async ({ }) => {
-  return { hello: 'world' }
-})
+import AddonsManager from 'App/AddonsManager';
+
+Route.get('/', async () => {
+  return { hello: 'world' };
+});
 
 // Require route from addons
-AddonsManager.registerRoutes()
+AddonsManager.registerRoutes();

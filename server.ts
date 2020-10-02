@@ -10,13 +10,11 @@
 |
 */
 
-import 'reflect-metadata'
-import sourceMapSupport from 'source-map-support'
-import { Ignitor } from '@adonisjs/core/build/src/Ignitor'
+import 'reflect-metadata';
+import { Ignitor } from '@adonisjs/core/build/src/Ignitor';
+import sourceMapSupport from 'source-map-support';
 
-sourceMapSupport.install({ handleUncaughtExceptions: false })
+sourceMapSupport.install({ handleUncaughtExceptions: false });
 
-new Ignitor(__dirname)
-  .httpServer()
-  .start()
-  .catch(console.error)
+// eslint-disable-next-line no-console
+new Ignitor(__dirname).httpServer().start().catch(console.error);

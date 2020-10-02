@@ -5,8 +5,8 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
-import { SessionConfig } from '@ioc:Adonis/Addons/Session'
+import { SessionConfig } from '@ioc:Adonis/Addons/Session';
+import Env from '@ioc:Adonis/Core/Env';
 
 const sessionConfig: SessionConfig = {
   /*
@@ -101,6 +101,6 @@ const sessionConfig: SessionConfig = {
   |
   */
   redisConnection: 'session',
-}
+};
 
-export default sessionConfig
+export default sessionConfig;

@@ -1,9 +1,7 @@
-'use strict';
-
-const childProcess = require('child_process');
+import { execFileSync } from 'child_process';
 
 try {
-  childProcess.execFileSync(
+  execFileSync(
     'docker-compose',
     [
       '-f',
@@ -19,6 +17,6 @@ try {
     },
   );
 } catch (e) {
-  process.stderr.write(e.stderr)
-  process.exit(1)
+  process.stderr.write(e.stderr);
+  process.exit(1);
 }
