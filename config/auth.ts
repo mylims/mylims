@@ -28,13 +28,13 @@ const authConfig: AuthConfig = {
     ldap: {
       driver: 'session',
       provider: {
-        id: '',
+        id: 'uid',
+        uid: 'uid',
         url: 'ldap://127.0.0.1:1389',
         driver: 'ldap',
         appDN: 'cn=admin,dc=example,dc=org',
         appPassword: 'adminpassword',
         baseUserDN: 'ou=users,dc=example,dc=org',
-        uid: 'uid',
       },
     },
   },
