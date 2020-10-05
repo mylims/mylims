@@ -8,11 +8,16 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  openldap:
+  ldap:
     image: bitnami/openldap:latest
     ports:
-      - 1389:1389
-      - 1636:1636
+      - '1389:1389'
+      - '1636:1636'
+    environment:
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=adminpassword
+      - LDAP_USERS=user01,user02
+      - LDAP_PASSWORDS=password1,password2
 
 volumes:
   mongo-data:
