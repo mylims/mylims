@@ -12,7 +12,10 @@
     "Config": "config",
     "Database": "database"
   },
-  "preloads": ["./start/routes", "./start/kernel"],
+  "preloads": [
+    "./start/routes",
+    "./start/kernel"
+  ],
   "providers": [
     "./addons/ldap/providers/LDAPProvider",
     "./providers/user/UserProvider",
@@ -21,5 +24,8 @@
     "@adonisjs/session",
     "@zakodium/adonis-mongodb"
   ],
-  "metaFiles": [".env", ".adonisrc.json"]
+  "metaFiles": [
+    ".env",
+    ".adonisrc.json"
+  ]
 }
