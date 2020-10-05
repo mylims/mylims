@@ -2,14 +2,51 @@
 
 > Electronic lab notebook for open science
 
-## Installation
+- [New ELN](#new-eln)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Run](#run)
+    - [Development](#development)
+    - [Production](#production)
+  - [Design](#design)
+    - [Core](#core)
+    - [Addons](#addons)
 
-Check the [install](./install.md) guide
+## Installation
+The following commands will respectively install the dependencies, build the core app and load the addons.
+```shell
+$ npm install
+$ npm run build
+$ node ace addons:load
+```
 
 ## Configuration
+Edit it as needed. Example: auth config for ldap provider.
 
-TODO
+## Run
+### Development
+The following commands will start mongodb and ldap (to test the ldap provider) containers, setup a replica set on the mongodb server (to support migrations) and start the development server.
+```shell
+$ docker-compose up -d
+$ node reset-dev.js
+$ npm start
+```
+### Production
+TBD
 
 ## Design
+The new ELN is meant to be highly modular, allowing developers to add new functionnalities by creating addons.
 
-TODO
+### Core
+The core part is built on top of [AdonisJS](//preview.adonisjs.com/) framework. The core provides commons parts such as addons loading, user model and ELN routes.
+
+New ELN uses MongoDB as the default database system using the [adonis-mongodb](https://github.com/zakodium/adonis-mongodb) provider.
+
+### Addons
+Addons can provide functionalities to the platform by exposing the following components:
+* API routes in `routes.ts`
+* External dependencies in `package.json`
+* Adonis providers `providers/*`
+* Migrations `migrations/*`
+
+An addons should be stored as a subfolder in the `addons` folder. It can be named as anything valid for the filesystem.
