@@ -1,4 +1,5 @@
 # contracts/auth.ts
+
 ```ts
 import { LDAPProviderConfig } from '../addons/ldap/LDAPAuthProvider'
 import { UserBuilder } from 'providers/user/UserModel'
@@ -6,17 +7,18 @@ import { UserBuilder } from 'providers/user/UserModel'
 // provider list:
 ldapUser: {
   implementation: UserProviderContract<ReturnType<typeof UserBuilder>>,
-  config: LDAPProviderConfig
-}
+  config: LDAPProviderConfig,
+},
 
 // guards list:
 ldap: {
   implementation: SessionGuardContract<'ldapUser', 'ldap'>,
-  config: SessionGuardConfig<'ldapUser'>
-}
+  config: SessionGuardConfig<'ldapUser'>,
+},
 ```
 
 # config/auth.ts
+
 ```ts
 const authConfig: AuthConfig = {
   guard: 'ldap',
@@ -44,5 +46,5 @@ const authConfig: AuthConfig = {
       },
     },
   },
-}
+};
 ```
