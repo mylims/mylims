@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 
 import { BaseCommand } from '@adonisjs/ace';
+import Build from '@adonisjs/assembler/build/commands/Build';
 
 import { RcFile } from '@ioc:Adonis/Core/Application';
 
@@ -21,5 +22,7 @@ export default class AddonsPrune extends BaseCommand {
       (provider) => provider.includes('addons') === false,
     );
     await writeFile(rcFilePath, JSON.stringify(rcFile, null, 2));
+    this.logger.success('Addons pruned.');
+    await this.kernel.runCommand(new Build(this.application, this.kernel), []);
   }
 }

@@ -1,9 +1,9 @@
 {
   "typescript": true,
   "commands": [
-    "./commands",
     "@adonisjs/core/build/commands",
-    "@zakodium/adonis-mongodb/lib/commands"
+    "@zakodium/adonis-mongodb/lib/commands",
+    "./commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
