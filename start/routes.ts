@@ -20,11 +20,11 @@
 
 import Route from '@ioc:Adonis/Core/Route';
 
-import AddonsManager from 'App/AddonsManager';
+import { registerRoutes } from 'App/AddonsManager';
 
 Route.get('/', async () => {
   return { hello: 'world' };
 });
 
 // Require route from addons
-AddonsManager.registerRoutes();
+registerRoutes();

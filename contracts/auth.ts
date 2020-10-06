@@ -35,8 +35,8 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     user: {
-      implementation: UserProviderContract<any>;
-      config: any;
+      implementation: UserProviderContract<unknown>;
+      config: unknown;
     };
 
     ldapUser: {
