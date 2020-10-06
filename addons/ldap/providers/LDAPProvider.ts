@@ -3,9 +3,9 @@ import { UserManager } from 'providers/user/UserManager';
 
 import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
 
-import { LDAPAuthProvider } from '../LDAPAuthProvider';
+import { LdapAuthProvider } from '../LdapAuthProvider';
 
-export default class LDAPProvider {
+export default class LdapProvider {
   public constructor(protected container: IocContract) {}
 
   public boot() {
@@ -17,7 +17,7 @@ export default class LDAPProvider {
           'provider',
           'ldap',
           (container, config) =>
-            new LDAPAuthProvider(container, config, UserManager),
+            new LdapAuthProvider(container, config, UserManager),
         );
       },
     );

@@ -1,4 +1,4 @@
-import { LDAPProviderConfig } from 'addons/ldap/LDAPAuthProvider';
+import { LdapProviderConfig } from 'addons/ldap/LdapAuthProvider';
 import { UserBuilder } from 'providers/user/UserModel';
 
 /**
@@ -41,7 +41,7 @@ declare module '@ioc:Adonis/Addons/Auth' {
 
     ldapUser: {
       implementation: UserProviderContract<ReturnType<typeof UserBuilder>>;
-      config: LDAPProviderConfig;
+      config: LdapProviderConfig;
     };
   }
 

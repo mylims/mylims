@@ -1,4 +1,4 @@
-import { IocContract, inject } from '@adonisjs/fold';
+import { IocContract } from '@adonisjs/fold';
 import * as ldap from 'ldapjs';
 import { UserManager } from 'providers/user/UserManager';
 import { UserBuilder } from 'providers/user/UserModel';
@@ -8,76 +8,31 @@ import {
   ProviderUserContract,
 } from '@ioc:Adonis/Addons/Auth';
 
-type MongoUser = InstanceType<ReturnType<typeof UserBuilder>>;
+import { LDAPUser, MongoUser } from './LdapUser';
 
-/**
- * LDAP user works a bridge between the provider and the guard
- */
-@inject([null, null])
-export class LDAPUser implements ProviderUserContract<MongoUser> {
-  private userClient: ldap.Client;
-
-  public constructor(
-    public user: MongoUser,
-    public config: LDAPProviderConfig,
-  ) {
-    this.userClient = ldap.createClient({ url: this.config.url });
-    this.user = user;
-  }
-
-  /**
-   * Returns the value of the user id
-   */
-  public getId(): string | null {
-    if (this.user === null || this.user.ldap_auth === null) {
-      return null;
-    }
-    return this.user.ldap_auth as string;
-  }
-
-  /**
-   * Verifies the user password
-   */
-  public verifyPassword(_plainPassword: string) {
-    return new Promise<boolean>((resolve) => {
-      this.userClient.bind(
-        `cn=${this.user.ldap_auth},${this.config.baseUserDN}`,
-        _plainPassword,
-        (err) => {
-          resolve(err ? false : true);
-        },
-      );
-    });
-  }
-
-  /**
-   * Returns the user remember me token or null
-   */
-  public getRememberMeToken(): string | null {
-    return null;
-  }
-
-  /**
-   * Updates user remember me token
-   */
-  public setRememberMeToken(/* _token: string */): void {
-    throw new Error('Method not implemented.');
-  }
+export interface LdapProviderConfig {
+  driver: 'ldap';
+  appDN: string;
+  appPassword: string;
+  baseUserDN: string;
+  uid: string;
+  id: string;
+  url: string;
 }
 
 /**
  * Database provider to lookup users inside the LDAP
  */
-export class LDAPAuthProvider implements UserProviderContract<MongoUser> {
+export class LdapAuthProvider implements UserProviderContract<MongoUser> {
   private adminClient: ldap.Client;
   private adminBound = false;
 
   private container: IocContract<ldap.SearchEntryObject>;
-  private config: LDAPProviderConfig;
+  private config: LdapProviderConfig;
 
   public constructor(
     container: IocContract,
-    config: LDAPProviderConfig,
+    config: LdapProviderConfig,
     private UserManager: UserManager,
   ) {
     this.container = container;
@@ -138,11 +93,9 @@ export class LDAPAuthProvider implements UserProviderContract<MongoUser> {
    * their defined uids.
    */
   public findByUid(uid: string): Promise<ProviderUserContract<MongoUser>> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this._adminBind((err) => {
-        if (err) {
-          return resolve(undefined);
-        }
+        if (err) return reject(err);
 
         this.adminClient.search(
           this.config.baseUserDN,
@@ -151,13 +104,13 @@ export class LDAPAuthProvider implements UserProviderContract<MongoUser> {
             scope: 'sub',
           },
           (err, res) => {
-            if (err) {
-              return resolve(undefined);
-            }
+            if (err) return reject(err);
+
             const foundEntries: ldap.SearchEntryObject[] = [];
             res.on('searchEntry', (entry) => {
               foundEntries.push(entry.object);
             });
+
             res.on('end', () => {
               if (foundEntries.length > 0) {
                 this.UserManager.getUser(
@@ -165,9 +118,7 @@ export class LDAPAuthProvider implements UserProviderContract<MongoUser> {
                   foundEntries[0][this.config.id] as string,
                 )
                   .then((user) => resolve(this.getUserFor(user)))
-                  .catch((err) => {
-                    throw err;
-                  });
+                  .catch((err) => reject(err));
               } else {
                 resolve(undefined);
               }
@@ -211,14 +162,4 @@ export class LDAPAuthProvider implements UserProviderContract<MongoUser> {
       callback();
     });
   }
-}
-
-export interface LDAPProviderConfig {
-  driver: 'ldap';
-  appDN: string;
-  appPassword: string;
-  baseUserDN: string;
-  uid: string;
-  id: string;
-  url: string;
 }
