@@ -13,11 +13,10 @@
     - [Addons](#addons)
 
 ## Installation
-The following commands will respectively install the dependencies, build the core app and load the addons.
+The following commands will respectively install the dependencies and build the core app.
 ```shell
 $ npm install
 $ npm run build
-$ node ace addons:load
 ```
 
 ## Configuration
@@ -45,7 +44,6 @@ New ELN uses MongoDB as the default database system using the [adonis-mongodb](h
 ### Addons
 Addons can provide functionalities to the platform by exposing the following components:
 * API routes in `routes.ts`
-* External dependencies in `package.json`
 * Adonis providers `providers/*`
 * Migrations `migrations/*`
 
