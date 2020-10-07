@@ -7,6 +7,8 @@
 
 import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
 
+import { config as configFile } from './config.json';
+
 /*
 |--------------------------------------------------------------------------
 | Authentication Mapping
@@ -17,7 +19,7 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
 |
 */
 const authConfig: AuthConfig = {
-  guard: 'ldap', // default value
+  guard: configFile.auth.default as 'ldap' | 'user', // default value
   list: {
     user: {
       driver: 'session',
@@ -28,13 +30,8 @@ const authConfig: AuthConfig = {
     ldap: {
       driver: 'session',
       provider: {
-        id: 'uid',
-        uid: 'uid',
-        url: 'ldap://127.0.0.1:1389',
         driver: 'ldap',
-        appDN: 'cn=admin,dc=example,dc=org',
-        appPassword: 'adminpassword',
-        baseUserDN: 'ou=users,dc=example,dc=org',
+        ...configFile.auth.ldap,
       },
     },
   },

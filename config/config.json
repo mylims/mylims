@@ -1,0 +1,35 @@
+{
+  "config": {
+    "date": "2020/10/07",
+    "app": {
+      "appKey": "i0Dh2SxcYheh2wRIHqtrkrx7a5HnoPYP",
+      "appName": "mylims-server",
+      "prettyPrint": false,
+      "logLevel": "info"
+    },
+    "auth": {
+      "default": "ldap",
+      "ldap": {
+        "id": "uid",
+        "uid": "uid",
+        "url": "ldap://127.0.0.1:1389",
+        "appDN": "cn=admin,dc=example,dc=org",
+        "appPassword": "adminpassword",
+        "baseUserDN": "ou=users,dc=example,dc=org"
+      }
+    },
+    "hash": {
+      "default": "argon"
+    },
+    "mongodb": {
+      "url": "mongodb://localhost:27017",
+      "database": "mylims"
+    },
+    "session": {
+      "driver": "cookie",
+      "cookieName": "adonis-session",
+      "sessionAge": "2h"
+    }
+  },
+  "history": []
+}
