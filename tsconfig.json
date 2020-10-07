@@ -1,26 +1,16 @@
 {
-  "include": [
-    "**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ],
+  "include": ["**/*"],
+  "exclude": ["node_modules", "build"],
   "extends": "./node_modules/adonis-preset-ts/tsconfig",
   "compilerOptions": {
     "outDir": "build",
     "rootDir": "./",
     "sourceMap": false,
+    "resolveJsonModule": true,
     "paths": {
-      "App/*": [
-        "./app/*"
-      ],
-      "Contracts/*": [
-        "./contracts/*"
-      ],
-      "Database/*": [
-        "./database/*"
-      ]
+      "App/*": ["./app/*"],
+      "Contracts/*": ["./contracts/*"],
+      "Database/*": ["./database/*"]
     },
     "types": [
       "@adonisjs/core",
@@ -29,8 +19,6 @@
       "@zakodium/adonis-mongodb",
       "node"
     ],
-    "lib": [
-      "ES2019.Array"
-    ]
+    "lib": ["ES2019.Array"]
   }
 }

@@ -7,11 +7,12 @@
 
 import proxyAddr from 'proxy-addr';
 
-import Env from '@ioc:Adonis/Core/Env';
 import { LoggerConfig } from '@ioc:Adonis/Core/Logger';
 import { ProfilerConfig } from '@ioc:Adonis/Core/Profiler';
 import { RequestConfig } from '@ioc:Adonis/Core/Request';
 import { ResponseConfig } from '@ioc:Adonis/Core/Response';
+
+import { config as configFile } from './config.json';
 
 type HttpConfig = RequestConfig & ResponseConfig;
 
@@ -28,7 +29,7 @@ type HttpConfig = RequestConfig & ResponseConfig;
 | be decrypted.
 |
 */
-export const appKey: string = Env.getOrFail('APP_KEY') as string;
+export const appKey: string = configFile.app.appKey;
 
 /*
 |--------------------------------------------------------------------------
@@ -150,7 +151,7 @@ export const logger: LoggerConfig = {
   | reading the `name` property from the `package.json` file.
   |
   */
-  name: Env.get('APP_NAME') as string,
+  name: configFile.app.appName,
 
   /*
   |--------------------------------------------------------------------------
@@ -172,7 +173,7 @@ export const logger: LoggerConfig = {
   | at deployment level and not code level.
   |
   */
-  level: Env.get('LOG_LEVEL', 'info') as string,
+  level: configFile.app.logLevel,
 
   /*
   |--------------------------------------------------------------------------
@@ -183,7 +184,7 @@ export const logger: LoggerConfig = {
   | can have huge impact on performance.
   |
   */
-  prettyPrint: Env.get('NODE_ENV') === 'development',
+  prettyPrint: configFile.app.prettyPrint,
 };
 
 /*
