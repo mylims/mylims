@@ -7,8 +7,6 @@
 
 import { HashConfig } from '@ioc:Adonis/Core/Hash';
 
-import { config as configFile } from './config.json';
-
 /*
 |--------------------------------------------------------------------------
 | Hash Config
@@ -28,7 +26,7 @@ const hashConfig: HashConfig = {
   | free to change the default value
   |
   */
-  default: configFile.hash.default as 'argon',
+  default: 'argon',
 
   list: {
     /*
