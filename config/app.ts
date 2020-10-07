@@ -7,6 +7,7 @@
 
 import proxyAddr from 'proxy-addr';
 
+import Env from '@ioc:Adonis/Core/Env';
 import { LoggerConfig } from '@ioc:Adonis/Core/Logger';
 import { ProfilerConfig } from '@ioc:Adonis/Core/Profiler';
 import { RequestConfig } from '@ioc:Adonis/Core/Request';
@@ -184,7 +185,7 @@ export const logger: LoggerConfig = {
   | can have huge impact on performance.
   |
   */
-  prettyPrint: configFile.app.prettyPrint,
+  prettyPrint: Env.get('NODE_ENV') === 'development',
 };
 
 /*
