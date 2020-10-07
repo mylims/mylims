@@ -4,7 +4,6 @@
     "app": {
       "appKey": "i0Dh2SxcYheh2wRIHqtrkrx7a5HnoPYP",
       "appName": "mylims-server",
-      "prettyPrint": false,
       "logLevel": "info"
     },
     "auth": {
