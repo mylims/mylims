@@ -1,6 +1,6 @@
 {
   "config": {
-    "date": "2020/10/07",
+    "date": "2020-10-07T14:48:00.000Z",
     "app": {
       "appKey": "i0Dh2SxcYheh2wRIHqtrkrx7a5HnoPYP",
       "appName": "mylims-server",
@@ -16,9 +16,6 @@
         "appPassword": "adminpassword",
         "baseUserDN": "ou=users,dc=example,dc=org"
       }
-    },
-    "hash": {
-      "default": "argon"
     },
     "mongodb": {
       "url": "mongodb://localhost:27017",
