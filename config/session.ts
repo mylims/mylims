@@ -7,7 +7,9 @@
 
 import { SessionConfig } from '@ioc:Adonis/Addons/Session';
 
-import { config as configFile } from './config.json';
+import { getConfig } from './config';
+
+const session = getConfig('session');
 
 const sessionConfig: SessionConfig = {
   /*
@@ -25,7 +27,7 @@ const sessionConfig: SessionConfig = {
   | Note: Switching drivers will make existing sessions invalid.
   |
   */
-  driver: configFile.session.driver,
+  driver: session.driver,
 
   /*
   |--------------------------------------------------------------------------
@@ -35,7 +37,7 @@ const sessionConfig: SessionConfig = {
   | The name of the cookie that will hold the session id.
   |
   */
-  cookieName: configFile.session.cookieName,
+  cookieName: session.cookieName,
 
   /*
   |--------------------------------------------------------------------------
@@ -62,7 +64,7 @@ const sessionConfig: SessionConfig = {
   | Example: `2 days`, `2.5 hrs`, `1y`, `5s` and so on.
   |
   */
-  age: configFile.session.sessionAge,
+  age: session.sessionAge || '2h',
 
   /*
   |--------------------------------------------------------------------------

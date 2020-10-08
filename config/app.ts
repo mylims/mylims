@@ -13,7 +13,9 @@ import { ProfilerConfig } from '@ioc:Adonis/Core/Profiler';
 import { RequestConfig } from '@ioc:Adonis/Core/Request';
 import { ResponseConfig } from '@ioc:Adonis/Core/Response';
 
-import { config as configFile } from './config.json';
+import { getConfig } from './config';
+
+const app = getConfig('app');
 
 type HttpConfig = RequestConfig & ResponseConfig;
 
@@ -30,7 +32,7 @@ type HttpConfig = RequestConfig & ResponseConfig;
 | be decrypted.
 |
 */
-export const appKey: string = configFile.app.appKey;
+export const appKey: string = app.appKey;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,7 +154,7 @@ export const logger: LoggerConfig = {
   | reading the `name` property from the `package.json` file.
   |
   */
-  name: configFile.app.appName,
+  name: app.appName,
 
   /*
   |--------------------------------------------------------------------------
@@ -174,7 +176,7 @@ export const logger: LoggerConfig = {
   | at deployment level and not code level.
   |
   */
-  level: configFile.app.logLevel,
+  level: app.logLevel,
 
   /*
   |--------------------------------------------------------------------------
