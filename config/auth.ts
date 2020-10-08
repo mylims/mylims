@@ -7,7 +7,7 @@
 
 import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
 
-import { config as configFile } from './config.json';
+import { getConfig } from './config';
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +18,9 @@ import { config as configFile } from './config.json';
 | inside the `contracts/auth.ts` file before mentioning them here.
 |
 */
+const auth = getConfig('auth');
 const authConfig: AuthConfig = {
-  guard: configFile.auth.default as 'ldap' | 'user', // default value
+  guard: auth.default,
   list: {
     user: {
       driver: 'session',
@@ -31,7 +32,7 @@ const authConfig: AuthConfig = {
       driver: 'session',
       provider: {
         driver: 'ldap',
-        ...configFile.auth.ldap,
+        ...auth.ldap,
       },
     },
   },

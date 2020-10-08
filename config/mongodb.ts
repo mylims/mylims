@@ -1,10 +1,11 @@
 import { MongodbConfig } from '@ioc:Mongodb/Database';
 
-import { config as configFile } from './config.json';
+import { getConfig } from './config';
 
+const mongodb = getConfig('mongodb');
 const config: MongodbConfig = {
   default: 'mongodb',
-  connections: { mongodb: configFile.mongodb },
+  connections: { mongodb },
 };
 
 export default config;
