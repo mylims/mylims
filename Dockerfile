@@ -1,4 +1,4 @@
-FROM node:current
+FROM node:14
 
 WORKDIR /usr/mylims
 
