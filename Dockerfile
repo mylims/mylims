@@ -8,9 +8,9 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+RUN node prune-addons.mjs
 
-RUN node ace addons:prune
+RUN npm run build
 
 EXPOSE 3333
 
