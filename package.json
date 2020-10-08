@@ -1,5 +1,5 @@
 {
-  "name": "eln-poc",
+  "name": "new-eln-server",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
   "devDependencies": {
     "@types/ldapjs": "^1.0.9",
     "@types/node": "^14.10.3",
-    "@zakodium/eslint-config": "^2.0.1",
+    "@zakodium/eslint-config": "^2.1.1",
     "adonis-preset-ts": "^1.0.4",
     "eslint": "^7.8.1",
     "pino-pretty": "^4.2.0",
