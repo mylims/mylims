@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <form action="/posts" method="POST">
+    <form action="{{ route('AdminsController.auth') }}" method="POST">
       <h1 id="message">System configuration</h1>
       <small id="smallMessage"> </small>
       <div class="field">
