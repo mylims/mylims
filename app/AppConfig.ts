@@ -32,3 +32,13 @@ export interface ConfigProps {
 export function getConfig<T extends keyof ConfigProps>(key: T): ConfigProps[T] {
   return (config as ConfigProps)[key];
 }
+
+export function getAllConfig() {
+  return {
+    date: getConfig('date'),
+    app: getConfig('app'),
+    auth: getConfig('auth'),
+    mongodb: getConfig('mongodb'),
+    session: getConfig('session'),
+  };
+}
