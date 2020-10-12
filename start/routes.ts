@@ -1,15 +1,10 @@
 import uuid from '@lukeed/uuid';
-import { CrendentialsBuilder } from 'Providers/local-user-auth/models/CredentialsModel';
-import { UserBuilder } from 'Providers/user/UserModel';
 
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
-import { Model } from '@ioc:Mongodb/Model';
+import { Credential, User } from '@ioc:Zakodium/User';
 
 import { registerRoutes } from 'App/AddonsManager';
-
-const Credentials = CrendentialsBuilder(Model);
-const User = UserBuilder(Model);
 
 Route.get('/', async () => {
   return { hello: 'world' };
@@ -17,7 +12,7 @@ Route.get('/', async () => {
 
 Route.post('/user', async ({ request }) => {
   const { lastname, firstname, email } = request.all();
-  const credential = await Credentials.create({
+  const credential = await Credential.create({
     resetToken: uuid(),
   });
   await User.create({
@@ -31,7 +26,7 @@ Route.post('/user', async ({ request }) => {
 
 Route.post('/user/password', async ({ request }) => {
   const { token, password } = request.all();
-  const credentials = await Credentials.findOne({ resetToken: token });
+  const credentials = await Credential.findOne({ resetToken: token });
   if (credentials === null) throw new Error('bad token');
   credentials.resetToken = null;
   credentials.hash = await Hash.make(password);

@@ -1,7 +1,7 @@
 import { Model } from '@ioc:Mongodb/Model';
 
-export function CrendentialsBuilder(model: typeof Model) {
-  return class Credentials extends model {
+export function CrendentialBuilder(model: typeof Model) {
+  return class Credential extends model {
     public hash: string;
     public resetToken: string | null;
   };

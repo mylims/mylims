@@ -3,21 +3,16 @@ import { UserBuilder } from 'providers/user/UserModel';
 
 import { ProviderUserContract } from '@ioc:Adonis/Addons/Auth';
 import { HashContract } from '@ioc:Adonis/Core/Hash';
-
-import { CrendentialsBuilder } from './models/CredentialsModel';
+import { Credential } from '@ioc:Zakodium/User';
 
 export type MongoUser = InstanceType<ReturnType<typeof UserBuilder>>;
 
 /**
  * LDAP user works a bridge between the provider and the guard
  */
-@inject([null, 'Adonis/Core/Hash', 'Mongodb/Model'])
+@inject([null, 'Adonis/Core/Hash'])
 export class LocalUser implements ProviderUserContract<MongoUser> {
-  public constructor(
-    public user: MongoUser,
-    private Hash: HashContract,
-    private Model: any,
-  ) {
+  public constructor(public user: MongoUser, private Hash: HashContract) {
     this.user = user;
   }
 
@@ -37,7 +32,7 @@ export class LocalUser implements ProviderUserContract<MongoUser> {
     if (!local) {
       return Promise.reject(new Error("user doesn't have local auth"));
     }
-    const credential = await CrendentialsBuilder(this.Model).findById(local);
+    const credential = await Credential.findById(local);
     if (credential === null) throw new Error('credential not found');
     return this.Hash.verify(credential.hash, _plainPassword);
   }
