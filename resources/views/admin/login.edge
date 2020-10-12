@@ -13,13 +13,17 @@
         <input
           type="password"
           name="password"
-          placeholder="Admin password"
           id="password"
+          placeholder="Admin password"
         />
         <label for="body">Admin password </label>
       </div>
 
       <button type="submit">Login</button>
     </form>
+
+    @if(error)
+      <div class="error">{{ error }}</div>
+    @endif
   </body>
 </html>
