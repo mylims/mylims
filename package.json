@@ -5,8 +5,7 @@
   "scripts": {
     "build": "node ace build",
     "start": "node ace serve --watch",
-    "postinstall": "npm run build",
-    "dev": "node reset-dev.mjs & node ace serve --watch",
+    "dev": "node reset-dev.mjs & npm start",
     "eslint": "eslint . --ext=.ts,.js",
     "eslint-fix": "npm run eslint -- --fix"
   },

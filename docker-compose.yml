@@ -10,6 +10,8 @@ services:
 
   ldap:
     image: bitnami/openldap:latest
+    stdin_open: true
+    tty: true
     ports:
       - '1389:1389'
       - '1636:1636'
@@ -18,6 +20,12 @@ services:
       - LDAP_ADMIN_PASSWORD=adminpassword
       - LDAP_USERS=user01,user02
       - LDAP_PASSWORDS=password1,password2
-
+  eln:
+    image: mylims/new-eln-server
+    ports:
+      - 3333:3333
+    volumes:
+      - D:\Zakodium\docker-eln-volumes\addons:/usr/mylims/addons
+      - D:\Zakodium\docker-eln-volumes\config:/usr/mylims/config
 volumes:
   mongo-data:
