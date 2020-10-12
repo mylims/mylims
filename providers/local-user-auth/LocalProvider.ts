@@ -3,7 +3,7 @@ import { UserManager } from 'providers/user/UserManager';
 
 import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
 
-import { LocalAuthProvider } from '../LocalAuthProvider';
+import { LocalAuthProvider } from './LocalAuthProvider';
 
 export default class LocalProvider {
   public constructor(protected container: IocContract) {}
@@ -11,13 +11,12 @@ export default class LocalProvider {
   public boot() {
     // IoC container is ready
     this.container.with(
-      ['Adonis/Addons/Auth', 'Zakodium/User', 'Adonis/Core/Hash'],
+      ['Adonis/Addons/Auth', 'Zakodium/User'],
       (Auth: AuthManagerContract, UserManager: UserManager) => {
         Auth.extend(
           'provider',
           'local',
-          (container, config) =>
-            new LocalAuthProvider(container, config, UserManager),
+          (container) => new LocalAuthProvider(container, UserManager),
         );
       },
     );

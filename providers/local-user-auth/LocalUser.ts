@@ -11,7 +11,7 @@ export type MongoUser = InstanceType<ReturnType<typeof UserBuilder>>;
 /**
  * LDAP user works a bridge between the provider and the guard
  */
-@inject([null, null, 'Adonis/Core/Hash', 'Mongodb/Model'])
+@inject([null, 'Adonis/Core/Hash', 'Mongodb/Model'])
 export class LocalUser implements ProviderUserContract<MongoUser> {
   public constructor(
     public user: MongoUser,
