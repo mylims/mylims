@@ -10,7 +10,8 @@
     "paths": {
       "App/*": ["./app/*"],
       "Contracts/*": ["./contracts/*"],
-      "Database/*": ["./database/*"]
+      "Database/*": ["./database/*"],
+      "Providers/*": ["./providers/*"]
     },
     "types": [
       "@adonisjs/core",
