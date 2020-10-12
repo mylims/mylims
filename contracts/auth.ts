@@ -1,4 +1,4 @@
-import { LdapProviderConfig } from 'addons/ldap/LdapAuthProvider';
+import { LdapProviderConfig } from 'Addons/ldap/LdapAuthProvider';
 import { UserBuilder } from 'providers/user/UserModel';
 
 /**

@@ -8,7 +8,7 @@ import {
   ProviderUserContract,
 } from '@ioc:Adonis/Addons/Auth';
 
-import { LDAPUser, MongoUser } from './LdapUser';
+import { LdapUser, MongoUser } from './LdapUser';
 
 export interface LdapProviderConfig {
   driver: 'ldap';
@@ -44,7 +44,7 @@ export class LdapAuthProvider implements UserProviderContract<MongoUser> {
    * Returns an instance of provider user
    */
   public getUserFor(user: InstanceType<ReturnType<typeof UserBuilder>>) {
-    return this.container.make(LDAPUser, [user, this.config]);
+    return this.container.make(LdapUser, [user, this.config]);
   }
 
   /**

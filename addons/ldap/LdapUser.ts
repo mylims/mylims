@@ -10,7 +10,7 @@ export type MongoUser = InstanceType<ReturnType<typeof UserBuilder>>;
 /**
  * LDAP user works a bridge between the provider and the guard
  */
-export class LDAPUser implements ProviderUserContract<MongoUser> {
+export class LdapUser implements ProviderUserContract<MongoUser> {
   private userClient: ldap.Client;
 
   public constructor(
