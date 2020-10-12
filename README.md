@@ -18,7 +18,6 @@ The following commands will respectively install the dependencies and build the 
 
 ```shell
 $ npm install
-$ npm run build
 ```
 
 ## Configuration
@@ -33,8 +32,7 @@ The following commands will start mongodb and ldap (to test the ldap provider) c
 
 ```shell
 $ docker-compose up -d
-$ node reset-dev.mjs
-$ npm start
+$ npm run dev
 ```
 
 ### Production

@@ -1,17 +1,20 @@
 {
-  "name": "eln-poc",
+  "name": "new-eln-server",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "node ace build",
     "start": "node ace serve --watch",
+    "postinstall": "npm run build",
+    "dev": "node reset-dev.mjs & node ace serve --watch",
     "eslint": "eslint . --ext=.ts,.js",
     "eslint-fix": "npm run eslint -- --fix"
   },
   "devDependencies": {
     "@types/ldapjs": "^1.0.9",
     "@types/node": "^14.10.3",
-    "@zakodium/eslint-config": "^2.0.1",
+    "@types/uuid": "^8.3.0",
+    "@zakodium/eslint-config": "^2.1.1",
     "adonis-preset-ts": "^1.0.4",
     "eslint": "^7.8.1",
     "pino-pretty": "^4.2.0",
@@ -27,7 +30,6 @@
     "@adonisjs/core": "^5.0.0-preview-rc-1.12",
     "@adonisjs/fold": "^6.4.1",
     "@adonisjs/session": "^3.1.2",
-    "@types/uuid": "^8.3.0",
     "@zakodium/adonis-mongodb": "^0.2.1",
     "ldapjs": "^2.1.1",
     "phc-argon2": "^1.0.10",
