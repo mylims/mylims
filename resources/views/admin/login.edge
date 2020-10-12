@@ -1,29 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>System configuration</title>
-    <link rel="stylesheet" href="/style.css" />
-  </head>
-  <body>
-    <form action="{{ route('AdminsController.auth') }}" method="POST">
-      <h1 id="message">System configuration</h1>
-      <small id="smallMessage"> </small>
-      <div class="field">
-        <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="Admin password"
-        />
-        <label for="body">Admin password </label>
-      </div>
+@layout('layouts/admin')
 
-      <button type="submit">Login</button>
-    </form>
+@section('content')
+  <form action="{{ route('AdminsController.auth') }}" method="POST">
+    <h1 id="message">System configuration</h1>
+    <small id="smallMessage"> </small>
+    <div class="field">
+      <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="Admin password"
+      />
+      <label for="body">Admin password </label>
+    </div>
 
-    @if(error)
-      <div class="error">{{ error }}</div>
-    @endif
-  </body>
-</html>
+    <button type="submit">Login</button>
+  </form>
+
+  @if(error)
+    <div class="error">{{ error }}</div>
+  @endif
+@endsection

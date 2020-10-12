@@ -34,8 +34,11 @@ Route.post('/user/password', async ({ request }) => {
   return credentials.save();
 });
 // Super admin views
-Route.get('/admin', 'AdminsController.login');
-Route.post('/admin/auth', 'AdminsController.auth');
+Route.group(() => {
+  Route.get('/', 'AdminsController.login');
+  Route.post('/auth', 'AdminsController.auth');
+  Route.get('/error/:error?', 'AdminsController.error');
+}).prefix('/admin');
 
 // Require route from addons
 registerRoutes();
