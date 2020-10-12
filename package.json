@@ -27,6 +27,7 @@
     "@adonisjs/core": "^5.0.0-preview-rc-1.12",
     "@adonisjs/fold": "^6.4.1",
     "@adonisjs/session": "^3.1.2",
+    "@types/uuid": "^8.3.0",
     "@zakodium/adonis-mongodb": "^0.2.1",
     "ldapjs": "^2.1.1",
     "phc-argon2": "^1.0.10",
