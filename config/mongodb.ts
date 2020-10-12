@@ -1,6 +1,6 @@
 import { MongodbConfig } from '@ioc:Mongodb/Database';
 
-import { getConfig } from './config';
+import { getConfig } from '../app/AppConfig';
 
 const mongodb = getConfig('mongodb');
 const config: MongodbConfig = {

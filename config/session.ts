@@ -7,7 +7,7 @@
 
 import { SessionConfig } from '@ioc:Adonis/Addons/Session';
 
-import { getConfig } from './config';
+import { getConfig } from '../app/AppConfig';
 
 const session = getConfig('session');
 

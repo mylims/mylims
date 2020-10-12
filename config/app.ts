@@ -13,7 +13,7 @@ import { ProfilerConfig } from '@ioc:Adonis/Core/Profiler';
 import { RequestConfig } from '@ioc:Adonis/Core/Request';
 import { ResponseConfig } from '@ioc:Adonis/Core/Response';
 
-import { getConfig } from './config';
+import { getConfig } from '../app/AppConfig';
 
 const app = getConfig('app');
 
