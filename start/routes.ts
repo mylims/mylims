@@ -33,6 +33,8 @@ Route.post('/user/password', async ({ request }) => {
   credentials.hash = await Hash.make(password);
   return credentials.save();
 });
+// Super admin views
+Route.get('/admin/login', async ({ view }) => view.render('admin/login'));
 
 // Require route from addons
 registerRoutes();

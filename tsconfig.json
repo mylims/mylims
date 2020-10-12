@@ -15,6 +15,7 @@
       "@adonisjs/core",
       "@adonisjs/auth",
       "@adonisjs/session",
+      "@adonisjs/view",
       "@zakodium/adonis-mongodb",
       "node"
     ],
