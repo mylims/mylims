@@ -10,14 +10,16 @@
     "App": "app",
     "Contracts": "contracts",
     "Config": "config",
-    "Database": "database"
+    "Database": "database",
+    "Addons": "addons",
+    "Providers": "providers"
   },
   "preloads": [
     "./start/routes",
     "./start/kernel"
   ],
   "providers": [
-    "./addons/ldap/providers/LDAPProvider",
+    "./addons/ldap/providers/LdapProvider",
     "./providers/user/UserProvider",
     "@adonisjs/core",
     "@adonisjs/auth",

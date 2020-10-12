@@ -1,5 +1,5 @@
 import { LdapProviderConfig } from 'Addons/ldap/LdapAuthProvider';
-import { UserBuilder } from 'providers/user/UserModel';
+import { UserBuilder } from 'Providers/user/UserModel';
 
 /**
  * Contract source: https://git.io/JvyKD

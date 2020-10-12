@@ -5,13 +5,9 @@ services:
     command: --replSet rs0
     ports:
       - 127.0.0.1:27017:27017
-    volumes:
-      - mongo-data:/data/db
 
   ldap:
     image: bitnami/openldap:latest
-    stdin_open: true
-    tty: true
     ports:
       - '1389:1389'
       - '1636:1636'
@@ -22,10 +18,9 @@ services:
       - LDAP_PASSWORDS=password1,password2
   eln:
     image: mylims/new-eln-server
-    ports:
+    ports: 
       - 3333:3333
+    stdin_open: true
+    tty: true
     volumes:
       - ..\docker-eln-volumes\addons:/usr/mylims/addons
-      - ..\docker-eln-volumes\config.json:/usr/mylims/config/config.json
-volumes:
-  mongo-data:
