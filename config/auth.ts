@@ -6,6 +6,7 @@
  */
 
 import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
+import { getConfig } from './config';
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,9 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
 | inside the `contracts/auth.ts` file before mentioning them here.
 |
 */
+const auth = getConfig('auth');
 const authConfig: AuthConfig = {
-  guard: 'ldap', // default value
+  guard: auth.default,
   list: {
     local: {
       driver: 'session',
@@ -28,13 +30,8 @@ const authConfig: AuthConfig = {
     ldap: {
       driver: 'session',
       provider: {
-        id: 'uid',
-        uid: 'uid',
-        url: 'ldap://127.0.0.1:1389',
         driver: 'ldap',
-        appDN: 'cn=admin,dc=example,dc=org',
-        appPassword: 'adminpassword',
-        baseUserDN: 'ou=users,dc=example,dc=org',
+        ...auth.ldap,
       },
     },
   },

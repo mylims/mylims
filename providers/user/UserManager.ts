@@ -4,14 +4,11 @@ export class UserManager {
   public constructor(private User: ReturnType<typeof UserBuilder>) {}
 
   public async getUser(authProvider: string, id: string) {
-    const user = await this.User.findOne({ [`${authProvider}_auth`]: id });
-    if (user === null) {
-      return this.createUser(authProvider, id);
-    }
-    return user;
+    const user = await this.User.findOne({ [`auth.${authProvider}`]: id });
+    return user || this.createUser(authProvider, id);
   }
 
   private createUser(authProvider: string, id: string) {
-    return this.User.create({ [`${authProvider}_auth`]: id });
+    return this.User.create({ auth: { [authProvider]: id } });
   }
 }
