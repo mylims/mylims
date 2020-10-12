@@ -4,7 +4,7 @@ html {
 }
 body {
   font-family: 'Lato', sans-serif;
-  background: #ff8473;
+  background: #d7f5de;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -18,7 +18,7 @@ form {
   flex-direction: column;
   background: transparent;
   max-width: 320px;
-  padding: 2rem 2rem 2rem 2rem;
+  padding: 2rem;
   position: relative;
 }
 form::before,
@@ -91,7 +91,7 @@ form input::placeholder {
   color: white;
 }
 form input:focus {
-  color: #0e39fe;
+  color: white;
   font-weight: bold;
   outline: 0;
   border: 6px solid #0e39fe;
@@ -120,4 +120,22 @@ form button {
 }
 form button:hover {
   border: 6px solid #090c9b;
+}
+
+.error {
+  margin-top: 4rem;
+  max-width: 320px;
+  padding: 2rem;
+  background-color: #ff8473;
+  position: relative;
+}
+.error::before {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s ease;
+  background: transparent;
+  transform: translateX(-3rem) translateY(-3rem);
+  border: 6px solid #d10d0d;
 }
