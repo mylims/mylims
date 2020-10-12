@@ -1,6 +1,6 @@
+import uuid from '@lukeed/uuid';
 import { CrendentialsBuilder } from 'Providers/local-user-auth/models/CredentialsModel';
 import { UserBuilder } from 'Providers/user/UserModel';
-import { v4 as uuidv4 } from 'uuid';
 
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
@@ -18,7 +18,7 @@ Route.get('/', async () => {
 Route.post('/user', async ({ request }) => {
   const { lastname, firstname, email } = request.all();
   const credential = await Credentials.create({
-    resetToken: uuidv4(),
+    resetToken: uuid(),
   });
   await User.create({
     lastname,
