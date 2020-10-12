@@ -1,9 +1,14 @@
 import Route from '@ioc:Adonis/Core/Route';
 
-const routePrefix = '/addons/ldap';
+const routePrefix = '/addons/local';
+
+Route.get(`${routePrefix}/register`, async () => {
+  // create credentials
+  // create user with link to credentials
+});
 
 Route.get(`${routePrefix}/login`, async ({ auth }) => {
-  await auth.use('ldap').attempt('user02', 'password2');
+  await auth.use('local').attempt('xavier@stouder.io', 'root');
   // eslint-disable-next-line no-console
   console.log(auth.user);
   return { test: true };

@@ -2,6 +2,7 @@ import { Model } from '@ioc:Mongodb/Model';
 
 interface AuthMethods {
   ldap?: string;
+  local?: string;
 }
 
 export function UserBuilder(model: typeof Model) {

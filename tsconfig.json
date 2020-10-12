@@ -27,7 +27,8 @@
       "@adonisjs/auth",
       "@adonisjs/session",
       "@zakodium/adonis-mongodb",
-      "node"
+      "node",
+      "./providers/user/types.d.ts"
     ],
     "lib": [
       "ES2019.Array"

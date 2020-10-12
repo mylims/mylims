@@ -19,10 +19,10 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
 const authConfig: AuthConfig = {
   guard: 'ldap', // default value
   list: {
-    user: {
+    local: {
       driver: 'session',
       provider: {
-        driver: '',
+        driver: 'local',
       },
     },
     ldap: {

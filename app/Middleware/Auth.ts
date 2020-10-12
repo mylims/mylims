@@ -25,7 +25,7 @@ export default class AuthMiddleware {
    */
   protected async authenticate(
     auth: HttpContextContract['auth'],
-    guards: Array<'user' | 'ldap'>,
+    guards: Array<'local' | 'ldap'>,
   ) {
     /**
      * Hold reference to the guard last attempted within the for loop. We pass
@@ -66,7 +66,7 @@ export default class AuthMiddleware {
   public async handle(
     { auth }: HttpContextContract,
     next: () => Promise<void>,
-    customGuards: Array<'user' | 'ldap'>,
+    customGuards: Array<'local' | 'ldap'>,
   ) {
     /**
      * Uses the user defined guards or the default guard mentioned in

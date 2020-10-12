@@ -34,8 +34,8 @@ declare module '@ioc:Adonis/Addons/Auth' {
     | different database tables.
     |
     */
-    user: {
-      implementation: UserProviderContract<unknown>;
+    localUser: {
+      implementation: UserProviderContract<ReturnType<typeof UserBuilder>>;
       config: unknown;
     };
 
@@ -71,9 +71,9 @@ declare module '@ioc:Adonis/Addons/Auth' {
     | the `user` provider for fetching user details.
     |
     */
-    user: {
-      implementation: SessionGuardContract<'user', 'user'>;
-      config: SessionGuardConfig<'user'>;
+    local: {
+      implementation: SessionGuardContract<'localUser', 'local'>;
+      config: SessionGuardConfig<'localUser'>;
     };
 
     ldap: {
