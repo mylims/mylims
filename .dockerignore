@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+build
+.eslint*
+docker-compose.yml
+README.md
+reset-dev.mjs
+postinstall.mjs
