@@ -8,11 +8,15 @@ on:
 
 jobs:
   lint:
-    name: Lint with ESLint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: npm install and eslint
-        run: |
-          npm ci
-          npm run eslint
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: npm install
+      - name: Run ESLint
+        run: npm run eslint
+      - name: Check types
+        run: npm run check-types

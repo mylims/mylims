@@ -12,6 +12,7 @@
     "Config": "config"
   },
   "preloads": [
+    "./start/env",
     "./start/routes",
     "./start/kernel"
   ],

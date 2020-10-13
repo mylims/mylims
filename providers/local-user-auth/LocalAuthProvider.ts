@@ -1,10 +1,8 @@
-import { IocContract } from '@adonisjs/fold';
-import * as ldap from 'ldapjs';
-
 import {
   UserProviderContract,
   ProviderUserContract,
 } from '@ioc:Adonis/Addons/Auth';
+import { IocContract } from '@ioc:Adonis/Core/Application';
 import UserManager from '@ioc:Zakodium/User';
 
 import User from 'App/Models/UserModel';
@@ -15,11 +13,10 @@ import { LocalUser } from './LocalUser';
  * Database provider to lookup users inside the LDAP
  */
 export class LocalAuthProvider implements UserProviderContract<User> {
-  private container: IocContract<ldap.SearchEntryObject>;
-
-  public constructor(container: IocContract, private UserManager: UserManager) {
-    this.container = container;
-  }
+  public constructor(
+    private container: IocContract,
+    private UserManager: UserManager,
+  ) {}
 
   /**
    * Returns an instance of provider user
