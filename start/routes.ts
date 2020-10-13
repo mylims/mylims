@@ -14,6 +14,7 @@ Route.get('/', async () => {
 Route.post('/user', async ({ request }) => {
   const { lastname, firstname, email } = request.all();
   const credential = await Credential.create({
+    email,
     resetToken: uuid(),
   });
   await User.create({
@@ -32,6 +33,12 @@ Route.post('/user/password', async ({ request }) => {
   credentials.resetToken = null;
   credentials.hash = await Hash.make(password);
   return credentials.save();
+});
+
+Route.post('/login', async ({ request, auth }) => {
+  const { email, password } = request.all();
+  await auth.use('local').attempt(email, password);
+  return true;
 });
 
 // Require route from addons

@@ -15,7 +15,11 @@ export default class LdapProvider {
           'provider',
           'ldap',
           (container, config) =>
-            new (require('./LDAPAuthProvider'))(container, config, UserManager),
+            new (require('../LDAPAuthProvider'))(
+              container,
+              config,
+              UserManager,
+            ),
         );
       },
     );

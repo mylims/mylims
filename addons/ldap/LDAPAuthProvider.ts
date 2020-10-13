@@ -24,7 +24,7 @@ export interface LdapProviderConfig {
 /**
  * Database provider to lookup users inside the LDAP
  */
-export class LdapAuthProvider implements UserProviderContract<User> {
+export default class LdapAuthProvider implements UserProviderContract<User> {
   private adminClient: ldap.Client;
   private adminBound = false;
 

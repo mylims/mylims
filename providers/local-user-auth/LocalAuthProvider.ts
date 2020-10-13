@@ -7,6 +7,7 @@ import {
 } from '@ioc:Adonis/Addons/Auth';
 import UserManager from '@ioc:Zakodium/User';
 
+import Credential from 'App/Models/CredentialModel';
 import User from 'App/Models/UserModel';
 
 import { LocalUser } from './LocalUser';
@@ -14,12 +15,11 @@ import { LocalUser } from './LocalUser';
 /**
  * Database provider to lookup users inside the LDAP
  */
-export class LocalAuthProvider implements UserProviderContract<User> {
-  private container: IocContract<ldap.SearchEntryObject>;
-
-  public constructor(container: IocContract, private UserManager: UserManager) {
-    this.container = container;
-  }
+export default class LocalAuthProvider implements UserProviderContract<User> {
+  public constructor(
+    private container: IocContract<ldap.SearchEntryObject>,
+    private UserManager: UserManager,
+  ) {}
 
   /**
    * Returns an instance of provider user
@@ -32,7 +32,11 @@ export class LocalAuthProvider implements UserProviderContract<User> {
    * Returns the user row using the primary key
    */
   public async findById(id: string): Promise<ProviderUserContract<User>> {
-    const user = await this.UserManager.getUser('local', id);
+    const credential = (await Credential.findOne({ email: id })) as Credential;
+    const user = await this.UserManager.getUser(
+      'local',
+      (credential.id as unknown) as string,
+    );
     return this.getUserFor(user);
   }
 
@@ -41,7 +45,11 @@ export class LocalAuthProvider implements UserProviderContract<User> {
    * their defined uids.
    */
   public async findByUid(uid: string): Promise<ProviderUserContract<User>> {
-    const user = await this.UserManager.getUser('local', uid);
+    const credential = (await Credential.findOne({ email: uid })) as Credential;
+    const user = await this.UserManager.getUser(
+      'local',
+      (credential.id as unknown) as string,
+    );
     return this.getUserFor(user);
   }
 
