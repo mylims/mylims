@@ -22,8 +22,6 @@ services:
     image: mylims/new-eln-server
     ports: 
       - 3333:3333
-    stdin_open: true
-    tty: true
     volumes:
       - ..\docker-eln-volumes\addons:/usr/mylims/addons
 
