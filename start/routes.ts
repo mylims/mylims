@@ -1,29 +1,37 @@
-/*
-|--------------------------------------------------------------------------
-| Routes
-|--------------------------------------------------------------------------
-|
-| This file is dedicated for defining HTTP routes. A single file is enough
-| for majority of projects, however you can define routes in different
-| files and just make sure to import them inside this file. For example
-|
-| Define routes in following two files
-| ├── start/routes/cart.ts
-| ├── start/routes/customer.ts
-|
-| and then import them inside `start/routes/index.ts` as follows
-|
-| import './cart'
-| import './customer'
-|
-*/
+import uuid from '@lukeed/uuid';
 
+import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
 
 import { registerRoutes } from 'App/AddonsManager';
+import Credential from 'App/Models/CredentialModel';
+import User from 'App/Models/UserModel';
 
 Route.get('/', async () => {
   return { hello: 'world' };
+});
+
+Route.post('/user', async ({ request }) => {
+  const { lastname, firstname, email } = request.all();
+  const credential = await Credential.create({
+    resetToken: uuid(),
+  });
+  await User.create({
+    lastname,
+    firstname,
+    email,
+    auth: { local: credential._id },
+  });
+  return true;
+});
+
+Route.post('/user/password', async ({ request }) => {
+  const { token, password } = request.all();
+  const credentials = await Credential.findOne({ resetToken: token });
+  if (credentials === null) throw new Error('bad token');
+  credentials.resetToken = null;
+  credentials.hash = await Hash.make(password);
+  return credentials.save();
 });
 
 // Require route from addons

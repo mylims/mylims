@@ -1,14 +1,12 @@
-import { UserBuilder } from './UserModel';
+import User from 'App/Models/UserModel';
 
-export class UserManager {
-  public constructor(private User: ReturnType<typeof UserBuilder>) {}
-
+export default class UserManager {
   public async getUser(authProvider: string, id: string) {
-    const user = await this.User.findOne({ [`auth.${authProvider}`]: id });
+    const user = await User.findOne({ [`auth.${authProvider}`]: id });
     return user || this.createUser(authProvider, id);
   }
 
   private createUser(authProvider: string, id: string) {
-    return this.User.create({ auth: { [authProvider]: id } });
+    return User.create({ auth: { [authProvider]: id } });
   }
 }

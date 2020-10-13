@@ -1,22 +1,18 @@
 import * as ldap from 'ldapjs';
-import { UserBuilder } from 'providers/user/UserModel';
 
 import { ProviderUserContract } from '@ioc:Adonis/Addons/Auth';
 
-import { LdapProviderConfig } from './LdapAuthProvider';
+import User from 'App/Models/UserModel';
 
-export type MongoUser = InstanceType<ReturnType<typeof UserBuilder>>;
+import { LdapProviderConfig } from './LdapAuthProvider';
 
 /**
  * LDAP user works a bridge between the provider and the guard
  */
-export class LdapUser implements ProviderUserContract<MongoUser> {
+export class LDAPUser implements ProviderUserContract<User> {
   private userClient: ldap.Client;
 
-  public constructor(
-    public user: MongoUser,
-    public config: LdapProviderConfig,
-  ) {
+  public constructor(public user: User, public config: LdapProviderConfig) {
     this.userClient = ldap.createClient({ url: this.config.url });
     this.user = user;
   }

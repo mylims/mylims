@@ -9,10 +9,7 @@
   "aliases": {
     "App": "app",
     "Contracts": "contracts",
-    "Config": "config",
-    "Database": "database",
-    "Addons": "addons",
-    "Providers": "providers"
+    "Config": "config"
   },
   "preloads": [
     "./start/routes",
@@ -21,6 +18,7 @@
   "providers": [
     "./addons/ldap/providers/LdapProvider",
     "./providers/user/UserProvider",
+    "./providers/local-user-auth/LocalProvider",
     "@adonisjs/core",
     "@adonisjs/auth",
     "@adonisjs/session",
