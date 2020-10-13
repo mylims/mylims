@@ -2,7 +2,7 @@
 
 ```ts
 import { LDAPProviderConfig } from '../addons/ldap/LDAPAuthProvider'
-import { UserBuilder } from 'providers/user/UserModel'
+import { UserBuilder } from 'Providers/user/UserModel'
 
 // provider list:
 ldapUser: {

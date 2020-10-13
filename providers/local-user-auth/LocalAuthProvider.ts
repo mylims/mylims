@@ -1,6 +1,6 @@
 import { IocContract } from '@adonisjs/fold';
+import UserManager from 'Providers/user/UserManager';
 import * as ldap from 'ldapjs';
-import UserManager from 'providers/user/UserManager';
 
 import {
   UserProviderContract,

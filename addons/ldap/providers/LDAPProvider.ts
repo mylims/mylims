@@ -1,5 +1,5 @@
 import { IocContract } from '@adonisjs/fold';
-import UserManager from 'providers/user/UserManager';
+import UserManager from 'Providers/user/UserManager';
 
 import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
 

@@ -18,7 +18,7 @@
     "./start/kernel"
   ],
   "providers": [
-    "./addons/ldap/providers/LDAPProvider",
+    "./addons/ldap/providers/LdapProvider",
     "./providers/user/UserProvider",
     "./providers/local-user-auth/LocalProvider",
     "@adonisjs/core",
