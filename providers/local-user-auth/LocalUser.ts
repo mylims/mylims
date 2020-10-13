@@ -1,25 +1,21 @@
-import { inject } from '@adonisjs/fold';
+import { inject } from '@adonisjs/core/build/standalone';
 
 import { ProviderUserContract } from '@ioc:Adonis/Addons/Auth';
 import { HashContract } from '@ioc:Adonis/Core/Hash';
 
-import Credential from 'App/Models/CredentialModel';
+import CredentialModel from 'App/Models/CredentialModel';
 import User from 'App/Models/UserModel';
 
 /**
  * LDAP user works a bridge between the provider and the guard
  */
-@inject([null, 'Adonis/Core/Hash', 'Zakodium/User'])
+@inject([null, 'Adonis/Core/Hash', 'App/Models/CredentialModel'])
 export class LocalUser implements ProviderUserContract<User> {
-  private Credential: typeof Credential;
   public constructor(
     public user: User,
     private Hash: HashContract,
-    private ZakodiumUser,
-  ) {
-    this.user = user;
-    this.Credential = this.ZakodiumUser.Credential;
-  }
+    private Credential: typeof CredentialModel,
+  ) {}
 
   /**
    * Returns the value of the user id

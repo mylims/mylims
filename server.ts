@@ -11,12 +11,10 @@
 */
 
 import 'reflect-metadata';
-import { Ignitor } from '@adonisjs/core/build/src/Ignitor';
+import { Ignitor } from '@adonisjs/core/build/standalone';
 import sourceMapSupport from 'source-map-support';
 
 sourceMapSupport.install({ handleUncaughtExceptions: false });
-
-Error.stackTraceLimit = 50;
 
 // eslint-disable-next-line no-console
 new Ignitor(__dirname).httpServer().start().catch(console.error);

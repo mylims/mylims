@@ -1,12 +1,23 @@
 {
   "include": ["**/*"],
-  "exclude": ["node_modules", "build"],
-  "extends": "./node_modules/adonis-preset-ts/tsconfig",
+  "exclude": ["node_modules"],
   "compilerOptions": {
+    "target": "es2020",
+    "module": "CommonJS",
     "outDir": "build",
     "rootDir": "./",
-    "sourceMap": false,
-    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "skipLibCheck": true,
+    "incremental": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "inlineSourceMap": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "lib": ["ES2020"],
     "paths": {
       "App/*": ["./app/*"],
       "Contracts/*": ["./contracts/*"]
@@ -18,8 +29,6 @@
       "@adonisjs/view",
       "@zakodium/adonis-mongodb",
       "node"
-    ],
-    "lib": ["ES2019.Array"],
-    "emitDecoratorMetadata": false
+    ]
   }
 }

@@ -1,10 +1,10 @@
-import { IocContract } from '@adonisjs/fold';
 import * as ldap from 'ldapjs';
 
 import {
   UserProviderContract,
   ProviderUserContract,
 } from '@ioc:Adonis/Addons/Auth';
+import { IocContract } from '@ioc:Adonis/Core/Application';
 import UserManager from '@ioc:Zakodium/User';
 
 import User from 'App/Models/UserModel';

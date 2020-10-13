@@ -11,7 +11,7 @@ export default class AdminsController {
 
   // Displays error and ask for admin password
   public async error({ params, view }: HttpContextContract) {
-    const errors = {
+    const errors: Record<string, string> = {
       wrong: 'Wrong password',
       missing: 'Missing admin password',
     };
