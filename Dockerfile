@@ -16,4 +16,4 @@ COPY --from=builder /usr/mylims/build ./
 COPY package*.json ./
 RUN npm ci
 EXPOSE 3333
-CMD [ "node", "yolo.js" ]
+CMD [ "node", "server.js" ]
