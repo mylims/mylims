@@ -23,7 +23,7 @@ services:
     ports: 
       - 3333:3333
     volumes:
-      - ..\docker-eln-volumes\addons:/usr/mylims/addons
+      - ../docker-eln-volumes/addons:/usr/mylims/addons
 
 volumes: 
   mongo-data:
