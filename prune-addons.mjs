@@ -11,4 +11,4 @@ rcFile.providers = rcFile.providers.filter(
   (provider) => provider.includes('addons') === false,
 );
 await writeFile(rcFilePath, JSON.stringify(rcFile, null, 2));
-console.log('Addons pruned.')
+console.log('Addons pruned.');
