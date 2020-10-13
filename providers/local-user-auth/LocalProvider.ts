@@ -11,7 +11,7 @@ export default class LocalProvider {
   public boot() {
     // IoC container is ready
     this.container.with(
-      ['Adonis/Addons/Auth'],
+      ['Adonis/Addons/Auth', 'Zakodium/User'],
       (Auth: AuthManagerContract, UserManager: UserManager) => {
         Auth.extend(
           'provider',
