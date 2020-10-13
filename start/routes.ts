@@ -2,9 +2,10 @@ import uuid from '@lukeed/uuid';
 
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
-import { Credential, User } from '@ioc:Zakodium/User';
 
 import { registerRoutes } from 'App/AddonsManager';
+import Credential from 'App/Models/CredentialModel';
+import User from 'App/Models/UserModel';
 
 Route.get('/', async () => {
   return { hello: 'world' };

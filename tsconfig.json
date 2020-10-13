@@ -20,6 +20,7 @@
       "@zakodium/adonis-mongodb",
       "node"
     ],
-    "lib": ["ES2019.Array"]
+    "lib": ["ES2019.Array"],
+    "emitDecoratorMetadata": false
   }
 }

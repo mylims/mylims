@@ -13,4 +13,9 @@ declare module '@ioc:Zakodium/User' {
     public role: 'ADMIN' | 'MEMBER';
     public auth: AuthMethods;
   }
+
+  export class Credential extends Model {
+    public hash: string;
+    public resetToken: string | null;
+  }
 }

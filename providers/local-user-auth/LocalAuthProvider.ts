@@ -1,19 +1,20 @@
 import { IocContract } from '@adonisjs/fold';
 import * as ldap from 'ldapjs';
-import { UserManager } from 'providers/user/UserManager';
-import { UserBuilder } from 'providers/user/UserModel';
+import UserManager from 'providers/user/UserManager';
 
 import {
   UserProviderContract,
   ProviderUserContract,
 } from '@ioc:Adonis/Addons/Auth';
 
-import { LocalUser, MongoUser } from './LocalUser';
+import User from 'App/Models/UserModel';
+
+import { LocalUser } from './LocalUser';
 
 /**
  * Database provider to lookup users inside the LDAP
  */
-export class LocalAuthProvider implements UserProviderContract<MongoUser> {
+export class LocalAuthProvider implements UserProviderContract<User> {
   private container: IocContract<ldap.SearchEntryObject>;
 
   public constructor(container: IocContract, private UserManager: UserManager) {
@@ -23,14 +24,14 @@ export class LocalAuthProvider implements UserProviderContract<MongoUser> {
   /**
    * Returns an instance of provider user
    */
-  public getUserFor(user: InstanceType<ReturnType<typeof UserBuilder>>) {
+  public getUserFor(user: User) {
     return this.container.make(LocalUser, [user]);
   }
 
   /**
    * Returns the user row using the primary key
    */
-  public async findById(id: string): Promise<ProviderUserContract<MongoUser>> {
+  public async findById(id: string): Promise<ProviderUserContract<User>> {
     const user = await this.UserManager.getUser('local', id);
     return this.getUserFor(user);
   }
@@ -39,9 +40,7 @@ export class LocalAuthProvider implements UserProviderContract<MongoUser> {
    * Returns the user row by searching the uidValue against
    * their defined uids.
    */
-  public async findByUid(
-    uid: string,
-  ): Promise<ProviderUserContract<MongoUser>> {
+  public async findByUid(uid: string): Promise<ProviderUserContract<User>> {
     const user = await this.UserManager.getUser('local', uid);
     return this.getUserFor(user);
   }
@@ -50,7 +49,7 @@ export class LocalAuthProvider implements UserProviderContract<MongoUser> {
    * Returns a user from their remember me token
    */
   public findByRememberMeToken(/*_userId: string | number, _token: string,*/): Promise<
-    ProviderUserContract<MongoUser>
+    ProviderUserContract<User>
   > {
     throw new Error('Method not implemented.');
   }

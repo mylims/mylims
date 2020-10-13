@@ -1,5 +1,5 @@
 import { IocContract } from '@adonisjs/fold';
-import { UserManager } from 'providers/user/UserManager';
+import UserManager from 'providers/user/UserManager';
 
 import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
 
@@ -11,7 +11,7 @@ export default class LocalProvider {
   public boot() {
     // IoC container is ready
     this.container.with(
-      ['Adonis/Addons/Auth', 'Zakodium/User'],
+      ['Adonis/Addons/Auth'],
       (Auth: AuthManagerContract, UserManager: UserManager) => {
         Auth.extend(
           'provider',
