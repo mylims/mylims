@@ -1,7 +1,7 @@
 import { IocContract } from '@adonisjs/fold';
-import UserManager from 'Providers/user/UserManager';
 
 import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
+import UserManager from '@ioc:Zakodium/User';
 
 import { LocalAuthProvider } from './LocalAuthProvider';
 

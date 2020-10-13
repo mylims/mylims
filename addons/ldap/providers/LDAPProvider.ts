@@ -1,7 +1,7 @@
 import { IocContract } from '@adonisjs/fold';
-import UserManager from 'Providers/user/UserManager';
 
 import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
+import UserManager from '@ioc:Zakodium/User';
 
 export default class LdapProvider {
   public constructor(protected container: IocContract) {}

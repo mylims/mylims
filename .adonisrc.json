@@ -9,9 +9,7 @@
   "aliases": {
     "App": "app",
     "Contracts": "contracts",
-    "Config": "config",
-    "Database": "database",
-    "Providers": "providers"
+    "Config": "config"
   },
   "preloads": [
     "./start/routes",
