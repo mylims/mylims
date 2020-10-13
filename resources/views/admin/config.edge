@@ -1,0 +1,191 @@
+@layout('layouts/admin')
+
+@section('content')
+<div class="container">
+
+  <form action="" method="PUT">
+    {{--  App  --}}
+    <h1 id="message">App configuration</h1>
+    <small id="smallMessage"> Date: {{ dateValue }} </small>
+
+    <div class="field">
+      <label for="appKey">Application key</label>
+      <input
+        type="text"
+        name="appKey"
+        id="appKey"
+        value="{{ config.app.appKey }}"
+        placeholder="Application key"
+      />
+    </div>
+    <div class="field">
+      <label for="appName">Application name</label>
+      <input
+        type="text"
+        name="appName"
+        id="appName"
+        value="{{ config.app.appName }}"
+        placeholder="Application name"
+      />
+    </div>
+    <div class="field">
+      <label for="logLevel">Log level</label>
+      <input
+        type="text"
+        name="logLevel"
+        id="logLevel"
+        value="{{ config.app.logLevel }}"
+        placeholder="Log level"
+      />
+    </div>
+
+    {{--  Session  --}}
+    <h1 id="message">Session configuration</h1>
+    <small id="smallMessage"> Date: {{ dateValue }} </small>
+
+    <div class="field">
+      <label for="driver">Session driver</label>
+      <input
+        type="text"
+        name="driver"
+        id="driver"
+        value="{{ config.session.driver }}"
+        placeholder="Session driver"
+      />
+    </div>
+    <div class="field">
+      <label for="cookieName">Cookie name</label>
+      <input
+        type="text"
+        name="cookieName"
+        id="cookieName"
+        value="{{ config.session.cookieName }}"
+        placeholder="Cookie name"
+      />
+    </div>
+    <div class="field">
+      <label for="sessionAge">Session age</label>
+      <input
+        type="text"
+        name="sessionAge"
+        id="sessionAge"
+        value="{{ config.session.sessionAge }}"
+        placeholder="Session age"
+      />
+    </div>
+
+    <button type="submit">Update configuration</button>
+  </form>
+  
+  {{--  Auth  --}}
+  <form action="" method="PUT">
+    <h1 id="message">Auth configuration</h1>
+    <small id="smallMessage"> Date: {{ dateValue }} </small>
+    
+    <div class="field">
+      <label for="default">Default protocol</label>
+      <input
+      type="text"
+      name="default"
+      id="default"
+      value="{{ config.auth.default }}"
+      placeholder="Default protocol"
+      />
+    </div>
+    <div class="field">
+      <label for="ldapid">LDAP id</label>
+      <input
+      type="text"
+      name="ldapid"
+      id="ldapid"
+      value="{{ config.auth.ldap.id }}"
+      placeholder="LDAP id"
+      />
+    </div>
+    <div class="field">
+      <label for="ldapid">LDAP uid</label>
+      <input
+      type="text"
+      name="ldapuid"
+      id="ldapuid"
+      value="{{ config.auth.ldap.uid }}"
+      placeholder="LDAP uid"
+      />
+    </div>
+    <div class="field">
+      <label for="ldapurl">LDAP URL</label>
+      <input
+      type="text"
+      name="ldapurl"
+      id="ldapurl"
+      value="{{ config.auth.ldap.url }}"
+      placeholder="LDAP URL"
+      />
+    </div>
+    <div class="field">
+      <label for="ldapdn">LDAP DN</label>
+      <input
+      type="text"
+      name="ldapdn"
+      id="ldapdn"
+      value="{{ config.auth.ldap.appDN }}"
+      placeholder="LDAP DN"
+      />
+    </div>
+    <div class="field">
+      <label for="ldappass">LDAP password</label>
+      <input
+      type="text"
+      name="ldappass"
+      id="ldappass"
+      value="{{ config.auth.ldap.appPassword }}"
+      placeholder="LDAP password"
+      />
+    </div>
+    <div class="field">
+      <label for="ldapuser">LDAP base user</label>
+      <input
+      type="text"
+      name="ldapuser"
+      id="ldapuser"
+      value="{{ config.auth.ldap.baseUserDN }}"
+      placeholder="LDAP base user"
+      />
+    </div>
+    
+    <button type="submit">Update configuration</button>
+  </form>
+  
+  <form action="" method="PUT" class="buttons">
+    {{--  MongoDB  --}}
+    <h1 id="message">Mongo configuration</h1>
+    <small id="smallMessage"> Date: {{ dateValue }} </small>
+    
+    <div class="field">
+      <label for="mongourl">MongoDB URL</label>
+      <input
+      type="text"
+      name="mongourl"
+      id="mongourl"
+      value="{{ config.mongodb.url }}"
+      placeholder="MongoDB URL"
+      />
+    </div>
+    <div class="field">
+      <label for="mongodb">MongoDB database</label>
+      <input
+      type="text"
+      name="mongodb"
+      id="mongodb"
+      value="{{ config.mongodb.database }}"
+      placeholder="MongoDB database"
+      />
+    </div>
+
+    <div class="buttons">
+      <button>Test connection</button>
+      <button type="submit">Update configuration</button>
+    </div>
+  </form>
+</div>
+@endsection
