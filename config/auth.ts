@@ -6,6 +6,7 @@
  */
 
 import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
+
 import { getConfig } from './config';
 
 /*
