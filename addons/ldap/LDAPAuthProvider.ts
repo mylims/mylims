@@ -1,14 +1,15 @@
 import { IocContract } from '@adonisjs/fold';
 import * as ldap from 'ldapjs';
-import { UserManager } from 'providers/user/UserManager';
-import { UserBuilder } from 'providers/user/UserModel';
 
 import {
   UserProviderContract,
   ProviderUserContract,
 } from '@ioc:Adonis/Addons/Auth';
+import UserManager from '@ioc:Zakodium/User';
 
-import { LDAPUser, MongoUser } from './LdapUser';
+import User from 'App/Models/UserModel';
+
+import { LDAPUser } from './LdapUser';
 
 export interface LdapProviderConfig {
   driver: 'ldap';
@@ -23,7 +24,7 @@ export interface LdapProviderConfig {
 /**
  * Database provider to lookup users inside the LDAP
  */
-export class LdapAuthProvider implements UserProviderContract<MongoUser> {
+export class LdapAuthProvider implements UserProviderContract<User> {
   private adminClient: ldap.Client;
   private adminBound = false;
 
@@ -43,14 +44,14 @@ export class LdapAuthProvider implements UserProviderContract<MongoUser> {
   /**
    * Returns an instance of provider user
    */
-  public getUserFor(user: InstanceType<ReturnType<typeof UserBuilder>>) {
+  public getUserFor(user: User) {
     return this.container.make(LDAPUser, [user, this.config]);
   }
 
   /**
    * Returns the user row using the primary key
    */
-  public findById(id: string): Promise<ProviderUserContract<MongoUser>> {
+  public findById(id: string): Promise<ProviderUserContract<User>> {
     return new Promise((resolve) => {
       this._adminBind((err) => {
         if (err) {
@@ -92,7 +93,7 @@ export class LdapAuthProvider implements UserProviderContract<MongoUser> {
    * Returns the user row by searching the uidValue against
    * their defined uids.
    */
-  public findByUid(uid: string): Promise<ProviderUserContract<MongoUser>> {
+  public findByUid(uid: string): Promise<ProviderUserContract<User>> {
     return new Promise((resolve, reject) => {
       this._adminBind((err) => {
         if (err) return reject(err);
@@ -133,7 +134,7 @@ export class LdapAuthProvider implements UserProviderContract<MongoUser> {
    * Returns a user from their remember me token
    */
   public findByRememberMeToken(/*_userId: string | number, _token: string,*/): Promise<
-    ProviderUserContract<MongoUser>
+    ProviderUserContract<User>
   > {
     throw new Error('Method not implemented.');
   }
@@ -141,7 +142,7 @@ export class LdapAuthProvider implements UserProviderContract<MongoUser> {
   /**
    * Updates the user remember me token
    */
-  public updateRememberMeToken(/* _authenticatable: ProviderUserContract<MongoUser> */): Promise<
+  public updateRememberMeToken(/* _authenticatable: ProviderUserContract<User> */): Promise<
     void
   > {
     throw new Error('Method not implemented.');

@@ -9,8 +9,7 @@
     "resolveJsonModule": true,
     "paths": {
       "App/*": ["./app/*"],
-      "Contracts/*": ["./contracts/*"],
-      "Database/*": ["./database/*"]
+      "Contracts/*": ["./contracts/*"]
     },
     "types": [
       "@adonisjs/core",
@@ -19,6 +18,7 @@
       "@zakodium/adonis-mongodb",
       "node"
     ],
-    "lib": ["ES2019.Array"]
+    "lib": ["ES2019.Array"],
+    "emitDecoratorMetadata": false
   }
 }

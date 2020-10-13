@@ -1,5 +1,6 @@
 import { LdapProviderConfig } from 'addons/ldap/LdapAuthProvider';
-import { UserBuilder } from 'providers/user/UserModel';
+
+import User from 'App/Models/UserModel';
 
 /**
  * Contract source: https://git.io/JvyKD
@@ -34,13 +35,13 @@ declare module '@ioc:Adonis/Addons/Auth' {
     | different database tables.
     |
     */
-    user: {
-      implementation: UserProviderContract<unknown>;
+    localUser: {
+      implementation: UserProviderContract<User>;
       config: unknown;
     };
 
     ldapUser: {
-      implementation: UserProviderContract<ReturnType<typeof UserBuilder>>;
+      implementation: UserProviderContract<User>;
       config: LdapProviderConfig;
     };
   }
@@ -71,9 +72,9 @@ declare module '@ioc:Adonis/Addons/Auth' {
     | the `user` provider for fetching user details.
     |
     */
-    user: {
-      implementation: SessionGuardContract<'user', 'user'>;
-      config: SessionGuardConfig<'user'>;
+    local: {
+      implementation: SessionGuardContract<'localUser', 'local'>;
+      config: SessionGuardConfig<'localUser'>;
     };
 
     ldap: {

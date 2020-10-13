@@ -6,7 +6,6 @@
  */
 
 import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
-
 import { getConfig } from './config';
 
 /*
@@ -22,10 +21,10 @@ const auth = getConfig('auth');
 const authConfig: AuthConfig = {
   guard: auth.default,
   list: {
-    user: {
+    local: {
       driver: 'session',
       provider: {
-        driver: '',
+        driver: 'local',
       },
     },
     ldap: {
