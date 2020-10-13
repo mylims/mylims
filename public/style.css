@@ -125,6 +125,27 @@ form button {
 form button:hover {
   border: 6px solid #090c9b;
 }
+form .buttons {
+  border: none;
+  margin-top: 2rem;
+  color: white;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  width: 75%;
+  position: absolute;
+  bottom: -20px;
+  right: 23%;
+  letter-spacing: 0.15em;
+  transition: all 0.3s ease;
+  display: flex;
+}
+form .buttons button {
+  background-color: #0e39fe;
+  position: relative;
+  right: 0;
+  bottom: 0;
+  margin: 0 1rem 0 0;
+}
 
 .error {
   margin-top: 4rem;
@@ -142,4 +163,13 @@ form button:hover {
   background: transparent;
   transform: translateX(-3rem) translateY(-3rem);
   border: 6px solid #d10d0d;
+}
+
+.container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+.container > form {
+  margin: 2rem;
 }

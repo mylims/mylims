@@ -36,8 +36,10 @@ Route.post('/user/password', async ({ request }) => {
 // Super admin views
 Route.group(() => {
   Route.get('/', 'AdminsController.login');
-  Route.post('/auth', 'AdminsController.auth');
   Route.get('/error/:error?', 'AdminsController.error');
+  Route.get('/config', 'AdminsController.config');
+
+  Route.post('/auth', 'AdminsController.auth');
 }).prefix('/admin');
 
 // Require route from addons
