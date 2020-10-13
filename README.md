@@ -18,7 +18,6 @@ The following commands will respectively install the dependencies and build the 
 
 ```shell
 $ npm install
-$ npm run build
 ```
 
 ## Configuration

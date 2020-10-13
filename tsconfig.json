@@ -9,10 +9,7 @@
     "resolveJsonModule": true,
     "paths": {
       "App/*": ["./app/*"],
-      "Contracts/*": ["./contracts/*"],
-      "Database/*": ["./database/*"],
-      "Addons/*": ["./addons/*"],
-      "Providers/*": ["./providers/*"]
+      "Contracts/*": ["./contracts/*"]
     },
     "types": [
       "@adonisjs/core",
