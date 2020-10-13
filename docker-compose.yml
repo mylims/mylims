@@ -18,12 +18,6 @@ services:
       - LDAP_ADMIN_PASSWORD=adminpassword
       - LDAP_USERS=user01,user02
       - LDAP_PASSWORDS=password1,password2
-  eln:
-    image: mylims/new-eln-server
-    ports: 
-      - 3333:3333
-    volumes:
-      - ../docker-eln-volumes/addons:/usr/mylims/addons
 
 volumes: 
   mongo-data:
