@@ -15,7 +15,8 @@ export default class LdapProvider {
           'provider',
           'ldap',
           (container, config) =>
-            new (require('../LDAPAuthProvider'))(
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            new (require('../LDAPAuthProvider').default)(
               container,
               config,
               UserManager,

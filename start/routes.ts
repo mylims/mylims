@@ -1,5 +1,3 @@
-import uuid from '@lukeed/uuid';
-
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
 
@@ -11,11 +9,10 @@ Route.get('/', async () => {
   return { hello: 'world' };
 });
 
-Route.post('/user', async ({ request }) => {
+Route.post('/users', async ({ request }) => {
   const { lastname, firstname, email } = request.all();
   const credential = await Credential.create({
     email,
-    resetToken: uuid(),
   });
   await User.create({
     lastname,
@@ -23,22 +20,33 @@ Route.post('/user', async ({ request }) => {
     email,
     auth: { local: credential._id },
   });
-  return true;
+
+  return Route.makeSignedUrl('setPassword', {
+    params: {
+      email,
+    },
+  });
 });
 
-Route.post('/user/password', async ({ request }) => {
-  const { token, password } = request.all();
-  const credentials = await Credential.findOne({ resetToken: token });
-  if (credentials === null) throw new Error('bad token');
-  credentials.resetToken = null;
-  credentials.hash = await Hash.make(password);
-  return credentials.save();
-});
+Route.post('/users/password/:email', async ({ request, params }) => {
+  if (request.hasValidSignature()) {
+    const { password } = request.all();
+    const { email } = params;
+    const credentials = await Credential.findOne({ email });
+    if (credentials === null) throw new Error('credential not found');
+    credentials.hash = await Hash.make(password);
+    await credentials.save();
+    return 'Email validated, password set.';
+  }
+  return 'Url is not valid';
+}).as('setPassword');
 
-Route.post('/login', async ({ request, auth }) => {
+Route.post('/login', async ({ auth, request }) => {
   const { email, password } = request.all();
   await auth.use('local').attempt(email, password);
-  return true;
+  // eslint-disable-next-line no-console
+  console.log(auth.user);
+  return { test: true };
 });
 
 // Require route from addons
