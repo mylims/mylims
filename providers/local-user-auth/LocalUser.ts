@@ -1,5 +1,3 @@
-import { inject } from '@adonisjs/fold';
-
 import { ProviderUserContract } from '@ioc:Adonis/Addons/Auth';
 import Hash from '@ioc:Adonis/Core/Hash';
 
@@ -9,10 +7,9 @@ import User from 'App/Models/UserModel';
 /**
  * LDAP user works a bridge between the provider and the guard
  */
-@inject([null])
 export class LocalUser implements ProviderUserContract<User> {
   public constructor(public user: User) {
-    this.user = user;
+    console.log(user.email);
   }
 
   /**

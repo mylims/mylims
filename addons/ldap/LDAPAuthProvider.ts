@@ -9,7 +9,7 @@ import UserManager from '@ioc:Zakodium/User';
 
 import User from 'App/Models/UserModel';
 
-import { LDAPUser } from './LdapUser';
+import LdapUser from './LdapUser';
 
 export interface LdapProviderConfig {
   driver: 'ldap';
@@ -28,16 +28,11 @@ export default class LdapAuthProvider implements UserProviderContract<User> {
   private adminClient: ldap.Client;
   private adminBound = false;
 
-  private container: IocContract<ldap.SearchEntryObject>;
-  private config: LdapProviderConfig;
-
   public constructor(
-    container: IocContract,
-    config: LdapProviderConfig,
+    private container: IocContract<ldap.SearchEntryObject>,
+    private config: LdapProviderConfig,
     private UserManager: UserManager,
   ) {
-    this.container = container;
-    this.config = config;
     this.adminClient = ldap.createClient({ url: this.config.url });
   }
 
@@ -45,7 +40,7 @@ export default class LdapAuthProvider implements UserProviderContract<User> {
    * Returns an instance of provider user
    */
   public getUserFor(user: User) {
-    return this.container.make(LDAPUser, [user, this.config]);
+    return this.container.make(LdapUser, [user, this.config]);
   }
 
   /**

@@ -35,7 +35,7 @@ export default class LocalAuthProvider implements UserProviderContract<User> {
     const credential = (await Credential.findOne({ email: id })) as Credential;
     const user = await this.UserManager.getUser(
       'local',
-      (credential.id as unknown) as string,
+      (credential._id as unknown) as string,
     );
     return this.getUserFor(user);
   }
@@ -48,7 +48,7 @@ export default class LocalAuthProvider implements UserProviderContract<User> {
     const credential = (await Credential.findOne({ email: uid })) as Credential;
     const user = await this.UserManager.getUser(
       'local',
-      (credential.id as unknown) as string,
+      (credential._id as unknown) as string,
     );
     return this.getUserFor(user);
   }
