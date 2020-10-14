@@ -2,11 +2,10 @@
 
 @section('content')
 <div class="container">
-
-  <form action="" method="PUT">
-    {{--  App  --}}
+  {{--  App  --}}
+  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
     <h1 id="message">App configuration</h1>
-    <small id="smallMessage"> Date: {{ dateValue }} </small>
+    <input type="hidden" id="confkey" name="confkey" value="app" />
 
     <div class="field">
       <label for="appKey">Application key</label>
@@ -39,9 +38,13 @@
       />
     </div>
 
-    {{--  Session  --}}
+    <button type="submit">Update configuration</button>
+  </form>
+
+  {{--  Session  --}}
+  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
     <h1 id="message">Session configuration</h1>
-    <small id="smallMessage"> Date: {{ dateValue }} </small>
+    <input type="hidden" id="confkey" name="confkey" value="session" />
 
     <div class="field">
       <label for="driver">Session driver</label>
@@ -76,109 +79,30 @@
 
     <button type="submit">Update configuration</button>
   </form>
-  
-  {{--  Auth  --}}
-  <form action="" method="PUT">
-    <h1 id="message">Auth configuration</h1>
-    <small id="smallMessage"> Date: {{ dateValue }} </small>
-    
-    <div class="field">
-      <label for="default">Default protocol</label>
-      <input
-      type="text"
-      name="default"
-      id="default"
-      value="{{ config.auth.default }}"
-      placeholder="Default protocol"
-      />
-    </div>
-    <div class="field">
-      <label for="ldapid">LDAP id</label>
-      <input
-      type="text"
-      name="ldapid"
-      id="ldapid"
-      value="{{ config.auth.ldap.id }}"
-      placeholder="LDAP id"
-      />
-    </div>
-    <div class="field">
-      <label for="ldapid">LDAP uid</label>
-      <input
-      type="text"
-      name="ldapuid"
-      id="ldapuid"
-      value="{{ config.auth.ldap.uid }}"
-      placeholder="LDAP uid"
-      />
-    </div>
-    <div class="field">
-      <label for="ldapurl">LDAP URL</label>
-      <input
-      type="text"
-      name="ldapurl"
-      id="ldapurl"
-      value="{{ config.auth.ldap.url }}"
-      placeholder="LDAP URL"
-      />
-    </div>
-    <div class="field">
-      <label for="ldapdn">LDAP DN</label>
-      <input
-      type="text"
-      name="ldapdn"
-      id="ldapdn"
-      value="{{ config.auth.ldap.appDN }}"
-      placeholder="LDAP DN"
-      />
-    </div>
-    <div class="field">
-      <label for="ldappass">LDAP password</label>
-      <input
-      type="text"
-      name="ldappass"
-      id="ldappass"
-      value="{{ config.auth.ldap.appPassword }}"
-      placeholder="LDAP password"
-      />
-    </div>
-    <div class="field">
-      <label for="ldapuser">LDAP base user</label>
-      <input
-      type="text"
-      name="ldapuser"
-      id="ldapuser"
-      value="{{ config.auth.ldap.baseUserDN }}"
-      placeholder="LDAP base user"
-      />
-    </div>
-    
-    <button type="submit">Update configuration</button>
-  </form>
-  
-  <form action="" method="PUT" class="buttons">
-    {{--  MongoDB  --}}
+
+  {{--  MongoDB  --}}
+  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
     <h1 id="message">Mongo configuration</h1>
-    <small id="smallMessage"> Date: {{ dateValue }} </small>
-    
+    <input type="hidden" id="confkey" name="confkey" value="mongodb" />
+
     <div class="field">
-      <label for="mongourl">MongoDB URL</label>
+      <label for="url">MongoDB URL</label>
       <input
-      type="text"
-      name="mongourl"
-      id="mongourl"
-      value="{{ config.mongodb.url }}"
-      placeholder="MongoDB URL"
+        type="text"
+        name="url"
+        id="url"
+        value="{{ config.mongodb.url }}"
+        placeholder="MongoDB URL"
       />
     </div>
     <div class="field">
-      <label for="mongodb">MongoDB database</label>
+      <label for="database">MongoDB database</label>
       <input
-      type="text"
-      name="mongodb"
-      id="mongodb"
-      value="{{ config.mongodb.database }}"
-      placeholder="MongoDB database"
+        type="text"
+        name="database"
+        id="database"
+        value="{{ config.mongodb.database }}"
+        placeholder="MongoDB database"
       />
     </div>
 
@@ -186,6 +110,75 @@
       <button>Test connection</button>
       <button type="submit">Update configuration</button>
     </div>
+  </form>
+
+  {{--  Auth  --}}
+  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
+    <h1 id="message">Auth configuration</h1>
+    <input type="hidden" id="confkey" name="confkey" value="ldap" />
+
+    <div class="field">
+      <label for="id">LDAP id</label>
+      <input
+        type="text"
+        name="id"
+        id="id"
+        value="{{ config.auth.ldap.id }}"
+        placeholder="LDAP id"
+      />
+    </div>
+    <div class="field">
+      <label for="uid">LDAP uid</label>
+      <input
+        type="text"
+        name="uid"
+        id="uid"
+        value="{{ config.auth.ldap.uid }}"
+        placeholder="LDAP uid"
+      />
+    </div>
+    <div class="field">
+      <label for="url">LDAP URL</label>
+      <input
+        type="text"
+        name="url"
+        id="url"
+        value="{{ config.auth.ldap.url }}"
+        placeholder="LDAP URL"
+      />
+    </div>
+    <div class="field">
+      <label for="appDN">LDAP DN</label>
+      <input
+        type="text"
+        name="appDN"
+        id="appDN"
+        value="{{ config.auth.ldap.appDN }}"
+        placeholder="LDAP DN"
+      />
+    </div>
+    <div class="field">
+      <label for="appPassword">LDAP password</label>
+      <input
+        type="text"
+        name="appPassword"
+        id="appPassword"
+        value="{{ config.auth.ldap.appPassword }}"
+        placeholder="LDAP password"
+      />
+    </div>
+    <div class="field">
+      <label for="baseUserDN">LDAP base user</label>
+      <input
+        type="text"
+        name="baseUserDN"
+        id="baseUserDN"
+        value="{{ config.auth.ldap.baseUserDN }}"
+        placeholder="LDAP base user"
+      />
+    </div>
+
+    <button type="submit">Update configuration</button>
   </form>
 </div>
 @endsection
