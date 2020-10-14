@@ -46,7 +46,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/', 'AdminsController.login');
   Route.get('/error/:error?', 'AdminsController.error');
-  Route.get('/config', 'AdminsController.config');
+  Route.get('/config', 'AdminsController.config').middleware('admin');
 
   Route.post('/auth', 'AdminsController.auth');
 }).prefix('/admin');
