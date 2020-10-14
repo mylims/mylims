@@ -14,6 +14,7 @@ export default class AdminsController {
     const errors: Record<string, string> = {
       wrong: 'Wrong password',
       missing: 'Missing admin password',
+      session: 'Session is not valid',
     };
     const error = (params.error && errors[params.error]) || 'Error';
     return view.render('admin/login', { error });
@@ -27,14 +28,16 @@ export default class AdminsController {
   }
 
   // Validates the admin password
-  public async auth({ request, response }: HttpContextContract) {
+  public async auth({ request, response, session }: HttpContextContract) {
     const pass = request.input('password');
     const adminPass = Env.get('ADMIN_PASSWORD');
 
+    // Pasword validation
     if (!adminPass) return response.redirect('/admin/error/missing');
+    if (pass !== adminPass) return response.redirect('/admin/error/wrong');
 
-    return pass !== adminPass
-      ? response.redirect('/admin/error/wrong')
-      : response.redirect('/admin/config');
+    // Sets the session cookie and go to config menu
+    session.put('sudo', new Date().getTime());
+    return response.redirect('/admin/config');
   }
 }
