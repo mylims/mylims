@@ -15,5 +15,6 @@ ENV NODE_ENV production
 COPY --from=builder /usr/mylims/build ./
 COPY package*.json ./
 RUN npm ci --ignore-scripts
+RUN node ace generate:manifest
 EXPOSE 3333
 CMD [ "node", "server.js" ]
