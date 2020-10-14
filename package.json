@@ -13,7 +13,7 @@
     "test": "npm run eslint && npm run check-types"
   },
   "devDependencies": {
-    "@adonisjs/assembler": "^3.0.2",
+    "@adonisjs/assembler": "^3.0.3",
     "@types/node": "^14.11.8",
     "@types/proxy-addr": "^2.0.0",
     "@types/source-map-support": "^0.5.3",
@@ -27,9 +27,9 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^4.3.1",
-    "@adonisjs/core": "^5.0.2-beta-rc-6",
+    "@adonisjs/core": "^5.0.2-beta-rc-7",
     "@adonisjs/session": "^4.0.2",
-    "@adonisjs/view": "^3.0.3",
+    "@adonisjs/view": "^3.0.4",
     "@lukeed/uuid": "^1.0.1",
     "@zakodium/adonis-mongodb": "^0.3.2",
     "phc-argon2": "^1.0.11",
