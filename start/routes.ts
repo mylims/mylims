@@ -44,11 +44,12 @@ Route.group(() => {
 
 // Super admin views
 Route.group(() => {
-  Route.get('/', 'AdminsController.login');
-  Route.get('/error/:error?', 'AdminsController.error');
-  Route.get('/config', 'AdminsController.config').middleware('admin');
+  Route.get('/', 'AdminsController.renderLogin');
+  Route.get('/error/:error?', 'AdminsController.renderError');
+  Route.get('/config', 'AdminsController.renderConfig').middleware('admin');
 
   Route.post('/auth', 'AdminsController.auth');
+  Route.post('/config', 'AdminsController.changeConf');
 }).prefix('/admin');
 
 // Require routes from addons

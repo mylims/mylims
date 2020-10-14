@@ -1,16 +1,16 @@
 import Env from '@ioc:Adonis/Core/Env';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
-import { getAllConfig } from 'App/AppConfig';
+import { getAllConfig, getConfig, setConfig } from 'App/AppConfig';
 
 export default class AdminsController {
   // Ask for admin password
-  public async login({ view }: HttpContextContract) {
+  public async renderLogin({ view }: HttpContextContract) {
     return view.render('admin/login');
   }
 
   // Displays error and ask for admin password
-  public async error({ params, view }: HttpContextContract) {
+  public async renderError({ params, view }: HttpContextContract) {
     const errors: Record<string, string> = {
       wrong: 'Wrong password',
       missing: 'Missing admin password',
@@ -21,10 +21,9 @@ export default class AdminsController {
   }
 
   // Displays config values
-  public async config({ view }: HttpContextContract) {
+  public async renderConfig({ view }: HttpContextContract) {
     const config = getAllConfig();
-    const dateValue = new Date(config.date).toLocaleDateString('fr-CH');
-    return view.render('admin/config', { config, dateValue });
+    return view.render('admin/config', { config });
   }
 
   // Validates the admin password
@@ -39,5 +38,20 @@ export default class AdminsController {
     // Sets the session cookie and go to config menu
     session.put('sudo', new Date().getTime());
     return response.redirect('/admin/config');
+  }
+
+  // Modifies the config file
+  public async changeConf({ request, response }: HttpContextContract) {
+    const { confkey: confKey, ...currConf } = request.all();
+    if (confKey) {
+      const authList = ['ldap'];
+      if (authList.includes(confKey)) {
+        const auth = getConfig('auth');
+        setConfig('auth', { ...auth, [confKey]: currConf });
+      } else {
+        setConfig(confKey, currConf);
+      }
+    }
+    response.redirect('/admin/config');
   }
 }
