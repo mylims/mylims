@@ -2,8 +2,6 @@ import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
 import { ApplicationContract } from '@ioc:Adonis/Core/Application';
 import UserManager from '@ioc:Zakodium/User';
 
-import { LocalAuthProvider } from './LocalAuthProvider';
-
 export default class LocalProvider {
   public static needsApplication = true;
   public constructor(protected app: ApplicationContract) {}
@@ -16,7 +14,8 @@ export default class LocalProvider {
         Auth.extend(
           'provider',
           'local',
-          (container) => new LocalAuthProvider(container, UserManager),
+          (container) =>
+            new (require('./LocalAuthProvider'))(container, UserManager),
         );
       },
     );

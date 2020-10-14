@@ -9,12 +9,11 @@ import { LdapProviderConfig } from './LdapAuthProvider';
 /**
  * LDAP user works a bridge between the provider and the guard
  */
-export class LDAPUser implements ProviderUserContract<User> {
+export default class LdapUser implements ProviderUserContract<User> {
   private userClient: ldap.Client;
 
   public constructor(public user: User, public config: LdapProviderConfig) {
     this.userClient = ldap.createClient({ url: this.config.url });
-    this.user = user;
   }
 
   /**
