@@ -3,8 +3,6 @@ import { IocContract } from '@adonisjs/fold';
 import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
 import UserManager from '@ioc:Zakodium/User';
 
-import { LocalAuthProvider } from './LocalAuthProvider';
-
 export default class LocalProvider {
   public constructor(protected container: IocContract) {}
 
@@ -16,7 +14,12 @@ export default class LocalProvider {
         Auth.extend(
           'provider',
           'local',
-          (container) => new LocalAuthProvider(container, UserManager),
+          (container) =>
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            new (require('./LocalAuthProvider').default)(
+              container,
+              UserManager,
+            ),
         );
       },
     );

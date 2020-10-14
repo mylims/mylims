@@ -6,8 +6,7 @@ export default class UserProvider {
   public register() {
     this.container.singleton('Zakodium/User', () => {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const UserManager = require('./UserManager').default;
-      return new UserManager();
+      return new (require('./UserManager').default)();
     });
   }
 }
