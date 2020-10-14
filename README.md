@@ -2,15 +2,14 @@
 
 > Electronic lab notebook for open science
 
-- [New ELN](#new-eln)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-  - [Run](#run)
-    - [Development](#development)
-    - [Production](#production)
-  - [Design](#design)
-    - [Core](#core)
-    - [Addons](#addons)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Run](#run)
+  - [Development](#development)
+  - [Production](#production)
+- [Design](#design)
+  - [Core](#core)
+  - [Addons](#addons)
 
 ## Installation
 
