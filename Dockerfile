@@ -2,7 +2,7 @@ FROM node:14 as builder
 WORKDIR /usr/mylims
 COPY .env.example ./.env
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --ignore-scripts
 COPY . .
 RUN node scripts/prune-addons.mjs
 RUN npm run build
