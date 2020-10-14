@@ -7,7 +7,6 @@
       "logLevel": "info"
     },
     "auth": {
-      "default": "ldap",
       "ldap": {
         "id": "uid",
         "uid": "uid",

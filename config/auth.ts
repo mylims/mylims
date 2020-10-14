@@ -20,7 +20,7 @@ import { getConfig } from '../app/AppConfig';
 */
 const auth = getConfig('auth');
 const authConfig: AuthConfig = {
-  guard: auth.default,
+  guard: 'local',
   list: {
     local: {
       driver: 'session',
@@ -28,6 +28,9 @@ const authConfig: AuthConfig = {
         driver: 'local',
       },
     },
+    // TODO: construct this dynamically
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     ldap: {
       driver: 'session',
       provider: {

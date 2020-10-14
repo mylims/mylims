@@ -13,7 +13,6 @@ export interface ConfigProps {
     logLevel: string;
   };
   auth: {
-    default: 'ldap' | 'local';
     ldap: {
       id: string;
       uid: string;

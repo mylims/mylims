@@ -7,7 +7,7 @@ import CredentialModel from 'App/Models/CredentialModel';
 import User from 'App/Models/UserModel';
 
 /**
- * LDAP user works a bridge between the provider and the guard
+ * Local user works a bridge between the provider and the guard
  */
 @inject([null, 'Adonis/Core/Hash', 'App/Models/CredentialModel'])
 export class LocalUser implements ProviderUserContract<User> {
