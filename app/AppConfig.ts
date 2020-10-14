@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-const { config } = JSON.parse(
+import isEqual from 'lodash.isequal';
+
+const { config, history } = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'config.json'), 'utf-8'),
 );
 
@@ -45,4 +47,22 @@ export function getAllConfig() {
     mongodb: getConfig('mongodb'),
     session: getConfig('session'),
   };
+}
+
+export function setConfig<T extends keyof ConfigProps>(
+  key: T,
+  newConfig: ConfigProps[T],
+) {
+  const currConf = getConfig(key);
+  if (!isEqual(currConf, newConfig)) {
+    const confToSave = {
+      config: { ...config, [key]: newConfig, date: new Date().toISOString() },
+      history: [config, ...history],
+    };
+
+    fs.writeFileSync(
+      path.join(__dirname, 'config.json'),
+      JSON.stringify(confToSave),
+    );
+  }
 }
