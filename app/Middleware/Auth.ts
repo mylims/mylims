@@ -1,5 +1,6 @@
 import { AuthenticationException } from '@adonisjs/auth/build/standalone';
 
+import { AuthContract } from '@ioc:Adonis/Addons/Auth';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
 /**
@@ -25,7 +26,7 @@ export default class AuthMiddleware {
    */
   protected async authenticate(
     auth: HttpContextContract['auth'],
-    guards: Array<'local' | 'ldap'>,
+    guards: Array<Parameters<AuthContract['use']>[0]>,
   ) {
     /**
      * Hold reference to the guard last attempted within the for loop. We pass
@@ -66,7 +67,7 @@ export default class AuthMiddleware {
   public async handle(
     { auth }: HttpContextContract,
     next: () => Promise<void>,
-    customGuards: Array<'local' | 'ldap'>,
+    customGuards: Array<Parameters<AuthContract['use']>[0]>,
   ) {
     /**
      * Uses the user defined guards or the default guard mentioned in

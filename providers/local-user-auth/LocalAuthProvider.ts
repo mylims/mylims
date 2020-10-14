@@ -10,7 +10,7 @@ import User from 'App/Models/UserModel';
 import { LocalUser } from './LocalUser';
 
 /**
- * Database provider to lookup users inside the LDAP
+ * Database provider to lookup users inside MongoDB
  */
 export class LocalAuthProvider implements UserProviderContract<User> {
   public constructor(
