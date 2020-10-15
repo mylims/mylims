@@ -50,6 +50,9 @@ Route.group(() => {
 
   Route.post('/auth', 'AdminsController.auth');
   Route.post('/config', 'AdminsController.changeConf');
+  Route.post('/mongotest', 'AdminsController.testMongoConnection').middleware(
+    'admin',
+  );
 }).prefix('/admin');
 
 // Require routes from addons
