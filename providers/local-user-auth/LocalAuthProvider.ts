@@ -41,10 +41,7 @@ export default class LocalAuthProvider implements UserProviderContract<User> {
   public async findByUid(uid: string): Promise<ProviderUserContract<User>> {
     const credential = await Credential.findOne({ email: uid });
     if (credential === null) throw new Error('credential not found');
-    const user = await this.UserManager.getUser(
-      'local',
-      credential?.id as string,
-    );
+    const user = await this.UserManager.getUser('local', credential._id);
     return this.getUserFor(user);
   }
 
