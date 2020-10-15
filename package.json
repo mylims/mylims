@@ -31,7 +31,7 @@
     "@adonisjs/session": "^4.0.2",
     "@adonisjs/view": "^3.0.4",
     "@lukeed/uuid": "^1.0.1",
-    "@zakodium/adonis-mongodb": "^0.3.2",
+    "@zakodium/adonis-mongodb": "^0.3.4",
     "phc-argon2": "^1.0.11",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
