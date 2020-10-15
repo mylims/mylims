@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^4.3.1",
-    "@adonisjs/core": "^5.0.2-beta-rc-7",
+    "@adonisjs/core": "^5.0.2-beta-rc-8",
     "@adonisjs/session": "^4.0.2",
     "@adonisjs/view": "^3.0.4",
     "@lukeed/uuid": "^1.0.1",
