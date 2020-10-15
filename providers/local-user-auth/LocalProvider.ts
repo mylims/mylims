@@ -15,7 +15,11 @@ export default class LocalProvider {
           'provider',
           'local',
           (container) =>
-            new (require('./LocalAuthProvider'))(container, UserManager),
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            new (require('./LocalAuthProvider').default)(
+              container,
+              UserManager,
+            ),
         );
       },
     );

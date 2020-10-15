@@ -1,5 +1,3 @@
-import uuid from '@lukeed/uuid';
-
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
 
@@ -13,25 +11,36 @@ Route.get('/', async () => ({ hello: 'world' }));
 Route.group(() => {
   Route.post('/', async ({ request }) => {
     const { lastname, firstname, email } = request.all();
-    const credential = await Credential.create({ resetToken: uuid() });
+    const credential = await Credential.create({ email });
     await User.create({
       lastname,
       firstname,
       email,
       auth: { local: credential._id },
     });
-    return true;
+
+    return Route.makeSignedUrl('setPassword', {
+      params: {
+        email,
+      },
+    });
   });
 
-  Route.post('/password', async ({ request }) => {
-    const { token, password } = request.all();
-    const credentials = await Credential.findOne({ resetToken: token });
-    if (credentials === null) throw new Error('bad token');
-    credentials.resetToken = null;
+  Route.post('/password/:email', async ({ request, response, params }) => {
+    const { password } = request.all();
+    const { email } = params;
+    const credentials = await Credential.findOne({ email });
+    if (credentials === null) return response.notFound(email);
     credentials.hash = await Hash.make(password);
     return credentials.save();
+  }).as('setPassword');
+
+  Route.post('/login', async ({ request, auth }) => {
+    const { email, password } = request.all();
+    const x = await auth.use('local').attempt(email, password);
+    return x.email;
   });
-}).prefix('/user');
+}).prefix('/users');
 
 // Super admin views
 Route.group(() => {

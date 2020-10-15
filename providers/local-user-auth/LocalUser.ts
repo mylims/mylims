@@ -1,21 +1,14 @@
-import { inject } from '@adonisjs/core/build/standalone';
-
 import { ProviderUserContract } from '@ioc:Adonis/Addons/Auth';
-import { HashContract } from '@ioc:Adonis/Core/Hash';
+import Hash from '@ioc:Adonis/Core/Hash';
 
-import CredentialModel from 'App/Models/CredentialModel';
+import Credential from 'App/Models/CredentialModel';
 import User from 'App/Models/UserModel';
 
 /**
  * Local user works a bridge between the provider and the guard
  */
-@inject([null, 'Adonis/Core/Hash', 'App/Models/CredentialModel'])
 export class LocalUser implements ProviderUserContract<User> {
-  public constructor(
-    public user: User,
-    private Hash: HashContract,
-    private Credential: typeof CredentialModel,
-  ) {}
+  public constructor(public user: User) {}
 
   /**
    * Returns the value of the user id
@@ -33,9 +26,9 @@ export class LocalUser implements ProviderUserContract<User> {
     if (!local) {
       return Promise.reject(new Error("user doesn't have local auth"));
     }
-    const credential = await this.Credential.findById(local);
+    const credential = await Credential.findById(local);
     if (credential === null) throw new Error('credential not found');
-    return this.Hash.verify(credential.hash, _plainPassword);
+    return Hash.verify(credential.hash, _plainPassword);
   }
 
   /**
