@@ -7,7 +7,7 @@ import {
 import { IocContract } from '@ioc:Adonis/Core/Application';
 import UserManager from '@ioc:Zakodium/User';
 
-import User from 'App/Models/UserModel';
+import User from 'App/Models/User';
 
 import LdapUser from './LdapUser';
 

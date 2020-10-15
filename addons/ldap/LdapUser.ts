@@ -2,7 +2,7 @@ import * as ldap from 'ldapjs';
 
 import { ProviderUserContract } from '@ioc:Adonis/Addons/Auth';
 
-import User from 'App/Models/UserModel';
+import User from 'App/Models/User';
 
 import { LdapProviderConfig } from './LdapAuthProvider';
 

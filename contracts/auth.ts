@@ -1,4 +1,4 @@
-import User from 'App/Models/UserModel';
+import User from 'App/Models/User';
 
 declare module '@ioc:Adonis/Addons/Auth' {
   interface ProvidersList {

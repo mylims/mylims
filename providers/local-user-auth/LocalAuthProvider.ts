@@ -5,14 +5,15 @@ import {
 import { IocContract } from '@ioc:Adonis/Core/Application';
 import UserManager from '@ioc:Zakodium/User';
 
-import User from 'App/Models/UserModel';
+import Credential from 'App/Models/Credential';
+import User from 'App/Models/User';
 
 import { LocalUser } from './LocalUser';
 
 /**
  * Database provider to lookup users inside MongoDB
  */
-export class LocalAuthProvider implements UserProviderContract<User> {
+export default class LocalAuthProvider implements UserProviderContract<User> {
   public constructor(
     private container: IocContract,
     private UserManager: UserManager,
@@ -38,7 +39,9 @@ export class LocalAuthProvider implements UserProviderContract<User> {
    * their defined uids.
    */
   public async findByUid(uid: string): Promise<ProviderUserContract<User>> {
-    const user = await this.UserManager.getUser('local', uid);
+    const credential = await Credential.findOne({ email: uid });
+    if (credential === null) throw new Error('credential not found');
+    const user = await this.UserManager.getUser('local', credential._id);
     return this.getUserFor(user);
   }
 
