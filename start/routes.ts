@@ -2,8 +2,8 @@ import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
 
 import { registerRoutes } from 'App/AddonsManager';
-import Credential from 'App/Models/CredentialModel';
-import User from 'App/Models/UserModel';
+import Credential from 'App/Models/Credential';
+import User from 'App/Models/User';
 
 Route.get('/', async () => ({ hello: 'world' }));
 

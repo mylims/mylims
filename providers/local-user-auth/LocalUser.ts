@@ -1,8 +1,8 @@
 import { ProviderUserContract } from '@ioc:Adonis/Addons/Auth';
 import Hash from '@ioc:Adonis/Core/Hash';
 
-import Credential from 'App/Models/CredentialModel';
-import User from 'App/Models/UserModel';
+import Credential from 'App/Models/Credential';
+import User from 'App/Models/User';
 
 /**
  * Local user works a bridge between the provider and the guard

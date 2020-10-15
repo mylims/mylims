@@ -1,4 +1,4 @@
-import User from 'App/Models/UserModel';
+import User from 'App/Models/User';
 
 import { LdapProviderConfig } from '../LdapAuthProvider';
 

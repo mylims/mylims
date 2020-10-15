@@ -5,8 +5,8 @@ import {
 import { IocContract } from '@ioc:Adonis/Core/Application';
 import UserManager from '@ioc:Zakodium/User';
 
-import Credential from 'App/Models/CredentialModel';
-import User from 'App/Models/UserModel';
+import Credential from 'App/Models/Credential';
+import User from 'App/Models/User';
 
 import { LocalUser } from './LocalUser';
 
