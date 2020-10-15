@@ -1,3 +1,5 @@
+import { MongoClient } from 'mongodb';
+
 import Env from '@ioc:Adonis/Core/Env';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
@@ -53,5 +55,19 @@ export default class AdminsController {
       }
     }
     response.redirect('/admin/config');
+  }
+
+  public async testMongoConnection({
+    request,
+  }: HttpContextContract): Promise<{ status: boolean }> {
+    const mongoUrl = request.input('mongoUrl');
+    try {
+      const connection = await MongoClient.connect(mongoUrl);
+      const status = connection.isConnected();
+      await connection.close();
+      return { status };
+    } catch (error) {
+      return { status: false };
+    }
   }
 }

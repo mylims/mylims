@@ -81,7 +81,11 @@
   </form>
 
   {{--  MongoDB  --}}
-  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
+  <form
+    action="{{ route('AdminsController.changeConf') }}"
+    method="POST"
+    id="mongoform"
+  >
     <h1 id="message">Mongo configuration</h1>
     <input type="hidden" id="confkey" name="confkey" value="mongodb" />
 
@@ -107,7 +111,7 @@
     </div>
 
     <div class="buttons">
-      <button>Test connection</button>
+      <button id="testmongobutton">Test connection</button>
       <button type="submit">Update configuration</button>
     </div>
   </form>
@@ -181,4 +185,35 @@
     <button type="submit">Update configuration</button>
   </form>
 </div>
+
+<script>
+  const mongoButton = document.getElementById('testmongobutton');
+  mongoButton.addEventListener('click', testConnection);
+
+  function testConnection(event) {
+    event.preventDefault();
+    const form = document.getElementById('mongoform');
+    if (form) {
+      const mongoUrl = form.elements['url'].value;
+      const testUrl = "{{ route('AdminsController.testMongoConnection') }}";
+
+      mongoButton.innerHTML = '... Loading'
+      fetch(testUrl, {
+        method: 'post',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ mongoUrl }),
+      })
+        .then((res) => res.json())
+        .then(({ status }) => {
+          mongoButton.innerHTML = status
+            ? 'Correct connection'
+            : 'Wrong connection';
+        })
+        .catch(() => { mongoButton.innerHTML = 'Wrong connection' });
+    }
+  }
+</script>
 @endsection
