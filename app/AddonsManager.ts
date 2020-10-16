@@ -5,29 +5,73 @@ import Application from '@ioc:Adonis/Core/Application';
 import Route from '@ioc:Adonis/Core/Route';
 
 const base = Application.makePath('.');
+const addonsDirectory = path.join(base, 'addons');
+
+class Addon {
+  private routesFile: string | null = null;
+  private migrationsDirectory: string | null = null;
+
+  public constructor(private name: string, private addonPath: string) {
+    const addonFiles = fs.readdirSync(addonPath);
+    for (const addonFile of addonFiles) {
+      if (addonFile.startsWith('routes.')) {
+        this.routesFile = path.join(this.addonPath, addonFile);
+      }
+      if (addonFile === 'migrations') {
+        this.migrationsDirectory = path.join(this.addonPath, addonFile);
+      }
+    }
+  }
+
+  public getName() {
+    return this.name;
+  }
+
+  public hasRoutesFile() {
+    return this.routesFile !== null;
+  }
+
+  public getRoutesFile() {
+    if (!this.routesFile) {
+      throw new Error(`addon ${this.name} has no routes file`);
+    }
+    return this.routesFile;
+  }
+
+  public hasMigrationsDirectory() {
+    return this.migrationsDirectory !== null;
+  }
+
+  public getMigrationsDirectory() {
+    if (!this.migrationsDirectory) {
+      throw new Error(`addon ${this.name} has no migrations directory`);
+    }
+    return this.migrationsDirectory;
+  }
+}
+
+const addons = fs
+  .readdirSync(addonsDirectory)
+  .map(
+    (addonName) => new Addon(addonName, path.join(addonsDirectory, addonName)),
+  );
 
 export function getAddons() {
-  return fs.readdirSync(path.join(base, 'addons'));
+  return addons;
 }
 
 export function registerRoutes() {
-  getRoutesFiles().forEach(([addon, addonPath]) => {
-    Route.group(() => {
-      require(addonPath);
-    }).prefix(`/addons/${addon}`);
-  });
+  addons
+    .filter((addon) => addon.hasRoutesFile())
+    .forEach((addon) => {
+      Route.group(() => {
+        require(addon.getRoutesFile());
+      }).prefix(`/addons/${addon.getName()}`);
+    });
 }
 
 export function getMigrations() {
-  return getAddons()
-    .filter((addon) =>
-      fs.existsSync(path.join(base, 'addons', addon, 'migrations')),
-    )
-    .map((addon) => path.join('addons', addon, 'migrations'));
-}
-
-function getRoutesFiles() {
-  return getAddons()
-    .map((addon) => [addon, path.join(base, 'addons', addon, 'routes.js')])
-    .filter(([, routeFile]) => fs.existsSync(routeFile));
+  return addons
+    .filter((addon) => addon.hasMigrationsDirectory())
+    .map((addon) => addon.getMigrationsDirectory());
 }

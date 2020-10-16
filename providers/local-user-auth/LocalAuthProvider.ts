@@ -22,7 +22,7 @@ export default class LocalAuthProvider implements UserProviderContract<User> {
   /**
    * Returns an instance of provider user
    */
-  public getUserFor(user: User) {
+  public getUserFor(user: User | null) {
     return this.container.make(LocalUser, [user]);
   }
 
@@ -40,7 +40,7 @@ export default class LocalAuthProvider implements UserProviderContract<User> {
    */
   public async findByUid(uid: string): Promise<ProviderUserContract<User>> {
     const credential = await Credential.findOne({ email: uid });
-    if (credential === null) throw new Error('credential not found');
+    if (credential === null) return this.getUserFor(null);
     const user = await this.UserManager.getUser('local', credential._id);
     return this.getUserFor(user);
   }

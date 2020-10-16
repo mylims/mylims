@@ -24,7 +24,7 @@ export interface LdapProviderConfig {
 /**
  * Database provider to lookup users inside the LDAP
  */
-export class LdapAuthProvider implements UserProviderContract<User> {
+export default class LdapAuthProvider implements UserProviderContract<User> {
   private adminClient: ldap.Client;
   private adminBound = false;
 
@@ -39,7 +39,7 @@ export class LdapAuthProvider implements UserProviderContract<User> {
   /**
    * Returns an instance of provider user
    */
-  public getUserFor(user: User) {
+  public getUserFor(user: User | null) {
     return this.container.make(LdapUser, [user, this.config]);
   }
 
@@ -116,7 +116,7 @@ export class LdapAuthProvider implements UserProviderContract<User> {
                   .then((user) => resolve(this.getUserFor(user)))
                   .catch((err) => reject(err));
               } else {
-                resolve(undefined);
+                resolve(this.getUserFor(null));
               }
             });
           },

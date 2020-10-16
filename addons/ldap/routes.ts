@@ -1,13 +1,8 @@
 import Route from '@ioc:Adonis/Core/Route';
 
-Route.get('/login', async ({ auth }) => {
-  await auth.use('ldap').attempt('user02', 'password2');
-  // eslint-disable-next-line no-console
-  console.log(auth.user);
-  return { test: true };
+Route.post('/login', async ({ request, auth }) => {
+  const { username, password } = request.post();
+  const ldapauth = auth.use('ldap');
+  const user = await ldapauth.attempt(username, password);
+  return user.id;
 });
-
-Route.get('/user', async ({ auth }) => {
-  // eslint-disable-next-line no-console
-  console.log(auth.user);
-}).middleware('auth');
