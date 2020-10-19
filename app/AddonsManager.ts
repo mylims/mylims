@@ -50,7 +50,7 @@ class Addon {
 
   public getMigrationsDirectory() {
     if (!this.manifest.migrations) {
-      throw new Error(`addon ${this.name} has no migrations directories`);
+      throw new Error(`addon ${this.name} has no migrations directory`);
     }
     return path.join(this.addonPath, this.manifest.migrations);
   }
