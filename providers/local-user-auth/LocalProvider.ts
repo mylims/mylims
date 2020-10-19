@@ -14,10 +14,10 @@ export default class LocalProvider {
         Auth.extend(
           'provider',
           'local',
-          (container) =>
+          (application) =>
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             new (require('./LocalAuthProvider').default)(
-              container,
+              application,
               UserManager,
             ),
         );

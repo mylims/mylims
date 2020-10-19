@@ -4,7 +4,7 @@ import {
   UserProviderContract,
   ProviderUserContract,
 } from '@ioc:Adonis/Addons/Auth';
-import { IocContract } from '@ioc:Adonis/Core/Application';
+import { ApplicationContract } from '@ioc:Adonis/Core/Application';
 import UserManager from '@ioc:Zakodium/User';
 
 import User from 'App/Models/User';
@@ -29,7 +29,7 @@ export default class LdapAuthProvider implements UserProviderContract<User> {
   private adminBound = false;
 
   public constructor(
-    private container: IocContract<ldap.SearchEntryObject>,
+    private application: ApplicationContract,
     private config: LdapProviderConfig,
     private UserManager: UserManager,
   ) {
@@ -40,7 +40,7 @@ export default class LdapAuthProvider implements UserProviderContract<User> {
    * Returns an instance of provider user
    */
   public getUserFor(user: User | null) {
-    return this.container.make(LdapUser, [user, this.config]);
+    return this.application.container.make(LdapUser, [user, this.config]);
   }
 
   /**

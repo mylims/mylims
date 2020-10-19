@@ -5,7 +5,7 @@ import * as AddonsManager from 'App/AddonsManager';
 import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
 
-Route.get('/', 'AppController.home');
+Route.get('/', 'AppController.home').middleware('silentAuth');
 
 // Local user authentication
 Route.group(() => {

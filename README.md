@@ -17,7 +17,7 @@
 The following commands will respectively install the dependencies and build the core app.
 
 ```shell
-$ npm install
+npm install
 ```
 
 ## Configuration
@@ -31,8 +31,8 @@ Edit it as needed. Example: auth config for ldap provider.
 The following commands will start mongodb and ldap (to test the ldap provider) containers, setup a replica set on the mongodb server (to support migrations) and start the development server.
 
 ```shell
-$ docker-compose up -d
-$ npm run dev
+docker-compose up -d
+npm run dev
 ```
 
 ### Production

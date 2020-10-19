@@ -2,7 +2,7 @@ import {
   UserProviderContract,
   ProviderUserContract,
 } from '@ioc:Adonis/Addons/Auth';
-import { IocContract } from '@ioc:Adonis/Core/Application';
+import { ApplicationContract } from '@ioc:Adonis/Core/Application';
 import UserManager from '@ioc:Zakodium/User';
 
 import Credential from 'App/Models/Credential';
@@ -15,7 +15,7 @@ import { LocalUser } from './LocalUser';
  */
 export default class LocalAuthProvider implements UserProviderContract<User> {
   public constructor(
-    private container: IocContract,
+    private application: ApplicationContract,
     private UserManager: UserManager,
   ) {}
 
@@ -23,7 +23,7 @@ export default class LocalAuthProvider implements UserProviderContract<User> {
    * Returns an instance of provider user
    */
   public getUserFor(user: User | null) {
-    return this.container.make(LocalUser, [user]);
+    return this.application.container.make(LocalUser, [user]);
   }
 
   /**
