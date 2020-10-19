@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-import isEqual from 'lodash.isequal';
+import { isDeepStrictEqual } from 'util';
 
 const { config, history } = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'config.json'), 'utf-8'),
@@ -47,7 +47,7 @@ export function setConfig<T extends keyof ConfigProps>(
   newConfig: ConfigProps[T],
 ) {
   const currConf = getConfig(key);
-  if (!isEqual(currConf, newConfig)) {
+  if (!isDeepStrictEqual(currConf, newConfig)) {
     const confToSave = {
       config: {
         ...config,
