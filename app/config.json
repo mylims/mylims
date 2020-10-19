@@ -1,11 +1,7 @@
 {
   "config": {
     "date": "2020-10-07T14:48:00.000Z",
-    "app": {
-      "appKey": "i0Dh2SxcYheh2wRIHqtrkrx7a5HnoPYP",
-      "appName": "mylims-server",
-      "logLevel": "info"
-    },
+    "appKey": "i0Dh2SxcYheh2wRIHqtrkrx7a5HnoPYP",
     "auth": {
       "ldap": {
         "id": "uid",
@@ -21,8 +17,6 @@
       "database": "mylims"
     },
     "session": {
-      "driver": "cookie",
-      "cookieName": "adonis-session",
       "sessionAge": "2h"
     }
   },
