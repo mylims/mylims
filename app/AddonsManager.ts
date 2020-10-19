@@ -19,7 +19,7 @@ class Addon {
 
   public constructor(private name: string, private addonPath: string) {
     this.manifest = JSON.parse(
-      fs.readFileSync(path.join(addonPath, 'addon-manifest.json'), {
+      fs.readFileSync(path.join(addonPath, 'manifest.json'), {
         encoding: 'utf-8',
       }),
     );
