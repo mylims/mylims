@@ -11,15 +11,13 @@ const { config, history } = JSON.parse(
 export interface ConfigProps {
   date: string;
   appKey: string;
-  auth: {
-    ldap: {
-      id: string;
-      uid: string;
-      url: string;
-      appDN: string;
-      appPassword: string;
-      baseUserDN: string;
-    };
+  ldap: {
+    id: string;
+    uid: string;
+    url: string;
+    appDN: string;
+    appPassword: string;
+    baseUserDN: string;
   };
   mongodb: {
     url: string;
@@ -38,7 +36,7 @@ export function getAllConfig() {
   return {
     date: getConfig('date'),
     appKey: getConfig('appKey'),
-    auth: getConfig('auth'),
+    ldap: getConfig('ldap'),
     mongodb: getConfig('mongodb'),
     session: getConfig('session'),
   };

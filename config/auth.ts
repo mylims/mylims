@@ -18,25 +18,20 @@ import { getConfig } from '../app/AppConfig';
 | inside the `contracts/auth.ts` file before mentioning them here.
 |
 */
-const auth = getConfig('auth');
+const ldapConf = getConfig('ldap');
 const authConfig: AuthConfig = {
   guard: 'local',
   list: {
     local: {
       driver: 'session',
-      provider: {
-        driver: 'local',
-      },
+      provider: { driver: 'local' },
     },
     // TODO: construct this dynamically
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     ldap: {
       driver: 'session',
-      provider: {
-        driver: 'ldap',
-        ...auth.ldap,
-      },
+      provider: { driver: 'ldap', ...ldapConf },
     },
   },
 };
