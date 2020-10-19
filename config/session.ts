@@ -27,7 +27,7 @@ const sessionConfig: SessionConfig = {
   | Note: Switching drivers will make existing sessions invalid.
   |
   */
-  driver: 'redis',
+  driver: 'cookie',
 
   /*
   |--------------------------------------------------------------------------

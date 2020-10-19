@@ -15,6 +15,7 @@
   "devDependencies": {
     "@adonisjs/assembler": "^3.0.3",
     "@types/node": "^14.11.10",
+    "@types/ms": "~0.7.31",
     "@types/proxy-addr": "^2.0.0",
     "@types/source-map-support": "^0.5.3",
     "@zakodium/eslint-config": "^2.1.1",
@@ -35,6 +36,7 @@
     "@types/lodash.isequal": "~4.5.5",
     "lodash.isequal": "^4.5.0",
     "mongodb": "^3.6.2",
+    "ms": "~2.1.2",
     "phc-argon2": "^1.0.11",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
