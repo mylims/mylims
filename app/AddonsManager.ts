@@ -79,5 +79,5 @@ export function registerRoutes() {
 export function getMigrations() {
   return addons
     .filter((addon) => addon.hasMigrationsDirectory())
-    .flatMap((addon) => addon.getMigrationsDirectory());
+    .map((addon) => addon.getMigrationsDirectory());
 }
