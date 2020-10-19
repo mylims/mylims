@@ -1,11 +1,11 @@
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
 
-import { registerRoutes } from 'App/AddonsManager';
+import * as AddonsManager from 'App/AddonsManager';
 import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
 
-Route.get('/', async () => ({ hello: 'world' }));
+Route.get('/', 'AppController.home');
 
 // Local user authentication
 Route.group(() => {
@@ -51,5 +51,5 @@ Route.group(() => {
   Route.post('/auth', 'AdminsController.auth');
 }).prefix('/admin');
 
-// Require route from addons
-registerRoutes();
+// Require routes from addons
+AddonsManager.registerRoutes();

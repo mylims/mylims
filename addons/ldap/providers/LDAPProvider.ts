@@ -11,11 +11,13 @@ export default class LdapProvider {
     this.app.container.with(
       ['Adonis/Addons/Auth', 'Zakodium/User'],
       (Auth: AuthManagerContract, UserManager: UserManager) => {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const LdapAuthProvider = require('../LdapAuthProvider').default;
         Auth.extend(
           'provider',
           'ldap',
           (container, config) =>
-            new (require('./LdapAuthProvider'))(container, config, UserManager),
+            new LdapAuthProvider(container, config, UserManager),
         );
       },
     );
