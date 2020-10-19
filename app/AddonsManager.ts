@@ -10,8 +10,8 @@ const addonsDirectory = path.join(base, 'addons');
 interface AddonManifest {
   displayName: string;
   description: string;
-  routes: string | undefined;
-  migrations: string | undefined;
+  routes?: string | undefined;
+  migrations?: string | undefined;
 }
 
 class Addon {
