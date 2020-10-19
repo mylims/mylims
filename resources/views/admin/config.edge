@@ -5,7 +5,7 @@
   {{--  Session  --}}
   <form action="{{ route('AdminsController.changeConf') }}" method="POST">
     <h1 id="message">Session configuration</h1>
-    <input type="hidden" id="confkey" name="confkey" value="sessionAge" />
+    <input type="hidden" id="confkey" name="confkey" value="session" />
 
     <div class="field">
       <label for="sessionAge">Session age</label>
@@ -13,7 +13,7 @@
         type="text"
         name="sessionAge"
         id="sessionAge"
-        value="{{ config.sessionAge }}"
+        value="{{ config.session.sessionAge }}"
         placeholder="Session age"
       />
     </div>
@@ -22,11 +22,7 @@
   </form>
 
   {{--  MongoDB  --}}
-  <form
-    action="{{ route('AdminsController.changeConf') }}"
-    method="POST"
-    id="mongoform"
-  >
+  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
     <h1 id="message">Mongo configuration</h1>
     <input type="hidden" id="confkey" name="confkey" value="mongodb" />
 
@@ -51,15 +47,12 @@
       />
     </div>
 
-    <div class="buttons">
-      <button id="testmongobutton">Test connection</button>
-      <button type="submit">Update configuration</button>
-    </div>
+    <button type="submit">Update configuration</button>
   </form>
 
-  {{--  Auth  --}}
+  {{--  LDAP  --}}
   <form action="{{ route('AdminsController.changeConf') }}" method="POST">
-    <h1 id="message">Auth configuration</h1>
+    <h1 id="message">LDAP configuration</h1>
     <input type="hidden" id="confkey" name="confkey" value="ldap" />
 
     <div class="field">
@@ -68,7 +61,7 @@
         type="text"
         name="id"
         id="id"
-        value="{{ config.auth.ldap.id }}"
+        value="{{ config.ldap.id }}"
         placeholder="LDAP id"
       />
     </div>
@@ -78,7 +71,7 @@
         type="text"
         name="uid"
         id="uid"
-        value="{{ config.auth.ldap.uid }}"
+        value="{{ config.ldap.uid }}"
         placeholder="LDAP uid"
       />
     </div>
@@ -88,7 +81,7 @@
         type="text"
         name="url"
         id="url"
-        value="{{ config.auth.ldap.url }}"
+        value="{{ config.ldap.url }}"
         placeholder="LDAP URL"
       />
     </div>
@@ -98,7 +91,7 @@
         type="text"
         name="appDN"
         id="appDN"
-        value="{{ config.auth.ldap.appDN }}"
+        value="{{ config.ldap.appDN }}"
         placeholder="LDAP DN"
       />
     </div>
@@ -108,7 +101,7 @@
         type="text"
         name="appPassword"
         id="appPassword"
-        value="{{ config.auth.ldap.appPassword }}"
+        value="{{ config.ldap.appPassword }}"
         placeholder="LDAP password"
       />
     </div>
@@ -118,7 +111,7 @@
         type="text"
         name="baseUserDN"
         id="baseUserDN"
-        value="{{ config.auth.ldap.baseUserDN }}"
+        value="{{ config.ldap.baseUserDN }}"
         placeholder="LDAP base user"
       />
     </div>
@@ -126,35 +119,4 @@
     <button type="submit">Update configuration</button>
   </form>
 </div>
-
-<script>
-  const mongoButton = document.getElementById('testmongobutton');
-  mongoButton.addEventListener('click', testConnection);
-
-  function testConnection(event) {
-    event.preventDefault();
-    const form = document.getElementById('mongoform');
-    if (form) {
-      const mongoUrl = form.elements['url'].value;
-      const testUrl = "{{ route('AdminsController.testMongoConnection') }}";
-
-      mongoButton.innerHTML = '... Loading'
-      fetch(testUrl, {
-        method: 'post',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ mongoUrl }),
-      })
-        .then((res) => res.json())
-        .then(({ status }) => {
-          mongoButton.innerHTML = status
-            ? 'Correct connection'
-            : 'Wrong connection';
-        })
-        .catch(() => { mongoButton.innerHTML = 'Wrong connection' });
-    }
-  }
-</script>
 @endsection

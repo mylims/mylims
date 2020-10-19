@@ -1,9 +1,10 @@
 import { MongoClient } from 'mongodb';
+import ms from 'ms';
 
 import Env from '@ioc:Adonis/Core/Env';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
-import { getAllConfig, getConfig, setConfig } from 'App/AppConfig';
+import { getAllConfig, setConfig } from 'App/AppConfig';
 
 export default class AdminsController {
   // Ask for admin password
@@ -45,27 +46,50 @@ export default class AdminsController {
   // Modifies the config file
   public async changeConf({ request, response }: HttpContextContract) {
     const { confkey: confKey, ...currConf } = request.all();
-    if (confKey) {
-      const authList = ['ldap'];
-      if (authList.includes(confKey)) {
-        const auth = getConfig('auth');
-        setConfig('auth', { ...auth, [confKey]: currConf });
-      } else {
+    switch (confKey) {
+      case undefined:
+      case null: {
+        break;
+      }
+
+      case 'mongodb': {
+        const { url } = currConf;
+        const { status } = await this.testMongoConnection(url);
+        if (status) setConfig(confKey, currConf);
+        break;
+      }
+
+      case 'session': {
+        const { sessionAge } = currConf;
+        const { status } = this.testSessionAge(sessionAge);
+        if (status) setConfig(confKey, currConf);
+        break;
+      }
+
+      default: {
         setConfig(confKey, currConf);
+        break;
       }
     }
     response.redirect('/admin/config');
   }
 
-  public async testMongoConnection({
-    request,
-  }: HttpContextContract): Promise<{ status: boolean }> {
-    const mongoUrl = request.input('mongoUrl');
+  private async testMongoConnection(
+    mongoUrl: string,
+  ): Promise<{ status: boolean }> {
     try {
       const connection = await MongoClient.connect(mongoUrl);
       const status = connection.isConnected();
       await connection.close();
       return { status };
+    } catch (error) {
+      return { status: false };
+    }
+  }
+
+  private testSessionAge(age: string) {
+    try {
+      return { status: !!ms(age) };
     } catch (error) {
       return { status: false };
     }

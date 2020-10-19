@@ -49,10 +49,7 @@ Route.group(() => {
   Route.get('/config', 'AdminsController.renderConfig').middleware('admin');
 
   Route.post('/auth', 'AdminsController.auth');
-  Route.post('/config', 'AdminsController.changeConf');
-  Route.post('/mongotest', 'AdminsController.testMongoConnection').middleware(
-    'admin',
-  );
+  Route.post('/config', 'AdminsController.changeConf').middleware('admin');
 }).prefix('/admin');
 
 // Require routes from addons
