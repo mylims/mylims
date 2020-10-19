@@ -15,8 +15,6 @@ import { ResponseConfig } from '@ioc:Adonis/Core/Response';
 
 import { getConfig } from '../app/AppConfig';
 
-const app = getConfig('app');
-
 type HttpConfig = RequestConfig & ResponseConfig;
 
 /*
@@ -32,7 +30,7 @@ type HttpConfig = RequestConfig & ResponseConfig;
 | be decrypted.
 |
 */
-export const appKey: string = app.appKey;
+export const appKey: string = getConfig('appKey');
 
 /*
 |--------------------------------------------------------------------------
@@ -154,7 +152,7 @@ export const logger: LoggerConfig = {
   | reading the `name` property from the `package.json` file.
   |
   */
-  name: app.appName,
+  name: 'mylims-server',
 
   /*
   |--------------------------------------------------------------------------
@@ -176,7 +174,7 @@ export const logger: LoggerConfig = {
   | at deployment level and not code level.
   |
   */
-  level: app.logLevel,
+  level: Env.get('LOG_LEVEL', 'info') as string,
 
   /*
   |--------------------------------------------------------------------------

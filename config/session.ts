@@ -27,7 +27,7 @@ const sessionConfig: SessionConfig = {
   | Note: Switching drivers will make existing sessions invalid.
   |
   */
-  driver: session.driver,
+  driver: 'redis',
 
   /*
   |--------------------------------------------------------------------------
@@ -37,7 +37,7 @@ const sessionConfig: SessionConfig = {
   | The name of the cookie that will hold the session id.
   |
   */
-  cookieName: session.cookieName,
+  cookieName: 'mylims-cookie',
 
   /*
   |--------------------------------------------------------------------------

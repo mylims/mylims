@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
@@ -9,11 +10,7 @@ const { config, history } = JSON.parse(
 
 export interface ConfigProps {
   date: string;
-  app: {
-    appKey: string;
-    appName: string;
-    logLevel: string;
-  };
+  appKey: string;
   auth: {
     ldap: {
       id: string;
@@ -29,8 +26,6 @@ export interface ConfigProps {
     database: string;
   };
   session: {
-    driver: 'cookie' | 'file' | 'redis';
-    cookieName: string;
     sessionAge?: string;
   };
 }
@@ -42,7 +37,7 @@ export function getConfig<T extends keyof ConfigProps>(key: T): ConfigProps[T] {
 export function getAllConfig() {
   return {
     date: getConfig('date'),
-    app: getConfig('app'),
+    appKey: getConfig('appKey'),
     auth: getConfig('auth'),
     mongodb: getConfig('mongodb'),
     session: getConfig('session'),
@@ -56,7 +51,12 @@ export function setConfig<T extends keyof ConfigProps>(
   const currConf = getConfig(key);
   if (!isEqual(currConf, newConfig)) {
     const confToSave = {
-      config: { ...config, [key]: newConfig, date: new Date().toISOString() },
+      config: {
+        ...config,
+        [key]: newConfig,
+        date: new Date().toISOString(),
+        appKey: randomString(32),
+      },
       history: [config, ...history],
     };
 
@@ -65,4 +65,12 @@ export function setConfig<T extends keyof ConfigProps>(
       JSON.stringify(confToSave),
     );
   }
+}
+
+export function randomString(len: number) {
+  return crypto
+    .randomBytes(Math.ceil(len / 2))
+    .toString('hex')
+    .substring(0, len)
+    .toString();
 }
