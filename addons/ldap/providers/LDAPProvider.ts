@@ -16,8 +16,8 @@ export default class LdapProvider {
         Auth.extend(
           'provider',
           'ldap',
-          (container, config) =>
-            new LdapAuthProvider(container, config, UserManager),
+          (application, config) =>
+            new LdapAuthProvider(application, config, UserManager),
         );
       },
     );
