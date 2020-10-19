@@ -11,7 +11,7 @@ interface AddonManifest {
   displayName: string;
   description: string;
   routes: string | undefined;
-  migrations: string[] | undefined;
+  migrations: string | undefined;
 }
 
 class Addon {
@@ -44,17 +44,15 @@ class Addon {
     return path.join(this.addonPath, this.manifest.routes);
   }
 
-  public hasMigrationsDirectories() {
+  public hasMigrationsDirectory() {
     return this.manifest.migrations !== undefined;
   }
 
-  public getMigrationsDirectories() {
+  public getMigrationsDirectory() {
     if (!this.manifest.migrations) {
       throw new Error(`addon ${this.name} has no migrations directories`);
     }
-    return this.manifest.migrations.map((migration) =>
-      path.join(this.addonPath, migration),
-    );
+    return path.join(this.addonPath, this.manifest.migrations);
   }
 }
 
@@ -80,6 +78,6 @@ export function registerRoutes() {
 
 export function getMigrations() {
   return addons
-    .filter((addon) => addon.hasMigrationsDirectories())
-    .flatMap((addon) => addon.getMigrationsDirectories());
+    .filter((addon) => addon.hasMigrationsDirectory())
+    .flatMap((addon) => addon.getMigrationsDirectory());
 }
