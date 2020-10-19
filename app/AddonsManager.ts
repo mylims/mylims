@@ -7,20 +7,26 @@ import Route from '@ioc:Adonis/Core/Route';
 const base = Application.makePath('.');
 const addonsDirectory = path.join(base, 'addons');
 
+interface AddonManifest {
+  displayName: string;
+  description: string;
+  routes: string | undefined;
+  migrations: string[] | undefined;
+}
+
 class Addon {
-  private routesFile: string | null = null;
-  private migrationsDirectory: string | null = null;
+  private manifest: AddonManifest;
 
   public constructor(private name: string, private addonPath: string) {
-    const addonFiles = fs.readdirSync(addonPath);
-    for (const addonFile of addonFiles) {
-      if (addonFile.startsWith('routes.')) {
-        this.routesFile = path.join(this.addonPath, addonFile);
-      }
-      if (addonFile === 'migrations') {
-        this.migrationsDirectory = path.join(this.addonPath, addonFile);
-      }
-    }
+    this.manifest = JSON.parse(
+      fs.readFileSync(path.join(addonPath, 'addon-manifest.json'), {
+        encoding: 'utf-8',
+      }),
+    );
+  }
+
+  public getDisplayName() {
+    return this.manifest.displayName;
   }
 
   public getName() {
@@ -28,25 +34,27 @@ class Addon {
   }
 
   public hasRoutesFile() {
-    return this.routesFile !== null;
+    return this.manifest.routes !== undefined;
   }
 
   public getRoutesFile() {
-    if (!this.routesFile) {
+    if (!this.manifest.routes) {
       throw new Error(`addon ${this.name} has no routes file`);
     }
-    return this.routesFile;
+    return path.join(this.addonPath, this.manifest.routes);
   }
 
-  public hasMigrationsDirectory() {
-    return this.migrationsDirectory !== null;
+  public hasMigrationsDirectories() {
+    return this.manifest.migrations !== undefined;
   }
 
-  public getMigrationsDirectory() {
-    if (!this.migrationsDirectory) {
-      throw new Error(`addon ${this.name} has no migrations directory`);
+  public getMigrationsDirectories() {
+    if (!this.manifest.migrations) {
+      throw new Error(`addon ${this.name} has no migrations directories`);
     }
-    return this.migrationsDirectory;
+    return this.manifest.migrations.map((migration) =>
+      path.join(this.addonPath, migration),
+    );
   }
 }
 
@@ -72,6 +80,6 @@ export function registerRoutes() {
 
 export function getMigrations() {
   return addons
-    .filter((addon) => addon.hasMigrationsDirectory())
-    .map((addon) => addon.getMigrationsDirectory());
+    .filter((addon) => addon.hasMigrationsDirectories())
+    .flatMap((addon) => addon.getMigrationsDirectories());
 }
