@@ -2,77 +2,18 @@
 
 @section('content')
 <div class="container">
-  {{--  App  --}}
-  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
-    <h1 id="message">App configuration</h1>
-    <input type="hidden" id="confkey" name="confkey" value="app" />
-
-    <div class="field">
-      <label for="appKey">Application key</label>
-      <input
-        type="text"
-        name="appKey"
-        id="appKey"
-        value="{{ config.app.appKey }}"
-        placeholder="Application key"
-      />
-    </div>
-    <div class="field">
-      <label for="appName">Application name</label>
-      <input
-        type="text"
-        name="appName"
-        id="appName"
-        value="{{ config.app.appName }}"
-        placeholder="Application name"
-      />
-    </div>
-    <div class="field">
-      <label for="logLevel">Log level</label>
-      <input
-        type="text"
-        name="logLevel"
-        id="logLevel"
-        value="{{ config.app.logLevel }}"
-        placeholder="Log level"
-      />
-    </div>
-
-    <button type="submit">Update configuration</button>
-  </form>
-
   {{--  Session  --}}
   <form action="{{ route('AdminsController.changeConf') }}" method="POST">
     <h1 id="message">Session configuration</h1>
-    <input type="hidden" id="confkey" name="confkey" value="session" />
+    <input type="hidden" id="confkey" name="confkey" value="sessionAge" />
 
-    <div class="field">
-      <label for="driver">Session driver</label>
-      <input
-        type="text"
-        name="driver"
-        id="driver"
-        value="{{ config.session.driver }}"
-        placeholder="Session driver"
-      />
-    </div>
-    <div class="field">
-      <label for="cookieName">Cookie name</label>
-      <input
-        type="text"
-        name="cookieName"
-        id="cookieName"
-        value="{{ config.session.cookieName }}"
-        placeholder="Cookie name"
-      />
-    </div>
     <div class="field">
       <label for="sessionAge">Session age</label>
       <input
         type="text"
         name="sessionAge"
         id="sessionAge"
-        value="{{ config.session.sessionAge }}"
+        value="{{ config.sessionAge }}"
         placeholder="Session age"
       />
     </div>

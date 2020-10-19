@@ -32,6 +32,7 @@
     "@adonisjs/view": "^3.0.4",
     "@zakodium/adonis-mongodb": "^0.3.4",
     "@lukeed/uuid": "^1.0.1",
+    "@types/lodash.isequal": "~4.5.5",
     "lodash.isequal": "^4.5.0",
     "mongodb": "^3.6.2",
     "phc-argon2": "^1.0.11",
