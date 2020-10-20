@@ -2,6 +2,7 @@ import { MongoClient } from 'mongodb';
 import ms from 'ms';
 
 import Env from '@ioc:Adonis/Core/Env';
+import Event from '@ioc:Adonis/Core/Event';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
 import { getAllConfig, setConfig } from 'App/AppConfig';
@@ -66,6 +67,10 @@ export default class AdminsController {
         break;
       }
     }
+
+    // TODO: fix this in Adonis
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    Event.emit('mylims:restart', 'config update');
     response.redirect('/admin/config');
   }
 

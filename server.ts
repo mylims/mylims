@@ -11,10 +11,45 @@
 */
 
 import 'reflect-metadata';
+import childProcess from 'child_process';
+
 import { Ignitor } from '@adonisjs/core/build/standalone';
 import sourceMapSupport from 'source-map-support';
 
 sourceMapSupport.install({ handleUncaughtExceptions: false });
 
-// eslint-disable-next-line no-console
-new Ignitor(__dirname).httpServer().start().catch(console.error);
+function parent() {
+  return new Promise((resolve) => {
+    const child = childProcess.fork(`${__filename}`, [], {
+      env: {
+        ...process.env,
+        CHILD: 'true',
+      },
+    });
+
+    child.on('message', (message: string) => {
+      if (message === 'restart') {
+        child.kill();
+        resolve();
+      }
+    });
+  });
+}
+
+function child() {
+  const httpServer = new Ignitor(__dirname).httpServer();
+  httpServer
+    .start()
+    // eslint-disable-next-line no-console
+    .catch(console.error);
+}
+
+function starter() {
+  if (process.env.CHILD) {
+    child();
+  } else {
+    // eslint-disable-next-line no-console
+    parent().then(starter).catch(console.log);
+  }
+}
+starter();
