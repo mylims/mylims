@@ -67,7 +67,7 @@ export default class AdminsController {
         break;
       }
     }
-    await Event.emit('mylims:restart', 'config update').catch((err) =>
+    Event.emit('mylims:restart', 'config update').catch((err) =>
       logger.error(err),
     );
     response.redirect('/admin/config');
