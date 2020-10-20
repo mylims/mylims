@@ -22,6 +22,7 @@ function parent() {
   return new Promise((resolve) => {
     const child = childProcess.fork(`${__filename}`, [], {
       env: {
+        ...process.env,
         CHILD: 'true',
       },
     });
