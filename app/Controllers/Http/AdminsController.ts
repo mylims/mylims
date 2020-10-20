@@ -41,7 +41,6 @@ export default class AdminsController {
 
   // Modifies the config file
   public async changeConf({ request, response, logger }: HttpContextContract) {
-
     const { confkey: confKey, ...currConf } = request.all();
     switch (confKey) {
       case undefined:
@@ -71,7 +70,6 @@ export default class AdminsController {
     await Event.emit('mylims:restart', 'config update').catch((err) =>
       logger.error(err),
     );
-
     response.redirect('/admin/config');
   }
 
