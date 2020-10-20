@@ -40,7 +40,7 @@ export default class AdminsController {
   }
 
   // Modifies the config file
-  public async changeConf({ request, response, logger }: HttpContextContract) {
+  public async changeConf({ request, response }: HttpContextContract) {
     const { confkey: confKey, ...currConf } = request.all();
     switch (confKey) {
       case undefined:
