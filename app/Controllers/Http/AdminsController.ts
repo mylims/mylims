@@ -13,17 +13,6 @@ export default class AdminsController {
     return view.render('admin/login');
   }
 
-  // Displays error and ask for admin password
-  public async renderError({ params, view }: HttpContextContract) {
-    const errors: Record<string, string> = {
-      wrong: 'Wrong password',
-      missing: 'Missing admin password',
-      session: 'Session is not valid',
-    };
-    const error = (params.error && errors[params.error]) || 'Error';
-    return view.render('admin/login', { error });
-  }
-
   // Displays config values
   public async renderConfig({ view }: HttpContextContract) {
     const config = getAllConfig();
@@ -36,8 +25,14 @@ export default class AdminsController {
     const adminPass = Env.get('ADMIN_PASSWORD');
 
     // Pasword validation
-    if (!adminPass) return response.redirect('/admin/error/missing');
-    if (pass !== adminPass) return response.redirect('/admin/error/wrong');
+    if (!adminPass) {
+      session.flash('error', 'Missing admin password');
+      return response.redirect().back();
+    }
+    if (pass !== adminPass) {
+      session.flash('error', 'Wrong password');
+      return response.redirect().back();
+    }
 
     // Sets the session cookie and go to config menu
     session.put('sudo', new Date().getTime());
@@ -46,6 +41,7 @@ export default class AdminsController {
 
   // Modifies the config file
   public async changeConf({ request, response, logger }: HttpContextContract) {
+
     const { confkey: confKey, ...currConf } = request.all();
     switch (confKey) {
       case undefined:
@@ -75,7 +71,8 @@ export default class AdminsController {
     await Event.emit('mylims:restart', 'config update').catch((err) =>
       logger.error(err),
     );
-    return response.redirect('/admin/config');
+
+    response.redirect('/admin/config');
   }
 
   private async testMongoConnection(
