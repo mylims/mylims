@@ -6,6 +6,8 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
 import { getAllConfig, setConfig } from 'App/AppConfig';
 
+import { restart } from '../../../server';
+
 export default class AdminsController {
   // Ask for admin password
   public async renderLogin({ view }: HttpContextContract) {
@@ -71,7 +73,10 @@ export default class AdminsController {
         break;
       }
     }
-    response.redirect('/admin/config');
+    if (process.send) {
+      process.send('reboot');
+    }
+    return response.redirect('/admin/config');
   }
 
   private async testMongoConnection(
