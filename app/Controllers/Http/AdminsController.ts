@@ -67,9 +67,10 @@ export default class AdminsController {
         break;
       }
     }
-    Event.emit('mylims:restart', 'config update').catch((err) =>
-      logger.error(err),
-    );
+
+    // TODO: fix this in Adonis
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    Event.emit('mylims:restart', 'config update');
     response.redirect('/admin/config');
   }
 
