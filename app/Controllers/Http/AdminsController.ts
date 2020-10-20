@@ -2,11 +2,10 @@ import { MongoClient } from 'mongodb';
 import ms from 'ms';
 
 import Env from '@ioc:Adonis/Core/Env';
+import Event from '@ioc:Adonis/Core/Event';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
 import { getAllConfig, setConfig } from 'App/AppConfig';
-
-import { restart } from '../../../server';
 
 export default class AdminsController {
   // Ask for admin password
@@ -46,7 +45,7 @@ export default class AdminsController {
   }
 
   // Modifies the config file
-  public async changeConf({ request, response }: HttpContextContract) {
+  public async changeConf({ request, response, logger }: HttpContextContract) {
     const { confkey: confKey, ...currConf } = request.all();
     switch (confKey) {
       case undefined:
@@ -73,9 +72,9 @@ export default class AdminsController {
         break;
       }
     }
-    if (process.send) {
-      process.send('reboot');
-    }
+    await Event.emit('mylims:restart', 'config update').catch((err) =>
+      logger.error(err),
+    );
     return response.redirect('/admin/config');
   }
 

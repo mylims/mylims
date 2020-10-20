@@ -28,7 +28,7 @@ function parent() {
     });
 
     child.on('message', (message: string) => {
-      if (message === 'reboot') {
+      if (message === 'restart') {
         child.kill();
         resolve();
       }
@@ -48,9 +48,8 @@ function starter() {
   if (process.env.CHILD) {
     child();
   } else {
-    parent()
-      .then(starter)
-      .catch((err) => console.log(err));
+    // eslint-disable-next-line no-console
+    parent().then(starter).catch(console.log);
   }
 }
 starter();
