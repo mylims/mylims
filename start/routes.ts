@@ -45,7 +45,6 @@ Route.group(() => {
 // Super admin views
 Route.group(() => {
   Route.get('/', 'AdminsController.renderLogin');
-  Route.get('/error/:error?', 'AdminsController.renderError');
   Route.get('/config', 'AdminsController.renderConfig').middleware('admin');
 
   Route.post('/auth', 'AdminsController.auth');
