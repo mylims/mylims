@@ -49,7 +49,7 @@ function starter() {
     child();
   } else {
     parent()
-      .then(() => starter())
+      .then(starter)
       .catch((err) => console.log(err));
   }
 }
