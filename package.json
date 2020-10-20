@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@adonisjs/assembler": "^3.0.3",
-    "@types/node": "^14.11.10",
+    "@types/node": "^14.14.0",
     "@types/ms": "^0.7.31",
     "@types/proxy-addr": "^2.0.0",
     "@types/source-map-support": "^0.5.3",
@@ -30,7 +30,7 @@
     "@adonisjs/auth": "^5.0.0",
     "@adonisjs/core": "^5.0.2-beta-rc-8",
     "@adonisjs/session": "^4.0.2",
-    "@adonisjs/view": "^3.0.4",
+    "@adonisjs/view": "^3.0.5",
     "@zakodium/adonis-mongodb": "^0.3.4",
     "mongodb": "^3.6.2",
     "ms": "^2.1.2",

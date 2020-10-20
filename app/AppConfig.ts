@@ -1,7 +1,6 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
-
 import { isDeepStrictEqual } from 'util';
 
 const { config, history } = JSON.parse(
