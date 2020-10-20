@@ -26,7 +26,7 @@ const authConfig: AuthConfig = {
       driver: 'session',
       provider: { driver: 'local' },
     },
-    // TODO: construct this dynamically
+    // TODO(targos): construct this dynamically
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     ldap: {
