@@ -17,7 +17,7 @@
     <button type="submit">Login</button>
   </form>
 
-  @if(error)
-    <div class="error">{{ error }}</div>
+  @if(flashMessages.get('error'))
+    <div class="error">{{ flashMessages.get('error') }}</div>
   @endif
 @endsection
