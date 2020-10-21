@@ -27,6 +27,7 @@
       "@adonisjs/auth",
       "@adonisjs/session",
       "@adonisjs/view",
+      "@types/jest",
       "@zakodium/adonis-mongodb",
       "node"
     ]
