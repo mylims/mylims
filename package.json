@@ -18,6 +18,7 @@
   "devDependencies": {
     "@adonisjs/assembler": "^3.0.3",
     "@babel/core": "^7.12.3",
+    "@tailwindcss/ui": "^0.6.2",
     "@types/jest": "^26.0.15",
     "@types/ms": "^0.7.31",
     "@types/node": "^14.14.0",
@@ -30,6 +31,7 @@
     "jest": "^26.6.0",
     "pino-pretty": "^4.3.0",
     "prettier": "2.1.2",
+    "tailwindcss": "^1.9.5",
     "ts-jest": "^26.4.1",
     "typescript": "^4.0.3",
     "youch": "^2.1.1",
@@ -46,8 +48,7 @@
     "phc-argon2": "^1.0.11",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
-    "source-map-support": "^0.5.19",
-    "tailwindcss": "^1.9.5"
+    "source-map-support": "^0.5.19"
   },
   "prettier": {
     "arrowParens": "always",
