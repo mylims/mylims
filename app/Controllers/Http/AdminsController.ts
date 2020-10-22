@@ -84,7 +84,7 @@ export default class AdminsController {
     const newlyEnabledAddons = Object.keys(request.all());
     setConfig('enabledAddons', newlyEnabledAddons);
     Event.emit('mylims:restart', 'update loaded addons').catch((err) =>
-      logger.warn(`Failed to emit a restart order.`),
+      logger.warn(`Failed to emit a restart order: ${err}`),
     );
     response.redirect('/admin/addons');
   }
