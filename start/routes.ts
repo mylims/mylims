@@ -46,9 +46,11 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/', 'AdminsController.renderLogin');
   Route.get('/config', 'AdminsController.renderConfig').middleware('admin');
+  Route.get('/addons', 'AdminsController.renderAddons').middleware('admin');
 
   Route.post('/auth', 'AdminsController.auth');
   Route.post('/config', 'AdminsController.changeConf').middleware('admin');
+  Route.post('/addons', 'AdminsController.addons').middleware('admin');
 }).prefix('/admin');
 
 // Require routes from addons

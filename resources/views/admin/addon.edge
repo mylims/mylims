@@ -1,0 +1,48 @@
+@layout('layouts/admin')
+
+@section('content')
+  <div class="flex flex-col mx-8">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <form  action="{{ route('AdminsController.addons') }}" method="POST">
+            @component('components/button', { label: 'Save', type: 'submit' })
+            @endcomponent
+            <table class="min-w-full divide-y divide-gray-200 mt-2">
+              <thead>
+                <tr>
+                  <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                    Description
+                  </th>
+                  <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                    Enabled
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                @each((addon, index) in availableAddons)
+                  <tr class="{{index % 2 === 1 ? 'bg-gray-50' : 'bg-white'}}">
+                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                      {{ addon.getDisplayName() }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                      {{ addon.getDescription() }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                      <div class="flex items-center h-5">
+                        <input id="{{ addon.getName() }}" name="{{ addon.getName() }}" {{ addon.isEnabled ? 'checked' : '' }} type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                      </div>
+                    </td>
+                  </tr>
+                @endeach
+              </tbody>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection
