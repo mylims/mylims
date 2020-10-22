@@ -1,122 +1,63 @@
 @layout('layouts/admin')
 
 @section('content')
-<div class="container">
-  {{--  Session  --}}
-  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
-    <h1 id="message">Session configuration</h1>
-    <input type="hidden" id="confkey" name="confkey" value="session" />
+  <div class="mt-12 mx-6 grid gap-10 lg:grid-cols-3 lg:max-w-none">
+    @component('components/card', { title: 'Session'})
+      @slot('content')
+        <form action="{{ route('AdminsController.changeConf') }}" method="POST">
+          <input type="hidden" id="confkey" name="confkey" value="session" />
 
-    <div class="field">
-      <label for="sessionAge">Session age</label>
-      <input
-        type="text"
-        name="sessionAge"
-        id="sessionAge"
-        value="{{ config.session.sessionAge }}"
-        placeholder="Session age"
-      />
-    </div>
+          @component('components/input', { id: 'sessionAge', label: 'Session age', type: 'text', name: 'sessionAge', value: config.session.sessionAge })
+          @endcomponent
 
-    <button type="submit">Update configuration</button>
-  </form>
+          @component('components/button', { label: 'Update configuration', type: 'submit'})
+          @endcomponent
+        </form>
+      @endslot
+    @endcomponent
+    @component('components/card', { title: 'MongoDB'})
+      @slot('content')
+        <form action="{{ route('AdminsController.changeConf') }}" method="POST">
+          <input type="hidden" id="confkey" name="confkey" value="mongodb" />
 
-  {{--  MongoDB  --}}
-  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
-    <h1 id="message">Mongo configuration</h1>
-    <input type="hidden" id="confkey" name="confkey" value="mongodb" />
+          @component('components/input', { id: 'mongo-url', label: 'MongoDB URL', type: 'text', name: 'mongo-url', value: config.mongodb.url })
+          @endcomponent
 
-    <div class="field">
-      <label for="url">MongoDB URL</label>
-      <input
-        type="text"
-        name="url"
-        id="url"
-        value="{{ config.mongodb.url }}"
-        placeholder="MongoDB URL"
-      />
-    </div>
-    <div class="field">
-      <label for="database">MongoDB database</label>
-      <input
-        type="text"
-        name="database"
-        id="database"
-        value="{{ config.mongodb.database }}"
-        placeholder="MongoDB database"
-      />
-    </div>
+          @component('components/input', { id: 'database', label: 'MongoDB database', type: 'text', name: 'database', value: config.mongodb.database })
+          @endcomponent
 
-    <button type="submit">Update configuration</button>
-  </form>
+          @component('components/button', { label: 'Update configuration', type: 'submit'})
+          @endcomponent
+        </form>
+      @endslot
+    @endcomponent
+    @component('components/card', { title: 'LDAP'})
+      @slot('content')
+        <form action="{{ route('AdminsController.changeConf') }}" method="POST">
+          <input type="hidden" id="confkey" name="confkey" value="ldap" />
 
-  {{--  LDAP  --}}
-  <form action="{{ route('AdminsController.changeConf') }}" method="POST">
-    <h1 id="message">LDAP configuration</h1>
-    <input type="hidden" id="confkey" name="confkey" value="ldap" />
+          @component('components/input', { id: 'id', label: 'LDAP id', type: 'text', name: 'id', value: config.ldap.id })
+          @endcomponent
 
-    <div class="field">
-      <label for="id">LDAP id</label>
-      <input
-        type="text"
-        name="id"
-        id="id"
-        value="{{ config.ldap.id }}"
-        placeholder="LDAP id"
-      />
-    </div>
-    <div class="field">
-      <label for="uid">LDAP uid</label>
-      <input
-        type="text"
-        name="uid"
-        id="uid"
-        value="{{ config.ldap.uid }}"
-        placeholder="LDAP uid"
-      />
-    </div>
-    <div class="field">
-      <label for="url">LDAP URL</label>
-      <input
-        type="text"
-        name="url"
-        id="url"
-        value="{{ config.ldap.url }}"
-        placeholder="LDAP URL"
-      />
-    </div>
-    <div class="field">
-      <label for="appDN">LDAP DN</label>
-      <input
-        type="text"
-        name="appDN"
-        id="appDN"
-        value="{{ config.ldap.appDN }}"
-        placeholder="LDAP DN"
-      />
-    </div>
-    <div class="field">
-      <label for="appPassword">LDAP password</label>
-      <input
-        type="text"
-        name="appPassword"
-        id="appPassword"
-        value="{{ config.ldap.appPassword }}"
-        placeholder="LDAP password"
-      />
-    </div>
-    <div class="field">
-      <label for="baseUserDN">LDAP base user</label>
-      <input
-        type="text"
-        name="baseUserDN"
-        id="baseUserDN"
-        value="{{ config.ldap.baseUserDN }}"
-        placeholder="LDAP base user"
-      />
-    </div>
+          @component('components/input', { id: 'uid', label: 'LDAP uid', type: 'text', name: 'uid', value: config.ldap.uid })
+          @endcomponent
 
-    <button type="submit">Update configuration</button>
-  </form>
-</div>
+          @component('components/input', { id: 'ldap-url', label: 'LDAP URL', type: 'text', name: 'ldap-url', value: config.ldap.url })
+          @endcomponent
+
+          @component('components/input', { id: 'appDN', label: 'LDAP DN', type: 'text', name: 'appDN', value: config.ldap.appDN })
+          @endcomponent
+
+          @component('components/input', { id: 'appPassword', label: 'LDAP password', type: 'text', name: 'appPassword', value: config.ldap.appPassword })
+          @endcomponent
+
+          @component('components/input', { id: 'baseUserDN', label: 'LDAP base user', type: 'text', name: 'baseUserDN', value: config.ldap.baseUserDN })
+          @endcomponent
+
+          @component('components/button', { label: 'Update configuration', type: 'submit'})
+          @endcomponent
+        </form>
+      @endslot
+    @endcomponent
+  </div>
 @endsection
