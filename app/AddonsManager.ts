@@ -66,6 +66,10 @@ class Addon {
   }
 }
 
+if (!fs.existsSync(addonsDirectory)) {
+  fs.mkdirSync(addonsDirectory);
+}
+
 const addons = fs
   .readdirSync(addonsDirectory)
   .map(
