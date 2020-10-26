@@ -56,7 +56,7 @@ class Addon {
   }
 }
 
-if (fs.existsSync(addonsDirectory) === false) {
+if (!fs.existsSync(addonsDirectory)) {
   fs.mkdirSync(addonsDirectory);
 }
 
