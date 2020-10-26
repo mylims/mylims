@@ -4,6 +4,8 @@ import * as path from 'path';
 import Application from '@ioc:Adonis/Core/Application';
 import Route from '@ioc:Adonis/Core/Route';
 
+import { getConfig } from './AppConfig';
+
 const base = Application.makePath('.');
 const addonsDirectory = path.join(base, 'addons');
 
@@ -31,6 +33,14 @@ class Addon {
 
   public getName() {
     return this.name;
+  }
+
+  public getDescription() {
+    return this.manifest.description;
+  }
+
+  public get isEnabled() {
+    return getConfig('enabledAddons').includes(this.name);
   }
 
   public hasRoutesFile() {
@@ -66,8 +76,12 @@ export function getAddons() {
   return addons;
 }
 
+function getEnabledAddons() {
+  return addons.filter((addon) => addon.isEnabled);
+}
+
 export function registerRoutes() {
-  addons
+  getEnabledAddons()
     .filter((addon) => addon.hasRoutesFile())
     .forEach((addon) => {
       Route.group(() => {
@@ -77,7 +91,7 @@ export function registerRoutes() {
 }
 
 export function getMigrations() {
-  return addons
+  return getEnabledAddons()
     .filter((addon) => addon.hasMigrationsDirectory())
     .map((addon) => addon.getMigrationsDirectory());
 }

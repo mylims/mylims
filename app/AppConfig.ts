@@ -17,6 +17,7 @@ const defaultConfig: ConfigFile = {
     },
     mongodb: { url: 'mongodb://localhost:27017', database: 'mylims' },
     session: { sessionAge: '2h' },
+    enabledAddons: [],
   },
   history: [],
 };
@@ -50,6 +51,7 @@ export interface ConfigProps {
   session: {
     sessionAge?: string;
   };
+  enabledAddons: string[];
 }
 
 export function getConfig<T extends keyof ConfigProps>(key: T): ConfigProps[T] {

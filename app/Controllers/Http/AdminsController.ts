@@ -5,6 +5,7 @@ import Env from '@ioc:Adonis/Core/Env';
 import Event from '@ioc:Adonis/Core/Event';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
+import { getAddons } from 'App/AddonsManager';
 import { getAllConfig, setConfig } from 'App/AppConfig';
 
 export default class AdminsController {
@@ -17,6 +18,11 @@ export default class AdminsController {
   public async renderConfig({ view }: HttpContextContract) {
     const config = getAllConfig();
     return view.render('admin/config', { config });
+  }
+
+  public async renderAddons({ view }: HttpContextContract) {
+    const availableAddons = getAddons();
+    return view.render('admin/addon', { availableAddons });
   }
 
   // Validates the admin password
@@ -72,6 +78,15 @@ export default class AdminsController {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Event.emit('mylims:restart', 'config update');
     response.redirect('/admin/config');
+  }
+
+  public async addons({ request, logger, response }: HttpContextContract) {
+    const newlyEnabledAddons = Object.keys(request.all());
+    setConfig('enabledAddons', newlyEnabledAddons);
+    Event.emit('mylims:restart', 'update loaded addons').catch((err) =>
+      logger.warn(`Failed to emit a restart order: ${err}`),
+    );
+    response.redirect('/admin/addons');
   }
 
   private async testMongoConnection(
