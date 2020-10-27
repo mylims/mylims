@@ -28,10 +28,8 @@ export default class LocalAuthProvider implements GenericAuthProvider {
   public async attempt(uid: string, password: string): Promise<any | null> {
     const potentialUser = await User.findOne({ emails: uid });
     if (potentialUser === null) return null;
-    console.log(`internal user exists: ${!!potentialUser}`);
 
     const ldapCN = potentialUser.authMethods.ldap;
-    console.log(`ldap identifier: ${ldapCN}`);
 
     if (ldapCN) {
       const result = await new Promise((resolve) => {
@@ -41,7 +39,6 @@ export default class LocalAuthProvider implements GenericAuthProvider {
           (err) => resolve(!err),
         );
       });
-      console.log(`bind result: ${result}`);
       if (result === true) {
         return ldapCN;
       }

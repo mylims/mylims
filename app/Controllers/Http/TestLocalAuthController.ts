@@ -26,6 +26,7 @@ export default class AppController {
   }
   public async user({ auth, response }: HttpContextContract) {
     await auth.authenticate();
+    // eslint-disable-next-line no-console
     console.log(auth.user);
     return response.send(auth.user ? 'YES' : 'NO');
   }

@@ -36,7 +36,6 @@ export default class Auth implements AuthContract {
       name,
     ) as GenericAuthProvider;
     this.authProviderName = name;
-    console.log(`using: ${this.authProviderName}`);
 
     return this;
   }
