@@ -1,0 +1,1 @@
+docker run -i -a stdin -a stdout -a stderr -e PORT=3333 -e HOST=127.0.0.1 -e ADMIN_PASSWORD=root -e LOG_LEVEL=debug mylims/new-eln-server  | ./node_modules/.bin/pino-mongodb -c logs -o -e -u mongodb://localhost:27017/mylims

@@ -1,4 +1,3 @@
-import sessionConfig from 'config/session';
 import { ObjectId } from 'mongodb';
 
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';

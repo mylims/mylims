@@ -1,5 +1,3 @@
-import { resetRetrieveHandlers } from 'source-map-support';
-
 import Hash from '@ioc:Adonis/Core/Hash';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 

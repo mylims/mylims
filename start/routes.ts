@@ -34,12 +34,6 @@ Route.group(() => {
     credentials.hash = await Hash.make(password);
     return credentials.save();
   }).as('setPassword');
-
-  Route.post('/login', async ({ request }) => {
-    const { email, password } = request.all();
-    //const x = await auth.attempt(email, password);
-    return x.email;
-  });
 }).prefix('/users');
 
 // Super admin views
