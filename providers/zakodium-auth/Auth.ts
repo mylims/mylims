@@ -51,7 +51,6 @@ export default class Auth implements AuthContract {
       uid,
       password,
     );
-    console.log(`attempt result: ${result}`);
     if (result !== null) {
       this.internalUser = await UserManager.getUser(
         this.authProviderName,
