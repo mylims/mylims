@@ -17,11 +17,10 @@
     "./start/events"
   ],
   "providers": [
-    "./addons/ldap/providers/LdapProvider",
-    "./providers/user/UserProvider",
-    "./providers/local-user-auth/LocalProvider",
+    "./providers/internal-user/UserProvider",
+    "./providers/zakodium-auth/ZakodiumAuthProvider",
+    "./providers/local-user/LocalProvider",
     "@adonisjs/core",
-    "@adonisjs/auth",
     "@adonisjs/session",
     "@zakodium/adonis-mongodb",
     "@adonisjs/view"

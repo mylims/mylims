@@ -8,7 +8,7 @@ interface AuthMethods {
 export default class User extends Model {
   public firstName: string;
   public lastName: string;
-  public email: string;
+  public emails: string[];
   public role: 'ADMIN' | 'MEMBER';
-  public auth: AuthMethods;
+  public authMethods: AuthMethods;
 }

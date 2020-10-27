@@ -35,9 +35,9 @@ Route.group(() => {
     return credentials.save();
   }).as('setPassword');
 
-  Route.post('/login', async ({ request, auth }) => {
+  Route.post('/login', async ({ request }) => {
     const { email, password } = request.all();
-    const x = await auth.use('local').attempt(email, password);
+    //const x = await auth.attempt(email, password);
     return x.email;
   });
 }).prefix('/users');
@@ -52,6 +52,13 @@ Route.group(() => {
   Route.post('/config', 'AdminsController.changeConf').middleware('admin');
   Route.post('/addons', 'AdminsController.addons').middleware('admin');
 }).prefix('/admin');
+
+Route.group(() => {
+  Route.get('/create', 'AuthControllerTest.create');
+  Route.get('/login', 'AuthControllerTest.login');
+  Route.get('/user', 'AuthControllerTest.user');
+  Route.get('/logout', 'AuthControllerTest.logout');
+}).prefix('auth-test');
 
 // Require routes from addons
 AddonsManager.registerRoutes();
