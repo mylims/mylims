@@ -1,26 +1,19 @@
-import { AuthManagerContract } from '@ioc:Adonis/Addons/Auth';
+import AuthManager from 'providers/zakodium-auth/AuthManager';
+
 import { ApplicationContract } from '@ioc:Adonis/Core/Application';
-import UserManager from '@ioc:Zakodium/User';
 
 export default class LdapProvider {
   public static needsApplication = true;
   public constructor(protected app: ApplicationContract) {}
 
   public boot() {
-    // IoC container is ready
-    this.app.container.with(
-      ['Adonis/Addons/Auth', 'Zakodium/User'],
-      (Auth: AuthManagerContract, UserManager: UserManager) => {
+    this.app.container.with(['Zakodium/Auth'], (AuthManager: AuthManager) => {
+      AuthManager.extend(
+        'ldap',
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const LdapAuthProvider = require('../LdapAuthProvider').default;
-        Auth.extend(
-          'provider',
-          'ldap',
-          (application, config) =>
-            new LdapAuthProvider(application, config, UserManager),
-        );
-      },
-    );
+        new (require('../LdapAuthProvider').default)(),
+      );
+    });
   }
 
   public shutdown() {
