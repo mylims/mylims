@@ -26,7 +26,7 @@ export default class AdminsController {
   }
 
   // Validates the admin password
-  public async auth({ request, response, session, auth }: HttpContextContract) {
+  public async auth({ request, response, session }: HttpContextContract) {
     const pass = request.input('password');
     const adminPass = Env.get('ADMIN_PASSWORD');
 
