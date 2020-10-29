@@ -17,7 +17,11 @@ export default class LocalAuthProvider implements GenericAuthProvider {
         throw new Error(`Invalid credential id: ${credentialId}`);
       }
       if (await Hash.verify(credential.hash, password)) {
-        return UserManager.getUser('local', credentialId);
+        return UserManager.getUser(
+          'local',
+          credentialId,
+          potentialUser.emails[0],
+        );
       }
     }
     return null;
