@@ -38,14 +38,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
           'ldap',
           ldapEntry[this.config.id],
         );
-        if (Array.isArray(ldapEntry.mail)) {
-          const mails: string[] = ldapEntry.mail;
-          internalUser.emails = [...mails];
-        } else if (typeof ldapEntry.mail === 'string') {
-          const mail: string = ldapEntry.mail;
-          internalUser.emails = [mail];
-        }
-        await internalUser.save();
+        await this.reconciliate(internalUser, ldapEntry);
         return internalUser;
       }
       return null;
@@ -95,5 +88,19 @@ export default class LocalAuthProvider implements GenericAuthProvider {
       logger.error('failed to bind', err);
       return false;
     }
+  }
+
+  private async reconciliate(
+    internalUser: User,
+    identityUser: ldap.SearchEntryObject,
+  ) {
+    if (Array.isArray(identityUser.mail)) {
+      const mails: string[] = identityUser.mail;
+      internalUser.emails = [...mails];
+    } else if (typeof identityUser.mail === 'string') {
+      const mail: string = identityUser.mail;
+      internalUser.emails = [mail];
+    }
+    await internalUser.save();
   }
 }
