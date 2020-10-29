@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { promisify } from 'util';
 
 import * as ldap from 'ldapjs';
@@ -22,22 +21,19 @@ export interface LdapProviderConfig {
 }
 
 export default class LocalAuthProvider implements GenericAuthProvider {
-  private adminClient: ldap.Client;
-  private userClient: ldap.Client;
-  private adminBound = false;
   private config: LdapProviderConfig;
 
   public constructor() {
     this.config = authConfig.providers.ldap as LdapProviderConfig;
-    this.userClient = ldap.createClient({ url: this.config.url });
-    this.adminClient = ldap.createClient({ url: this.config.url });
   }
 
   public async attempt(uid: string, password: string): Promise<User | null> {
-    await this.bind();
+    const userClient = ldap.createClient({ url: this.config.url });
+    // bad password or bind failed
+    if ((await this.bind(userClient, uid, password)) === false) return null;
     try {
-      const ldapEntry = await this.searchUser(uid);
-      if (ldapEntry !== null && (await this.checkPassword(uid, password))) {
+      const ldapEntry = await this.searchUser(userClient, uid);
+      if (ldapEntry !== null) {
         const internalUser = await UserManager.getUser(
           'ldap',
           ldapEntry[this.config.id],
@@ -58,30 +54,15 @@ export default class LocalAuthProvider implements GenericAuthProvider {
       return null;
     }
   }
-
-  private async bind() {
-    const adminBind = promisify<string, string>(this.adminClient.bind).bind(
-      this.adminClient,
-    );
-
-    if (this.adminBound) return true;
-    try {
-      await adminBind(this.config.appDN, this.config.appPassword);
-      this.adminBound = true;
-      return true;
-    } catch (err) {
-      logger.error('ldap failed to bind as admin', err);
-      return false;
-    }
-  }
   private async searchUser(
+    userClient: ldap.Client,
     uid: string,
   ): Promise<ldap.SearchEntryObject | null> {
     const ldapSearch = promisify<
       string,
       ldap.SearchOptions,
       ldap.SearchCallbackResponse
-    >(this.adminClient.search).bind(this.adminClient);
+    >(userClient.search.bind(userClient));
 
     const response = await ldapSearch(this.config.baseUserDN, {
       filter: `(${this.config.uid}=*${uid}*)`,
@@ -95,22 +76,23 @@ export default class LocalAuthProvider implements GenericAuthProvider {
     return new Promise((resolve) => {
       response.on('end', () => {
         if (foundEntries.length > 0) {
-          return resolve(foundEntries[0] as string);
+          return resolve(foundEntries[0]);
         } else {
           return resolve(null);
         }
       });
     });
   }
-  private async checkPassword(uid: string, password: string) {
+
+  private async bind(userClient: ldap.Client, uid: string, password: string) {
     const clientBind = promisify<string, string, void>(
-      this.userClient.bind,
-    ).bind(this.userClient);
+      userClient.bind.bind(userClient),
+    );
     try {
       await clientBind(`cn=${uid},${this.config.baseUserDN}`, password);
       return true;
     } catch (err) {
-      logger.error('failed to check password', err);
+      logger.error('failed to bind', err);
       return false;
     }
   }
