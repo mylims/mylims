@@ -3,6 +3,7 @@ import { Model } from '@ioc:Mongodb/Model';
 interface AuthMethods {
   ldap?: string;
   local?: string;
+  [key: string]: string | undefined;
 }
 
 export default class User extends Model {

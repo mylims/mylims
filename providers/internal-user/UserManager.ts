@@ -20,11 +20,25 @@ export default class UserManager {
     return User.findOne({ [`authMethods.${authProvider}`]: id });
   }
 
-  private getUserByEmail(email: string): Promise<User | null> {
-    return User.findOne({ emails: email });
+  private async getUserByEmail(
+    authProvider: string,
+    id: unknown,
+    email: string,
+  ): Promise<User | null> {
+    const user = await User.findOne({ emails: email });
+    if (user === null) {
+      return null;
+    } else {
+      user.authMethods[authProvider] = id as string;
+      await user.save();
+    }
+    return user;
   }
 
-  private createUser(authProvider: string, id: unknown) {
-    return User.create({ auth: { [authProvider]: id } });
+  private createUser(authProvider: string, id: unknown, email?: string) {
+    return User.create({
+      authMethods: { [authProvider]: id },
+      emails: [email],
+    });
   }
 }

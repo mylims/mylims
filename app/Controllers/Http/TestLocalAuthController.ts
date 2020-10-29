@@ -7,6 +7,7 @@ import User from 'App/Models/User';
 export default class AppController {
   public async create() {
     const credential = new Credential();
+    credential.email = 'xavier@stouder.io';
     credential.hash = await Hash.make('root');
     await credential.save();
 
