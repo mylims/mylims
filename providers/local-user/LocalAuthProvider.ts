@@ -5,7 +5,7 @@ import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
 
 export default class LocalAuthProvider implements GenericAuthProvider {
-  public async attempt(uid: string, password: string): Promise<any | null> {
+  public async attempt(uid: string, password: string): Promise<string | null> {
     const potentialUser = await User.findOne({ emails: uid });
     if (potentialUser === null) return null;
 

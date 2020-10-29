@@ -15,10 +15,4 @@ export default class LocalUserProvider {
       );
     });
   }
-
-  public shutdown() {
-    // Cleanup, since app is going down
-  }
-
-  public ready() {}
 }

@@ -25,7 +25,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
     this.userClient = ldap.createClient({ url: this.config.url });
   }
 
-  public async attempt(uid: string, password: string): Promise<any | null> {
+  public async attempt(uid: string, password: string): Promise<string | null> {
     const potentialUser = await User.findOne({ emails: uid });
     if (potentialUser === null) return null;
 
