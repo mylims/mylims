@@ -5,8 +5,6 @@ import * as AddonsManager from 'App/AddonsManager';
 import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
 
-Route.get('/', 'AppController.home').middleware('silentAuth');
-
 // Local user authentication
 Route.group(() => {
   Route.post('/', async ({ request }) => {
@@ -34,12 +32,6 @@ Route.group(() => {
     credentials.hash = await Hash.make(password);
     return credentials.save();
   }).as('setPassword');
-
-  Route.post('/login', async ({ request, auth }) => {
-    const { email, password } = request.all();
-    const x = await auth.use('local').attempt(email, password);
-    return x.email;
-  });
 }).prefix('/users');
 
 // Super admin views
@@ -52,6 +44,22 @@ Route.group(() => {
   Route.post('/config', 'AdminsController.changeConf').middleware('admin');
   Route.post('/addons', 'AdminsController.addons').middleware('admin');
 }).prefix('/admin');
+
+Route.group(() => {
+  Route.group(() => {
+    Route.get('/create', 'TestLocalAuthController.create');
+    Route.get('/login', 'TestLocalAuthController.login');
+    Route.get('/user', 'TestLocalAuthController.user');
+    Route.get('/logout', 'TestLocalAuthController.logout');
+  }).prefix('local');
+
+  Route.group(() => {
+    Route.get('/create', 'TestLdapAuthController.create');
+    Route.get('/login', 'TestLdapAuthController.login');
+    Route.get('/user', 'TestLdapAuthController.user');
+    Route.get('/logout', 'TestLdapAuthController.logout');
+  }).prefix('ldap');
+}).prefix('test-auth');
 
 // Require routes from addons
 AddonsManager.registerRoutes();

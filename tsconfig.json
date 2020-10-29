@@ -24,7 +24,6 @@
     },
     "types": [
       "@adonisjs/core",
-      "@adonisjs/auth",
       "@adonisjs/session",
       "@adonisjs/view",
       "@types/jest",

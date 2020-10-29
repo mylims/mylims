@@ -1,15 +1,14 @@
+import { promisify } from 'util';
+
 import * as ldap from 'ldapjs';
 
-import {
-  UserProviderContract,
-  ProviderUserContract,
-} from '@ioc:Adonis/Addons/Auth';
-import { ApplicationContract } from '@ioc:Adonis/Core/Application';
+import logger from '@ioc:Adonis/Core/Logger';
+import { GenericAuthProvider } from '@ioc:Zakodium/Auth';
 import UserManager from '@ioc:Zakodium/User';
 
 import User from 'App/Models/User';
 
-import LdapUser from './LdapUser';
+import authConfig from '../../config/auth';
 
 export interface LdapProviderConfig {
   driver: 'ldap';
@@ -21,141 +20,87 @@ export interface LdapProviderConfig {
   url: string;
 }
 
-/**
- * Database provider to lookup users inside the LDAP
- */
-export default class LdapAuthProvider implements UserProviderContract<User> {
-  private adminClient: ldap.Client;
-  private adminBound = false;
+export default class LocalAuthProvider implements GenericAuthProvider {
+  private config: LdapProviderConfig;
 
-  public constructor(
-    private application: ApplicationContract,
-    private config: LdapProviderConfig,
-    private UserManager: UserManager,
-  ) {
-    this.adminClient = ldap.createClient({ url: this.config.url });
+  public constructor() {
+    this.config = authConfig.providers.ldap as LdapProviderConfig;
   }
 
-  /**
-   * Returns an instance of provider user
-   */
-  public getUserFor(user: User | null) {
-    return this.application.container.make(LdapUser, [user, this.config]);
-  }
-
-  /**
-   * Returns the user row using the primary key
-   */
-  public findById(id: string): Promise<ProviderUserContract<User>> {
-    return new Promise((resolve) => {
-      this._adminBind((err) => {
-        if (err) {
-          return resolve(undefined);
-        }
-
-        this.adminClient.search(
-          this.config.baseUserDN,
-          {
-            filter: `(${this.config.id}=*${id}*)`,
-            scope: 'sub',
-          },
-          (err, res) => {
-            if (err) {
-              return resolve(undefined);
-            }
-            const foundEntries: ldap.SearchEntryObject[] = [];
-            res.on('searchEntry', (entry) => {
-              foundEntries.push(entry.object);
-            });
-            res.on('end', () => {
-              if (foundEntries.length > 0) {
-                this.UserManager.getUser('ldap', id)
-                  .then((user) => resolve(this.getUserFor(user)))
-                  .catch((err) => {
-                    throw err;
-                  });
-              } else {
-                resolve(undefined);
-              }
-            });
-          },
+  public async attempt(uid: string, password: string): Promise<User | null> {
+    const userClient = ldap.createClient({ url: this.config.url });
+    // bad password or bind failed
+    if ((await this.bind(userClient, uid, password)) === false) return null;
+    try {
+      const ldapEntry = await this.searchUser(userClient, uid);
+      if (ldapEntry !== null) {
+        const internalUser = await UserManager.getUser(
+          'ldap',
+          ldapEntry[this.config.id],
         );
-      });
-    });
-  }
-
-  /**
-   * Returns the user row by searching the uidValue against
-   * their defined uids.
-   */
-  public findByUid(uid: string): Promise<ProviderUserContract<User>> {
-    return new Promise((resolve, reject) => {
-      this._adminBind((err) => {
-        if (err) return reject(err);
-
-        this.adminClient.search(
-          this.config.baseUserDN,
-          {
-            filter: `(${this.config.uid}=*${uid}*)`,
-            scope: 'sub',
-          },
-          (err, res) => {
-            if (err) return reject(err);
-
-            const foundEntries: ldap.SearchEntryObject[] = [];
-            res.on('searchEntry', (entry) => {
-              foundEntries.push(entry.object);
-            });
-
-            res.on('end', () => {
-              if (foundEntries.length > 0) {
-                this.UserManager.getUser(
-                  'ldap',
-                  foundEntries[0][this.config.id] as string,
-                )
-                  .then((user) => resolve(this.getUserFor(user)))
-                  .catch((err) => reject(err));
-              } else {
-                resolve(this.getUserFor(null));
-              }
-            });
-          },
-        );
-      });
-    });
-  }
-
-  /**
-   * Returns a user from their remember me token
-   */
-  public findByRememberMeToken(/*_userId: string | number, _token: string,*/): Promise<
-    ProviderUserContract<User>
-  > {
-    throw new Error('Method not implemented.');
-  }
-
-  /**
-   * Updates the user remember me token
-   */
-  public updateRememberMeToken(/* _authenticatable: ProviderUserContract<User> */): Promise<
-    void
-  > {
-    throw new Error('Method not implemented.');
-  }
-
-  private _adminBind(callback: (err?: Error) => void) {
-    if (this.adminBound === true) {
-      return callback();
-    }
-
-    this.adminClient.bind(this.config.appDN, this.config.appPassword, (err) => {
-      if (err) {
-        this.adminBound = false;
-        return callback(err);
+        await this.reconciliate(internalUser, ldapEntry);
+        return internalUser;
       }
+      return null;
+    } catch (err) {
+      logger.error('failed to search');
+      return null;
+    }
+  }
+  private async searchUser(
+    userClient: ldap.Client,
+    uid: string,
+  ): Promise<ldap.SearchEntryObject | null> {
+    const ldapSearch = promisify<
+      string,
+      ldap.SearchOptions,
+      ldap.SearchCallbackResponse
+    >(userClient.search.bind(userClient));
 
-      this.adminBound = true;
-      callback();
+    const response = await ldapSearch(this.config.baseUserDN, {
+      filter: `(${this.config.uid}=*${uid}*)`,
+      scope: 'sub',
     });
+    const foundEntries: ldap.SearchEntryObject[] = [];
+    response.on('searchEntry', (entry) => {
+      foundEntries.push(entry.object);
+    });
+
+    return new Promise((resolve) => {
+      response.on('end', () => {
+        if (foundEntries.length > 0) {
+          return resolve(foundEntries[0]);
+        } else {
+          return resolve(null);
+        }
+      });
+    });
+  }
+
+  private async bind(userClient: ldap.Client, uid: string, password: string) {
+    const clientBind = promisify<string, string, void>(
+      userClient.bind.bind(userClient),
+    );
+    try {
+      await clientBind(`cn=${uid},${this.config.baseUserDN}`, password);
+      return true;
+    } catch (err) {
+      logger.error('failed to bind', err);
+      return false;
+    }
+  }
+
+  private async reconciliate(
+    internalUser: User,
+    identityUser: ldap.SearchEntryObject,
+  ) {
+    if (Array.isArray(identityUser.mail)) {
+      const mails: string[] = identityUser.mail;
+      internalUser.emails = [...mails];
+    } else if (typeof identityUser.mail === 'string') {
+      const mail: string = identityUser.mail;
+      internalUser.emails = [mail];
+    }
+    await internalUser.save();
   }
 }
