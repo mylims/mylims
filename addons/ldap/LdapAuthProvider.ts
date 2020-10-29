@@ -43,7 +43,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
       }
       return null;
     } catch (err) {
-      logger.error('failed to search', err);
+      logger.error(err, 'failed to search');
       return null;
     } finally {
       userClient.destroy();
@@ -87,7 +87,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
       await clientBind(`cn=${uid},${this.config.baseUserDN}`, password);
       return true;
     } catch (err) {
-      logger.error('failed to bind', err);
+      logger.error(err, 'failed to bind');
       return false;
     }
   }
