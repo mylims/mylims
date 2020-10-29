@@ -45,6 +45,8 @@ export default class LocalAuthProvider implements GenericAuthProvider {
     } catch (err) {
       logger.error('failed to search', err);
       return null;
+    } finally {
+      userClient.destroy();
     }
   }
   private async searchUser(
