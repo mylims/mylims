@@ -1,6 +1,7 @@
 import * as ldap from 'ldapjs';
 
 import { GenericAuthProvider } from '@ioc:Zakodium/Auth';
+import UserManager from '@ioc:Zakodium/User';
 
 import User from 'App/Models/User';
 
@@ -25,7 +26,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
     this.userClient = ldap.createClient({ url: this.config.url });
   }
 
-  public async attempt(uid: string, password: string): Promise<string | null> {
+  public async attempt(uid: string, password: string): Promise<User | null> {
     const potentialUser = await User.findOne({ emails: uid });
     if (potentialUser === null) return null;
 
@@ -40,7 +41,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
         );
       });
       if (result === true) {
-        return ldapCN;
+        return UserManager.getUser('ldap', result);
       }
     }
     return null;

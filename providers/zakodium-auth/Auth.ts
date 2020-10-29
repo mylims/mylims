@@ -2,7 +2,6 @@ import { ObjectId } from 'mongodb';
 
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import { AuthContract, GenericAuthProvider } from '@ioc:Zakodium/Auth';
-import UserManager from '@ioc:Zakodium/User';
 
 import User from 'App/Models/User';
 
@@ -46,15 +45,12 @@ export default class Auth implements AuthContract {
    * @param password
    */
   public async login(uid: string, password: string) {
-    const result: string | null = await this.use().authProvider.attempt<string>(
+    const result: User | null = await this.use().authProvider.attempt(
       uid,
       password,
     );
     if (result !== null) {
-      this.internalUser = await UserManager.getUser(
-        this.authProviderName,
-        result,
-      );
+      this.internalUser = result;
       this.ctx.session.put('internal_user', this.internalUser.id);
       return true;
     }

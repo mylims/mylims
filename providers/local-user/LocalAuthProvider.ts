@@ -1,11 +1,12 @@
 import Hash from '@ioc:Adonis/Core/Hash';
 import { GenericAuthProvider } from '@ioc:Zakodium/Auth';
+import UserManager from '@ioc:Zakodium/User';
 
 import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
 
 export default class LocalAuthProvider implements GenericAuthProvider {
-  public async attempt(uid: string, password: string): Promise<string | null> {
+  public async attempt(uid: string, password: string): Promise<User | null> {
     const potentialUser = await User.findOne({ emails: uid });
     if (potentialUser === null) return null;
 
@@ -16,7 +17,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
         throw new Error(`Invalid credential id: ${credentialId}`);
       }
       if (await Hash.verify(credential.hash, password)) {
-        return credentialId;
+        return UserManager.getUser('local', credentialId);
       }
     }
     return null;
