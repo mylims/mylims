@@ -43,7 +43,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
       }
       return null;
     } catch (err) {
-      logger.error('failed to search');
+      logger.error('failed to search', err);
       return null;
     }
   }
