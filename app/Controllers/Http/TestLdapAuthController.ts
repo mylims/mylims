@@ -7,13 +7,12 @@ export default class TestLdapAuthController {
     const user = new User();
     user.firstName = 'Xavier';
     user.lastName = 'Stouder';
-    user.emails = ['xavier@stouder.io', 'xavier.stouder@he-arc.ch'];
     user.role = 'ADMIN';
     user.authMethods = { ldap: 'user01' };
     await user.save();
   }
   public async login({ auth }: HttpContextContract) {
-    await auth.use('ldap').login('xavier.stouder@he-arc.ch', 'password1');
+    await auth.use('ldap').login('user01', 'password1');
   }
   public async logout({ auth }: HttpContextContract) {
     auth.logout();
