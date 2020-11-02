@@ -6,7 +6,7 @@ export default class UserManager {
     if (userByUid !== null) return userByUid;
 
     if (email !== undefined) {
-      const userByEmail = await this.getUserByEmail(email);
+      const userByEmail = await this.getUserByEmail(authProvider, id, email);
       if (userByEmail !== null) return userByEmail;
     }
 
