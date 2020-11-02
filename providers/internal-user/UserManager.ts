@@ -32,7 +32,7 @@ export default class UserManager {
     return user;
   }
 
-  private createUser(authProvider: string, id: unknown, email?: string) {
+  private createUser(authProvider: string, id: string, email?: string) {
     return User.create({
       authMethods: { [authProvider]: id },
       emails: [email],

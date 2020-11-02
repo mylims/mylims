@@ -11,7 +11,11 @@ export default class LocalAuthProvider implements GenericAuthProvider {
     if (credential === null) return null;
 
     if (await Hash.verify(credential.hash, password)) {
-      return UserManager.getUser('local', credential.id, credential.email);
+      return UserManager.getUser(
+        'local',
+        credential.id as string,
+        credential.email,
+      );
     } else {
       return null;
     }
