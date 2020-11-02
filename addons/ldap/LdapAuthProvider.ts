@@ -34,9 +34,10 @@ export default class LocalAuthProvider implements GenericAuthProvider {
     try {
       const ldapEntry = await this.searchUser(userClient, uid);
       if (ldapEntry !== null) {
+        const id = ldapEntry[this.config.id];
         const internalUser = await UserManager.getUser(
           'ldap',
-          ldapEntry[this.config.id],
+          Array.isArray(id) ? id[0] : id,
           Array.isArray(ldapEntry.mail) ? ldapEntry.mail[0] : ldapEntry.mail,
         );
         await this.reconciliate(internalUser, ldapEntry);

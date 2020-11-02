@@ -4,10 +4,10 @@ declare module '@ioc:Zakodium/User' {
   export class UserManager {
     public getUser(
       authProvider: string,
-      id: unknown,
+      id: string,
       email?: string,
     ): Promise<User>;
-    private createUser(authProvider: string, id: unknown): Promise<User>;
+    private createUser(authProvider: string, id: string): Promise<User>;
   }
   const UserManagerInstance: InstanceType<typeof UserManager>;
   export default UserManagerInstance;

@@ -6,24 +6,18 @@ import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
 
 export default class LocalAuthProvider implements GenericAuthProvider {
-  public async attempt(uid: string, password: string): Promise<User | null> {
-    const potentialUser = await User.findOne({ emails: uid });
-    if (potentialUser === null) return null;
+  public async attempt(email: string, password: string): Promise<User | null> {
+    const credential = await Credential.findOne({ email });
+    if (credential === null) return null;
 
-    const credentialId = potentialUser.authMethods?.local;
-    if (credentialId) {
-      const credential = await Credential.findById(credentialId);
-      if (credential === null) {
-        throw new Error(`Invalid credential id: ${credentialId}`);
-      }
-      if (await Hash.verify(credential.hash, password)) {
-        return UserManager.getUser(
-          'local',
-          credentialId,
-          potentialUser.emails[0],
-        );
-      }
+    if (await Hash.verify(credential.hash, password)) {
+      return UserManager.getUser(
+        'local',
+        String(credential.id),
+        credential.email,
+      );
+    } else {
+      return null;
     }
-    return null;
   }
 }
