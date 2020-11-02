@@ -51,7 +51,7 @@ export default class Auth implements AuthContract {
     );
     if (result !== null) {
       this.internalUser = result;
-      this.ctx.session.put('internal_user', this.internalUser.id);
+      this.ctx.session.put('internal_user', String(this.internalUser.id));
       return true;
     }
     return false;
@@ -65,7 +65,7 @@ export default class Auth implements AuthContract {
   }
 
   public async authenticate() {
-    const userId = this.ctx.session.get('internal_user');
+    const userId: string = this.ctx.session.get('internal_user');
     if (!userId) return false;
     const user = await User.findById(new ObjectId(userId));
     if (user === null) {
