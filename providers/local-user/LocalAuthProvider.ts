@@ -13,7 +13,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
     if (await Hash.verify(credential.hash, password)) {
       return UserManager.getUser(
         'local',
-        credential.id as string,
+        String(credential.id),
         credential.email,
       );
     } else {
