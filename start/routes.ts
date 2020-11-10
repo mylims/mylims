@@ -46,6 +46,10 @@ Route.group(() => {
 }).prefix('/admin');
 
 Route.group(() => {
+  Route.post('local', 'AuthController.login');
+}).prefix('auth');
+
+Route.group(() => {
   Route.group(() => {
     Route.get('/create', 'TestLocalAuthController.create');
     Route.get('/login', 'TestLocalAuthController.login');
