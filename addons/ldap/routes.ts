@@ -7,8 +7,8 @@ Route.post(
     const { uid, password } = request.all();
     const result = await auth.use('ldap').login(uid, password);
     if (result === null || result === false) {
-      return response.unauthorized({ uid: 'Bad credentials' });
+      return response.unauthorized({ error: 'Bad credentials' });
     }
-    response.ok({ uid });
+    return response.ok({ email: auth.user?.emails[0], role: auth.user?.role });
   },
 );
