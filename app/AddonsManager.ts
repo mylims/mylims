@@ -64,6 +64,14 @@ class Addon {
     }
     return path.join(this.addonPath, this.manifest.migrations);
   }
+
+  public toJSON() {
+    return {
+      name: this.name,
+      displayName: this.manifest.displayName,
+      description: this.manifest.description,
+    };
+  }
 }
 
 if (!fs.existsSync(addonsDirectory)) {
@@ -92,6 +100,9 @@ export function registerRoutes() {
         require(addon.getRoutesFile());
       }).prefix(`/addons/${addon.getName()}`);
     });
+  Route.get('/addons', async () =>
+    getEnabledAddons().map((addon) => addon.getName()),
+  );
 }
 
 export function getMigrations() {

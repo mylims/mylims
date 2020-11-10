@@ -46,6 +46,10 @@ Route.group(() => {
 }).prefix('/admin');
 
 Route.group(() => {
+  Route.post('local', 'AuthController.login');
+}).prefix('/auth');
+
+Route.group(() => {
   Route.group(() => {
     Route.get('/create', 'TestLocalAuthController.create');
     Route.get('/login', 'TestLocalAuthController.login');
@@ -59,7 +63,7 @@ Route.group(() => {
     Route.get('/user', 'TestLdapAuthController.user');
     Route.get('/logout', 'TestLdapAuthController.logout');
   }).prefix('ldap');
-}).prefix('test-auth');
+}).prefix('/test-auth');
 
 // Require routes from addons
 AddonsManager.registerRoutes();

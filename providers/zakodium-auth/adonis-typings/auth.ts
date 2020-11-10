@@ -3,7 +3,7 @@ declare module '@ioc:Zakodium/Auth' {
 
   export interface AuthContract {
     use(name?: string): AuthContract;
-    login(uid: string, password: string): Promise<boolean | null>;
+    login(uid: string, password: string): Promise<boolean>;
     logout(): void;
     authenticate(): Promise<boolean>;
     user?: User;
