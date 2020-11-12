@@ -1,0 +1,17 @@
+type Query {
+  users: [User!]!
+}
+
+type AuthMethods {
+  local: String
+  ldap: String
+}
+
+type User {
+  id: String!
+  firstName: String!
+  lastName: String!
+  emails: [String!]!
+  role: String!
+  authMethods: AuthMethods
+}

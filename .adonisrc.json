@@ -24,9 +24,14 @@
     "@adonisjs/core",
     "@adonisjs/session",
     "@zakodium/adonis-mongodb",
-    "@adonisjs/view"
+    "@adonisjs/view",
+    "adonis-apollo"
   ],
   "metaFiles": [
+    {
+      "pattern": "app/Schemas/*",
+      "reloadServer": true
+    },
     ".env",
     ".adonisrc.json",
     "resources/views/**/*.edge",
