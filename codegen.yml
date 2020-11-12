@@ -15,7 +15,7 @@ config:
     DateTime: Date
     URL: string
   skipTypename: true
-  contextType: './types#ApolloContext'
+  contextType: '@ioc:Apollo/Config#ApolloBaseContext'
   useIndexSignature: true
   mappers:
     User: ./Models/User#default

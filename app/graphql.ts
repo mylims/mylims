@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import User from './Models/User';
-import { ApolloContext } from './types';
+import { ApolloBaseContext } from '@ioc:Apollo/Config';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
@@ -24,6 +24,7 @@ export type GqlAuthMethods = {
 };
 
 export type GqlUser = {
+  id: Scalars['ID'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   emails: Array<Scalars['String']>;
@@ -154,6 +155,7 @@ export type GqlResolversTypes = ResolversObject<{
   AuthMethods: ResolverTypeWrapper<GqlAuthMethods>;
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
 
@@ -163,18 +165,19 @@ export type GqlResolversParentTypes = ResolversObject<{
   AuthMethods: GqlAuthMethods;
   String: Scalars['String'];
   User: User;
+  ID: Scalars['ID'];
   Boolean: Scalars['Boolean'];
 }>;
 
 export type GqlQueryResolvers<
-  ContextType = ApolloContext,
+  ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['Query'] = GqlResolversParentTypes['Query']
 > = ResolversObject<{
   users?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
 }>;
 
 export type GqlAuthMethodsResolvers<
-  ContextType = ApolloContext,
+  ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['AuthMethods'] = GqlResolversParentTypes['AuthMethods']
 > = ResolversObject<{
   local?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
@@ -183,9 +186,10 @@ export type GqlAuthMethodsResolvers<
 }>;
 
 export type GqlUserResolvers<
-  ContextType = ApolloContext,
+  ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['User'] = GqlResolversParentTypes['User']
 > = ResolversObject<{
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
   firstName?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   emails?: Resolver<
@@ -202,7 +206,7 @@ export type GqlUserResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type GqlResolvers<ContextType = ApolloContext> = ResolversObject<{
+export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   Query?: GqlQueryResolvers<ContextType>;
   AuthMethods?: GqlAuthMethodsResolvers<ContextType>;
   User?: GqlUserResolvers<ContextType>;
