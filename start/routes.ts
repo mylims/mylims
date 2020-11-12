@@ -1,3 +1,4 @@
+import Application from '@ioc:Adonis/Core/Application';
 import Env from '@ioc:Adonis/Core/Env';
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
@@ -73,6 +74,7 @@ AddonsManager.registerRoutes();
 const apolloGroup = Route.group(() => {
   ApolloServer.applyMiddleware({ Route });
 });
-if (Env.get('NODE_ENV') === 'production') {
+
+if (Application.inProduction) {
   apolloGroup.middleware('auth');
 }
