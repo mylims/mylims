@@ -1,5 +1,4 @@
 import Application from '@ioc:Adonis/Core/Application';
-import Env from '@ioc:Adonis/Core/Env';
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
 import ApolloServer from '@ioc:Apollo/Server';
