@@ -1,6 +1,10 @@
 {
-  "include": ["**/*"],
-  "exclude": ["node_modules"],
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
   "compilerOptions": {
     "target": "es2020",
     "module": "CommonJS",
@@ -17,10 +21,16 @@
     "esModuleInterop": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "lib": ["ES2020"],
+    "lib": [
+      "ES2020"
+    ],
     "paths": {
-      "App/*": ["./app/*"],
-      "Contracts/*": ["./contracts/*"]
+      "App/*": [
+        "./app/*"
+      ],
+      "Contracts/*": [
+        "./contracts/*"
+      ]
     },
     "types": [
       "@adonisjs/core",
@@ -28,7 +38,8 @@
       "@adonisjs/view",
       "@types/jest",
       "@zakodium/adonis-mongodb",
-      "node"
+      "node",
+      "adonis-apollo"
     ]
   }
 }

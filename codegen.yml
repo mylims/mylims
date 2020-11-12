@@ -1,0 +1,21 @@
+schema: http://localhost:3333/graphql
+hooks:
+  afterOneFileWrite:
+    - prettier --write
+generates:
+  ./app/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+config:
+  typesPrefix: Gql
+  namingConvention:
+    enumValues: change-case#upperCase
+  scalars:
+    DateTime: Date
+    URL: string
+  skipTypename: true
+  contextType: '@ioc:Apollo/Config#ApolloBaseContext'
+  useIndexSignature: true
+  mappers:
+    User: ./Models/User#default

@@ -1,5 +1,7 @@
+import Application from '@ioc:Adonis/Core/Application';
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
+import ApolloServer from '@ioc:Apollo/Server';
 
 import * as AddonsManager from 'App/AddonsManager';
 import Credential from 'App/Models/Credential';
@@ -67,3 +69,11 @@ Route.group(() => {
 
 // Require routes from addons
 AddonsManager.registerRoutes();
+
+const apolloGroup = Route.group(() => {
+  ApolloServer.applyMiddleware({ Route });
+});
+
+if (Application.inProduction) {
+  apolloGroup.middleware('auth');
+}
