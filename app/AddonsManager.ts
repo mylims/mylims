@@ -16,6 +16,8 @@ interface AddonManifest {
   migrations?: string | undefined;
 }
 
+export type { Addon };
+
 class Addon {
   private manifest: AddonManifest;
 
