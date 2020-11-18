@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { StoreContract } from '@ioc:Adonis/Addons/Session';
-import { RequestContract } from '@ioc:Adonis/Core/Request';
+import { useAdonisContext } from '@ioc:React';
 
 import { ConfigProps } from 'App/AppConfig';
 
@@ -10,20 +9,13 @@ import Card from '../Card';
 import Input from '../Input';
 import Admin from '../layouts/Admin';
 
-export default function Config(props: {
-  request: RequestContract;
-  route: (routeIdentifier: string) => string;
-  flashMessages: StoreContract;
-  config: ConfigProps;
-}) {
+export default function Config(props: { config: ConfigProps }) {
+  const { makeUrl } = useAdonisContext();
   return (
-    <Admin request={props.request}>
+    <Admin>
       <div className="grid gap-10 mx-6 mt-12 lg:grid-cols-3 lg:max-w-none">
         <Card title="Session">
-          <form
-            action={props.route('AdminsController.changeConf')}
-            method="POST"
-          >
+          <form action={makeUrl('AdminsController.changeConf')} method="POST">
             <input type="hidden" id="confkey" name="confkey" value="session" />
             <Input
               id="sessionAge"
@@ -36,10 +28,7 @@ export default function Config(props: {
           </form>
         </Card>
         <Card title="MongoDb">
-          <form
-            action={props.route('AdminsController.changeConf')}
-            method="POST"
-          >
+          <form action={makeUrl('AdminsController.changeConf')} method="POST">
             <input type="hidden" id="confkey" name="confkey" value="mongodb" />
             <Input
               id="mongo-url"
@@ -59,10 +48,7 @@ export default function Config(props: {
           </form>
         </Card>
         <Card title="LDAP">
-          <form
-            action={props.route('AdminsController.changeConf')}
-            method="POST"
-          >
+          <form action={makeUrl('AdminsController.changeConf')} method="POST">
             <input type="hidden" id="confkey" name="confkey" value="ldap" />
 
             <Input

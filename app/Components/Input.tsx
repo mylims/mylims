@@ -26,7 +26,7 @@ export default function Input(props: InputProps) {
           name={props.name}
           className="block w-full form-input sm:text-sm sm:leading-5"
           placeholder={props.placeholder}
-          value={props.value}
+          defaultValue={props.value}
         />
       </div>
       {props.error && (

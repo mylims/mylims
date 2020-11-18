@@ -33,18 +33,5 @@ export default class ZakodiumAuthProvider {
         );
       },
     );
-
-    this.app.container.with(
-      ['Adonis/Core/Server', 'Adonis/Core/Route'],
-      (Server, Route) => {
-        Server.hooks.before(async (ctx) => {
-          ctx.react.share({
-            auth: ctx.auth,
-            route: (routeIdentifier: string) => Route.makeUrl(routeIdentifier),
-            flashMessages: ctx.session.flashMessages,
-          });
-        });
-      },
-    );
   }
 }

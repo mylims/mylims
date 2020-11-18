@@ -58,14 +58,8 @@ export function getConfig<T extends keyof ConfigProps>(key: T): ConfigProps[T] {
   return (config as ConfigProps)[key];
 }
 
-export function getAllConfig() {
-  return {
-    date: getConfig('date'),
-    appKey: getConfig('appKey'),
-    ldap: getConfig('ldap'),
-    mongodb: getConfig('mongodb'),
-    session: getConfig('session'),
-  };
+export function getAllConfig(): ConfigProps {
+  return config;
 }
 
 export function setConfig<T extends keyof ConfigProps>(

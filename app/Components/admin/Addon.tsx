@@ -1,29 +1,21 @@
 import React from 'react';
 
-import { StoreContract } from '@ioc:Adonis/Addons/Session';
-import { RequestContract } from '@ioc:Adonis/Core/Request';
+import { useAdonisContext } from '@ioc:React';
 
 import type { Addon } from 'App/AddonsManager';
 
 import Button from '../Button';
 import Admin from '../layouts/Admin';
 
-export default function AddonPage(props: {
-  request: RequestContract;
-  route: (routeIdentifier: string) => string;
-  flashMessages: StoreContract;
-  availableAddons: Addon[];
-}) {
+export default function AddonPage(props: { availableAddons: Addon[] }) {
+  const { makeUrl } = useAdonisContext();
   return (
-    <Admin request={props.request}>
+    <Admin>
       <div className="flex flex-col mx-8">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div className="overflow-hidden border-b shadow border-neutral-200 sm:rounded-lg">
-              <form
-                action={props.route('AdminsController.addons')}
-                method="POST"
-              >
+              <form action={makeUrl('AdminsController.addons')} method="POST">
                 <Button label="Save" type="submit" />
                 <table className="min-w-full mt-2 divide-y divide-neutral-200">
                   <thead>
@@ -58,7 +50,7 @@ export default function AddonPage(props: {
                             <input
                               id={addon.getName()}
                               name={addon.getName()}
-                              checked={addon.isEnabled}
+                              defaultChecked={addon.isEnabled}
                               type="checkbox"
                               className="w-4 h-4 transition duration-150 ease-in-out form-checkbox text-alternative-600"
                             />
