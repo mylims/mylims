@@ -43,7 +43,7 @@ function NavLink(props: { href: string; label: string; currentUrl: string }) {
       href={props.href}
       className={clsx(
         'ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5',
-        props.currentUrl === '/admin/addons'
+        props.currentUrl === props.href
           ? 'text-white bg-neutral-900 focus:outline-none focus:text-white focus:bg-neutral-700 transition duration-150 ease-in-out'
           : 'text-neutral-300 hover:text-white hover:bg-neutral-700 focus:outline-none focus:text-white focus:bg-neutral-700 transition duration-150 ease-in-out',
       )}
