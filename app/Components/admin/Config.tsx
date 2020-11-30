@@ -34,7 +34,7 @@ export default function Config(props: { config: ConfigProps }) {
               id="mongo-url"
               label="MongoDB URL"
               type="text"
-              name="mongo-url"
+              name="url"
               value={props.config.mongodb.url}
             />
             <Input
