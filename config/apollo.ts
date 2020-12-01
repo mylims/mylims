@@ -3,7 +3,7 @@ import { ApolloConfig, ApolloBaseContext } from '@ioc:Apollo/Config';
 type ApolloContext = ApolloBaseContext;
 
 const config: ApolloConfig = {
-  schemas: 'app/Schemas',
+  schemas: ['app/Schemas', 'addons/ldap/Schemas'],
   resolvers: 'app/Resolvers',
   path: '/graphql',
   apolloServer: {
@@ -15,6 +15,7 @@ const config: ApolloConfig = {
   executableSchema: {
     inheritResolversFromInterfaces: true,
   },
+  playgroundSettings: {},
 };
 
 export default config;
