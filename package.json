@@ -44,6 +44,7 @@
   "dependencies": {
     "@adonisjs/core": "^5.0.4-preview-rc-2",
     "@adonisjs/session": "^4.0.5",
+    "@adonisjs/view": "^3.0.9",
     "@zakodium/adonis-mongodb": "^0.3.5",
     "adonis-apollo": "^0.13.0",
     "adonis-react": "^0.1.0",
