@@ -7,10 +7,7 @@ import Auth from './Auth';
 export default class AuthManager {
   public extendedProviders: Map<string, GenericAuthProvider> = new Map();
 
-  public constructor(
-    private application: ApplicationContract,
-    private config: any,
-  ) {}
+  public constructor(private application: ApplicationContract) {}
 
   public getAuthForRequest(ctx: HttpContextContract) {
     return new Auth(this, ctx);

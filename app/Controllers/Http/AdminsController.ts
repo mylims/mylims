@@ -77,18 +77,14 @@ export default class AdminsController {
       }
     }
 
-    // TODO(xstoudi): fix this in Adonis
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Event.emit('mylims:restart', 'config update');
     response.redirect('/admin/config');
   }
 
-  public async addons({ request, logger, response }: HttpContextContract) {
+  public async addons({ request, response }: HttpContextContract) {
     const newlyEnabledAddons = Object.keys(request.all());
     setConfig('enabledAddons', newlyEnabledAddons);
-    Event.emit('mylims:restart', 'update loaded addons').catch((err) =>
-      logger.warn(`Failed to emit a restart order: ${err}`),
-    );
+    Event.emit('mylims:restart', 'update loaded addons');
     response.redirect('/admin/addons');
   }
 
