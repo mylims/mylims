@@ -20,16 +20,16 @@ jobs:
         run: npm run eslint
       - name: Check types
         run: npm run check-types
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2-beta
-        with:
-          node-version: 14.x
-      - name: Install dependencies
-        run: npm ci
-      - name: Prepare environment
-        run: cp .env.example .env
-      - name: Run tests
-        run: npm run test-only
+#  test:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/setup-node@v2-beta
+#        with:
+#          node-version: 14.x
+#      - name: Install dependencies
+#        run: npm ci
+#      - name: Prepare environment
+#        run: cp .env.example .env
+#      - name: Run tests
+#        run: npm run test-only
