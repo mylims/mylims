@@ -69,7 +69,7 @@ export default function Config(props: { config: ConfigProps }) {
               id="ldap-url"
               label="LDAP URL"
               type="text"
-              name="ldap-url"
+              name="url"
               value={props.config.ldap.url}
             />
             <Input
