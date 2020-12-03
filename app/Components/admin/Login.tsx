@@ -2,10 +2,9 @@ import React from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
-import Button from '../Button';
 import Card from '../Card';
-import Input from '../Input';
 import Admin from '../layouts/Admin';
+import { Button, Input } from '../tailwind-ui';
 
 export default function Login() {
   const {
@@ -25,7 +24,7 @@ export default function Login() {
                 name="password"
                 error={session.flashMessages.get('error')}
               />
-              <Button type="submit" label="Login" />
+              <Button type="submit">Login</Button>
             </Card>
           </form>
         </div>
