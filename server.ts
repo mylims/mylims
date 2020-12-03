@@ -38,18 +38,14 @@ function parent() {
 
 function child() {
   const httpServer = new Ignitor(__dirname).httpServer();
-  httpServer
-    .start()
-    // eslint-disable-next-line no-console
-    .catch(console.error);
+  httpServer.start();
 }
 
 function starter() {
   if (process.env.CHILD) {
     child();
   } else {
-    // eslint-disable-next-line no-console
-    parent().then(starter).catch(console.log);
+    parent().then(starter);
   }
 }
 starter();
