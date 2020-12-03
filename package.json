@@ -29,7 +29,7 @@
     "@types/proxy-addr": "^2.0.0",
     "@types/react": "^16.9.56",
     "@types/source-map-support": "^0.5.3",
-    "@zakodium/eslint-config": "^2.1.4",
+    "@zakodium/eslint-config": "^2.2.1",
     "@zakodium/tailwind-config": "^1.2.1",
     "babel-types": "^6.26.0",
     "eslint": "^7.13.0",
