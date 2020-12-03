@@ -31,7 +31,7 @@ export default function Config(props: { config: ConfigProps }) {
                 label="Session age"
                 type="text"
                 name="sessionAge"
-                value={props.config.session.sessionAge}
+                defaultValue={props.config.session.sessionAge}
                 className="mb-2"
               />
               <Button type="submit">Update configuration</Button>
@@ -50,14 +50,14 @@ export default function Config(props: { config: ConfigProps }) {
                 type="hidden"
                 id="confkey"
                 name="confkey"
-                value="mongodb"
+                defaultValue="mongodb"
               />
               <Input
                 id="mongo-url"
                 label="MongoDB URL"
                 type="text"
                 name="url"
-                value={props.config.mongodb.url}
+                defaultValue={props.config.mongodb.url}
                 className="mb-2"
               />
               <Input
@@ -65,7 +65,7 @@ export default function Config(props: { config: ConfigProps }) {
                 label="MongoDB database"
                 type="text"
                 name="database"
-                value={props.config.mongodb.database}
+                defaultValue={props.config.mongodb.database}
                 className="mb-2"
               />
               <Button type="submit">Update configuration</Button>
@@ -86,7 +86,7 @@ export default function Config(props: { config: ConfigProps }) {
                 label="LDAP id"
                 type="text"
                 name="id"
-                value={props.config.ldap.id}
+                defaultValue={props.config.ldap.id}
                 className="mb-2"
               />
               <Input
@@ -94,7 +94,7 @@ export default function Config(props: { config: ConfigProps }) {
                 label="LDAP uid"
                 type="text"
                 name="uid"
-                value={props.config.ldap.uid}
+                defaultValue={props.config.ldap.uid}
                 className="mb-2"
               />
               <Input
@@ -102,7 +102,7 @@ export default function Config(props: { config: ConfigProps }) {
                 label="LDAP URL"
                 type="text"
                 name="url"
-                value={props.config.ldap.url}
+                defaultValue={props.config.ldap.url}
                 className="mb-2"
               />
               <Input
@@ -110,7 +110,7 @@ export default function Config(props: { config: ConfigProps }) {
                 label="LDAP DN"
                 type="text"
                 name="appDN"
-                value={props.config.ldap.appDN}
+                defaultValue={props.config.ldap.appDN}
                 className="mb-2"
               />
               <Input
@@ -118,7 +118,7 @@ export default function Config(props: { config: ConfigProps }) {
                 label="LDAP password"
                 type="text"
                 name="appPassword"
-                value={props.config.ldap.appPassword}
+                defaultValue={props.config.ldap.appPassword}
                 className="mb-2"
               />
               <Input
@@ -126,7 +126,7 @@ export default function Config(props: { config: ConfigProps }) {
                 label="LDAP base user"
                 type="text"
                 name="baseUserDN"
-                value={props.config.ldap.baseUserDN}
+                defaultValue={props.config.ldap.baseUserDN}
                 className="mb-2"
               />
               <Button type="submit">Update configuration</Button>
