@@ -24,8 +24,8 @@
     "@adonisjs/core",
     "@adonisjs/session",
     "@zakodium/adonis-mongodb",
-    "@adonisjs/view",
-    "adonis-apollo"
+    "adonis-apollo",
+    "adonis-react"
   ],
   "metaFiles": [
     {
@@ -34,7 +34,6 @@
     },
     ".env",
     ".adonisrc.json",
-    "resources/views/**/*.edge",
     "public/**"
   ]
 }

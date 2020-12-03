@@ -33,14 +33,5 @@ export default class ZakodiumAuthProvider {
         );
       },
     );
-
-    this.app.container.with(
-      ['Adonis/Core/Server', 'Adonis/Core/View'],
-      (Server) => {
-        Server.hooks.before(async (ctx) => {
-          ctx.view.share({ auth: ctx.auth });
-        });
-      },
-    );
   }
 }

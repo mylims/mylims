@@ -7,22 +7,25 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
 import { getAddons } from 'App/AddonsManager';
 import { getAllConfig, setConfig } from 'App/AppConfig';
+import Addon from 'App/Components/admin/Addon';
+import Config from 'App/Components/admin/Config';
+import Login from 'App/Components/admin/Login';
 
 export default class AdminsController {
   // Ask for admin password
-  public async renderLogin({ view }: HttpContextContract) {
-    return view.render('admin/login');
+  public async renderLogin({ react }: HttpContextContract) {
+    return react.render(Login);
   }
 
   // Displays config values
-  public async renderConfig({ view }: HttpContextContract) {
+  public async renderConfig({ react }: HttpContextContract) {
     const config = getAllConfig();
-    return view.render('admin/config', { config });
+    return react.render(Config, { config });
   }
 
-  public async renderAddons({ view }: HttpContextContract) {
+  public async renderAddons({ react }: HttpContextContract) {
     const availableAddons = getAddons();
-    return view.render('admin/addon', { availableAddons });
+    return react.render(Addon, { availableAddons });
   }
 
   // Validates the admin password
