@@ -1,10 +1,12 @@
 import { ApolloConfig, ApolloBaseContext } from '@ioc:Apollo/Config';
 
+import { getProviders, getSchemas } from '../app/AddonsManager';
+
 type ApolloContext = ApolloBaseContext;
 
 const config: ApolloConfig = {
-  schemas: ['app/Schemas', 'addons/ldap/Schemas'],
-  resolvers: 'app/Resolvers',
+  schemas: ['app/Schemas', ...getSchemas()],
+  resolvers: ['app/Resolvers', ...getProviders()],
   path: '/graphql',
   apolloServer: {
     introspection: true,

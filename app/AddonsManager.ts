@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import Application from '@ioc:Adonis/Core/Application';
-import Route from '@ioc:Adonis/Core/Route';
 
 import { getConfig } from './AppConfig';
 
@@ -14,6 +13,8 @@ interface AddonManifest {
   description: string;
   routes?: string | undefined;
   migrations?: string | undefined;
+  schemas?: string | undefined;
+  providers?: string | undefined;
 }
 
 export type { Addon };
@@ -67,6 +68,28 @@ class Addon {
     return path.join(this.addonPath, this.manifest.migrations);
   }
 
+  public hasSchemasDirectory() {
+    return this.manifest.schemas !== undefined;
+  }
+
+  public getSchemasDirectory() {
+    if (!this.manifest.schemas) {
+      throw new Error(`addon ${this.name} has no schemas directory`);
+    }
+    return path.join(this.addonPath, this.manifest.schemas);
+  }
+
+  public hasProvidersDirectory() {
+    return this.manifest.providers !== undefined;
+  }
+
+  public getProvidersDirectory() {
+    if (!this.manifest.providers) {
+      throw new Error(`addon ${this.name} has no providers directory`);
+    }
+    return path.join(this.addonPath, this.manifest.providers);
+  }
+
   public toJSON() {
     return {
       name: this.name,
@@ -94,7 +117,9 @@ function getEnabledAddons() {
   return addons.filter((addon) => addon.isEnabled);
 }
 
-export function registerRoutes() {
+export async function registerRoutes() {
+  const Route = (await import('@ioc:Adonis/Core/Route')).default;
+
   getEnabledAddons()
     .filter((addon) => addon.hasRoutesFile())
     .forEach((addon) => {
@@ -111,4 +136,16 @@ export function getMigrations() {
   return getEnabledAddons()
     .filter((addon) => addon.hasMigrationsDirectory())
     .map((addon) => addon.getMigrationsDirectory());
+}
+
+export function getSchemas() {
+  return getEnabledAddons()
+    .filter((addon) => addon.hasSchemasDirectory())
+    .map((addon) => addon.getSchemasDirectory());
+}
+
+export function getProviders() {
+  return getEnabledAddons()
+    .filter((addon) => addon.hasProvidersDirectory())
+    .map((addon) => addon.getProvidersDirectory());
 }
