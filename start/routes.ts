@@ -68,8 +68,8 @@ Route.group(() => {
 }).prefix('/test-auth');
 
 // Require routes from addons
-// eslint-disable-next-line no-console
-AddonsManager.registerRoutes().catch((err) => console.log(err));
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+AddonsManager.registerRoutes();
 
 const apolloGroup = Route.group(() => {
   ApolloServer.applyMiddleware({ Route });
