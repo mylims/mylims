@@ -14,7 +14,7 @@ interface AddonManifest {
   routes?: string | undefined;
   migrations?: string | undefined;
   schemas?: string | undefined;
-  providers?: string | undefined;
+  resolvers?: string | undefined;
 }
 
 export type { Addon };
@@ -79,15 +79,15 @@ class Addon {
     return path.join(this.addonPath, this.manifest.schemas);
   }
 
-  public hasProvidersDirectory() {
-    return this.manifest.providers !== undefined;
+  public hasResolversDirectory() {
+    return this.manifest.resolvers !== undefined;
   }
 
-  public getProvidersDirectory() {
-    if (!this.manifest.providers) {
-      throw new Error(`addon ${this.name} has no providers directory`);
+  public getResolversDirectory() {
+    if (!this.manifest.resolvers) {
+      throw new Error(`addon ${this.name} has no resolvers directory`);
     }
-    return path.join(this.addonPath, this.manifest.providers);
+    return path.join(this.addonPath, this.manifest.resolvers);
   }
 
   public toJSON() {
@@ -144,8 +144,8 @@ export function getSchemas() {
     .map((addon) => addon.getSchemasDirectory());
 }
 
-export function getProviders() {
+export function getResolvers() {
   return getEnabledAddons()
-    .filter((addon) => addon.hasProvidersDirectory())
-    .map((addon) => addon.getProvidersDirectory());
+    .filter((addon) => addon.hasResolversDirectory())
+    .map((addon) => addon.getResolversDirectory());
 }
