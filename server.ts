@@ -38,8 +38,7 @@ function parent() {
 
 function child() {
   const httpServer = new Ignitor(__dirname).httpServer();
-  httpServer
-    .start();
+  httpServer.start();
 }
 
 function starter() {
