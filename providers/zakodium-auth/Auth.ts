@@ -9,8 +9,9 @@ import AuthManager from './AuthManager';
 
 export default class Auth implements AuthContract {
   private authProvider: GenericAuthProvider;
-  private authProviderName: string;
   private internalUser: User;
+
+  private authProviderName: string;
 
   public constructor(
     public authManager: AuthManager,

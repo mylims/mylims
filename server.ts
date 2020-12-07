@@ -19,7 +19,7 @@ import sourceMapSupport from 'source-map-support';
 sourceMapSupport.install({ handleUncaughtExceptions: false });
 
 function parent() {
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     const child = childProcess.fork(`${__filename}`, [], {
       env: {
         ...process.env,
