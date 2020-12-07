@@ -51,7 +51,11 @@ export default function AddonPage(props: { availableAddons: Addon[] }) {
       <div className="flex flex-col mx-8 mt-2">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <form action={makeUrl('AdminsController.addons')} method="POST">
+            <form
+              action={makeUrl('AdminsController.addons')}
+              method="POST"
+              className="space-y-2"
+            >
               <Button type="submit" className="mb-2">
                 Save
               </Button>

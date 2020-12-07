@@ -21,14 +21,17 @@ export default function Login() {
               </h3>
             </Card.Header>
             <Card.Body>
-              <form action={makeUrl('AdminsController.auth')} method="POST">
+              <form
+                action={makeUrl('AdminsController.auth')}
+                method="POST"
+                className="space-y-2"
+              >
                 <Input
                   label="Password"
                   id="password"
                   type="password"
                   name="password"
                   error={session.flashMessages.get('error')}
-                  className="mb-2"
                 />
                 <Button type="submit">Login</Button>
               </form>

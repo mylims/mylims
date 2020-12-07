@@ -19,7 +19,11 @@ export default function Config(props: { config: ConfigProps }) {
             </h3>
           </Card.Header>
           <Card.Body>
-            <form action={makeUrl('AdminsController.changeConf')} method="POST">
+            <form
+              action={makeUrl('AdminsController.changeConf')}
+              method="POST"
+              className="space-y-2"
+            >
               <input
                 type="hidden"
                 id="confkey"
@@ -32,7 +36,6 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="sessionAge"
                 defaultValue={props.config.session.sessionAge}
-                className="mb-2"
               />
               <Button type="submit">Update configuration</Button>
             </form>
@@ -45,7 +48,11 @@ export default function Config(props: { config: ConfigProps }) {
             </h3>
           </Card.Header>
           <Card.Body>
-            <form action={makeUrl('AdminsController.changeConf')} method="POST">
+            <form
+              action={makeUrl('AdminsController.changeConf')}
+              method="POST"
+              className="space-y-2"
+            >
               <input
                 type="hidden"
                 id="confkey"
@@ -58,7 +65,6 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="url"
                 defaultValue={props.config.mongodb.url}
-                className="mb-2"
               />
               <Input
                 id="database"
@@ -66,7 +72,6 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="database"
                 defaultValue={props.config.mongodb.database}
-                className="mb-2"
               />
               <Button type="submit">Update configuration</Button>
             </form>
@@ -79,7 +84,11 @@ export default function Config(props: { config: ConfigProps }) {
             </h3>
           </Card.Header>
           <Card.Body>
-            <form action={makeUrl('AdminsController.changeConf')} method="POST">
+            <form
+              action={makeUrl('AdminsController.changeConf')}
+              method="POST"
+              className="space-y-2"
+            >
               <input type="hidden" id="confkey" name="confkey" value="ldap" />
               <Input
                 id="id"
@@ -87,7 +96,6 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="id"
                 defaultValue={props.config.ldap.id}
-                className="mb-2"
               />
               <Input
                 id="uid"
@@ -95,7 +103,6 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="uid"
                 defaultValue={props.config.ldap.uid}
-                className="mb-2"
               />
               <Input
                 id="ldap-url"
@@ -103,7 +110,6 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="url"
                 defaultValue={props.config.ldap.url}
-                className="mb-2"
               />
               <Input
                 id="appDN"
@@ -111,7 +117,6 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="appDN"
                 defaultValue={props.config.ldap.appDN}
-                className="mb-2"
               />
               <Input
                 id="appPassword"
@@ -119,7 +124,6 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="appPassword"
                 defaultValue={props.config.ldap.appPassword}
-                className="mb-2"
               />
               <Input
                 id="baseUserDN"
@@ -127,7 +131,6 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="baseUserDN"
                 defaultValue={props.config.ldap.baseUserDN}
-                className="mb-2"
               />
               <Button type="submit">Update configuration</Button>
             </form>
