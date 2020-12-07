@@ -1,4 +1,5 @@
 {
+  "extends": "./node_modules/adonis-preset-ts/tsconfig",
   "include": ["**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
@@ -14,10 +15,11 @@
     "emitDecoratorMetadata": false,
     "inlineSourceMap": true,
     "moduleResolution": "node",
+    "noUnusedLocals": false,
     "esModuleInterop": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "lib": ["ES2020"],
+    "lib": ["DOM"],
     "jsx": "react",
     "paths": {
       "App/*": ["./app/*"],
