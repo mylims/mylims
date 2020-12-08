@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import Application from '@ioc:Adonis/Core/Application';
+import { RouterContract } from '@ioc:Adonis/Core/Route';
 
 import { getConfig } from './AppConfig';
 
@@ -117,9 +118,7 @@ function getEnabledAddons() {
   return addons.filter((addon) => addon.isEnabled);
 }
 
-export async function registerRoutes() {
-  const Route = (await import('@ioc:Adonis/Core/Route')).default;
-
+export function registerRoutes(Route: RouterContract) {
   getEnabledAddons()
     .filter((addon) => addon.hasRoutesFile())
     .forEach((addon) => {
