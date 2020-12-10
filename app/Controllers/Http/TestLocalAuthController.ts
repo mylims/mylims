@@ -20,7 +20,7 @@ export default class AppController {
     await user.save();
   }
   public async login({ auth }: HttpContextContract) {
-    await auth.use('local').login('xavier.stouder@he-arc.ch', 'root');
+    await auth.use('local').attempt('xavier.stouder@he-arc.ch', 'root');
   }
   public async logout({ auth }: HttpContextContract) {
     auth.logout();

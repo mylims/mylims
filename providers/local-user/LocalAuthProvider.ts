@@ -6,6 +6,9 @@ import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
 
 export default class LocalAuthProvider implements GenericAuthProvider {
+  public login(): Promise<User | null> {
+    throw new Error('Method not implemented.');
+  }
   public async attempt(email: string, password: string): Promise<User | null> {
     const credential = await Credential.findOne({ email });
     if (credential === null) return null;
