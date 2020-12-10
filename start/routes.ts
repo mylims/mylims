@@ -68,7 +68,7 @@ Route.group(() => {
 }).prefix('/test-auth');
 
 // Require routes from addons
-AddonsManager.registerRoutes();
+AddonsManager.registerRoutes(Route);
 
 const apolloGroup = Route.group(() => {
   ApolloServer.applyMiddleware({ Route });
