@@ -11,7 +11,10 @@ interface OicdContent {
   [key: string]: string;
 }
 
-Route.get('/login', async ({ oidc }: HttpContextContract) => oidc.login());
+Route.get('/login', async ({ request, oidc }: HttpContextContract) => {
+  const { oidcProvider } = request.all();
+  return oidc.login(oidcProvider);
+});
 
 Route.post(
   '/callback',
@@ -23,7 +26,7 @@ Route.post(
       return response.badRequest({ errors: [err] });
     }
 
-    await auth.use('oidc').login(content.oid);
+    await auth.use(`oidc_${state.provider}`).login(content.oid);
     if (!auth.user) {
       return response.internalServerError({ errors: ['Failed to get user'] });
     }

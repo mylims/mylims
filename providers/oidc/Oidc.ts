@@ -1,37 +1,36 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import { OidcContract, OidcState } from '@ioc:Zakodium/Oidc';
+import {
+  OidcConfig,
+  OidcContract,
+  OidcProviderConfig,
+  OidcState,
+} from '@ioc:Zakodium/Oidc';
 
 import { verifyOidcJwt } from './utils';
 
-// TODO : config
-const authorizationEndpoint =
-  'https://login.microsoftonline.com/87839ca1-728a-473a-8c11-95dc39a51c30/oauth2/v2.0/authorize';
-
-const baseLoginUrl = new URL(authorizationEndpoint);
-baseLoginUrl.searchParams.set(
-  'client_id',
-  '6cd84433-e0cd-4135-a3b6-6a2f523a1e7d',
-);
-baseLoginUrl.searchParams.set('response_type', 'id_token');
-baseLoginUrl.searchParams.set(
-  'redirect_uri',
-  'http://localhost:3333/addons/oidc/callback',
-);
-baseLoginUrl.searchParams.set('scope', 'openid email profile');
-baseLoginUrl.searchParams.set('response_mode', 'form_post');
-
 export default class Oidc implements OidcContract {
-  public constructor(private ctx: HttpContextContract) {}
+  private selectedProvider: OidcProviderConfig;
 
-  public login() {
+  public constructor(
+    private ctx: HttpContextContract,
+    private oidcConfig: OidcConfig,
+  ) {
+    if (oidcConfig === null) throw new Error('Failed to load oidc config');
+    this.selectedProvider = this.oidcConfig.providers[0];
+  }
+
+  public login(provider: string) {
+    this.selectProvider(provider);
+
     const { request, response } = this.ctx;
     const query = request.get();
     const redirectTo = query.redirect_to || 'http://localhost:3000';
     const state = {
       redirectTo,
+      provider,
     };
 
-    const loginUrl = new URL(baseLoginUrl.href);
+    const loginUrl = new URL(this.baseLoginUrl.href);
     loginUrl.searchParams.set('nonce', '1111111111');
     loginUrl.searchParams.set('state', JSON.stringify(state));
 
@@ -68,5 +67,28 @@ export default class Oidc implements OidcContract {
       },
     );
     return [verified, state] as [T, OidcState];
+  }
+
+  private selectProvider(providerId: string) {
+    const foundProvider = this.oidcConfig.providers.find(
+      (provider) => provider.identifier === providerId,
+    );
+    if (foundProvider === undefined) {
+      throw new Error(`Bad provider identifier: ${providerId}`);
+    }
+    this.selectedProvider = foundProvider;
+  }
+
+  private get baseLoginUrl() {
+    const baseLoginUrl = new URL(this.selectedProvider.endpoints.authorization);
+    baseLoginUrl.searchParams.set('client_id', this.selectedProvider.clientId);
+    baseLoginUrl.searchParams.set('response_type', 'id_token');
+    baseLoginUrl.searchParams.set(
+      'redirect_uri',
+      'http://localhost:3333/addons/oidc/callback',
+    );
+    baseLoginUrl.searchParams.set('scope', 'openid email profile');
+    baseLoginUrl.searchParams.set('response_mode', 'form_post');
+    return baseLoginUrl;
   }
 }

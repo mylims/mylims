@@ -16,10 +16,13 @@ export default class OidcProvider {
 
   public ready() {
     this.app.container.with(['Adonis/Core/HttpContext'], (HttpContext) => {
+      const oidcConfig = this.app.container
+        .use('Adonis/Core/Config')
+        .get('oidc', null);
       HttpContext.getter(
         'oidc',
         function oidc() {
-          return new Oidc(this);
+          return new Oidc(this, oidcConfig);
         },
         true,
       );
