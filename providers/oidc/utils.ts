@@ -3,7 +3,7 @@ import { promisify } from 'util';
 import got from 'got';
 import { decode, verify, Secret, VerifyOptions } from 'jsonwebtoken';
 
-const verifyJwt = promisify<string, Secret, VerifyOptions, T>(verify);
+const verifyJwt = promisify<string, Secret, VerifyOptions, unknown>(verify);
 
 interface Jwt<T> {
   header: {
