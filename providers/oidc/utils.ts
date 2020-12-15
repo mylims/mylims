@@ -26,8 +26,6 @@ interface Jwk {
   pem: string | undefined;
 }
 
-// TODO
-
 let publicKeys: Jwk[] = [];
 let publicKeysPromise: Promise<Jwk[]> | null = null;
 

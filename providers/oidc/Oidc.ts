@@ -1,3 +1,5 @@
+import env from 'env';
+
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import {
   OidcConfig,
@@ -31,7 +33,7 @@ export default class Oidc implements OidcContract {
 
     const { request, response } = this.ctx;
     const query = request.get();
-    const redirectTo = query.redirect_to || 'http://localhost:3000';
+    const redirectTo = query.redirect_to || `${env.FRONTEND_URL}/eln`;
     const state = {
       redirectTo,
       provider,
@@ -95,7 +97,7 @@ export default class Oidc implements OidcContract {
     baseLoginUrl.searchParams.set('response_type', 'id_token');
     baseLoginUrl.searchParams.set(
       'redirect_uri',
-      'http://localhost:3333/addons/oidc/callback',
+      `${env.BACKEND_URL}/addons/oidc/callback`,
     );
     baseLoginUrl.searchParams.set('scope', 'openid email profile');
     baseLoginUrl.searchParams.set('response_mode', 'form_post');
