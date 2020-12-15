@@ -56,16 +56,19 @@ export default class Oidc implements OidcContract {
     }
 
     const state = JSON.parse(oidcResponse.state) as OidcState;
+    this.selectProvider(state.provider);
     const token = oidcResponse.id_token;
-    const verified = await verifyOidcJwt<T>(token);
-
-    ['oid', 'email', 'preferred_username', 'family_name', 'given_name'].forEach(
-      (key) => {
-        if (!verified[key]) {
-          throw new Error(`missing ${key} claim`);
-        }
-      },
+    const verified = await verifyOidcJwt<T>(
+      token,
+      this.selectedProvider.endpoints.keys,
     );
+
+    ['sub', 'email'].forEach((key) => {
+      if (!verified[key]) {
+        throw new Error(`missing ${key} claim`);
+      }
+    });
+
     return [verified, state] as [T, OidcState];
   }
 

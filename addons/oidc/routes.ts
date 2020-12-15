@@ -4,11 +4,11 @@ import Route from '@ioc:Adonis/Core/Route';
 import { OidcState } from '@ioc:Zakodium/Oidc';
 
 interface OicdContent {
-  oid: string;
+  sub: string;
   email: string;
-  given_name: string;
-  family_name: string;
-  [key: string]: string;
+  given_name?: string;
+  family_name?: string;
+  [key: string]: string | undefined;
 }
 
 Route.get('/login', async ({ request, oidc }: HttpContextContract) => {
@@ -23,17 +23,21 @@ Route.post(
     try {
       [content, state] = await oidc.callback<OicdContent>();
     } catch (err) {
-      return response.badRequest({ errors: [err] });
+      return response.badRequest({ errors: [err.message] });
     }
 
-    await auth.use(`oidc_${state.provider}`).login(content.oid);
+    await auth.use(`oidc_${state.provider}`).login(content.sub);
     if (!auth.user) {
       return response.internalServerError({ errors: ['Failed to get user'] });
     }
 
     const { user } = auth;
-    if (!user.firstName) user.firstName = content.given_name;
-    if (!user.lastName) user.lastName = content.family_name;
+    if (!user.firstName && content.given_name) {
+      user.firstName = content.given_name;
+    }
+    if (!user.lastName && content.family_name) {
+      user.lastName = content.family_name;
+    }
     if (!user.emails.includes(content.email)) {
       user.emails.push(content.email);
     }

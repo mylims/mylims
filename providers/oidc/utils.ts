@@ -27,24 +27,23 @@ interface Jwk {
 }
 
 // TODO
-const keysUrl = 'https://login.microsoftonline.com/common/discovery/keys';
 
 let publicKeys: Jwk[] = [];
 let publicKeysPromise: Promise<Jwk[]> | null = null;
 
-async function getKeys(): Promise<Jwk[]> {
+async function getKeys(keysUrl: string): Promise<Jwk[]> {
   const response = await got.get(keysUrl).json<{ keys: Jwk[] }>();
   publicKeys = response.keys;
   publicKeysPromise = null;
   return response.keys;
 }
 
-async function ensureKeys() {
+async function ensureKeys(keysUrl: string) {
   if (publicKeys.length > 0) {
     return publicKeys;
   }
   if (!publicKeysPromise) {
-    publicKeysPromise = getKeys();
+    publicKeysPromise = getKeys(keysUrl);
   }
   return publicKeysPromise;
 }
@@ -106,9 +105,9 @@ function encodeLengthHex(n: number): string {
   return toHex(lengthOfLengthByte) + nHex;
 }
 
-export async function verifyOidcJwt<T>(token: string) {
+export async function verifyOidcJwt<T>(token: string, keysUrl: string) {
   const decoded = decode(token, { complete: true, json: true }) as Jwt<T>;
-  const keys = await ensureKeys();
+  const keys = await ensureKeys(keysUrl);
   const correctKey = keys.find((key) => key.kid === decoded.header.kid);
   if (!correctKey) throw new Error(`could not find key: ${decoded.header.kid}`);
 

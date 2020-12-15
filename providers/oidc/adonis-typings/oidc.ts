@@ -2,7 +2,7 @@ declare module '@ioc:Zakodium/Oidc' {
   export interface OidcProviderConfig {
     identifier: string;
     label: string;
-    endpoints: { authorization: string };
+    endpoints: { authorization: string; keys: string };
     clientId: string;
   }
   export interface OidcConfig {
@@ -14,7 +14,7 @@ declare module '@ioc:Zakodium/Oidc' {
   }
   export interface OidcContract {
     login(provider: string): void;
-    callback<T extends { [key: string]: string }>(): Promise<
+    callback<T extends { [key: string]: string | undefined }>(): Promise<
       [content: T, state: OidcState]
     >;
   }
