@@ -37,7 +37,7 @@ export default class Oidc implements OidcContract {
     return response.redirect(loginUrl.href);
   }
 
-  public async callback<T extends { [key: string]: string }>() {
+  public async callback<T extends { [key: string]: string | undefined }>() {
     const { request } = this.ctx;
 
     const oidcResponse = request.only([
