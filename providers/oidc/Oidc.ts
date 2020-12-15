@@ -19,6 +19,13 @@ export default class Oidc implements OidcContract {
     this.selectedProvider = this.oidcConfig.providers[0];
   }
 
+  public get availableProviders() {
+    return this.oidcConfig.providers.map(({ label, identifier }) => ({
+      label,
+      identifier,
+    }));
+  }
+
   public login(provider: string) {
     this.selectProvider(provider);
 

@@ -11,6 +11,11 @@ interface OicdContent {
   [key: string]: string | undefined;
 }
 
+Route.get(
+  '/providers',
+  async ({ oidc }: HttpContextContract) => oidc.availableProviders,
+);
+
 Route.get('/login', async ({ request, oidc }: HttpContextContract) => {
   const { oidcProvider } = request.all();
   return oidc.login(oidcProvider);

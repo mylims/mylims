@@ -13,6 +13,7 @@ declare module '@ioc:Zakodium/Oidc' {
     provider: string;
   }
   export interface OidcContract {
+    availableProviders: Pick<OidcProviderConfig, 'identifier' | 'label'>[];
     login(provider: string): void;
     callback<T extends { [key: string]: string | undefined }>(): Promise<
       [content: T, state: OidcState]
