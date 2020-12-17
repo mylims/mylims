@@ -48,6 +48,7 @@ Route.group(() => {
 }).prefix('/admin');
 
 Route.group(() => {
+  Route.get('/', 'AuthController.myself');
   Route.post('local', 'AuthController.login');
 }).prefix('/auth');
 

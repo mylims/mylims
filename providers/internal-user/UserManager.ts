@@ -36,6 +36,7 @@ export default class UserManager {
     const emails = [];
     if (email) emails.push(email);
     return User.create({
+      role: 'MEMBER',
       authMethods: { [authProvider]: id },
       emails,
     });

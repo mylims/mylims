@@ -53,6 +53,7 @@ export default class Auth implements AuthContract {
     if (result !== null) {
       this.internalUser = result;
       this.ctx.session.put('internal_user', String(this.internalUser.id));
+      this.ctx.session.commit();
       return true;
     }
     return false;
@@ -67,6 +68,7 @@ export default class Auth implements AuthContract {
     if (result !== null) {
       this.internalUser = result;
       this.ctx.session.put('internal_user', String(this.internalUser.id));
+      this.ctx.session.commit();
       return true;
     }
     return false;

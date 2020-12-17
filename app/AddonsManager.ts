@@ -77,7 +77,7 @@ class Addon {
     if (!this.manifest.schemas) {
       throw new Error(`addon ${this.name} has no schemas directory`);
     }
-    return path.join(this.addonPath, this.manifest.schemas);
+    return path.join('addons', this.getName(), this.manifest.schemas);
   }
 
   public hasResolversDirectory() {
@@ -88,7 +88,7 @@ class Addon {
     if (!this.manifest.resolvers) {
       throw new Error(`addon ${this.name} has no resolvers directory`);
     }
-    return path.join(this.addonPath, this.manifest.resolvers);
+    return path.join('addons', this.getName(), this.manifest.resolvers);
   }
 
   public toJSON() {
