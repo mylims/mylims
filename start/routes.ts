@@ -50,6 +50,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/', 'AuthController.myself');
   Route.post('local', 'AuthController.login');
+  Route.get('/logout', 'AuthController.logout');
 }).prefix('/auth');
 
 Route.group(() => {
