@@ -7,7 +7,7 @@ import {
   OidcState,
 } from '@ioc:Zakodium/Oidc';
 
-import { verifyOidcJwt } from './utils';
+import { tenCharsIds, verifyOidcJwt } from './utils';
 
 export default class Oidc implements OidcContract {
   private selectedProvider: OidcProviderConfig;
@@ -39,7 +39,7 @@ export default class Oidc implements OidcContract {
     };
 
     const loginUrl = new URL(this.baseLoginUrl.href);
-    loginUrl.searchParams.set('nonce', '1111111111');
+    loginUrl.searchParams.set('nonce', tenCharsIds());
     loginUrl.searchParams.set('state', JSON.stringify(state));
 
     return response.redirect(loginUrl.href);

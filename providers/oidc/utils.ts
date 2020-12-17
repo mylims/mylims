@@ -1,5 +1,7 @@
+import { randomBytes } from 'crypto';
 import { promisify } from 'util';
 
+import baseX from 'base-x';
 import got from 'got';
 import { decode, verify, Secret, VerifyOptions } from 'jsonwebtoken';
 
@@ -114,4 +116,10 @@ export async function verifyOidcJwt<T>(token: string, keysUrl: string) {
   }
 
   return verifyJwt(token, correctKey.pem, {}) as Promise<T>;
+}
+
+const base36 = baseX('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+export function tenCharsIds() {
+  const bytes = randomBytes(8);
+  return base36.encode(bytes).slice(0, 10);
 }
