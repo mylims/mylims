@@ -2,8 +2,6 @@
   "name": "addon-oidc",
   "version": "0.0.0",
   "private": true,
-  "dependencies": {
-  },
-  "devDependencies": {
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
