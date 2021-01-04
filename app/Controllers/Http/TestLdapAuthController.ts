@@ -5,8 +5,8 @@ import User from 'App/Models/User';
 export default class TestLdapAuthController {
   public async create() {
     const user = new User();
-    user.firstName = 'Xavier';
-    user.lastName = 'Stouder';
+    user.firstname = 'Xavier';
+    user.lastname = 'Stouder';
     user.role = 'ADMIN';
     user.authMethods = { ldap: 'user01' };
     await user.save();

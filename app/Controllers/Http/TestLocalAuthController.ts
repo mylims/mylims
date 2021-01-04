@@ -7,13 +7,12 @@ import User from 'App/Models/User';
 export default class AppController {
   public async create() {
     const credential = new Credential();
-    credential.email = 'xavier@stouder.io';
     credential.hash = await Hash.make('root');
     await credential.save();
 
     const user = new User();
-    user.firstName = 'Xavier';
-    user.lastName = 'Stouder';
+    user.firstname = 'Xavier';
+    user.lastname = 'Stouder';
     user.emails = ['xavier@stouder.io', 'xavier.stouder@he-arc.ch'];
     user.role = 'ADMIN';
     user.authMethods = { local: (credential.id as unknown) as string };

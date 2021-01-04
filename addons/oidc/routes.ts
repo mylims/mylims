@@ -37,11 +37,11 @@ Route.post(
     }
 
     const { user } = auth;
-    if (!user.firstName && content.given_name) {
-      user.firstName = content.given_name;
+    if (!user.firstname && content.given_name) {
+      user.firstname = content.given_name;
     }
-    if (!user.lastName && content.family_name) {
-      user.lastName = content.family_name;
+    if (!user.lastname && content.family_name) {
+      user.lastname = content.family_name;
     }
     if (!user.emails.includes(content.email)) {
       user.emails.push(content.email);

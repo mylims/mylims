@@ -31,8 +31,8 @@ export type GqlAuthMethods = {
 
 export type GqlUser = {
   id: Scalars['ID'];
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
+  firstname?: Maybe<Scalars['String']>;
+  lastname?: Maybe<Scalars['String']>;
   emails: Array<Scalars['String']>;
   role: Scalars['String'];
   authMethods?: Maybe<GqlAuthMethods>;
@@ -206,12 +206,12 @@ export type GqlUserResolvers<
   ParentType extends GqlResolversParentTypes['User'] = GqlResolversParentTypes['User']
 > = ResolversObject<{
   id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
-  firstName?: Resolver<
+  firstname?: Resolver<
     Maybe<GqlResolversTypes['String']>,
     ParentType,
     ContextType
   >;
-  lastName?: Resolver<
+  lastname?: Resolver<
     Maybe<GqlResolversTypes['String']>,
     ParentType,
     ContextType

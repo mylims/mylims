@@ -16,6 +16,7 @@ Route.group(() => {
       lastname,
       firstname,
       emails: [email],
+      role: 'MEMBER',
     });
 
     return Route.makeSignedUrl('setPassword', {

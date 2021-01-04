@@ -8,8 +8,8 @@ type AuthMethods {
 
 type User {
   id: ID!
-  firstName: String
-  lastName: String
+  firstname: String
+  lastname: String
   emails: [String!]!
   role: String!
   authMethods: AuthMethods
