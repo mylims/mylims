@@ -6,33 +6,43 @@ import ApolloServer from '@ioc:Apollo/Server';
 import * as AddonsManager from 'App/AddonsManager';
 import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
+import { ObjectId } from 'mongodb';
 
 // Local user authentication
 Route.group(() => {
   Route.post('/', async ({ request }) => {
     const { lastname, firstname, email } = request.all();
-    const credential = await Credential.create({ email });
-    await User.create({
+    const user = await User.create({
       lastname,
       firstname,
-      email,
-      auth: { local: credential._id },
+      emails: [email],
     });
 
     return Route.makeSignedUrl('setPassword', {
       params: {
-        email,
+        userId: user._id,
       },
     });
   });
 
-  Route.post('/password/:email', async ({ request, response, params }) => {
+  Route.post('/password/:userId', async ({ request, response, params }) => {
     const { password } = request.all();
-    const { email } = params;
-    const credentials = await Credential.findOne({ email });
-    if (credentials === null) return response.notFound(email);
-    credentials.hash = await Hash.make(password);
-    return credentials.save();
+    const { userId } = params;
+
+    console.log(userId);
+    const user = await User.findById(new ObjectId(userId));
+    console.log('user', user);
+    if (user === null) return response.notFound(user);
+
+    const credential = new Credential();
+    console.log('credential', credential);
+    if (credential === null) return response.notFound(credential);
+    credential.hash = await Hash.make(password);
+
+    await credential.save();
+
+    user.authMethods = { local: String(credential.id) };
+    return user.save();
   }).as('setPassword');
 }).prefix('/users');
 
