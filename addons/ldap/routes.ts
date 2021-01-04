@@ -7,7 +7,7 @@ Route.post(
   '/login',
   async ({ request, auth, response }: HttpContextContract) => {
     const { uid, password } = await request.validate(LoginValidator);
-    const result = await auth.use('ldap').login(uid, password);
+    const result = await auth.use('ldap').attempt(uid, password);
     if (result === null || result === false) {
       return response.unauthorized({
         errors: [{ message: 'Bad credentials' }],

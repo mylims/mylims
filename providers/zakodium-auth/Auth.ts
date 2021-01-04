@@ -41,11 +41,11 @@ export default class Auth implements AuthContract {
   }
 
   /**
-   * Login user using the previously defined provider.
+   * Attempt to login user using the previously defined provider.
    * @param uid
    * @param password
    */
-  public async login(uid: string, password: string) {
+  public async attempt(uid: string, password: string) {
     const result: User | null = await this.use().authProvider.attempt(
       uid,
       password,
@@ -53,6 +53,22 @@ export default class Auth implements AuthContract {
     if (result !== null) {
       this.internalUser = result;
       this.ctx.session.put('internal_user', String(this.internalUser.id));
+      this.ctx.session.commit();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Login user using the previously defined provider.
+   * @param uid
+   */
+  public async login(uid: string) {
+    const result: User | null = await this.use().authProvider.login(uid);
+    if (result !== null) {
+      this.internalUser = result;
+      this.ctx.session.put('internal_user', String(this.internalUser.id));
+      this.ctx.session.commit();
       return true;
     }
     return false;

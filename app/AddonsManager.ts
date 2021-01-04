@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import Application from '@ioc:Adonis/Core/Application';
+import { RouterContract } from '@ioc:Adonis/Core/Route';
 
 import { getConfig } from './AppConfig';
 
@@ -76,7 +77,7 @@ class Addon {
     if (!this.manifest.schemas) {
       throw new Error(`addon ${this.name} has no schemas directory`);
     }
-    return path.join(this.addonPath, this.manifest.schemas);
+    return path.join('addons', this.getName(), this.manifest.schemas);
   }
 
   public hasResolversDirectory() {
@@ -87,7 +88,7 @@ class Addon {
     if (!this.manifest.resolvers) {
       throw new Error(`addon ${this.name} has no resolvers directory`);
     }
-    return path.join(this.addonPath, this.manifest.resolvers);
+    return path.join('addons', this.getName(), this.manifest.resolvers);
   }
 
   public toJSON() {
@@ -117,9 +118,7 @@ function getEnabledAddons() {
   return addons.filter((addon) => addon.isEnabled);
 }
 
-export async function registerRoutes() {
-  const Route = (await import('@ioc:Adonis/Core/Route')).default;
-
+export function registerRoutes(Route: RouterContract) {
   getEnabledAddons()
     .filter((addon) => addon.hasRoutesFile())
     .forEach((addon) => {

@@ -12,7 +12,7 @@ export default class TestLdapAuthController {
     await user.save();
   }
   public async login({ auth }: HttpContextContract) {
-    await auth.use('ldap').login('user01', 'password1');
+    await auth.use('ldap').attempt('user01', 'password1');
   }
   public async logout({ auth }: HttpContextContract) {
     auth.logout();

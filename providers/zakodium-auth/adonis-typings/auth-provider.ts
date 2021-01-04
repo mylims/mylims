@@ -3,5 +3,6 @@ declare module '@ioc:Zakodium/Auth' {
 
   export interface GenericAuthProvider {
     attempt(uid: string, password: string): Promise<User | null>;
+    login(uid: string): Promise<User | null>;
   }
 }

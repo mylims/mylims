@@ -27,6 +27,10 @@ export default class LocalAuthProvider implements GenericAuthProvider {
     this.config = authConfig.providers.ldap as LdapProviderConfig;
   }
 
+  public login(): Promise<User | null> {
+    throw new Error('Method not implemented.');
+  }
+
   public async attempt(uid: string, password: string): Promise<User | null> {
     const userClient = ldap.createClient({ url: this.config.url });
     // bad password or bind failed

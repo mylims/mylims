@@ -5,6 +5,10 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -21,12 +25,14 @@ export type GqlQuery = {
 export type GqlAuthMethods = {
   local?: Maybe<Scalars['String']>;
   ldap?: Maybe<Scalars['String']>;
+  oidc_azure?: Maybe<Scalars['String']>;
+  oidc_google?: Maybe<Scalars['String']>;
 };
 
 export type GqlUser = {
   id: Scalars['ID'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
   emails: Array<Scalars['String']>;
   role: Scalars['String'];
   authMethods?: Maybe<GqlAuthMethods>;
@@ -182,6 +188,16 @@ export type GqlAuthMethodsResolvers<
 > = ResolversObject<{
   local?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
   ldap?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
+  oidc_azure?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  oidc_google?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -190,8 +206,16 @@ export type GqlUserResolvers<
   ParentType extends GqlResolversParentTypes['User'] = GqlResolversParentTypes['User']
 > = ResolversObject<{
   id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
-  firstName?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
-  lastName?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  firstName?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  lastName?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   emails?: Resolver<
     Array<GqlResolversTypes['String']>,
     ParentType,

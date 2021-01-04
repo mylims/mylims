@@ -5,4 +5,6 @@ export default Env.rules({
   HOST: Env.schema.string({ format: 'host' }),
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
   ADMIN_PASSWORD: Env.schema.string(),
+  BACKEND_URL: Env.schema.string(),
+  FRONTEND_URL: Env.schema.string(),
 });
