@@ -21,7 +21,7 @@ export default class ZakodiumAuthProvider {
   }
 
   public ready() {
-    this.app.container.with(
+    this.app.container.withBindings(
       ['Adonis/Core/HttpContext', 'Zakodium/Auth'],
       (HttpContext, AuthManager) => {
         HttpContext.getter(

@@ -1,4 +1,4 @@
-# New ELN
+# myLIMS
 
 > Electronic lab notebook for open science
 

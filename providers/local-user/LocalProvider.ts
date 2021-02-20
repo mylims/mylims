@@ -7,12 +7,15 @@ export default class LocalUserProvider {
   public constructor(protected app: ApplicationContract) {}
 
   public boot() {
-    this.app.container.with(['Zakodium/Auth'], (AuthManager: AuthManager) => {
-      AuthManager.extend(
-        'local',
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        new (require('./LocalAuthProvider').default)(),
-      );
-    });
+    this.app.container.withBindings(
+      ['Zakodium/Auth'],
+      (AuthManager: AuthManager) => {
+        AuthManager.extend(
+          'local',
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          new (require('./LocalAuthProvider').default)(),
+        );
+      },
+    );
   }
 }

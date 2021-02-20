@@ -7,13 +7,16 @@ export default class LdapProvider {
   public constructor(protected app: ApplicationContract) {}
 
   public boot() {
-    this.app.container.with(['Zakodium/Auth'], (AuthManager: AuthManager) => {
-      AuthManager.extend(
-        'ldap',
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        new (require('../LdapAuthProvider').default)(),
-      );
-    });
+    this.app.container.withBindings(
+      ['Zakodium/Auth'],
+      (AuthManager: AuthManager) => {
+        AuthManager.extend(
+          'ldap',
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          new (require('../LdapAuthProvider').default)(),
+        );
+      },
+    );
   }
 
   public shutdown() {

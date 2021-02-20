@@ -8,18 +8,21 @@ export default class OidcProvider {
   public constructor(protected app: ApplicationContract) {}
 
   public boot() {
-    this.app.container.with(['Zakodium/Auth'], (AuthManager: AuthManager) => {
-      const oidcConfig: OidcConfig = this.app.container
-        .use('Adonis/Core/Config')
-        .get('oidc', null);
-      oidcConfig.providers.forEach((oidcProviderConfig) =>
-        AuthManager.extend(
-          `oidc_${oidcProviderConfig.identifier}`,
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          new (require('../OidcAuthProvider').default)(oidcProviderConfig),
-        ),
-      );
-    });
+    this.app.container.withBindings(
+      ['Zakodium/Auth'],
+      (AuthManager: AuthManager) => {
+        const oidcConfig: OidcConfig = this.app.container
+          .use('Adonis/Core/Config')
+          .get('oidc', null);
+        oidcConfig.providers.forEach((oidcProviderConfig) =>
+          AuthManager.extend(
+            `oidc_${oidcProviderConfig.identifier}`,
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            new (require('../OidcAuthProvider').default)(oidcProviderConfig),
+          ),
+        );
+      },
+    );
   }
 
   public shutdown() {
