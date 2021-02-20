@@ -111,9 +111,9 @@ function Text(props: { page: number; total: number }): JSX.Element {
     <div>
       <p className="text-sm text-neutral-700">
         Showing page
-        <span className="font-medium"> {props.page} </span>
+        <span className="font-semibold"> {props.page} </span>
         of
-        <span className="font-medium"> {props.total} </span>
+        <span className="font-semibold"> {props.total} </span>
         pages.
       </p>
     </div>

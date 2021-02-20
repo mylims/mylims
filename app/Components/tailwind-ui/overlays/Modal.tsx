@@ -21,6 +21,7 @@ export interface ModalProps<T extends ElementType> {
   iconColor: Color;
   children: ReactNode;
   onRequestClose?: () => void;
+  requestCloseOnEsc?: boolean;
   fluid?: boolean;
   animated?: boolean;
   wrapperComponent?: T;
@@ -46,7 +47,8 @@ const textColors = {
 };
 
 export function Modal<T extends ElementType>(props: ModalProps<T>) {
-  useLockBodyScroll(props.isOpen);
+  const { isOpen, onRequestClose, requestCloseOnEsc } = props;
+  useLockBodyScroll(isOpen);
   const { dispatch } = useContext(dispatchContext);
   const ref = useRef(props.isOpen);
   useEffect(() => {
@@ -65,6 +67,21 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
       });
     }
   }, [dispatch, props.isOpen]);
+
+  useEffect(() => {
+    function onEsc(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        onRequestClose?.();
+      }
+    }
+    if (isOpen && requestCloseOnEsc) {
+      document.addEventListener('keydown', onEsc);
+    }
+    return () => {
+      document.removeEventListener('keydown', onEsc);
+    };
+  }, [onRequestClose, isOpen, requestCloseOnEsc]);
+
   const { animated: animation = true } = props;
 
   let modalContents = (
@@ -111,7 +128,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
               bgColors[props.iconColor],
             )}
           >
-            <span className={clsx(textColors[props.iconColor], 'w-6 h-6')}>
+            <span className={clsx(textColors[props.iconColor], 'text-2xl')}>
               {props.icon}
             </span>
           </div>
@@ -153,7 +170,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
 
 Modal.Header = function (props: { children: ReactNode }) {
   return (
-    <h3 className="text-lg font-medium text-neutral-900" id="modal-headline">
+    <h3 className="text-lg font-semibold text-neutral-900" id="modal-headline">
       {props.children}
     </h3>
   );

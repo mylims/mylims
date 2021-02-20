@@ -36,7 +36,6 @@ function Row({ value: addon, index }: { value: Addon; index: number }) {
         <Checkbox
           id={addon.getName()}
           name={addon.getName()}
-          label="test"
           defaultChecked={addon.isEnabled}
         />
       </td>

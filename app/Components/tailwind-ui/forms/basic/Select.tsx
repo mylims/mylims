@@ -58,7 +58,7 @@ function SelectHelper(props: SelectHelperProps) {
         as="div"
         className="space-y-1"
         value={props.selected}
-        // @ts-expect-error: TODO: check if it's possible to force type using generic
+        disabled={props.disabled}
         onChange={(value) =>
           props.disabled ? undefined : props.onSelect?.(value)
         }
@@ -68,7 +68,7 @@ function SelectHelper(props: SelectHelperProps) {
             <div className="flex items-center justify-between w-full">
               <Listbox.Label
                 className={clsx(
-                  'block text-sm font-medium',
+                  'block text-sm font-semibold',
                   props.disabled ? labelDisabledColor : labelColor,
                 )}
               >
@@ -90,7 +90,6 @@ function SelectHelper(props: SelectHelperProps) {
             <div ref={setReferenceElement} className="relative">
               <span className="inline-block w-full rounded-md shadow-sm">
                 <Listbox.Button
-                  disabled={props.disabled}
                   className={clsx(
                     'bg-white relative w-full border rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 sm:text-sm',
                     props.error ? inputError : inputColor,

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useFormikContext } from 'formik';
 import React from 'react';
 
@@ -20,6 +21,10 @@ export function FormError<T>(props: {
       : 'Unknown error';
 
   return (
-    <Alert className={props.className} title={message} type={AlertType.ERROR} />
+    <Alert
+      className={clsx(props.className, 'whitespace-pre-wrap')}
+      title={message}
+      type={AlertType.ERROR}
+    />
   );
 }

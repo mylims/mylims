@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, {
   ComponentType,
   TdHTMLAttributes,
@@ -17,13 +18,22 @@ export interface TableProps<T = any> {
   Tr: ComponentType<TrProps<T>>;
   Empty?: ComponentType;
   Header?: ComponentType;
-
   pagination?: PaginationProps;
   itemsPerPage?: number;
+  tableStyle?: React.CSSProperties;
+  tableClassName?: string;
 }
 
 export function Table<T extends { id: number | string }>(props: TableProps<T>) {
-  const { data, Tr, Empty, Header, pagination } = props;
+  const {
+    data,
+    Tr,
+    Empty,
+    Header,
+    pagination,
+    tableStyle,
+    tableClassName,
+  } = props;
 
   if (data.length === 0) {
     return Empty ? <Empty /> : null;
@@ -33,7 +43,13 @@ export function Table<T extends { id: number | string }>(props: TableProps<T>) {
     <div className="flex flex-col">
       <div>
         <div className="inline-block min-w-full overflow-hidden align-middle border-b shadow border-neutral-200 sm:rounded-lg">
-          <table className="min-w-full divide-y divide-neutral-200">
+          <table
+            style={tableStyle}
+            className={clsx(
+              'min-w-full divide-y divide-neutral-200',
+              tableClassName,
+            )}
+          >
             {Header && (
               <thead>
                 <Header />
@@ -56,23 +72,40 @@ export function Table<T extends { id: number | string }>(props: TableProps<T>) {
   );
 }
 
-export type TdProps = TdHTMLAttributes<HTMLTableDataCellElement>;
-export type ThProps = ThHTMLAttributes<HTMLTableHeaderCellElement>;
+export interface TdProps extends TdHTMLAttributes<HTMLTableDataCellElement> {
+  compact?: boolean;
+}
+
+export interface ThProps extends ThHTMLAttributes<HTMLTableHeaderCellElement> {
+  compact?: boolean;
+}
 
 export function Td(props: TdProps) {
+  const { className, compact, ...otherProps } = props;
   return (
     <td
-      className="px-6 py-4 text-sm font-medium whitespace-nowrap text-neutral-900"
-      {...props}
+      className={clsx(
+        'text-sm font-semibold whitespace-nowrap text-neutral-900',
+        { 'px-6 py-4': !compact },
+        props.className,
+      )}
+      {...otherProps}
     />
   );
 }
 
 export function Th(props: ThProps) {
+  const { compact, className, ...otherProps } = props;
   return (
     <th
-      className="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-neutral-500 bg-neutral-50"
-      {...props}
+      className={clsx(
+        'text-xs font-semibold tracking-wider text-left uppercase text-neutral-500 bg-neutral-50',
+        {
+          'px-6 py-3': !compact,
+        },
+        className,
+      )}
+      {...otherProps}
     />
   );
 }

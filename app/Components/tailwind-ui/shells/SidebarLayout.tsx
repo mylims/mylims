@@ -2,15 +2,17 @@ import { Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import React, { ReactNode, useEffect, ReactElement } from 'react';
 
-import { useOnOff } from '../hooks/useOnOff';
 import { SvgOutlineMenuAlt1, SvgOutlineX } from '../svg/heroicon/outline';
 
 interface SidebarLayoutProps {
   children: ReactElement[];
+  open: () => void;
+  close: () => void;
+  isOpen: boolean;
 }
 
 export function SidebarLayout(props: SidebarLayoutProps) {
-  const [isOpen, open, close] = useOnOff();
+  const { open, close, isOpen, children } = props;
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -21,15 +23,11 @@ export function SidebarLayout(props: SidebarLayoutProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [close]);
 
-  const sidebar = props.children.find(
+  const sidebar = children.find(
     (child) => child.type === SidebarLayout.Sidebar,
   );
-  const header = props.children.find(
-    (child) => child.type === SidebarLayout.Header,
-  );
-  const body = props.children.find(
-    (child) => child.type === SidebarLayout.Body,
-  );
+  const header = children.find((child) => child.type === SidebarLayout.Header);
+  const body = children.find((child) => child.type === SidebarLayout.Body);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -77,8 +75,8 @@ export function SidebarLayout(props: SidebarLayoutProps) {
         </div>
       </Transition>
 
-      <div className="hidden lg:flex lg:flex-shrink-0 border-">
-        <div className="flex flex-col w-64 pt-5 pb-4 bg-white border-r border-neutral-200">
+      <div className="hidden lg:flex lg:flex-shrink-0">
+        <div className="flex flex-col w-64 bg-white border-r border-neutral-200">
           {sidebar}
         </div>
       </div>
@@ -95,12 +93,10 @@ export function SidebarLayout(props: SidebarLayoutProps) {
           >
             <SvgOutlineMenuAlt1 className="w-6 h-6 transition duration-150 ease-in-out" />
           </button>
-          <div className="flex justify-between flex-1 px-4 sm:px-6 lg:px-8">
-            {header}
-          </div>
+          <div className="flex justify-between flex-1">{header}</div>
         </div>
-        <main className="relative z-0 flex-1 pb-8 overflow-y-auto">
-          <div className="px-4 mt-8 sm:px-6 lg:px-8">{body}</div>
+        <main className="relative z-0 flex flex-col flex-1 pb-8 overflow-y-auto">
+          {body}
         </main>
       </div>
     </div>

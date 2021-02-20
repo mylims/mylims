@@ -36,7 +36,7 @@ export const Button = forwardRefWithAs(
         {...otherProps}
         ref={ref}
         className={clsx(
-          'font-medium text-white focus:outline-none',
+          'font-semibold text-white focus:outline-none',
           getVariantColor(variant, color),
           sizes[size],
           className,

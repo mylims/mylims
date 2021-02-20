@@ -1,10 +1,23 @@
 import clsx from 'clsx';
 import React, { ReactNode, Ref } from 'react';
 
-import { SvgSolidExclamationCircle } from '../../svg/heroicon/solid';
+import { Spinner } from '../../elements/spinner/Spinner';
+import {
+  SvgSolidCheck,
+  SvgSolidExclamationCircle,
+} from '../../svg/heroicon/solid';
 import { forwardRefWithAs } from '../../util';
 
-import { Error, Help, Hint, inputColor, inputError, Label } from './common';
+import {
+  Error,
+  Help,
+  Hint,
+  inputColor,
+  inputError,
+  inputValid,
+  Label,
+  Valid,
+} from './common';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -18,15 +31,18 @@ export interface InputProps
   wrapperRef?: Ref<HTMLDivElement>;
   name: string;
   error?: string;
+  valid?: boolean | string;
   leadingAddon?: ReactNode;
   leadingInlineAddon?: ReactNode;
   trailingAddon?: ReactNode;
   trailingInlineAddon?: ReactNode;
+  loading?: boolean;
   label: string;
   hiddenLabel?: boolean;
   hint?: string;
   help?: string;
   inlinePlaceholder?: ReactNode;
+  inputClassName?: string;
 }
 
 export const Input = forwardRefWithAs(
@@ -37,10 +53,12 @@ export const Input = forwardRefWithAs(
       className,
       style,
       error,
+      valid,
       leadingAddon,
       leadingInlineAddon,
       trailingAddon,
       trailingInlineAddon,
+      loading,
       label,
       hiddenLabel = false,
       hint,
@@ -49,6 +67,7 @@ export const Input = forwardRefWithAs(
       inlinePlaceholder,
       wrapperRef,
       type = 'text',
+      inputClassName,
       ...otherProps
     } = props;
 
@@ -74,6 +93,7 @@ export const Input = forwardRefWithAs(
               {
                 [inputColor]: !error,
                 [inputError]: error,
+                [inputValid]: valid,
                 'rounded-r-md': leadingAddon && !trailingAddon,
                 'rounded-l-md': trailingAddon && !leadingAddon,
                 'rounded-md': !leadingAddon && !trailingAddon,
@@ -97,21 +117,34 @@ export const Input = forwardRefWithAs(
               placeholder={
                 placeholder && !inlinePlaceholder ? placeholder : undefined
               }
-              className={clsx({
-                'flex-1 focus:outline-none focus:ring-0 sm:text-sm border-none p-0': true,
-                'bg-neutral-50 text-neutral-500': props.disabled,
-              })}
+              className={clsx(
+                {
+                  'flex-1 focus:outline-none focus:ring-0 sm:text-sm border-none p-0': true,
+                  'bg-neutral-50 text-neutral-500': props.disabled,
+                },
+                inputClassName,
+              )}
               type={type}
               {...otherProps}
             />
-            {trailingInlineAddon && (
-              <TrailingInlineAddon value={trailingInlineAddon} />
-            )}
+            <div className="inline-flex flex-row items-center space-x-1 cursor-default">
+              {loading && <Spinner className="w-5 h-5 text-neutral-400" />}
+              {trailingInlineAddon && (
+                <TrailingInlineAddon value={trailingInlineAddon} />
+              )}
+            </div>
             {error && <InputErrorIcon />}
+            {valid && <InputValidIcon />}
           </label>
           {trailingAddon && <TrailingAddon value={trailingAddon} />}
         </div>
-        {error ? <Error text={error} /> : help && <Help text={help} />}
+        {error ? (
+          <Error text={error} />
+        ) : valid && typeof valid === 'string' ? (
+          <Valid text={valid} />
+        ) : (
+          help && <Help text={help} />
+        )}
       </div>
     );
   },
@@ -119,6 +152,10 @@ export const Input = forwardRefWithAs(
 
 function InputErrorIcon() {
   return <SvgSolidExclamationCircle className="w-5 h-5 ml-2 text-danger-500" />;
+}
+
+function InputValidIcon() {
+  return <SvgSolidCheck className="w-5 h-5 ml-2 text-success-600" />;
 }
 
 function LeadingInlineAddon(props: { value: ReactNode }) {

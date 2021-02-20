@@ -11,8 +11,11 @@ function SvgSolidArchive({
 }: React.SVGProps<SVGSVGElement> & SVGRProps) {
   return (
     <svg
+      xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       fill="currentColor"
+      width="1em"
+      height="1em"
       aria-labelledby={titleId}
       {...props}
     >

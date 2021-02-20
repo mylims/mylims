@@ -1,2 +1,3 @@
 build
 app/graphql.ts
+app/Components/tailwind-ui

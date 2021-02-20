@@ -1,23 +1,23 @@
 import { useField } from 'formik';
 import React from 'react';
 
-import { Toggle } from '../basic/Toggle';
+import { Toggle, ToggleProps } from '../basic/Toggle';
 
-export interface ToggleFieldProps {
+export interface ToggleFieldProps
+  extends Omit<ToggleProps, 'activated' | 'onToggle'> {
   name: string;
   label: string;
-  disabled?: boolean;
 }
 
 export function ToggleField(props: ToggleFieldProps): JSX.Element {
-  const [field, , helper] = useField(props);
+  const { name, ...otherProps } = props;
+  const [field, , helper] = useField(name);
 
   return (
     <Toggle
-      label={props.label}
-      disabled={props.disabled}
       onToggle={helper.setValue}
       activated={Boolean(field.value)}
+      {...otherProps}
       {...field}
     />
   );

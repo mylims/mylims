@@ -4,8 +4,6 @@ import { ActionType } from '../types';
 
 import { KeyboardAction, KeyboardActionState } from './KeyboardActionProvider';
 
-let warned = false;
-
 export type KeyboardActions =
   | ActionType<
       'ADD_ACTIONS',
@@ -33,11 +31,7 @@ export const dispatchContext = createContext<{
   disabled: boolean;
 }>({
   dispatch: () => {
-    if (!warned) {
-      // eslint-disable-next-line no-console
-      console.warn('dispatch was called but dispatch context was not provided');
-      warned = true;
-    }
+    // no-op
   },
   disabled: false,
 });

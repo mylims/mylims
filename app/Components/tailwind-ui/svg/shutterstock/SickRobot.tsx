@@ -10,7 +10,14 @@ function SvgSickRobot({
   ...props
 }: React.SVGProps<SVGSVGElement> & SVGRProps) {
   return (
-    <svg viewBox="0 0 991.48 811.92" aria-labelledby={titleId} {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 991.48 811.92"
+      width="1em"
+      height="1em"
+      aria-labelledby={titleId}
+      {...props}
+    >
       {title ? <title id={titleId}>{title}</title> : null}
       <defs>
         <style>

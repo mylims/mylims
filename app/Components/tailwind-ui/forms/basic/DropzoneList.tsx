@@ -56,7 +56,7 @@ function DropzonListRow({ value: props }: DropzoneListRowProps) {
 
       <DropzoneTd>{String(bytesize(props.file.size))}</DropzoneTd>
 
-      <DropzoneTd className="px-2 my-2 text-sm font-medium text-right whitespace-nowrap text-neutral-900">
+      <DropzoneTd className="px-2 my-2 text-sm font-semibold text-right whitespace-nowrap text-neutral-900">
         <button
           type="button"
           onClick={props.delete}
@@ -72,7 +72,7 @@ function DropzonListRow({ value: props }: DropzoneListRowProps) {
 function DropzoneTd(props: TdProps) {
   return (
     <td
-      className="px-6 text-sm font-medium whitespace-nowrap text-neutral-900"
+      className="px-6 text-sm font-semibold whitespace-nowrap text-neutral-900"
       {...props}
     />
   );

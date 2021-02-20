@@ -36,10 +36,10 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
     <div className="absolute inset-0 overflow-hidden">
       <section className="absolute inset-y-0 right-0 flex max-w-full pl-10">
         <Transition.Child
-          enter="transform transition ease-in-out duration-500 sm:duration-700"
+          enter="transform transition ease-out duration-400 sm:duration-500"
           enterFrom="translate-x-full"
           enterTo="translate-x-0"
-          leave="transform transition ease-in-out duration-500 sm:duration-700"
+          leave="transform transition ease-out duration-500 sm:duration-600"
           leaveFrom="translate-x-0"
           leaveTo="translate-x-full"
           className="w-screen max-w-md"

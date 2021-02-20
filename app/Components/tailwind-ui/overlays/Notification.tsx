@@ -31,11 +31,13 @@ export function Notification(props: NotificationProps) {
       <div className="z-40 overflow-hidden rounded-lg ring-1 ring-black ring-opacity-5">
         <div className="p-4">
           <div className="flex items-start">
-            <div className="flex-shrink-0">{props.icon && props.icon}</div>
+            <div className="flex-shrink-0 text-xl">{props.icon}</div>
             <div className="ml-3 w-0 flex-1 pt-0.5">
-              <p className="text-sm font-medium text-neutral-900">
-                {props.title}
-              </p>
+              {props.title && (
+                <p className="text-sm font-semibold text-neutral-900">
+                  {props.title}
+                </p>
+              )}
 
               {props.children}
             </div>

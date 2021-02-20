@@ -60,7 +60,7 @@ function LargeToggle(props: ToggleProps): JSX.Element {
       </Switch>
       <Switch.Label
         className={clsx(
-          'text-sm font-medium',
+          'text-sm font-semibold',
           disabled ? labelDisabledColor : labelColor,
         )}
       >
@@ -111,7 +111,7 @@ function SmallToggle(props: ToggleProps) {
       </Switch>
       <Switch.Label
         className={clsx(
-          'text-sm font-medium',
+          'text-sm font-semibold',
           disabled ? labelDisabledColor : labelColor,
         )}
       >

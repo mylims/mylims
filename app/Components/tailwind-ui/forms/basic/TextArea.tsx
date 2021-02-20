@@ -13,6 +13,7 @@ export interface TextAreaProps
   hiddenLabel?: boolean;
   hint?: string;
   help?: string;
+  textAreaClassName?: string;
 
   ref?: Ref<HTMLTextAreaElement>;
 }
@@ -28,6 +29,7 @@ export const TextArea = forwardRefWithAs(
       hiddenLabel = false,
       hint,
       help,
+      textAreaClassName,
       ...otherProps
     } = props;
     return (
@@ -53,6 +55,7 @@ export const TextArea = forwardRefWithAs(
                 [inputColor]: !error,
                 [inputError]: error,
               },
+              textAreaClassName,
             )}
             {...otherProps}
           />

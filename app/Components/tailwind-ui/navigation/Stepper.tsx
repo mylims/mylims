@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 import { SvgOutlineCheck } from '../svg/heroicon/outline';
@@ -32,6 +33,10 @@ function getSteps(steps: Array<Step>, current: number): Utils {
   };
 }
 
+function getLabelSteps(index: number): string {
+  return String(index + 1).padStart(2, '0');
+}
+
 function getStepComponent(step: StepWithId, utils: Utils): JSX.Element {
   if (utils.actual === step) return <StepCurrent step={step} />;
   if (utils.done.includes(step)) return <StepDone step={step} />;
@@ -62,13 +67,16 @@ function StepCurrent(props: {
 
   return (
     <span
-      className="flex items-start px-6 py-5 text-sm font-medium lg:pl-9"
+      className={clsx(
+        'flex px-6 py-5 text-sm font-semibold lg:pl-9',
+        !props.step.description ? 'items-center' : 'items-start',
+      )}
       aria-current="step"
     >
       <span className="flex-shrink-0">
         <span className="flex items-center justify-center w-10 h-10 border-2 rounded-full border-primary-600">
           <span className="text-primary-600">
-            {`0${props.step.id}`.slice(-2)}
+            {getLabelSteps(props.step.id)}
           </span>
         </span>
       </span>
@@ -76,9 +84,11 @@ function StepCurrent(props: {
         <span className="text-xs font-semibold tracking-wide uppercase text-primary-600">
           {props.step.label}
         </span>
-        <span className="text-sm font-medium text-neutral-500">
-          {props.step.description}
-        </span>
+        {props.step.description && (
+          <span className="text-sm font-semibold text-neutral-500">
+            {props.step.description}
+          </span>
+        )}
       </span>
     </span>
   );
@@ -86,11 +96,16 @@ function StepCurrent(props: {
 
 function StepToDoComponent(props: { step: StepWithId }): JSX.Element {
   return (
-    <span className="flex items-start px-6 py-5 text-sm font-medium lg:pl-9">
+    <span
+      className={clsx(
+        'flex px-6 py-5 text-sm font-semibold lg:pl-9',
+        !props.step.description ? 'items-center' : 'items-start',
+      )}
+    >
       <span className="flex-shrink-0">
         <span className="flex items-center justify-center w-10 h-10 border-2 rounded-full border-neutral-300">
           <span className="text-neutral-500">
-            {`0${props.step.id}`.slice(-2)}
+            {getLabelSteps(props.step.id)}
           </span>
         </span>
       </span>
@@ -98,7 +113,7 @@ function StepToDoComponent(props: { step: StepWithId }): JSX.Element {
         <span className="text-xs font-semibold tracking-wide uppercase text-neutral-500">
           {props.step.label}
         </span>
-        <span className="text-sm font-medium text-neutral-500">
+        <span className="text-sm font-semibold text-neutral-500">
           {props.step.description}
         </span>
       </span>
@@ -108,7 +123,12 @@ function StepToDoComponent(props: { step: StepWithId }): JSX.Element {
 
 function StepDone(props: { step: StepWithId }): JSX.Element {
   return (
-    <span className="flex items-start px-6 py-5 text-sm font-medium lg:pl-9">
+    <span
+      className={clsx(
+        'flex px-6 py-5 text-sm font-semibold lg:pl-9',
+        !props.step.description ? 'items-center' : 'items-start',
+      )}
+    >
       <span className="flex-shrink-0">
         <span className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-600">
           <SvgOutlineCheck className="w-6 h-6 text-white" />
@@ -118,7 +138,7 @@ function StepDone(props: { step: StepWithId }): JSX.Element {
         <span className="text-xs font-semibold tracking-wide uppercase">
           {props.step.label}
         </span>
-        <span className="text-sm font-medium text-neutral-500">
+        <span className="text-sm font-semibold text-neutral-500">
           {props.step.description}
         </span>
       </span>

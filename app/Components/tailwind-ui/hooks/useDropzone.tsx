@@ -44,7 +44,7 @@ export type SingleFileDropzoneHookConfig = Omit<
   'replace' | 'maxFiles' | 'multiple'
 >;
 
-export function useSingleFileDrozone(config: SingleFileDropzoneHookConfig) {
+export function useSingleFileDropzone(config: SingleFileDropzoneHookConfig) {
   const droppedFiles = useDropzone({
     replace: true,
     maxFiles: 1,

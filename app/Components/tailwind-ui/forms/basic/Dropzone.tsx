@@ -70,7 +70,7 @@ export function Dropzone(props: DropzoneProps): JSX.Element {
                 message
               ) : (
                 <p>
-                  <span className="font-medium text-primary-600 hover:text-primary-500">
+                  <span className="font-semibold text-primary-600 hover:text-primary-500">
                     Upload a file
                   </span>{' '}
                   or drag and drop

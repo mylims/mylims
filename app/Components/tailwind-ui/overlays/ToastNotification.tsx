@@ -36,7 +36,7 @@ export function ToastNotification(props: NotificationToastProps) {
       <div className="z-40 overflow-hidden">
         <div className="p-2">
           <div className="flex items-center justify-between">
-            <div className="ml-3 w-0 pt-0.5 text-white">{props.label}</div>
+            <div className="ml-3 pt-0.5 text-white">{props.label}</div>
 
             <div className="flex items-center ml-4">
               {props.action && (

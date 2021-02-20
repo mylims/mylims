@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Button } from '../elements/buttons/Button';
 import { Alert, AlertType } from '../feedback/Alert';
-import { useNotificationCenter } from '../overlays/NotificationCenter';
+import { NotificationContext } from '../overlays/NotificationContext';
 import { SvgOutlineCheck } from '../svg/heroicon/outline';
 import { Color } from '../types';
 
@@ -13,7 +13,7 @@ interface PageNotFoundErrorPageProps {
 }
 
 export function PageNotFoundErrorPage(props: PageNotFoundErrorPageProps) {
-  const { addNotification } = useNotificationCenter();
+  const context = useContext(NotificationContext);
   const errorReport = `The page ${props.url} was not found`;
 
   return (
@@ -38,16 +38,16 @@ export function PageNotFoundErrorPage(props: PageNotFoundErrorPageProps) {
             className="mt-3"
             onClick={() => {
               void navigator.clipboard.writeText(errorReport).then(() => {
-                addNotification(
-                  {
-                    title: 'Successfully copied error report',
-                    content: '',
-                    icon: (
-                      <SvgOutlineCheck className="w-5 h-5 text-success-600" />
-                    ),
-                  },
-                  3000,
-                );
+                if (context) {
+                  context.addNotification(
+                    {
+                      title: 'Successfully copied error report',
+                      content: '',
+                      icon: <SvgOutlineCheck className="text-success-600" />,
+                    },
+                    3000,
+                  );
+                }
               });
             }}
             color={Color.warning}

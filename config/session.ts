@@ -12,6 +12,8 @@ import { getConfig } from '../app/AppConfig';
 const session = getConfig('session');
 
 const sessionConfig: SessionConfig = {
+  enabled: true,
+
   /*
   |--------------------------------------------------------------------------
   | Driver

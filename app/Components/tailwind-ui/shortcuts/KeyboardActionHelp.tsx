@@ -38,6 +38,7 @@ export function KeyboardActionHelp(props: KeyboardActionHelpProps) {
     <Modal
       isOpen={showHelp}
       onRequestClose={helpOff}
+      requestCloseOnEsc
       icon={<SvgOutlineInformationCircle />}
       iconColor={Color.primary}
       fluid

@@ -30,7 +30,7 @@ export function Breadcrumb(props: BreadcrumbProps) {
 
 Breadcrumb.Item = function (props: { children: ReactNode }) {
   return (
-    <div className="text-sm font-medium transition duration-150 ease-in-out text-neutral-500 hover:text-neutral-700">
+    <div className="text-sm font-semibold transition duration-150 ease-in-out text-neutral-500 hover:text-neutral-700">
       {props.children}
     </div>
   );

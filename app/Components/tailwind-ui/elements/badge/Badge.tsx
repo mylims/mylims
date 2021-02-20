@@ -79,7 +79,7 @@ export function Badge(props: BadgeProps) {
   return (
     <span
       className={clsx(
-        'inline-flex items-center font-medium ',
+        'inline-flex items-center font-semibold ',
         size === BadgeSize.LARGE ? 'text-sm' : 'text-xs',
         colors[props.color],
         rounded

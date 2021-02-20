@@ -37,7 +37,7 @@ export function Radio(props: RadioProps): JSX.Element {
         <label
           htmlFor={id}
           className={clsx(
-            'block font-medium',
+            'block font-semibold',
             props.disabled ? labelDisabledColor : labelColor,
           )}
         >
