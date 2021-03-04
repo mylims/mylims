@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "ldapjs": "^2.2.3"
+    "ldapjs": "^2.2.4"
   },
   "devDependencies": {
     "@types/ldapjs": "^1.0.9"
