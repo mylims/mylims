@@ -68,8 +68,7 @@ function convertToPem(n: string, e: string): string {
 
   const derB64 = Buffer.from(encodedPubkey, 'hex').toString('base64');
 
-  // derB64 is guaranteed to match the RegExp
-  // @ts-ignore
+  // @ts-expect-error derB64 is guaranteed to match the RegExp
   const pem = `-----BEGIN RSA PUBLIC KEY-----\n${derB64
     .match(/.{1,64}/g)
     .join('\n')}\n-----END RSA PUBLIC KEY-----\n`;
