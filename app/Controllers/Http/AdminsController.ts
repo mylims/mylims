@@ -11,6 +11,8 @@ import Addon from 'App/Components/admin/Addon';
 import Config from 'App/Components/admin/Config';
 import Login from 'App/Components/admin/Login';
 
+const adminPass = Env.get('ADMIN_PASSWORD');
+
 export default class AdminsController {
   // Ask for admin password
   public async renderLogin({ react }: HttpContextContract) {
@@ -31,7 +33,6 @@ export default class AdminsController {
   // Validates the admin password
   public async auth({ request, response, session }: HttpContextContract) {
     const pass = request.input('password');
-    const adminPass = Env.get('ADMIN_PASSWORD');
 
     // Pasword validation
     if (!adminPass) {
@@ -44,7 +45,7 @@ export default class AdminsController {
     }
 
     // Sets the session cookie and go to config menu
-    session.put('sudo', new Date().getTime());
+    session.put('mylims.admin.sudo', Date.now());
     return response.redirect('/admin/config');
   }
 
