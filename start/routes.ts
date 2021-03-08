@@ -7,6 +7,10 @@ import * as AddonsManager from 'App/AddonsManager';
 import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
 
+Route.get('/', (ctx) => {
+  ctx.response.redirect('/admin');
+});
+
 // Local user authentication
 Route.group(() => {
   Route.post('/', async ({ request }) => {
