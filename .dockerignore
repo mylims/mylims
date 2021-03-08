@@ -1,7 +1,20 @@
-node_modules
-npm-debug.log
+# Folders
+.git
+.github
+addons
 build
+node_modules
+tests
+
+# Files
+.dockerignore
+.editorconfig
 .eslint*
+.gitignore
+.prettierignore
+.prettierrc.json
+ace-manifest.json
+Dockerfile
 docker-compose.yml
 README.md
-addons
+*.log

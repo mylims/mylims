@@ -7,8 +7,6 @@ COPY . .
 RUN node scripts/prune-addons.mjs
 RUN npm run build
 RUN rm build/.env
-# TODO(targos): replace this once Adonis supports custom tsconfig for production.
-RUN rm -r build/tests
 
 FROM node:14
 WORKDIR /usr/mylims
