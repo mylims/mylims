@@ -31,6 +31,7 @@ The following commands will start mongodb and ldap (to test the ldap provider) c
 
 ```shell
 docker-compose up -d
+node scripts/init-db.mjs
 npm run dev
 ```
 
