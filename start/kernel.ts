@@ -4,5 +4,5 @@ Server.middleware.register(['Adonis/Core/BodyParserMiddleware']);
 Server.middleware.registerNamed({
   auth: 'App/Middleware/Auth',
   silentAuth: 'App/Middleware/SilentAuth',
-  admin: 'App/Middleware/Admin',
+  sudo: 'App/Middleware/Sudo',
 });

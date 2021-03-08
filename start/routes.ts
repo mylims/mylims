@@ -43,12 +43,13 @@ Route.group(() => {
 // Super admin views
 Route.group(() => {
   Route.get('/', 'AdminsController.renderLogin');
-  Route.get('/config', 'AdminsController.renderConfig').middleware('admin');
-  Route.get('/addons', 'AdminsController.renderAddons').middleware('admin');
-
   Route.post('/auth', 'AdminsController.auth');
-  Route.post('/config', 'AdminsController.changeConf').middleware('admin');
-  Route.post('/addons', 'AdminsController.addons').middleware('admin');
+  Route.group(() => {
+    Route.get('/config', 'AdminsController.renderConfig');
+    Route.get('/addons', 'AdminsController.renderAddons');
+    Route.post('/config', 'AdminsController.changeConf');
+    Route.post('/addons', 'AdminsController.addons');
+  }).middleware('sudo');
 }).prefix('/admin');
 
 Route.group(() => {
