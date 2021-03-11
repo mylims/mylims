@@ -1,5 +1,3 @@
-import { ObjectId } from 'mongodb';
-
 import Hash from '@ioc:Adonis/Core/Hash';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
@@ -35,13 +33,14 @@ export default class AuthController {
     return response.ok({ email, role: auth.user?.role });
   }
 
-  public async myself({ response, auth }: HttpContextContract) {
+  public async myself({ response, auth, session }: HttpContextContract) {
     const { user } = auth;
     if (user) {
       return response.ok({
         isAuth: true,
         email: user.emails[0],
         role: user.role,
+        method: session.get('mylims.auth.method'),
       });
     } else {
       return response.ok({
