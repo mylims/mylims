@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Route from '@ioc:Adonis/Core/Route';
 
-import LdapAuthProvider from './LdapAuthProvider';
+import { attempt } from './LdapAuthProvider';
 import LoginValidator from './Validators/LoginValidator';
 
 Route.post(
@@ -9,9 +9,7 @@ Route.post(
   async ({ request, auth, response, session }: HttpContextContract) => {
     const { uid, password } = await request.validate(LoginValidator);
 
-    const ldapProvider = new LdapAuthProvider();
-
-    const result = await ldapProvider.attempt(uid, password);
+    const result = await attempt(uid, password);
     if (result === null) {
       return response.unauthorized({
         errors: [{ message: 'Bad credentials' }],
