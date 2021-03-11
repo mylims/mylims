@@ -8,7 +8,12 @@ import User from 'App/Models/User';
 import LoginValidator from 'App/Validators/LoginValidator';
 
 export default class AuthController {
-  public async login({ request, auth, response }: HttpContextContract) {
+  public async login({
+    request,
+    auth,
+    response,
+    session,
+  }: HttpContextContract) {
     const { email, password } = await request.validate(LoginValidator);
     const credential = await Credential.findOne({ email });
     if (
@@ -26,6 +31,8 @@ export default class AuthController {
     }
 
     await auth.login(user);
+    session.put('mylims.auth.method', 'local');
+    await session.commit();
     return response.ok({ email, role: auth.user?.role });
   }
 

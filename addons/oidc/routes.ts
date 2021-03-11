@@ -24,7 +24,7 @@ Route.get('/login', async ({ request, oidc }: HttpContextContract) => {
 
 Route.post(
   '/callback',
-  async ({ response, auth, oidc }: HttpContextContract) => {
+  async ({ response, auth, oidc, session }: HttpContextContract) => {
     let content: OicdContent, state: OidcState;
     try {
       [content, state] = await oidc.callback<OicdContent>();
@@ -32,15 +32,20 @@ Route.post(
       return response.badRequest({ errors: [err.message] });
     }
 
+    const methodKey = `oidc_${state.provider}`;
+
     const internalUser = await UserManager.getUser(
-      `oidc_${state.provider}`,
+      methodKey,
       content.sub,
       content.email,
     );
     if (!internalUser) {
       return response.internalServerError({ errors: ['Failed to get user'] });
     }
+
     await auth.login(internalUser);
+    session.put('mylims.auth.method', methodKey);
+    await session.commit();
 
     if (!internalUser.firstName && content.given_name) {
       internalUser.firstName = content.given_name;

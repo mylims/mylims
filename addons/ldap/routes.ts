@@ -6,7 +6,7 @@ import LoginValidator from './Validators/LoginValidator';
 
 Route.post(
   '/login',
-  async ({ request, auth, response }: HttpContextContract) => {
+  async ({ request, auth, response, session }: HttpContextContract) => {
     const { uid, password } = await request.validate(LoginValidator);
 
     const ldapProvider = new LdapAuthProvider();
@@ -19,6 +19,8 @@ Route.post(
     }
 
     auth.login(result);
+    session.put('mylims.auth.method', 'ldap');
+    await session.commit();
 
     return response.ok({ email: auth.user?.emails[0], role: auth.user?.role });
   },
