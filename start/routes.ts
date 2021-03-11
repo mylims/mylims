@@ -53,7 +53,7 @@ Route.group(() => {
 }).prefix('/admin');
 
 Route.group(() => {
-  Route.get('/', 'AuthController.myself');
+  Route.get('/', 'AuthController.myself').middleware('silentAuth');
   Route.post('/local', 'AuthController.login');
   Route.get('/logout', 'AuthController.logout');
 }).prefix('/auth');

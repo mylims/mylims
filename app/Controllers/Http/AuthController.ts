@@ -29,18 +29,17 @@ export default class AuthController {
     return response.ok({ email, role: auth.user?.role });
   }
 
-  public async myself({ session, response }: HttpContextContract) {
-    const internalUserId = session.get('auth_web');
-    const user = await User.findById(new ObjectId(internalUserId));
-    if (user === null) {
-      return response.ok({
-        isAuth: false,
-      });
-    } else {
+  public async myself({ response, auth }: HttpContextContract) {
+    const { user } = auth;
+    if (user) {
       return response.ok({
         isAuth: true,
         email: user.emails[0],
         role: user.role,
+      });
+    } else {
+      return response.ok({
+        isAuth: false,
       });
     }
   }
