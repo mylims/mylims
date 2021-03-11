@@ -45,7 +45,6 @@ Route.post(
 
     await auth.login(internalUser);
     session.put('mylims.auth.method', methodKey);
-    await session.commit();
 
     if (!internalUser.firstName && content.given_name) {
       internalUser.firstName = content.given_name;

@@ -18,9 +18,8 @@ Route.post(
       });
     }
 
-    auth.login(result);
+    await auth.login(result);
     session.put('mylims.auth.method', 'ldap');
-    await session.commit();
 
     return response.ok({ email: auth.user?.emails[0], role: auth.user?.role });
   },

@@ -32,7 +32,6 @@ export default class AuthController {
 
     await auth.login(user);
     session.put('mylims.auth.method', 'local');
-    await session.commit();
     return response.ok({ email, role: auth.user?.role });
   }
 
