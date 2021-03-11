@@ -1,24 +1,36 @@
 import { ObjectId } from 'mongodb';
 
+import Hash from '@ioc:Adonis/Core/Hash';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
+import Credential from 'App/Models/Credential';
 import User from 'App/Models/User';
 import LoginValidator from 'App/Validators/LoginValidator';
 
 export default class AuthController {
   public async login({ request, auth, response }: HttpContextContract) {
     const { email, password } = await request.validate(LoginValidator);
-    const result = await auth.use('local').attempt(email, password);
-    if (result === false) {
+    const credential = await Credential.findOne({ email });
+    if (
+      credential === null ||
+      !(await Hash.verify(credential.hash, password))
+    ) {
       return response.unauthorized({
         errors: [{ message: 'Bad credentials' }],
       });
     }
+
+    const user = await User.findOne({ emails: email });
+    if (user === null) {
+      return response.notFound({ errors: [{ message: 'User not found' }] });
+    }
+
+    await auth.login(user);
     return response.ok({ email, role: auth.user?.role });
   }
 
   public async myself({ session, response }: HttpContextContract) {
-    const internalUserId = session.get('internal_user');
+    const internalUserId = session.get('auth_web');
     const user = await User.findById(new ObjectId(internalUserId));
     if (user === null) {
       return response.ok({

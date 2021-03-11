@@ -3,15 +3,12 @@ import { promisify } from 'util';
 import * as ldap from 'ldapjs';
 
 import logger from '@ioc:Adonis/Core/Logger';
-import { GenericAuthProvider } from '@ioc:Zakodium/Auth';
 import UserManager from '@ioc:Zakodium/User';
 
+import { getConfig } from 'App/AppConfig';
 import User from 'App/Models/User';
 
-import authConfig from '../../config/auth';
-
 export interface LdapProviderConfig {
-  driver: 'ldap';
   appDN: string;
   appPassword: string;
   baseUserDN: string;
@@ -20,15 +17,11 @@ export interface LdapProviderConfig {
   url: string;
 }
 
-export default class LocalAuthProvider implements GenericAuthProvider {
+export default class LdapAuthProvider {
   private config: LdapProviderConfig;
 
   public constructor() {
-    this.config = authConfig.providers.ldap as LdapProviderConfig;
-  }
-
-  public login(): Promise<User | null> {
-    throw new Error('Method not implemented.');
+    this.config = getConfig('ldap');
   }
 
   public async attempt(uid: string, password: string): Promise<User | null> {
@@ -55,6 +48,7 @@ export default class LocalAuthProvider implements GenericAuthProvider {
       userClient.destroy();
     }
   }
+
   private async searchUser(
     userClient: ldap.Client,
     uid: string,

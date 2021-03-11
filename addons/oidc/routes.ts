@@ -2,6 +2,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Route from '@ioc:Adonis/Core/Route';
 import { OidcState } from '@ioc:Zakodium/Oidc';
+import UserManager from '@ioc:Zakodium/User';
 
 interface OicdContent {
   sub: string;
@@ -31,22 +32,26 @@ Route.post(
       return response.badRequest({ errors: [err.message] });
     }
 
-    await auth.use(`oidc_${state.provider}`).login(content.sub);
-    if (!auth.user) {
+    const internalUser = await UserManager.getUser(
+      `oidc_${state.provider}`,
+      content.sub,
+      content.email,
+    );
+    if (!internalUser) {
       return response.internalServerError({ errors: ['Failed to get user'] });
     }
+    await auth.login(internalUser);
 
-    const { user } = auth;
-    if (!user.firstName && content.given_name) {
-      user.firstName = content.given_name;
+    if (!internalUser.firstName && content.given_name) {
+      internalUser.firstName = content.given_name;
     }
-    if (!user.lastName && content.family_name) {
-      user.lastName = content.family_name;
+    if (!internalUser.lastName && content.family_name) {
+      internalUser.lastName = content.family_name;
     }
-    if (!user.emails.includes(content.email)) {
-      user.emails.push(content.email);
+    if (!internalUser.emails.includes(content.email)) {
+      internalUser.emails.push(content.email);
     }
-    await user.save();
+    await internalUser.save();
 
     return response.redirect(state.redirectTo);
   },
