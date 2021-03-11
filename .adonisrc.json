@@ -18,16 +18,13 @@
   ],
   "providers": [
     "./providers/internal-user/UserProvider",
-    "./providers/zakodium-auth/ZakodiumAuthProvider",
-    "./providers/local-user/LocalProvider",
     "./providers/oidc/OidcProvider",
-    "./addons/ldap/providers/LdapProvider",
-    "./addons/oidc/providers/OidcProvider",
     "@adonisjs/core",
     "@adonisjs/session",
     "@zakodium/adonis-mongodb",
     "adonis-apollo",
-    "adonis-react"
+    "adonis-react",
+    "@adonisjs/auth"
   ],
   "metaFiles": [
     {

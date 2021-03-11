@@ -1,13 +1,14 @@
-import { AuthConfig } from '@ioc:Zakodium/Auth';
+import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
 
-import { getConfig } from 'App/AppConfig';
-
-const ldapConf = getConfig('ldap');
 const authConfig: AuthConfig = {
-  defaultProvider: 'local',
-  providers: {
-    local: {},
-    ldap: { ...ldapConf },
+  guard: 'web',
+  list: {
+    web: {
+      driver: 'session',
+      provider: {
+        driver: 'mongodb-model',
+      },
+    },
   },
 };
 

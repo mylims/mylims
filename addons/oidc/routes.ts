@@ -2,6 +2,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Route from '@ioc:Adonis/Core/Route';
 import { OidcState } from '@ioc:Zakodium/Oidc';
+import UserManager from '@ioc:Zakodium/User';
 
 interface OicdContent {
   sub: string;
@@ -23,7 +24,7 @@ Route.get('/login', async ({ request, oidc }: HttpContextContract) => {
 
 Route.post(
   '/callback',
-  async ({ response, auth, oidc }: HttpContextContract) => {
+  async ({ response, auth, oidc, session }: HttpContextContract) => {
     let content: OicdContent, state: OidcState;
     try {
       [content, state] = await oidc.callback<OicdContent>();
@@ -31,22 +32,30 @@ Route.post(
       return response.badRequest({ errors: [err.message] });
     }
 
-    await auth.use(`oidc_${state.provider}`).login(content.sub);
-    if (!auth.user) {
+    const methodKey = `oidc_${state.provider}`;
+
+    const internalUser = await UserManager.getUser(
+      methodKey,
+      content.sub,
+      content.email,
+    );
+    if (!internalUser) {
       return response.internalServerError({ errors: ['Failed to get user'] });
     }
 
-    const { user } = auth;
-    if (!user.firstName && content.given_name) {
-      user.firstName = content.given_name;
+    await auth.login(internalUser);
+    session.put('mylims.auth.method', methodKey);
+
+    if (!internalUser.firstName && content.given_name) {
+      internalUser.firstName = content.given_name;
     }
-    if (!user.lastName && content.family_name) {
-      user.lastName = content.family_name;
+    if (!internalUser.lastName && content.family_name) {
+      internalUser.lastName = content.family_name;
     }
-    if (!user.emails.includes(content.email)) {
-      user.emails.push(content.email);
+    if (!internalUser.emails.includes(content.email)) {
+      internalUser.emails.push(content.email);
     }
-    await user.save();
+    await internalUser.save();
 
     return response.redirect(state.redirectTo);
   },

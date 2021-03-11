@@ -53,26 +53,10 @@ Route.group(() => {
 }).prefix('/admin');
 
 Route.group(() => {
-  Route.get('/', 'AuthController.myself');
-  Route.post('local', 'AuthController.login');
+  Route.get('/', 'AuthController.myself').middleware('silentAuth');
+  Route.post('/local', 'AuthController.login');
   Route.get('/logout', 'AuthController.logout');
 }).prefix('/auth');
-
-Route.group(() => {
-  Route.group(() => {
-    Route.get('/create', 'TestLocalAuthController.create');
-    Route.get('/login', 'TestLocalAuthController.login');
-    Route.get('/user', 'TestLocalAuthController.user');
-    Route.get('/logout', 'TestLocalAuthController.logout');
-  }).prefix('local');
-
-  Route.group(() => {
-    Route.get('/create', 'TestLdapAuthController.create');
-    Route.get('/login', 'TestLdapAuthController.login');
-    Route.get('/user', 'TestLdapAuthController.user');
-    Route.get('/logout', 'TestLdapAuthController.logout');
-  }).prefix('ldap');
-}).prefix('/test-auth');
 
 // Require routes from addons
 AddonsManager.registerRoutes(Route);
