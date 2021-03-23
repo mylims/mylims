@@ -2,6 +2,8 @@ import { listDirectoryFiles } from '@adonisjs/core/build/standalone';
 
 import Application from '@ioc:Adonis/Core/Application';
 
+import * as AddonsManager from '../app/AddonsManager';
+
 /*
 |--------------------------------------------------------------------------
 | Exporting an array of commands
@@ -17,6 +19,12 @@ import Application from '@ioc:Adonis/Core/Application';
 | 2. We must ignore this file.
 |
 */
-export default listDirectoryFiles(__dirname, Application.appRoot, [
-  './commands/index',
-]);
+
+export default [
+  ...listDirectoryFiles(__dirname, Application.appRoot, ['./commands/index']),
+  ...AddonsManager.getCommands()
+    .map((commandsPath) =>
+      listDirectoryFiles(commandsPath, Application.appRoot),
+    )
+    .flat(),
+];
