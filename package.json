@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "node ace build",
+    "build": "node --trace-warnings ace build",
     "check-types": "tsc --noEmit",
     "dev": "node ace serve --watch",
     "eslint": "eslint . --cache",

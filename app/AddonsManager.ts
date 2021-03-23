@@ -16,6 +16,7 @@ interface AddonManifest {
   migrations?: string | undefined;
   schemas?: string | undefined;
   resolvers?: string | undefined;
+  commands?: string | undefined;
 }
 
 export type { Addon };
@@ -91,6 +92,17 @@ class Addon {
     return path.join('addons', this.getName(), this.manifest.resolvers);
   }
 
+  public hasCommandsDirectory() {
+    return this.manifest.commands !== undefined;
+  }
+
+  public getCommandsDirectory() {
+    if (!this.manifest.commands) {
+      throw new Error(`addons ${this.name} has no commands directory`);
+    }
+    return path.join('addons', this.getName(), this.manifest.commands);
+  }
+
   public toJSON() {
     return {
       name: this.name,
@@ -147,4 +159,10 @@ export function getResolvers() {
   return getEnabledAddons()
     .filter((addon) => addon.hasResolversDirectory())
     .map((addon) => addon.getResolversDirectory());
+}
+
+export function getCommands() {
+  return getAddons()
+    .filter((addon) => addon.hasCommandsDirectory())
+    .map((addons) => addons.getCommandsDirectory());
 }
