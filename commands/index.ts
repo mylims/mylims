@@ -1,5 +1,3 @@
-import { join } from 'path';
-
 import { listDirectoryFiles } from '@adonisjs/core/build/standalone';
 
 import Application from '@ioc:Adonis/Core/Application';
