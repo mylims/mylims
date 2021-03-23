@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@adonisjs/core": "^5.0.5-canary-rc-2",
     "ldapjs": "^2.2.4"
   },
   "devDependencies": {
