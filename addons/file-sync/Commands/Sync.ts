@@ -5,11 +5,8 @@ import { FileInfo, FileSynchronizer } from 'fs-synchronizer';
 
 import ObjectId from '@ioc:Mongodb/ObjectId';
 
-import { buildFileModel } from '../Models/File';
-import { buildImportConfigModel } from '../Models/ImportConfig';
-
-let ImportConfig: ReturnType<typeof buildImportConfigModel>;
-let File: ReturnType<typeof buildFileModel>;
+import File from '../Models/File';
+import ImportConfig from '../Models/ImportConfig';
 
 export default class Sync extends BaseCommand {
   public static commandName = 'sync';
@@ -24,14 +21,6 @@ export default class Sync extends BaseCommand {
   public static settings = {
     loadApp: true,
   };
-
-  public async prepare() {
-    const { Model } = await this.application.container.useAsync(
-      'Mongodb/Model',
-    );
-    ImportConfig = buildImportConfigModel(Model);
-    File = buildFileModel(Model);
-  }
 
   public async run() {
     const importConfig = await ImportConfig.findById(

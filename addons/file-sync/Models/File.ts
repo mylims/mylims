@@ -1,6 +1,6 @@
 import { Stats } from 'fs';
 
-import type { Model } from '@ioc:Mongodb/Model';
+import { Model } from '@ioc:Mongodb/Model';
 import ObjectId from '@ioc:Mongodb/ObjectId';
 
 interface FileId {
@@ -15,9 +15,7 @@ export interface Revision {
   stat: Stats;
 }
 
-export function buildFileModel(ModelClass: typeof Model) {
-  return class File extends ModelClass<FileId> {
-    public filename: string;
-    public revisions: Revision[];
-  };
+export default class File extends Model<FileId> {
+  public filename: string;
+  public revisions: Revision[];
 }
