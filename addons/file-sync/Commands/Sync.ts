@@ -23,6 +23,11 @@ export default class Sync extends BaseCommand {
   };
 
   public async run() {
+    if (!ObjectId.isValid(this.importConfigId)) {
+      this.logger.error(`Invalid ObjectId: ${this.importConfigId}`);
+      return;
+    }
+
     const importConfig = await ImportConfig.findById(
       new ObjectId(this.importConfigId),
     );
