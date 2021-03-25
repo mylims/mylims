@@ -24,7 +24,7 @@ export default class Sync extends BaseCommand {
 
   public async run() {
     if (!ObjectId.isValid(this.importConfigId)) {
-      this.logger.error(`Invalid ObjectId: ${this.importConfigId}`);
+      this.logger.error(`invalid ObjectId: ${this.importConfigId}`);
       return;
     }
 
@@ -32,7 +32,7 @@ export default class Sync extends BaseCommand {
       new ObjectId(this.importConfigId),
     );
     if (importConfig === null) {
-      this.logger.error(`Invalid import config id: ${this.importConfigId}`);
+      this.logger.error(`invalid import config id: ${this.importConfigId}`);
       return;
     }
 
@@ -44,7 +44,7 @@ export default class Sync extends BaseCommand {
       fileHandlers.push(this.handleFile(fileInfo));
     });
     sync.on('end', () => {
-      this.logger.debug('File lookup ended');
+      this.logger.debug('file lookup ended');
     });
 
     try {
@@ -59,7 +59,7 @@ export default class Sync extends BaseCommand {
   }
 
   public async handleFile(fileInfo: FileInfo) {
-    this.logger.debug(`Handling file "${fileInfo.filename}"`);
+    this.logger.debug(`handling file "${fileInfo.filename}"`);
 
     const { filename } = fileInfo;
     const file = await File.findOne({ filename });
@@ -70,7 +70,7 @@ export default class Sync extends BaseCommand {
   }
 
   private async handleUnknownFile(fileInfo: FileInfo) {
-    this.logger.debug(`Handling unknown file: ${fileInfo.filename}`);
+    this.logger.debug(`handling unknown file: ${fileInfo.filename}`);
 
     const { filename, relativePath, stat } = fileInfo;
     await File.create({
@@ -99,15 +99,15 @@ export default class Sync extends BaseCommand {
       modificationDate.getTime() === lastRevision.stat.mtime.getTime() &&
       size === lastRevision.stat.size
     ) {
-      this.logger.debug('Stats are identical, ignore', undefined, filename);
+      this.logger.debug('stats are identical, ignore', undefined, filename);
       return;
     }
 
-    this.logger.debug('Stats have changed, proceed', undefined, filename);
+    this.logger.debug('stats have changed, proceed', undefined, filename);
 
     if (lastRevision.status === 'PENDING') {
       this.logger.debug(
-        'Latest revision is still pending, update',
+        'latest revision is still pending, update',
         undefined,
         filename,
       );
@@ -121,7 +121,7 @@ export default class Sync extends BaseCommand {
     }
 
     this.logger.debug(
-      'Latest revision is not pending, create new revision',
+      'latest revision is not pending, create new revision',
       undefined,
       filename,
     );
