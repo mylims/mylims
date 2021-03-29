@@ -1,3 +1,5 @@
+import { promisify } from 'util';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BaseCommand, flags } from '@adonisjs/core/build/standalone';
 import { v4 as uuid } from '@lukeed/uuid';
@@ -7,6 +9,8 @@ import ObjectId from '@ioc:Mongodb/ObjectId';
 
 import File from '../Models/File';
 import ImportConfig from '../Models/ImportConfig';
+
+const asyncTimeout = promisify(setTimeout);
 
 export default class Sync extends BaseCommand {
   public static commandName = 'sync';
@@ -175,12 +179,7 @@ export default class Sync extends BaseCommand {
         filename,
       );
 
-      file.revisions[0] = {
-        ...lastRevision,
-        size,
-        creationDate,
-        modificationDate,
-      };
+      Object.assign(lastRevision, { size, creationDate, modificationDate });
       await file.save();
       return;
     }
@@ -203,10 +202,8 @@ export default class Sync extends BaseCommand {
     await file.save();
   }
 
-  private wait() {
-    return new Promise((resolve) => {
-      this.logger.info(`waiting ${this.interval}s...`);
-      setTimeout(resolve, this.interval * 1000);
-    });
+  private async wait() {
+    this.logger.info(`waiting ${this.interval}s...`);
+    await asyncTimeout(this.interval * 1000);
   }
 }
