@@ -1,4 +1,4 @@
-import { Stats } from 'fs';
+import { FileInfo } from 'fs-synchronizer';
 
 import { Model } from '@ioc:Mongodb/Model';
 import ObjectId from '@ioc:Mongodb/ObjectId';
@@ -8,11 +8,11 @@ interface FileId {
   relativePath: string;
 }
 
-export interface Revision {
+export interface Revision
+  extends Pick<FileInfo, 'size' | 'creationDate' | 'modificationDate'> {
   id: string;
   date: Date;
   status: 'PENDING';
-  stat: Stats;
 }
 
 export default class File extends Model<FileId> {

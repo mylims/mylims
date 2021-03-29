@@ -122,7 +122,13 @@ export default class Sync extends BaseCommand {
       importConfigId,
     );
 
-    const { filename, relativePath, stat } = fileInfo;
+    const {
+      filename,
+      relativePath,
+      size,
+      creationDate,
+      modificationDate,
+    } = fileInfo;
     await File.create({
       _id: { configId: this.importConfigId, relativePath },
       filename,
@@ -131,7 +137,9 @@ export default class Sync extends BaseCommand {
           id: uuid(),
           date: new Date(),
           status: 'PENDING',
-          stat,
+          size,
+          creationDate,
+          modificationDate,
         },
       ],
     });
@@ -143,12 +151,12 @@ export default class Sync extends BaseCommand {
     file: InstanceType<typeof File>,
     importConfigId: string,
   ) {
-    const { modificationDate, size, filename, stat } = fileInfo;
+    const { creationDate, modificationDate, size, filename } = fileInfo;
     const lastRevision = file.revisions[0];
 
     if (
-      modificationDate.getTime() === lastRevision.stat.mtime.getTime() &&
-      size === lastRevision.stat.size
+      modificationDate.getTime() === lastRevision.modificationDate.getTime() &&
+      size === lastRevision.modificationDate.getTime()
     ) {
       this.logger.debug(
         'stats are identical, ignore',
@@ -169,7 +177,9 @@ export default class Sync extends BaseCommand {
 
       file.revisions[0] = {
         ...lastRevision,
-        stat,
+        size,
+        creationDate,
+        modificationDate,
       };
       await file.save();
       return;
@@ -185,7 +195,9 @@ export default class Sync extends BaseCommand {
       id: uuid(),
       date: new Date(),
       status: 'PENDING',
-      stat,
+      size,
+      creationDate,
+      modificationDate,
     });
 
     await file.save();
