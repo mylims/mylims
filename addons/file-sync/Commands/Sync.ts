@@ -169,7 +169,7 @@ export default class Sync extends BaseCommand {
     if (lastRevision.status === 'PENDING') {
       this.logger.debug(
         'latest revision is still pending, update',
-        undefined,
+        importConfigId,
         filename,
       );
 
