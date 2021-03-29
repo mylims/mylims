@@ -44,7 +44,7 @@ export default class Sync extends BaseCommand {
   }
 
   private async executeSynchronizer() {
-    const importsConfigToProcess: ImportConfig[] = [];
+    const importConfigsToProcess: ImportConfig[] = [];
 
     if (this.importConfigId) {
       if (!ObjectId.isValid(this.importConfigId)) {
@@ -63,23 +63,17 @@ export default class Sync extends BaseCommand {
         this.logger.warning('specified import is disabled');
       }
 
-      importsConfigToProcess.push(importConfig);
+      importConfigsToProcess.push(importConfig);
     } else {
       const importConfigs = await (
         await ImportConfig.find({ enabled: true })
       ).all();
-      importsConfigToProcess.push(...importConfigs);
+      importConfigsToProcess.push(...importConfigs);
     }
 
-    const syncCount = (
-      await Promise.all(
-        importsConfigToProcess.map((importConfig) =>
-          this.executeConfig(importConfig),
-        ),
-      )
-    ).reduce((a, b) => a + b, 0);
-
-    this.logger.success(`${syncCount} files synchronized`);
+    for await (const importConfigToProcess of importConfigsToProcess) {
+      await this.executeConfig(importConfigToProcess);
+    }
   }
 
   private async executeConfig(importConfig: ImportConfig) {
@@ -106,7 +100,7 @@ export default class Sync extends BaseCommand {
 
     await Promise.all(fileHandlers);
 
-    return fileHandlers.length;
+    this.logger.success(`${fileHandlers.length} files synchronized`);
   }
 
   private async handleFile(fileInfo: FileInfo, importConfigId: string) {
