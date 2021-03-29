@@ -71,7 +71,7 @@ export default class Sync extends BaseCommand {
       importConfigsToProcess.push(...importConfigs);
     }
 
-    for await (const importConfigToProcess of importConfigsToProcess) {
+    for (const importConfigToProcess of importConfigsToProcess) {
       await this.executeConfig(importConfigToProcess);
     }
   }
