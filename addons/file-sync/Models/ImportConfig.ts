@@ -2,8 +2,13 @@ import { Pattern, SyncOptions } from 'fs-synchronizer';
 
 import { Model } from '@ioc:Mongodb/Model';
 
-export default class ImportConfig extends Model implements SyncOptions {
+interface FileSynchronizerOptions extends Omit<SyncOptions, 'root'> {
+  maxDepth: number;
+  patterns: Pattern[];
+}
+
+export default class ImportConfig extends Model {
   public root: string;
-  public maxDepth: number;
-  public patterns: Pattern[];
+  public enabled: boolean;
+  public fileSynchronizerOptions: FileSynchronizerOptions;
 }
