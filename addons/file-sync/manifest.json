@@ -1,0 +1,5 @@
+{
+  "displayName": "File synchronizer",
+  "description": "Synchronize file from disk to database.",
+  "commands": "./Commands"
+}
