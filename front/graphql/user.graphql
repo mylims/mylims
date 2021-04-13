@@ -1,0 +1,18 @@
+fragment authMethods on AuthMethods {
+  local
+  ldap
+  oidc_azure
+  oidc_google
+}
+query Users {
+  users {
+    id
+    lastName
+    firstName
+    emails
+    role
+    authMethods {
+      ...authMethods
+    }
+  }
+}
