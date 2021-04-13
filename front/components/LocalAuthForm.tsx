@@ -31,7 +31,7 @@ export default function LocalAuthForm() {
         return router.push('/eln');
       }
     },
-    [auth, router],
+    [auth, router, authMutation],
   );
 
   return (

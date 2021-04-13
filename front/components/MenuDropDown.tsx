@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
+
 import useAuth from '../hooks/useAuth';
 import { useElnMutation } from '../hooks/useElnQuery';
 
@@ -11,7 +12,7 @@ interface DropdownCustoms {
 
 export default function MenuDropDown(): JSX.Element {
   const auth = useAuth();
-  const router = useRouter()
+  const router = useRouter();
 
   const logoutQuery = useElnMutation('/auth/logout');
 
@@ -33,20 +34,21 @@ export default function MenuDropDown(): JSX.Element {
           label: 'Logout',
           type: 'option',
           data: {
-            onClick: () => 
-              logoutQuery.mutateAsync({})
-                .then(() => {
-                  auth.isAuth = false;
-                  router.push('/login');
-                })
+            onClick: () =>
+              logoutQuery.mutateAsync({}).then(() => {
+                auth.isAuth = false;
+                // eslint-disable-next-line no-console
+                router.push('/login').catch((err) => console.error(err));
+              }),
           },
         },
       ],
     ],
-    [auth, history, logoutQuery],
+    [auth, logoutQuery, router],
   );
 
   function handleClick(selected: DropdownOption<DropdownCustoms>) {
+    // eslint-disable-next-line no-console
     selected.data?.onClick().catch((err) => console.log(err));
   }
 

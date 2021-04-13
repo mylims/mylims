@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 
+import ElnLayout from '../../components/ElnLayout';
 import {
   Table,
   Spinner,
@@ -14,8 +15,6 @@ import {
   AuthMethods,
   AuthMethodsFragment,
 } from '../../generated/graphql';
-
-import ElnLayout from '../../components/ElnLayout';
 
 export default function Users() {
   const { loading, error, data } = useUsersQuery();
