@@ -11,12 +11,6 @@
     "tailwind:build": "tailwindcss build tailwind.css -o ./styles/tailwind.out.css",
     "components:update": "components-update -o components/tailwind-ui"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "dependencies": {
     "@apollo/client": "^3.3.14",
     "@headlessui/react": "^0.3.1",
