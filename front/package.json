@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "eslint": "eslint . --cache",
-    "eslint:fix": "eslint . --config .eslintrc.yml --ext ts,tsx --cache --fix",
+    "eslint-fix": "npm run eslint -- --fix",
     "tailwind:build": "tailwindcss build tailwind.css -o ./styles/tailwind.out.css",
     "components:update": "components-update -o components/tailwind-ui"
   },
