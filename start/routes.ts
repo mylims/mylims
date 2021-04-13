@@ -55,7 +55,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/', 'AuthController.myself').middleware('silentAuth');
   Route.post('/local', 'AuthController.login');
-  Route.get('/logout', 'AuthController.logout');
+  Route.post('/logout', 'AuthController.logout');
 }).prefix('/auth');
 
 // Require routes from addons
