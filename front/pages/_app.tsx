@@ -1,4 +1,3 @@
-import '../styles/globals.css';
 import '../styles/tailwind.out.css';
 
 import { ApolloProvider } from '@apollo/client';
