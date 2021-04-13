@@ -1,4 +1,4 @@
 build
-src
+front
 app/graphql.ts
 app/Components/tailwind-ui

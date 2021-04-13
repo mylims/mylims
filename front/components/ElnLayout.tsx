@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useMemo } from 'react';
 
-import MenuDropDown from '../../components/MenuDropDown';
-import { ZakodiumSolidSvg } from '../../components/tailwind-ui';
+import MenuDropDown from './MenuDropDown';
+import { ZakodiumSolidSvg } from './tailwind-ui';
 
 export default function ElnLayout({ children }) {
   const { pathname } = useRouter();

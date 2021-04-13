@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ElnLayout from './_layout';
+import ElnLayout from '../../components/ElnLayout';
 
 export default function ElnIndex() {
   return <>Dashboard</>;

@@ -15,7 +15,7 @@ import {
   AuthMethodsFragment,
 } from '../../generated/graphql';
 
-import ElnLayout from './_layout';
+import ElnLayout from '../../components/ElnLayout';
 
 export default function Users() {
   const { loading, error, data } = useUsersQuery();
