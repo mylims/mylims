@@ -1,4 +1,4 @@
-import '../styles/tailwind.out.css';
+import '../tailwind.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { useMemo } from 'react';
