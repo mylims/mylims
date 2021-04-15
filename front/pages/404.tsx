@@ -1,5 +1,8 @@
-import { ErrorPage } from '../components/tailwind-ui';
+import { useRouter } from 'next/router';
+
+import { PageNotFoundErrorPage } from '../components/tailwind-ui';
 
 export default function Custom404() {
-  return <ErrorPage title="Error 404" subtitle="Page not found" />;
+  const { asPath } = useRouter();
+  return <PageNotFoundErrorPage url={asPath} />;
 }
