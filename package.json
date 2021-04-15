@@ -6,7 +6,7 @@
     "build": "node ace build",
     "check-types": "tsc --noEmit",
     "dev": "node ace serve --watch",
-    "eslint": "eslint . --cache",
+    "eslint": "eslint addons app commands config contracts mongodb providers start tests server.ts env.ts --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "postinstall": "node scripts/postinstall.mjs && npm run tailwind:build",
     "test": "npm run test-only && npm run eslint && npm run check-types",
