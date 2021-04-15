@@ -3,12 +3,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useMemo } from 'react';
 
+import useAuth from '../hooks/useAuth';
+
 import MenuDropDown from './MenuDropDown';
 import { ZakodiumSolidSvg } from './tailwind-ui';
 
 export default function ElnLayout({ children }) {
-  const { pathname } = useRouter();
+  const router = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const { isAuth } = useAuth();
 
   const ROUTES = useMemo(() => {
     return [
@@ -20,6 +23,13 @@ export default function ElnLayout({ children }) {
     ];
   }, []);
 
+  /*if (!isAuth) {
+    // eslint-disable-next-line no-console
+    router.push('/login').catch((err) => console.error(err));
+    return null;
+  }*/
+
+  const { pathname } = router;
   const currentLabel =
     ROUTES.find((route) => pathname === route.pathname)?.label || ':C';
 

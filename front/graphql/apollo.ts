@@ -1,6 +1,12 @@
-import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
+import {
+  InMemoryCache,
+  ApolloClient,
+  ApolloLink,
+  Observable,
+} from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
+import NextRouter from 'next/router';
 
 import introspectionQueryResultData from '../generated/fragmentTypes';
 
@@ -20,6 +26,18 @@ export const client = new ApolloClient({
         if (networkError) {
           // eslint-disable-next-line no-console
           console.error('Network error', networkError);
+          if (
+            (networkError as typeof networkError & { statusCode: number })
+              .statusCode === 401
+          ) {
+            return new Observable((observer) => {
+              NextRouter.push('/login')
+                .then(() => {
+                  observer.complete();
+                })
+                .catch((err) => observer.error(err));
+            });
+          }
         }
       }
     }),
