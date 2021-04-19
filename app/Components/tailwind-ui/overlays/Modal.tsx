@@ -1,32 +1,21 @@
 import { Transition } from '@headlessui/react';
 import clsx from 'clsx';
+import polyfill from 'dialog-polyfill-universal';
 import React, {
+  createElement,
   ElementType,
   ReactNode,
-  createElement,
   useContext,
   useEffect,
   useRef,
 } from 'react';
-import ReactDOM from 'react-dom';
 
-import { useLockBodyScroll } from '..';
+import { useLockBodyScroll } from '../hooks/useLockBodyScroll';
 import { dispatchContext } from '../shortcuts/KeyboardActionContext';
 import { SvgOutlineX } from '../svg/heroicon/outline';
 import { Color, PropsOf } from '../types';
 
-export interface ModalProps<T extends ElementType> {
-  isOpen: boolean;
-  icon: ReactNode;
-  iconColor: Color;
-  children: ReactNode;
-  onRequestClose?: () => void;
-  requestCloseOnEsc?: boolean;
-  fluid?: boolean;
-  animated?: boolean;
-  wrapperComponent?: T;
-  wrapperProps?: Omit<PropsOf<T>, 'children'>;
-}
+import { Portal } from './Portal';
 
 const bgColors = {
   [Color.primary]: 'bg-primary-100',
@@ -46,8 +35,35 @@ const textColors = {
   [Color.warning]: 'text-warning-600',
 };
 
+export interface ModalProps<T extends ElementType> {
+  children: ReactNode;
+  isOpen: boolean;
+  onRequestClose?: () => void;
+  icon: ReactNode;
+  iconColor: Color;
+  hasCloseButton?: boolean;
+  requestCloseOnBackdrop?: boolean;
+  requestCloseOnEsc?: boolean;
+  wrapperComponent?: T;
+  animated?: boolean;
+  fluid?: boolean;
+  wrapperProps?: Omit<PropsOf<T>, 'children'>;
+}
+
+// @ts-ignore Chrome isn't in the standard
+const isChrome = typeof window !== 'undefined' && window.chrome;
+
 export function Modal<T extends ElementType>(props: ModalProps<T>) {
-  const { isOpen, onRequestClose, requestCloseOnEsc } = props;
+  const {
+    isOpen,
+    onRequestClose,
+    hasCloseButton = true,
+    requestCloseOnBackdrop = true,
+    requestCloseOnEsc = true,
+    animated = true,
+    fluid = true,
+  } = props;
+
   useLockBodyScroll(isOpen);
   const { dispatch } = useContext(dispatchContext);
   const ref = useRef(props.isOpen);
@@ -57,7 +73,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
     }
   }, [dispatch]);
   useEffect(() => {
-    if (props.isOpen) {
+    if (isOpen) {
       dispatch({
         type: 'DISABLE_COUNT',
       });
@@ -66,75 +82,63 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
         type: 'ENABLE_COUNT',
       });
     }
-  }, [dispatch, props.isOpen]);
+  }, [dispatch, isOpen]);
 
+  const dialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    function onEsc(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        onRequestClose?.();
+    function onEsc(event: Event) {
+      event.preventDefault();
+      if (requestCloseOnEsc && onRequestClose) {
+        onRequestClose();
       }
     }
-    if (isOpen && requestCloseOnEsc) {
-      document.addEventListener('keydown', onEsc);
+    const dialog = dialogRef.current;
+    if (dialog) {
+      dialog.addEventListener('cancel', onEsc);
+      return () => dialog.removeEventListener('cancel', onEsc);
     }
-    return () => {
-      document.removeEventListener('keydown', onEsc);
-    };
-  }, [onRequestClose, isOpen, requestCloseOnEsc]);
-
-  const { animated: animation = true } = props;
+  }, [onRequestClose, requestCloseOnEsc]);
+  useEffect(() => {
+    if (dialogRef.current) {
+      polyfill.registerDialog(dialogRef.current);
+    }
+  }, []);
+  useEffect(() => {
+    if (isOpen) {
+      dialogRef.current?.showModal();
+    } else if (!isOpen && dialogRef.current?.hasAttribute('open')) {
+      dialogRef.current?.close();
+    }
+  }, [isOpen]);
 
   let modalContents = (
-    <div
-      className="flex items-end justify-center h-full px-4 pt-4 pb-20 text-center sm:block"
-      onClick={props.onRequestClose}
-    >
-      <div className="fixed inset-0">
-        <div className="absolute inset-0 opacity-75 bg-neutral-500" />
-      </div>
-      <span className="hidden sm:inline-block sm:align-middle sm:h-screen" />
-      &#8203;
-      <div
-        onClick={(event) => {
-          if (props.onRequestClose) {
-            // don't let overlay receive the click event to prevent modal from closing
-            event.stopPropagation();
-          }
-        }}
-        className={clsx(
-          'max-h-full inline-flex px-4 pt-5 pb-4 overflow-x-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:p-6',
-          {
-            'sm:max-w-lg sm:w-full': !props.fluid,
-            'max-w-full': props.fluid,
-          },
-        )}
-      >
-        {props.onRequestClose !== undefined && (
-          <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
-            <button
-              type="button"
-              onClick={props.onRequestClose}
-              className="bg-white rounded-full text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500"
-              aria-label="Close"
-            >
-              <SvgOutlineX className="w-6 h-6" />
-            </button>
-          </div>
-        )}
-        <div className="w-full max-h-full sm:flex sm:items-start">
-          <div
-            className={clsx(
-              'flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full sm:mx-0 sm:h-10 sm:w-10',
-              bgColors[props.iconColor],
-            )}
+    <div>
+      {onRequestClose && hasCloseButton ? (
+        <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
+          <button
+            type="button"
+            onClick={onRequestClose}
+            className="bg-white rounded-full text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500"
+            aria-label="Close"
           >
-            <span className={clsx(textColors[props.iconColor], 'text-2xl')}>
-              {props.icon}
-            </span>
-          </div>
-          <div className="flex flex-col flex-grow min-w-0 mt-3 text-center sm:max-h-full sm:mt-0 sm:ml-4 sm:text-left">
-            {props.children}
-          </div>
+            <SvgOutlineX className="w-6 h-6" />
+          </button>
+        </div>
+      ) : null}
+
+      <div className="w-full max-h-full sm:flex sm:items-start">
+        <div
+          className={clsx(
+            'flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full sm:mx-0 sm:h-10 sm:w-10',
+            bgColors[props.iconColor],
+          )}
+        >
+          <span className={clsx(textColors[props.iconColor], 'text-2xl')}>
+            {props.icon}
+          </span>
+        </div>
+        <div className="flex flex-col flex-grow min-w-0 mt-3 text-center sm:max-h-full sm:mt-0 sm:ml-4 sm:text-left">
+          {props.children}
         </div>
       </div>
     </div>
@@ -150,25 +154,54 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
 
   return (
     <Portal>
-      <Transition
-        className="fixed inset-0 z-50 overflow-y-auto"
-        show={props.isOpen}
-        enter={clsx('ease-out', { 'duration-300': animation })}
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave={clsx('ease-in', {
-          'duration-200': animation,
-        })}
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
+      <dialog
+        onClick={(event) => {
+          // Since the dialog has no size of itself, this condition is only
+          // `true` when we click on the backdrop.
+          if (event.target === event.currentTarget && requestCloseOnBackdrop) {
+            onRequestClose?.();
+          }
+        }}
+        ref={dialogRef}
+        style={
+          !isChrome
+            ? {
+                position: 'fixed',
+                top: '50%',
+                transform: 'translate(0, -50%)',
+                maxHeight: 'calc((100% - 6px) - 2em)',
+                overflow: 'auto',
+              }
+            : undefined
+        }
+        className={clsx(
+          'text-left align-bottom bg-white rounded-lg shadow-xl',
+          {
+            'sm:max-w-lg sm:w-full': !fluid,
+            'max-w-full': fluid,
+          },
+        )}
       >
-        {modalContents}
-      </Transition>
+        <Transition
+          show={props.isOpen}
+          enter={clsx('ease-out', { 'duration-300': animated })}
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave={clsx('ease-in', {
+            'duration-200': animated,
+          })}
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+          className="px-4 pt-5 pb-4"
+        >
+          {modalContents}
+        </Transition>
+      </dialog>
     </Portal>
   );
 }
 
-Modal.Header = function (props: { children: ReactNode }) {
+Modal.Header = function ModalHeader(props: { children: ReactNode }) {
   return (
     <h3 className="text-lg font-semibold text-neutral-900" id="modal-headline">
       {props.children}
@@ -176,7 +209,7 @@ Modal.Header = function (props: { children: ReactNode }) {
   );
 };
 
-Modal.Body = function (props: { children: ReactNode }) {
+Modal.Body = function ModalBody(props: { children: ReactNode }) {
   return (
     <div className="max-w-full min-h-0 mt-2 overflow-auto">
       {props.children}
@@ -184,11 +217,11 @@ Modal.Body = function (props: { children: ReactNode }) {
   );
 };
 
-Modal.Description = function (props: { children: ReactNode }) {
-  return <p className="text-sm text-neutral-500">{props.children}</p>;
+Modal.Description = function ModalDescription(props: { children: ReactNode }) {
+  return <div className="text-sm text-neutral-500">{props.children}</div>;
 };
 
-Modal.Footer = function (props: {
+Modal.Footer = function ModalFooter(props: {
   children: ReactNode;
   align?: 'right' | 'left' | 'center';
 }) {
@@ -206,8 +239,4 @@ Modal.Footer = function (props: {
       {props.children}
     </div>
   );
-};
-
-const Portal: React.FC = ({ children }) => {
-  return ReactDOM.createPortal(children, document.body);
 };

@@ -19,7 +19,10 @@ interface SearchSelectFieldProps<T>
 }
 
 interface SimpleSearchSelectFieldProps<T extends SimpleOption>
-  extends Omit<SimpleSearchSelectProps<T>, 'selected' | 'onSelect' | 'error'> {
+  extends Omit<
+    SimpleSearchSelectProps<T>,
+    'selected' | 'onSelect' | 'error' | 'onBlur'
+  > {
   name: string;
   resolveTo: 'value' | 'object';
 }
@@ -64,6 +67,7 @@ export function SearchSelectField<T>(
       getValue={getValue}
       renderOption={renderOption}
       options={options}
+      onBlur={field.onBlur}
       {...otherProps}
       error={meta.touched ? meta.error : undefined}
       selected={selected}

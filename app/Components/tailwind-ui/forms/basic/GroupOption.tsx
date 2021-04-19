@@ -1,9 +1,8 @@
 import clsx from 'clsx';
-import React, { ReactElement } from 'react';
+import { useField } from 'formik';
+import React, { Children, cloneElement, ReactElement } from 'react';
 
-import { OptionField } from '../formik/GroupOptionField';
-
-import { Label } from './common';
+import { Error as ErrorComponent, Label } from './common';
 
 export interface GroupOptionProps {
   label?: string;
@@ -21,7 +20,18 @@ export interface OptionProps
   description: string;
 }
 
-export function GroupOption(props: GroupOptionProps): JSX.Element {
+export function GroupOption(props: GroupOptionProps) {
+  Children.forEach(props.children, (child) => {
+    if (child.type !== Option) {
+      throw new Error(
+        'GroupOption expects children to be GroupOption.Option components only',
+      );
+    }
+  });
+  return <GroupOptionInternal {...props} />;
+}
+
+function GroupOptionInternal(props: GroupOptionProps): JSX.Element {
   const lastChildIndex = Array.isArray(props.children)
     ? props.children.length - 1
     : 0;
@@ -59,7 +69,29 @@ export function GroupOption(props: GroupOptionProps): JSX.Element {
   );
 }
 
-GroupOption.Option = (props: OptionProps): JSX.Element => {
+export function GroupOptionField(
+  props: GroupOptionProps & {
+    name: string;
+  },
+) {
+  const [, meta] = useField(props.name);
+  const childrenWithName = Children.map(props.children, (child) => {
+    if (child.type !== OptionField) {
+      throw new Error(
+        'GroupOptionField expects children to be GroupOptionField.Option components only',
+      );
+    }
+    return cloneElement(child, { name: props.name });
+  });
+  return (
+    <div>
+      <GroupOptionInternal {...props} children={childrenWithName} />
+      {meta.touched && meta.error && <ErrorComponent text={meta.error} />}
+    </div>
+  );
+}
+
+function Option(props: OptionProps): JSX.Element {
   const { label, description, name, id, value, checked, ...otherProps } = props;
   return (
     <label htmlFor={id}>
@@ -101,6 +133,15 @@ GroupOption.Option = (props: OptionProps): JSX.Element => {
       </div>
     </label>
   );
-};
+}
 
-GroupOption.OptionField = OptionField;
+export function OptionField(props: OptionProps): JSX.Element {
+  const [field] = useField({ ...props, type: 'radio' });
+  return <Option {...props} {...field} />;
+}
+
+GroupOptionField.Option = OptionField as (
+  props: Omit<OptionProps, 'name'>,
+) => JSX.Element;
+
+GroupOption.Option = Option;
