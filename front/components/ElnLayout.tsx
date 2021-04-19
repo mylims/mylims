@@ -15,7 +15,6 @@ interface ElnLayoutProps {
 export default function ElnLayout({ children }: ElnLayoutProps) {
   const router = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const { isAuth } = useAuth();
 
   const ROUTES = useMemo(() => {
     return [
