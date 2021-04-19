@@ -1,14 +1,10 @@
 import { useMutation, useQuery } from 'react-query';
 
-if (!process.env.NEXT_PUBLIC_API_URL) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_API_URL');
-}
-
-const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+import { API_URL } from '../env';
 
 export function useElnQuery(path: string) {
   return useQuery(path, () =>
-    fetch(`${baseUrl}${path}`, {
+    fetch(`${API_URL}${path}`, {
       credentials: 'include',
     })
       .then(async (res) => [res.ok, await res.json()])
@@ -21,7 +17,7 @@ export function useElnQuery(path: string) {
 
 export function useElnMutation(path: string) {
   return useMutation(path, (body: unknown) =>
-    fetch(`${baseUrl}${path}`, {
+    fetch(`${API_URL}${path}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

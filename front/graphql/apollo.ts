@@ -2,11 +2,8 @@ import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
 
+import { API_URL } from '../env';
 import introspectionQueryResultData from '../generated/fragmentTypes';
-
-if (!process.env.NEXT_PUBLIC_API_URL) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_API_URL');
-}
 
 const cache = new InMemoryCache({
   possibleTypes: introspectionQueryResultData.possibleTypes,
@@ -28,7 +25,7 @@ export const client = new ApolloClient({
       }
     }),
     createUploadLink({
-      uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+      uri: `${API_URL}/graphql`,
       credentials: 'include',
     }),
   ]),

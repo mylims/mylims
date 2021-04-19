@@ -1,11 +1,8 @@
 import React, { useCallback, useState } from 'react';
 
 import { Button, Card, Select } from '../../components/tailwind-ui';
+import { API_URL } from '../../env';
 import { useElnQuery } from '../../hooks/useElnQuery';
-
-if (!process.env.NEXT_PUBLIC_API_URL) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_API_URL');
-}
 
 interface ProviderData {
   identifier: string;
@@ -20,7 +17,7 @@ export default function OidcAuthForm() {
     // ssr workaround
     if (window) {
       window.location.assign(
-        `${process.env.NEXT_PUBLIC_API_URL}/addons/oidc/login?oidcProvider=${selectedOidcProvider}`,
+        `${API_URL}/addons/oidc/login?oidcProvider=${selectedOidcProvider}`,
       );
     }
   }, [selectedOidcProvider]);
