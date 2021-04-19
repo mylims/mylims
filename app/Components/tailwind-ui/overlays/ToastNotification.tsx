@@ -20,7 +20,7 @@ export interface NotificationToastProps
 export function ToastNotification(props: NotificationToastProps) {
   return (
     <Transition
-      appear={true}
+      appear
       show={props.state === 'SHOWING'}
       enter="transform ease-out duration-300 transition"
       enterFrom={clsx(

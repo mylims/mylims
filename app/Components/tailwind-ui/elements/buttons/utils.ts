@@ -1,11 +1,19 @@
 import { Size, Color, Variant } from '../../types';
 
-const sizes: Record<Size, string> = {
+const baseSizes: Record<Size, string> = {
   [Size.xSmall]: 'px-2.5 py-1.5 text-xs',
   [Size.small]: 'px-3 py-2 text-sm',
   [Size.medium]: 'px-4 py-2 text-sm',
   [Size.large]: 'px-4 py-2 text-base',
   [Size.xLarge]: 'px-6 py-3 text-base',
+};
+
+const circularSizes: Record<Size, string> = {
+  [Size.xSmall]: 'p-1 text-xl',
+  [Size.small]: 'p-1.5 text-xl',
+  [Size.medium]: 'p-2 text-xl',
+  [Size.large]: 'p-2 text-2xl',
+  [Size.xLarge]: 'p-3 text-2xl',
 };
 
 const colorsPrimary: Record<Color, string> = {
@@ -66,4 +74,11 @@ function getVariantColor(variant: Variant, color: Color): string {
   }
 }
 
-export { sizes, getVariantColor, colorsPrimary, colorsSecondary, colorsWhite };
+export {
+  baseSizes,
+  circularSizes,
+  getVariantColor,
+  colorsPrimary,
+  colorsSecondary,
+  colorsWhite,
+};

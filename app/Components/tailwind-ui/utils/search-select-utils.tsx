@@ -336,6 +336,9 @@ interface InternalSearchSelectProps<T>
   hasValue: boolean;
   leadingInlineAddon?: ReactNode;
   highlightColor?: string;
+  required?: boolean;
+  onBlur?: (e: React.FocusEvent) => void;
+  name?: string;
 }
 
 export function InternalSearchSelect<T>(
@@ -360,6 +363,7 @@ export function InternalSearchSelect<T>(
 
     clearable = false,
     disabled = false,
+    required = false,
     loading = false,
     noResultsHint = defaultNoResultsHint,
     error,
@@ -370,22 +374,27 @@ export function InternalSearchSelect<T>(
     formattedSelected,
     leadingInlineAddon,
     hasValue,
-
+    name,
+    onBlur,
     highlightColor = 'text-white bg-primary-600',
   } = props;
 
   return (
     <div ref={mainRef}>
       <Input
+        required={required}
         wrapperRef={setReferenceElement}
         type="text"
-        name={label}
+        name={name || label}
         label={label}
         value={searchValue}
         disabled={disabled}
         error={error}
         help={help}
-        onBlur={closeList}
+        onBlur={(event) => {
+          onBlur?.(event);
+          closeList();
+        }}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onClick={openList}

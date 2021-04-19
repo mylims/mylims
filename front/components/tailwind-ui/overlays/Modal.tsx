@@ -1,5 +1,6 @@
 import { Transition } from '@headlessui/react';
 import clsx from 'clsx';
+import polyfill from 'dialog-polyfill-universal';
 import React, {
   createElement,
   ElementType,

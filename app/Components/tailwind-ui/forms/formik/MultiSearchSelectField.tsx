@@ -13,7 +13,10 @@ import {
 } from '../basic/MultiSearchSelect';
 
 interface MultiSearchSelectFieldProps<T>
-  extends Omit<MultiSearchSelectProps<T>, 'selected' | 'onSelect' | 'error'> {
+  extends Omit<
+    MultiSearchSelectProps<T>,
+    'selected' | 'onSelect' | 'error' | 'onBlur'
+  > {
   name: string;
   resolveTo: 'value' | 'object';
 }
@@ -21,7 +24,7 @@ interface MultiSearchSelectFieldProps<T>
 interface SimpleMultiSearchSelectFieldProps<T extends SimpleOption>
   extends Omit<
     SimpleMultiSearchSelectProps<T>,
-    'selected' | 'onSelect' | 'error'
+    'selected' | 'onSelect' | 'error' | 'onBlur'
   > {
   name: string;
   resolveTo: 'value' | 'object';
@@ -73,6 +76,7 @@ export function MultiSearchSelectField<T>(
       getValue={getValue}
       renderOption={renderOption}
       options={options}
+      onBlur={field.onBlur}
       {...otherProps}
       error={meta.touched ? meta.error : undefined}
       selected={selected}

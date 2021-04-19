@@ -19,17 +19,7 @@ import {
   Valid,
 } from './common';
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  /**
-   * Ref for the <input> element.
-   */
-  ref?: Ref<HTMLInputElement>;
-  /**
-   * Ref for the <div> wrapping the <input> element.
-   */
-  wrapperRef?: Ref<HTMLDivElement>;
-  name: string;
+export interface CustomInputProps {
   error?: string;
   valid?: boolean | string;
   leadingAddon?: ReactNode;
@@ -43,6 +33,20 @@ export interface InputProps
   help?: string;
   inlinePlaceholder?: ReactNode;
   inputClassName?: string;
+}
+
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement>,
+    CustomInputProps {
+  name: string;
+  /**
+   * Ref for the <input> element.
+   */
+  ref?: Ref<HTMLInputElement>;
+  /**
+   * Ref for the <div> wrapping the <input> element.
+   */
+  wrapperRef?: Ref<HTMLDivElement>;
 }
 
 export const Input = forwardRefWithAs(

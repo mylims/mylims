@@ -14,7 +14,11 @@ const cache = new InMemoryCache({
   possibleTypes: introspectionQueryResultData.possibleTypes,
 });
 
+const graphqlUrl = `${process.env.NEXT_PUBLIC_API_URL}/graphql`;
+
 export const client = new ApolloClient({
+  uri: graphqlUrl,
+  credentials: 'include',
   link: ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors) {
@@ -42,7 +46,7 @@ export const client = new ApolloClient({
       }
     }),
     createUploadLink({
-      uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+      uri: graphqlUrl,
       credentials: 'include',
     }),
   ]),
