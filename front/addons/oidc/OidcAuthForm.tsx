@@ -15,7 +15,7 @@ export default function OidcAuthForm() {
   >(undefined);
   const onConnect = useCallback(() => {
     // ssr workaround
-    if (window) {
+    if (window && selectedOidcProvider) {
       window.location.assign(
         `${API_URL}/addons/oidc/login?oidcProvider=${selectedOidcProvider}`,
       );
