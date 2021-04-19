@@ -18,7 +18,7 @@ npm install
 
 ## Configuration
 
-Rename `.env.example` to `.env` and set variables accordingly.
+Copy `.env.example` to `.env` and set variables accordingly.
 
 ## Run
 
@@ -37,4 +37,3 @@ TBD
 ## Design
 
 The frontend app uses [Next.js](https://nextjs.org/) framework.
-
