@@ -67,11 +67,11 @@ export function Faq(props: FaqProps) {
   const { title, questions, selectedQuestionId, onSelect } = props;
 
   return (
-    <div className="max-w-3xl divide-y-2 divide-gray-200">
-      <h2 className="text-3xl font-extrabold text-center text-gray-900 sm:text-4xl">
+    <div className="max-w-3xl divide-y-2 divide-neutral-200">
+      <h2 className="text-3xl font-extrabold text-center text-neutral-900 sm:text-4xl">
         {title}
       </h2>
-      <dl className="mt-6 space-y-6 divide-y divide-gray-200">
+      <dl className="mt-6 space-y-6 divide-y divide-neutral-200">
         {questions.map((question) => (
           <Question
             key={question.id}

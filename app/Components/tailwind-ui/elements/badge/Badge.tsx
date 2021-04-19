@@ -8,15 +8,28 @@ export enum BadgeSize {
   LARGE = 'large',
 }
 
-export interface BadgeProps {
-  label: ReactNode;
+export enum BadgeVariant {
+  COLORED_DOT = 'COLORED_DOT',
+  COLORED_BACKGROUND = 'COLORED_BACKGROUND',
+}
+
+export interface VariantBadgeProps extends BaseBadgeProps {
+  variant: BadgeVariant;
   color: Color;
-  size?: BadgeSize;
   dot?: boolean;
+}
+
+export interface ColoredBadgeProps extends BaseBadgeProps {
+  variant: BadgeVariant.COLORED_DOT;
+  customColor: CSSProperties['color'];
+  dot?: true;
+}
+
+export interface BaseBadgeProps {
+  label: ReactNode;
+  size?: BadgeSize;
   rounded?: boolean;
-
   onDismiss?: (event: MouseEvent) => void;
-
   className?: string;
   style?: CSSProperties;
 }
@@ -67,21 +80,28 @@ const paddings = {
   },
 };
 
-export function Badge(props: BadgeProps) {
+export function Badge(props: VariantBadgeProps | ColoredBadgeProps) {
   const {
     size = BadgeSize.SMALL,
     rounded = false,
     dot = false,
     onDismiss,
   } = props;
+
   const padding = paddings[size];
+
+  const coloredDot = 'bg-white border border-neutral-300';
+  const color =
+    'color' in props && props.variant === BadgeVariant.COLORED_BACKGROUND
+      ? colors[props.color]
+      : coloredDot;
 
   return (
     <span
       className={clsx(
-        'inline-flex items-center font-semibold ',
+        'inline-flex items-center font-semibold',
         size === BadgeSize.LARGE ? 'text-sm' : 'text-xs',
-        colors[props.color],
+        color,
         rounded
           ? size === BadgeSize.LARGE
             ? 'rounded-md'
@@ -92,15 +112,26 @@ export function Badge(props: BadgeProps) {
       )}
       style={props.style}
     >
-      {dot && (
+      {(props.variant === BadgeVariant.COLORED_DOT || dot) && (
         <svg
           className={clsx(
             'mr-1.5 h-2 w-2',
-            dotColors[props.color],
             size === BadgeSize.LARGE ? '-ml-1' : '-ml-0.5',
+            {
+              [dotColors['color' in props ? props.color : Color.neutral]]:
+                props.variant === BadgeVariant.COLORED_BACKGROUND &&
+                'color' in props,
+            },
           )}
           fill="currentColor"
           viewBox="0 0 8 8"
+          style={{
+            color:
+              props.variant === BadgeVariant.COLORED_DOT &&
+              'customColor' in props
+                ? props.customColor
+                : undefined,
+          }}
         >
           <circle cx="4" cy="4" r="3" />
         </svg>
@@ -112,7 +143,7 @@ export function Badge(props: BadgeProps) {
           onClick={props.onDismiss}
           className={clsx(
             'flex-shrink-0 ml-0.5 h-4 w-4 rounded-full inline-flex items-center justify-center focus:outline-none focus:text-white',
-            removeColors[props.color],
+            removeColors['color' in props ? props.color : Color.neutral],
           )}
         >
           <svg

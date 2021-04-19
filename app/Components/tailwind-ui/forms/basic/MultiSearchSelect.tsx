@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { MouseEvent, useCallback, useMemo } from 'react';
 
-import { Badge } from '../../elements/badge/Badge';
+import { Badge, BadgeVariant } from '../../elements/badge/Badge';
 import { Color } from '../../types';
 import {
   defaultCanCreate,
@@ -75,6 +75,7 @@ export function MultiSearchSelect<T>(
       return (
         <Badge
           key={value}
+          variant={BadgeVariant.COLORED_BACKGROUND}
           label={rendered}
           color={getBadgeColor(option)}
           rounded

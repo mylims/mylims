@@ -18,7 +18,8 @@ export interface KeyboardActionHelpProps {
 
 export function KeyboardActionHelp(props: KeyboardActionHelpProps) {
   const { key = '?', alt = false } = props;
-  const [showHelp, helpOn, helpOff] = useOnOff(false);
+  const [showHelp, helpOn, helpOff] = useOnOff();
+
   const helpActions = useMemo(() => {
     return [
       {
@@ -38,7 +39,6 @@ export function KeyboardActionHelp(props: KeyboardActionHelpProps) {
     <Modal
       isOpen={showHelp}
       onRequestClose={helpOff}
-      requestCloseOnEsc
       icon={<SvgOutlineInformationCircle />}
       iconColor={Color.primary}
       fluid

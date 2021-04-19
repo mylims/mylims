@@ -1,4 +1,5 @@
 import { Transition } from '@headlessui/react';
+import clsx from 'clsx';
 import React, {
   ElementType,
   ReactElement,
@@ -9,9 +10,21 @@ import React, {
 
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import { SvgOutlineX } from '../svg/heroicon/outline';
-import { PropsOf } from '../types';
+import { PropsOf, Size } from '../types';
 
 import { Portal } from './Portal';
+
+function getSizeClassname(size: Size): string {
+  const record: Record<Size, string> = {
+    xSmall: 'max-w-xs',
+    small: 'max-w-sm',
+    medium: 'max-w-md',
+    large: 'max-w-lg',
+    xLarge: 'max-w-xl',
+  };
+
+  return record[size];
+}
 
 export interface SlideOverProps<T extends ElementType> {
   isOpen: boolean;
@@ -19,12 +32,21 @@ export interface SlideOverProps<T extends ElementType> {
   onClose?: () => void;
   wrapperComponent?: T;
   wrapperProps?: Omit<PropsOf<T>, 'children'>;
+  requestCloseOnClickOutside?: boolean;
+  maxWidth?: Size;
 }
 
 export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
+  const {
+    requestCloseOnClickOutside = true,
+    maxWidth: maxWidthSlideOver = Size.medium,
+  } = props;
+
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => {
-    props.onClose?.();
+    if (requestCloseOnClickOutside) {
+      props.onClose?.();
+    }
   });
 
   const Header = props.children.find((node) => node.type === SlideOver.Header);
@@ -43,7 +65,7 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
           leave="transform transition ease-out duration-500 sm:duration-600"
           leaveFrom="translate-x-0"
           leaveTo="translate-x-full"
-          className="w-screen max-w-md"
+          className={clsx('w-screen', getSizeClassname(maxWidthSlideOver))}
         >
           <div
             ref={ref}
