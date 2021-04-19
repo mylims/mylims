@@ -3,6 +3,10 @@ import React, { useCallback, useState } from 'react';
 import { Button, Card, Select } from '../../components/tailwind-ui';
 import { useElnQuery } from '../../hooks/useElnQuery';
 
+if (!process.env.NEXT_PUBLIC_API_URL) {
+  throw new Error('Missing environment variable: NEXT_PUBLIC_API_URL');
+}
+
 interface ProviderData {
   identifier: string;
 }

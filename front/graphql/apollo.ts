@@ -4,6 +4,10 @@ import { createUploadLink } from 'apollo-upload-client';
 
 import introspectionQueryResultData from '../generated/fragmentTypes';
 
+if (!process.env.NEXT_PUBLIC_API_URL) {
+  throw new Error('Missing environment variable: NEXT_PUBLIC_API_URL');
+}
+
 const cache = new InMemoryCache({
   possibleTypes: introspectionQueryResultData.possibleTypes,
 });
