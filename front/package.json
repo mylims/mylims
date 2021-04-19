@@ -36,6 +36,7 @@
     "use-http": "^1.0.18"
   },
   "devDependencies": {
+    "@types/apollo-upload-client": "^14.1.0",
     "@zakodium/components-update": "^1.4.1",
     "@zakodium/eslint-config": "^3.0.1",
     "@zakodium/tailwind-config": "^2.0.2",

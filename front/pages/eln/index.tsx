@@ -6,4 +6,4 @@ export default function ElnIndex() {
   return <>Dashboard</>;
 }
 
-ElnIndex.getLayout = (page) => <ElnLayout>{page}</ElnLayout>;
+ElnIndex.getLayout = (page: React.ReactNode) => <ElnLayout>{page}</ElnLayout>;

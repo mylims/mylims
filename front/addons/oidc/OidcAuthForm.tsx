@@ -3,6 +3,10 @@ import React, { useCallback, useState } from 'react';
 import { Button, Card, Select } from '../../components/tailwind-ui';
 import { useElnQuery } from '../../hooks/useElnQuery';
 
+interface ProviderData {
+  identifier: string;
+}
+
 export default function OidcAuthForm() {
   const { data: providersData = [] } = useElnQuery('/addons/oidc/providers');
   const [selectedOidcProvider, selectOidcProvider] = useState<
@@ -28,7 +32,8 @@ export default function OidcAuthForm() {
         <div className="p-4">
           <Select
             selected={providersData.find(
-              (provider) => provider.identifier === selectedOidcProvider,
+              (provider: ProviderData) =>
+                provider.identifier === selectedOidcProvider,
             )}
             options={providersData}
             renderOption={(option) => option.label}

@@ -6,7 +6,11 @@ import React, { useState, useMemo } from 'react';
 import MenuDropDown from './MenuDropDown';
 import { ZakodiumSolidSvg } from './tailwind-ui';
 
-export default function ElnLayout({ children }) {
+interface ElnLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function ElnLayout({ children }: ElnLayoutProps) {
   const { pathname } = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
