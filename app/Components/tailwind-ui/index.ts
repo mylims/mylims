@@ -20,8 +20,9 @@ export { Label as FieldLabel } from './forms/basic/common';
 export type { LabelProps as FieldLabelProps } from './forms/basic/common';
 
 export * from './forms/basic/Checkbox';
-export * from './forms/basic/DropzoneList';
 export * from './forms/basic/Dropzone';
+export * from './forms/basic/DropzoneField';
+export * from './forms/basic/DropzoneList';
 export * from './forms/basic/Input';
 export * from './forms/basic/MultiSearchSelect';
 export * from './forms/basic/Radio';
@@ -32,6 +33,7 @@ export * from './forms/basic/Toggle';
 export * from './forms/basic/GroupOption';
 
 export * from './forms/formik/CheckboxField';
+export * from './forms/formik/DatePickerField';
 export * from './forms/formik/Form';
 export * from './forms/formik/FormError';
 export * from './forms/formik/InputField';
@@ -42,7 +44,6 @@ export * from './forms/formik/SelectField';
 export * from './forms/formik/SubmitButton';
 export * from './forms/formik/TextAreaField';
 export * from './forms/formik/ToggleField';
-export * from './forms/formik/GroupOptionField';
 
 export * from './hooks/globalKeyboardActions';
 export * from './hooks/useDebounce';
@@ -74,6 +75,7 @@ export * from './navigation/VerticalNavigation';
 
 export * from './overlays/Modal';
 export * from './overlays/NotificationCenter';
+export * from './overlays/Portal';
 export * from './overlays/SlideOver';
 
 export * from './shells/SidebarLayout';

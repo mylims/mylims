@@ -25,11 +25,11 @@ export function SelectField<T>(
   const { name, resolveTo, getValue, renderOption, ...otherProps } = props;
   const [field, meta, formik] = useField(name);
 
-  // @ts-expect-error because of overload
+  // @ts-ignore because of overload
   const getValueFn = getValue ? getValue : (option) => option.value;
   const renderOptionFn = renderOption
     ? renderOption
-    : // @ts-expect-error because of overload
+    : // @ts-ignore because of overload
       (option) => option.label;
 
   return (
@@ -49,6 +49,8 @@ export function SelectField<T>(
         } else {
           formik.setValue(resolveTo === 'object' ? option : getValueFn(option));
         }
+
+        formik.setTouched(true, false);
       }}
       error={meta.touched ? meta.error : undefined}
       {...otherProps}

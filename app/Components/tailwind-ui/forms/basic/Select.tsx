@@ -36,7 +36,6 @@ export interface SelectHelperProps extends SelectCommonProps {
   selected?: string;
   onSelect?: (selected: string | undefined) => void;
   inline: boolean;
-
   highlightColor?: string;
 }
 
@@ -52,6 +51,7 @@ function SelectHelper(props: SelectHelperProps) {
     setPopperElement,
     popperProps,
   } = useSameWidthPopper({ placement: 'bottom', distance: 5 });
+
   return (
     <div className={props.className}>
       <Listbox
@@ -59,9 +59,9 @@ function SelectHelper(props: SelectHelperProps) {
         className="space-y-1"
         value={props.selected}
         disabled={props.disabled}
-        onChange={(value) =>
-          props.disabled ? undefined : props.onSelect?.(value)
-        }
+        onChange={(value) => {
+          return props.disabled ? undefined : props.onSelect?.(value);
+        }}
       >
         {({ open }) => (
           <>
@@ -226,9 +226,9 @@ export function Select<T>(props: SelectProps<T> | BaseSelectProps<T>) {
   const {
     options,
     selected,
-    // @ts-expect-error Cannot deal with types in overloaded function
+    // @ts-ignore Cannot deal with types in overloaded function
     getValue = (option) => option.value,
-    // @ts-expect-error Cannot deal with types in overloaded function
+    // @ts-ignore Cannot deal with types in overloaded function
     renderOption = (option) => option.label,
     onSelect,
     inline = false,

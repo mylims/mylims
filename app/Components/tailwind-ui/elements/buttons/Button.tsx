@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import React, { ReactNode, Ref } from 'react';
 
-import { Color, Size, Variant } from '../../types';
+import { Color, Roundness, Size, Variant } from '../../types';
 import { forwardRefWithAs } from '../../util';
 
-import { getVariantColor, sizes } from './utils';
+import { getVariantColor, baseSizes, circularSizes } from './utils';
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,6 +13,7 @@ export interface ButtonProps
   color?: Color;
   size?: Size;
   variant?: Variant;
+  roundness?: Roundness;
   group?: string;
   ref?: Ref<HTMLButtonElement>;
 }
@@ -26,6 +27,7 @@ export const Button = forwardRefWithAs(
       group,
       children,
       type = 'button',
+      roundness = Roundness.light,
       className,
       ...otherProps
     } = props;
@@ -38,7 +40,9 @@ export const Button = forwardRefWithAs(
         className={clsx(
           'font-semibold text-white focus:outline-none',
           getVariantColor(variant, color),
-          sizes[size],
+          roundness === Roundness.circular
+            ? circularSizes[size]
+            : baseSizes[size],
           className,
           {
             'cursor-default': props.disabled,
@@ -47,6 +51,8 @@ export const Button = forwardRefWithAs(
             'rounded-r-md': group === 'right',
             'rounded-md shadow-sm focus:ring-2 focus:ring-offset-2': !group,
             'focus:ring-1 focus:z-10': group,
+            'rounded-full':
+              roundness === Roundness.full || roundness === Roundness.circular,
           },
         )}
       >

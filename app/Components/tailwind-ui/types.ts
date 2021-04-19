@@ -21,6 +21,12 @@ export enum Variant {
   white = 'white',
 }
 
+export enum Roundness {
+  light = 'light',
+  full = 'full',
+  circular = 'circular',
+}
+
 export type ActionType<Action, Payload = void> = Payload extends void
   ? { type: Action }
   : { type: Action; payload: Payload };

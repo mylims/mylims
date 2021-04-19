@@ -24,6 +24,9 @@ interface BaseSearchSelectProps<T> {
   // Props passed directly to Input
   label: string;
   placeholder?: string;
+  required?: boolean;
+  onBlur?: (e: React.FocusEvent) => void;
+  name?: string;
 
   // Custom props for results list
   options: T[];

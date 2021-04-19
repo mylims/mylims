@@ -40,7 +40,7 @@ const Question = (props: QuestionProps) => {
         <button
           onClick={onToggle}
           type="button"
-          className="flex items-start justify-between w-full text-left text-neutral-400"
+          className="flex items-start justify-between w-full text-left text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2"
         >
           <span className="font-semibold text-neutral-900">{question}</span>
           <span className="flex items-center ml-6 h-7">
@@ -52,8 +52,12 @@ const Question = (props: QuestionProps) => {
           </span>
         </button>
       </dt>
-      <dd className={clsx('mt-2 pr-12', { hidden: selectedQuestionId !== id })}>
-        <p className="text-base text-justify text-neutral-500">{answer}</p>
+      <dd
+        className={clsx('mt-2 pr-12', {
+          hidden: selectedQuestionId !== id,
+        })}
+      >
+        <div className="text-base text-justify text-neutral-500">{answer}</div>
       </dd>
     </div>
   );
@@ -63,11 +67,11 @@ export function Faq(props: FaqProps) {
   const { title, questions, selectedQuestionId, onSelect } = props;
 
   return (
-    <div className="max-w-3xl divide-y-2 divide-gray-200">
-      <h2 className="text-3xl font-extrabold text-center text-gray-900 sm:text-4xl">
+    <div className="max-w-3xl divide-y-2 divide-neutral-200">
+      <h2 className="text-3xl font-extrabold text-center text-neutral-900 sm:text-4xl">
         {title}
       </h2>
-      <dl className="mt-6 space-y-6 divide-y divide-gray-200">
+      <dl className="mt-6 space-y-6 divide-y divide-neutral-200">
         {questions.map((question) => (
           <Question
             key={question.id}
