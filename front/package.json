@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@types/apollo-upload-client": "^14.1.0",
+    "@types/react-dom": "^17.0.3",
     "@zakodium/components-update": "^1.4.1",
     "@zakodium/eslint-config": "^3.0.1",
     "@zakodium/tailwind-config": "^2.0.2",
