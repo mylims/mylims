@@ -23,12 +23,6 @@ export default function ElnLayout({ children }) {
     ];
   }, []);
 
-  /*if (!isAuth) {
-    // eslint-disable-next-line no-console
-    router.push('/login').catch((err) => console.error(err));
-    return null;
-  }*/
-
   const { pathname } = router;
   const currentLabel =
     ROUTES.find((route) => pathname === route.pathname)?.label || ':C';
