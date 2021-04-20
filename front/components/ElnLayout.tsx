@@ -3,15 +3,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useMemo } from 'react';
 
-import useAuth from '../hooks/useAuth';
-
 import MenuDropDown from './MenuDropDown';
 import { ZakodiumSolidSvg } from './tailwind-ui';
 
-export default function ElnLayout({ children }) {
+interface ElnLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function ElnLayout({ children }: ElnLayoutProps) {
   const router = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const { isAuth } = useAuth();
 
   const ROUTES = useMemo(() => {
     return [

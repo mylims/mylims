@@ -1,7 +1,8 @@
-import '../styles/tailwind.out.css';
+import '../tailwind.css';
 
 import { ApolloProvider } from '@apollo/client';
-import { useMemo } from 'react';
+import { AppProps } from 'next/dist/next-server/lib/router/router';
+import React, { ComponentType, useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
@@ -17,7 +18,11 @@ import { useElnQuery } from '../hooks/useElnQuery';
 
 const queryClient = new QueryClient();
 
-function SetupEln({ children }) {
+interface SetupElnProps {
+  children: React.ReactNode;
+}
+
+function SetupEln({ children }: SetupElnProps) {
   const {
     isLoading: addonsLoading,
     data: addonsData = [],
@@ -56,7 +61,13 @@ function SetupEln({ children }) {
   );
 }
 
-function MyApp({ Component, pageProps }) {
+type MyAppProps = AppProps & {
+  Component: ComponentType & {
+    getLayout: (component: React.ReactNode) => React.ReactNode;
+  };
+};
+
+function MyApp({ Component, pageProps }: MyAppProps) {
   const getLayout = useMemo(() => Component.getLayout || ((page) => page), [
     Component.getLayout,
   ]);

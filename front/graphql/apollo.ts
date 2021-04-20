@@ -6,15 +6,16 @@ import {
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
-import NextRouter from 'next/router';
+import nextRouter from 'next/router';
 
+import { API_URL } from '../env';
 import introspectionQueryResultData from '../generated/fragmentTypes';
 
 const cache = new InMemoryCache({
   possibleTypes: introspectionQueryResultData.possibleTypes,
 });
 
-const graphqlUrl = `${process.env.NEXT_PUBLIC_API_URL}/graphql`;
+const graphqlUrl = `${API_URL}/graphql`;
 
 export const client = new ApolloClient({
   uri: graphqlUrl,
@@ -35,7 +36,8 @@ export const client = new ApolloClient({
               .statusCode === 401
           ) {
             return new Observable((observer) => {
-              NextRouter.push('/login')
+              nextRouter
+                .push('/login')
                 .then(() => {
                   observer.complete();
                 })

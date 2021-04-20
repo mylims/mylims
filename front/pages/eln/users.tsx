@@ -40,7 +40,7 @@ export default function Users() {
   );
 }
 
-Users.getLayout = (page) => <ElnLayout>{page}</ElnLayout>;
+Users.getLayout = (page: React.ReactNode) => <ElnLayout>{page}</ElnLayout>;
 
 function Header() {
   return (

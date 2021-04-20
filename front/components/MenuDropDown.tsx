@@ -38,7 +38,7 @@ export default function MenuDropDown(): JSX.Element {
               logoutQuery.mutateAsync({}).then(() => {
                 auth.isAuth = false;
                 // eslint-disable-next-line no-console
-                router.push('/login').catch((err) => console.log(err));
+                router.push('/login').catch((err) => console.error(err));
               }),
           },
         },

@@ -1,7 +1,12 @@
 import React, { useCallback, useState } from 'react';
 
 import { Button, Card, Select } from '../../components/tailwind-ui';
+import { API_URL } from '../../env';
 import { useElnQuery } from '../../hooks/useElnQuery';
+
+interface ProviderData {
+  identifier: string;
+}
 
 export default function OidcAuthForm() {
   const { data: providersData = [] } = useElnQuery('/addons/oidc/providers');
@@ -10,9 +15,9 @@ export default function OidcAuthForm() {
   >(undefined);
   const onConnect = useCallback(() => {
     // ssr workaround
-    if (window) {
+    if (window && selectedOidcProvider) {
       window.location.assign(
-        `${process.env.NEXT_PUBLIC_API_URL}/addons/oidc/login?oidcProvider=${selectedOidcProvider}`,
+        `${API_URL}/addons/oidc/login?oidcProvider=${selectedOidcProvider}`,
       );
     }
   }, [selectedOidcProvider]);
@@ -28,7 +33,8 @@ export default function OidcAuthForm() {
         <div className="p-4">
           <Select
             selected={providersData.find(
-              (provider) => provider.identifier === selectedOidcProvider,
+              (provider: ProviderData) =>
+                provider.identifier === selectedOidcProvider,
             )}
             options={providersData}
             renderOption={(option) => option.label}
