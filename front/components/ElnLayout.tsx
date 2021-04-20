@@ -3,8 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useMemo } from 'react';
 
-import useAuth from '../hooks/useAuth';
-
 import MenuDropDown from './MenuDropDown';
 import { ZakodiumSolidSvg } from './tailwind-ui';
 
