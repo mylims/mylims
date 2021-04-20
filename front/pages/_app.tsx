@@ -13,6 +13,7 @@ import {
   ToastNotificationCenter,
 } from '../components/tailwind-ui';
 import AddonsContext from '../contexts/AddonsContext';
+import AuthContext from '../contexts/AuthContext';
 import { client } from '../graphql/apollo';
 import { useElnQuery } from '../hooks/useElnQuery';
 
@@ -29,6 +30,12 @@ function SetupEln({ children }: SetupElnProps) {
     error: addonsError,
   } = useElnQuery('/addons');
 
+  const {
+    isLoading: authLoading,
+    data: authData = { isAuth: false },
+    error: authError,
+  } = useElnQuery('/auth');
+
   if (addonsError) {
     return (
       <NotificationProvider>
@@ -41,7 +48,19 @@ function SetupEln({ children }: SetupElnProps) {
     );
   }
 
-  if (addonsLoading) {
+  if (authError) {
+    return (
+      <NotificationProvider>
+        <NotificationCenter position="bottom-right" />
+        <ToastNotificationCenter position="bottom" />
+        <ErrorPage subtitle="There was a little problem." title="Oooops">
+          Failed to get auth status : {authError}
+        </ErrorPage>
+      </NotificationProvider>
+    );
+  }
+
+  if (addonsLoading || authLoading) {
     return (
       <div className="flex justify-center items-center w-full h-full">
         <div className="flex flex-col items-center">
@@ -56,7 +75,7 @@ function SetupEln({ children }: SetupElnProps) {
 
   return (
     <AddonsContext.Provider value={addonsData}>
-      {children}
+      <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>
     </AddonsContext.Provider>
   );
 }
