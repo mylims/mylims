@@ -67,7 +67,6 @@ export function setConfig<T extends keyof ConfigProps>(
   newConfig: ConfigProps[T],
 ) {
   const currConf = getConfig(key);
-  console.log('set config');
   if (!isDeepStrictEqual(currConf, newConfig)) {
     const confToSave = {
       config: {
@@ -77,8 +76,6 @@ export function setConfig<T extends keyof ConfigProps>(
       },
       history: [config, ...history],
     };
-
-    console.log('overwrite');
 
     fs.writeFileSync(
       path.join(__dirname, 'config.json'),
