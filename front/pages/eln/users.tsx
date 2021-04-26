@@ -11,9 +11,7 @@ import {
 } from '../../components/tailwind-ui';
 import {
   useUsersQuery,
-  UsersQuery,
-  AuthMethods,
-  AuthMethodsFragment,
+  UsersQuery
 } from '../../generated/graphql';
 
 export default function Users() {
@@ -55,15 +53,15 @@ function Header() {
 
 function Row(props: { value: UsersQuery['users'][number] }) {
   const [authMethodsKeys, authMethods] = useMemo(
-    () => [
-      Object.keys(props.value.authMethods ?? []).filter(
-        (authMethod) => !authMethod.startsWith('__'),
-      ) as (keyof Pick<
-        AuthMethods,
-        'local' | 'ldap' | 'oidc_azure' | 'oidc_google'
-      >)[],
-      props.value.authMethods ?? ([] as AuthMethodsFragment),
-    ],
+    () => {
+      const authMethods = props.value.authMethods ?? []
+      return [
+        Object.keys(authMethods).filter(
+          (authMethod) => !authMethod.startsWith('__'),
+        ),
+        authMethods,
+      ]
+    },
     [props.value.authMethods],
   );
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
@@ -9,7 +9,11 @@ export default function Login() {
   const {
     makeUrl,
     ctx: { session },
+    app: { env },
   } = useAdonisContext();
+
+  const backendUrl = useMemo(() => env.get('BACKEND_URL'), [env]);
+
   return (
     <Admin>
       <div className="px-4 mx-auto mt-8 max-w-7xl sm:px-6 lg:px-12">
@@ -22,7 +26,7 @@ export default function Login() {
             </Card.Header>
             <Card.Body>
               <form
-                action={makeUrl('AdminsController.auth')}
+                action={`${backendUrl}${makeUrl('AdminsController.auth')}`}
                 method="POST"
                 className="space-y-2"
               >

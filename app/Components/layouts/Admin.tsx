@@ -1,13 +1,22 @@
 import clsx from 'clsx';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
 import Base from './Base';
 
 export default function Admin(props: { children: ReactNode }) {
-  const { request } = useAdonisContext();
-  const currentUrl = request.url();
+  const {
+    request,
+    app: { env },
+  } = useAdonisContext();
+
+  const backendUrl = useMemo(() => env.get('BACKEND_URL'), [env]);
+  const currentUrl = useMemo(() => backendUrl + request.url(), [
+    backendUrl,
+    request,
+  ]);
+
   return (
     <Base>
       <nav className="bg-neutral-800">
@@ -17,12 +26,12 @@ export default function Admin(props: { children: ReactNode }) {
               <div className="sm:block sm:ml-6">
                 <div className="flex">
                   <NavLink
-                    href="/admin/config"
+                    href={`${backendUrl}/admin/config`}
                     label="Configuration"
                     currentUrl={currentUrl}
                   />
                   <NavLink
-                    href="/admin/addons"
+                    href={`${backendUrl}/admin/addons`}
                     label="Addons"
                     currentUrl={currentUrl}
                   />

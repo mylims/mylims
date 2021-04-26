@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
@@ -8,7 +8,13 @@ import Admin from '../layouts/Admin';
 import { Card, Input, Button } from '../tailwind-ui';
 
 export default function Config(props: { config: ConfigProps }) {
-  const { makeUrl } = useAdonisContext();
+  const {
+    makeUrl,
+    app: { env },
+  } = useAdonisContext();
+
+  const backendUrl = useMemo(() => env.get('BACKEND_URL'), [env]);
+
   return (
     <Admin>
       <div className="grid gap-10 mx-6 mt-12 lg:grid-cols-3 lg:max-w-none">
@@ -20,7 +26,7 @@ export default function Config(props: { config: ConfigProps }) {
           </Card.Header>
           <Card.Body>
             <form
-              action={makeUrl('AdminsController.changeConf')}
+              action={`${backendUrl}${makeUrl('AdminsController.changeConf')}`}
               method="POST"
               className="space-y-2"
             >
@@ -49,7 +55,7 @@ export default function Config(props: { config: ConfigProps }) {
           </Card.Header>
           <Card.Body>
             <form
-              action={makeUrl('AdminsController.changeConf')}
+              action={`${backendUrl}${makeUrl('AdminsController.changeConf')}`}
               method="POST"
               className="space-y-2"
             >
@@ -85,7 +91,7 @@ export default function Config(props: { config: ConfigProps }) {
           </Card.Header>
           <Card.Body>
             <form
-              action={makeUrl('AdminsController.changeConf')}
+              action={`${backendUrl}${makeUrl('AdminsController.changeConf')}`}
               method="POST"
               className="space-y-2"
             >

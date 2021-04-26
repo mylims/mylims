@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
@@ -44,14 +44,20 @@ function Row({ value: addon, index }: { value: Addon; index: number }) {
 }
 
 export default function AddonPage(props: { availableAddons: Addon[] }) {
-  const { makeUrl } = useAdonisContext();
+  const {
+    makeUrl,
+    app: { env },
+  } = useAdonisContext();
+
+  const backendUrl = useMemo(() => env.get('BACKEND_URL'), [env]);
+
   return (
     <Admin>
       <div className="flex flex-col mx-8 mt-2">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <form
-              action={makeUrl('AdminsController.addons')}
+              action={`${backendUrl}${makeUrl('AdminsController.addons')}`}
               method="POST"
               className="space-y-2"
             >

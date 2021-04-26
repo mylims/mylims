@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"next dev\" \"npm run codegen-watch\"",
     "build": "next build",
     "start": "next start",
     "eslint": "eslint . --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "check-types": "tsc --noEmit",
     "tailwind:build": "tailwindcss build tailwind.css -o ./styles/tailwind.out.css",
-    "components:update": "components-update -o components/tailwind-ui"
+    "components:update": "components-update -o components/tailwind-ui",
+    "codegen-watch": "graphql-codegen --config codegen.yml --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.3.14",
@@ -37,11 +38,17 @@
     "use-http": "^1.0.18"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.21.4",
+    "@graphql-codegen/fragment-matcher": "^2.0.1",
+    "@graphql-codegen/typescript": "^1.22.0",
+    "@graphql-codegen/typescript-operations": "^1.17.16",
+    "@graphql-codegen/typescript-react-apollo": "^2.2.4",
     "@types/apollo-upload-client": "^14.1.0",
     "@types/react-dom": "^17.0.3",
     "@zakodium/components-update": "^1.4.1",
     "@zakodium/eslint-config": "^3.0.1",
     "@zakodium/tailwind-config": "^2.0.2",
+    "concurrently": "^6.0.2",
     "eslint": "^7.23.0",
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",

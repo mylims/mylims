@@ -5,6 +5,11 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,19 +17,13 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: any;
 };
 
 export type Query = {
   __typename?: 'Query';
   users: Array<User>;
-};
-
-export type AuthMethods = {
-  __typename?: 'AuthMethods';
-  local?: Maybe<Scalars['String']>;
-  ldap?: Maybe<Scalars['String']>;
-  oidc_azure?: Maybe<Scalars['String']>;
-  oidc_google?: Maybe<Scalars['String']>;
 };
 
 export type User = {
@@ -34,13 +33,8 @@ export type User = {
   lastName?: Maybe<Scalars['String']>;
   emails: Array<Scalars['String']>;
   role: Scalars['String'];
-  authMethods?: Maybe<AuthMethods>;
+  authMethods?: Maybe<Scalars['JSONObject']>;
 };
-
-export type AuthMethodsFragment = { __typename?: 'AuthMethods' } & Pick<
-  AuthMethods,
-  'local' | 'ldap' | 'oidc_azure' | 'oidc_google'
->;
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -48,23 +42,11 @@ export type UsersQuery = { __typename?: 'Query' } & {
   users: Array<
     { __typename?: 'User' } & Pick<
       User,
-      'id' | 'lastName' | 'firstName' | 'emails' | 'role'
-    > & {
-        authMethods?: Maybe<
-          { __typename?: 'AuthMethods' } & AuthMethodsFragment
-        >;
-      }
+      'id' | 'lastName' | 'firstName' | 'emails' | 'role' | 'authMethods'
+    >
   >;
 };
 
-export const AuthMethodsFragmentDoc = gql`
-  fragment authMethods on AuthMethods {
-    local
-    ldap
-    oidc_azure
-    oidc_google
-  }
-`;
 export const UsersDocument = gql`
   query Users {
     users {
@@ -73,12 +55,9 @@ export const UsersDocument = gql`
       firstName
       emails
       role
-      authMethods {
-        ...authMethods
-      }
+      authMethods
     }
   }
-  ${AuthMethodsFragmentDoc}
 `;
 
 /**
@@ -102,9 +81,10 @@ export function useUsersQuery(
     UsersQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return ApolloReactHooks.useQuery<UsersQuery, UsersQueryVariables>(
     UsersDocument,
-    baseOptions,
+    options,
   );
 }
 export function useUsersLazyQuery(
@@ -113,9 +93,10 @@ export function useUsersLazyQuery(
     UsersQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return ApolloReactHooks.useLazyQuery<UsersQuery, UsersQueryVariables>(
     UsersDocument,
-    baseOptions,
+    options,
   );
 }
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;

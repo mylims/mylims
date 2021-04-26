@@ -1,4 +1,0 @@
-type AuthMethods {
-  oidc_azure: String
-  oidc_google: String
-}
