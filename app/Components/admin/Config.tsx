@@ -1,19 +1,17 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
 import { ConfigProps } from 'App/AppConfig';
 
+import env from '../../../env';
 import Admin from '../layouts/Admin';
 import { Card, Input, Button } from '../tailwind-ui';
 
-export default function Config(props: { config: ConfigProps }) {
-  const {
-    makeUrl,
-    app: { env },
-  } = useAdonisContext();
+const backendUrl = env.BACKEND_URL;
 
-  const backendUrl = useMemo(() => env.get('BACKEND_URL'), [env]);
+export default function Config(props: { config: ConfigProps }) {
+  const { makeUrl } = useAdonisContext();
 
   return (
     <Admin>

@@ -1,5 +1,3 @@
-scalar JSONObject
-
 type Query {
   users: [User!]!
 }
@@ -10,5 +8,5 @@ type User {
   lastName: String
   emails: [String!]!
   role: String!
-  authMethods: JSONObject
+  authMethods: JSONObject!
 }

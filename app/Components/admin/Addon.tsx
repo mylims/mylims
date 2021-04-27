@@ -1,11 +1,14 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
 import type { Addon } from 'App/AddonsManager';
 
+import env from '../../../env';
 import Admin from '../layouts/Admin';
 import { Button, Checkbox, Table } from '../tailwind-ui';
+
+const backendUrl = env.BACKEND_URL;
 
 function Header() {
   return (
@@ -44,12 +47,7 @@ function Row({ value: addon, index }: { value: Addon; index: number }) {
 }
 
 export default function AddonPage(props: { availableAddons: Addon[] }) {
-  const {
-    makeUrl,
-    app: { env },
-  } = useAdonisContext();
-
-  const backendUrl = useMemo(() => env.get('BACKEND_URL'), [env]);
+  const { makeUrl } = useAdonisContext();
 
   return (
     <Admin>

@@ -1,21 +1,18 @@
 import clsx from 'clsx';
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode } from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
+import env from '../../../env';
+
 import Base from './Base';
 
-export default function Admin(props: { children: ReactNode }) {
-  const {
-    request,
-    app: { env },
-  } = useAdonisContext();
+const backendUrl = env.BACKEND_URL;
 
-  const backendUrl = useMemo(() => env.get('BACKEND_URL'), [env]);
-  const currentUrl = useMemo(() => backendUrl + request.url(), [
-    backendUrl,
-    request,
-  ]);
+export default function Admin(props: { children: ReactNode }) {
+  const { request } = useAdonisContext();
+
+  const currentUrl = backendUrl + request.url();
 
   return (
     <Base>

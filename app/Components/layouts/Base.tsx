@@ -1,14 +1,10 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode } from 'react';
 
-import { useAdonisContext } from '@ioc:React';
+import env from '../../../env';
+
+const backendUrl = env.BACKEND_URL;
 
 export default function Base(props: { children: ReactNode }) {
-  const {
-    app: { env },
-  } = useAdonisContext();
-
-  const backendUrl = useMemo(() => env.get('BACKEND_URL'), [env]);
-
   return (
     <html lang="en">
       <head>

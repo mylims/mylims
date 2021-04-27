@@ -1,18 +1,18 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
+import env from '../../../env';
 import Admin from '../layouts/Admin';
 import { Card, Button, Input } from '../tailwind-ui';
+
+const backendUrl = env.BACKEND_URL;
 
 export default function Login() {
   const {
     makeUrl,
     ctx: { session },
-    app: { env },
   } = useAdonisContext();
-
-  const backendUrl = useMemo(() => env.get('BACKEND_URL'), [env]);
 
   return (
     <Admin>
