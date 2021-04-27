@@ -51,7 +51,7 @@
     "@lukeed/uuid": "^2.0.0",
     "@popperjs/core": "^2.9.2",
     "@types/react-datepicker": "^3.1.8",
-    "@zakodium/adonis-mongodb": "^0.6.0",
+    "@zakodium/adonis-mongodb": "^0.7.0",
     "adonis-apollo": "^0.13.1",
     "adonis-react": "^0.2.0",
     "base-x": "^3.0.8",
