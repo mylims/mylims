@@ -35,11 +35,8 @@ export default class AuthController {
   }
 
   public async myself({ response, auth, session }: HttpContextContract) {
-    console.log('1');
     const { user } = auth;
-    console.log('2');
     if (user) {
-      console.log('3');
       return response.ok({
         isAuth: true,
         email: user.emails[0],
@@ -47,7 +44,6 @@ export default class AuthController {
         method: session.get('mylims.auth.method'),
       });
     } else {
-      console.log('4');
       return response.ok({
         isAuth: false,
       });
