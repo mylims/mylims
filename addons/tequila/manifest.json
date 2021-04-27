@@ -1,0 +1,6 @@
+{
+  "displayName": "tequila authentication",
+  "description": "Allow tequila user to authenticate on the platform.",
+  "routes": "./routes",
+  "schemas": "./Schemas"
+}
