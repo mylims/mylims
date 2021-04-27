@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 
-import env from '../../../env';
-
-const backendUrl = env.BACKEND_URL;
+import { useBackendUrl } from '../hooks/useBackendUrl';
 
 export default function Base(props: { children: ReactNode }) {
+  const backendUrl = useBackendUrl();
+
   return (
     <html lang="en">
       <head>

@@ -17,7 +17,8 @@ FROM node:14
 WORKDIR /usr/mylims
 ENV NODE_ENV production
 #ENV ENV_SILENT true
-RUN npm ci
 COPY --from=builder /usr/mylims/build ./
+COPY --from=deps /usr/mylims/package*.json ./
+RUN npm ci --ignore-scripts
 EXPOSE 3333
 CMD [ "node", "server.js" ]

@@ -3,15 +3,14 @@ import React, { ReactNode } from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
-import env from '../../../env';
+import { useBackendUrl } from '../hooks/useBackendUrl';
 
 import Base from './Base';
-
-const backendUrl = env.BACKEND_URL;
 
 export default function Admin(props: { children: ReactNode }) {
   const { request } = useAdonisContext();
 
+  const backendUrl = useBackendUrl();
   const currentUrl = backendUrl + request.url();
 
   return (

@@ -4,11 +4,9 @@ import { useAdonisContext } from '@ioc:React';
 
 import type { Addon } from 'App/AddonsManager';
 
-import env from '../../../env';
+import { useBackendUrl } from '../hooks/useBackendUrl';
 import Admin from '../layouts/Admin';
 import { Button, Checkbox, Table } from '../tailwind-ui';
-
-const backendUrl = env.BACKEND_URL;
 
 function Header() {
   return (
@@ -48,6 +46,7 @@ function Row({ value: addon, index }: { value: Addon; index: number }) {
 
 export default function AddonPage(props: { availableAddons: Addon[] }) {
   const { makeUrl } = useAdonisContext();
+  const backendUrl = useBackendUrl();
 
   return (
     <Admin>
@@ -55,7 +54,9 @@ export default function AddonPage(props: { availableAddons: Addon[] }) {
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <form
-              action={`${backendUrl}${makeUrl('AdminsController.addons')}`}
+              action={makeUrl('AdminsController.addons', undefined, {
+                prefixUrl: backendUrl,
+              })}
               method="POST"
               className="space-y-2"
             >

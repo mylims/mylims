@@ -2,17 +2,16 @@ import React from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
-import env from '../../../env';
+import { useBackendUrl } from '../hooks/useBackendUrl';
 import Admin from '../layouts/Admin';
 import { Card, Button, Input } from '../tailwind-ui';
-
-const backendUrl = env.BACKEND_URL;
 
 export default function Login() {
   const {
     makeUrl,
     ctx: { session },
   } = useAdonisContext();
+  const backendUrl = useBackendUrl();
 
   return (
     <Admin>
@@ -26,7 +25,9 @@ export default function Login() {
             </Card.Header>
             <Card.Body>
               <form
-                action={`${backendUrl}${makeUrl('AdminsController.auth')}`}
+                action={makeUrl('AdminsController.auth', undefined, {
+                  prefixUrl: backendUrl,
+                })}
                 method="POST"
                 className="space-y-2"
               >
