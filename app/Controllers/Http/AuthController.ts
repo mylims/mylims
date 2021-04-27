@@ -13,6 +13,7 @@ export default class AuthController {
     session,
   }: HttpContextContract) {
     const { email, password } = await request.validate(LoginValidator);
+
     const credential = await Credential.findOne({ email });
     if (
       credential === null ||
