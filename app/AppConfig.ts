@@ -15,6 +15,10 @@ const defaultConfig: ConfigFile = {
       appPassword: 'adminpassword',
       baseUserDN: 'ou=users,dc=example,dc=org',
     },
+    tequila: {
+      hostUrl: 'https://tequila.epfl.ch/cgi-bin/tequila',
+      serviceName: 'mylims',
+    },
     mongodb: { url: 'mongodb://localhost:27017', database: 'mylims' },
     session: { sessionAge: '2h' },
     enabledAddons: [],
@@ -43,6 +47,11 @@ export interface ConfigProps {
     appDN: string;
     appPassword: string;
     baseUserDN: string;
+  };
+  tequila: {
+    hostUrl: string;
+    serviceName: string;
+    groupName?: string;
   };
   mongodb: {
     url: string;
