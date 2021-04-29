@@ -1,4 +1,8 @@
-import { GraphQLResolveInfo } from 'graphql';
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from 'graphql';
 import User from './Models/User';
 import FileSyncOption from './addons/file-sync/Models/FileSyncOption';
 import { ApolloBaseContext } from '@ioc:Apollo/Config';
@@ -21,6 +25,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: any;
 };
 
 export type GqlQuery = {
@@ -31,13 +37,6 @@ export type GqlQuery = {
 
 export type GqlQueryFileSyncOptionArgs = {
   id: Scalars['ID'];
-};
-
-export type GqlAuthMethods = {
-  local?: Maybe<Scalars['String']>;
-  ldap?: Maybe<Scalars['String']>;
-  oidc_azure?: Maybe<Scalars['String']>;
-  oidc_google?: Maybe<Scalars['String']>;
 };
 
 export type GqlUser = {
@@ -219,6 +218,7 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type GqlResolversTypes = ResolversObject<{
+  JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
   Query: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   User: ResolverTypeWrapper<User>;
@@ -236,6 +236,7 @@ export type GqlResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type GqlResolversParentTypes = ResolversObject<{
+  JSONObject: Scalars['JSONObject'];
   Query: {};
   ID: Scalars['ID'];
   User: User;
@@ -249,6 +250,11 @@ export type GqlResolversParentTypes = ResolversObject<{
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
 }>;
+
+export interface GqlJsonObjectScalarConfig
+  extends GraphQLScalarTypeConfig<GqlResolversTypes['JSONObject'], any> {
+  name: 'JSONObject';
+}
 
 export type GqlQueryResolvers<
   ContextType = ApolloBaseContext,
@@ -266,25 +272,6 @@ export type GqlQueryResolvers<
     ContextType,
     RequireFields<GqlQueryFileSyncOptionArgs, 'id'>
   >;
-}>;
-
-export type GqlAuthMethodsResolvers<
-  ContextType = ApolloBaseContext,
-  ParentType extends GqlResolversParentTypes['AuthMethods'] = GqlResolversParentTypes['AuthMethods']
-> = ResolversObject<{
-  local?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
-  ldap?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
-  oidc_azure?: Resolver<
-    Maybe<GqlResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  oidc_google?: Resolver<
-    Maybe<GqlResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GqlUserResolvers<
@@ -360,8 +347,8 @@ export type GqlFileSyncOptionResolvers<
 }>;
 
 export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
+  JSONObject?: GraphQLScalarType;
   Query?: GqlQueryResolvers<ContextType>;
-  AuthMethods?: GqlAuthMethodsResolvers<ContextType>;
   User?: GqlUserResolvers<ContextType>;
   Mutation?: GqlMutationResolvers<ContextType>;
   Pattern?: GqlPatternResolvers<ContextType>;

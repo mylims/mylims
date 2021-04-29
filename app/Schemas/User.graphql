@@ -2,15 +2,11 @@ type Query {
   users: [User!]!
 }
 
-type AuthMethods {
-  local: String
-}
-
 type User {
   id: ID!
   firstName: String
   lastName: String
   emails: [String!]!
   role: String!
-  authMethods: AuthMethods
+  authMethods: JSONObject!
 }

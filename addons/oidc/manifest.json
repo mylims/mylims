@@ -1,6 +1,5 @@
 {
   "displayName": "OIDC authentication",
   "description": "Allow OIDC user to authenticate on the platform.",
-  "routes": "./routes",
-  "schemas": "./Schemas"
+  "routes": "./routes"
 }

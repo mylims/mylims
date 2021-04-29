@@ -1,3 +1,0 @@
-type AuthMethods {
-  ldap: String
-}
