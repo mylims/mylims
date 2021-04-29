@@ -1,6 +1,5 @@
 {
   "displayName": "LDAP authentication",
   "description": "Allow LDAP user to authenticate on the platform.",
-  "routes": "./routes",
-  "schemas": "./Schemas"
+  "routes": "./routes"
 }

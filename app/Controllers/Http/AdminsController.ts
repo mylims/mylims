@@ -12,6 +12,7 @@ import Config from 'App/Components/admin/Config';
 import Login from 'App/Components/admin/Login';
 
 const adminPass = Env.get('ADMIN_PASSWORD');
+const backendUrl = Env.get('BACKEND_URL');
 
 export default class AdminsController {
   // Ask for admin password
@@ -46,7 +47,7 @@ export default class AdminsController {
 
     // Sets the session cookie and go to config menu
     session.put('mylims.admin.sudo', Date.now());
-    return response.redirect('/admin/config');
+    return response.redirect(`${backendUrl}/admin/config`);
   }
 
   // Modifies the config file
@@ -79,14 +80,14 @@ export default class AdminsController {
     }
 
     Event.emit('mylims:restart', 'config update');
-    response.redirect('/admin/config');
+    response.redirect(`${backendUrl}/admin/config`);
   }
 
   public async addons({ request, response }: HttpContextContract) {
     const newlyEnabledAddons = Object.keys(request.all());
     setConfig('enabledAddons', newlyEnabledAddons);
     Event.emit('mylims:restart', 'update loaded addons');
-    response.redirect('/admin/addons');
+    response.redirect(`${backendUrl}/admin/addons`);
   }
 
   private async testMongoConnection(

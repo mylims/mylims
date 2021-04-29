@@ -9,12 +9,7 @@ import {
   Alert,
   AlertType,
 } from '../../components/tailwind-ui';
-import {
-  useUsersQuery,
-  UsersQuery,
-  AuthMethods,
-  AuthMethodsFragment,
-} from '../../generated/graphql';
+import { useUsersQuery, UsersQuery } from '../../generated/graphql';
 
 export default function Users() {
   const { loading, error, data } = useUsersQuery();
@@ -54,18 +49,15 @@ function Header() {
 }
 
 function Row(props: { value: UsersQuery['users'][number] }) {
-  const [authMethodsKeys, authMethods] = useMemo(
-    () => [
-      Object.keys(props.value.authMethods ?? []).filter(
+  const [authMethodsKeys, authMethods] = useMemo(() => {
+    const authMethods = props.value.authMethods ?? [];
+    return [
+      Object.keys(authMethods).filter(
         (authMethod) => !authMethod.startsWith('__'),
-      ) as (keyof Pick<
-        AuthMethods,
-        'local' | 'ldap' | 'oidc_azure' | 'oidc_google'
-      >)[],
-      props.value.authMethods ?? ([] as AuthMethodsFragment),
-    ],
-    [props.value.authMethods],
-  );
+      ),
+      authMethods,
+    ];
+  }, [props.value.authMethods]);
 
   return (
     <tr>

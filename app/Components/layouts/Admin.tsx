@@ -3,11 +3,16 @@ import React, { ReactNode } from 'react';
 
 import { useAdonisContext } from '@ioc:React';
 
+import { useBackendUrl } from '../hooks/useBackendUrl';
+
 import Base from './Base';
 
 export default function Admin(props: { children: ReactNode }) {
   const { request } = useAdonisContext();
-  const currentUrl = request.url();
+
+  const backendUrl = useBackendUrl();
+  const currentUrl = backendUrl + request.url();
+
   return (
     <Base>
       <nav className="bg-neutral-800">
@@ -17,12 +22,12 @@ export default function Admin(props: { children: ReactNode }) {
               <div className="sm:block sm:ml-6">
                 <div className="flex">
                   <NavLink
-                    href="/admin/config"
+                    href={`${backendUrl}/admin/config`}
                     label="Configuration"
                     currentUrl={currentUrl}
                   />
                   <NavLink
-                    href="/admin/addons"
+                    href={`${backendUrl}/admin/addons`}
                     label="Addons"
                     currentUrl={currentUrl}
                   />

@@ -1,4 +1,8 @@
-import { GraphQLResolveInfo } from 'graphql';
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from 'graphql';
 import User from './Models/User';
 import { ApolloBaseContext } from '@ioc:Apollo/Config';
 export type Maybe<T> = T | null;
@@ -16,17 +20,12 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: any;
 };
 
 export type GqlQuery = {
   users: Array<GqlUser>;
-};
-
-export type GqlAuthMethods = {
-  local?: Maybe<Scalars['String']>;
-  ldap?: Maybe<Scalars['String']>;
-  oidc_azure?: Maybe<Scalars['String']>;
-  oidc_google?: Maybe<Scalars['String']>;
 };
 
 export type GqlUser = {
@@ -35,7 +34,7 @@ export type GqlUser = {
   lastName?: Maybe<Scalars['String']>;
   emails: Array<Scalars['String']>;
   role: Scalars['String'];
-  authMethods?: Maybe<GqlAuthMethods>;
+  authMethods?: Maybe<Scalars['JSONObject']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -157,48 +156,34 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type GqlResolversTypes = ResolversObject<{
+  JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
   Query: ResolverTypeWrapper<{}>;
-  AuthMethods: ResolverTypeWrapper<GqlAuthMethods>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type GqlResolversParentTypes = ResolversObject<{
+  JSONObject: Scalars['JSONObject'];
   Query: {};
-  AuthMethods: GqlAuthMethods;
-  String: Scalars['String'];
   User: User;
   ID: Scalars['ID'];
+  String: Scalars['String'];
   Boolean: Scalars['Boolean'];
 }>;
+
+export interface GqlJsonObjectScalarConfig
+  extends GraphQLScalarTypeConfig<GqlResolversTypes['JSONObject'], any> {
+  name: 'JSONObject';
+}
 
 export type GqlQueryResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['Query'] = GqlResolversParentTypes['Query']
 > = ResolversObject<{
   users?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
-}>;
-
-export type GqlAuthMethodsResolvers<
-  ContextType = ApolloBaseContext,
-  ParentType extends GqlResolversParentTypes['AuthMethods'] = GqlResolversParentTypes['AuthMethods']
-> = ResolversObject<{
-  local?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
-  ldap?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
-  oidc_azure?: Resolver<
-    Maybe<GqlResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  oidc_google?: Resolver<
-    Maybe<GqlResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GqlUserResolvers<
@@ -223,7 +208,7 @@ export type GqlUserResolvers<
   >;
   role?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   authMethods?: Resolver<
-    Maybe<GqlResolversTypes['AuthMethods']>,
+    Maybe<GqlResolversTypes['JSONObject']>,
     ParentType,
     ContextType
   >;
@@ -231,7 +216,7 @@ export type GqlUserResolvers<
 }>;
 
 export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
+  JSONObject?: GraphQLScalarType;
   Query?: GqlQueryResolvers<ContextType>;
-  AuthMethods?: GqlAuthMethodsResolvers<ContextType>;
   User?: GqlUserResolvers<ContextType>;
 }>;
