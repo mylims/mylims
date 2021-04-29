@@ -38,7 +38,7 @@ npm run dev
 If it's the first time, don't forget to copy or create the `.env` file and is necessary to run the migration command
 
 ```shell
-cp .env.example
+cp .env.example .env
 npm i
 node ace mongodb:migration:run
 ```
