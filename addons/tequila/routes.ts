@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 import Env from '@ioc:Adonis/Core/Env';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Route from '@ioc:Adonis/Core/Route';
@@ -5,31 +7,25 @@ import UserManager from '@ioc:Zakodium/User';
 
 import { getConfig } from 'App/AppConfig';
 
+import { objectToUrl, reconciliate, textToObject } from './utils';
+
 export interface TequilaProviderConfig {
   hostUrl: string;
-  groupName?: string;
 }
 
 const config: TequilaProviderConfig = getConfig('tequila');
 
 const userFields = ['name', 'firstname', 'email', 'uniqueid'] as const;
-type TequilaUser = { [k in typeof userFields[number]]: string };
 const requestBody: Record<string, string | undefined> = {
-  urlaccess: `${Env.get('BACKEND_URL')}/tequila/validate`,
+  urlaccess: `${Env.get('BACKEND_URL')}/addons/tequila/validate`,
   request: userFields.join(','),
-  require: config.groupName && `group=${config.groupName}`,
 };
 
 Route.get('/login', async ({ response }: HttpContextContract) => {
   try {
-    // Append query params
-    const url = new URL(`${config.hostUrl}/createrequest`);
-    for (const key in requestBody) {
-      if (requestBody[key] !== undefined) {
-        url.searchParams.append(key, requestBody[key] as string);
-      }
-    }
-    const requestAns = await fetch(url.toString()).then((res) => res.text());
+    const requestAns = await fetch(
+      objectToUrl(`${config.hostUrl}/createrequest`, requestBody),
+    ).then((res) => res.text());
     const requestKey: string | undefined = requestAns.split('=')[1];
 
     if (requestKey) {
@@ -50,7 +46,7 @@ Route.get(
   '/validate',
   async ({ request, response, auth, session }: HttpContextContract) => {
     // Save session key
-    const responseKey = request.param('key');
+    const responseKey = request.all().key;
     if (!responseKey) {
       return response.internalServerError({ errors: ['Empty response key'] });
     }
@@ -58,11 +54,14 @@ Route.get(
 
     try {
       // Constructs query url
-      const url = new URL(`${config.hostUrl}/fetchattributes`);
-      url.searchParams.append('key', responseKey);
-      const authUser = await fetch(url.toString());
+      const url = `${config.hostUrl}/fetchattributes?key=${responseKey}`;
+      const authUser = await fetch(url);
+      if (authUser.status !== 200) {
+        return response.internalServerError({ errors: [authUser.statusText] });
+      }
 
-      const tequilaUser: TequilaUser = await authUser.json();
+      const tequilaResponse = await authUser.text();
+      const tequilaUser = textToObject(tequilaResponse);
       const internalUser = await UserManager.getUser(
         'tequila',
         tequilaUser.uniqueid,
@@ -73,23 +72,7 @@ Route.get(
       }
 
       // Update user information
-      if (
-        tequilaUser.email &&
-        !internalUser.emails.includes(tequilaUser.email)
-      ) {
-        internalUser.emails.push(tequilaUser.email);
-      }
-      if (tequilaUser.name && internalUser.lastName !== tequilaUser.name) {
-        internalUser.lastName = tequilaUser.name;
-      }
-      if (
-        tequilaUser.firstname &&
-        internalUser.firstName !== tequilaUser.firstname
-      ) {
-        internalUser.firstName = tequilaUser.firstname;
-      }
-      await internalUser.save();
-
+      await reconciliate(internalUser, tequilaUser);
       await auth.login(internalUser);
       session.put('mylims.auth.method', 'tequila');
 
