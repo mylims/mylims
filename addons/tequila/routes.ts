@@ -21,7 +21,7 @@ const requestBody: Record<string, string | undefined> = {
   require: config.groupName && `group=${config.groupName}`,
 };
 
-Route.post('/login', async ({ response }: HttpContextContract) => {
+Route.get('/login', async ({ response }: HttpContextContract) => {
   try {
     // append query params
     const url = new URL(`${config.hostUrl}/createrequest`);
