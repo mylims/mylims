@@ -17,7 +17,7 @@ const defaultConfig: ConfigFile = {
     },
     tequila: {
       hostUrl: 'https://tequila.epfl.ch/cgi-bin/tequila',
-      serviceName: 'mylims',
+      groupName: 'powerlab',
     },
     mongodb: { url: 'mongodb://localhost:27017', database: 'mylims' },
     session: { sessionAge: '2h' },
@@ -50,7 +50,6 @@ export interface ConfigProps {
   };
   tequila: {
     hostUrl: string;
-    serviceName: string;
     groupName?: string;
   };
   mongodb: {
