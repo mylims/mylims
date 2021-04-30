@@ -11,10 +11,9 @@ export interface TequilaProviderConfig {
 }
 
 const config: TequilaProviderConfig = getConfig('tequila');
+
 const userFields = ['name', 'firstname', 'email', 'uniqueid'] as const;
-type TequilaUser = {
-  [k in typeof userFields[number]]: string;
-};
+type TequilaUser = { [k in typeof userFields[number]]: string };
 const requestBody: Record<string, string | undefined> = {
   urlaccess: `${Env.get('BACKEND_URL')}/tequila/validate`,
   request: userFields.join(','),
@@ -23,7 +22,7 @@ const requestBody: Record<string, string | undefined> = {
 
 Route.get('/login', async ({ response }: HttpContextContract) => {
   try {
-    // append query params
+    // Append query params
     const url = new URL(`${config.hostUrl}/createrequest`);
     for (const key in requestBody) {
       if (requestBody[key] !== undefined) {
@@ -50,9 +49,15 @@ Route.get('/login', async ({ response }: HttpContextContract) => {
 Route.get(
   '/validate',
   async ({ request, response, auth, session }: HttpContextContract) => {
+    // Save session key
     const responseKey = request.param('key');
+    if (!responseKey) {
+      return response.internalServerError({ errors: ['Empty response key'] });
+    }
     session.put('tequila.key', responseKey);
+
     try {
+      // Constructs query url
       const url = new URL(`${config.hostUrl}/fetchattributes`);
       url.searchParams.append('key', responseKey);
       const authUser = await fetch(url.toString());
@@ -67,6 +72,7 @@ Route.get(
         return response.internalServerError({ errors: ['Failed to get user'] });
       }
 
+      // Update user information
       if (
         tequilaUser.email &&
         !internalUser.emails.includes(tequilaUser.email)
