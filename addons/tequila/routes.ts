@@ -7,7 +7,6 @@ import { getConfig } from 'App/AppConfig';
 
 export interface TequilaProviderConfig {
   hostUrl: string;
-  serviceName: string;
   groupName?: string;
 }
 
@@ -17,25 +16,26 @@ type TequilaUser = {
   [k in typeof userFields[number]]: string;
 };
 const requestBody: Record<string, string | undefined> = {
-  urlacces: `${Env.get('BACKEND_URL')}/tequila/validate`,
-  service: config.serviceName,
+  urlaccess: `${Env.get('BACKEND_URL')}/tequila/validate`,
   request: userFields.join(','),
   require: config.groupName && `group=${config.groupName}`,
 };
 
 Route.post('/login', async ({ response }: HttpContextContract) => {
   try {
-    const requestKey = await fetch(`${config.hostUrl}/createrequest`, {
-      method: 'POST',
-      body: Object.keys(requestBody)
-        .filter((key) => !!requestBody[key])
-        .map((key) => `${key}=${requestBody[key] as string}`)
-        .join('\n'),
-      credentials: 'include',
-    });
-    if (requestKey.body !== null) {
+    // append query params
+    const url = new URL(`${config.hostUrl}/createrequest`);
+    for (const key in requestBody) {
+      if (requestBody[key] !== undefined) {
+        url.searchParams.append(key, requestBody[key] as string);
+      }
+    }
+    const requestAns = await fetch(url.toString()).then((res) => res.text());
+    const requestKey: string | undefined = requestAns.split('=')[1];
+
+    if (requestKey) {
       response.redirect(
-        `${config.hostUrl}/requestauth?requestkey=${String(requestKey.body)}`,
+        `${config.hostUrl}/requestauth?requestkey=${requestKey}`,
       );
     } else {
       return response.badRequest({
@@ -53,11 +53,10 @@ Route.get(
     const responseKey = request.param('key');
     session.put('tequila.key', responseKey);
     try {
-      const authUser = await fetch(`${config.hostUrl}/fetchattributes`, {
-        method: 'POST',
-        body: `key=${responseKey}`,
-        credentials: 'include',
-      });
+      const url = new URL(`${config.hostUrl}/fetchattributes`);
+      url.searchParams.append('key', responseKey);
+      const authUser = await fetch(url.toString());
+
       const tequilaUser: TequilaUser = await authUser.json();
       const internalUser = await UserManager.getUser(
         'tequila',
