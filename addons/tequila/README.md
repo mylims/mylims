@@ -15,8 +15,8 @@ There are 3 actors in the Tequila authentication process. A people with a browse
 7. **Application** will see **User** comes back, but this time, it finds the request key it was waiting for.
 8. It first tries to see it there is a session already opened for this key.
 9. If there is, **User** is given access to the services of **Application**.
-10. But just after **User** returns from **Tequila**, there is no such session. So, **Application** calls another URL on **Tequila** with the command ‘fetchattributes’, along with the request key.
-11. **Tequila** sends back the values of the attributes relative to **User** (username, name, etc...).
+10. But just after **User** returns from **Tequila**, there is no such session. So, **Application** calls another URL on **Tequila** with the command `fetchattributes`, along with the request key.
+11. **Tequila** sends back the values of the attributes relative to **User**. All the attributes that you can ask about the user are documented here: https://tequila.epfl.ch/serverinfo.
 12. **Application** creates a Session for **User** with all the attributes values stored in it for future use.
 13. **Application** also set a cookie in **User**'s browser with a session key.
 
