@@ -174,13 +174,6 @@ export default function Config(props: { config: ConfigProps }) {
                 name="hostUrl"
                 defaultValue={props.config.tequila.hostUrl}
               />
-              <Input
-                id="groupName"
-                label="Tequila group name"
-                type="text"
-                name="groupName"
-                defaultValue={props.config.tequila.groupName}
-              />
               <Button type="submit">Update configuration</Button>
             </form>
           </Card.Body>
