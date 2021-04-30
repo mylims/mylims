@@ -145,6 +145,46 @@ export default function Config(props: { config: ConfigProps }) {
             </form>
           </Card.Body>
         </Card>
+
+        {/* Tequila configuration */}
+        <Card>
+          <Card.Header>
+            <h3 className="text-lg font-medium leading-6 text-neutral-900">
+              Tequila
+            </h3>
+          </Card.Header>
+          <Card.Body>
+            <form
+              action={makeUrl('AdminsController.changeConf', undefined, {
+                prefixUrl: backendUrl,
+              })}
+              method="POST"
+              className="space-y-2"
+            >
+              <input
+                type="hidden"
+                id="confkey"
+                name="confkey"
+                value="tequila"
+              />
+              <Input
+                id="hostUrl"
+                label="Tequila URL"
+                type="text"
+                name="hostUrl"
+                defaultValue={props.config.tequila.hostUrl}
+              />
+              <Input
+                id="groupName"
+                label="Tequila group name"
+                type="text"
+                name="groupName"
+                defaultValue={props.config.tequila.groupName}
+              />
+              <Button type="submit">Update configuration</Button>
+            </form>
+          </Card.Body>
+        </Card>
       </div>
     </Admin>
   );
