@@ -5,20 +5,17 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Route from '@ioc:Adonis/Core/Route';
 import UserManager from '@ioc:Zakodium/User';
 
-import { getConfig } from 'App/AppConfig';
+import { ConfigProps, getConfig } from 'App/AppConfig';
 
 import { objectToUrl, reconciliate, textToObject } from './utils';
 
-export interface TequilaProviderConfig {
-  hostUrl: string;
-}
-
-const config: TequilaProviderConfig = getConfig('tequila');
+const config: ConfigProps['tequila'] = getConfig('tequila');
 
 const userFields = ['name', 'firstname', 'email', 'uniqueid'] as const;
 const requestBody: Record<string, string | undefined> = {
   urlaccess: `${Env.get('BACKEND_URL')}/addons/tequila/validate`,
   request: userFields.join(','),
+  service: config.serviceName,
 };
 
 Route.get('/login', async ({ response }: HttpContextContract) => {

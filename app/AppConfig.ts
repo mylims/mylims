@@ -16,7 +16,8 @@ const defaultConfig: ConfigFile = {
       baseUserDN: 'ou=users,dc=example,dc=org',
     },
     tequila: {
-      hostUrl: 'https://tequila.epfl.ch/cgi-bin/tequila',
+      hostUrl: 'https://test-tequila.epfl.ch/cgi-bin/tequila',
+      serviceName: 'myLIMS',
     },
     mongodb: { url: 'mongodb://localhost:27017', database: 'mylims' },
     session: { sessionAge: '2h' },
@@ -49,6 +50,7 @@ export interface ConfigProps {
   };
   tequila: {
     hostUrl: string;
+    serviceName: string;
   };
   mongodb: {
     url: string;
