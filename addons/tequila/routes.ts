@@ -30,7 +30,7 @@ Route.get('/login', async ({ response }: HttpContextContract) => {
 
     if (requestKey) {
       response.redirect(
-        `${config.hostUrl}/requestauth?requestkey=${requestKey}`,
+        `${config.hostUrl}/requestauth?requestkey=${requestKey.trim()}`,
       );
     } else {
       return response.badRequest({
@@ -46,7 +46,7 @@ Route.get(
   '/validate',
   async ({ request, response, auth, session }: HttpContextContract) => {
     // Save session key
-    const responseKey = request.all().key;
+    const responseKey = request.all().key.trim();
     if (!responseKey) {
       return response.internalServerError({ errors: ['Empty response key'] });
     }
@@ -62,6 +62,8 @@ Route.get(
 
       const tequilaResponse = await authUser.text();
       const tequilaUser = textToObject(tequilaResponse);
+      if (!tequilaUser.uniqueid) return response.ok(authUser);
+
       const internalUser = await UserManager.getUser(
         'tequila',
         tequilaUser.uniqueid,
