@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import User from './Models/User';
+import FileSyncOption from './addons/file-sync/Models/FileSyncOption';
 import { ApolloBaseContext } from '@ioc:Apollo/Config';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -9,6 +10,10 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
   { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
   { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = {
+  [X in Exclude<keyof T, K>]?: T[X];
+} &
+  { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -20,6 +25,12 @@ export type Scalars = {
 
 export type GqlQuery = {
   users: Array<GqlUser>;
+  fileSyncOptions: Array<GqlFileSyncOption>;
+  fileSyncOption: GqlFileSyncOption;
+};
+
+export type GqlQueryFileSyncOptionArgs = {
+  id: Scalars['ID'];
 };
 
 export type GqlAuthMethods = {
@@ -35,7 +46,58 @@ export type GqlUser = {
   lastName?: Maybe<Scalars['String']>;
   emails: Array<Scalars['String']>;
   role: Scalars['String'];
-  authMethods?: Maybe<GqlAuthMethods>;
+  authMethods: Scalars['JSONObject'];
+};
+
+export type GqlMutation = {
+  createFileSyncOption: GqlFileSyncOption;
+  editFileSyncOption: GqlFileSyncOption;
+};
+
+export type GqlMutationCreateFileSyncOptionArgs = {
+  input: GqlNewFileSyncOptionInput;
+};
+
+export type GqlMutationEditFileSyncOptionArgs = {
+  input: GqlEditFileSyncOptionInput;
+};
+
+export enum GqlPatternType {
+  EXCLUDE = 'exclude',
+  INCLUDE = 'include',
+}
+
+export type GqlPattern = {
+  type: GqlPatternType;
+  pattern: Scalars['String'];
+};
+
+export type GqlFileSyncOption = {
+  id: Scalars['ID'];
+  enabled: Scalars['Boolean'];
+  root: Scalars['String'];
+  maxDepth: Scalars['Int'];
+  patterns: Array<GqlPattern>;
+};
+
+export type GqlNewFileSyncOptionInput = {
+  enabled: Scalars['Boolean'];
+  root: Scalars['String'];
+  maxDepth: Scalars['Int'];
+  patterns: Array<GqlFileSyncOptionPatternInput>;
+};
+
+export type GqlEditFileSyncOptionInput = {
+  id: Scalars['ID'];
+  enabled: Scalars['Boolean'];
+  root: Scalars['String'];
+  maxDepth: Scalars['Int'];
+  patterns: Array<GqlFileSyncOptionPatternInput>;
+};
+
+export type GqlFileSyncOptionPatternInput = {
+  type: GqlPatternType;
+  pattern: Scalars['String'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -158,21 +220,34 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type GqlResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
-  AuthMethods: ResolverTypeWrapper<GqlAuthMethods>;
-  String: ResolverTypeWrapper<Scalars['String']>;
-  User: ResolverTypeWrapper<User>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  User: ResolverTypeWrapper<User>;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  PatternType: GqlPatternType;
+  Pattern: ResolverTypeWrapper<GqlPattern>;
+  FileSyncOption: ResolverTypeWrapper<FileSyncOption>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
+  EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
+  FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type GqlResolversParentTypes = ResolversObject<{
   Query: {};
-  AuthMethods: GqlAuthMethods;
-  String: Scalars['String'];
-  User: User;
   ID: Scalars['ID'];
+  User: User;
+  String: Scalars['String'];
+  Mutation: {};
+  Pattern: GqlPattern;
+  FileSyncOption: FileSyncOption;
   Boolean: Scalars['Boolean'];
+  Int: Scalars['Int'];
+  NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
+  EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
+  FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
 }>;
 
 export type GqlQueryResolvers<
@@ -180,6 +255,17 @@ export type GqlQueryResolvers<
   ParentType extends GqlResolversParentTypes['Query'] = GqlResolversParentTypes['Query']
 > = ResolversObject<{
   users?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
+  fileSyncOptions?: Resolver<
+    Array<GqlResolversTypes['FileSyncOption']>,
+    ParentType,
+    ContextType
+  >;
+  fileSyncOption?: Resolver<
+    GqlResolversTypes['FileSyncOption'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryFileSyncOptionArgs, 'id'>
+  >;
 }>;
 
 export type GqlAuthMethodsResolvers<
@@ -223,7 +309,50 @@ export type GqlUserResolvers<
   >;
   role?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   authMethods?: Resolver<
-    Maybe<GqlResolversTypes['AuthMethods']>,
+    GqlResolversTypes['JSONObject'],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlMutationResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['Mutation'] = GqlResolversParentTypes['Mutation']
+> = ResolversObject<{
+  createFileSyncOption?: Resolver<
+    GqlResolversTypes['FileSyncOption'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationCreateFileSyncOptionArgs, 'input'>
+  >;
+  editFileSyncOption?: Resolver<
+    GqlResolversTypes['FileSyncOption'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationEditFileSyncOptionArgs, 'input'>
+  >;
+}>;
+
+export type GqlPatternResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['Pattern'] = GqlResolversParentTypes['Pattern']
+> = ResolversObject<{
+  type?: Resolver<GqlResolversTypes['PatternType'], ParentType, ContextType>;
+  pattern?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlFileSyncOptionResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['FileSyncOption'] = GqlResolversParentTypes['FileSyncOption']
+> = ResolversObject<{
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
+  enabled?: Resolver<GqlResolversTypes['Boolean'], ParentType, ContextType>;
+  root?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  maxDepth?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  patterns?: Resolver<
+    Array<GqlResolversTypes['Pattern']>,
     ParentType,
     ContextType
   >;
@@ -234,4 +363,7 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   Query?: GqlQueryResolvers<ContextType>;
   AuthMethods?: GqlAuthMethodsResolvers<ContextType>;
   User?: GqlUserResolvers<ContextType>;
+  Mutation?: GqlMutationResolvers<ContextType>;
+  Pattern?: GqlPatternResolvers<ContextType>;
+  FileSyncOption?: GqlFileSyncOptionResolvers<ContextType>;
 }>;

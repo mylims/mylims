@@ -9,10 +9,11 @@ import MenuDropDown from './MenuDropDown';
 import { ZakodiumSolidSvg } from './tailwind-ui';
 
 interface ElnLayoutProps {
+  pageTitle?: string;
   children: React.ReactNode;
 }
 
-export default function ElnLayout({ children }: ElnLayoutProps) {
+export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
   const router = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { isAuth } = useAuth();
@@ -23,6 +24,11 @@ export default function ElnLayout({ children }: ElnLayoutProps) {
         pathname: '/eln',
       },
       { label: 'Users', pathname: `/eln/users` },
+      {
+        label: 'File synchronization',
+        pathname: `/eln/addons/fileSync/list`,
+        pathmatch: `/eln/addons/fileSync/**`,
+      },
     ];
   }, []);
 
@@ -33,8 +39,10 @@ export default function ElnLayout({ children }: ElnLayoutProps) {
   }
 
   const { pathname } = router;
-  const currentLabel =
-    ROUTES.find((route) => pathname === route.pathname)?.label || ':C';
+  const currentTitle =
+    pageTitle ||
+    ROUTES.find((route) => pathname === route.pathname)?.label ||
+    'Unknown page title';
 
   return (
     <div>
@@ -140,7 +148,7 @@ export default function ElnLayout({ children }: ElnLayoutProps) {
       <header className="bg-neutral-100 shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold leading-tight text-neutral-900">
-            {currentLabel}
+            {currentTitle}
           </h1>
         </div>
       </header>

@@ -1,5 +1,7 @@
 {
   "displayName": "File synchronizer",
   "description": "Synchronize file from disk to database.",
-  "commands": "./Commands"
+  "commands": "./Commands",
+  "schemas": "./Schemas",
+  "resolvers": "./Resolvers"
 }

@@ -1,0 +1,47 @@
+type Query {
+  fileSyncOptions: [FileSyncOption!]!
+  fileSyncOption(id: ID!): FileSyncOption!
+}
+
+type Mutation {
+  createFileSyncOption(input: NewFileSyncOptionInput!): FileSyncOption!
+  editFileSyncOption(input: EditFileSyncOptionInput!): FileSyncOption!
+}
+
+enum PatternType {
+  exclude
+  include
+}
+
+type Pattern {
+  type: PatternType!
+  pattern: String!
+}
+
+type FileSyncOption {
+  id: ID!
+  enabled: Boolean!
+  root: String!
+  maxDepth: Int!
+  patterns: [Pattern!]!
+}
+
+input NewFileSyncOptionInput {
+  enabled: Boolean!
+  root: String!
+  maxDepth: Int!
+  patterns: [FileSyncOptionPatternInput!]!
+}
+
+input EditFileSyncOptionInput {
+  id: ID!
+  enabled: Boolean!
+  root: String!
+  maxDepth: Int!
+  patterns: [FileSyncOptionPatternInput!]!
+}
+
+input FileSyncOptionPatternInput {
+  type: PatternType!
+  pattern: String!
+}

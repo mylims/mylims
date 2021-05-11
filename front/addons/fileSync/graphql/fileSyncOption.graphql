@@ -1,0 +1,35 @@
+fragment FileSyncOptionFields on FileSyncOption {
+  id
+  enabled
+  root
+  maxDepth
+  patterns {
+    type
+    pattern
+  }
+}
+
+query FileSyncOptions {
+  fileSyncOptions {
+    ...FileSyncOptionFields
+  }
+}
+
+query FileSyncOption($id: ID!) {
+  fileSyncOption(id: $id) {
+    ...FileSyncOptionFields
+  }
+}
+
+mutation CreateFileSyncOption($input: NewFileSyncOptionInput!) {
+  createFileSyncOption(input: $input) {
+    id
+    ...FileSyncOptionFields
+  }
+}
+mutation EditFileSyncOption($input: EditFileSyncOptionInput!) {
+  editFileSyncOption(input: $input) {
+    id
+    ...FileSyncOptionFields
+  }
+}
