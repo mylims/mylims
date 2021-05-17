@@ -9,7 +9,6 @@ import {
   useEditFileSyncOptionMutation,
   useFileSyncOptionQuery,
 } from '../../../../generated/graphql';
-import { omitDeep } from '../../../../utils/omit-deep';
 import FileSyncConfigForm from '../../FileSyncConfigForm';
 
 export default function EditConfig() {
@@ -39,12 +38,11 @@ export default function EditConfig() {
 
   if (id === undefined) {
     router.push('list').catch((err) => {
+      // eslint-disable-next-line no-console
       console.error(err);
     });
     return null;
   }
-
-  console.log(data?.fileSyncOption);
 
   return (
     <>

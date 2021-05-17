@@ -51,6 +51,7 @@ export type GqlUser = {
 export type GqlMutation = {
   createFileSyncOption: GqlFileSyncOption;
   editFileSyncOption: GqlFileSyncOption;
+  deleteFileSyncOption: Array<GqlFileSyncOption>;
 };
 
 export type GqlMutationCreateFileSyncOptionArgs = {
@@ -59,6 +60,10 @@ export type GqlMutationCreateFileSyncOptionArgs = {
 
 export type GqlMutationEditFileSyncOptionArgs = {
   input: GqlEditFileSyncOptionInput;
+};
+
+export type GqlMutationDeleteFileSyncOptionArgs = {
+  input: GqlDeleteFileSyncOptionInput;
 };
 
 export enum GqlPatternType {
@@ -92,6 +97,10 @@ export type GqlEditFileSyncOptionInput = {
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
   patterns: Array<GqlFileSyncOptionPatternInput>;
+};
+
+export type GqlDeleteFileSyncOptionInput = {
+  id: Scalars['ID'];
 };
 
 export type GqlFileSyncOptionPatternInput = {
@@ -231,6 +240,7 @@ export type GqlResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars['Int']>;
   NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
+  DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
 }>;
 
@@ -248,6 +258,7 @@ export type GqlResolversParentTypes = ResolversObject<{
   Int: Scalars['Int'];
   NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
+  DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
 }>;
 
@@ -318,6 +329,12 @@ export type GqlMutationResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlMutationEditFileSyncOptionArgs, 'input'>
+  >;
+  deleteFileSyncOption?: Resolver<
+    Array<GqlResolversTypes['FileSyncOption']>,
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationDeleteFileSyncOptionArgs, 'input'>
   >;
 }>;
 

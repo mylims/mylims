@@ -15,6 +15,7 @@ generates:
       withComponent: false
       withHooks: true
       withMutationFn: false
+      withRefetchFn: true
       apolloReactHooksImportFrom: '@apollo/client'
       namingConvention:
         enumValues: change-case#upperCase

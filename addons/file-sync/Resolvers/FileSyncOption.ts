@@ -5,7 +5,7 @@ import ObjectId from '@ioc:Mongodb/ObjectId';
 import { NotFoundError } from 'App/Exceptions/ApolloErrors';
 import { GqlResolvers } from 'App/graphql';
 
-import FileSyncOption, { FileSyncOptionFields } from '../Models/FileSyncOption';
+import FileSyncOption from '../Models/FileSyncOption';
 
 const resolvers: GqlResolvers = {
   Query: {
@@ -22,7 +22,6 @@ const resolvers: GqlResolvers = {
       return FileSyncOption.create(input);
     },
     async editFileSyncOption(_: unknown, { input }) {
-      console.log('specific');
       // TODO: avoid using new ObjectId()
       const fileSyncOption = await FileSyncOption.findById(
         new ObjectId(input.id),
@@ -39,6 +38,19 @@ const resolvers: GqlResolvers = {
 
       await fileSyncOption.save();
       return fileSyncOption;
+    },
+    async deleteFileSyncOption(_: unknown, { input }) {
+      const fileSyncOption = await FileSyncOption.findById(
+        new ObjectId(input.id),
+      );
+      if (!fileSyncOption) {
+        throw new NotFoundError('file sync option not found');
+      }
+
+      await fileSyncOption.delete();
+
+      const fileSyncOptions = await FileSyncOption.find({});
+      return fileSyncOptions.all();
     },
   },
 };

@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 
 import ElnLayout from '../../../components/ElnLayout';
 import {
@@ -18,13 +20,18 @@ import {
   Th,
 } from '../../../components/tailwind-ui';
 import {
-  FileSyncOptionQuery,
   FileSyncOptionsQuery,
   useFileSyncOptionsQuery,
+  useDeleteFileSyncOptionMutation,
+  refetchFileSyncOptionsQuery,
 } from '../../../generated/graphql';
 
 export default function ConfigList() {
   const { loading, error, data } = useFileSyncOptionsQuery();
+
+  const [deleteFileSyncOptionMutation] = useDeleteFileSyncOptionMutation({
+    refetchQueries: [refetchFileSyncOptionsQuery()],
+  });
 
   return (
     <>
@@ -40,7 +47,7 @@ export default function ConfigList() {
           tableClassName="table-fixed"
           Header={Header}
           Empty={Empty}
-          Tr={Row}
+          Tr={Row(deleteFileSyncOptionMutation)}
           data={data?.fileSyncOptions ?? []}
         />
       )}
@@ -64,33 +71,39 @@ function Header() {
   );
 }
 
-function Row(props: {
-  value: FileSyncOptionsQuery['fileSyncOptions'][number];
-}) {
-  const { value } = props;
-  return (
-    <tr>
-      <Td>{value.enabled ? <SvgOutlineCheck /> : <SvgOutlineX />}</Td>
-      <Td>{value.root}</Td>
-      <Td>{value.patterns.length}</Td>
-      <Td>
-        <Link href="edit/[id]" as={`edit/${value.id}`}>
-          <Button roundness={Roundness.circular}>
-            <SvgOutlineCog />
-          </Button>
-        </Link>
-        <Link href="">
+function Row(
+  deleteFileSyncOption: ReturnType<typeof useDeleteFileSyncOptionMutation>[0],
+) {
+  return (props: {
+    value: FileSyncOptionsQuery['fileSyncOptions'][number];
+  }) => {
+    const { value } = props;
+
+    return (
+      <tr>
+        <Td>{value.enabled ? <SvgOutlineCheck /> : <SvgOutlineX />}</Td>
+        <Td>{value.root}</Td>
+        <Td>{value.patterns.length}</Td>
+        <Td>
+          <Link href="edit/[id]" as={`edit/${value.id}`}>
+            <Button roundness={Roundness.circular}>
+              <SvgOutlineCog />
+            </Button>
+          </Link>
           <Button
             color={Color.danger}
             roundness={Roundness.circular}
             className="ml-2"
+            onClick={() =>
+              deleteFileSyncOption({ variables: { input: { id: value.id } } })
+            }
           >
             <SvgOutlineTrash />
           </Button>
-        </Link>
-      </Td>
-    </tr>
-  );
+        </Td>
+      </tr>
+    );
+  };
 }
 
 function Empty() {

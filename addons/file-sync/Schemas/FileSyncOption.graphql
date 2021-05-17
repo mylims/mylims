@@ -6,6 +6,7 @@ type Query {
 type Mutation {
   createFileSyncOption(input: NewFileSyncOptionInput!): FileSyncOption!
   editFileSyncOption(input: EditFileSyncOptionInput!): FileSyncOption!
+  deleteFileSyncOption(input: DeleteFileSyncOptionInput!): [FileSyncOption!]!
 }
 
 enum PatternType {
@@ -39,6 +40,10 @@ input EditFileSyncOptionInput {
   root: String!
   maxDepth: Int!
   patterns: [FileSyncOptionPatternInput!]!
+}
+
+input DeleteFileSyncOptionInput {
+  id: ID!
 }
 
 input FileSyncOptionPatternInput {

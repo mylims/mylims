@@ -33,3 +33,10 @@ mutation EditFileSyncOption($input: EditFileSyncOptionInput!) {
     ...FileSyncOptionFields
   }
 }
+
+mutation DeleteFileSyncOption($input: DeleteFileSyncOptionInput!) {
+  deleteFileSyncOption(input: $input) {
+    id
+    ...FileSyncOptionFields
+  }
+}

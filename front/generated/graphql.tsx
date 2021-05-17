@@ -21,6 +21,10 @@ export type Scalars = {
   JSONObject: any;
 };
 
+export type DeleteFileSyncOptionInput = {
+  id: Scalars['ID'];
+};
+
 export type EditFileSyncOptionInput = {
   id: Scalars['ID'];
   enabled: Scalars['Boolean'];
@@ -45,6 +49,7 @@ export type FileSyncOptionPatternInput = {
 export type Mutation = {
   createFileSyncOption: FileSyncOption;
   editFileSyncOption: FileSyncOption;
+  deleteFileSyncOption: Array<FileSyncOption>;
 };
 
 export type MutationCreateFileSyncOptionArgs = {
@@ -53,6 +58,10 @@ export type MutationCreateFileSyncOptionArgs = {
 
 export type MutationEditFileSyncOptionArgs = {
   input: EditFileSyncOptionInput;
+};
+
+export type MutationDeleteFileSyncOptionArgs = {
+  input: DeleteFileSyncOptionInput;
 };
 
 export type NewFileSyncOptionInput = {
@@ -125,6 +134,17 @@ export type EditFileSyncOptionMutationVariables = Exact<{
 
 export type EditFileSyncOptionMutation = {
   editFileSyncOption: Pick<FileSyncOption, 'id'> & FileSyncOptionFieldsFragment;
+};
+
+export type DeleteFileSyncOptionMutationVariables = Exact<{
+  input: DeleteFileSyncOptionInput;
+}>;
+
+export type DeleteFileSyncOptionMutation = { __typename?: 'Mutation' } & {
+  deleteFileSyncOption: Array<
+    { __typename?: 'FileSyncOption' } & Pick<FileSyncOption, 'id'> &
+      FileSyncOptionFieldsFragment
+  >;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
@@ -208,6 +228,11 @@ export type FileSyncOptionsQueryResult = Apollo.QueryResult<
   FileSyncOptionsQuery,
   FileSyncOptionsQueryVariables
 >;
+export function refetchFileSyncOptionsQuery(
+  variables?: FileSyncOptionsQueryVariables,
+) {
+  return { query: FileSyncOptionsDocument, variables: variables };
+}
 export const FileSyncOptionDocument = gql`
   query FileSyncOption($id: ID!) {
     fileSyncOption(id: $id) {
@@ -267,6 +292,11 @@ export type FileSyncOptionQueryResult = Apollo.QueryResult<
   FileSyncOptionQuery,
   FileSyncOptionQueryVariables
 >;
+export function refetchFileSyncOptionQuery(
+  variables?: FileSyncOptionQueryVariables,
+) {
+  return { query: FileSyncOptionDocument, variables: variables };
+}
 export const CreateFileSyncOptionDocument = gql`
   mutation CreateFileSyncOption($input: NewFileSyncOptionInput!) {
     createFileSyncOption(input: $input) {
@@ -361,6 +391,53 @@ export type EditFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
   EditFileSyncOptionMutation,
   EditFileSyncOptionMutationVariables
 >;
+export const DeleteFileSyncOptionDocument = gql`
+  mutation DeleteFileSyncOption($input: DeleteFileSyncOptionInput!) {
+    deleteFileSyncOption(input: $input) {
+      id
+      ...FileSyncOptionFields
+    }
+  }
+  ${FileSyncOptionFieldsFragmentDoc}
+`;
+
+/**
+ * __useDeleteFileSyncOptionMutation__
+ *
+ * To run a mutation, you first call `useDeleteFileSyncOptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFileSyncOptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFileSyncOptionMutation, { data, loading, error }] = useDeleteFileSyncOptionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteFileSyncOptionMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    DeleteFileSyncOptionMutation,
+    DeleteFileSyncOptionMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useMutation<
+    DeleteFileSyncOptionMutation,
+    DeleteFileSyncOptionMutationVariables
+  >(DeleteFileSyncOptionDocument, options);
+}
+export type DeleteFileSyncOptionMutationHookResult = ReturnType<
+  typeof useDeleteFileSyncOptionMutation
+>;
+export type DeleteFileSyncOptionMutationResult = Apollo.MutationResult<DeleteFileSyncOptionMutation>;
+export type DeleteFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
+  DeleteFileSyncOptionMutation,
+  DeleteFileSyncOptionMutationVariables
+>;
 export const UsersDocument = gql`
   query Users {
     users {
@@ -419,3 +496,6 @@ export type UsersQueryResult = Apollo.QueryResult<
   UsersQuery,
   UsersQueryVariables
 >;
+export function refetchUsersQuery(variables?: UsersQueryVariables) {
+  return { query: UsersDocument, variables: variables };
+}
