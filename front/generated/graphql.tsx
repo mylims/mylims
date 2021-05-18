@@ -140,10 +140,9 @@ export type DeleteFileSyncOptionMutationVariables = Exact<{
   input: DeleteFileSyncOptionInput;
 }>;
 
-export type DeleteFileSyncOptionMutation = { __typename?: 'Mutation' } & {
+export type DeleteFileSyncOptionMutation = {
   deleteFileSyncOption: Array<
-    { __typename?: 'FileSyncOption' } & Pick<FileSyncOption, 'id'> &
-      FileSyncOptionFieldsFragment
+    Pick<FileSyncOption, 'id'> & FileSyncOptionFieldsFragment
   >;
 };
 
