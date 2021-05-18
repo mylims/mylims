@@ -1,6 +1,4 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useMemo } from 'react';
 
 import ElnLayout from '../../../components/ElnLayout';
 import {
@@ -27,17 +25,31 @@ import {
 } from '../../../generated/graphql';
 
 export default function ConfigList() {
-  const { loading, error, data } = useFileSyncOptionsQuery();
+  const { loading, error: queryError, data } = useFileSyncOptionsQuery();
 
-  const [deleteFileSyncOptionMutation] = useDeleteFileSyncOptionMutation({
+  const [
+    deleteFileSyncOptionMutation,
+    { error: mutationError },
+  ] = useDeleteFileSyncOptionMutation({
     refetchQueries: [refetchFileSyncOptionsQuery()],
   });
 
   return (
     <>
-      {error && (
-        <Alert title={'Error while fetching user'} type={AlertType.ERROR}>
-          Unexpected error {error}
+      {queryError && (
+        <Alert
+          title={'Error while fetching file sync option'}
+          type={AlertType.ERROR}
+        >
+          Unexpected error: {queryError}
+        </Alert>
+      )}
+      {mutationError && (
+        <Alert
+          title={'Error while deleting file sync option'}
+          type={AlertType.ERROR}
+        >
+          Unexpected error: {mutationError}
         </Alert>
       )}
       {loading ? (

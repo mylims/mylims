@@ -19,4 +19,4 @@ config:
   useIndexSignature: true
   mappers:
     User: ./Models/User#default
-    FileSyncOption: ./addons/file-sync/Models/FileSyncOption#default
+    FileSyncOption: ../addons/file-sync/Models/FileSyncOption#default

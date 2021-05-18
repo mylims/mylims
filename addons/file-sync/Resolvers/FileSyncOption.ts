@@ -1,7 +1,5 @@
 import { Pattern } from 'fs-synchronizer';
 
-import ObjectId from '@ioc:Mongodb/ObjectId';
-
 import { NotFoundError } from 'App/Exceptions/ApolloErrors';
 import { GqlResolvers } from 'App/graphql';
 
@@ -14,7 +12,11 @@ const resolvers: GqlResolvers = {
       return fileSyncOptions.all();
     },
     async fileSyncOption(_, { id }) {
-      return FileSyncOption.findByIdOrThrow(new ObjectId(id));
+      const fileSyncOption = await FileSyncOption.findById(id);
+      if (!fileSyncOption) {
+        throw new NotFoundError('file sync option not found');
+      }
+      return fileSyncOption;
     },
   },
   Mutation: {
@@ -22,10 +24,7 @@ const resolvers: GqlResolvers = {
       return FileSyncOption.create(input);
     },
     async editFileSyncOption(_: unknown, { input }) {
-      // TODO: avoid using new ObjectId()
-      const fileSyncOption = await FileSyncOption.findById(
-        new ObjectId(input.id),
-      );
+      const fileSyncOption = await FileSyncOption.findById(input.id);
       if (!fileSyncOption) {
         throw new NotFoundError('file sync option not found');
       }
@@ -33,16 +32,13 @@ const resolvers: GqlResolvers = {
       fileSyncOption.enabled = input.enabled;
       fileSyncOption.root = input.root;
       fileSyncOption.maxDepth = input.maxDepth;
-      // TODO: avoid cast
       fileSyncOption.patterns = input.patterns as Pattern[];
 
       await fileSyncOption.save();
       return fileSyncOption;
     },
     async deleteFileSyncOption(_: unknown, { input }) {
-      const fileSyncOption = await FileSyncOption.findById(
-        new ObjectId(input.id),
-      );
+      const fileSyncOption = await FileSyncOption.findById(input.id);
       if (!fileSyncOption) {
         throw new NotFoundError('file sync option not found');
       }

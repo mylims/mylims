@@ -1,7 +1,5 @@
 import { FieldArray, FormikConfig } from 'formik';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
 
 import {
   Button,
@@ -134,15 +132,13 @@ export default function FileSyncConfigForm({
                     </SubmitButton>
                   </div>
                   <div>
-                    <Link href="list">
-                      <Button
-                        className="flex"
-                        color={Color.danger}
-                        onClick={() => router.back()}
-                      >
-                        Cancel
-                      </Button>
-                    </Link>
+                    <Button
+                      className="flex"
+                      color={Color.danger}
+                      onClick={() => router.back()}
+                    >
+                      Cancel
+                    </Button>
                   </div>
                 </div>
               </Card.Footer>

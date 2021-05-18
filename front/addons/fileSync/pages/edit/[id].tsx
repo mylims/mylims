@@ -6,13 +6,17 @@ import ElnLayout from '../../../../components/ElnLayout';
 import { Alert, AlertType, Spinner } from '../../../../components/tailwind-ui';
 import {
   EditFileSyncOptionInput,
+  NewFileSyncOptionInput,
   useEditFileSyncOptionMutation,
   useFileSyncOptionQuery,
 } from '../../../../generated/graphql';
 import FileSyncConfigForm from '../../FileSyncConfigForm';
 
 export default function EditConfig() {
-  const [editFileSyncOption, { loading }] = useEditFileSyncOptionMutation();
+  const [
+    editFileSyncOption,
+    { loading: mutationLoading },
+  ] = useEditFileSyncOptionMutation();
   const router = useRouter();
   const { id } = router.query;
   const { data, loading: queryLoading, error } = useFileSyncOptionQuery({
@@ -21,8 +25,10 @@ export default function EditConfig() {
 
   const onSubmit = useMemo(
     () => async (
-      values: EditFileSyncOptionInput,
-      { resetForm }: FormikHelpers<EditFileSyncOptionInput>,
+      values: EditFileSyncOptionInput | NewFileSyncOptionInput,
+      {
+        resetForm,
+      }: FormikHelpers<EditFileSyncOptionInput | NewFileSyncOptionInput>,
     ) => {
       await editFileSyncOption({
         variables: { input: { ...values, id: id as string } },
@@ -62,7 +68,7 @@ export default function EditConfig() {
           submitLabel="Save"
           initialValues={data?.fileSyncOption}
           onSubmit={onSubmit}
-          loading={loading}
+          loading={mutationLoading}
         />
       )}
     </>
