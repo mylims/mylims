@@ -10,7 +10,6 @@ import {
   Spinner,
   SvgOutlineCheck,
   SvgOutlineCog,
-  SvgOutlinePlus,
   SvgOutlineTrash,
   SvgOutlineX,
   Table,
