@@ -1,8 +1,8 @@
+import { XIcon } from '@heroicons/react/outline';
 import { useField } from 'formik';
 import React from 'react';
 import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 
-import { SvgOutlineX } from '../../svg/heroicon/outline';
 import { CustomInputProps, Input } from '../basic/Input';
 
 if (typeof window !== 'undefined') {
@@ -37,8 +37,8 @@ export function DatePickerField(props: DatePickerFieldProps) {
             error={meta.touched ? meta.error : undefined}
             trailingInlineAddon={
               value && props.isClearable ? (
-                <SvgOutlineX
-                  className="cursor-pointer"
+                <XIcon
+                  className="w-3.5 h-3.5 cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();

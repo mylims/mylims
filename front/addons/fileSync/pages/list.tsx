@@ -1,3 +1,4 @@
+import { CheckIcon, CogIcon, TrashIcon, XIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 
 import ElnLayout from '../../../components/ElnLayout';
@@ -8,10 +9,6 @@ import {
   Color,
   Roundness,
   Spinner,
-  SvgOutlineCheck,
-  SvgOutlineCog,
-  SvgOutlineTrash,
-  SvgOutlineX,
   Table,
   Td,
   Th,
@@ -82,13 +79,19 @@ function Row(
 
     return (
       <tr>
-        <Td>{value.enabled ? <SvgOutlineCheck /> : <SvgOutlineX />}</Td>
+        <Td>
+          {value.enabled ? (
+            <CheckIcon className="h-5 w-5" />
+          ) : (
+            <XIcon className="h-5 w-5" />
+          )}
+        </Td>
         <Td>{value.root}</Td>
         <Td>{value.patterns.length}</Td>
         <Td>
           <Link href="edit/[id]" as={`edit/${value.id}`}>
             <Button roundness={Roundness.circular}>
-              <SvgOutlineCog />
+              <CogIcon className="h-5 w-5" />
             </Button>
           </Link>
           <Button
@@ -99,7 +102,7 @@ function Row(
               deleteFileSyncOption({ variables: { input: { id: value.id } } })
             }
           >
-            <SvgOutlineTrash />
+            <TrashIcon className="h-5 w-5" />
           </Button>
         </Td>
       </tr>

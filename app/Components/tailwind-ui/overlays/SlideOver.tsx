@@ -1,4 +1,5 @@
 import { Transition } from '@headlessui/react';
+import { XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React, {
   ElementType,
@@ -9,7 +10,6 @@ import React, {
 } from 'react';
 
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
-import { SvgOutlineX } from '../svg/heroicon/outline';
 import { PropsOf, Size } from '../types';
 
 import { Portal } from './Portal';
@@ -34,12 +34,14 @@ export interface SlideOverProps<T extends ElementType> {
   wrapperProps?: Omit<PropsOf<T>, 'children'>;
   requestCloseOnClickOutside?: boolean;
   maxWidth?: Size;
+  allowPageInteraction?: boolean;
 }
 
 export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
   const {
     requestCloseOnClickOutside = true,
     maxWidth: maxWidthSlideOver = Size.medium,
+    allowPageInteraction = false,
   } = props;
 
   const ref = useRef<HTMLDivElement>(null);
@@ -56,8 +58,8 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
   );
 
   let slideOverContents = (
-    <div className="absolute inset-0 overflow-hidden">
-      <section className="absolute inset-y-0 right-0 flex max-w-full pl-10">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <section className="absolute inset-y-0 right-0 flex max-w-full pl-10 pointer-events-auto">
         <Transition.Child
           enter="transform transition ease-out duration-400 sm:duration-500"
           enterFrom="translate-x-full"
@@ -82,7 +84,7 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
                         onClick={props.onClose}
                         className="bg-white rounded-full text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
                       >
-                        <SvgOutlineX className="w-6 h-6" />
+                        <XIcon className="w-6 h-6" />
                       </button>
                     </div>
                   )}
@@ -109,7 +111,10 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
     <Portal>
       <Transition
         show={props.isOpen}
-        className="fixed inset-0 z-50 overflow-hidden"
+        className={clsx(
+          'fixed inset-0 z-50 overflow-hidden',
+          allowPageInteraction && 'pointer-events-none',
+        )}
       >
         {slideOverContents}
       </Transition>

@@ -1,3 +1,4 @@
+import { TrashIcon } from '@heroicons/react/outline';
 import { Field, FieldArray, FormikConfig } from 'formik';
 import { useRouter } from 'next/router';
 
@@ -11,7 +12,6 @@ import {
   RadioField,
   Size,
   SubmitButton,
-  SvgOutlineTrash,
   ToggleField,
 } from '../../components/tailwind-ui';
 import {
@@ -98,7 +98,7 @@ export default function FileSyncConfigForm({
                                     color={Color.danger}
                                     onClick={() => remove(index)}
                                   >
-                                    <SvgOutlineTrash />
+                                    <TrashIcon className="h-5 w-5" />
                                   </Button>
                                 </Card.Header>
                                 <div className="p-2">

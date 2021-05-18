@@ -50,7 +50,7 @@ export const TextArea = forwardRefWithAs(
             id={id}
             name={name}
             className={clsx(
-              'shadow-sm block w-full sm:text-sm border-neutral-300 rounded-md',
+              'form-textarea shadow-sm block w-full sm:text-sm border-neutral-300 rounded-md',
               {
                 [inputColor]: !error,
                 [inputError]: error,

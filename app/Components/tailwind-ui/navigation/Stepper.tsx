@@ -1,7 +1,6 @@
+import { CheckIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React from 'react';
-
-import { SvgOutlineCheck } from '../svg/heroicon/outline';
 
 export interface Step {
   label: string;
@@ -131,7 +130,7 @@ function StepDone(props: { step: StepWithId }): JSX.Element {
     >
       <span className="flex-shrink-0">
         <span className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-600">
-          <SvgOutlineCheck className="w-6 h-6 text-white" />
+          <CheckIcon className="w-6 h-6 text-white" />
         </span>
       </span>
       <span className="mt-0.5 ml-4 min-w-0 flex flex-col">

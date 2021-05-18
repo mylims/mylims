@@ -1,3 +1,4 @@
+import { ChevronDownIcon, XIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import React, {
   ChangeEvent,
@@ -18,7 +19,6 @@ import { Input } from '../forms/basic/Input';
 import { useSameWidthPopper } from '../hooks/popper';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import { useOnOff } from '../hooks/useOnOff';
-import { SvgSolidChevronDown, SvgSolidX } from '../svg/heroicon/solid';
 import { Color } from '../types';
 
 export interface SimpleOption {
@@ -409,14 +409,14 @@ export function InternalSearchSelect<T>(
           <div className="inline-flex flex-row items-center cursor-default text-neutral-400">
             {loading && <Spinner className="w-5 h-5 mr-1 text-neutral-400" />}
             {clearable && hasValue && !disabled && (
-              <SvgSolidX
+              <XIcon
                 className="w-4 h-4 hover:text-neutral-500"
                 onClick={handleXClick}
               />
             )}
             {/* font-mono so the vertical bar is vertically aligned with the SVG */}
             <span className="mx-1 font-mono font-light">{` | `}</span>
-            <SvgSolidChevronDown
+            <ChevronDownIcon
               className={clsx({
                 'w-5 h-5': true,
                 'hover:text-neutral-500': !disabled,

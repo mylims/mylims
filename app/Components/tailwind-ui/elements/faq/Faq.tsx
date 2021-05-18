@@ -1,7 +1,6 @@
+import { ChevronDownIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
-
-import { SvgOutlineChevronDown } from '../../svg/heroicon/outline';
 
 export interface QuestionType {
   id: string;
@@ -44,7 +43,7 @@ const Question = (props: QuestionProps) => {
         >
           <span className="font-semibold text-neutral-900">{question}</span>
           <span className="flex items-center ml-6 h-7">
-            <SvgOutlineChevronDown
+            <ChevronDownIcon
               className={clsx('w-6 h-6 transform', {
                 '-rotate-180': selectedQuestionId === id,
               })}

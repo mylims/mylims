@@ -1,11 +1,8 @@
+import { CheckIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import React, { ReactNode, Ref } from 'react';
 
 import { Spinner } from '../../elements/spinner/Spinner';
-import {
-  SvgSolidCheck,
-  SvgSolidExclamationCircle,
-} from '../../svg/heroicon/solid';
 import { forwardRefWithAs } from '../../util';
 
 import {
@@ -155,11 +152,11 @@ export const Input = forwardRefWithAs(
 );
 
 function InputErrorIcon() {
-  return <SvgSolidExclamationCircle className="w-5 h-5 ml-2 text-danger-500" />;
+  return <ExclamationCircleIcon className="w-5 h-5 ml-2 text-danger-500" />;
 }
 
 function InputValidIcon() {
-  return <SvgSolidCheck className="w-5 h-5 ml-2 text-success-600" />;
+  return <CheckIcon className="w-5 h-5 ml-2 text-success-600" />;
 }
 
 function LeadingInlineAddon(props: { value: ReactNode }) {

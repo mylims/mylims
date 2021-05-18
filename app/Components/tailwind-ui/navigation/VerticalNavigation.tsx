@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
-import { useOnOff } from '../hooks/useOnOff';
+import { useVerticalNavigationCollapse } from '../hooks/useVerticalNavigationCollapse';
 
 export type VerticalNavigationRenderOptionCallback<T> = (
   children: ReactNode,
@@ -37,6 +37,7 @@ export interface VerticalNavigationProps<T> {
   selected: VerticalNavigationOption<T> | undefined;
   onSelect?: SelectOptionCallback<T>;
   size?: VerticalNavigationSize;
+  autoCollapse?: boolean;
 }
 
 type SelectOptionCallback<T> = (selected: VerticalNavigationOption<T>) => void;
@@ -54,16 +55,23 @@ const iconStyles = {
 export function VerticalNavigation<T>(
   props: VerticalNavigationProps<T>,
 ): JSX.Element {
-  const { onSelect, selected, options, size } = props;
+  const { onSelect, selected, options, size, autoCollapse = false } = props;
 
-  const opts = options.map((element) => {
-    if (element.type === 'option') {
-      return {
-        ...element,
-        label: element.label || element.value,
-      };
-    }
-    return element;
+  const opts = useMemo(() => {
+    return options.map((element) => {
+      if (element.type === 'option') {
+        return {
+          ...element,
+          label: element.label || element.value,
+        };
+      }
+      return element;
+    });
+  }, [options]);
+
+  const navigation = useVerticalNavigationCollapse(opts, {
+    autoCollapse,
+    selected,
   });
 
   let chosenSize = size ? size : 'small';
@@ -91,6 +99,7 @@ export function VerticalNavigation<T>(
                 selected={selected}
                 size={chosenSize}
                 onSelect={onSelect}
+                {...navigation}
               />
             );
           }
@@ -114,18 +123,27 @@ interface NavigationGroupProps<T> {
   selected?: VerticalNavigationOption<T>;
   onSelect?: SelectOptionCallback<T>;
   size: VerticalNavigationSize;
+  toggleElement: (element: VerticalNavigationGroupOption<T>) => void;
+  isElementOpen: (element: VerticalNavigationGroupOption<T>) => boolean;
 }
 
 function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
-  const { element, selected, onSelect, size } = props;
-  const [isOpen, , , toggle] = useOnOff(
-    element.options.some((element) => element === selected),
-  );
+  const {
+    element,
+    selected,
+    onSelect,
+    size,
+    toggleElement,
+    isElementOpen,
+  } = props;
+
+  const isOpen = isElementOpen(element);
+
   return (
     <div className="space-y-1">
       <button
         type="button"
-        onClick={toggle}
+        onClick={() => toggleElement(element)}
         className={clsx(
           'flex items-center w-full pl-2 pr-1 py-2 bg-white rounded-md group hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500',
           optionStyles[size],
@@ -134,7 +152,7 @@ function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
         {element.icon && (
           <div
             className={clsx(
-              'text-2xl text-neutral-400 group-hover:text-neutral-600',
+              'w-6 h-6 text-2xl text-neutral-400 group-hover:text-neutral-600',
               iconStyles[size],
             )}
           >
@@ -189,7 +207,7 @@ function Navigation<T>(props: NavigationProps<T>): JSX.Element {
       {props.element.icon && (
         <div
           className={clsx(
-            'text-2xl group-hover:text-neutral-600',
+            'w-6 h-6 group-hover:text-neutral-600',
             iconStyles[props.size],
           )}
         >

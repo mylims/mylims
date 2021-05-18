@@ -68,7 +68,7 @@ Feed.Item = function (props: FeedItemProps) {
             colors[iconBackgroundColor],
           )}
         >
-          {icon}
+          <span className="w-5 h-5">{icon}</span>
         </span>
       </div>
       <div className="flex justify-between flex-1 min-w-0 space-x-4">

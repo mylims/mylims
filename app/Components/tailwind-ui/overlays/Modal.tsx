@@ -1,4 +1,5 @@
 import { Transition } from '@headlessui/react';
+import { XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import polyfill from 'dialog-polyfill-universal';
 import React, {
@@ -12,7 +13,6 @@ import React, {
 
 import { useLockBodyScroll } from '../hooks/useLockBodyScroll';
 import { dispatchContext } from '../shortcuts/KeyboardActionContext';
-import { SvgOutlineX } from '../svg/heroicon/outline';
 import { Color, PropsOf } from '../types';
 
 import { Portal } from './Portal';
@@ -121,7 +121,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
             className="bg-white rounded-full text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500"
             aria-label="Close"
           >
-            <SvgOutlineX className="w-6 h-6" />
+            <XIcon className="w-6 h-6" />
           </button>
         </div>
       ) : null}
@@ -133,7 +133,9 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
             bgColors[props.iconColor],
           )}
         >
-          <span className={clsx(textColors[props.iconColor], 'text-2xl')}>
+          <span
+            className={clsx(textColors[props.iconColor], 'text-2xl w-6 h-6')}
+          >
             {props.icon}
           </span>
         </div>
@@ -203,7 +205,10 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
 
 Modal.Header = function ModalHeader(props: { children: ReactNode }) {
   return (
-    <h3 className="text-lg font-semibold text-neutral-900" id="modal-headline">
+    <h3
+      className="mr-10 text-lg font-semibold text-neutral-900"
+      id="modal-headline"
+    >
       {props.children}
     </h3>
   );
