@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import picomatch from 'picomatch';
 import React, { useState, useMemo } from 'react';
 
 import useAuth from '../hooks/useAuth';
@@ -55,22 +56,26 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  {ROUTES.map((route) => (
-                    <Link href={route.pathname} key={route.pathname}>
-                      <a
-                        className={clsx(
-                          'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
-                          {
-                            'text-neutral-100 bg-neutral-900':
-                              pathname === route.pathname,
-                            'text-neutral-300': pathname !== route.pathname,
-                          },
-                        )}
-                      >
-                        {route.label}
-                      </a>
-                    </Link>
-                  ))}
+                  {ROUTES.map((route) => {
+                    const match = picomatch(route.pathmatch || route.pathname);
+                    return (
+                      <Link href={route.pathname} key={route.pathname}>
+                        <a
+                          className={clsx(
+                            'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
+                            {
+                              'text-neutral-100 bg-neutral-900': match(
+                                pathname,
+                              ),
+                              'text-neutral-300': !match(pathname),
+                            },
+                          )}
+                        >
+                          {route.label}
+                        </a>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             </div>
