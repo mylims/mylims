@@ -34,24 +34,19 @@ export default function ConfigList() {
     refetchQueries: [refetchFileSyncOptionsQuery()],
   });
 
+  const error = queryError || mutationError || null;
+
   return (
     <>
-      {queryError && (
-        <Alert
-          title={'Error while fetching file sync option'}
-          type={AlertType.ERROR}
-        >
-          Unexpected error: {queryError}
+      {error && (
+        <Alert title={'Error'} type={AlertType.ERROR}>
+          Unexpected error: {error.message}
         </Alert>
       )}
-      {mutationError && (
-        <Alert
-          title={'Error while deleting file sync option'}
-          type={AlertType.ERROR}
-        >
-          Unexpected error: {mutationError}
-        </Alert>
-      )}
+
+      <Link href="create">
+        <Button className="mb-4">Create</Button>
+      </Link>
       {loading ? (
         <Spinner className="w-10 h-10 text-danger-500" />
       ) : (
@@ -63,11 +58,6 @@ export default function ConfigList() {
           data={data?.fileSyncOptions ?? []}
         />
       )}
-      <Link href="create">
-        <Button roundness={Roundness.circular}>
-          <SvgOutlinePlus />
-        </Button>
-      </Link>
     </>
   );
 }
@@ -119,7 +109,16 @@ function Row(
 }
 
 function Empty() {
-  return <h1>Empty</h1>;
+  return (
+    <>
+      <Header />
+      <tr>
+        <Td colSpan={4} align="center">
+          Empty
+        </Td>
+      </tr>
+    </>
+  );
 }
 
 ConfigList.getLayout = (page: React.ReactNode) => <ElnLayout>{page}</ElnLayout>;

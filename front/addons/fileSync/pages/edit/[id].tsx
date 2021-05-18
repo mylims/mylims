@@ -52,16 +52,15 @@ export default function EditConfig() {
 
   return (
     <>
-      {error && (
+      {queryLoading ? (
+        <Spinner className="w-10 h-10 text-danger-500" />
+      ) : error ? (
         <Alert
           title={'Error while fetching file sync option'}
           type={AlertType.ERROR}
         >
-          Unexpected error {error}
+          Unexpected error {error.message}
         </Alert>
-      )}
-      {queryLoading ? (
-        <Spinner className="w-10 h-10 text-danger-500" />
       ) : (
         <FileSyncConfigForm
           title="Edit synchronisation"

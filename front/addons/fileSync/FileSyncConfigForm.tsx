@@ -1,4 +1,4 @@
-import { FieldArray, FormikConfig } from 'formik';
+import { Field, FieldArray, FormikConfig } from 'formik';
 import { useRouter } from 'next/router';
 
 import {
@@ -66,7 +66,7 @@ export default function FileSyncConfigForm({
               </Card.Header>
               <div className="p-4 space-y-4">
                 <FormError />
-                {initialValues && <InputField name="id" label="id" />}
+                {initialValues && <Field name="id" label="id" type="hidden" />}
                 <ToggleField name="enabled" label="Enabled" />
                 <InputField name="root" label="Root path" />
                 <InputField type="number" name="maxDepth" label="Max depth" />
@@ -87,8 +87,10 @@ export default function FileSyncConfigForm({
                       <div className="flex flex-wrap">
                         {values.patterns.length > 0 &&
                           values.patterns.map((pattern, index) => (
-                            // eslint-disable-next-line react/jsx-key
-                            <div className="m-2 min-w-1/3">
+                            <div
+                              className="m-2 min-w-1/3"
+                              key={pattern.pattern}
+                            >
                               <Card>
                                 <Card.Header>
                                   <Button
