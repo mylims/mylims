@@ -36,8 +36,7 @@ export default function Login() {
 
   useEffect(() => {
     if (auth.isAuth) {
-      // eslint-disable-next-line no-console
-      router.push('/eln').catch((err) => console.error(err));
+      void router.push('/eln');
     }
   }, [auth.isAuth, router]);
 

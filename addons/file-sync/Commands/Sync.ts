@@ -8,7 +8,7 @@ import { FileInfo, FileSynchronizer } from 'fs-synchronizer';
 import ObjectId from '@ioc:Mongodb/ObjectId';
 
 import File from '../Models/File';
-import ImportConfig from '../Models/ImportConfig';
+import FileSyncOption from '../Models/FileSyncOption';
 
 const asyncTimeout = promisify(setTimeout);
 
@@ -18,9 +18,9 @@ export default class Sync extends BaseCommand {
   public static description = '';
 
   @flags.string({
-    description: 'Import config to use',
+    description: 'File sync option to use',
   })
-  public importConfigId: string;
+  public fileSyncOptionId: string;
 
   @flags.number({
     description:
@@ -44,58 +44,59 @@ export default class Sync extends BaseCommand {
   }
 
   private async executeSynchronizer() {
-    const importConfigsToProcess: ImportConfig[] = [];
+    const fileSyncOptionsToProcess: FileSyncOption[] = [];
 
-    if (this.importConfigId) {
-      if (!ObjectId.isValid(this.importConfigId)) {
-        this.logger.error(`invalid ObjectId: ${this.importConfigId}`);
+    if (this.fileSyncOptionId) {
+      if (!ObjectId.isValid(this.fileSyncOptionId)) {
+        this.logger.error(`invalid ObjectId: ${this.fileSyncOptionId}`);
         return;
       }
 
-      const importConfig = await ImportConfig.findById(
-        new ObjectId(this.importConfigId),
+      const fileSyncOption = await FileSyncOption.findById(
+        new ObjectId(this.fileSyncOptionId),
       );
-      if (importConfig === null) {
-        this.logger.error(`invalid import config id: ${this.importConfigId}`);
+      if (fileSyncOption === null) {
+        this.logger.error(
+          `invalid file sync option id: ${this.fileSyncOptionId}`,
+        );
         return;
       }
-      if (!importConfig.enabled) {
-        this.logger.warning('specified import is disabled');
+      if (!fileSyncOption.enabled) {
+        this.logger.warning('specified file sync option is disabled');
+        const confirmed = await this.prompt.confirm('continue anyway?');
+        if (!confirmed) return;
       }
 
-      importConfigsToProcess.push(importConfig);
+      fileSyncOptionsToProcess.push(fileSyncOption);
     } else {
-      const importConfigs = await (
-        await ImportConfig.find({ enabled: true })
+      const fileSyncOptions = await (
+        await FileSyncOption.find({ enabled: true })
       ).all();
-      importConfigsToProcess.push(...importConfigs);
+      fileSyncOptionsToProcess.push(...fileSyncOptions);
     }
 
-    for (const importConfigToProcess of importConfigsToProcess) {
-      await this.executeConfig(importConfigToProcess);
+    for (const fileSyncOptionToProcess of fileSyncOptionsToProcess) {
+      await this.executeConfig(fileSyncOptionToProcess);
     }
   }
 
-  private async executeConfig(importConfig: ImportConfig) {
-    const sync = new FileSynchronizer({
-      root: importConfig.root,
-      ...importConfig.fileSynchronizerOptions,
-    });
+  private async executeConfig(fileSyncOption: FileSyncOption) {
+    const sync = new FileSynchronizer(fileSyncOption);
 
     const fileHandlers: Promise<void>[] = [];
-    const importConfigId = importConfig.id.toHexString();
+    const fileSyncOptionId = fileSyncOption.id.toHexString();
 
     sync.on('file', (fileInfo) => {
-      fileHandlers.push(this.handleFile(fileInfo, importConfigId));
+      fileHandlers.push(this.handleFile(fileInfo, fileSyncOptionId));
     });
     sync.on('end', () => {
-      this.logger.debug('file lookup ended', importConfigId);
+      this.logger.debug('file lookup ended', fileSyncOptionId);
     });
 
     try {
       await sync.walk();
     } catch (err) {
-      this.logger.error(err.message, importConfigId);
+      this.logger.error(err.message, fileSyncOptionId);
     }
 
     await Promise.all(fileHandlers);
@@ -103,21 +104,24 @@ export default class Sync extends BaseCommand {
     this.logger.success(`${fileHandlers.length} files synchronized`);
   }
 
-  private async handleFile(fileInfo: FileInfo, importConfigId: string) {
-    this.logger.debug(`handling file "${fileInfo.filename}"`, importConfigId);
+  private async handleFile(fileInfo: FileInfo, fileSyncOptionId: string) {
+    this.logger.debug(`handling file "${fileInfo.filename}"`, fileSyncOptionId);
 
     const { filename } = fileInfo;
     const file = await File.findOne({ filename });
     if (file === null) {
-      return this.handleUnknownFile(fileInfo, importConfigId);
+      return this.handleUnknownFile(fileInfo, fileSyncOptionId);
     }
-    return this.handleKnownFile(fileInfo, file, importConfigId);
+    return this.handleKnownFile(fileInfo, file, fileSyncOptionId);
   }
 
-  private async handleUnknownFile(fileInfo: FileInfo, importConfigId: string) {
+  private async handleUnknownFile(
+    fileInfo: FileInfo,
+    fileSyncOptionId: string,
+  ) {
     this.logger.debug(
       `handling unknown file: ${fileInfo.filename}`,
-      importConfigId,
+      fileSyncOptionId,
     );
 
     const {
@@ -128,7 +132,7 @@ export default class Sync extends BaseCommand {
       modificationDate,
     } = fileInfo;
     await File.create({
-      _id: { configId: this.importConfigId, relativePath },
+      _id: { configId: this.fileSyncOptionId, relativePath },
       filename,
       revisions: [
         {
@@ -147,29 +151,33 @@ export default class Sync extends BaseCommand {
   private async handleKnownFile(
     fileInfo: FileInfo,
     file: InstanceType<typeof File>,
-    importConfigId: string,
+    fileSyncOptionId: string,
   ) {
     const { creationDate, modificationDate, size, filename } = fileInfo;
     const lastRevision = file.revisions[0];
 
     if (
       modificationDate.getTime() === lastRevision.modificationDate.getTime() &&
-      size === lastRevision.modificationDate.getTime()
+      size === lastRevision.size
     ) {
       this.logger.debug(
         'stats are identical, ignore',
-        importConfigId,
+        fileSyncOptionId,
         filename,
       );
       return;
     }
 
-    this.logger.debug('stats have changed, proceed', importConfigId, filename);
+    this.logger.debug(
+      'stats have changed, proceed',
+      fileSyncOptionId,
+      filename,
+    );
 
     if (lastRevision.status === 'PENDING') {
       this.logger.debug(
         'latest revision is still pending, update',
-        importConfigId,
+        fileSyncOptionId,
         filename,
       );
 
@@ -180,7 +188,7 @@ export default class Sync extends BaseCommand {
 
     this.logger.debug(
       'latest revision is not pending, create new revision',
-      importConfigId,
+      fileSyncOptionId,
       filename,
     );
 

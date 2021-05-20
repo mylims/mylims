@@ -1,9 +1,9 @@
+import { XIcon } from '@heroicons/react/outline';
 import bytesize from 'byte-size';
 import clsx from 'clsx';
 import React from 'react';
 
 import { Table, TdProps } from '../../lists/Table';
-import { SvgOutlineX } from '../../svg/heroicon/outline';
 
 interface DropzoneListFile {
   id: string;
@@ -62,7 +62,7 @@ function DropzonListRow({ value: props }: DropzoneListRowProps) {
           onClick={props.delete}
           className="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 text-primary-500 hover:bg-primary-100 active:bg-primary-200 focus:ring-primary-600"
         >
-          <SvgOutlineX className="w-5 h-5" />
+          <XIcon className="w-5 h-5" />
         </button>
       </DropzoneTd>
     </tr>

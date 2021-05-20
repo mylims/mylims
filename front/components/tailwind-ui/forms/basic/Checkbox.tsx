@@ -32,7 +32,7 @@ export function Checkbox(props: CheckboxProps): JSX.Element {
           value={value}
           type="checkbox"
           className={clsx(
-            'w-4 h-4 rounded text-primary-600 disabled:text-neutral-300',
+            'w-4 h-4 rounded form-checkbox text-primary-600 disabled:text-neutral-300',
             error
               ? 'border-danger-300 focus:ring-danger-500'
               : 'border-neutral-300 focus:ring-primary-500',

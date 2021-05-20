@@ -1,6 +1,6 @@
+import { XIcon } from '@heroicons/react/outline';
 import React, { ReactNode } from 'react';
 
-import { SvgOutlineX } from '../../svg/heroicon/outline';
 import { PropsOf } from '../../types';
 
 export interface BannerProps<T extends React.ElementType> {
@@ -30,8 +30,8 @@ export function Banner<T extends React.ElementType = 'a'>(
       <div className="px-3 py-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex items-start flex-1 w-0 text-white md:items-center">
-            <span className="flex p-2 text-2xl rounded-lg bg-primary-800">
-              {icon}
+            <span className="flex p-2 rounded-lg bg-primary-800">
+              <span className="w-6 h-6">{icon}</span>
             </span>
             <p className="ml-3 font-semibold">
               <span className="md:inline">{description}</span>
@@ -53,7 +53,7 @@ export function Banner<T extends React.ElementType = 'a'>(
                 className="flex p-2 -mr-1 rounded-md hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
               >
                 <span className="sr-only">Dismiss</span>
-                <SvgOutlineX className="w-6 h-6 text-white" />
+                <XIcon className="w-6 h-6 text-white" />
               </button>
             </div>
           )}

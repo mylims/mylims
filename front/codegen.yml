@@ -1,6 +1,6 @@
 overwrite: true
 schema: 'http://localhost:3333/graphql'
-documents: 'graphql/*.graphql'
+documents: '**/*.graphql'
 hooks:
   afterOneFileWrite:
     - prettier --write
@@ -11,10 +11,15 @@ generates:
       - 'typescript-operations'
       - 'typescript-react-apollo'
     config:
+      withHOC: false
+      withComponent: false
+      withHooks: true
       withMutationFn: false
+      withRefetchFn: true
       apolloReactHooksImportFrom: '@apollo/client'
       namingConvention:
         enumValues: change-case#upperCase
+      skipTypename: true
   generated/fragmentTypes.ts:
     plugins:
       - 'fragment-matcher'

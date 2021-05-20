@@ -1,6 +1,5 @@
+import { ChevronRightIcon } from '@heroicons/react/outline';
 import React, { ReactNode } from 'react';
-
-import { SvgOutlineChevronRight } from '../svg/heroicon/outline';
 
 export interface BreadcrumbProps {
   children: Array<ReactNode>;
@@ -16,7 +15,7 @@ export function Breadcrumb(props: BreadcrumbProps) {
             <li key={index}>
               <div className="flex items-center space-x-4">
                 {index !== props.children.length && index !== 0 && (
-                  <SvgOutlineChevronRight className="flex-shrink-0 w-5 h-5 text-neutral-400" />
+                  <ChevronRightIcon className="flex-shrink-0 w-5 h-5 text-neutral-400" />
                 )}
                 {option}
               </div>

@@ -1,8 +1,7 @@
 import { Transition } from '@headlessui/react';
+import { XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React from 'react';
-
-import { SvgOutlineX } from '../svg/heroicon/outline';
 
 import { NotificationState } from './NotificationCenter';
 
@@ -53,7 +52,7 @@ export function ToastNotification(props: NotificationToastProps) {
                 onClick={props.onDismiss}
                 className="rounded-full p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-neutral-700 text-neutral-300 bg-neutral-700 hover:bg-neutral-100 hover:text-neutral-700 active:bg-neutral-50 focus:ring-neutral-100"
               >
-                <SvgOutlineX className="w-5 h-5" />
+                <XIcon className="w-5 h-5" />
               </button>
             </div>
           </div>

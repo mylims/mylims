@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import picomatch from 'picomatch';
 import React, { useState, useMemo } from 'react';
 
 import useAuth from '../hooks/useAuth';
@@ -9,10 +10,11 @@ import MenuDropDown from './MenuDropDown';
 import { ZakodiumSolidSvg } from './tailwind-ui';
 
 interface ElnLayoutProps {
+  pageTitle?: string;
   children: React.ReactNode;
 }
 
-export default function ElnLayout({ children }: ElnLayoutProps) {
+export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
   const router = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { isAuth } = useAuth();
@@ -23,6 +25,11 @@ export default function ElnLayout({ children }: ElnLayoutProps) {
         pathname: '/eln',
       },
       { label: 'Users', pathname: `/eln/users` },
+      {
+        label: 'File synchronization',
+        pathname: `/eln/addons/fileSync/list`,
+        pathmatch: `/eln/addons/fileSync/**`,
+      },
     ];
   }, []);
 
@@ -33,8 +40,10 @@ export default function ElnLayout({ children }: ElnLayoutProps) {
   }
 
   const { pathname } = router;
-  const currentLabel =
-    ROUTES.find((route) => pathname === route.pathname)?.label || ':C';
+  const currentTitle =
+    pageTitle ||
+    ROUTES.find((route) => pathname === route.pathname)?.label ||
+    'Unknown page title';
 
   return (
     <div>
@@ -47,22 +56,26 @@ export default function ElnLayout({ children }: ElnLayoutProps) {
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  {ROUTES.map((route) => (
-                    <Link href={route.pathname} key={route.pathname}>
-                      <a
-                        className={clsx(
-                          'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
-                          {
-                            'text-neutral-100 bg-neutral-900':
-                              pathname === route.pathname,
-                            'text-neutral-300': pathname !== route.pathname,
-                          },
-                        )}
-                      >
-                        {route.label}
-                      </a>
-                    </Link>
-                  ))}
+                  {ROUTES.map((route) => {
+                    const match = picomatch(route.pathmatch || route.pathname);
+                    return (
+                      <Link href={route.pathname} key={route.pathname}>
+                        <a
+                          className={clsx(
+                            'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
+                            {
+                              'text-neutral-100 bg-neutral-900': match(
+                                pathname,
+                              ),
+                              'text-neutral-300': !match(pathname),
+                            },
+                          )}
+                        >
+                          {route.label}
+                        </a>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -140,7 +153,7 @@ export default function ElnLayout({ children }: ElnLayoutProps) {
       <header className="bg-neutral-100 shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold leading-tight text-neutral-900">
-            {currentLabel}
+            {currentTitle}
           </h1>
         </div>
       </header>

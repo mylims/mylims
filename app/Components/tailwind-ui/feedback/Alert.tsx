@@ -1,13 +1,13 @@
+import {
+  CheckCircleIcon,
+  ExclamationIcon,
+  InformationCircleIcon,
+  XIcon,
+  XCircleIcon,
+} from '@heroicons/react/solid';
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
 
-import {
-  SvgSolidCheckCircle,
-  SvgSolidExclamation,
-  SvgSolidInformationCircle,
-  SvgSolidX,
-  SvgSolidXCircle,
-} from '../svg/heroicon/solid';
 import { Color } from '../types';
 
 const closeButtonColors: Record<Color, string> = {
@@ -47,7 +47,7 @@ const theme = {
       title: 'text-primary-800',
       text: 'text-primary-700',
     },
-    icon: <SvgSolidInformationCircle className="text-primary-400" />,
+    icon: <InformationCircleIcon className="w-5 h-5 text-primary-400" />,
   },
   [AlertType.WARNING]: {
     theme: {
@@ -55,7 +55,7 @@ const theme = {
       title: 'text-warning-800',
       text: 'text-warning-700',
     },
-    icon: <SvgSolidExclamation className="text-warning-400" />,
+    icon: <ExclamationIcon className="w-5 h-5 text-warning-400" />,
   },
   [AlertType.ERROR]: {
     theme: {
@@ -63,7 +63,7 @@ const theme = {
       title: 'text-danger-800',
       text: 'text-danger-700',
     },
-    icon: <SvgSolidXCircle className="text-danger-400" />,
+    icon: <XCircleIcon className="w-5 h-5 text-danger-400" />,
   },
   [AlertType.SUCCESS]: {
     theme: {
@@ -71,7 +71,7 @@ const theme = {
       title: 'text-success-800',
       text: 'text-success-700',
     },
-    icon: <SvgSolidCheckCircle className="text-success-400" />,
+    icon: <CheckCircleIcon className="w-5 h-5 text-success-400" />,
   },
 };
 
@@ -129,7 +129,7 @@ export function Alert(props: AlertProps): JSX.Element {
                   'rounded-full p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2',
                 )}
               >
-                <SvgSolidX className="w-5 h-5" />
+                <XIcon className="w-5 h-5" />
               </button>
             </div>
           </div>

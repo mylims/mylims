@@ -1,6 +1,6 @@
+import { ChevronRightIcon } from '@heroicons/react/outline';
 import React, { ReactNode } from 'react';
 
-import { SvgOutlineChevronRight } from '../svg/heroicon/outline';
 import { PropsOf } from '../types';
 
 export interface StackedListProps {
@@ -35,7 +35,7 @@ StackedList.Row = function <
             </div>
           </div>
           <div>
-            <SvgOutlineChevronRight className="w-5 h-5 text-neutral-400" />
+            <ChevronRightIcon className="w-5 h-5 text-neutral-400" />
           </div>
         </div>
       </Element>

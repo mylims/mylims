@@ -1,7 +1,6 @@
+import { DocumentSearchIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
-
-import { SvgOutlineDocumentSearch } from '../svg/heroicon/outline';
 
 interface ResourceNotFoundProps {
   resource: ReactNode;
@@ -18,7 +17,7 @@ export function ResourceNotFound(props: ResourceNotFoundProps) {
         props.className,
       )}
     >
-      <SvgOutlineDocumentSearch className="w-12 h-12 text-primary-600" />
+      <DocumentSearchIcon className="w-12 h-12 text-primary-600" />
       <div className="mt-1 font-semibold">{resource}</div>
       <div className="mt-2 text-sm text-neutral-700">
         {description

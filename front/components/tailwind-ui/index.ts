@@ -83,8 +83,6 @@ export * from './shells/SidebarLayout';
 export * from './shortcuts/KeyboardActionHelp';
 export * from './shortcuts/KeyboardActionProvider';
 
-export * from './svg/heroicon/outline';
-export * from './svg/heroicon/solid';
 export * from './svg/shutterstock';
 
 export * from './types';

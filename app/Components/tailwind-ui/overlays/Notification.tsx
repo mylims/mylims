@@ -1,8 +1,7 @@
 import { Transition } from '@headlessui/react';
+import { XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
-
-import { SvgOutlineX } from '../svg/heroicon/outline';
 
 import { NotificationState } from './NotificationCenter';
 
@@ -31,7 +30,7 @@ export function Notification(props: NotificationProps) {
       <div className="z-40 overflow-hidden rounded-lg ring-1 ring-black ring-opacity-5">
         <div className="p-4">
           <div className="flex items-start">
-            <div className="flex-shrink-0 text-xl">{props.icon}</div>
+            <div className="flex-shrink-0 w-5 h-5 text-xl">{props.icon}</div>
             <div className="ml-3 w-0 flex-1 pt-0.5">
               {props.title && (
                 <p className="text-sm font-semibold text-neutral-900">
@@ -47,7 +46,7 @@ export function Notification(props: NotificationProps) {
                 onClick={props.onDismiss}
                 className="inline-flex transition duration-150 ease-in-out text-neutral-400 focus:outline-none focus:text-neutral-500"
               >
-                <SvgOutlineX className="w-5 h-5" />
+                <XIcon className="w-5 h-5" />
               </button>
             </div>
           </div>

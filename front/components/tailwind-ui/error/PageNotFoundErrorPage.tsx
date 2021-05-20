@@ -1,9 +1,9 @@
+import { CheckIcon } from '@heroicons/react/outline';
 import React, { useContext } from 'react';
 
 import { Button } from '../elements/buttons/Button';
 import { Alert, AlertType } from '../feedback/Alert';
 import { NotificationContext } from '../overlays/NotificationContext';
-import { SvgOutlineCheck } from '../svg/heroicon/outline';
 import { Color } from '../types';
 
 import { ErrorPage } from './ErrorPage';
@@ -43,7 +43,7 @@ export function PageNotFoundErrorPage(props: PageNotFoundErrorPageProps) {
                     {
                       title: 'Successfully copied error report',
                       content: '',
-                      icon: <SvgOutlineCheck className="text-success-600" />,
+                      icon: <CheckIcon className="text-success-600" />,
                     },
                     3000,
                   );

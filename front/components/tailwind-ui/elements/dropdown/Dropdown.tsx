@@ -1,8 +1,7 @@
 import { Menu, Transition } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
-
-import { SvgSolidChevronDown } from '../../svg/heroicon/solid';
 
 export interface DropdownOption<T> {
   type: 'option';
@@ -45,7 +44,7 @@ export function Dropdown<T>(props: DropdownProps<T>): React.ReactElement {
               ) : (
                 <>
                   {props.title}
-                  <SvgSolidChevronDown className="w-5 h-5 ml-2 -mr-1" />
+                  <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" />
                 </>
               )}
             </Menu.Button>
@@ -103,7 +102,7 @@ export function Dropdown<T>(props: DropdownProps<T>): React.ReactElement {
                                     {option.icon !== undefined && (
                                       <span
                                         className={clsx(
-                                          'text-xl mr-3',
+                                          'w-5 h-5 mr-3',
                                           active
                                             ? 'text-neutral-500'
                                             : ' text-neutral-400',

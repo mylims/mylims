@@ -1,7 +1,6 @@
+import { PaperClipIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
-
-import { SvgOutlinePaperClip } from '../svg/heroicon/outline';
 
 interface DescriptionListProps {
   title: ReactNode;
@@ -66,7 +65,7 @@ export function DescriptionAttachmentList(
           className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
         >
           <div className="flex items-center flex-1 w-0">
-            <SvgOutlinePaperClip className="flex-shrink-0 w-5 h-5 text-neutral-400" />
+            <PaperClipIcon className="flex-shrink-0 w-5 h-5 text-neutral-400" />
             <span className="flex-1 w-0 ml-2 truncate">
               {attachment.filename}
             </span>

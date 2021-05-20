@@ -1,8 +1,7 @@
 import { Transition } from '@headlessui/react';
+import { MenuAlt1Icon, XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React, { ReactNode, useEffect, ReactElement } from 'react';
-
-import { SvgOutlineMenuAlt1, SvgOutlineX } from '../svg/heroicon/outline';
 
 interface SidebarLayoutProps {
   children: ReactElement[];
@@ -66,7 +65,7 @@ export function SidebarLayout(props: SidebarLayoutProps) {
                 aria-label="Close sidebar"
                 onClick={close}
               >
-                <SvgOutlineX className="w-6 h-6 text-white" />
+                <XIcon className="w-6 h-6 text-white" />
               </button>
             </div>
             <div>{sidebar}</div>
@@ -91,7 +90,7 @@ export function SidebarLayout(props: SidebarLayoutProps) {
             aria-label="Open sidebar"
             onClick={open}
           >
-            <SvgOutlineMenuAlt1 className="w-6 h-6 transition duration-150 ease-in-out" />
+            <MenuAlt1Icon className="w-6 h-6 transition duration-150 ease-in-out" />
           </button>
           <div className="flex justify-between flex-1">{header}</div>
         </div>

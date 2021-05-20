@@ -1,10 +1,10 @@
 import { Listbox, Transition } from '@headlessui/react';
+import { CheckIcon } from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import React, { ReactNode, useMemo } from 'react';
 
 import { useSameWidthPopper } from '../../hooks/popper';
-import { SvgOutlineCheck } from '../../svg/heroicon/outline';
-import { SvgSolidX } from '../../svg/heroicon/solid';
 
 import {
   labelDisabledColor,
@@ -118,7 +118,7 @@ function SelectHelper(props: SelectHelperProps) {
                           props.onSelect?.(undefined);
                         }}
                       >
-                        <SvgSolidX className="w-4 h-4 hover:text-neutral-500 text-neutral-400" />
+                        <XIcon className="w-4 h-4 hover:text-neutral-500 text-neutral-400" />
                       </div>
                     )}
 
@@ -177,7 +177,7 @@ function SelectHelper(props: SelectHelperProps) {
                                     'absolute inset-y-0 left-0 flex items-center pl-1.5',
                                   )}
                                 >
-                                  <SvgOutlineCheck className="w-5 h-5" />
+                                  <CheckIcon className="w-5 h-5" />
                                 </span>
                               )}
                             </div>
