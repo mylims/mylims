@@ -34,19 +34,14 @@ export default function EditConfig() {
         variables: { input: { ...values, id: id as string } },
       });
       resetForm();
-      router.push('../list').catch((err) => {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      });
+      await router.push('../list');
     },
     [editFileSyncOption, router, id],
   );
 
   if (id === undefined) {
-    router.push('list').catch((err) => {
-      // eslint-disable-next-line no-console
-      console.error(err);
-    });
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    router.push('list');
     return null;
   }
 

@@ -24,10 +24,7 @@ export default function CreateConfig() {
     ) => {
       await createFileSyncOption({ variables: { input: values } });
       resetForm();
-      router.push('list').catch((err) => {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      });
+      await router.push('list');
     },
     [createFileSyncOption, router],
   );
