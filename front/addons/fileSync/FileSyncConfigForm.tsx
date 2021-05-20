@@ -1,4 +1,3 @@
-import { TrashIcon } from '@heroicons/react/outline';
 import { Field, FieldArray, FormikConfig } from 'formik';
 import { useRouter } from 'next/router';
 
@@ -9,7 +8,6 @@ import {
   Form,
   FormError,
   InputField,
-  RadioField,
   Size,
   SubmitButton,
   ToggleField,
@@ -19,6 +17,8 @@ import {
   NewFileSyncOptionInput,
 } from '../../generated/graphql';
 import { omitDeep } from '../../utils/omit-deep';
+
+import PatternEdit from './PatternEdit';
 
 const defaultInitialValues: NewFileSyncOptionInput = {
   enabled: false,
@@ -86,40 +86,13 @@ export default function FileSyncConfigForm({
                       </h3>
                       <div className="flex flex-wrap">
                         {values.patterns.length > 0 &&
-                          values.patterns.map((pattern, index) => (
-                            <div
-                              className="m-2 min-w-1/3"
-                              key={pattern.pattern}
-                            >
-                              <Card>
-                                <Card.Header>
-                                  <Button
-                                    size={Size.xSmall}
-                                    color={Color.danger}
-                                    onClick={() => remove(index)}
-                                  >
-                                    <TrashIcon className="h-5 w-5" />
-                                  </Button>
-                                </Card.Header>
-                                <div className="p-2">
-                                  <RadioField
-                                    value="include"
-                                    name={`patterns.${index}.type`}
-                                    label="Include"
-                                  />
-                                  <RadioField
-                                    value="exclude"
-                                    name={`patterns.${index}.type`}
-                                    label="Exclude"
-                                  />
-                                  <InputField
-                                    name={`patterns.${index}.pattern`}
-                                    label="Pattern"
-                                    hiddenLabel
-                                  />
-                                </div>
-                              </Card>
-                            </div>
+                          values.patterns.map((_, index) => (
+                            <PatternEdit
+                              // eslint-disable-next-line react/no-array-index-key
+                              key={index}
+                              remove={remove}
+                              index={index}
+                            />
                           ))}
                       </div>
                     </>
