@@ -63,6 +63,8 @@ export default class Sync extends BaseCommand {
       }
       if (!fileSyncOption.enabled) {
         this.logger.warning('specified file sync option is disabled');
+        const confirmed = await this.prompt.confirm('continue anyway?');
+        if (!confirmed) return;
       }
 
       fileSyncOptionsToProcess.push(fileSyncOption);
@@ -79,9 +81,7 @@ export default class Sync extends BaseCommand {
   }
 
   private async executeConfig(fileSyncOption: FileSyncOption) {
-    const sync = new FileSynchronizer({
-      ...fileSyncOption,
-    });
+    const sync = new FileSynchronizer(fileSyncOption);
 
     const fileHandlers: Promise<void>[] = [];
     const fileSyncOptionId = fileSyncOption.id.toHexString();
@@ -158,7 +158,7 @@ export default class Sync extends BaseCommand {
 
     if (
       modificationDate.getTime() === lastRevision.modificationDate.getTime() &&
-      size === lastRevision.modificationDate.getTime()
+      size === lastRevision.size
     ) {
       this.logger.debug(
         'stats are identical, ignore',
