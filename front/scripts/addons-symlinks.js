@@ -11,11 +11,7 @@ const addonFolders = fs.readdirSync(addonsRoot);
 const symlinkRoot = join('pages', 'eln', 'addons');
 
 console.log('clear previous symlinks...');
-try {
-  fs.rmSync(symlinkRoot, { recursive: true });
-} catch (err) {
-  console.log('no previous symlink found...');
-}
+fs.rmSync(symlinkRoot, { recursive: true, force: true });
 fs.mkdirSync(symlinkRoot);
 
 console.log(`found ${addonFolders.length} addons...`);
