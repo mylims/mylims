@@ -36,8 +36,7 @@ export default function Login() {
 
   useEffect(() => {
     if (auth.isAuth) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      router.push('/eln');
+      void router.push('/eln');
     }
   }, [auth.isAuth, router]);
 

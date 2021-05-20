@@ -40,8 +40,7 @@ export default function EditConfig() {
   );
 
   if (id === undefined) {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    router.push('list');
+    void router.push('list');
     return null;
   }
 
