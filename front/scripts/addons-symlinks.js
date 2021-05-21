@@ -16,19 +16,13 @@ fs.mkdirSync(symlinkRoot);
 
 console.log(`found ${addonFolders.length} addons...`);
 const createdSymlinks = addonFolders.filter((addonFolder) => {
-  const absoluteTarget = resolve(
-    process.cwd(),
-    addonsRoot,
-    addonFolder,
-    'pages',
-  );
-
-  const symlinkPath = resolve(process.cwd(), join(symlinkRoot, addonFolder));
+  const relativeTarget = join('..', '..', '..', 'addons', addonFolder, 'pages');
+  const symlinkPath = join(process.cwd(), symlinkRoot, addonFolder);
 
   try {
-    fs.accessSync(absoluteTarget);
-    fs.symlinkSync(absoluteTarget, symlinkPath);
-    console.log(`${symlinkPath} --> ${absoluteTarget}`);
+    fs.accessSync(resolve(symlinkRoot, relativeTarget));
+    fs.symlinkSync(relativeTarget, symlinkPath);
+    console.log(`${symlinkPath} --> ${relativeTarget}`);
     return true;
   } catch (err) {
     if (err.code !== 'ENOENT') {
