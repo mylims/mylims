@@ -8,7 +8,7 @@ const addonsRoot = 'addons';
 
 const addonFolders = fs.readdirSync(addonsRoot);
 
-const symlinkRoot = join('pages', 'eln', 'addons');
+const symlinkRoot = 'pages/eln/addons';
 
 console.log('clear previous symlinks...');
 fs.rmSync(symlinkRoot, { recursive: true, force: true });
