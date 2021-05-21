@@ -18,7 +18,7 @@ console.log(`found ${addonFolders.length} addons...`);
 const createdSymlinks = addonFolders.filter((addonFolder) => {
   const relativeTarget = relative(
     symlinkRoot,
-    join('addons', addonFolder, 'pages'),
+    join(addonsRoot, addonFolder, 'pages'),
   );
 
   const symlinkPath = join(process.cwd(), symlinkRoot, addonFolder);
