@@ -2,7 +2,7 @@
 'use strict';
 
 const fs = require('fs');
-const { join, resolve } = require('path');
+const { join, resolve, relative } = require('path');
 
 const addonsRoot = 'addons';
 
@@ -16,7 +16,11 @@ fs.mkdirSync(symlinkRoot);
 
 console.log(`found ${addonFolders.length} addons...`);
 const createdSymlinks = addonFolders.filter((addonFolder) => {
-  const relativeTarget = join('..', '..', '..', 'addons', addonFolder, 'pages');
+  const relativeTarget = relative(
+    symlinkRoot,
+    join('addons', addonFolder, 'pages'),
+  );
+
   const symlinkPath = join(process.cwd(), symlinkRoot, addonFolder);
 
   try {
