@@ -2,13 +2,13 @@
 'use strict';
 
 const fs = require('fs');
-const { join, resolve } = require('path');
+const { join, resolve, relative } = require('path');
 
 const addonsRoot = 'addons';
 
 const addonFolders = fs.readdirSync(addonsRoot);
 
-const symlinkRoot = join('pages', 'eln', 'addons');
+const symlinkRoot = 'pages/eln/addons';
 
 console.log('clear previous symlinks...');
 fs.rmSync(symlinkRoot, { recursive: true, force: true });
@@ -16,19 +16,17 @@ fs.mkdirSync(symlinkRoot);
 
 console.log(`found ${addonFolders.length} addons...`);
 const createdSymlinks = addonFolders.filter((addonFolder) => {
-  const absoluteTarget = resolve(
-    process.cwd(),
-    addonsRoot,
-    addonFolder,
-    'pages',
+  const relativeTarget = relative(
+    symlinkRoot,
+    join(addonsRoot, addonFolder, 'pages'),
   );
 
-  const symlinkPath = resolve(process.cwd(), join(symlinkRoot, addonFolder));
+  const symlinkPath = join(symlinkRoot, addonFolder);
 
   try {
-    fs.accessSync(absoluteTarget);
-    fs.symlinkSync(absoluteTarget, symlinkPath);
-    console.log(`${symlinkPath} --> ${absoluteTarget}`);
+    fs.accessSync(resolve(symlinkRoot, relativeTarget));
+    fs.symlinkSync(relativeTarget, symlinkPath);
+    console.log(`${symlinkPath} --> ${relativeTarget}`);
     return true;
   } catch (err) {
     if (err.code !== 'ENOENT') {
