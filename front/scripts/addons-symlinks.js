@@ -21,7 +21,7 @@ const createdSymlinks = addonFolders.filter((addonFolder) => {
     join(addonsRoot, addonFolder, 'pages'),
   );
 
-  const symlinkPath = join(process.cwd(), symlinkRoot, addonFolder);
+  const symlinkPath = join(symlinkRoot, addonFolder);
 
   try {
     fs.accessSync(resolve(symlinkRoot, relativeTarget));
