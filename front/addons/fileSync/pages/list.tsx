@@ -61,9 +61,10 @@ export default function ConfigList() {
 function Header() {
   return (
     <tr>
-      <Th className="w-1/3">Enabled</Th>
-      <Th className="w-1/3">Root</Th>
-      <Th className="w-1/3">Patterns</Th>
+      <Th className="w-1/4">Enabled</Th>
+      <Th className="w-1/4">Root</Th>
+      <Th className="w-1/4">Patterns</Th>
+      <Th className="w-1/4">Ready checks</Th>
       <Th>Actions</Th>
     </tr>
   );
@@ -88,6 +89,7 @@ function Row(
         </Td>
         <Td>{value.root}</Td>
         <Td>{value.patterns.length}</Td>
+        <Td>{value.readyChecks.length}</Td>
         <Td>
           <Link href="edit/[id]" as={`edit/${value.id}`}>
             <Button roundness={Roundness.circular}>

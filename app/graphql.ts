@@ -27,12 +27,16 @@ export type Scalars = {
   Float: number;
   /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSONObject: any;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: any;
 };
 
 export type GqlQuery = {
+  __typename?: 'Query';
   users: Array<GqlUser>;
   fileSyncOptions: Array<GqlFileSyncOption>;
   fileSyncOption: GqlFileSyncOption;
+  readyChecks: Array<Scalars['String']>;
 };
 
 export type GqlQueryFileSyncOptionArgs = {
@@ -40,6 +44,7 @@ export type GqlQueryFileSyncOptionArgs = {
 };
 
 export type GqlUser = {
+  __typename?: 'User';
   id: Scalars['ID'];
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
@@ -49,6 +54,7 @@ export type GqlUser = {
 };
 
 export type GqlMutation = {
+  __typename?: 'Mutation';
   createFileSyncOption: GqlFileSyncOption;
   editFileSyncOption: GqlFileSyncOption;
   deleteFileSyncOption: Array<GqlFileSyncOption>;
@@ -72,16 +78,19 @@ export enum GqlPatternType {
 }
 
 export type GqlPattern = {
+  __typename?: 'Pattern';
   type: GqlPatternType;
   pattern: Scalars['String'];
 };
 
 export type GqlFileSyncOption = {
+  __typename?: 'FileSyncOption';
   id: Scalars['ID'];
   enabled: Scalars['Boolean'];
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
   patterns: Array<GqlPattern>;
+  readyChecks: Array<GqlReadyCheck>;
 };
 
 export type GqlNewFileSyncOptionInput = {
@@ -89,6 +98,7 @@ export type GqlNewFileSyncOptionInput = {
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
   patterns: Array<GqlFileSyncOptionPatternInput>;
+  readyChecks: Array<GqlReadyCheckInput>;
 };
 
 export type GqlEditFileSyncOptionInput = {
@@ -97,6 +107,7 @@ export type GqlEditFileSyncOptionInput = {
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
   patterns: Array<GqlFileSyncOptionPatternInput>;
+  readyChecks: Array<GqlReadyCheckInput>;
 };
 
 export type GqlDeleteFileSyncOptionInput = {
@@ -106,6 +117,24 @@ export type GqlDeleteFileSyncOptionInput = {
 export type GqlFileSyncOptionPatternInput = {
   type: GqlPatternType;
   pattern: Scalars['String'];
+};
+
+export type GqlReadyCheckInput = {
+  name: Scalars['String'];
+  type: GqlReadyCheckType;
+  keyValue: Scalars['JSON'];
+};
+
+export enum GqlReadyCheckType {
+  DYNAMIC = 'dynamic',
+  STATIC = 'static',
+}
+
+export type GqlReadyCheck = {
+  __typename?: 'ReadyCheck';
+  name: Scalars['String'];
+  type: GqlReadyCheckType;
+  keyValue: Scalars['JSON'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -228,10 +257,11 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type GqlResolversTypes = ResolversObject<{
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
+  JSON: ResolverTypeWrapper<Scalars['JSON']>;
   Query: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  User: ResolverTypeWrapper<User>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  User: ResolverTypeWrapper<User>;
   Mutation: ResolverTypeWrapper<{}>;
   PatternType: GqlPatternType;
   Pattern: ResolverTypeWrapper<GqlPattern>;
@@ -242,15 +272,19 @@ export type GqlResolversTypes = ResolversObject<{
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
+  ReadyCheckInput: GqlReadyCheckInput;
+  ReadyCheckType: GqlReadyCheckType;
+  ReadyCheck: ResolverTypeWrapper<GqlReadyCheck>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type GqlResolversParentTypes = ResolversObject<{
   JSONObject: Scalars['JSONObject'];
+  JSON: Scalars['JSON'];
   Query: {};
   ID: Scalars['ID'];
-  User: User;
   String: Scalars['String'];
+  User: User;
   Mutation: {};
   Pattern: GqlPattern;
   FileSyncOption: FileSyncOption;
@@ -260,11 +294,18 @@ export type GqlResolversParentTypes = ResolversObject<{
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
+  ReadyCheckInput: GqlReadyCheckInput;
+  ReadyCheck: GqlReadyCheck;
 }>;
 
 export interface GqlJsonObjectScalarConfig
   extends GraphQLScalarTypeConfig<GqlResolversTypes['JSONObject'], any> {
   name: 'JSONObject';
+}
+
+export interface GqlJsonScalarConfig
+  extends GraphQLScalarTypeConfig<GqlResolversTypes['JSON'], any> {
+  name: 'JSON';
 }
 
 export type GqlQueryResolvers<
@@ -282,6 +323,11 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlQueryFileSyncOptionArgs, 'id'>
+  >;
+  readyChecks?: Resolver<
+    Array<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
   >;
 }>;
 
@@ -360,14 +406,31 @@ export type GqlFileSyncOptionResolvers<
     ParentType,
     ContextType
   >;
+  readyChecks?: Resolver<
+    Array<GqlResolversTypes['ReadyCheck']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlReadyCheckResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['ReadyCheck'] = GqlResolversParentTypes['ReadyCheck']
+> = ResolversObject<{
+  name?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<GqlResolversTypes['ReadyCheckType'], ParentType, ContextType>;
+  keyValue?: Resolver<GqlResolversTypes['JSON'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   JSONObject?: GraphQLScalarType;
+  JSON?: GraphQLScalarType;
   Query?: GqlQueryResolvers<ContextType>;
   User?: GqlUserResolvers<ContextType>;
   Mutation?: GqlMutationResolvers<ContextType>;
   Pattern?: GqlPatternResolvers<ContextType>;
   FileSyncOption?: GqlFileSyncOptionResolvers<ContextType>;
+  ReadyCheck?: GqlReadyCheckResolvers<ContextType>;
 }>;

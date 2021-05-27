@@ -7,6 +7,8 @@ import { GqlResolvers } from 'App/graphql';
 
 import FileSyncOption from '../Models/FileSyncOption';
 
+import { ensureCheckName } from './ReadyCheck';
+
 const resolvers: GqlResolvers = {
   Query: {
     async fileSyncOptions() {
@@ -23,9 +25,12 @@ const resolvers: GqlResolvers = {
   },
   Mutation: {
     async createFileSyncOption(_, { input }) {
+      input.readyChecks.forEach(({ name }) => ensureCheckName(name));
       return FileSyncOption.create(input);
     },
     async editFileSyncOption(_, { input }) {
+      input.readyChecks.forEach(({ name }) => ensureCheckName(name));
+
       const fileSyncOption = await FileSyncOption.findById(
         new ObjectId(input.id),
       );
@@ -37,6 +42,7 @@ const resolvers: GqlResolvers = {
       fileSyncOption.root = input.root;
       fileSyncOption.maxDepth = input.maxDepth;
       fileSyncOption.patterns = input.patterns as Pattern[];
+      fileSyncOption.readyChecks = input.readyChecks;
 
       await fileSyncOption.save();
       return fileSyncOption;

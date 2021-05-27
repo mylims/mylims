@@ -1,0 +1,14 @@
+type Query {
+  readyChecks: [String!]!
+}
+
+enum ReadyCheckType {
+  dynamic
+  static
+}
+
+type ReadyCheck {
+  name: String!
+  type: ReadyCheckType!
+  keyValue: JSON!
+}

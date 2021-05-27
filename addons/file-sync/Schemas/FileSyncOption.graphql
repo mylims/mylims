@@ -25,6 +25,7 @@ type FileSyncOption {
   root: String!
   maxDepth: Int!
   patterns: [Pattern!]!
+  readyChecks: [ReadyCheck!]!
 }
 
 input NewFileSyncOptionInput {
@@ -32,6 +33,7 @@ input NewFileSyncOptionInput {
   root: String!
   maxDepth: Int!
   patterns: [FileSyncOptionPatternInput!]!
+  readyChecks: [ReadyCheckInput!]!
 }
 
 input EditFileSyncOptionInput {
@@ -40,6 +42,7 @@ input EditFileSyncOptionInput {
   root: String!
   maxDepth: Int!
   patterns: [FileSyncOptionPatternInput!]!
+  readyChecks: [ReadyCheckInput!]!
 }
 
 input DeleteFileSyncOptionInput {
@@ -49,4 +52,10 @@ input DeleteFileSyncOptionInput {
 input FileSyncOptionPatternInput {
   type: PatternType!
   pattern: String!
+}
+
+input ReadyCheckInput {
+  name: String!
+  type: ReadyCheckType!
+  keyValue: JSON!
 }
