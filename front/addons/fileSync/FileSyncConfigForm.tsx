@@ -17,7 +17,6 @@ import {
 import {
   EditFileSyncOptionInput,
   NewFileSyncOptionInput,
-  ReadyChecksQuery,
   useReadyChecksQuery,
 } from '../../generated/graphql';
 import { omitDeep } from '../../utils/omit-deep';
