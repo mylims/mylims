@@ -1,14 +1,18 @@
 type Query {
-  readyChecks: [String!]!
+  readyChecks: [ReadyCheckDescriptor!]!
 }
 
-enum ReadyCheckType {
-  dynamic
-  static
+type ReadyCheckDescriptor {
+  name: String!
+  hasArg: Boolean!
 }
 
 type ReadyCheck {
   name: String!
-  type: ReadyCheckType!
-  keyValue: JSON!
+  value: String
+}
+
+input ReadyCheckInput {
+  name: String!
+  value: String
 }

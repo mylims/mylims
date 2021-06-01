@@ -2,9 +2,9 @@
   "name": "file-sync",
   "version": "0.0.0",
   "private": true,
-  "devDependencies": {},
   "dependencies": {
     "@lukeed/uuid": "^2.0.0",
+    "bson": "^4.4.0",
     "fs-synchronizer": "^0.2.0",
     "is-my-file-ready": "^0.1.0"
   }

@@ -7,30 +7,35 @@ import { GqlResolvers } from 'App/graphql';
 
 import FileSyncOption from '../Models/FileSyncOption';
 
-import { ensureCheckName } from './ReadyCheck';
+import { deserializeReadyChecks, serializeReadyChecks } from './ReadyCheck';
 
 const resolvers: GqlResolvers = {
   Query: {
     async fileSyncOptions() {
       const fileSyncOptions = await FileSyncOption.find({});
-      return fileSyncOptions.all();
+      const allFileSyncOptions = await fileSyncOptions.all();
+      return allFileSyncOptions.map(fileSyncOption => {
+        fileSyncOption.readyChecks = serializeReadyChecks(fileSyncOption.readyChecks)
+        return fileSyncOption
+      })
     },
     async fileSyncOption(_, { id }) {
       const fileSyncOption = await FileSyncOption.findById(new ObjectId(id));
       if (!fileSyncOption) {
         throw new NotFoundError('file sync option not found');
       }
+      fileSyncOption.readyChecks = serializeReadyChecks(fileSyncOption.readyChecks)
       return fileSyncOption;
     },
   },
   Mutation: {
     async createFileSyncOption(_, { input }) {
-      input.readyChecks.forEach(({ name }) => ensureCheckName(name));
-      return FileSyncOption.create(input);
+      return FileSyncOption.create({
+        ...input,
+        readyChecks: deserializeReadyChecks(input.readyChecks)
+      });
     },
     async editFileSyncOption(_, { input }) {
-      input.readyChecks.forEach(({ name }) => ensureCheckName(name));
-
       const fileSyncOption = await FileSyncOption.findById(
         new ObjectId(input.id),
       );
@@ -42,7 +47,7 @@ const resolvers: GqlResolvers = {
       fileSyncOption.root = input.root;
       fileSyncOption.maxDepth = input.maxDepth;
       fileSyncOption.patterns = input.patterns as Pattern[];
-      fileSyncOption.readyChecks = input.readyChecks;
+      fileSyncOption.readyChecks = deserializeReadyChecks(input.readyChecks);
 
       await fileSyncOption.save();
       return fileSyncOption;

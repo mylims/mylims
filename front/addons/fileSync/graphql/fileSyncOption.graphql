@@ -9,8 +9,7 @@ fragment FileSyncOptionFields on FileSyncOption {
   }
   readyChecks {
     name
-    type
-    keyValue
+    value
   }
 }
 

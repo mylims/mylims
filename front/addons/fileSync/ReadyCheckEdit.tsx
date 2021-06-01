@@ -7,31 +7,33 @@ import {
   Card,
   Color,
   InputField,
-  RadioField,
   SelectField,
   Size,
 } from '../../components/tailwind-ui';
+import { ReadyCheckDescriptor, ReadyCheckInput } from '../../generated/graphql';
 
 interface ReadyCheckEditProps {
   remove: ArrayHelpers['remove'];
   index: number;
-  checkNames: string[];
+  checks: ReadyCheckDescriptor[];
+  readyCheck: ReadyCheckInput;
 }
 
 export default function ReadyCheckEdit({
   remove,
   index,
-  checkNames,
+  checks,
+  readyCheck,
 }: ReadyCheckEditProps) {
   const checkNamesOptions = useMemo(() => {
-    return checkNames.map((checkName) => ({
-      label: checkName,
-      value: checkName,
+    return checks.map(({ name }) => ({
+      label: name,
+      value: name,
     }));
-  }, [checkNames]);
+  }, [checks]);
 
   return (
-    <div className="m-2 min-w-1/3">
+    <div className="p-2 lg:w-1/4 md:w-1/3 sm:w-1/2 w-full">
       <Card>
         <Card.Header>
           <Button
@@ -48,22 +50,11 @@ export default function ReadyCheckEdit({
             options={checkNamesOptions}
             resolveTo="value"
           />
-          <div>
-            <RadioField
-              value="dynamic"
-              name={`readyChecks.${index}.type`}
-              label="Dynamic"
-            />
-            <RadioField
-              value="static"
-              name={`readyChecks.${index}.type`}
-              label="Static"
-            />
-          </div>
-          <InputField
-            name={`readyChecks.${index}.keyValue`}
-            label="Key / Value"
-          />
+          {checks.some(
+            (check) => check.name === readyCheck.name && check.hasArg,
+          ) && (
+            <InputField name={`readyChecks.${index}.value`} label="Parameter" />
+          )}
         </div>
       </Card>
     </div>

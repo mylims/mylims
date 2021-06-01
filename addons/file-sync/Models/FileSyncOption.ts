@@ -3,7 +3,10 @@ import { Pattern, SyncOptions } from 'fs-synchronizer';
 import { Model } from '@ioc:Mongodb/Model';
 import ObjectId from '@ioc:Mongodb/ObjectId';
 
-import { GqlReadyCheckType } from 'App/graphql';
+export interface ReadyCheck {
+  name: string
+  value?: unknown
+}
 
 export interface FileSyncOptionFields extends SyncOptions {
   id?: ObjectId;
@@ -11,11 +14,7 @@ export interface FileSyncOptionFields extends SyncOptions {
   enabled: boolean;
   maxDepth: number;
   patterns: Pattern[];
-}
-export interface ReadyCheckInput {
-  name: string;
-  type: GqlReadyCheckType;
-  keyValue: unknown;
+  readyChecks: ReadyCheck[];
 }
 
 export default class FileSyncOption
@@ -25,5 +24,5 @@ export default class FileSyncOption
   public enabled: boolean;
   public maxDepth: number;
   public patterns: Pattern[];
-  public readyChecks: ReadyCheckInput[];
+  public readyChecks: ReadyCheck[];
 }

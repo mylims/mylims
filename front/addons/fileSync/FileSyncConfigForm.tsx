@@ -122,22 +122,21 @@ export default function FileSyncConfigForm({
                           <Button
                             size={Size.xSmall}
                             className="ml-2"
-                            onClick={() =>
-                              push({ name: '', type: 'static', keyValue: '' })
-                            }
+                            onClick={() => push({ name: '' })}
                           >
                             Add
                           </Button>
                         </h3>
                         <div className="flex flex-wrap">
                           {values.readyChecks.length > 0 &&
-                            values.readyChecks.map((_, index) => (
+                            values.readyChecks.map((readyCheck, index) => (
                               <ReadyCheckEdit
                                 // eslint-disable-next-line react/no-array-index-key
                                 key={index}
                                 remove={remove}
                                 index={index}
-                                checkNames={data?.readyChecks ?? []}
+                                readyCheck={readyCheck}
+                                checks={data?.readyChecks ?? []}
                               />
                             ))}
                         </div>

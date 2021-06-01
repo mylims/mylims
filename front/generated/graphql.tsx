@@ -90,7 +90,7 @@ export type Query = {
   users: Array<User>;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
-  readyChecks: Array<Scalars['String']>;
+  readyChecks: Array<ReadyCheckDescriptor>;
 };
 
 export type QueryFileSyncOptionArgs = {
@@ -99,20 +99,18 @@ export type QueryFileSyncOptionArgs = {
 
 export type ReadyCheck = {
   name: Scalars['String'];
-  type: ReadyCheckType;
-  keyValue: Scalars['JSON'];
+  value?: Maybe<Scalars['String']>;
+};
+
+export type ReadyCheckDescriptor = {
+  name: Scalars['String'];
+  hasArg: Scalars['Boolean'];
 };
 
 export type ReadyCheckInput = {
   name: Scalars['String'];
-  type: ReadyCheckType;
-  keyValue: Scalars['JSON'];
+  value?: Maybe<Scalars['String']>;
 };
-
-export enum ReadyCheckType {
-  DYNAMIC = 'dynamic',
-  STATIC = 'static',
-}
 
 export type User = {
   id: Scalars['ID'];
@@ -128,7 +126,7 @@ export type FileSyncOptionFieldsFragment = Pick<
   'id' | 'enabled' | 'root' | 'maxDepth'
 > & {
   patterns: Array<Pick<Pattern, 'type' | 'pattern'>>;
-  readyChecks: Array<Pick<ReadyCheck, 'name' | 'type' | 'keyValue'>>;
+  readyChecks: Array<Pick<ReadyCheck, 'name' | 'value'>>;
 };
 
 export type FileSyncOptionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -174,7 +172,9 @@ export type DeleteFileSyncOptionMutation = {
 
 export type ReadyChecksQueryVariables = Exact<{ [key: string]: never }>;
 
-export type ReadyChecksQuery = Pick<Query, 'readyChecks'>;
+export type ReadyChecksQuery = {
+  readyChecks: Array<Pick<ReadyCheckDescriptor, 'name' | 'hasArg'>>;
+};
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -199,8 +199,7 @@ export const FileSyncOptionFieldsFragmentDoc = gql`
     }
     readyChecks {
       name
-      type
-      keyValue
+      value
     }
   }
 `;
@@ -474,7 +473,10 @@ export type DeleteFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
 >;
 export const ReadyChecksDocument = gql`
   query ReadyChecks {
-    readyChecks
+    readyChecks {
+      name
+      hasArg
+    }
   }
 `;
 
