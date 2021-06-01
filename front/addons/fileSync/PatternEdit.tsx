@@ -18,7 +18,7 @@ interface PatternEditProps {
 
 export default function PatternEdit({ remove, index }: PatternEditProps) {
   return (
-    <div className="p-2 lg:w-1/4 md:w-1/3 sm:w-1/2 w-full">
+    <div className="p-2">
       <Card>
         <Card.Header>
           <Button

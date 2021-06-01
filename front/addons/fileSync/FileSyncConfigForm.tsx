@@ -99,7 +99,7 @@ export default function FileSyncConfigForm({
                           Add
                         </Button>
                       </h3>
-                      <div className="flex flex-wrap">
+                      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
                         {values.patterns.length > 0 &&
                           values.patterns.map((_, index) => (
                             <PatternEdit
@@ -127,7 +127,7 @@ export default function FileSyncConfigForm({
                             Add
                           </Button>
                         </h3>
-                        <div className="flex flex-wrap">
+                        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
                           {values.readyChecks.length > 0 &&
                             values.readyChecks.map((readyCheck, index) => (
                               <ReadyCheckEdit
