@@ -1,0 +1,6 @@
+query ReadyChecks {
+  readyChecks {
+    name
+    hasArg
+  }
+}

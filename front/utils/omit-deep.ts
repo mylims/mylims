@@ -12,7 +12,7 @@ export function omitDeep(obj: any, props: string[] | string) {
         newObj[objKey] = obj[objKey].map((subObj: any) =>
           omitDeep(subObj, props),
         );
-      } else if (typeof obj[objKey] === 'object') {
+      } else if (typeof obj[objKey] === 'object' && obj[objKey] !== null) {
         newObj[objKey] = omitDeep(obj[objKey], props);
       } else {
         newObj[objKey] = obj[objKey];

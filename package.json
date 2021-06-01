@@ -78,7 +78,6 @@
     "source-map-support": "^0.5.19"
   },
   "volta": {
-    "node": "15.11.0",
-    "npm": "7.6.1"
+    "node": "16.2.0"
   }
 }

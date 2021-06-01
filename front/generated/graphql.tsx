@@ -17,6 +17,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: any;
   /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSONObject: any;
 };
@@ -31,6 +33,7 @@ export type EditFileSyncOptionInput = {
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
   patterns: Array<FileSyncOptionPatternInput>;
+  readyChecks: Array<ReadyCheckInput>;
 };
 
 export type FileSyncOption = {
@@ -39,6 +42,7 @@ export type FileSyncOption = {
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
   patterns: Array<Pattern>;
+  readyChecks: Array<ReadyCheck>;
 };
 
 export type FileSyncOptionPatternInput = {
@@ -69,6 +73,7 @@ export type NewFileSyncOptionInput = {
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
   patterns: Array<FileSyncOptionPatternInput>;
+  readyChecks: Array<ReadyCheckInput>;
 };
 
 export type Pattern = {
@@ -85,10 +90,26 @@ export type Query = {
   users: Array<User>;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
+  readyChecks: Array<ReadyCheckDescriptor>;
 };
 
 export type QueryFileSyncOptionArgs = {
   id: Scalars['ID'];
+};
+
+export type ReadyCheck = {
+  name: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
+};
+
+export type ReadyCheckDescriptor = {
+  name: Scalars['String'];
+  hasArg: Scalars['Boolean'];
+};
+
+export type ReadyCheckInput = {
+  name: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
 };
 
 export type User = {
@@ -103,7 +124,10 @@ export type User = {
 export type FileSyncOptionFieldsFragment = Pick<
   FileSyncOption,
   'id' | 'enabled' | 'root' | 'maxDepth'
-> & { patterns: Array<Pick<Pattern, 'type' | 'pattern'>> };
+> & {
+  patterns: Array<Pick<Pattern, 'type' | 'pattern'>>;
+  readyChecks: Array<Pick<ReadyCheck, 'name' | 'value'>>;
+};
 
 export type FileSyncOptionsQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -146,6 +170,12 @@ export type DeleteFileSyncOptionMutation = {
   >;
 };
 
+export type ReadyChecksQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ReadyChecksQuery = {
+  readyChecks: Array<Pick<ReadyCheckDescriptor, 'name' | 'hasArg'>>;
+};
+
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UsersQuery = {
@@ -166,6 +196,10 @@ export const FileSyncOptionFieldsFragmentDoc = gql`
     patterns {
       type
       pattern
+    }
+    readyChecks {
+      name
+      value
     }
   }
 `;
@@ -437,6 +471,65 @@ export type DeleteFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
   DeleteFileSyncOptionMutation,
   DeleteFileSyncOptionMutationVariables
 >;
+export const ReadyChecksDocument = gql`
+  query ReadyChecks {
+    readyChecks {
+      name
+      hasArg
+    }
+  }
+`;
+
+/**
+ * __useReadyChecksQuery__
+ *
+ * To run a query within a React component, call `useReadyChecksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReadyChecksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useReadyChecksQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useReadyChecksQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    ReadyChecksQuery,
+    ReadyChecksQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<ReadyChecksQuery, ReadyChecksQueryVariables>(
+    ReadyChecksDocument,
+    options,
+  );
+}
+export function useReadyChecksLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    ReadyChecksQuery,
+    ReadyChecksQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    ReadyChecksQuery,
+    ReadyChecksQueryVariables
+  >(ReadyChecksDocument, options);
+}
+export type ReadyChecksQueryHookResult = ReturnType<typeof useReadyChecksQuery>;
+export type ReadyChecksLazyQueryHookResult = ReturnType<
+  typeof useReadyChecksLazyQuery
+>;
+export type ReadyChecksQueryResult = Apollo.QueryResult<
+  ReadyChecksQuery,
+  ReadyChecksQueryVariables
+>;
+export function refetchReadyChecksQuery(variables?: ReadyChecksQueryVariables) {
+  return { query: ReadyChecksDocument, variables: variables };
+}
 export const UsersDocument = gql`
   query Users {
     users {

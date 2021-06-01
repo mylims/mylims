@@ -1,0 +1,18 @@
+type Query {
+  readyChecks: [ReadyCheckDescriptor!]!
+}
+
+type ReadyCheckDescriptor {
+  name: String!
+  hasArg: Boolean!
+}
+
+type ReadyCheck {
+  name: String!
+  value: String
+}
+
+input ReadyCheckInput {
+  name: String!
+  value: String
+}

@@ -2,6 +2,8 @@ import { Field, FieldArray, FormikConfig } from 'formik';
 import { useRouter } from 'next/router';
 
 import {
+  Alert,
+  AlertType,
   Button,
   Card,
   Color,
@@ -15,16 +17,19 @@ import {
 import {
   EditFileSyncOptionInput,
   NewFileSyncOptionInput,
+  useReadyChecksQuery,
 } from '../../generated/graphql';
 import { omitDeep } from '../../utils/omit-deep';
 
 import PatternEdit from './PatternEdit';
+import ReadyCheckEdit from './ReadyCheckEdit';
 
 const defaultInitialValues: NewFileSyncOptionInput = {
   enabled: false,
   root: '',
   maxDepth: 0,
   patterns: [],
+  readyChecks: [],
 };
 
 interface FileSyncConfigFormProps {
@@ -46,8 +51,18 @@ export default function FileSyncConfigForm({
 }: FileSyncConfigFormProps) {
   const router = useRouter();
 
+  const { data, error, loading: readyCheckLoading } = useReadyChecksQuery();
+
   return (
     <div className="m-4 min-w-1/4">
+      {error && (
+        <Alert
+          title={'Error while loading available ready checks'}
+          type={AlertType.ERROR}
+        >
+          Unexpected error: {error}
+        </Alert>
+      )}
       <Card>
         <Form
           initialValues={
@@ -84,7 +99,7 @@ export default function FileSyncConfigForm({
                           Add
                         </Button>
                       </h3>
-                      <div className="flex flex-wrap">
+                      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
                         {values.patterns.length > 0 &&
                           values.patterns.map((_, index) => (
                             <PatternEdit
@@ -98,6 +113,37 @@ export default function FileSyncConfigForm({
                     </>
                   )}
                 </FieldArray>
+                {!readyCheckLoading && (
+                  <FieldArray name="readyChecks">
+                    {({ push, remove }) => (
+                      <>
+                        <h3 className="text-md leading-6 font-medium text-cool-gray-900">
+                          Ready checks
+                          <Button
+                            size={Size.xSmall}
+                            className="ml-2"
+                            onClick={() => push({ name: '' })}
+                          >
+                            Add
+                          </Button>
+                        </h3>
+                        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+                          {values.readyChecks.length > 0 &&
+                            values.readyChecks.map((readyCheck, index) => (
+                              <ReadyCheckEdit
+                                // eslint-disable-next-line react/no-array-index-key
+                                key={index}
+                                remove={remove}
+                                index={index}
+                                readyCheck={readyCheck}
+                                checks={data?.readyChecks ?? []}
+                              />
+                            ))}
+                        </div>
+                      </>
+                    )}
+                  </FieldArray>
+                )}
               </div>
               <Card.Footer>
                 <div className="flex flex-wrap justify-between">
