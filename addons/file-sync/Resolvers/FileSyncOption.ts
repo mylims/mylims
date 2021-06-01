@@ -50,6 +50,7 @@ const resolvers: GqlResolvers = {
       fileSyncOption.readyChecks = deserializeReadyChecks(input.readyChecks);
 
       await fileSyncOption.save();
+      fileSyncOption.readyChecks = serializeReadyChecks(fileSyncOption.readyChecks)
       return fileSyncOption;
     },
     async deleteFileSyncOption(_, { input }) {

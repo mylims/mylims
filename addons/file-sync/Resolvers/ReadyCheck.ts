@@ -18,7 +18,7 @@ export const checks: ReadyCheckMetadata[] = [
     name: 'editTime',
   }, {
     name: 'endsWithBytes',
-    deserialize: (args) => new Binary(Buffer.from(args[0], 'hex'), Binary.SUBTYPE_BYTE_ARRAY),
+    deserialize: (args) => Buffer.from(args[0], 'hex'),
     serialize: (readyCheck: ReadyCheck) => {
       return (readyCheck.value as Binary).buffer.toString('hex')
     }
