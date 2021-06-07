@@ -75,7 +75,10 @@
     "react-dropzone": "^11.3.2",
     "react-popper": "^2.2.5",
     "reflect-metadata": "^0.1.13",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "@targos/adonis-drive": "^4.0.8",
+    "adonis-datadrive": "^0.1.4",
+    "@slynova/flydrive": "^1.0.3"
   },
   "volta": {
     "node": "16.2.0"

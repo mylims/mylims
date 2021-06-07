@@ -15,6 +15,7 @@ export default function Config(props: { config: ConfigProps }) {
   return (
     <Admin>
       <div className="grid gap-10 mx-6 mt-12 lg:grid-cols-3 lg:max-w-none">
+        {/* Session configuration */}
         <Card>
           <Card.Header>
             <h3 className="text-lg font-medium leading-6 text-neutral-900">
@@ -46,6 +47,8 @@ export default function Config(props: { config: ConfigProps }) {
             </form>
           </Card.Body>
         </Card>
+
+        {/* MongoDB configuration */}
         <Card>
           <Card.Header>
             <h3 className="text-lg font-medium leading-6 text-neutral-900">
@@ -84,6 +87,8 @@ export default function Config(props: { config: ConfigProps }) {
             </form>
           </Card.Body>
         </Card>
+
+        {/* LDAP configuration */}
         <Card>
           <Card.Header>
             <h3 className="text-lg font-medium leading-6 text-neutral-900">
@@ -173,6 +178,39 @@ export default function Config(props: { config: ConfigProps }) {
                 type="text"
                 name="hostUrl"
                 defaultValue={props.config.tequila.hostUrl}
+              />
+              <Button type="submit">Update configuration</Button>
+            </form>
+          </Card.Body>
+        </Card>
+
+        {/* FileSync configuration */}
+        <Card>
+          <Card.Header>
+            <h3 className="text-lg font-medium leading-6 text-neutral-900">
+              File sync
+            </h3>
+          </Card.Header>
+          <Card.Body>
+            <form
+              action={makeUrl('AdminsController.changeConf', undefined, {
+                prefixUrl: backendUrl,
+              })}
+              method="POST"
+              className="space-y-2"
+            >
+              <input
+                type="hidden"
+                id="confkey"
+                name="confkey"
+                value="fileSync"
+              />
+              <Input
+                id="root"
+                label="Root folder"
+                type="text"
+                name="root"
+                defaultValue={props.config.fileSync.root}
               />
               <Button type="submit">Update configuration</Button>
             </form>
