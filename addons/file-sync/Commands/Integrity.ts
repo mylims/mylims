@@ -28,6 +28,13 @@ export default class Import extends BaseCommand {
   })
   public yes: boolean;
 
+  @flags.boolean({
+    description:
+      'No action. Perform a simulation of events that would occur but do not actually change anything.',
+    alias: 's',
+  })
+  public simulate: boolean;
+
   private deps: {
     SyncFile: typeof SyncFile;
     FileSyncOption: typeof FileSyncOption;
@@ -142,6 +149,11 @@ export default class Import extends BaseCommand {
     reason: string,
     type: string,
   ) {
+    this.logger.info(`${type} integrity violation on "${suffix}"`);
+    if (this.simulate) {
+      return false;
+    }
+
     const shouldDelete =
       this.yes ||
       (await this.prompt.confirm(`${reason} for "${suffix}", delete ${type}?`));

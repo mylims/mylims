@@ -179,7 +179,7 @@ export default class Import extends BaseCommand {
               value = syncFile.revisions[0].size;
               break;
             default:
-              throw new Error('invalid same size');
+              throw new Error('invalid ready check name');
           }
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
