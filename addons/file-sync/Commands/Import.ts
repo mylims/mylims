@@ -126,7 +126,7 @@ export default class Import extends BaseCommand {
     }
 
     let importCount = 0;
-    for (const syncFile of await syncFiles.all()) {
+    for await (const syncFile of syncFiles) {
       const isReady = await this.isReady(fileSyncOption.readyChecks, syncFile);
       if (!isReady) {
         this.logger.debug(
