@@ -110,9 +110,8 @@ export default class Import extends BaseCommand {
   }
 
   private async checkDatabaseIntegrity() {
-    const files = await (await this.deps.File.find({})).all();
     let skippedDeletions = 0;
-    for (const file of files) {
+    for await (const file of await this.deps.File.find({})) {
       this.logger.info('checking', undefined, file.id);
       let size = 0;
       try {
