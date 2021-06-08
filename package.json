@@ -52,9 +52,12 @@
     "@heroicons/react": "^1.0.1",
     "@lukeed/uuid": "^2.0.0",
     "@popperjs/core": "^2.9.2",
+    "@slynova/flydrive": "^1.0.3",
+    "@targos/adonis-drive": "^4.0.8",
     "@types/react-datepicker": "^3.1.8",
     "@zakodium/adonis-mongodb": "^0.7.0",
     "adonis-apollo": "^0.13.1",
+    "adonis-datadrive": "^0.1.4",
     "adonis-react": "^0.2.1",
     "base-x": "^3.0.8",
     "byte-size": "^7.0.1",
@@ -75,10 +78,7 @@
     "react-dropzone": "^11.3.2",
     "react-popper": "^2.2.5",
     "reflect-metadata": "^0.1.13",
-    "source-map-support": "^0.5.19",
-    "@targos/adonis-drive": "^4.0.8",
-    "adonis-datadrive": "^0.1.4",
-    "@slynova/flydrive": "^1.0.3"
+    "source-map-support": "^0.5.19"
   },
   "volta": {
     "node": "16.2.0"
