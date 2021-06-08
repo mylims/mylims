@@ -122,6 +122,17 @@
         }
       ]
     },
+    "file:integrity": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "./addons/file-sync/Commands/Integrity",
+      "commandName": "file:integrity",
+      "description": "Check files integrity",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "file:sync": {
       "settings": {
         "loadApp": true

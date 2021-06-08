@@ -7,10 +7,8 @@ import { FileInfo, FileSynchronizer } from 'fs-synchronizer';
 
 import ObjectId from '@ioc:Mongodb/ObjectId';
 
-import type { FileSyncOption } from '../Models/FileSyncOption'
+import type { FileSyncOption } from '../Models/FileSyncOption';
 import type { SyncFile, SyncState } from '../Models/SyncFile';
-
-
 
 const asyncTimeout = promisify(setTimeout);
 export default class Sync extends BaseCommand {
@@ -34,19 +32,19 @@ export default class Sync extends BaseCommand {
   };
 
   private deps: {
-    FileSyncOption: typeof FileSyncOption,
-    SyncFile: typeof SyncFile
-    SyncState: typeof SyncState
-  }
+    FileSyncOption: typeof FileSyncOption;
+    SyncFile: typeof SyncFile;
+    SyncState: typeof SyncState;
+  };
 
   public async run() {
-    const { FileSyncOption } = await import('../Models/FileSyncOption')
-    const { SyncFile, SyncState } = await import('../Models/SyncFile')
+    const { FileSyncOption } = await import('../Models/FileSyncOption');
+    const { SyncFile, SyncState } = await import('../Models/SyncFile');
     this.deps = {
       FileSyncOption,
       SyncFile,
-      SyncState
-    }
+      SyncState,
+    };
 
     if (this.interval !== undefined) {
       while (true) {
@@ -119,7 +117,10 @@ export default class Sync extends BaseCommand {
   }
 
   private async handleFile(fileInfo: FileInfo, fileSyncOption: FileSyncOption) {
-    this.logger.debug(`handling file "${fileInfo.filename}"`, this.fileSyncOptionId);
+    this.logger.debug(
+      `handling file "${fileInfo.filename}"`,
+      this.fileSyncOptionId,
+    );
 
     const { filename } = fileInfo;
     const file = await this.deps.SyncFile.findOne({ filename });
@@ -138,13 +139,8 @@ export default class Sync extends BaseCommand {
       this.fileSyncOptionId,
     );
 
-    const {
-      filename,
-      relativePath,
-      size,
-      creationDate,
-      modificationDate,
-    } = fileInfo;
+    const { filename, relativePath, size, creationDate, modificationDate } =
+      fileInfo;
     await this.deps.SyncFile.create({
       _id: { configId: fileSyncOption.id, relativePath },
       filename,
@@ -164,7 +160,7 @@ export default class Sync extends BaseCommand {
 
   private async handleKnownFile(
     fileInfo: FileInfo,
-    file: InstanceType<typeof SyncFile>
+    file: InstanceType<typeof SyncFile>,
   ) {
     const { creationDate, modificationDate, size, filename } = fileInfo;
     const lastRevision = file.revisions[0];
