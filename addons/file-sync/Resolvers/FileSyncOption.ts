@@ -5,7 +5,7 @@ import ObjectId from '@ioc:Mongodb/ObjectId';
 import { NotFoundError } from 'App/Exceptions/ApolloErrors';
 import { GqlResolvers } from 'App/graphql';
 
-import FileSyncOption from '../Models/FileSyncOption';
+import { FileSyncOption } from '../Models/FileSyncOption';
 
 import { deserializeReadyChecks, serializeReadyChecks } from './ReadyCheck';
 

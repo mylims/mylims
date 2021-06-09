@@ -21,6 +21,7 @@ const defaultConfig: ConfigFile = {
     },
     mongodb: { url: 'mongodb://localhost:27017', database: 'mylims' },
     session: { sessionAge: '2h' },
+    fileSync: { root: '' },
     enabledAddons: [],
   },
   history: [],
@@ -58,6 +59,9 @@ export interface ConfigProps {
   };
   session: {
     sessionAge?: string;
+  };
+  fileSync: {
+    root: string
   };
   enabledAddons: string[];
 }

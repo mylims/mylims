@@ -1,1 +1,162 @@
-{"commands":{"dump:rcfile":{"settings":{},"commandPath":"@adonisjs/core/build/commands/DumpRc","commandName":"dump:rcfile","description":"Dump contents of .adonisrc.json file along with defaults","args":[],"aliases":[],"flags":[]},"list:routes":{"settings":{"loadApp":true},"commandPath":"@adonisjs/core/build/commands/ListRoutes","commandName":"list:routes","description":"List application routes","args":[],"aliases":[],"flags":[{"name":"json","propertyName":"json","type":"boolean","description":"Output as JSON"}]},"generate:key":{"settings":{},"commandPath":"@adonisjs/core/build/commands/GenerateKey","commandName":"generate:key","description":"Generate a new APP_KEY secret","args":[],"aliases":[],"flags":[]},"mongodb:make:migration":{"settings":{"loadApp":true},"commandPath":"@zakodium/adonis-mongodb/lib/commands/MongodbMakeMigration","commandName":"mongodb:make:migration","description":"Make a new migration file","args":[{"type":"string","propertyName":"name","name":"name","required":true,"description":"Name of the migration file"}],"aliases":[],"flags":[{"name":"connection","propertyName":"connection","type":"string","description":"Database connection to use for the migration"}]},"mongodb:migration:run":{"settings":{"loadApp":true},"commandPath":"@zakodium/adonis-mongodb/lib/commands/MongodbMigrate","commandName":"mongodb:migration:run","description":"Execute pending migrations","args":[],"aliases":[],"flags":[{"name":"connection","propertyName":"connection","type":"string","description":"Database connection to use for the migration"}]},"mongodb:migration:status":{"settings":{"loadApp":true},"commandPath":"@zakodium/adonis-mongodb/lib/commands/MongodbListMigrations","commandName":"mongodb:migration:status","description":"Show pending migrations","args":[],"aliases":[],"flags":[{"name":"connection","propertyName":"connection","type":"string","description":"Database connection to use for the migration"}]},"sync":{"settings":{"loadApp":true},"commandPath":"./addons/file-sync/Commands/Sync","commandName":"sync","description":"","args":[],"aliases":[],"flags":[{"name":"import-config-id","propertyName":"importConfigId","type":"string","description":"Import config to use"}]}},"aliases":{}}
+{
+  "commands": {
+    "dump:rcfile": {
+      "settings": {},
+      "commandPath": "@adonisjs/core/build/commands/DumpRc",
+      "commandName": "dump:rcfile",
+      "description": "Dump contents of .adonisrc.json file along with defaults",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
+    "list:routes": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "@adonisjs/core/build/commands/ListRoutes",
+      "commandName": "list:routes",
+      "description": "List application routes",
+      "args": [],
+      "aliases": [],
+      "flags": [
+        {
+          "name": "json",
+          "propertyName": "json",
+          "type": "boolean",
+          "description": "Output as JSON"
+        }
+      ]
+    },
+    "generate:key": {
+      "settings": {},
+      "commandPath": "@adonisjs/core/build/commands/GenerateKey",
+      "commandName": "generate:key",
+      "description": "Generate a new APP_KEY secret",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
+    "mongodb:make:migration": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "@zakodium/adonis-mongodb/lib/commands/MongodbMakeMigration",
+      "commandName": "mongodb:make:migration",
+      "description": "Make a new migration file",
+      "args": [
+        {
+          "type": "string",
+          "propertyName": "name",
+          "name": "name",
+          "required": true,
+          "description": "Name of the migration file"
+        }
+      ],
+      "aliases": [],
+      "flags": [
+        {
+          "name": "connection",
+          "propertyName": "connection",
+          "type": "string",
+          "description": "Database connection to use for the migration"
+        }
+      ]
+    },
+    "mongodb:migration:run": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "@zakodium/adonis-mongodb/lib/commands/MongodbMigrate",
+      "commandName": "mongodb:migration:run",
+      "description": "Execute pending migrations",
+      "args": [],
+      "aliases": [],
+      "flags": [
+        {
+          "name": "connection",
+          "propertyName": "connection",
+          "type": "string",
+          "description": "Database connection to use for the migration"
+        }
+      ]
+    },
+    "mongodb:migration:status": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "@zakodium/adonis-mongodb/lib/commands/MongodbListMigrations",
+      "commandName": "mongodb:migration:status",
+      "description": "Show pending migrations",
+      "args": [],
+      "aliases": [],
+      "flags": [
+        {
+          "name": "connection",
+          "propertyName": "connection",
+          "type": "string",
+          "description": "Database connection to use for the migration"
+        }
+      ]
+    },
+    "file:import": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "./addons/file-sync/Commands/Import",
+      "commandName": "file:import",
+      "description": "Import synchronized files",
+      "args": [],
+      "aliases": [],
+      "flags": [
+        {
+          "name": "file-sync-option-id",
+          "propertyName": "fileSyncOptionId",
+          "type": "string",
+          "description": "File sync option to use"
+        },
+        {
+          "name": "interval",
+          "propertyName": "interval",
+          "type": "number",
+          "description": "Interval, import runs one time execution if it is not provided."
+        }
+      ]
+    },
+    "file:integrity": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "./addons/file-sync/Commands/Integrity",
+      "commandName": "file:integrity",
+      "description": "Check files integrity",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
+    "file:sync": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "./addons/file-sync/Commands/Sync",
+      "commandName": "file:sync",
+      "description": "Synchronize files",
+      "args": [],
+      "aliases": [],
+      "flags": [
+        {
+          "name": "file-sync-option-id",
+          "propertyName": "fileSyncOptionId",
+          "type": "string",
+          "description": "File sync option to use"
+        },
+        {
+          "name": "interval",
+          "propertyName": "interval",
+          "type": "number",
+          "description": "Interval, sync runs one time execution if it is not provided."
+        }
+      ]
+    }
+  },
+  "aliases": {}
+}

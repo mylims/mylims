@@ -17,9 +17,12 @@ export interface FileSyncOptionFields extends SyncOptions {
   readyChecks: ReadyCheck[];
 }
 
-export default class FileSyncOption
+export class FileSyncOption
   extends Model
   implements FileSyncOptionFields {
+
+  public static collectionName = 'fileSync.syncOptions'
+
   public root: string;
   public enabled: boolean;
   public maxDepth: number;

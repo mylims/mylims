@@ -24,7 +24,9 @@
     "@zakodium/adonis-mongodb",
     "adonis-apollo",
     "adonis-react",
-    "@adonisjs/auth"
+    "@adonisjs/auth",
+    "@targos/adonis-drive",
+    "adonis-datadrive"
   ],
   "metaFiles": [
     {

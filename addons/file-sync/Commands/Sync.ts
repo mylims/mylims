@@ -7,15 +7,14 @@ import { FileInfo, FileSynchronizer } from 'fs-synchronizer';
 
 import ObjectId from '@ioc:Mongodb/ObjectId';
 
-import File from '../Models/File';
-import FileSyncOption from '../Models/FileSyncOption';
+import type { FileSyncOption } from '../Models/FileSyncOption';
+import type { SyncFile, SyncState } from '../Models/SyncFile';
 
 const asyncTimeout = promisify(setTimeout);
-
 export default class Sync extends BaseCommand {
-  public static commandName = 'sync';
+  public static commandName = 'file:sync';
 
-  public static description = '';
+  public static description = 'Synchronize files';
 
   @flags.string({
     description: 'File sync option to use',
@@ -32,7 +31,21 @@ export default class Sync extends BaseCommand {
     loadApp: true,
   };
 
+  private deps: {
+    FileSyncOption: typeof FileSyncOption;
+    SyncFile: typeof SyncFile;
+    SyncState: typeof SyncState;
+  };
+
   public async run() {
+    const { FileSyncOption } = await import('../Models/FileSyncOption');
+    const { SyncFile, SyncState } = await import('../Models/SyncFile');
+    this.deps = {
+      FileSyncOption,
+      SyncFile,
+      SyncState,
+    };
+
     if (this.interval !== undefined) {
       while (true) {
         await this.executeSynchronizer();
@@ -52,7 +65,7 @@ export default class Sync extends BaseCommand {
         return;
       }
 
-      const fileSyncOption = await FileSyncOption.findById(
+      const fileSyncOption = await this.deps.FileSyncOption.findById(
         new ObjectId(this.fileSyncOptionId),
       );
       if (fileSyncOption === null) {
@@ -70,7 +83,7 @@ export default class Sync extends BaseCommand {
       fileSyncOptionsToProcess.push(fileSyncOption);
     } else {
       const fileSyncOptions = await (
-        await FileSyncOption.find({ enabled: true })
+        await this.deps.FileSyncOption.find({ enabled: true })
       ).all();
       fileSyncOptionsToProcess.push(...fileSyncOptions);
     }
@@ -84,19 +97,18 @@ export default class Sync extends BaseCommand {
     const sync = new FileSynchronizer(fileSyncOption);
 
     const fileHandlers: Promise<void>[] = [];
-    const fileSyncOptionId = fileSyncOption.id.toHexString();
 
     sync.on('file', (fileInfo) => {
-      fileHandlers.push(this.handleFile(fileInfo, fileSyncOptionId));
+      fileHandlers.push(this.handleFile(fileInfo, fileSyncOption));
     });
     sync.on('end', () => {
-      this.logger.debug('file lookup ended', fileSyncOptionId);
+      this.logger.debug('file lookup ended', this.fileSyncOptionId);
     });
 
     try {
       await sync.walk();
     } catch (err) {
-      this.logger.error(err.message, fileSyncOptionId);
+      this.logger.error(err.message, this.fileSyncOptionId);
     }
 
     await Promise.all(fileHandlers);
@@ -104,41 +116,39 @@ export default class Sync extends BaseCommand {
     this.logger.success(`${fileHandlers.length} files synchronized`);
   }
 
-  private async handleFile(fileInfo: FileInfo, fileSyncOptionId: string) {
-    this.logger.debug(`handling file "${fileInfo.filename}"`, fileSyncOptionId);
+  private async handleFile(fileInfo: FileInfo, fileSyncOption: FileSyncOption) {
+    this.logger.debug(
+      `handling file "${fileInfo.filename}"`,
+      this.fileSyncOptionId,
+    );
 
     const { filename } = fileInfo;
-    const file = await File.findOne({ filename });
+    const file = await this.deps.SyncFile.findOne({ filename });
     if (file === null) {
-      return this.handleUnknownFile(fileInfo, fileSyncOptionId);
+      return this.handleUnknownFile(fileInfo, fileSyncOption);
     }
-    return this.handleKnownFile(fileInfo, file, fileSyncOptionId);
+    return this.handleKnownFile(fileInfo, file);
   }
 
   private async handleUnknownFile(
     fileInfo: FileInfo,
-    fileSyncOptionId: string,
+    fileSyncOption: FileSyncOption,
   ) {
     this.logger.debug(
       `handling unknown file: ${fileInfo.filename}`,
-      fileSyncOptionId,
+      this.fileSyncOptionId,
     );
 
-    const {
-      filename,
-      relativePath,
-      size,
-      creationDate,
-      modificationDate,
-    } = fileInfo;
-    await File.create({
-      _id: { configId: this.fileSyncOptionId, relativePath },
+    const { filename, relativePath, size, creationDate, modificationDate } =
+      fileInfo;
+    await this.deps.SyncFile.create({
+      _id: { configId: fileSyncOption.id, relativePath },
       filename,
       revisions: [
         {
           id: uuid(),
           date: new Date(),
-          status: 'PENDING',
+          status: this.deps.SyncState.PENDING,
           size,
           creationDate,
           modificationDate,
@@ -150,8 +160,7 @@ export default class Sync extends BaseCommand {
 
   private async handleKnownFile(
     fileInfo: FileInfo,
-    file: InstanceType<typeof File>,
-    fileSyncOptionId: string,
+    file: InstanceType<typeof SyncFile>,
   ) {
     const { creationDate, modificationDate, size, filename } = fileInfo;
     const lastRevision = file.revisions[0];
@@ -162,7 +171,7 @@ export default class Sync extends BaseCommand {
     ) {
       this.logger.debug(
         'stats are identical, ignore',
-        fileSyncOptionId,
+        this.fileSyncOptionId,
         filename,
       );
       return;
@@ -170,14 +179,14 @@ export default class Sync extends BaseCommand {
 
     this.logger.debug(
       'stats have changed, proceed',
-      fileSyncOptionId,
+      this.fileSyncOptionId,
       filename,
     );
 
-    if (lastRevision.status === 'PENDING') {
+    if (lastRevision.status === this.deps.SyncState.PENDING) {
       this.logger.debug(
         'latest revision is still pending, update',
-        fileSyncOptionId,
+        this.fileSyncOptionId,
         filename,
       );
 
@@ -188,14 +197,14 @@ export default class Sync extends BaseCommand {
 
     this.logger.debug(
       'latest revision is not pending, create new revision',
-      fileSyncOptionId,
+      this.fileSyncOptionId,
       filename,
     );
 
     file.revisions.unshift({
       id: uuid(),
       date: new Date(),
-      status: 'PENDING',
+      status: this.deps.SyncState.PENDING,
       size,
       creationDate,
       modificationDate,
