@@ -14,17 +14,21 @@ const resolvers: GqlResolvers = {
     async fileSyncOptions() {
       const fileSyncOptions = await FileSyncOption.find({});
       const allFileSyncOptions = await fileSyncOptions.all();
-      return allFileSyncOptions.map(fileSyncOption => {
-        fileSyncOption.readyChecks = serializeReadyChecks(fileSyncOption.readyChecks)
-        return fileSyncOption
-      })
+      return allFileSyncOptions.map((fileSyncOption) => {
+        fileSyncOption.readyChecks = serializeReadyChecks(
+          fileSyncOption.readyChecks,
+        );
+        return fileSyncOption;
+      });
     },
     async fileSyncOption(_, { id }) {
       const fileSyncOption = await FileSyncOption.findById(new ObjectId(id));
       if (!fileSyncOption) {
         throw new NotFoundError('file sync option not found');
       }
-      fileSyncOption.readyChecks = serializeReadyChecks(fileSyncOption.readyChecks)
+      fileSyncOption.readyChecks = serializeReadyChecks(
+        fileSyncOption.readyChecks,
+      );
       return fileSyncOption;
     },
   },
@@ -32,7 +36,7 @@ const resolvers: GqlResolvers = {
     async createFileSyncOption(_, { input }) {
       return FileSyncOption.create({
         ...input,
-        readyChecks: deserializeReadyChecks(input.readyChecks)
+        readyChecks: deserializeReadyChecks(input.readyChecks),
       });
     },
     async editFileSyncOption(_, { input }) {
@@ -50,7 +54,9 @@ const resolvers: GqlResolvers = {
       fileSyncOption.readyChecks = deserializeReadyChecks(input.readyChecks);
 
       await fileSyncOption.save();
-      fileSyncOption.readyChecks = serializeReadyChecks(fileSyncOption.readyChecks)
+      fileSyncOption.readyChecks = serializeReadyChecks(
+        fileSyncOption.readyChecks,
+      );
       return fileSyncOption;
     },
     async deleteFileSyncOption(_, { input }) {

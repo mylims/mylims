@@ -120,7 +120,8 @@ export const Input = forwardRefWithAs(
               }
               className={clsx(
                 {
-                  'flex-1 focus:outline-none focus:ring-0 sm:text-sm border-none p-0': true,
+                  'flex-1 focus:outline-none focus:ring-0 sm:text-sm border-none p-0':
+                    true,
                   'bg-neutral-50 text-neutral-500': props.disabled,
                 },
                 inputClassName,

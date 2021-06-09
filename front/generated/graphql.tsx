@@ -372,7 +372,8 @@ export function useCreateFileSyncOptionMutation(
 export type CreateFileSyncOptionMutationHookResult = ReturnType<
   typeof useCreateFileSyncOptionMutation
 >;
-export type CreateFileSyncOptionMutationResult = Apollo.MutationResult<CreateFileSyncOptionMutation>;
+export type CreateFileSyncOptionMutationResult =
+  Apollo.MutationResult<CreateFileSyncOptionMutation>;
 export type CreateFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
   CreateFileSyncOptionMutation,
   CreateFileSyncOptionMutationVariables
@@ -419,7 +420,8 @@ export function useEditFileSyncOptionMutation(
 export type EditFileSyncOptionMutationHookResult = ReturnType<
   typeof useEditFileSyncOptionMutation
 >;
-export type EditFileSyncOptionMutationResult = Apollo.MutationResult<EditFileSyncOptionMutation>;
+export type EditFileSyncOptionMutationResult =
+  Apollo.MutationResult<EditFileSyncOptionMutation>;
 export type EditFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
   EditFileSyncOptionMutation,
   EditFileSyncOptionMutationVariables
@@ -466,7 +468,8 @@ export function useDeleteFileSyncOptionMutation(
 export type DeleteFileSyncOptionMutationHookResult = ReturnType<
   typeof useDeleteFileSyncOptionMutation
 >;
-export type DeleteFileSyncOptionMutationResult = Apollo.MutationResult<DeleteFileSyncOptionMutation>;
+export type DeleteFileSyncOptionMutationResult =
+  Apollo.MutationResult<DeleteFileSyncOptionMutation>;
 export type DeleteFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
   DeleteFileSyncOptionMutation,
   DeleteFileSyncOptionMutationVariables

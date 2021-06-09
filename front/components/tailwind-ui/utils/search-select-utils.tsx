@@ -16,33 +16,35 @@ import React, {
 
 import { Spinner } from '../elements/spinner/Spinner';
 import { Input } from '../forms/basic/Input';
+import {
+  GetValue,
+  RenderOption,
+  SimpleSelectOption,
+} from '../forms/basic/Select';
 import { useSameWidthPopper } from '../hooks/popper';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import { useOnOff } from '../hooks/useOnOff';
 import { Color } from '../types';
 
-export interface SimpleOption {
-  value: string | number;
-  label: string;
-}
-
-export type GetValue<T> = (option: T) => string | number;
-export type RenderOption<T> = (option: T) => ReactNode;
-
-export type FilterOptions<T> = (query: string, options: T[]) => T[];
-
-export function defaultOptionsFilter<T extends SimpleOption>(
+export type FilterOptions<OptionType> = (
   query: string,
-  options: T[],
-): T[] {
+  options: OptionType[],
+) => OptionType[];
+
+export function defaultOptionsFilter<OptionType extends SimpleSelectOption>(
+  query: string,
+  options: OptionType[],
+): OptionType[] {
   const lowerQuery = query.toLowerCase();
   return options.filter((option) =>
     String(option.label).toLowerCase().includes(lowerQuery),
   );
 }
 
-export function customOptionsFilter<T>(getText: (option: T) => string) {
-  return (query: string, options: Array<T>) => {
+export function customOptionsFilter<OptionType>(
+  getText: (option: OptionType) => string,
+) {
+  return (query: string, options: Array<OptionType>) => {
     const lowerQuery = query.toLowerCase();
     return options.filter((obj) =>
       getText(obj).toLowerCase().includes(lowerQuery),
@@ -56,11 +58,11 @@ function DefaultNoResultsHint() {
 
 export const defaultNoResultsHint = <DefaultNoResultsHint />;
 
-export function defaultRenderOption(option: SimpleOption) {
+export function defaultRenderOption(option: SimpleSelectOption) {
   return option.label;
 }
 
-export function defaultGetValue(option: SimpleOption) {
+export function defaultGetValue(option: SimpleSelectOption) {
   return option.value;
 }
 
@@ -76,12 +78,12 @@ export function preventDefault(event: UIEvent) {
   event.preventDefault();
 }
 
-export type InternalOption<T> =
+export type InternalOption<OptionType> =
   | {
       type: 'option';
       value: string | number;
       label: ReactNode;
-      originalValue: T;
+      originalValue: OptionType;
     }
   | {
       type: 'create';
@@ -90,20 +92,22 @@ export type InternalOption<T> =
       originalValue: string;
     };
 
-export function buildInternalOptions<T>(
-  options: T[],
-  getValue: GetValue<T>,
-  renderOption: RenderOption<T>,
+export function buildInternalOptions<OptionType>(
+  options: OptionType[],
+  getValue: GetValue<OptionType>,
+  renderOption: RenderOption<OptionType>,
   createValue?: string,
-): InternalOption<T>[] {
-  const internalOptions: InternalOption<T>[] = options.map((option) => {
-    return {
-      type: 'option',
-      value: getValue(option),
-      label: renderOption(option),
-      originalValue: option,
-    };
-  });
+): InternalOption<OptionType>[] {
+  const internalOptions: InternalOption<OptionType>[] = options.map(
+    (option) => {
+      return {
+        type: 'option',
+        value: getValue(option),
+        label: renderOption(option),
+        originalValue: option,
+      };
+    },
+  );
   if (createValue) {
     internalOptions.push({
       type: 'create',
@@ -115,14 +119,18 @@ export function buildInternalOptions<T>(
   return internalOptions;
 }
 
-export function FormattedOption<T>(props: {
+export interface FormattedOptionProps<OptionType> {
   index: number;
-  option: InternalOption<T>;
+  option: InternalOption<OptionType>;
   focused: number;
   setFocused: (index: number) => void;
-  select: (option: InternalOption<T>) => void;
-  highlightColor: string;
-}) {
+  select: (option: InternalOption<OptionType>) => void;
+  highlightClassName: string;
+}
+
+export function FormattedOption<OptionType>(
+  props: FormattedOptionProps<OptionType>,
+) {
   const { index, option, focused, setFocused, select } = props;
   const isFocused = focused === index;
   const ref = useRef<HTMLDivElement>(null);
@@ -135,7 +143,7 @@ export function FormattedOption<T>(props: {
     <div
       ref={ref}
       className={clsx(
-        isFocused ? props.highlightColor : 'text-neutral-900',
+        isFocused ? props.highlightClassName : 'text-neutral-900',
         'py-2 px-4',
       )}
       onMouseMove={() => setFocused(index)}
@@ -146,21 +154,21 @@ export function FormattedOption<T>(props: {
   );
 }
 
-interface UseSearchSelectInternalsConfig<T> {
+interface UseSearchSelectInternalsConfig<OptionType> {
   searchValue: string;
   onSearchChange: (newValue: string) => void;
-  options: T[];
-  onSelect: (option: T | undefined) => void;
-  getValue: GetValue<T>;
-  renderOption: RenderOption<T>;
+  options: OptionType[];
+  onSelect: (option: OptionType | undefined) => void;
+  getValue: GetValue<OptionType>;
+  renderOption: RenderOption<OptionType>;
   onCreate?: (value: string) => void;
   canCreate: (value: string) => boolean;
   formattedSelected?: { value: string | number; label: ReactNode };
 }
 
-export function useSearchSelectInternals<T>(
-  config: UseSearchSelectInternalsConfig<T>,
-): UseSearchSelectInternalsReturn<T> {
+export function useSearchSelectInternals<OptionType>(
+  config: UseSearchSelectInternalsConfig<OptionType>,
+): UseSearchSelectInternalsReturn<OptionType> {
   const {
     searchValue,
     onSearchChange,
@@ -200,11 +208,8 @@ export function useSearchSelectInternals<T>(
     setFocused(0);
   }, [formattedOptions, formattedSelected]);
 
-  const {
-    setReferenceElement,
-    setPopperElement,
-    popperProps,
-  } = useSameWidthPopper({ placement: 'bottom', distance: 6 });
+  const { setReferenceElement, setPopperElement, popperProps } =
+    useSameWidthPopper({ placement: 'bottom', distance: 6 });
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     if (!isListOpen) {
@@ -213,7 +218,7 @@ export function useSearchSelectInternals<T>(
     onSearchChange(event.target.value);
   }
 
-  function select(option: InternalOption<T>): void {
+  function select(option: InternalOption<OptionType>): void {
     if (option.type === 'option') {
       onSelect(option.originalValue);
     } else {
@@ -305,24 +310,24 @@ export function useSearchSelectInternals<T>(
   };
 }
 
-interface UseSearchSelectInternalsReturn<T>
+interface UseSearchSelectInternalsReturn<OptionType>
   extends ReturnType<typeof useSameWidthPopper> {
   mainRef: Ref<HTMLDivElement>;
   closeList: () => void;
   openList: () => void;
   isListOpen: boolean;
-  formattedOptions: InternalOption<T>[];
+  formattedOptions: InternalOption<OptionType>[];
   focused: number;
   setFocused: (newFocus: number) => void;
-  select: (option: InternalOption<T>) => void;
+  select: (option: InternalOption<OptionType>) => void;
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
   handleChevronDownClick: (event: MouseEvent) => void;
   handleXClick: (event: MouseEvent) => void;
 }
 
-interface InternalSearchSelectProps<T>
-  extends UseSearchSelectInternalsReturn<T> {
+interface InternalSearchSelectProps<OptionType>
+  extends UseSearchSelectInternalsReturn<OptionType> {
   clearable?: boolean;
   disabled?: boolean;
   loading?: boolean;
@@ -335,14 +340,14 @@ interface InternalSearchSelectProps<T>
   formattedSelected?: { value: string | number; label: ReactNode };
   hasValue: boolean;
   leadingInlineAddon?: ReactNode;
-  highlightColor?: string;
+  highlightClassName?: string;
   required?: boolean;
   onBlur?: (e: React.FocusEvent) => void;
   name?: string;
 }
 
-export function InternalSearchSelect<T>(
-  props: InternalSearchSelectProps<T>,
+export function InternalSearchSelect<OptionType>(
+  props: InternalSearchSelectProps<OptionType>,
 ): JSX.Element {
   const {
     mainRef,
@@ -376,7 +381,7 @@ export function InternalSearchSelect<T>(
     hasValue,
     name,
     onBlur,
-    highlightColor = 'text-white bg-primary-600',
+    highlightClassName = 'text-white bg-primary-600',
   } = props;
 
   return (
@@ -448,7 +453,7 @@ export function InternalSearchSelect<T>(
                 focused={focused}
                 setFocused={setFocused}
                 select={select}
-                highlightColor={highlightColor}
+                highlightClassName={highlightClassName}
               />
             ))
           )}

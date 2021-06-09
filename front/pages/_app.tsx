@@ -87,9 +87,10 @@ type MyAppProps = AppProps & {
 };
 
 function MyApp({ Component, pageProps }: MyAppProps) {
-  const getLayout = useMemo(() => Component.getLayout || ((page) => page), [
-    Component.getLayout,
-  ]);
+  const getLayout = useMemo(
+    () => Component.getLayout || ((page) => page),
+    [Component.getLayout],
+  );
 
   return (
     <QueryClientProvider client={queryClient}>

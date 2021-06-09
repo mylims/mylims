@@ -1,85 +1,49 @@
 import { useField } from 'formik';
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import {
-  defaultGetValue,
-  defaultRenderOption,
-  SimpleOption,
-} from '../../utils/search-select-utils';
 import {
   MultiSearchSelect,
   MultiSearchSelectProps,
   SimpleMultiSearchSelectProps,
 } from '../basic/MultiSearchSelect';
+import { SimpleSelectOption } from '../basic/Select';
 
-interface MultiSearchSelectFieldProps<T>
+interface MultiSearchSelectFieldProps<OptionType>
   extends Omit<
-    MultiSearchSelectProps<T>,
+    MultiSearchSelectProps<OptionType>,
     'selected' | 'onSelect' | 'error' | 'onBlur'
   > {
   name: string;
-  resolveTo: 'value' | 'object';
 }
 
-interface SimpleMultiSearchSelectFieldProps<T extends SimpleOption>
+interface SimpleMultiSearchSelectFieldProps<OptionType>
   extends Omit<
-    SimpleMultiSearchSelectProps<T>,
+    SimpleMultiSearchSelectProps<OptionType>,
     'selected' | 'onSelect' | 'error' | 'onBlur'
   > {
   name: string;
-  resolveTo: 'value' | 'object';
 }
 
-export function MultiSearchSelectField<T extends SimpleOption>(
-  props: SimpleMultiSearchSelectFieldProps<T>,
-): JSX.Element;
-export function MultiSearchSelectField<T>(
-  props: MultiSearchSelectFieldProps<T>,
-): JSX.Element;
-export function MultiSearchSelectField<T>(
-  props: T extends SimpleOption
-    ? SimpleMultiSearchSelectFieldProps<T>
-    : MultiSearchSelectFieldProps<T>,
+export function MultiSearchSelectField<OptionType>(
+  props: OptionType extends SimpleSelectOption
+    ? SimpleMultiSearchSelectFieldProps<OptionType>
+    : MultiSearchSelectFieldProps<OptionType>,
 ): JSX.Element {
-  const {
-    name,
-    resolveTo,
-    getValue = defaultGetValue,
-    renderOption = defaultRenderOption,
-    options,
-    ...otherProps
-  } = props;
-  const [field, meta, formik] = useField(name);
+  const { name, ...otherProps } = props;
+  const [field, meta, formik] = useField<OptionType[]>(name);
 
-  const fieldValue = field.value;
-  const selected = useMemo(() => {
-    if (resolveTo === 'object') {
-      return fieldValue;
-    } else {
-      return (fieldValue as (string | number)[]).map((value) =>
-        options.find((option) => getValue(option) === value),
-      );
-    }
-  }, [fieldValue, options, getValue, resolveTo]);
-
-  function handleSelect(options: T[]) {
-    if (resolveTo === 'object') {
-      formik.setValue(options);
-    } else {
-      formik.setValue(options.map(getValue));
-    }
+  function handleSelect(options: OptionType[]) {
+    formik.setValue(options);
   }
 
   return (
+    // @ts-ignore
     <MultiSearchSelect
       name={name}
-      getValue={getValue}
-      renderOption={renderOption}
-      options={options}
       onBlur={field.onBlur}
       {...otherProps}
       error={meta.touched ? meta.error : undefined}
-      selected={selected}
+      selected={field.value}
       onSelect={handleSelect}
     />
   );

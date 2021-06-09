@@ -19,12 +19,11 @@ export enum SyncState {
   PENDING = 'pending',
   IMPORTING = 'importing',
   IMPORTED = 'imported',
-  IMPORT_FAIL = 'import_fail'
+  IMPORT_FAIL = 'import_fail',
 }
 
 export class SyncFile extends Model<FileId> {
-
-  public static collectionName = 'fileSync.syncFiles'
+  public static collectionName = 'fileSync.syncFiles';
 
   public filename: string;
   public revisions: Revision[];

@@ -9,38 +9,30 @@ import {
   defaultRenderOption,
   defaultGetBadgeColor,
   InternalSearchSelect,
-  SimpleOption,
   useSearchSelectInternals,
 } from '../../utils/search-select-utils';
 
 import { SearchSelectProps, SimpleSearchSelectProps } from './SearchSelect';
+import { SimpleSelectOption } from './Select';
 
-interface BaseMultiSearchSelectProps<T> {
-  selected: T[];
-  onSelect: (newSelected: T[]) => void;
-  getBadgeColor?: (option: T) => Color;
-
-  highlightColor?: string;
+export interface SimpleMultiSearchSelectProps<OptionType>
+  extends Omit<SimpleSearchSelectProps<OptionType>, 'selected' | 'onSelect'> {
+  selected: OptionType[];
+  onSelect: (newSelected: OptionType[]) => void;
+  getBadgeColor?: (option: OptionType) => Color;
 }
 
-export interface SimpleMultiSearchSelectProps<T extends SimpleOption>
-  extends Omit<SimpleSearchSelectProps<T>, 'selected' | 'onSelect'>,
-    BaseMultiSearchSelectProps<T> {}
+export interface MultiSearchSelectProps<OptionType>
+  extends Omit<SearchSelectProps<OptionType>, 'selected' | 'onSelect'> {
+  selected: OptionType[];
+  onSelect: (newSelected: OptionType[]) => void;
+  getBadgeColor?: (option: OptionType) => Color;
+}
 
-export interface MultiSearchSelectProps<T>
-  extends Omit<SearchSelectProps<T>, 'selected' | 'onSelect'>,
-    BaseMultiSearchSelectProps<T> {}
-
-export function MultiSearchSelect<T extends SimpleOption>(
-  props: SimpleMultiSearchSelectProps<T>,
-): JSX.Element;
-export function MultiSearchSelect<T>(
-  props: MultiSearchSelectProps<T>,
-): JSX.Element;
-export function MultiSearchSelect<T>(
-  props: T extends SimpleOption
-    ? SimpleMultiSearchSelectProps<T>
-    : MultiSearchSelectProps<T>,
+export function MultiSearchSelect<OptionType>(
+  props: OptionType extends SimpleSelectOption
+    ? SimpleMultiSearchSelectProps<OptionType>
+    : MultiSearchSelectProps<OptionType>,
 ): JSX.Element {
   const {
     onSearchChange,
@@ -87,7 +79,7 @@ export function MultiSearchSelect<T>(
   }, [selected, getValue, renderOption, onSelect, getBadgeColor, disabled]);
 
   const handleSelect = useCallback(
-    (value: T | undefined) => {
+    (value: OptionType | undefined) => {
       if (value === undefined) {
         onSelect([]);
       } else {

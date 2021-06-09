@@ -1,11 +1,6 @@
 {
-  "include": [
-    "**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "front"
-  ],
+  "include": ["**/*"],
+  "exclude": ["node_modules", "front"],
   "compilerOptions": {
     "target": "es2020",
     "module": "CommonJS",
@@ -22,18 +17,11 @@
     "esModuleInterop": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "lib": [
-      "ES2020",
-      "DOM"
-    ],
+    "lib": ["ES2020", "DOM"],
     "jsx": "react",
     "paths": {
-      "App/*": [
-        "./app/*"
-      ],
-      "Contracts/*": [
-        "./contracts/*"
-      ]
+      "App/*": ["./app/*"],
+      "Contracts/*": ["./contracts/*"]
     },
     "types": [
       "@adonisjs/core",

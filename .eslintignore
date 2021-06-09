@@ -2,3 +2,4 @@ build
 front
 app/graphql.ts
 app/Components/tailwind-ui
+/data

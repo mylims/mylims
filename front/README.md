@@ -10,6 +10,7 @@
 - [Design](#design)
 
 ## Installation
+
 The following command will install the dependencies.
 
 ```shell

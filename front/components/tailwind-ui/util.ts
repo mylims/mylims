@@ -6,7 +6,7 @@ import React from 'react';
  */
 export function forwardRefWithAs<T>(component: T): T {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return React.forwardRef((component as unknown) as any) as any;
+  return React.forwardRef(component as unknown as any) as any;
 }
 
 const _userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';

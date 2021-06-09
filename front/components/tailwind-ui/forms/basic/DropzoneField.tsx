@@ -15,21 +15,12 @@ export interface DropzoneFieldProps extends Omit<DropzoneProps, 'onDrop'> {
 }
 
 export function DropzoneField(props: DropzoneFieldProps) {
-  const {
-    message,
-    header,
-    name,
-    label,
-    required,
-    disabled,
-    ...otherProps
-  } = props;
-  const {
-    dropzoneProps,
-    dropzoneListProps,
-    field,
-    meta,
-  } = useDropzoneField(otherProps, { name });
+  const { message, header, name, label, required, disabled, ...otherProps } =
+    props;
+  const { dropzoneProps, dropzoneListProps, field, meta } = useDropzoneField(
+    otherProps,
+    { name },
+  );
 
   return (
     <div>

@@ -23,12 +23,10 @@ import {
 export default function ConfigList() {
   const { loading, error: queryError, data } = useFileSyncOptionsQuery();
 
-  const [
-    deleteFileSyncOptionMutation,
-    { error: mutationError },
-  ] = useDeleteFileSyncOptionMutation({
-    refetchQueries: [refetchFileSyncOptionsQuery()],
-  });
+  const [deleteFileSyncOptionMutation, { error: mutationError }] =
+    useDeleteFileSyncOptionMutation({
+      refetchQueries: [refetchFileSyncOptionsQuery()],
+    });
 
   const error = queryError || mutationError || null;
 

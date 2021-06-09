@@ -200,9 +200,8 @@ export function NotificationCenter(props: NotificationCenterProps) {
       className={clsx(
         'fixed flex pointer-events-none m-5 z-40',
         {
-          'sm:items-start sm:justify-end items-end justify-center': props.position.endsWith(
-            'right',
-          ),
+          'sm:items-start sm:justify-end items-end justify-center':
+            props.position.endsWith('right'),
           'top-0': props.position.startsWith('top'),
           'bottom-0': props.position.startsWith('bottom'),
           'right-0': props.position.endsWith('right'),

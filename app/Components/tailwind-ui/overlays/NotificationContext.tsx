@@ -33,6 +33,5 @@ export type NotificationActions =
   | ActionType<'DEL_NOTIFICATION', string>
   | ActionType<'DISAPPEAR', string>;
 
-export const NotificationContext = createContext<NotificationContextHook | null>(
-  null,
-);
+export const NotificationContext =
+  createContext<NotificationContextHook | null>(null);

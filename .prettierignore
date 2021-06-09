@@ -1,1 +1,8 @@
 .adonisrc.json
+node_modules
+build
+.next
+public
+tailwind.out.css
+config.json
+/data

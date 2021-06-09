@@ -6,6 +6,7 @@ import { useElnQuery } from '../../hooks/useElnQuery';
 
 interface ProviderData {
   identifier: string;
+  label: string;
 }
 
 export default function OidcAuthForm() {
@@ -26,12 +27,12 @@ export default function OidcAuthForm() {
     <div className="m-4 min-w-1/4">
       <Card>
         <Card.Header>
-          <h3 className="text-lg leading-6 font-medium text-cool-gray-900">
+          <h3 className="text-lg font-medium leading-6 text-cool-gray-900">
             OpenID Connect provider
           </h3>
         </Card.Header>
         <div className="p-4">
-          <Select
+          <Select<ProviderData>
             selected={providersData.find(
               (provider: ProviderData) =>
                 provider.identifier === selectedOidcProvider,

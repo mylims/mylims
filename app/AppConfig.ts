@@ -61,7 +61,7 @@ export interface ConfigProps {
     sessionAge?: string;
   };
   fileSync: {
-    root: string
+    root: string;
   };
   enabledAddons: string[];
 }

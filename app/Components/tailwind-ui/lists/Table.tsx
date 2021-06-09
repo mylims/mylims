@@ -25,15 +25,8 @@ export interface TableProps<T = any> {
 }
 
 export function Table<T extends { id: number | string }>(props: TableProps<T>) {
-  const {
-    data,
-    Tr,
-    Empty,
-    Header,
-    pagination,
-    tableStyle,
-    tableClassName,
-  } = props;
+  const { data, Tr, Empty, Header, pagination, tableStyle, tableClassName } =
+    props;
 
   if (data.length === 0) {
     return Empty ? <Empty /> : null;

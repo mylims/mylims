@@ -128,14 +128,8 @@ interface NavigationGroupProps<T> {
 }
 
 function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
-  const {
-    element,
-    selected,
-    onSelect,
-    size,
-    toggleElement,
-    isElementOpen,
-  } = props;
+  const { element, selected, onSelect, size, toggleElement, isElementOpen } =
+    props;
 
   const isOpen = isElementOpen(element);
 

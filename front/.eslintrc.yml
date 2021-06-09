@@ -1,2 +1,2 @@
 root: true
-extends: "@zakodium/eslint-config/typescript-react"
+extends: '@zakodium/eslint-config/typescript-react'

@@ -1,10 +1,8 @@
 import { useField } from 'formik';
 import { useMemo, useState } from 'react';
 
-import {
-  defaultOptionsFilter,
-  SimpleOption,
-} from '../utils/search-select-utils';
+import { SimpleSelectOption } from '../forms/basic/Select';
+import { defaultOptionsFilter } from '../utils/search-select-utils';
 
 import {
   SearchSelectHookConfig,
@@ -12,49 +10,41 @@ import {
   SimpleSearchSelectHookConfig,
 } from './useSearchSelect';
 
-export interface MultiSearchSelectHookResult<T>
-  extends Omit<SearchSelectHookResult<T>, 'selected' | 'onSelect'> {
-  selected: T[];
-  onSelect: (newOptions: T[]) => void;
+export interface MultiSearchSelectHookResult<OptionType>
+  extends Omit<SearchSelectHookResult<OptionType>, 'selected' | 'onSelect'> {
+  selected: OptionType[];
+  onSelect: (newOptions: OptionType[]) => void;
 }
 
-export type MultiSearchSelectFieldHookResult<
-  T
-> = MultiSearchSelectHookResult<T> & {
+export interface MultiSearchSelectFieldHookResult<OptionType>
+  extends MultiSearchSelectHookResult<OptionType> {
   name: string;
-};
+}
 
-export type SimpleMultiSearchSelectHookConfig<
-  T extends SimpleOption
-> = SimpleSearchSelectHookConfig<T>;
-export type MultiSearchSelectHookConfig<T> = SearchSelectHookConfig<T>;
+export interface SimpleMultiSearchSelectHookConfig<
+  OptionType extends SimpleSelectOption,
+> extends SimpleSearchSelectHookConfig<OptionType> {}
+export interface MultiSearchSelectHookConfig<OptionType>
+  extends SearchSelectHookConfig<OptionType> {}
 
-export type MultiSearchSelectFieldHookConfig<
-  T
-> = MultiSearchSelectHookConfig<T> & {
+export interface MultiSearchSelectFieldHookConfig<OptionType>
+  extends MultiSearchSelectHookConfig<OptionType> {
   name: string;
-};
+}
 
-export type SimpleMultiSearchSelectFieldHookConfig<
-  T extends SimpleOption
-> = SimpleMultiSearchSelectHookConfig<T> & {
+export interface SimpleMultiSearchSelectFieldHookConfig<
+  OptionType extends SimpleSelectOption,
+> extends SimpleMultiSearchSelectHookConfig<OptionType> {
   name: string;
-};
+}
 
-export function useMultiSearchSelectField<T extends SimpleOption>(
-  config: SimpleMultiSearchSelectFieldHookConfig<T>,
-): MultiSearchSelectFieldHookResult<T>;
-export function useMultiSearchSelectField<T>(
-  config: MultiSearchSelectFieldHookConfig<T>,
-): MultiSearchSelectFieldHookResult<T>;
-export function useMultiSearchSelectField<T>(
-  config: T extends SimpleOption
-    ? SimpleMultiSearchSelectFieldHookConfig<T>
-    : MultiSearchSelectFieldHookConfig<T>,
-): MultiSearchSelectFieldHookResult<T> {
-  // @ts-expect-error
-  const searchSelect = useMultiSearchSelect<T>(config);
-  const [field, , helper] = useField<T[]>(config.name);
+export function useMultiSearchSelectField<OptionType>(
+  config: OptionType extends SimpleSelectOption
+    ? SimpleMultiSearchSelectFieldHookConfig<OptionType>
+    : MultiSearchSelectFieldHookConfig<OptionType>,
+): MultiSearchSelectFieldHookResult<OptionType> {
+  const searchSelect = useMultiSearchSelect<OptionType>(config);
+  const [field, , helper] = useField<OptionType[]>(config.name);
 
   return {
     ...searchSelect,
@@ -64,25 +54,18 @@ export function useMultiSearchSelectField<T>(
   };
 }
 
-export function useMultiSearchSelect<T extends SimpleOption>(
-  config: SimpleMultiSearchSelectHookConfig<T>,
-): MultiSearchSelectHookResult<T>;
-export function useMultiSearchSelect<T>(
-  config: MultiSearchSelectHookConfig<T>,
-): MultiSearchSelectHookResult<T>;
-export function useMultiSearchSelect<T>(
-  config: T extends SimpleOption
-    ? SimpleMultiSearchSelectHookConfig<T>
-    : MultiSearchSelectHookConfig<T>,
-): MultiSearchSelectHookResult<T> {
+export function useMultiSearchSelect<OptionType>(
+  config: OptionType extends SimpleSelectOption
+    ? SimpleMultiSearchSelectHookConfig<OptionType>
+    : MultiSearchSelectHookConfig<OptionType>,
+): MultiSearchSelectHookResult<OptionType> {
   const { options, filterOptions = defaultOptionsFilter } = config;
   const [searchValue, setSearchValue] = useState('');
-  const newOptions = useMemo(() => filterOptions(searchValue, options), [
-    options,
-    filterOptions,
-    searchValue,
-  ]);
-  const [selected, setSelected] = useState<T[]>([]);
+  const newOptions = useMemo(
+    () => filterOptions(searchValue, options),
+    [options, filterOptions, searchValue],
+  );
+  const [selected, setSelected] = useState<OptionType[]>([]);
 
   return {
     searchValue,

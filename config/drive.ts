@@ -5,7 +5,7 @@
  * file.
  */
 
-import { getConfig } from 'App/AppConfig'
+import { getConfig } from 'App/AppConfig';
 
 /*
 |--------------------------------------------------------------------------
@@ -23,14 +23,13 @@ const driveConfig = {
   default: 'local',
 
   disks: {
-
     local: {
       driver: 'local',
       config: {
-        root: getConfig('fileSync').root
+        root: getConfig('fileSync').root,
       },
     },
   },
-}
+};
 
-export default driveConfig
+export default driveConfig;

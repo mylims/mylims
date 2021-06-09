@@ -1,63 +1,112 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import {
   defaultCanCreate,
   defaultGetValue,
   defaultRenderOption,
-  GetValue,
   InternalSearchSelect,
-  RenderOption,
-  SimpleOption,
   useSearchSelectInternals,
 } from '../../utils/search-select-utils';
 
-interface BaseSearchSelectProps<T> {
-  // Custom props for search input
-  clearable?: boolean;
-  disabled?: boolean;
-  loading?: boolean;
-  error?: string;
-  help?: string;
-  searchValue: string;
-  onSearchChange: (newValue: string) => void;
+import { SimpleSelectOption, GetValue, RenderOption } from './Select';
 
-  // Props passed directly to Input
-  label: string;
-  placeholder?: string;
-  required?: boolean;
-  onBlur?: (e: React.FocusEvent) => void;
-  name?: string;
-
-  // Custom props for results list
-  options: T[];
-  onSelect: (option: T | undefined) => void;
-  selected?: T;
-  noResultsHint?: ReactNode;
+export interface SimpleSearchSelectProps<OptionType> {
+  /**
+   * List of options to select from.
+   */
+  options: OptionType[];
+  /**
+   * Currently selected option.
+   */
+  selected?: OptionType;
+  /**
+   * Callback which will be called when an option is selected or when clearing is requested.
+   */
+  onSelect: (option: OptionType | undefined) => void;
+  /**
+   * Callback which will be called when the user selects the "create" option.
+   * Passing this prop is what makes the option to appear.
+   */
   onCreate?: (value: string) => void;
+  /**
+   * Callback which will be called before displaying the "create" option to the
+   * user. If it is present and doesn't return `true`, the option will not be displayed.
+   */
   canCreate?: (value: string) => boolean;
 
-  highlightColor?: string;
+  /**
+   * Function to get the value that uniquely identifies each option.
+   */
+  getValue?: GetValue<OptionType>;
+  /**
+   * Custom function to render each option.
+   */
+  renderOption?: RenderOption<OptionType>;
+
+  /**
+   * Value to control the input field.
+   */
+  searchValue: string;
+  /**
+   * Called when the value in the input is about to change.
+   */
+  onSearchChange: (newValue: string) => void;
+  /**
+   * Input field's label.
+   */
+  label: string;
+  /**
+   * Placeholder to display when no value is selected and no search text is entered.
+   */
+  placeholder?: string;
+  /**
+   * Adds a red * to the label.
+   */
+  required?: boolean;
+  /**
+   * Called when the input field is blurred.
+   */
+  onBlur?: (e: React.FocusEvent) => void;
+  /**
+   * Input field's name.
+   */
+  name?: string;
+  /**
+   * Allows to unselect the currently selected value.
+   */
+  clearable?: boolean;
+  /**
+   * Disable interactions with the field.
+   */
+  disabled?: boolean;
+  /**
+   * Displays a spinner in the field.
+   */
+  loading?: boolean;
+  /**
+   * Error message.
+   */
+  error?: string;
+  /**
+   * Explanation or precisions about what the field is for.
+   */
+  help?: string;
+  /**
+   * Class applied to the highlighted option.
+   */
+  highlightClassName?: string;
 }
 
-export interface SimpleSearchSelectProps<T extends SimpleOption>
-  extends BaseSearchSelectProps<T> {
-  getValue?: GetValue<T>;
-  renderOption?: RenderOption<T>;
+export interface SearchSelectProps<OptionType>
+  extends SimpleSearchSelectProps<OptionType> {
+  getValue: GetValue<OptionType>;
+  renderOption: RenderOption<OptionType>;
 }
 
-export interface SearchSelectProps<T> extends BaseSearchSelectProps<T> {
-  getValue: GetValue<T>;
-  renderOption: RenderOption<T>;
-}
-
-export function SearchSelect<T extends SimpleOption>(
-  props: SimpleSearchSelectProps<T>,
-): JSX.Element;
-export function SearchSelect<T>(props: SearchSelectProps<T>): JSX.Element;
-export function SearchSelect<T>(
-  props: T extends SimpleOption
-    ? SimpleSearchSelectProps<T>
-    : SearchSelectProps<T>,
+export function SearchSelect<OptionType>(
+  props: OptionType extends SimpleSelectOption
+    ? SimpleSearchSelectProps<OptionType>
+    : SearchSelectProps<OptionType>,
 ): JSX.Element {
   const {
     onSearchChange,

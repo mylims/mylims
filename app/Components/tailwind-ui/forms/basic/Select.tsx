@@ -2,7 +2,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode } from 'react';
 
 import { useSameWidthPopper } from '../../hooks/popper';
 
@@ -13,55 +13,151 @@ import {
   inputColor,
 } from './common';
 
-export interface SelectOption {
+export interface SimpleSelectOption {
   value: string | number;
   label: ReactNode;
 }
 
-interface SelectCommonProps {
-  help?: string;
-  required?: boolean;
-  clearable?: boolean;
-  placeholder?: string;
-  error?: string;
+export type GetValue<OptionType> = (option: OptionType) => string | number;
+export type RenderOption<OptionType> = (option: OptionType) => ReactNode;
+
+function simpleGetValue(option: SimpleSelectOption) {
+  return option.value;
+}
+
+function simpleRenderOption(option: SimpleSelectOption) {
+  return option.label;
+}
+
+export interface SelectProps<OptionType> extends SimpleSelectProps<OptionType> {
+  /**
+   * Function to get the value that uniquely identifies each option.
+   */
+  getValue: GetValue<OptionType>;
+  /**
+   * Custom function to render each option.
+   */
+  renderOption: RenderOption<OptionType>;
+}
+
+export interface SimpleSelectProps<OptionType> {
+  /**
+   * List of options to select from.
+   */
+  options: OptionType[];
+  /**
+   * Currently selected option.
+   */
+  selected?: OptionType;
+  /**
+   * Callback which will be called when an option is selected or when clearing is requested.
+   */
+  onSelect?: (selected: OptionType | undefined) => void;
+
+  /**
+   * Function to get the value that uniquely identifies each option.
+   */
+  getValue?: GetValue<OptionType>;
+  /**
+   * Custom function to render each option.
+   */
+  renderOption?: RenderOption<OptionType>;
+
+  /**
+   * Field label.
+   */
   label?: string;
-  className?: string;
+  /**
+   * Explanation or precisions about what the field is for.
+   */
+  help?: string;
+  /**
+   * Error message.
+   */
+  error?: string;
+  /**
+   * Placeholder to display when no value is selected.
+   */
+  placeholder?: string;
+
+  /**
+   * Adds a red * to the label.
+   */
+  required?: boolean;
+  /**
+   * Allows to unselect the currently selected value.
+   */
+  clearable?: boolean;
+  /**
+   * Disable interactions with the field.
+   */
   disabled?: boolean;
 
+  /**
+   * Class applied to the outermost div element.
+   */
+  className?: string;
+  /**
+   * Class applied to the highlighted option.
+   */
+  highlightClassName?: string;
+  /**
+   * Whether the component is supposed to be rendered inline.
+   * Currently only affects the placement of the clear button.
+   */
   inline?: boolean;
 }
 
-export interface SelectHelperProps extends SelectCommonProps {
-  options: SelectOption[];
-  selected?: string;
-  onSelect?: (selected: string | undefined) => void;
-  inline: boolean;
-  highlightColor?: string;
-}
-
-function SelectHelper(props: SelectHelperProps) {
-  const { highlightColor = 'text-white bg-primary-600' } = props;
-
-  const selectedOption = props.options.find(
-    (option) => option.value === props.selected,
-  );
-
+export function Select<OptionType>(
+  props: OptionType extends SimpleSelectOption
+    ? SimpleSelectProps<OptionType>
+    : SelectProps<OptionType>,
+): JSX.Element {
   const {
-    setReferenceElement,
-    setPopperElement,
-    popperProps,
-  } = useSameWidthPopper({ placement: 'bottom', distance: 5 });
+    options,
+    selected,
+    onSelect,
+    className,
+    label,
+    error,
+    help,
+    placeholder,
+    required = false,
+    clearable = false,
+    disabled = false,
+    inline = false,
+    getValue = simpleGetValue,
+    renderOption = simpleRenderOption,
+    highlightClassName = 'text-white bg-primary-600',
+  } = props;
+
+  const selectedValue = selected ? getValue(selected) : undefined;
+
+  const { setReferenceElement, setPopperElement, popperProps } =
+    useSameWidthPopper({ placement: 'bottom', distance: 5 });
+
+  function handleChange(value: string | number | undefined) {
+    if (!onSelect) {
+      return;
+    }
+    if (value === undefined) {
+      return onSelect(value);
+    }
+    const option = options.find((option) => getValue(option) === value);
+    if (!option) {
+      throw new Error('unreachable');
+    }
+    onSelect(option);
+  }
 
   return (
-    <div className={props.className}>
+    <div className={className}>
       <Listbox
         as="div"
         className="space-y-1"
-        value={props.selected}
-        disabled={props.disabled}
-        onChange={(value) => {
-          return props.disabled ? undefined : props.onSelect?.(value);
-        }}
+        value={selectedValue}
+        disabled={disabled}
+        onChange={handleChange}
       >
         {({ open }) => (
           <>
@@ -69,22 +165,20 @@ function SelectHelper(props: SelectHelperProps) {
               <Listbox.Label
                 className={clsx(
                   'block text-sm font-semibold',
-                  props.disabled ? labelDisabledColor : labelColor,
+                  disabled ? labelDisabledColor : labelColor,
                 )}
               >
-                {props.label}
-                {props.required && <span className="text-warning-600"> *</span>}
+                {label}
+                {required && <span className="text-warning-600"> *</span>}
               </Listbox.Label>
-              {!props.disabled &&
-              props.clearable &&
-              props.selected &&
-              !props.inline ? (
-                <div
-                  className="text-xs cursor-pointer text-primary-600"
-                  onClick={() => props.onSelect?.(undefined)}
+              {!disabled && clearable && selected && !inline ? (
+                <button
+                  type="button"
+                  className="text-xs focus:outline-none text-primary-600 focus:ring-1 focus:ring-primary-600 focus:ring-offset-1"
+                  onClick={() => onSelect?.(undefined)}
                 >
                   Clear
-                </div>
+                </button>
               ) : null}
             </div>
             <div ref={setReferenceElement} className="relative">
@@ -92,35 +186,34 @@ function SelectHelper(props: SelectHelperProps) {
                 <Listbox.Button
                   className={clsx(
                     'bg-white relative w-full border rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 sm:text-sm',
-                    props.error ? inputError : inputColor,
+                    error ? inputError : inputColor,
                   )}
                 >
                   <span className="block truncate">
-                    {selectedOption?.label || (
+                    {selected ? (
+                      renderOption(selected)
+                    ) : (
                       <span
                         className={
-                          props.error ? 'text-danger-300' : 'text-neutral-400'
+                          error ? 'text-danger-300' : 'text-neutral-400'
                         }
                       >
-                        {props.placeholder}&nbsp;
+                        {placeholder}&nbsp;
                       </span>
                     )}
                   </span>
 
-                  {!props.disabled &&
-                    props.clearable &&
-                    props.selected &&
-                    props.inline && (
-                      <div
-                        className="absolute inset-y-0 flex items-center mr-2 cursor-pointer right-6"
-                        onPointerUp={(event) => {
-                          event.stopPropagation();
-                          props.onSelect?.(undefined);
-                        }}
-                      >
-                        <XIcon className="w-4 h-4 hover:text-neutral-500 text-neutral-400" />
-                      </div>
-                    )}
+                  {!disabled && clearable && selected && inline && (
+                    <div
+                      className="absolute inset-y-0 flex items-center mr-2 cursor-pointer right-6"
+                      onPointerUp={(event) => {
+                        event.stopPropagation();
+                        onSelect?.(undefined);
+                      }}
+                    >
+                      <XIcon className="w-4 h-4 hover:text-neutral-500 text-neutral-400" />
+                    </div>
+                  )}
 
                   <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                     <svg
@@ -140,7 +233,7 @@ function SelectHelper(props: SelectHelperProps) {
                 </Listbox.Button>
               </span>
 
-              {!props.disabled && (
+              {!disabled && (
                 <Transition
                   show={open}
                   leave="transition-opacity ease-in duration-300"
@@ -153,48 +246,57 @@ function SelectHelper(props: SelectHelperProps) {
                       static
                       className="py-1 overflow-auto text-base bg-white rounded-md ring-1 ring-black ring-opacity-5 max-h-60 focus:outline-none sm:text-sm"
                     >
-                      {props.options.map((option) => (
-                        <Listbox.Option key={option.value} value={option.value}>
-                          {({ selected, active }) => (
-                            <div
-                              className={clsx(
-                                active ? highlightColor : 'text-neutral-900',
-                                'cursor-default select-none relative py-2 pl-8 pr-4',
-                              )}
-                            >
-                              <span
+                      {options.map((option) => {
+                        const value = getValue(option);
+                        return (
+                          <Listbox.Option key={value} value={value}>
+                            {({ selected: isSelected, active }) => (
+                              <div
                                 className={clsx(
-                                  selected ? 'font-semibold' : 'font-normal',
-                                  'block truncate',
+                                  active
+                                    ? highlightClassName
+                                    : 'text-neutral-900',
+                                  'cursor-default select-none relative py-2 pl-8 pr-4',
                                 )}
                               >
-                                {option.label}
-                              </span>
-                              {selected && (
                                 <span
                                   className={clsx(
-                                    active ? 'text-white' : 'text-primary-600',
-                                    'absolute inset-y-0 left-0 flex items-center pl-1.5',
+                                    isSelected
+                                      ? 'font-semibold'
+                                      : 'font-normal',
+                                    'block truncate',
                                   )}
                                 >
-                                  <CheckIcon className="w-5 h-5" />
+                                  {renderOption(option)}
                                 </span>
-                              )}
-                            </div>
-                          )}
-                        </Listbox.Option>
-                      ))}
+                                {isSelected && (
+                                  <span
+                                    className={clsx(
+                                      active
+                                        ? 'text-white'
+                                        : 'text-primary-600',
+                                      'absolute inset-y-0 left-0 flex items-center pl-1.5',
+                                    )}
+                                  >
+                                    <CheckIcon className="w-5 h-5" />
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </Listbox.Option>
+                        );
+                      })}
                     </Listbox.Options>
                   </div>
                 </Transition>
               )}
-              {(props.error || props.help) && (
+              {(error || help) && (
                 <p
                   className={clsx('mt-2 text-sm text-neutral-500', {
-                    'text-danger-600': props.error,
+                    'text-danger-600': error,
                   })}
                 >
-                  {props.error || props.help}
+                  {error || help}
                 </p>
               )}
             </div>
@@ -202,68 +304,5 @@ function SelectHelper(props: SelectHelperProps) {
         )}
       </Listbox>
     </div>
-  );
-}
-
-export interface SelectProps<T> extends BaseSelectProps<T> {
-  getValue: (option: T) => string | number;
-  renderOption: (option: T) => ReactNode;
-}
-
-export interface BaseSelectProps<T> extends SelectCommonProps {
-  getValue?: (option: T) => string | number;
-  renderOption?: (option: T) => ReactNode;
-  options: T[];
-  onSelect?: (selected: T | undefined) => void;
-  selected: T | undefined;
-}
-
-export function Select<T extends SelectOption>(
-  props: BaseSelectProps<T>,
-): JSX.Element;
-export function Select<T>(props: SelectProps<T>): JSX.Element;
-export function Select<T>(props: SelectProps<T> | BaseSelectProps<T>) {
-  const {
-    options,
-    selected,
-    // @ts-ignore Cannot deal with types in overloaded function
-    getValue = (option) => option.value,
-    // @ts-ignore Cannot deal with types in overloaded function
-    renderOption = (option) => option.label,
-    onSelect,
-    inline = false,
-    ...otherProps
-  } = props;
-
-  const selectOptions: SelectOption[] = useMemo(() => {
-    return options.map((option) => ({
-      label: renderOption(option),
-      value: getValue(option),
-    }));
-  }, [options, getValue, renderOption]);
-
-  const selectedOption = useMemo(() => {
-    if (selected === undefined) return undefined;
-    return options.find((option) => getValue(option) === getValue(selected));
-  }, [options, selected, getValue]);
-
-  return (
-    <SelectHelper
-      inline={inline}
-      options={selectOptions}
-      selected={selectedOption ? getValue(selectedOption) : undefined}
-      onSelect={(selected: string | undefined) => {
-        if (selected === undefined) {
-          onSelect?.(undefined);
-          return;
-        }
-        const option = options.find((option) => getValue(option) === selected);
-        if (!option) {
-          throw new Error('Unreachable');
-        }
-        onSelect?.(option);
-      }}
-      {...otherProps}
-    />
   );
 }

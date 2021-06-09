@@ -21,7 +21,7 @@ type StackedListRowProps<T> = {
 } & PropsOf<T>;
 
 StackedList.Row = function <
-  T extends React.ElementType = typeof React.Fragment
+  T extends React.ElementType = typeof React.Fragment,
 >(props: StackedListRowProps<T>) {
   const { as: Element = React.Fragment, children, ...otherProps } = props;
 

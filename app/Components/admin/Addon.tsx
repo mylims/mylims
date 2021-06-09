@@ -66,9 +66,11 @@ export default function AddonPage(props: { availableAddons: Addon[] }) {
               <Table
                 Header={Header}
                 Tr={Row}
-                data={(props.availableAddons as (Addon & {
-                  id: string;
-                })[]).map((addon) => {
+                data={(
+                  props.availableAddons as (Addon & {
+                    id: string;
+                  })[]
+                ).map((addon) => {
                   addon.id = addon.getName();
                   return addon;
                 })}

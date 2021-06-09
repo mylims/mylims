@@ -33,9 +33,9 @@ export function Banner<T extends React.ElementType = 'a'>(
             <span className="flex p-2 rounded-lg bg-primary-800">
               <span className="w-6 h-6">{icon}</span>
             </span>
-            <p className="ml-3 font-semibold">
+            <div className="ml-3 font-semibold">
               <span className="md:inline">{description}</span>
-            </p>
+            </div>
           </div>
           <div className="flex-shrink-0 order-3 w-full mt-2 sm:order-2 sm:mt-0 sm:w-auto">
             <Component

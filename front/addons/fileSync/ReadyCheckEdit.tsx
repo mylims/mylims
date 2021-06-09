@@ -41,14 +41,13 @@ export default function ReadyCheckEdit({
             color={Color.danger}
             onClick={() => remove(index)}
           >
-            <TrashIcon className="h-5 w-5" />
+            <TrashIcon className="w-5 h-5" />
           </Button>
         </Card.Header>
         <div className="p-2 space-y-2">
           <SelectField
             name={`readyChecks.${index}.name`}
             options={checkNamesOptions}
-            resolveTo="value"
           />
           {checks.some(
             (check) => check.name === readyCheck.name && check.hasArg,

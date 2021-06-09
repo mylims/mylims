@@ -20,7 +20,9 @@ export function DescriptionList(props: DescriptionListProps) {
         <h3 className="text-lg font-semibold leading-6 text-neutral-900">
           {title}
         </h3>
-        <p className="max-w-2xl mt-1 text-sm text-neutral-500">{subtitle}</p>
+        <div className="max-w-2xl mt-1 text-sm text-neutral-500">
+          {subtitle}
+        </div>
       </div>
       <div className="px-4 py-5 border-t border-neutral-200 sm:p-0">
         <dl className="sm:divide-y sm:divide-neutral-200">

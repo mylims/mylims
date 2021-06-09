@@ -13,29 +13,32 @@ import {
 import FileSyncConfigForm from '../../FileSyncConfigForm';
 
 export default function EditConfig() {
-  const [
-    editFileSyncOption,
-    { loading: mutationLoading },
-  ] = useEditFileSyncOptionMutation();
+  const [editFileSyncOption, { loading: mutationLoading }] =
+    useEditFileSyncOptionMutation();
   const router = useRouter();
   const { id } = router.query;
-  const { data, loading: queryLoading, error } = useFileSyncOptionQuery({
+  const {
+    data,
+    loading: queryLoading,
+    error,
+  } = useFileSyncOptionQuery({
     variables: { id: id as string },
   });
 
   const onSubmit = useMemo(
-    () => async (
-      values: EditFileSyncOptionInput | NewFileSyncOptionInput,
-      {
-        resetForm,
-      }: FormikHelpers<EditFileSyncOptionInput | NewFileSyncOptionInput>,
-    ) => {
-      await editFileSyncOption({
-        variables: { input: { ...values, id: id as string } },
-      });
-      resetForm();
-      await router.push('../list');
-    },
+    () =>
+      async (
+        values: EditFileSyncOptionInput | NewFileSyncOptionInput,
+        {
+          resetForm,
+        }: FormikHelpers<EditFileSyncOptionInput | NewFileSyncOptionInput>,
+      ) => {
+        await editFileSyncOption({
+          variables: { input: { ...values, id: id as string } },
+        });
+        resetForm();
+        await router.push('../list');
+      },
     [editFileSyncOption, router, id],
   );
 

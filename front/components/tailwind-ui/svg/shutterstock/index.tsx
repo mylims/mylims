@@ -1,1 +1,1 @@
-export { default as SvgSickRobot } from './SickRobot'
+export { default as SvgSickRobot } from './SickRobot';

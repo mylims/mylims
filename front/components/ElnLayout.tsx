@@ -64,9 +64,8 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
                           className={clsx(
                             'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
                             {
-                              'text-neutral-100 bg-neutral-900': match(
-                                pathname,
-                              ),
+                              'text-neutral-100 bg-neutral-900':
+                                match(pathname),
                               'text-neutral-300': !match(pathname),
                             },
                           )}

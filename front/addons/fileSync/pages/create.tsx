@@ -11,21 +11,20 @@ import {
 import FileSyncConfigForm from '../FileSyncConfigForm';
 
 export default function CreateConfig() {
-  const [
-    createFileSyncOption,
-    { loading, error },
-  ] = useCreateFileSyncOptionMutation();
+  const [createFileSyncOption, { loading, error }] =
+    useCreateFileSyncOptionMutation();
   const router = useRouter();
 
   const onSubmit = useMemo(
-    () => async (
-      values: NewFileSyncOptionInput,
-      { resetForm }: FormikHelpers<NewFileSyncOptionInput>,
-    ) => {
-      await createFileSyncOption({ variables: { input: values } });
-      resetForm();
-      await router.push('list');
-    },
+    () =>
+      async (
+        values: NewFileSyncOptionInput,
+        { resetForm }: FormikHelpers<NewFileSyncOptionInput>,
+      ) => {
+        await createFileSyncOption({ variables: { input: values } });
+        resetForm();
+        await router.push('list');
+      },
     [createFileSyncOption, router],
   );
 

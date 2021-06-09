@@ -9,7 +9,7 @@ services:
       - mongo-data:/data/db
   backend:
     build: .
-    depends_on: 
+    depends_on:
       - mongo
     ports:
       - '3333:3333'
