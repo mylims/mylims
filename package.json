@@ -8,7 +8,7 @@
     "check-types": "tsc --noEmit",
     "eslint": "eslint addons app commands config contracts mongodb providers start tests server.ts env.ts --cache",
     "eslint-fix": "npm run eslint -- --fix",
-    "prepare": "node scripts/postinstall.mjs && npm run tailwind:build",
+    "prepare": "node scripts/prepare.mjs && npm run tailwind:build",
     "prettier": "prettier --check .",
     "prettier-write": "prettier --write .",
     "test": "npm run test-only && npm run eslint && npm run prettier && npm run check-types",
