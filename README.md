@@ -19,6 +19,8 @@ The following commands will respectively install the dependencies and build the 
 npm install
 ```
 
+You should do it in the `front` folder too, to install frontend dependencies.
+
 ## Configuration
 
 Edit it as needed. Example: auth config for ldap provider.
@@ -26,6 +28,8 @@ Edit it as needed. Example: auth config for ldap provider.
 ## Run
 
 ### Development
+
+#### Backend
 
 The following commands will start mongodb and ldap (to test the ldap provider) containers, setup a replica set on the mongodb server (to support migrations) and start the development server.
 
@@ -41,6 +45,22 @@ If it's the first time, don't forget to copy or create the `.env` file and is ne
 cp .env.example .env
 npm i
 node ace mongodb:migration:run
+```
+
+#### Frontend
+
+The following command will run the Next.js app.
+
+```shell
+npm run dev
+```
+
+If it's the first time, don't forget to copy or create the `.env` file, install dependencies and expose addons pages using the following commands:
+
+```shell
+cp .env.example .env
+npm i
+node scripts/addons-symlinks.js
 ```
 
 ### Production
