@@ -5,9 +5,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   Button,
-  Card,
-  Color,
-  Modal,
   SlideOver,
   Spinner,
   Table,
@@ -20,14 +17,14 @@ import {
   useDirectoryTreeLazyQuery,
 } from '../../generated/graphql';
 
-interface SelectFolderModalProps {
+interface SelectFolderSlideOverProps {
   returnPath: (path: string) => void;
 }
 
-export default function SelectFolderModal({
+export default function SelectFolderSlideOver({
   returnPath,
-}: SelectFolderModalProps) {
-  const [isModalOpen, openModal, closeModal] = useOnOff();
+}: SelectFolderSlideOverProps) {
+  const [isSlideOverOpen, openSlideOver, closeSlideOver] = useOnOff();
 
   const [selectedPath, _selectPath] = useState('/');
 
@@ -42,7 +39,7 @@ export default function SelectFolderModal({
 
   const directoryList = useMemo(() => {
     if (data === undefined) {
-      return undefined;
+      return [];
     }
     const directoryList = [...data.directoryTree];
     directoryList.unshift({ path: '..', type: DirectoryEntryType.DIRECTORY });
@@ -61,8 +58,8 @@ export default function SelectFolderModal({
 
   return (
     <>
-      <Button onClick={openModal}>Select root</Button>
-      <SlideOver isOpen={isModalOpen}>
+      <Button onClick={openSlideOver}>Select root</Button>
+      <SlideOver isOpen={isSlideOverOpen}>
         <SlideOver.Header>
           <h2 className="text-lg font-semibold text-neutral-900">
             Select folder
@@ -75,17 +72,17 @@ export default function SelectFolderModal({
           ) : (
             <Table
               Header={Header(selectedPath)}
-              data={directoryList as any[]}
+              data={directoryList}
               Tr={Row(selectPath)}
             />
           )}
         </SlideOver.Content>
         <SlideOver.Footer>
-          <Button onClick={closeModal}>Cancel</Button>
+          <Button onClick={closeSlideOver}>Cancel</Button>
           <Button
             onClick={() => {
               returnPath(selectedPath);
-              closeModal();
+              closeSlideOver();
             }}
           >
             Validate

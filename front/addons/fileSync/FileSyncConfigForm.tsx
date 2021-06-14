@@ -1,6 +1,5 @@
 import { Field, FieldArray, FormikConfig } from 'formik';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
 
 import {
   Alert,
@@ -24,7 +23,7 @@ import { omitDeep } from '../../utils/omit-deep';
 
 import PatternEdit from './PatternEdit';
 import ReadyCheckEdit from './ReadyCheckEdit';
-import SelectFolderModal from './SelectFolderModal';
+import SelectFolderSlideOver from './SelectFolderSlideOver';
 
 const defaultInitialValues: NewFileSyncOptionInput = {
   enabled: false,
@@ -87,7 +86,7 @@ export default function FileSyncConfigForm({
                 <ToggleField name="enabled" label="Enabled" />
                 <>
                   <InputField name="root" label="Root path" disabled />
-                  <SelectFolderModal
+                  <SelectFolderSlideOver
                     returnPath={(path: string) => setFieldValue('root', path)}
                   />
                 </>
@@ -138,7 +137,6 @@ export default function FileSyncConfigForm({
                           {values.readyChecks.length > 0 &&
                             values.readyChecks.map((readyCheck, index) => (
                               <ReadyCheckEdit
-                                // eslint-disable-next-line react/no-array-index-key
                                 key={readyCheck.name + readyCheck.value}
                                 remove={remove}
                                 index={index}
