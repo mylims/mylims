@@ -23,6 +23,7 @@ import { omitDeep } from '../../utils/omit-deep';
 
 import PatternEdit from './PatternEdit';
 import ReadyCheckEdit from './ReadyCheckEdit';
+import SelectFolderSlideOver from './SelectFolderSlideOver';
 
 const defaultInitialValues: NewFileSyncOptionInput = {
   enabled: false,
@@ -72,7 +73,7 @@ export default function FileSyncConfigForm({
           }
           onSubmit={onSubmit}
         >
-          {({ values }) => (
+          {({ values, setFieldValue }) => (
             <>
               <Card.Header>
                 <h3 className="text-lg leading-6 font-medium text-cool-gray-900">
@@ -83,7 +84,12 @@ export default function FileSyncConfigForm({
                 <FormError />
                 {initialValues && <Field name="id" label="id" type="hidden" />}
                 <ToggleField name="enabled" label="Enabled" />
-                <InputField name="root" label="Root path" />
+                <>
+                  <InputField name="root" label="Root path" disabled />
+                  <SelectFolderSlideOver
+                    returnPath={(path: string) => setFieldValue('root', path)}
+                  />
+                </>
                 <InputField type="number" name="maxDepth" label="Max depth" />
 
                 <FieldArray name="patterns">
@@ -131,8 +137,7 @@ export default function FileSyncConfigForm({
                           {values.readyChecks.length > 0 &&
                             values.readyChecks.map((readyCheck, index) => (
                               <ReadyCheckEdit
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={index}
+                                key={readyCheck.name + readyCheck.value}
                                 remove={remove}
                                 index={index}
                                 readyCheck={readyCheck}

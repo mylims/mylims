@@ -1,0 +1,13 @@
+type Query {
+  directoryTree(root: String!): [DirectoryEntry!]!
+}
+
+enum DirectoryEntryType {
+  directory
+  file
+}
+
+type DirectoryEntry {
+  path: String!
+  type: DirectoryEntryType!
+}
