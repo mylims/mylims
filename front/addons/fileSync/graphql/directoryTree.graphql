@@ -1,0 +1,6 @@
+query DirectoryTree($root: String!) {
+  directoryTree(root: $root) {
+    path
+    type
+  }
+}

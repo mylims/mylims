@@ -36,6 +36,17 @@ export type GqlDeleteFileSyncOptionInput = {
   id: Scalars['ID'];
 };
 
+export type GqlDirectoryEntry = {
+  __typename?: 'DirectoryEntry';
+  path: Scalars['String'];
+  type: GqlDirectoryEntryType;
+};
+
+export enum GqlDirectoryEntryType {
+  DIRECTORY = 'directory',
+  FILE = 'file',
+}
+
 export type GqlEditFileSyncOptionInput = {
   id: Scalars['ID'];
   enabled: Scalars['Boolean'];
@@ -101,9 +112,14 @@ export enum GqlPatternType {
 export type GqlQuery = {
   __typename?: 'Query';
   users: Array<GqlUser>;
+  directoryTree: Array<GqlDirectoryEntry>;
   fileSyncOptions: Array<GqlFileSyncOption>;
   fileSyncOption: GqlFileSyncOption;
   readyChecks: Array<GqlReadyCheckDescriptor>;
+};
+
+export type GqlQueryDirectoryTreeArgs = {
+  root: Scalars['String'];
 };
 
 export type GqlQueryFileSyncOptionArgs = {
@@ -258,9 +274,11 @@ export type DirectiveResolverFn<
 export type GqlResolversTypes = ResolversObject<{
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  DirectoryEntry: ResolverTypeWrapper<GqlDirectoryEntry>;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  DirectoryEntryType: GqlDirectoryEntryType;
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   FileSyncOption: ResolverTypeWrapper<FileSyncOption>;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
@@ -281,9 +299,10 @@ export type GqlResolversTypes = ResolversObject<{
 export type GqlResolversParentTypes = ResolversObject<{
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
   ID: Scalars['ID'];
+  DirectoryEntry: GqlDirectoryEntry;
+  String: Scalars['String'];
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   Boolean: Scalars['Boolean'];
-  String: Scalars['String'];
   Int: Scalars['Int'];
   FileSyncOption: FileSyncOption;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
@@ -297,6 +316,19 @@ export type GqlResolversParentTypes = ResolversObject<{
   ReadyCheckDescriptor: GqlReadyCheckDescriptor;
   ReadyCheckInput: GqlReadyCheckInput;
   User: User;
+}>;
+
+export type GqlDirectoryEntryResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['DirectoryEntry'] = GqlResolversParentTypes['DirectoryEntry'],
+> = ResolversObject<{
+  path?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<
+    GqlResolversTypes['DirectoryEntryType'],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GqlFileSyncOptionResolvers<
@@ -368,6 +400,12 @@ export type GqlQueryResolvers<
   ParentType extends GqlResolversParentTypes['Query'] = GqlResolversParentTypes['Query'],
 > = ResolversObject<{
   users?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
+  directoryTree?: Resolver<
+    Array<GqlResolversTypes['DirectoryEntry']>,
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryDirectoryTreeArgs, 'root'>
+  >;
   fileSyncOptions?: Resolver<
     Array<GqlResolversTypes['FileSyncOption']>,
     ParentType,
@@ -434,6 +472,7 @@ export type GqlUserResolvers<
 }>;
 
 export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
+  DirectoryEntry?: GqlDirectoryEntryResolvers<ContextType>;
   FileSyncOption?: GqlFileSyncOptionResolvers<ContextType>;
   JSON?: GraphQLScalarType;
   JSONObject?: GraphQLScalarType;

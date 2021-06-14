@@ -12,6 +12,10 @@ import {
 } from '../../components/tailwind-ui';
 import { ReadyCheckDescriptor, ReadyCheckInput } from '../../generated/graphql';
 
+function simpleGetValueRenderOption(option: string) {
+  return option;
+}
+
 interface ReadyCheckEditProps {
   remove: ArrayHelpers['remove'];
   index: number;
@@ -26,10 +30,7 @@ export default function ReadyCheckEdit({
   readyCheck,
 }: ReadyCheckEditProps) {
   const checkNamesOptions = useMemo(() => {
-    return checks.map(({ name }) => ({
-      label: name,
-      value: name,
-    }));
+    return checks.map(({ name }) => name);
   }, [checks]);
 
   return (
@@ -48,6 +49,8 @@ export default function ReadyCheckEdit({
           <SelectField
             name={`readyChecks.${index}.name`}
             options={checkNamesOptions}
+            getValue={simpleGetValueRenderOption}
+            renderOption={simpleGetValueRenderOption}
           />
           {checks.some(
             (check) => check.name === readyCheck.name && check.hasArg,

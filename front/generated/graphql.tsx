@@ -27,6 +27,16 @@ export type DeleteFileSyncOptionInput = {
   id: Scalars['ID'];
 };
 
+export type DirectoryEntry = {
+  path: Scalars['String'];
+  type: DirectoryEntryType;
+};
+
+export enum DirectoryEntryType {
+  DIRECTORY = 'directory',
+  FILE = 'file',
+}
+
 export type EditFileSyncOptionInput = {
   id: Scalars['ID'];
   enabled: Scalars['Boolean'];
@@ -88,9 +98,14 @@ export enum PatternType {
 
 export type Query = {
   users: Array<User>;
+  directoryTree: Array<DirectoryEntry>;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
+};
+
+export type QueryDirectoryTreeArgs = {
+  root: Scalars['String'];
 };
 
 export type QueryFileSyncOptionArgs = {
@@ -119,6 +134,14 @@ export type User = {
   emails: Array<Scalars['String']>;
   role: Scalars['String'];
   authMethods: Scalars['JSONObject'];
+};
+
+export type DirectoryTreeQueryVariables = Exact<{
+  root: Scalars['String'];
+}>;
+
+export type DirectoryTreeQuery = {
+  directoryTree: Array<Pick<DirectoryEntry, 'path' | 'type'>>;
 };
 
 export type FileSyncOptionFieldsFragment = Pick<
@@ -203,6 +226,70 @@ export const FileSyncOptionFieldsFragmentDoc = gql`
     }
   }
 `;
+export const DirectoryTreeDocument = gql`
+  query DirectoryTree($root: String!) {
+    directoryTree(root: $root) {
+      path
+      type
+    }
+  }
+`;
+
+/**
+ * __useDirectoryTreeQuery__
+ *
+ * To run a query within a React component, call `useDirectoryTreeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDirectoryTreeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDirectoryTreeQuery({
+ *   variables: {
+ *      root: // value for 'root'
+ *   },
+ * });
+ */
+export function useDirectoryTreeQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    DirectoryTreeQuery,
+    DirectoryTreeQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    DirectoryTreeQuery,
+    DirectoryTreeQueryVariables
+  >(DirectoryTreeDocument, options);
+}
+export function useDirectoryTreeLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    DirectoryTreeQuery,
+    DirectoryTreeQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    DirectoryTreeQuery,
+    DirectoryTreeQueryVariables
+  >(DirectoryTreeDocument, options);
+}
+export type DirectoryTreeQueryHookResult = ReturnType<
+  typeof useDirectoryTreeQuery
+>;
+export type DirectoryTreeLazyQueryHookResult = ReturnType<
+  typeof useDirectoryTreeLazyQuery
+>;
+export type DirectoryTreeQueryResult = Apollo.QueryResult<
+  DirectoryTreeQuery,
+  DirectoryTreeQueryVariables
+>;
+export function refetchDirectoryTreeQuery(
+  variables?: DirectoryTreeQueryVariables,
+) {
+  return { query: DirectoryTreeDocument, variables: variables };
+}
 export const FileSyncOptionsDocument = gql`
   query FileSyncOptions {
     fileSyncOptions {
