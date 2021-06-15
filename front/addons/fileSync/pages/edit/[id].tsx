@@ -4,13 +4,13 @@ import { useMemo } from 'react';
 
 import ElnLayout from '../../../../components/ElnLayout';
 import { Alert, AlertType, Spinner } from '../../../../components/tailwind-ui';
+import FileSyncConfigForm from '../../FileSyncConfigForm';
 import {
   EditFileSyncOptionInput,
   NewFileSyncOptionInput,
   useEditFileSyncOptionMutation,
   useFileSyncOptionQuery,
-} from '../../../../generated/graphql';
-import FileSyncConfigForm from '../../FileSyncConfigForm';
+} from '../../generated/graphql';
 
 export default function EditConfig() {
   const [editFileSyncOption, { loading: mutationLoading }] =

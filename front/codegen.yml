@@ -1,27 +1,34 @@
 overwrite: true
 schema: 'http://localhost:3333/graphql'
-documents: '**/*.graphql'
 hooks:
   afterOneFileWrite:
     - prettier --write
+config:
+  withHOC: false
+  withComponent: false
+  withHooks: true
+  withMutationFn: false
+  withRefetchFn: true
+  apolloReactHooksImportFrom: '@apollo/client'
+  namingConvention:
+    enumValues: change-case#upperCase
+  skipTypename: true
 generates:
   generated/graphql.tsx:
+    documents: 'graphql/*.graphql'
     plugins:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
-    config:
-      withHOC: false
-      withComponent: false
-      withHooks: true
-      withMutationFn: false
-      withRefetchFn: true
-      apolloReactHooksImportFrom: '@apollo/client'
-      namingConvention:
-        enumValues: change-case#upperCase
-      skipTypename: true
   generated/fragmentTypes.ts:
+    documents: 'graphql/*.graphql'
     plugins:
       - 'fragment-matcher'
     config:
       apolloClientVersion: 3
+  addons/fileSync/generated/graphql.tsx:
+    documents: 'addons/fileSync/graphql/*.graphql'
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'

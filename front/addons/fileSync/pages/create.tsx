@@ -4,11 +4,11 @@ import { useMemo } from 'react';
 
 import ElnLayout from '../../../components/ElnLayout';
 import { Alert, AlertType } from '../../../components/tailwind-ui';
+import FileSyncConfigForm from '../FileSyncConfigForm';
 import {
   NewFileSyncOptionInput,
   useCreateFileSyncOptionMutation,
-} from '../../../generated/graphql';
-import FileSyncConfigForm from '../FileSyncConfigForm';
+} from '../generated/graphql';
 
 export default function CreateConfig() {
   const [createFileSyncOption, { loading, error }] =

@@ -12,10 +12,11 @@ import {
   Th,
   useOnOff,
 } from '../../components/tailwind-ui';
+
 import {
   DirectoryEntryType,
   useDirectoryTreeLazyQuery,
-} from '../../generated/graphql';
+} from './generated/graphql';
 
 interface SelectFolderSlideOverProps {
   returnPath: (path: string) => void;

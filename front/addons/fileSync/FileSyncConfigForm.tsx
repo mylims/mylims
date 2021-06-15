@@ -14,16 +14,16 @@ import {
   SubmitButton,
   ToggleField,
 } from '../../components/tailwind-ui';
-import {
-  EditFileSyncOptionInput,
-  NewFileSyncOptionInput,
-  useReadyChecksQuery,
-} from '../../generated/graphql';
 import { omitDeep } from '../../utils/omit-deep';
 
 import PatternEdit from './PatternEdit';
 import ReadyCheckEdit from './ReadyCheckEdit';
 import SelectFolderSlideOver from './SelectFolderSlideOver';
+import {
+  EditFileSyncOptionInput,
+  NewFileSyncOptionInput,
+  useReadyChecksQuery,
+} from './generated/graphql';
 
 const defaultInitialValues: NewFileSyncOptionInput = {
   enabled: false,
