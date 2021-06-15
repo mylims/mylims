@@ -98,6 +98,17 @@
         }
       ]
     },
+    "user:create": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "./commands/UserCreate",
+      "commandName": "user:create",
+      "description": "Create an user",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "file:import": {
       "settings": {
         "loadApp": true
@@ -131,7 +142,22 @@
       "description": "Check files integrity",
       "args": [],
       "aliases": [],
-      "flags": []
+      "flags": [
+        {
+          "name": "yes",
+          "propertyName": "yes",
+          "type": "boolean",
+          "description": "Answer yes to all questions",
+          "alias": "y"
+        },
+        {
+          "name": "simulate",
+          "propertyName": "simulate",
+          "type": "boolean",
+          "description": "No action. Perform a simulation of events that would occur but do not actually change anything.",
+          "alias": "s"
+        }
+      ]
     },
     "file:sync": {
       "settings": {
