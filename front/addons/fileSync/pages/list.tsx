@@ -18,7 +18,7 @@ import {
   useFileSyncOptionsQuery,
   useDeleteFileSyncOptionMutation,
   refetchFileSyncOptionsQuery,
-} from '../../../generated/graphql';
+} from '../generated/graphql';
 
 export default function ConfigList() {
   const { loading, error: queryError, data } = useFileSyncOptionsQuery();
