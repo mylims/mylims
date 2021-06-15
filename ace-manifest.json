@@ -98,12 +98,12 @@
         }
       ]
     },
-    "create:user": {
+    "user:create": {
       "settings": {
         "loadApp": true
       },
-      "commandPath": "./commands/CreateUser",
-      "commandName": "create:user",
+      "commandPath": "./commands/UserCreate",
+      "commandName": "user:create",
       "description": "Create an user",
       "args": [],
       "aliases": [],

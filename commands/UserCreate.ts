@@ -1,7 +1,7 @@
-import { BaseCommand, Hash } from '@adonisjs/core/build/standalone';
+import { BaseCommand } from '@adonisjs/core/build/standalone';
 
 export default class CreateUser extends BaseCommand {
-  public static commandName = 'create:user';
+  public static commandName = 'user:create';
   public static description = 'Create an user';
 
   public static settings = {
