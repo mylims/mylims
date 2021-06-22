@@ -1,15 +1,15 @@
-FROM node:14 AS deps
+FROM node:16 AS deps
 WORKDIR /usr/mylims-front
 COPY package.json package-lock.json ./
 RUN npm ci
 
-FROM node:14 as builder
+FROM node:16 as builder
 WORKDIR /usr/mylims-front
 COPY . .
 COPY --from=deps /usr/mylims-front/node_modules ./node_modules
 RUN npm run build
 
-FROM node:14
+FROM node:16
 WORKDIR /usr/mylims-front
 ENV NODE_ENV production
 

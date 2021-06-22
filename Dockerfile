@@ -1,11 +1,11 @@
-FROM node:14 AS deps
+FROM node:16 AS deps
 WORKDIR /usr/mylims
 COPY .env.example ./.env
 COPY package*.json ./
 RUN npm ci --ignore-scripts
 RUN npm rebuild
 
-FROM node:14 AS builder
+FROM node:16 AS builder
 WORKDIR /usr/mylims
 COPY . .
 COPY --from=deps /usr/mylims/node_modules ./node_modules
@@ -13,7 +13,7 @@ RUN node scripts/prune-addons.mjs
 RUN npm run build
 RUN rm build/.env
 
-FROM node:14
+FROM node:16
 WORKDIR /usr/mylims
 ENV NODE_ENV production
 #ENV ENV_SILENT true
