@@ -124,6 +124,7 @@ export default class Import extends BaseCommand {
       this.logger.info(`no file to sync`, fileSyncOptionId);
       return;
     }
+    this.logger.info(`${count} files to sync`);
 
     let importCount = 0;
     for await (const syncFile of syncFiles) {
