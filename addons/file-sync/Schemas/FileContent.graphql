@@ -1,0 +1,9 @@
+type Query {
+  fileByPath(path: String!): FileContent!
+}
+
+type FileContent {
+  fileName: String!
+  size: Int!
+  content: String!
+}
