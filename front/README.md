@@ -23,6 +23,7 @@ Copy `.env.example` to `.env` and set variables accordingly.
 Don't forget to expose addons pages using the following command:
 
 ```shell
+cp .env.example .env
 node scripts/addons-symlinks.js
 ```
 
