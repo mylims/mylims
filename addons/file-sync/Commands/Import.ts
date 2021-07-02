@@ -202,7 +202,7 @@ export default class Import extends BaseCommand {
       createReadStream(syncFile._id.relativePath),
     );
     await this.deps.File.create({
-      _id: driveFile.id,
+      _id: syncFile.revisions[0].id,
       filename: driveFile.filename,
       size: driveFile.size,
     });
