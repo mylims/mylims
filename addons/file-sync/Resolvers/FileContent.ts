@@ -1,22 +1,23 @@
-import { readFile } from 'fs/promises';
-import { join } from 'path';
+import DataDrive from '@ioc:DataDrive';
 
 import { GqlResolvers } from 'App/graphql';
 
-import { FileSyncOption } from '../Models/FileSyncOption';
+import { File } from '../Models/File';
 import { SyncFile } from '../Models/SyncFile';
 
 const resolvers: GqlResolvers = {
   Query: {
     async fileByPath(_, { path }) {
-      const [file] = await (
+      const [syncFile] = await (
         await SyncFile.find({ '_id.relativePath': path })
       ).all();
-      const { configId } = file.id;
-      const { root } = await FileSyncOption.findByIdOrThrow(configId);
-      const fileBuffer = await readFile(join(root, path));
-      const content = fileBuffer.toString();
-      return { filename: file.filename, size: file.revisions[0].size, content };
+      const file = await File.findByIdOrThrow(syncFile.revisions[0].id);
+      const content = await DataDrive.drive('local').get(file);
+      return {
+        filename: file.filename,
+        size: file.size,
+        content,
+      };
     },
   },
 };
