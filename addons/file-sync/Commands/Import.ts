@@ -1,4 +1,5 @@
 import { createReadStream } from 'fs';
+import { join } from 'path';
 import { promisify } from 'util';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -116,7 +117,9 @@ export default class Import extends BaseCommand {
     this.logger.info('handling file sync option', fileSyncOptionId);
     const syncFiles = await this.deps.SyncFile.find({
       '_id.configId': fileSyncOption.id,
-      'revisions.0.status': this.deps.SyncState.PENDING,
+      'revisions.0.status': {
+        $in: [this.deps.SyncState.PENDING, this.deps.SyncState.IMPORT_FAIL],
+      },
     });
 
     const count = await syncFiles.count();
@@ -143,9 +146,9 @@ export default class Import extends BaseCommand {
 
       try {
         await this.importFile(syncFile);
+        syncFile.revisions[0].status = this.deps.SyncState.IMPORTED;
       } catch (err) {
         syncFile.revisions[0].status = this.deps.SyncState.IMPORT_FAIL;
-        await syncFile.save();
         this.logger.error(
           'failed to import file',
           fileSyncOptionId,
@@ -153,7 +156,6 @@ export default class Import extends BaseCommand {
         );
       }
 
-      syncFile.revisions[0].status = this.deps.SyncState.IMPORTED;
       await syncFile.save();
       this.logger.debug('imported', fileSyncOptionId, syncFile.filename);
       importCount++;
@@ -197,9 +199,13 @@ export default class Import extends BaseCommand {
 
   private async importFile(syncFile: SyncFile) {
     const drive = this.deps.DataDrive.drive('local');
+    const { root } = await this.deps.FileSyncOption.findByIdOrThrow(
+      syncFile._id.configId,
+    );
+    const filePath = join(root, syncFile._id.relativePath);
     const driveFile = await drive.put(
       syncFile.filename,
-      createReadStream(syncFile._id.relativePath),
+      createReadStream(filePath),
     );
     await this.deps.File.create({
       _id: syncFile.revisions[0].id,
