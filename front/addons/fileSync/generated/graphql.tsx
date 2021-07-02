@@ -46,6 +46,12 @@ export type EditFileSyncOptionInput = {
   readyChecks: Array<ReadyCheckInput>;
 };
 
+export type FileContent = {
+  filename: Scalars['String'];
+  size: Scalars['Int'];
+  content: Scalars['String'];
+};
+
 export type FileSyncOption = {
   id: Scalars['ID'];
   enabled: Scalars['Boolean'];
@@ -99,6 +105,7 @@ export enum PatternType {
 export type Query = {
   users: Array<User>;
   directoryTree: Array<DirectoryEntry>;
+  fileByPath: FileContent;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -106,6 +113,10 @@ export type Query = {
 
 export type QueryDirectoryTreeArgs = {
   root: Scalars['String'];
+};
+
+export type QueryFileByPathArgs = {
+  path: Scalars['String'];
 };
 
 export type QueryFileSyncOptionArgs = {
