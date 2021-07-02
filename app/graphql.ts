@@ -58,7 +58,7 @@ export type GqlEditFileSyncOptionInput = {
 
 export type GqlFileContent = {
   __typename?: 'FileContent';
-  fileName: Scalars['String'];
+  filename: Scalars['String'];
   size: Scalars['Int'];
   content: Scalars['String'];
 };
@@ -349,7 +349,7 @@ export type GqlFileContentResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['FileContent'] = GqlResolversParentTypes['FileContent'],
 > = ResolversObject<{
-  fileName?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  filename?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   content?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
