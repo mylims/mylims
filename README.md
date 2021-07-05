@@ -43,6 +43,14 @@ npm i
 node ace mongodb:migration:run
 ```
 
+### Configuration
+
+Is necessary to have running the [frontend server](./front/README.md#installation) in order con administrate de system. For this in the `localhost:3333/admin` server configuration is possible to administrate the addons, including the login methods. After is required to have created an user:
+
+```shell
+node ace user:create
+```
+
 ### Production
 
 TBD
