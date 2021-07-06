@@ -26,7 +26,7 @@ import {
 } from './generated/graphql';
 
 const defaultInitialValues: NewFileSyncOptionInput = {
-  enabled: false,
+  enabled: true,
   root: '',
   maxDepth: 0,
   patterns: [],
@@ -76,7 +76,7 @@ export default function FileSyncConfigForm({
           {({ values, setFieldValue }) => (
             <>
               <Card.Header>
-                <h3 className="text-lg leading-6 font-medium text-cool-gray-900">
+                <h3 className="text-lg font-medium leading-6 text-cool-gray-900">
                   {title}
                 </h3>
               </Card.Header>
@@ -95,7 +95,7 @@ export default function FileSyncConfigForm({
                 <FieldArray name="patterns">
                   {({ push, remove }) => (
                     <>
-                      <h3 className="text-md leading-6 font-medium text-cool-gray-900">
+                      <h3 className="font-medium leading-6 text-md text-cool-gray-900">
                         Patterns
                         <Button
                           size={Size.xSmall}
@@ -123,7 +123,7 @@ export default function FileSyncConfigForm({
                   <FieldArray name="readyChecks">
                     {({ push, remove }) => (
                       <>
-                        <h3 className="text-md leading-6 font-medium text-cool-gray-900">
+                        <h3 className="font-medium leading-6 text-md text-cool-gray-900">
                           Ready checks
                           <Button
                             size={Size.xSmall}
