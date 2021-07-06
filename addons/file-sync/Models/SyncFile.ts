@@ -17,6 +17,8 @@ export interface Revision
   status: GqlFileStatus;
 }
 
+export const SyncState = GqlFileStatus;
+
 export class SyncFile extends Model<FileId> {
   public static collectionName = 'fileSync.syncFiles';
 

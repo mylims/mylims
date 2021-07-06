@@ -2,9 +2,8 @@ import { useRouter } from 'next/router';
 
 import ElnLayout from '../../../../components/ElnLayout';
 import { Alert, AlertType, Spinner } from '../../../../components/tailwind-ui';
-import { useFilesByConfigQuery } from '../../generated/graphql';
-
 import TableFilesSync from '../../TableFilesSync';
+import { useFilesByConfigQuery } from '../../generated/graphql';
 
 export default function ListFiles() {
   const router = useRouter();
@@ -18,7 +17,7 @@ export default function ListFiles() {
   }
 
   if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
-  if (error)
+  if (error) {
     return (
       <Alert
         title={'Error while fetching file sync option'}
@@ -27,6 +26,7 @@ export default function ListFiles() {
         Unexpected error {error.message}
       </Alert>
     );
+  }
 
   return <TableFilesSync data={data} />;
 }

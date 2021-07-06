@@ -1,5 +1,6 @@
 import { InboxIcon } from '@heroicons/react/outline';
 import React, { useMemo } from 'react';
+
 import {
   Badge,
   BadgeVariant,
