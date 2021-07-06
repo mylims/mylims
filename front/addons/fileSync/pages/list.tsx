@@ -1,6 +1,7 @@
 import {
   CheckIcon,
   CogIcon,
+  TableIcon,
   TrashIcon,
   XIcon,
   InboxIcon,
@@ -95,8 +96,21 @@ function Row(
         <Td>{value.patterns.length}</Td>
         <Td>{value.readyChecks.length}</Td>
         <Td>
+          <Link href="files/[id]" as={`files/${value.id}`}>
+            <Button
+              roundness={Roundness.circular}
+              color={Color.success}
+              title="List of files"
+            >
+              <TableIcon className="w-5 h-5" />
+            </Button>
+          </Link>
           <Link href="edit/[id]" as={`edit/${value.id}`}>
-            <Button roundness={Roundness.circular}>
+            <Button
+              roundness={Roundness.circular}
+              className="ml-2"
+              title="Configuration"
+            >
               <CogIcon className="w-5 h-5" />
             </Button>
           </Link>
@@ -107,6 +121,7 @@ function Row(
             onClick={() =>
               deleteFileSyncOption({ variables: { input: { id: value.id } } })
             }
+            title="Delete configuration"
           >
             <TrashIcon className="w-5 h-5" />
           </Button>

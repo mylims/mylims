@@ -52,6 +52,13 @@ export type FileContent = {
   content: Scalars['String'];
 };
 
+export enum FileStatus {
+  PENDING = 'pending',
+  IMPORTING = 'importing',
+  IMPORTED = 'imported',
+  IMPORT_FAIL = 'import_fail',
+}
+
 export type FileSyncOption = {
   id: Scalars['ID'];
   enabled: Scalars['Boolean'];
@@ -106,6 +113,7 @@ export type Query = {
   users: Array<User>;
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
+  filesByConfig: Array<SyncFileRevision>;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -117,6 +125,10 @@ export type QueryDirectoryTreeArgs = {
 
 export type QueryFileByPathArgs = {
   path: Scalars['String'];
+};
+
+export type QueryFilesByConfigArgs = {
+  configId: Scalars['String'];
 };
 
 export type QueryFileSyncOptionArgs = {
@@ -136,6 +148,14 @@ export type ReadyCheckDescriptor = {
 export type ReadyCheckInput = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type SyncFileRevision = {
+  revisionId: Scalars['String'];
+  countRevisions: Scalars['Int'];
+  size: Scalars['Int'];
+  relativePath: Scalars['String'];
+  status: FileStatus;
 };
 
 export type User = {

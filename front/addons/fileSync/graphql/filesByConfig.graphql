@@ -1,0 +1,9 @@
+query FilesByConfig($id: String!) {
+  filesByConfig(configId: $id) {
+    revisionId
+    countRevisions
+    size
+    relativePath
+    status
+  }
+}
