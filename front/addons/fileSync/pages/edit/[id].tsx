@@ -60,7 +60,7 @@ export default function EditConfig() {
         </Alert>
       ) : (
         <FileSyncConfigForm
-          title="Edit synchronisation"
+          title="Edit synchronization"
           submitLabel="Save"
           initialValues={data?.fileSyncOption}
           onSubmit={onSubmit}
