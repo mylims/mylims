@@ -52,6 +52,13 @@ export type FileContent = {
   content: Scalars['String'];
 };
 
+export enum FileStatus {
+  PENDING = 'pending',
+  IMPORTING = 'importing',
+  IMPORTED = 'imported',
+  IMPORT_FAIL = 'import_fail',
+}
+
 export type FileSyncOption = {
   id: Scalars['ID'];
   enabled: Scalars['Boolean'];
@@ -106,6 +113,7 @@ export type Query = {
   users: Array<User>;
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
+  filesByConfig: Array<SyncFileRevision>;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -117,6 +125,10 @@ export type QueryDirectoryTreeArgs = {
 
 export type QueryFileByPathArgs = {
   path: Scalars['String'];
+};
+
+export type QueryFilesByConfigArgs = {
+  configId: Scalars['String'];
 };
 
 export type QueryFileSyncOptionArgs = {
@@ -136,6 +148,14 @@ export type ReadyCheckDescriptor = {
 export type ReadyCheckInput = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type SyncFileRevision = {
+  revisionId: Scalars['String'];
+  countRevisions: Scalars['Int'];
+  size: Scalars['Int'];
+  relativePath: Scalars['String'];
+  status: FileStatus;
 };
 
 export type User = {
@@ -201,6 +221,19 @@ export type DeleteFileSyncOptionMutationVariables = Exact<{
 export type DeleteFileSyncOptionMutation = {
   deleteFileSyncOption: Array<
     Pick<FileSyncOption, 'id'> & FileSyncOptionFieldsFragment
+  >;
+};
+
+export type FilesByConfigQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type FilesByConfigQuery = {
+  filesByConfig: Array<
+    Pick<
+      SyncFileRevision,
+      'revisionId' | 'countRevisions' | 'size' | 'relativePath' | 'status'
+    >
   >;
 };
 
@@ -561,6 +594,73 @@ export type DeleteFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
   DeleteFileSyncOptionMutation,
   DeleteFileSyncOptionMutationVariables
 >;
+export const FilesByConfigDocument = gql`
+  query FilesByConfig($id: String!) {
+    filesByConfig(configId: $id) {
+      revisionId
+      countRevisions
+      size
+      relativePath
+      status
+    }
+  }
+`;
+
+/**
+ * __useFilesByConfigQuery__
+ *
+ * To run a query within a React component, call `useFilesByConfigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFilesByConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFilesByConfigQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFilesByConfigQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    FilesByConfigQuery,
+    FilesByConfigQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    FilesByConfigQuery,
+    FilesByConfigQueryVariables
+  >(FilesByConfigDocument, options);
+}
+export function useFilesByConfigLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    FilesByConfigQuery,
+    FilesByConfigQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    FilesByConfigQuery,
+    FilesByConfigQueryVariables
+  >(FilesByConfigDocument, options);
+}
+export type FilesByConfigQueryHookResult = ReturnType<
+  typeof useFilesByConfigQuery
+>;
+export type FilesByConfigLazyQueryHookResult = ReturnType<
+  typeof useFilesByConfigLazyQuery
+>;
+export type FilesByConfigQueryResult = Apollo.QueryResult<
+  FilesByConfigQuery,
+  FilesByConfigQueryVariables
+>;
+export function refetchFilesByConfigQuery(
+  variables?: FilesByConfigQueryVariables,
+) {
+  return { query: FilesByConfigDocument, variables: variables };
+}
 export const ReadyChecksDocument = gql`
   query ReadyChecks {
     readyChecks {

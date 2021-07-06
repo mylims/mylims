@@ -69,7 +69,7 @@ export default function SelectFolderSlideOver({
         <div>{selectedPath}</div>
         <SlideOver.Content>
           {loading || data === undefined ? (
-            <Spinner className="text-danger-500 h-10 w-10" />
+            <Spinner className="w-10 h-10 text-danger-500" />
           ) : (
             <Table
               Header={Header(selectedPath)}
@@ -115,7 +115,7 @@ interface RowProps {
 function Row(selectPath: (newPath: string) => void) {
   return ({ value }: RowProps) => (
     <tr
-      className="hover:bg-neutral-100 cursor-pointer"
+      className="cursor-pointer hover:bg-neutral-100"
       onClick={() => selectPath(value.path)}
     >
       <Td compact>
