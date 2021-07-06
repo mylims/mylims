@@ -1,13 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
-import { Button, Card, Select } from '../../components/tailwind-ui';
+import { Button, Card } from '../../components/tailwind-ui';
 import { API_URL } from '../../env';
-import { useElnQuery } from '../../hooks/useElnQuery';
-
-interface ProviderData {
-  identifier: string;
-  label: string;
-}
 
 export default function TequilaAuthForm() {
   const onConnect = () => {
