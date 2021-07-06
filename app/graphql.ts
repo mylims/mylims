@@ -63,6 +63,13 @@ export type GqlFileContent = {
   content: Scalars['String'];
 };
 
+export enum GqlFileStatus {
+  PENDING = 'pending',
+  IMPORTING = 'importing',
+  IMPORTED = 'imported',
+  IMPORT_FAIL = 'import_fail',
+}
+
 export type GqlFileSyncOption = {
   __typename?: 'FileSyncOption';
   id: Scalars['ID'];
@@ -121,6 +128,7 @@ export type GqlQuery = {
   users: Array<GqlUser>;
   directoryTree: Array<GqlDirectoryEntry>;
   fileByPath: GqlFileContent;
+  filesByConfig: Array<GqlSyncFileRevision>;
   fileSyncOptions: Array<GqlFileSyncOption>;
   fileSyncOption: GqlFileSyncOption;
   readyChecks: Array<GqlReadyCheckDescriptor>;
@@ -132,6 +140,10 @@ export type GqlQueryDirectoryTreeArgs = {
 
 export type GqlQueryFileByPathArgs = {
   path: Scalars['String'];
+};
+
+export type GqlQueryFilesByConfigArgs = {
+  configId: Scalars['String'];
 };
 
 export type GqlQueryFileSyncOptionArgs = {
@@ -153,6 +165,15 @@ export type GqlReadyCheckDescriptor = {
 export type GqlReadyCheckInput = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type GqlSyncFileRevision = {
+  __typename?: 'SyncFileRevision';
+  revisionId: Scalars['String'];
+  countRevisions: Scalars['Int'];
+  size: Scalars['Int'];
+  relativePath: Scalars['String'];
+  status: GqlFileStatus;
 };
 
 export type GqlUser = {
@@ -293,6 +314,7 @@ export type GqlResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   FileContent: ResolverTypeWrapper<GqlFileContent>;
+  FileStatus: GqlFileStatus;
   FileSyncOption: ResolverTypeWrapper<FileSyncOption>;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
@@ -305,6 +327,7 @@ export type GqlResolversTypes = ResolversObject<{
   ReadyCheck: ResolverTypeWrapper<GqlReadyCheck>;
   ReadyCheckDescriptor: ResolverTypeWrapper<GqlReadyCheckDescriptor>;
   ReadyCheckInput: GqlReadyCheckInput;
+  SyncFileRevision: ResolverTypeWrapper<GqlSyncFileRevision>;
   User: ResolverTypeWrapper<User>;
 }>;
 
@@ -329,6 +352,7 @@ export type GqlResolversParentTypes = ResolversObject<{
   ReadyCheck: GqlReadyCheck;
   ReadyCheckDescriptor: GqlReadyCheckDescriptor;
   ReadyCheckInput: GqlReadyCheckInput;
+  SyncFileRevision: GqlSyncFileRevision;
   User: User;
 }>;
 
@@ -436,6 +460,12 @@ export type GqlQueryResolvers<
     ContextType,
     RequireFields<GqlQueryFileByPathArgs, 'path'>
   >;
+  filesByConfig?: Resolver<
+    Array<GqlResolversTypes['SyncFileRevision']>,
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryFilesByConfigArgs, 'configId'>
+  >;
   fileSyncOptions?: Resolver<
     Array<GqlResolversTypes['FileSyncOption']>,
     ParentType,
@@ -469,6 +499,18 @@ export type GqlReadyCheckDescriptorResolvers<
 > = ResolversObject<{
   name?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   hasArg?: Resolver<GqlResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlSyncFileRevisionResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['SyncFileRevision'] = GqlResolversParentTypes['SyncFileRevision'],
+> = ResolversObject<{
+  revisionId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  countRevisions?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  relativePath?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<GqlResolversTypes['FileStatus'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -512,5 +554,6 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   Query?: GqlQueryResolvers<ContextType>;
   ReadyCheck?: GqlReadyCheckResolvers<ContextType>;
   ReadyCheckDescriptor?: GqlReadyCheckDescriptorResolvers<ContextType>;
+  SyncFileRevision?: GqlSyncFileRevisionResolvers<ContextType>;
   User?: GqlUserResolvers<ContextType>;
 }>;

@@ -1,0 +1,18 @@
+type Query {
+  filesByConfig(configId: String!): [SyncFileRevision!]!
+}
+
+enum FileStatus {
+  pending
+  importing
+  imported
+  import_fail
+}
+
+type SyncFileRevision {
+  revisionId: String!
+  countRevisions: Int!
+  size: Int!
+  relativePath: String!
+  status: FileStatus!
+}
