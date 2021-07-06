@@ -1,4 +1,10 @@
-import { CheckIcon, CogIcon, TrashIcon, XIcon } from '@heroicons/react/outline';
+import {
+  CheckIcon,
+  CogIcon,
+  TrashIcon,
+  XIcon,
+  InboxIcon,
+} from '@heroicons/react/outline';
 import Link from 'next/link';
 
 import ElnLayout from '../../../components/ElnLayout';
@@ -80,9 +86,9 @@ function Row(
       <tr>
         <Td>
           {value.enabled ? (
-            <CheckIcon className="h-5 w-5" />
+            <CheckIcon className="w-5 h-5" />
           ) : (
-            <XIcon className="h-5 w-5" />
+            <XIcon className="w-5 h-5" />
           )}
         </Td>
         <Td>{value.root}</Td>
@@ -91,7 +97,7 @@ function Row(
         <Td>
           <Link href="edit/[id]" as={`edit/${value.id}`}>
             <Button roundness={Roundness.circular}>
-              <CogIcon className="h-5 w-5" />
+              <CogIcon className="w-5 h-5" />
             </Button>
           </Link>
           <Button
@@ -102,7 +108,7 @@ function Row(
               deleteFileSyncOption({ variables: { input: { id: value.id } } })
             }
           >
-            <TrashIcon className="h-5 w-5" />
+            <TrashIcon className="w-5 h-5" />
           </Button>
         </Td>
       </tr>
@@ -116,7 +122,10 @@ function Empty() {
       <Header />
       <tr>
         <Td colSpan={4} align="center">
-          Empty
+          <div className="flex flex-row justify-center text-neutral-500">
+            <InboxIcon className="w-5 h-5 mr-2" />
+            <span>Empty</span>
+          </div>
         </Td>
       </tr>
     </>
