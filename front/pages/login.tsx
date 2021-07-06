@@ -11,8 +11,8 @@ import useAuth from '../hooks/useAuth';
 const spinner = (
   <div className="m-4 min-w-1/4">
     <Card>
-      <div className="flex justify-center items-center w-full h-full m-4">
-        <Spinner className="text-danger-500 h-10 w-10" />
+      <div className="flex items-center justify-center w-full h-full m-4">
+        <Spinner className="w-10 h-10 text-danger-500" />
       </div>
     </Card>
   </div>
@@ -25,6 +25,10 @@ const loginAddons = {
   oidc: dynamic(() => pMinDelay(import('../addons/oidc/OidcAuthForm'), 1000), {
     loading: () => spinner,
   }),
+  tequila: dynamic(
+    () => pMinDelay(import('../addons/tequila/TequilaAuthForm'), 1000),
+    { loading: () => spinner },
+  ),
 };
 
 type AddonsKeys = keyof typeof loginAddons;
@@ -42,7 +46,7 @@ export default function Login() {
 
   return (
     <>
-      <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+      <h2 className="mt-6 text-3xl font-extrabold leading-9 text-center text-gray-900">
         New-eln login
       </h2>
       <div className="flex flex-wrap justify-around">

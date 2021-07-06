@@ -75,7 +75,7 @@ Route.get(
       await auth.login(internalUser);
       session.put('mylims.auth.method', 'tequila');
 
-      return response.ok(tequilaUser);
+      return response.redirect(`${Env.get('FRONTEND_URL')}/eln`);
     } catch (err) {
       return response.badRequest({ errors: [err.message] });
     }
