@@ -3,5 +3,6 @@
   "description": "Synchronize file from disk to database.",
   "commands": "./Commands",
   "schemas": "./Schemas",
-  "resolvers": "./Resolvers"
+  "resolvers": "./Resolvers",
+  "routes": "./routes"
 }
