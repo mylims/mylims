@@ -203,12 +203,14 @@ export default class Import extends BaseCommand {
       syncFile._id.configId,
     );
     const filePath = join(root, syncFile._id.relativePath);
+    const id = syncFile.revisions[0].id;
     const driveFile = await drive.put(
       syncFile.filename,
       createReadStream(filePath),
+      { id },
     );
     await this.deps.File.create({
-      _id: syncFile.revisions[0].id,
+      _id: id,
       filename: driveFile.filename,
       size: driveFile.size,
     });

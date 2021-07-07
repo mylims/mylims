@@ -59,7 +59,7 @@
     "@types/react-datepicker": "^4.1.0",
     "@zakodium/adonis-mongodb": "^0.8.1",
     "adonis-apollo": "^0.14.0",
-    "adonis-datadrive": "^0.2.0",
+    "adonis-datadrive": "^0.3.0",
     "adonis-react": "^0.2.1",
     "base-x": "^3.0.8",
     "byte-size": "^7.0.1",
