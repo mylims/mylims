@@ -1,4 +1,4 @@
-import DataDrive from '@ioc:DataDrive';
+import Env from '@ioc:Adonis/Core/Env';
 
 import { GqlResolvers } from 'App/graphql';
 
@@ -11,12 +11,13 @@ const resolvers: GqlResolvers = {
       const [syncFile] = await (
         await SyncFile.find({ '_id.relativePath': path })
       ).all();
-      const file = await File.findByIdOrThrow(syncFile.revisions[0].id);
-      const content = await DataDrive.drive('local').get(file);
+      const id = syncFile.revisions[0].id;
+      const file = await File.findByIdOrThrow(id);
+      const urlPath = 'addons/file-sync/file-content';
       return {
         filename: file.filename,
         size: file.size,
-        content,
+        content: `${Env.get('BACKEND_URL')}/${urlPath}?id=${id}`,
       };
     },
   },
