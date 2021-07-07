@@ -23,6 +23,10 @@ Route.get(
     const file = await File.findByIdOrThrow(id);
     const content = DataDrive.drive('local').getStream(file);
 
+    response.append(
+      'Content-Disposition',
+      `attachment; filename="${file.filename}"`,
+    );
     return response.stream(content);
   },
 );
