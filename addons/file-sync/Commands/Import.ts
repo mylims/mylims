@@ -114,6 +114,7 @@ export default class Import extends BaseCommand {
 
   private async handleFileSyncOption(fileSyncOption: FileSyncOption) {
     const fileSyncOptionId = fileSyncOption.id.toHexString();
+    const root = fileSyncOption.root;
     this.logger.info('handling file sync option', fileSyncOptionId);
     const syncFiles = await this.deps.SyncFile.find({
       '_id.configId': fileSyncOption.id,
@@ -131,7 +132,11 @@ export default class Import extends BaseCommand {
 
     let importCount = 0;
     for await (const syncFile of syncFiles) {
-      const isReady = await this.isReady(fileSyncOption.readyChecks, syncFile);
+      const isReady = await this.isReady(
+        fileSyncOption.readyChecks,
+        syncFile,
+        root,
+      );
       if (!isReady) {
         this.logger.debug(
           `still not ready, skipping...`,
@@ -145,7 +150,7 @@ export default class Import extends BaseCommand {
       await syncFile.save();
 
       try {
-        await this.importFile(syncFile);
+        await this.importFile(syncFile, root);
         syncFile.revisions[0].status = this.deps.SyncState.IMPORTED;
       } catch (err) {
         syncFile.revisions[0].status = this.deps.SyncState.IMPORT_FAIL;
@@ -166,9 +171,10 @@ export default class Import extends BaseCommand {
   private async isReady(
     readyChecks: ReadyCheck[],
     syncFile: SyncFile,
+    root: string,
   ): Promise<boolean> {
     const checkResult = await isMyFileReady(
-      syncFile._id.relativePath,
+      join(root, syncFile._id.relativePath),
       readyChecks.map((readyCheck) => {
         let value: unknown;
         if (readyCheck.value) {
@@ -197,11 +203,8 @@ export default class Import extends BaseCommand {
     return checkResult.isReady;
   }
 
-  private async importFile(syncFile: SyncFile) {
+  private async importFile(syncFile: SyncFile, root: string) {
     const drive = this.deps.DataDrive.drive('local');
-    const { root } = await this.deps.FileSyncOption.findByIdOrThrow(
-      syncFile._id.configId,
-    );
     const filePath = join(root, syncFile._id.relativePath);
     const id = syncFile.revisions[0].id;
     const driveFile = await drive.put(
