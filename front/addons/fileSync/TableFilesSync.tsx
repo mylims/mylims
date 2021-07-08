@@ -1,6 +1,8 @@
 import {
   InboxIcon,
   DownloadIcon,
+  DocumentTextIcon,
+  FolderOpenIcon,
   ChevronDownIcon,
   ChevronUpIcon,
 } from '@heroicons/react/outline';
@@ -118,11 +120,11 @@ export default function TableFilesSync({ data }: TableFilesSyncProps) {
 function Header() {
   return (
     <tr>
-      <Th className="w-2/6">Relative path</Th>
-      <Th className="w-1/6">Size</Th>
-      <Th className="w-1/6">Status</Th>
-      <Th className="w-1/6">Revisions</Th>
-      <Th className="w-1/6">Actions</Th>
+      <Th className="w-1/2">Relative path</Th>
+      <Th className="w-1/12">Size</Th>
+      <Th className="w-1/12">Revisions</Th>
+      <Th className="w-2/12">Status</Th>
+      <Th className="w-2/12">Actions</Th>
     </tr>
   );
 }
@@ -155,16 +157,17 @@ function FileRow({ value }: { value: FileSync }) {
     <tr>
       <Td
         title={value.name}
-        className="truncate"
+        className="flex truncate"
         style={{ paddingLeft: `${1.5 + 1.5 * value.level}rem` }}
       >
+        <DocumentTextIcon className="w-5 h-5 mr-1" />
         {value.name}
       </Td>
       <Td>{size}</Td>
+      <Td>{value.countRevisions}</Td>
       <Td>
         <FileStatusLabel status={value.status} />
       </Td>
-      <Td>{value.countRevisions}</Td>
       <Td>
         <Button
           color={Color.neutral}
@@ -188,9 +191,10 @@ function DirRow({ value }: { value: DirSync }) {
       <tr>
         <Td
           title={value.name}
-          className="truncate"
+          className="flex truncate"
           style={{ paddingLeft: `${1.5 + 1.5 * value.level}rem` }}
         >
+          <FolderOpenIcon className="w-5 h-5 mr-1" />
           {value.name}
         </Td>
         <Td>{size}</Td>
