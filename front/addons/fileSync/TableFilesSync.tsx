@@ -6,7 +6,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from '@heroicons/react/outline';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import bytes from 'byte-size';
 
 import {
@@ -24,7 +24,7 @@ import {
 import {
   FilesByConfigQuery,
   FileStatus,
-  SyncFileRevision,
+  useFileByPathLazyQuery,
 } from './generated/graphql';
 
 interface TableFilesSyncProps {
@@ -41,6 +41,7 @@ interface FileSync {
   name: string;
   size: number;
   level: number;
+  relativePath: string;
   revisionId: string;
   countRevisions: number;
   status: FileStatus;
@@ -59,11 +60,10 @@ export default function TableFilesSync({ data }: TableFilesSyncProps) {
   const files = useMemo(() => {
     let ans: TreeSync[] = [];
     for (const file of data?.filesByConfig ?? []) {
-      const { relativePath, ...fileOther } = file;
-      const path = relativePath.split('\\');
+      const path = file.relativePath.split('\\');
       const name = path[path.length - 1];
       const leaf: FileSync = {
-        ...fileOther,
+        ...file,
         name,
         id: file.relativePath,
         type: TreeType.file,
@@ -153,6 +153,17 @@ function Row({ value }: { value: TreeSync }) {
 
 function FileRow({ value }: { value: FileSync }) {
   const size = bytes(value.size).toString();
+  const [getContent, { called, data, loading }] = useFileByPathLazyQuery({
+    variables: { path: value.relativePath },
+  });
+
+  useEffect(() => {
+    const url = data?.fileByPath.content;
+    if (!loading && called && url && process.browser) {
+      window.open(url, '_blank');
+    }
+  }, [data, loading, called]);
+
   return (
     <tr>
       <Td
@@ -175,6 +186,8 @@ function FileRow({ value }: { value: FileSync }) {
           variant={Variant.secondary}
           className="ml-2"
           title="Download"
+          onClick={() => getContent()}
+          disabled={loading}
         >
           <DownloadIcon className="w-3 h-3" />
         </Button>
