@@ -19,7 +19,7 @@ const resolvers: GqlResolvers = {
             countRevisions: revisions.length,
             size: latestRevision.size,
             status: latestRevision.status,
-            date: latestRevision.date.getTime(),
+            date: latestRevision.date,
           };
         },
       );

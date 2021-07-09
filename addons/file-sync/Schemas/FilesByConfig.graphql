@@ -15,5 +15,5 @@ type SyncFileRevision {
   size: Int!
   relativePath: String!
   status: FileStatus!
-  date: Int!
+  date: DateTime!
 }

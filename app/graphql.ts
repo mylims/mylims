@@ -26,6 +26,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  DateTime: Date;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
   /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
@@ -174,7 +176,7 @@ export type GqlSyncFileRevision = {
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   status: GqlFileStatus;
-  date: Scalars['Int'];
+  date: Scalars['DateTime'];
 };
 
 export type GqlUser = {
@@ -306,6 +308,7 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type GqlResolversTypes = ResolversObject<{
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   DirectoryEntry: ResolverTypeWrapper<GqlDirectoryEntry>;
@@ -334,6 +337,7 @@ export type GqlResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type GqlResolversParentTypes = ResolversObject<{
+  DateTime: Scalars['DateTime'];
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
   ID: Scalars['ID'];
   DirectoryEntry: GqlDirectoryEntry;
@@ -357,6 +361,11 @@ export type GqlResolversParentTypes = ResolversObject<{
   User: User;
 }>;
 
+export interface GqlDateTimeScalarConfig
+  extends GraphQLScalarTypeConfig<GqlResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
+
 export type GqlDirectoryEntryResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['DirectoryEntry'] = GqlResolversParentTypes['DirectoryEntry'],
@@ -376,7 +385,7 @@ export type GqlFileContentResolvers<
 > = ResolversObject<{
   filename?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
-  content?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  content?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -512,7 +521,7 @@ export type GqlSyncFileRevisionResolvers<
   size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   relativePath?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<GqlResolversTypes['FileStatus'], ParentType, ContextType>;
-  date?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -546,6 +555,7 @@ export type GqlUserResolvers<
 }>;
 
 export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
+  DateTime?: GraphQLScalarType;
   DirectoryEntry?: GqlDirectoryEntryResolvers<ContextType>;
   FileContent?: GqlFileContentResolvers<ContextType>;
   FileSyncOption?: GqlFileSyncOptionResolvers<ContextType>;
