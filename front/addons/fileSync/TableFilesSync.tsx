@@ -7,7 +7,7 @@ import {
   ChevronUpIcon,
 } from '@heroicons/react/outline';
 import bytes from 'byte-size';
-import { format } from 'date-fns';
+import { format, max } from 'date-fns';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import {
@@ -41,7 +41,7 @@ interface SyncBase {
   name: string;
   size: number;
   level: number;
-  date: number;
+  date: Date;
 }
 interface FileSync extends SyncBase {
   type: TreeType.file;
@@ -64,6 +64,7 @@ export default function TableFilesSync({ data }: TableFilesSyncProps) {
       const name = path[path.length - 1];
       const leaf: FileSync = {
         ...file,
+        date: new Date(file.date),
         name,
         id: file.relativePath,
         type: TreeType.file,
@@ -93,7 +94,7 @@ export default function TableFilesSync({ data }: TableFilesSyncProps) {
             });
             filesList = (filesList[filesList.length - 1] as DirSync).children;
           } else {
-            const latestDate = Math.max(leaf.date, filesList[index].date);
+            const latestDate = max([leaf.date, filesList[index].date]);
             filesList[index].date = latestDate;
             filesList[index].size += leaf.size;
             filesList = (filesList[index] as DirSync).children;
@@ -179,7 +180,7 @@ function FileRow({ value }: { value: FileSync }) {
         {value.name}
       </Td>
       <Td>{size}</Td>
-      <Td>{format(new Date(value.date), 'dd.MM.yyyy')}</Td>
+      <Td>{format(value.date, 'dd.MM.yyyy')}</Td>
       <Td>{value.countRevisions}</Td>
       <Td>
         <FileStatusLabel status={value.status} />

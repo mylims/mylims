@@ -1,2 +1,3 @@
 scalar JSONObject
 scalar JSON
+scalar DateTime
