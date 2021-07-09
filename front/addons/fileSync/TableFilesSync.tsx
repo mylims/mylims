@@ -123,8 +123,8 @@ function Header() {
       <Th className="w-1/2">Relative path</Th>
       <Th className="w-1/12">Size</Th>
       <Th className="w-1/12">Revisions</Th>
-      <Th className="w-2/12">Status</Th>
-      <Th className="w-2/12">Actions</Th>
+      <Th className="w-1/12">Status</Th>
+      <Th className="w-1/12">Actions</Th>
     </tr>
   );
 }
@@ -167,8 +167,8 @@ function FileRow({ value }: { value: FileSync }) {
   return (
     <tr>
       <Td
-        title={value.name}
-        className="flex truncate"
+        title={value.relativePath}
+        className="flex items-center truncate"
         style={{ paddingLeft: `${1.5 + 1.5 * value.level}rem` }}
       >
         <DocumentTextIcon className="w-5 h-5 mr-1" />
@@ -204,21 +204,14 @@ function DirRow({ value }: { value: DirSync }) {
       <tr>
         <Td
           title={value.name}
-          className="flex truncate"
+          className="flex items-center truncate"
           style={{ paddingLeft: `${1.5 + 1.5 * value.level}rem` }}
         >
-          <FolderOpenIcon className="w-5 h-5 mr-1" />
-          {value.name}
-        </Td>
-        <Td>{size}</Td>
-        <Td> - </Td>
-        <Td> - </Td>
-        <Td>
           <Button
             color={Color.neutral}
             roundness={Roundness.circular}
             variant={Variant.secondary}
-            className="ml-2"
+            className="mr-2"
             title="Expand"
             onClick={() => setExpanded(!expanded)}
           >
@@ -228,7 +221,13 @@ function DirRow({ value }: { value: DirSync }) {
               <ChevronDownIcon className="w-3 h-3" />
             )}
           </Button>
+          <FolderOpenIcon className="w-5 h-5 mr-1" />
+          {value.name}
         </Td>
+        <Td>{size}</Td>
+        <Td></Td>
+        <Td></Td>
+        <Td></Td>
       </tr>
       {expanded
         ? value.children.map((child) => <Row key={child.id} value={child} />)
