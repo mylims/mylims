@@ -5,5 +5,6 @@ query FilesByConfig($id: String!) {
     size
     relativePath
     status
+    date
   }
 }

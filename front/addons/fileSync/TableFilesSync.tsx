@@ -6,8 +6,9 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from '@heroicons/react/outline';
-import React, { useEffect, useMemo, useState } from 'react';
 import bytes from 'byte-size';
+import { format } from 'date-fns';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import {
   Badge,
@@ -35,23 +36,22 @@ enum TreeType {
   file = 'file',
   dir = 'dir',
 }
-interface FileSync {
+interface SyncBase {
   id: string;
-  type: TreeType.file;
   name: string;
   size: number;
   level: number;
+  date: number;
+}
+interface FileSync extends SyncBase {
+  type: TreeType.file;
   relativePath: string;
   revisionId: string;
   countRevisions: number;
   status: FileStatus;
 }
-interface DirSync {
-  id: string;
+interface DirSync extends SyncBase {
   type: TreeType.dir;
-  name: string;
-  size: number;
-  level: number;
   children: TreeSync[];
 }
 type TreeSync = FileSync | DirSync;
@@ -87,11 +87,14 @@ export default function TableFilesSync({ data }: TableFilesSyncProps) {
               name: currDir,
               type: TreeType.dir,
               size: leaf.size,
+              date: leaf.date,
               children: [],
               level: i,
             });
             filesList = (filesList[filesList.length - 1] as DirSync).children;
           } else {
+            const latestDate = Math.max(leaf.date, filesList[index].date);
+            filesList[index].date = latestDate;
             filesList[index].size += leaf.size;
             filesList = (filesList[index] as DirSync).children;
           }
@@ -122,6 +125,7 @@ function Header() {
     <tr>
       <Th className="w-1/2">Relative path</Th>
       <Th className="w-1/12">Size</Th>
+      <Th className="w-1/12">Update date</Th>
       <Th className="w-1/12">Revisions</Th>
       <Th className="w-1/12">Status</Th>
       <Th className="w-1/12">Actions</Th>
@@ -175,6 +179,7 @@ function FileRow({ value }: { value: FileSync }) {
         {value.name}
       </Td>
       <Td>{size}</Td>
+      <Td>{format(new Date(value.date), 'dd.MM.yyyy')}</Td>
       <Td>{value.countRevisions}</Td>
       <Td>
         <FileStatusLabel status={value.status} />
@@ -225,9 +230,10 @@ function DirRow({ value }: { value: DirSync }) {
           {value.name}
         </Td>
         <Td>{size}</Td>
-        <Td></Td>
-        <Td></Td>
-        <Td></Td>
+        <Td>{format(new Date(value.date), 'dd.MM.yyyy')}</Td>
+        <Td />
+        <Td />
+        <Td />
       </tr>
       {expanded
         ? value.children.map((child) => <Row key={child.id} value={child} />)

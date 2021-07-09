@@ -156,6 +156,7 @@ export type SyncFileRevision = {
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   status: FileStatus;
+  date: Scalars['Int'];
 };
 
 export type User = {

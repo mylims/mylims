@@ -174,6 +174,7 @@ export type GqlSyncFileRevision = {
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   status: GqlFileStatus;
+  date: Scalars['Int'];
 };
 
 export type GqlUser = {
@@ -375,7 +376,7 @@ export type GqlFileContentResolvers<
 > = ResolversObject<{
   filename?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
-  content?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  content?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -511,6 +512,7 @@ export type GqlSyncFileRevisionResolvers<
   size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   relativePath?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<GqlResolversTypes['FileStatus'], ParentType, ContextType>;
+  date?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
