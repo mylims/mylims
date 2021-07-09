@@ -156,6 +156,7 @@ export type SyncFileRevision = {
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   status: FileStatus;
+  date: Scalars['Int'];
 };
 
 export type User = {
@@ -238,7 +239,12 @@ export type FilesByConfigQuery = {
   filesByConfig: Array<
     Pick<
       SyncFileRevision,
-      'revisionId' | 'countRevisions' | 'size' | 'relativePath' | 'status'
+      | 'revisionId'
+      | 'countRevisions'
+      | 'size'
+      | 'relativePath'
+      | 'status'
+      | 'date'
     >
   >;
 };
@@ -667,6 +673,7 @@ export const FilesByConfigDocument = gql`
       size
       relativePath
       status
+      date
     }
   }
 `;
