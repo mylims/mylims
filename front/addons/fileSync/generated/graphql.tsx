@@ -159,6 +159,7 @@ export type SyncFileRevision = {
   relativePath: Scalars['String'];
   status: FileStatus;
   date: Scalars['DateTime'];
+  downloadUrl: Scalars['String'];
 };
 
 export type User = {
@@ -241,6 +242,7 @@ export type FilesByConfigQuery = {
       | 'relativePath'
       | 'status'
       | 'date'
+      | 'downloadUrl'
     >
   >;
 };
@@ -611,6 +613,7 @@ export const FilesByConfigDocument = gql`
       relativePath
       status
       date
+      downloadUrl
     }
   }
 `;

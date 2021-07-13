@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/outline';
 import bytes from 'byte-size';
 import { format, max } from 'date-fns';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import {
   Badge,
@@ -21,7 +21,6 @@ import {
   Th,
   Variant,
 } from '../../components/tailwind-ui';
-import { FILE_URL } from '../../env';
 
 import { FilesByConfigQuery, FileStatus } from './generated/graphql';
 
@@ -46,6 +45,7 @@ interface FileSync extends SyncBase {
   revisionId: string;
   countRevisions: number;
   status: FileStatus;
+  downloadUrl: string;
 }
 interface DirSync extends SyncBase {
   type: TreeType.dir;
@@ -173,11 +173,7 @@ function FileRow({ value }: { value: FileSync }) {
         <FileStatusLabel status={value.status} />
       </Td>
       <Td>
-        <a
-          href={`${FILE_URL}?id=${value.revisionId}`}
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href={value.downloadUrl} target="_blank" rel="noreferrer">
           <Button
             color={Color.neutral}
             roundness={Roundness.circular}

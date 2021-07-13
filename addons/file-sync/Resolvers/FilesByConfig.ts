@@ -1,3 +1,4 @@
+import Env from '@ioc:Adonis/Core/Env';
 import ObjectId from '@ioc:Mongodb/ObjectId';
 
 import { GqlResolvers, GqlSyncFileRevision } from 'App/graphql';
@@ -13,6 +14,7 @@ const resolvers: GqlResolvers = {
       return syncFiles.map<GqlSyncFileRevision>(
         ({ _id: { relativePath }, revisions }) => {
           const latestRevision = revisions[0];
+          const urlPath = 'addons/file-sync/file-content';
           return {
             relativePath,
             revisionId: latestRevision.id,
@@ -20,6 +22,9 @@ const resolvers: GqlResolvers = {
             size: latestRevision.size,
             status: latestRevision.status,
             date: latestRevision.date,
+            downloadUrl: `${Env.get('BACKEND_URL')}/${urlPath}?id=${
+              latestRevision.id
+            }`,
           };
         },
       );

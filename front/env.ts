@@ -3,4 +3,3 @@ if (!process.env.NEXT_PUBLIC_API_URL) {
 }
 
 export const API_URL: string = process.env.NEXT_PUBLIC_API_URL;
-export const FILE_URL: string = `${API_URL}/addons/file-sync/file-content`;

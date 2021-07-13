@@ -6,5 +6,6 @@ query FilesByConfig($id: String!) {
     relativePath
     status
     date
+    downloadUrl
   }
 }
