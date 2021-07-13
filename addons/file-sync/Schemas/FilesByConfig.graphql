@@ -16,4 +16,5 @@ type SyncFileRevision {
   relativePath: String!
   status: FileStatus!
   date: DateTime!
+  downloadUrl: String!
 }
