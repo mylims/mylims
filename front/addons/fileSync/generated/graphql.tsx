@@ -178,12 +178,6 @@ export type DirectoryTreeQuery = {
   directoryTree: Array<Pick<DirectoryEntry, 'path' | 'type'>>;
 };
 
-export type FileByPathQueryVariables = Exact<{
-  path: Scalars['String'];
-}>;
-
-export type FileByPathQuery = { fileByPath: Pick<FileContent, 'content'> };
-
 export type FileSyncOptionFieldsFragment = Pick<
   FileSyncOption,
   'id' | 'enabled' | 'root' | 'maxDepth'
@@ -336,65 +330,6 @@ export function refetchDirectoryTreeQuery(
   variables?: DirectoryTreeQueryVariables,
 ) {
   return { query: DirectoryTreeDocument, variables: variables };
-}
-export const FileByPathDocument = gql`
-  query FileByPath($path: String!) {
-    fileByPath(path: $path) {
-      content
-    }
-  }
-`;
-
-/**
- * __useFileByPathQuery__
- *
- * To run a query within a React component, call `useFileByPathQuery` and pass it any options that fit your needs.
- * When your component renders, `useFileByPathQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFileByPathQuery({
- *   variables: {
- *      path: // value for 'path'
- *   },
- * });
- */
-export function useFileByPathQuery(
-  baseOptions: ApolloReactHooks.QueryHookOptions<
-    FileByPathQuery,
-    FileByPathQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<FileByPathQuery, FileByPathQueryVariables>(
-    FileByPathDocument,
-    options,
-  );
-}
-export function useFileByPathLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    FileByPathQuery,
-    FileByPathQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<
-    FileByPathQuery,
-    FileByPathQueryVariables
-  >(FileByPathDocument, options);
-}
-export type FileByPathQueryHookResult = ReturnType<typeof useFileByPathQuery>;
-export type FileByPathLazyQueryHookResult = ReturnType<
-  typeof useFileByPathLazyQuery
->;
-export type FileByPathQueryResult = Apollo.QueryResult<
-  FileByPathQuery,
-  FileByPathQueryVariables
->;
-export function refetchFileByPathQuery(variables?: FileByPathQueryVariables) {
-  return { query: FileByPathDocument, variables: variables };
 }
 export const FileSyncOptionsDocument = gql`
   query FileSyncOptions {
