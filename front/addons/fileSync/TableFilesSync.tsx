@@ -21,12 +21,9 @@ import {
   Th,
   Variant,
 } from '../../components/tailwind-ui';
+import { FILE_URL } from '../../env';
 
-import {
-  FilesByConfigQuery,
-  FileStatus,
-  useFileByPathLazyQuery,
-} from './generated/graphql';
+import { FilesByConfigQuery, FileStatus } from './generated/graphql';
 
 interface TableFilesSyncProps {
   data?: FilesByConfigQuery;
@@ -158,16 +155,6 @@ function Row({ value }: { value: TreeSync }) {
 
 function FileRow({ value }: { value: FileSync }) {
   const size = bytes(value.size).toString();
-  const [getContent, { called, data, loading }] = useFileByPathLazyQuery({
-    variables: { path: value.relativePath },
-  });
-
-  useEffect(() => {
-    const url = data?.fileByPath.content;
-    if (!loading && called && url && process.browser) {
-      window.open(url, '_blank');
-    }
-  }, [data, loading, called]);
 
   return (
     <tr>
@@ -186,17 +173,21 @@ function FileRow({ value }: { value: FileSync }) {
         <FileStatusLabel status={value.status} />
       </Td>
       <Td>
-        <Button
-          color={Color.neutral}
-          roundness={Roundness.circular}
-          variant={Variant.secondary}
-          className="ml-2"
-          title="Download"
-          onClick={() => getContent()}
-          disabled={loading}
+        <a
+          href={`${FILE_URL}?id=${value.revisionId}`}
+          target="_blank"
+          rel="noreferrer"
         >
-          <DownloadIcon className="w-3 h-3" />
-        </Button>
+          <Button
+            color={Color.neutral}
+            roundness={Roundness.circular}
+            variant={Variant.secondary}
+            className="ml-2"
+            title="Download"
+          >
+            <DownloadIcon className="w-3 h-3" />
+          </Button>
+        </a>
       </Td>
     </tr>
   );

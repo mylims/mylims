@@ -1,5 +1,0 @@
-query FileByPath($path: String!) {
-  fileByPath(path: $path) {
-    content
-  }
-}
