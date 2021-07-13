@@ -146,6 +146,8 @@ export type GqlQueryFileByPathArgs = {
 
 export type GqlQueryFilesByConfigArgs = {
   configId: Scalars['String'];
+  level: Scalars['Int'];
+  path?: Maybe<Array<Scalars['String']>>;
 };
 
 export type GqlQueryFileSyncOptionArgs = {
@@ -177,6 +179,7 @@ export type GqlSyncFileRevision = {
   relativePath: Scalars['String'];
   status: GqlFileStatus;
   date: Scalars['DateTime'];
+  downloadUrl: Scalars['String'];
 };
 
 export type GqlUser = {
@@ -474,7 +477,7 @@ export type GqlQueryResolvers<
     Array<GqlResolversTypes['SyncFileRevision']>,
     ParentType,
     ContextType,
-    RequireFields<GqlQueryFilesByConfigArgs, 'configId'>
+    RequireFields<GqlQueryFilesByConfigArgs, 'configId' | 'level'>
   >;
   fileSyncOptions?: Resolver<
     Array<GqlResolversTypes['FileSyncOption']>,
@@ -522,6 +525,7 @@ export type GqlSyncFileRevisionResolvers<
   relativePath?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<GqlResolversTypes['FileStatus'], ParentType, ContextType>;
   date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  downloadUrl?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

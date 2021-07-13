@@ -11,7 +11,6 @@ import type { DataDrive } from '@ioc:DataDrive';
 import type DataDriveManager from '@ioc:DataDrive';
 
 import type { File } from '../Models/File';
-import type { FileSyncOption } from '../Models/FileSyncOption';
 import type { SyncFile, SyncState } from '../Models/SyncFile';
 
 export default class Import extends BaseCommand {
@@ -37,7 +36,6 @@ export default class Import extends BaseCommand {
 
   private deps: {
     SyncFile: typeof SyncFile;
-    FileSyncOption: typeof FileSyncOption;
     SyncState: typeof SyncState;
     Drive: typeof Drive;
     DataDriveManager: typeof DataDriveManager;
@@ -49,14 +47,12 @@ export default class Import extends BaseCommand {
 
   public async run() {
     const { SyncFile, SyncState } = await import('../Models/SyncFile');
-    const { FileSyncOption } = await import('../Models/FileSyncOption');
     const { default: DataDriveManager } = await import('@ioc:DataDrive');
     const { default: Drive } = await import('@ioc:Adonis/Addons/Drive');
     const { File } = await import('../Models/File');
 
     this.deps = {
       SyncFile,
-      FileSyncOption,
       SyncState,
       DataDriveManager,
       Drive,
