@@ -1,3 +1,4 @@
+import { sep } from 'path';
 import { promisify } from 'util';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -144,6 +145,7 @@ export default class Sync extends BaseCommand {
     await this.deps.SyncFile.create({
       _id: { configId: fileSyncOption.id, relativePath },
       filename,
+      level: relativePath.split(sep).length,
       revisions: [
         {
           id: uuid(),

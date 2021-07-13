@@ -5,6 +5,7 @@
   "dependencies": {
     "@lukeed/uuid": "^2.0.0",
     "bson": "^4.4.0",
+    "escape-string-regexp": "^4.0.0",
     "fs-synchronizer": "^0.2.1",
     "is-my-file-ready": "^0.1.0"
   }

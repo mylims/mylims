@@ -1,5 +1,9 @@
 type Query {
-  filesByConfig(configId: String!): [SyncFileRevision!]!
+  filesByConfig(
+    configId: String!
+    level: Int!
+    path: [String!]
+  ): [SyncFileRevision!]!
 }
 
 enum FileStatus {
