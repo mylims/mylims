@@ -2,16 +2,17 @@ fragment RevisionFields on SyncElementRevision {
   size
   relativePath
   date
+  path
 }
 
-query FilesByConfig($id: String!, $path: [String!]) {
+query FilesByConfig($id: String!, $path: [String!]!) {
   filesByConfig(configId: $id, path: $path) {
     files {
       ...RevisionFields
-      revisionId
       countRevisions
       status
       downloadUrl
+      filename
     }
     dirs {
       ...RevisionFields

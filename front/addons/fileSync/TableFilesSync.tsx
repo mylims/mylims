@@ -7,8 +7,9 @@ import {
   ChevronUpIcon,
 } from '@heroicons/react/outline';
 import bytes from 'byte-size';
-import { format, max } from 'date-fns';
-import React, { useMemo, useState } from 'react';
+import { format } from 'date-fns';
+import { produce } from 'immer';
+import React, { useContext, useEffect, useState } from 'react';
 
 import {
   Badge,
@@ -16,16 +17,22 @@ import {
   Button,
   Color,
   Roundness,
+  Spinner,
   Table,
   Td,
   Th,
   Variant,
 } from '../../components/tailwind-ui';
 
-import { FilesByConfigQuery, FileStatus } from './generated/graphql';
+import {
+  FilesByConfigQuery,
+  FileStatus,
+  useFilesByConfigLazyQuery,
+} from './generated/graphql';
 
 interface TableFilesSyncProps {
   data?: FilesByConfigQuery;
+  id: string;
 }
 
 enum TreeType {
@@ -36,85 +43,74 @@ interface SyncBase {
   id: string;
   name: string;
   size: number;
-  level: number;
   date: Date;
+  path: string[];
 }
 interface FileSync extends SyncBase {
   type: TreeType.file;
   relativePath: string;
-  revisionId: string;
   countRevisions: number;
   status: FileStatus;
   downloadUrl: string;
 }
 interface DirSync extends SyncBase {
   type: TreeType.dir;
-  children: TreeSync[];
+  children: TreeSync[] | null;
 }
 type TreeSync = FileSync | DirSync;
 
-export default function TableFilesSync({ data }: TableFilesSyncProps) {
-  const files = useMemo(() => {
-    let ans: TreeSync[] = [];
-    for (const file of data?.filesByConfig ?? []) {
-      const path = file.relativePath.split('\\');
-      const name = path[path.length - 1];
-      const leaf: FileSync = {
+interface TreeContextType {
+  state: TreeSync[];
+  setState: (state: TreeSync[]) => void;
+  id: string;
+}
+const TreeContext = React.createContext<TreeContextType>({
+  state: [],
+  setState(): void {},
+  id: '',
+});
+export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
+  const [state, setState] = useState<TreeSync[]>([]);
+
+  useEffect(() => {
+    const filesQuery = data?.filesByConfig.files ?? [];
+    const dirsQuery = data?.filesByConfig.dirs ?? [];
+    let tree: TreeSync[] = [];
+
+    for (const dir of dirsQuery) {
+      tree.push({
+        id: dir.relativePath,
+        name: dir.relativePath,
+        size: dir.size,
+        path: dir.path,
+        date: new Date(dir.date),
+        type: TreeType.dir,
+        children: null,
+      });
+    }
+
+    for (const file of filesQuery) {
+      tree.push({
         ...file,
         date: new Date(file.date),
-        name,
+        name: file.filename,
         id: file.relativePath,
         type: TreeType.file,
-        level: path.length - 1,
-      };
-
-      if (path.length === 1) {
-        // Root file
-        ans.push(leaf);
-      } else {
-        // Nested file
-        let filesList = ans;
-        for (let i = 0; i < path.length - 1; i++) {
-          const currDir = path[i];
-          let index = filesList.findIndex(
-            ({ name, type }) => type === TreeType.dir && name === currDir,
-          );
-          if (index === -1) {
-            filesList.push({
-              id: currDir,
-              name: currDir,
-              type: TreeType.dir,
-              size: leaf.size,
-              date: leaf.date,
-              children: [],
-              level: i,
-            });
-            filesList = (filesList[filesList.length - 1] as DirSync).children;
-          } else {
-            const latestDate = max([leaf.date, filesList[index].date]);
-            filesList[index].date = latestDate;
-            filesList[index].size += leaf.size;
-            filesList = (filesList[index] as DirSync).children;
-          }
-        }
-        filesList.push(leaf);
-      }
+      });
     }
-    return ans.sort((a, b) => {
-      if (a.type === TreeType.dir && b.type === TreeType.file) return -1;
-      if (b.type === TreeType.dir && a.type === TreeType.file) return 1;
-      return a.name.localeCompare(b.name);
-    });
+    setState(tree);
   }, [data]);
 
   return (
-    <Table
-      tableClassName="table-fixed"
-      Header={Header}
-      Empty={Empty}
-      Tr={Row}
-      data={files}
-    />
+    <TreeContext.Provider value={{ state, setState, id }}>
+      <Table
+        tableClassName="table-fixed"
+        Header={Header}
+        Empty={Empty}
+        Tr={Row}
+        data={state}
+      />
+    </TreeContext.Provider>
   );
 }
 
@@ -161,7 +157,7 @@ function FileRow({ value }: { value: FileSync }) {
       <Td
         title={value.relativePath}
         className="flex items-center truncate"
-        style={{ paddingLeft: `${1.5 + 1.5 * value.level}rem` }}
+        style={{ paddingLeft: `${1.5 + 1.5 * value.path.length}rem` }}
       >
         <DocumentTextIcon className="w-5 h-5 mr-1" />
         {value.name}
@@ -191,14 +187,62 @@ function FileRow({ value }: { value: FileSync }) {
 
 function DirRow({ value }: { value: DirSync }) {
   const [expanded, setExpanded] = useState(false);
+  const context = useContext(TreeContext);
+  const [fetchChild, { loading, called, data }] = useFilesByConfigLazyQuery({
+    variables: { id: context.id, path: [...value.path, value.id] },
+  });
   const size = bytes(value.size).toString();
+
+  useEffect(() => {
+    if (called && !loading && data) {
+      const { files, dirs } = data.filesByConfig;
+      context.setState(
+        produce(context.state, (draft: TreeSync[]) => {
+          let edges: TreeSync[] = draft;
+          for (const step of value.path) {
+            edges =
+              (
+                edges.find(
+                  ({ id, type }) => id === step && type === TreeType.dir,
+                ) as DirSync | undefined
+              )?.children ?? [];
+          }
+          let node: DirSync | undefined = edges.find(
+            ({ id, type }) => id === value.id && type === TreeType.dir,
+          ) as DirSync | undefined;
+
+          if (node) {
+            node.children = [
+              ...dirs.map((dir) => ({
+                id: dir.relativePath,
+                name: dir.relativePath,
+                size: dir.size,
+                path: dir.path,
+                date: new Date(dir.date),
+                type: TreeType.dir as const,
+                children: null,
+              })),
+              ...files.map((file) => ({
+                ...file,
+                date: new Date(file.date),
+                name: file.filename,
+                id: file.relativePath,
+                type: TreeType.file as const,
+              })),
+            ];
+          }
+        }),
+      );
+    }
+  }, [called, loading, data, context, value.path, value.id]);
+
   return (
     <>
       <tr>
         <Td
           title={value.name}
           className="flex items-center truncate"
-          style={{ paddingLeft: `${1.5 + 1.5 * value.level}rem` }}
+          style={{ paddingLeft: `${1.5 + 1.5 * value.path.length}rem` }}
         >
           <Button
             color={Color.neutral}
@@ -206,7 +250,10 @@ function DirRow({ value }: { value: DirSync }) {
             variant={Variant.secondary}
             className="mr-2"
             title="Expand"
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => {
+              setExpanded(!expanded);
+              if (!called && !value.children) fetchChild();
+            }}
           >
             {expanded ? (
               <ChevronUpIcon className="w-3 h-3" />
@@ -223,7 +270,8 @@ function DirRow({ value }: { value: DirSync }) {
         <Td />
         <Td />
       </tr>
-      {expanded
+      {expanded && loading && <Spinner className="w-10 h-10 text-danger-500" />}
+      {expanded && value.children
         ? value.children.map((child) => <Row key={child.id} value={child} />)
         : null}
     </>

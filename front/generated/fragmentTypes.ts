@@ -4,6 +4,8 @@ export interface PossibleTypesResultData {
   };
 }
 const result: PossibleTypesResultData = {
-  possibleTypes: {},
+  possibleTypes: {
+    SyncElementRevision: ['SyncDirRevision', 'SyncFileRevision'],
+  },
 };
 export default result;
