@@ -175,12 +175,14 @@ export type GqlSyncDirRevision = GqlSyncElementRevision & {
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   date: Scalars['DateTime'];
+  path: Array<Scalars['String']>;
 };
 
 export type GqlSyncElementRevision = {
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   date: Scalars['DateTime'];
+  path: Array<Scalars['String']>;
 };
 
 export type GqlSyncFileRevision = GqlSyncElementRevision & {
@@ -192,6 +194,8 @@ export type GqlSyncFileRevision = GqlSyncElementRevision & {
   status: GqlFileStatus;
   date: Scalars['DateTime'];
   downloadUrl: Scalars['String'];
+  path: Array<Scalars['String']>;
+  filename: Scalars['String'];
 };
 
 export type GqlSyncTreeRevision = {
@@ -550,6 +554,7 @@ export type GqlSyncDirRevisionResolvers<
   size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   relativePath?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  path?: Resolver<Array<GqlResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -565,6 +570,7 @@ export type GqlSyncElementRevisionResolvers<
   size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   relativePath?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  path?: Resolver<Array<GqlResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type GqlSyncFileRevisionResolvers<
@@ -578,6 +584,8 @@ export type GqlSyncFileRevisionResolvers<
   status?: Resolver<GqlResolversTypes['FileStatus'], ParentType, ContextType>;
   date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
   downloadUrl?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  path?: Resolver<Array<GqlResolversTypes['String']>, ParentType, ContextType>;
+  filename?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

@@ -6,6 +6,7 @@ interface SyncElementRevision {
   size: Int!
   relativePath: String!
   date: DateTime!
+  path: [String!]!
 }
 
 type SyncTreeRevision {
@@ -28,10 +29,13 @@ type SyncFileRevision implements SyncElementRevision {
   status: FileStatus!
   date: DateTime!
   downloadUrl: String!
+  path: [String!]!
+  filename: String!
 }
 
 type SyncDirRevision implements SyncElementRevision {
   size: Int!
   relativePath: String!
   date: DateTime!
+  path: [String!]!
 }

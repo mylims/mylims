@@ -35,11 +35,13 @@ const resolvers: GqlResolvers = {
       }
       const syncFiles = await (await SyncFile.find(fileQuery)).all();
       const files = syncFiles.map<GqlSyncFileRevision>(
-        ({ _id: { relativePath }, revisions }) => {
+        ({ _id: { relativePath }, revisions, filename }) => {
           const latestRevision = revisions[0];
           const urlPath = 'addons/file-sync/file-content';
           return {
             relativePath,
+            path,
+            filename,
             revisionId: latestRevision.id,
             countRevisions: revisions.length,
             size: latestRevision.size,
@@ -90,7 +92,7 @@ const resolvers: GqlResolvers = {
             },
           },
         ])
-        .map(({ _id, size, date }) => ({ relativePath: _id, date, size }))
+        .map(({ _id, size, date }) => ({ relativePath: _id, date, size, path }))
         .toArray();
 
       return { files, dirs };
