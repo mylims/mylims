@@ -194,7 +194,7 @@ function DirRow({ value }: { value: DirSync }) {
   const size = bytes(value.size).toString();
 
   useEffect(() => {
-    if (called && !loading && data) {
+    if (called && !loading && data && !value.children) {
       const { files, dirs } = data.filesByConfig;
       context.setState(
         produce(context.state, (draft: TreeSync[]) => {
@@ -234,7 +234,7 @@ function DirRow({ value }: { value: DirSync }) {
         }),
       );
     }
-  }, [called, loading, data, context, value.path, value.id]);
+  }, [called, loading, data, context, value.path, value.id, value.children]);
 
   return (
     <>
