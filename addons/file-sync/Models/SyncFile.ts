@@ -23,6 +23,6 @@ export class SyncFile extends Model<FileId> {
   public static collectionName = 'fileSync.syncFiles';
 
   public filename: string;
-  public level: number;
+  public path: string[];
   public revisions: Revision[];
 }

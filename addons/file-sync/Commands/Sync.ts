@@ -142,10 +142,12 @@ export default class Sync extends BaseCommand {
 
     const { filename, relativePath, size, creationDate, modificationDate } =
       fileInfo;
+    let path = relativePath.split(sep);
+    path.pop();
     await this.deps.SyncFile.create({
       _id: { configId: fileSyncOption.id, relativePath },
       filename,
-      level: relativePath.split(sep).length,
+      path,
       revisions: [
         {
           id: uuid(),
