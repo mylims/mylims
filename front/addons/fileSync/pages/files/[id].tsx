@@ -9,7 +9,7 @@ export default function ListFiles() {
   const router = useRouter();
   const { id } = router.query;
   const { data, loading, error } = useFilesByConfigQuery({
-    variables: { id: id as string },
+    variables: { id: id as string, level: 1, path: [] },
   });
   if (id === undefined) {
     void router.push('list');

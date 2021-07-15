@@ -131,6 +131,8 @@ export type QueryFileByPathArgs = {
 
 export type QueryFilesByConfigArgs = {
   configId: Scalars['String'];
+  level: Scalars['Int'];
+  path?: Maybe<Array<Scalars['String']>>;
 };
 
 export type QueryFileSyncOptionArgs = {

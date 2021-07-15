@@ -130,7 +130,7 @@ export type GqlQuery = {
   users: Array<GqlUser>;
   directoryTree: Array<GqlDirectoryEntry>;
   fileByPath: GqlFileContent;
-  filesByConfig: Array<GqlSyncFileRevision>;
+  filesByConfig: GqlSyncTreeRevision;
   fileSyncOptions: Array<GqlFileSyncOption>;
   fileSyncOption: GqlFileSyncOption;
   readyChecks: Array<GqlReadyCheckDescriptor>;
@@ -146,8 +146,7 @@ export type GqlQueryFileByPathArgs = {
 
 export type GqlQueryFilesByConfigArgs = {
   configId: Scalars['String'];
-  level: Scalars['Int'];
-  path?: Maybe<Array<Scalars['String']>>;
+  path: Array<Scalars['String']>;
 };
 
 export type GqlQueryFileSyncOptionArgs = {
@@ -171,7 +170,20 @@ export type GqlReadyCheckInput = {
   value?: Maybe<Scalars['String']>;
 };
 
-export type GqlSyncFileRevision = {
+export type GqlSyncDirRevision = GqlSyncElementRevision & {
+  __typename?: 'SyncDirRevision';
+  size: Scalars['Int'];
+  relativePath: Scalars['String'];
+  date: Scalars['DateTime'];
+};
+
+export type GqlSyncElementRevision = {
+  size: Scalars['Int'];
+  relativePath: Scalars['String'];
+  date: Scalars['DateTime'];
+};
+
+export type GqlSyncFileRevision = GqlSyncElementRevision & {
   __typename?: 'SyncFileRevision';
   revisionId: Scalars['String'];
   countRevisions: Scalars['Int'];
@@ -180,6 +192,12 @@ export type GqlSyncFileRevision = {
   status: GqlFileStatus;
   date: Scalars['DateTime'];
   downloadUrl: Scalars['String'];
+};
+
+export type GqlSyncTreeRevision = {
+  __typename?: 'SyncTreeRevision';
+  files: Array<GqlSyncFileRevision>;
+  dirs: Array<GqlSyncDirRevision>;
 };
 
 export type GqlUser = {
@@ -334,7 +352,12 @@ export type GqlResolversTypes = ResolversObject<{
   ReadyCheck: ResolverTypeWrapper<GqlReadyCheck>;
   ReadyCheckDescriptor: ResolverTypeWrapper<GqlReadyCheckDescriptor>;
   ReadyCheckInput: GqlReadyCheckInput;
+  SyncDirRevision: ResolverTypeWrapper<GqlSyncDirRevision>;
+  SyncElementRevision:
+    | GqlResolversTypes['SyncDirRevision']
+    | GqlResolversTypes['SyncFileRevision'];
   SyncFileRevision: ResolverTypeWrapper<GqlSyncFileRevision>;
+  SyncTreeRevision: ResolverTypeWrapper<GqlSyncTreeRevision>;
   User: ResolverTypeWrapper<User>;
 }>;
 
@@ -360,7 +383,12 @@ export type GqlResolversParentTypes = ResolversObject<{
   ReadyCheck: GqlReadyCheck;
   ReadyCheckDescriptor: GqlReadyCheckDescriptor;
   ReadyCheckInput: GqlReadyCheckInput;
+  SyncDirRevision: GqlSyncDirRevision;
+  SyncElementRevision:
+    | GqlResolversParentTypes['SyncDirRevision']
+    | GqlResolversParentTypes['SyncFileRevision'];
   SyncFileRevision: GqlSyncFileRevision;
+  SyncTreeRevision: GqlSyncTreeRevision;
   User: User;
 }>;
 
@@ -474,10 +502,10 @@ export type GqlQueryResolvers<
     RequireFields<GqlQueryFileByPathArgs, 'path'>
   >;
   filesByConfig?: Resolver<
-    Array<GqlResolversTypes['SyncFileRevision']>,
+    GqlResolversTypes['SyncTreeRevision'],
     ParentType,
     ContextType,
-    RequireFields<GqlQueryFilesByConfigArgs, 'configId' | 'level'>
+    RequireFields<GqlQueryFilesByConfigArgs, 'configId' | 'path'>
   >;
   fileSyncOptions?: Resolver<
     Array<GqlResolversTypes['FileSyncOption']>,
@@ -515,6 +543,30 @@ export type GqlReadyCheckDescriptorResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type GqlSyncDirRevisionResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['SyncDirRevision'] = GqlResolversParentTypes['SyncDirRevision'],
+> = ResolversObject<{
+  size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  relativePath?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlSyncElementRevisionResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['SyncElementRevision'] = GqlResolversParentTypes['SyncElementRevision'],
+> = ResolversObject<{
+  __resolveType: TypeResolveFn<
+    'SyncDirRevision' | 'SyncFileRevision',
+    ParentType,
+    ContextType
+  >;
+  size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  relativePath?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+}>;
+
 export type GqlSyncFileRevisionResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['SyncFileRevision'] = GqlResolversParentTypes['SyncFileRevision'],
@@ -526,6 +578,23 @@ export type GqlSyncFileRevisionResolvers<
   status?: Resolver<GqlResolversTypes['FileStatus'], ParentType, ContextType>;
   date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
   downloadUrl?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlSyncTreeRevisionResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['SyncTreeRevision'] = GqlResolversParentTypes['SyncTreeRevision'],
+> = ResolversObject<{
+  files?: Resolver<
+    Array<GqlResolversTypes['SyncFileRevision']>,
+    ParentType,
+    ContextType
+  >;
+  dirs?: Resolver<
+    Array<GqlResolversTypes['SyncDirRevision']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -570,6 +639,9 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   Query?: GqlQueryResolvers<ContextType>;
   ReadyCheck?: GqlReadyCheckResolvers<ContextType>;
   ReadyCheckDescriptor?: GqlReadyCheckDescriptorResolvers<ContextType>;
+  SyncDirRevision?: GqlSyncDirRevisionResolvers<ContextType>;
+  SyncElementRevision?: GqlSyncElementRevisionResolvers<ContextType>;
   SyncFileRevision?: GqlSyncFileRevisionResolvers<ContextType>;
+  SyncTreeRevision?: GqlSyncTreeRevisionResolvers<ContextType>;
   User?: GqlUserResolvers<ContextType>;
 }>;

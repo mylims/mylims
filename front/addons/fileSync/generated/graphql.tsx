@@ -131,6 +131,8 @@ export type QueryFileByPathArgs = {
 
 export type QueryFilesByConfigArgs = {
   configId: Scalars['String'];
+  level: Scalars['Int'];
+  path?: Maybe<Array<Scalars['String']>>;
 };
 
 export type QueryFileSyncOptionArgs = {
@@ -230,6 +232,8 @@ export type DeleteFileSyncOptionMutation = {
 
 export type FilesByConfigQueryVariables = Exact<{
   id: Scalars['String'];
+  level: Scalars['Int'];
+  path?: Maybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
 export type FilesByConfigQuery = {
@@ -605,8 +609,8 @@ export type DeleteFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
   DeleteFileSyncOptionMutationVariables
 >;
 export const FilesByConfigDocument = gql`
-  query FilesByConfig($id: String!) {
-    filesByConfig(configId: $id) {
+  query FilesByConfig($id: String!, $level: Int!, $path: [String!]) {
+    filesByConfig(configId: $id, level: $level, path: $path) {
       revisionId
       countRevisions
       size
@@ -631,6 +635,8 @@ export const FilesByConfigDocument = gql`
  * const { data, loading, error } = useFilesByConfigQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      level: // value for 'level'
+ *      path: // value for 'path'
  *   },
  * });
  */
