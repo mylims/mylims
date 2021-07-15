@@ -9,7 +9,7 @@ export default function ListFiles() {
   const router = useRouter();
   const { id } = router.query;
   const { data, loading, error } = useFilesByConfigQuery({
-    variables: { id: id as string, level: 1, path: [] },
+    variables: { id: id as string, path: [] },
   });
   if (id === undefined) {
     void router.push('list');
@@ -28,7 +28,7 @@ export default function ListFiles() {
     );
   }
 
-  return <TableFilesSync data={data} />;
+  return <TableFilesSync data={data} id={id as string} />;
 }
 
 ListFiles.getLayout = (page: React.ReactNode) => (

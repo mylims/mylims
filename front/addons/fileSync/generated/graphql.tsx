@@ -115,7 +115,7 @@ export type Query = {
   users: Array<User>;
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
-  filesByConfig: Array<SyncFileRevision>;
+  filesByConfig: SyncTreeRevision;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -131,8 +131,7 @@ export type QueryFileByPathArgs = {
 
 export type QueryFilesByConfigArgs = {
   configId: Scalars['String'];
-  level: Scalars['Int'];
-  path?: Maybe<Array<Scalars['String']>>;
+  path: Array<Scalars['String']>;
 };
 
 export type QueryFileSyncOptionArgs = {
@@ -154,7 +153,21 @@ export type ReadyCheckInput = {
   value?: Maybe<Scalars['String']>;
 };
 
-export type SyncFileRevision = {
+export type SyncDirRevision = SyncElementRevision & {
+  size: Scalars['Int'];
+  relativePath: Scalars['String'];
+  date: Scalars['DateTime'];
+  path: Array<Scalars['String']>;
+};
+
+export type SyncElementRevision = {
+  size: Scalars['Int'];
+  relativePath: Scalars['String'];
+  date: Scalars['DateTime'];
+  path: Array<Scalars['String']>;
+};
+
+export type SyncFileRevision = SyncElementRevision & {
   revisionId: Scalars['String'];
   countRevisions: Scalars['Int'];
   size: Scalars['Int'];
@@ -162,6 +175,13 @@ export type SyncFileRevision = {
   status: FileStatus;
   date: Scalars['DateTime'];
   downloadUrl: Scalars['String'];
+  path: Array<Scalars['String']>;
+  filename: Scalars['String'];
+};
+
+export type SyncTreeRevision = {
+  files: Array<SyncFileRevision>;
+  dirs: Array<SyncDirRevision>;
 };
 
 export type User = {
@@ -230,25 +250,36 @@ export type DeleteFileSyncOptionMutation = {
   >;
 };
 
+type RevisionFields_SyncDirRevision_Fragment = Pick<
+  SyncDirRevision,
+  'size' | 'relativePath' | 'date' | 'path'
+>;
+
+type RevisionFields_SyncFileRevision_Fragment = Pick<
+  SyncFileRevision,
+  'size' | 'relativePath' | 'date' | 'path'
+>;
+
+export type RevisionFieldsFragment =
+  | RevisionFields_SyncDirRevision_Fragment
+  | RevisionFields_SyncFileRevision_Fragment;
+
 export type FilesByConfigQueryVariables = Exact<{
   id: Scalars['String'];
-  level: Scalars['Int'];
-  path?: Maybe<Array<Scalars['String']> | Scalars['String']>;
+  path: Array<Scalars['String']> | Scalars['String'];
 }>;
 
 export type FilesByConfigQuery = {
-  filesByConfig: Array<
-    Pick<
-      SyncFileRevision,
-      | 'revisionId'
-      | 'countRevisions'
-      | 'size'
-      | 'relativePath'
-      | 'status'
-      | 'date'
-      | 'downloadUrl'
-    >
-  >;
+  filesByConfig: {
+    files: Array<
+      Pick<
+        SyncFileRevision,
+        'countRevisions' | 'status' | 'downloadUrl' | 'filename'
+      > &
+        RevisionFields_SyncFileRevision_Fragment
+    >;
+    dirs: Array<RevisionFields_SyncDirRevision_Fragment>;
+  };
 };
 
 export type ReadyChecksQueryVariables = Exact<{ [key: string]: never }>;
@@ -271,6 +302,14 @@ export const FileSyncOptionFieldsFragmentDoc = gql`
       name
       value
     }
+  }
+`;
+export const RevisionFieldsFragmentDoc = gql`
+  fragment RevisionFields on SyncElementRevision {
+    size
+    relativePath
+    date
+    path
   }
 `;
 export const DirectoryTreeDocument = gql`
@@ -609,17 +648,21 @@ export type DeleteFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
   DeleteFileSyncOptionMutationVariables
 >;
 export const FilesByConfigDocument = gql`
-  query FilesByConfig($id: String!, $level: Int!, $path: [String!]) {
-    filesByConfig(configId: $id, level: $level, path: $path) {
-      revisionId
-      countRevisions
-      size
-      relativePath
-      status
-      date
-      downloadUrl
+  query FilesByConfig($id: String!, $path: [String!]!) {
+    filesByConfig(configId: $id, path: $path) {
+      files {
+        ...RevisionFields
+        countRevisions
+        status
+        downloadUrl
+        filename
+      }
+      dirs {
+        ...RevisionFields
+      }
     }
   }
+  ${RevisionFieldsFragmentDoc}
 `;
 
 /**
@@ -635,7 +678,6 @@ export const FilesByConfigDocument = gql`
  * const { data, loading, error } = useFilesByConfigQuery({
  *   variables: {
  *      id: // value for 'id'
- *      level: // value for 'level'
  *      path: // value for 'path'
  *   },
  * });

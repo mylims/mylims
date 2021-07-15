@@ -115,7 +115,7 @@ export type Query = {
   users: Array<User>;
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
-  filesByConfig: Array<SyncFileRevision>;
+  filesByConfig: SyncTreeRevision;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -131,8 +131,7 @@ export type QueryFileByPathArgs = {
 
 export type QueryFilesByConfigArgs = {
   configId: Scalars['String'];
-  level: Scalars['Int'];
-  path?: Maybe<Array<Scalars['String']>>;
+  path: Array<Scalars['String']>;
 };
 
 export type QueryFileSyncOptionArgs = {
@@ -154,7 +153,21 @@ export type ReadyCheckInput = {
   value?: Maybe<Scalars['String']>;
 };
 
-export type SyncFileRevision = {
+export type SyncDirRevision = SyncElementRevision & {
+  size: Scalars['Int'];
+  relativePath: Scalars['String'];
+  date: Scalars['DateTime'];
+  path: Array<Scalars['String']>;
+};
+
+export type SyncElementRevision = {
+  size: Scalars['Int'];
+  relativePath: Scalars['String'];
+  date: Scalars['DateTime'];
+  path: Array<Scalars['String']>;
+};
+
+export type SyncFileRevision = SyncElementRevision & {
   revisionId: Scalars['String'];
   countRevisions: Scalars['Int'];
   size: Scalars['Int'];
@@ -162,6 +175,13 @@ export type SyncFileRevision = {
   status: FileStatus;
   date: Scalars['DateTime'];
   downloadUrl: Scalars['String'];
+  path: Array<Scalars['String']>;
+  filename: Scalars['String'];
+};
+
+export type SyncTreeRevision = {
+  files: Array<SyncFileRevision>;
+  dirs: Array<SyncDirRevision>;
 };
 
 export type User = {
