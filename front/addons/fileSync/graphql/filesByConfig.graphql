@@ -1,11 +1,20 @@
-query FilesByConfig($id: String!) {
-  filesByConfig(configId: $id) {
-    revisionId
-    countRevisions
-    size
-    relativePath
-    status
-    date
-    downloadUrl
+fragment RevisionFields on SyncElementRevision {
+  size
+  relativePath
+  date
+}
+
+query FilesByConfig($id: String!, $path: [String!]) {
+  filesByConfig(configId: $id, path: $path) {
+    files {
+      ...RevisionFields
+      revisionId
+      countRevisions
+      status
+      downloadUrl
+    }
+    dirs {
+      ...RevisionFields
+    }
   }
 }

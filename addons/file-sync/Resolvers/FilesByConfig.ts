@@ -10,20 +10,31 @@ import { GqlResolvers, GqlSyncFileRevision } from 'App/graphql';
 
 import { SyncFile } from '../Models/SyncFile';
 
+interface AggregateFilesByConfig {
+  _id: string;
+  size: number;
+  date: Date;
+}
+
 const resolvers: GqlResolvers = {
   Query: {
-    async filesByConfig(_, { configId, path, level }) {
-      let query: FilterQuery<SyncFile> = {
+    async filesByConfig(_, { configId, path }) {
+      const absolutePath = escapeStr(join(...path));
+      const latestPath = path[path.length - 1];
+
+      // Queries for files by configId and path
+      let fileQuery: FilterQuery<SyncFile> = {
         '_id.configId': new ObjectId(configId),
-        level,
+        path: { $size: path.length },
       };
-      if (path) {
-        query['_id.relativePath'] = {
-          $regex: `^${join(...path.map((val) => escapeStr(val)))}`,
+      if (path.length > 0) {
+        fileQuery['_id.relativePath'] = {
+          $regex: new RegExp(`^${absolutePath}`),
         };
+        fileQuery[`path.${path.length - 1}`] = latestPath;
       }
-      const syncFiles = await (await SyncFile.find(query)).all();
-      return syncFiles.map<GqlSyncFileRevision>(
+      const syncFiles = await (await SyncFile.find(fileQuery)).all();
+      const files = syncFiles.map<GqlSyncFileRevision>(
         ({ _id: { relativePath }, revisions }) => {
           const latestRevision = revisions[0];
           const urlPath = 'addons/file-sync/file-content';
@@ -40,6 +51,49 @@ const resolvers: GqlResolvers = {
           };
         },
       );
+
+      // Queries for directories for configId and path
+      let dirQuery: Record<string, unknown> = {
+        '_id.configId': new ObjectId(configId),
+        pathIndex: path.length,
+        revisionsIndex: 0,
+      };
+      if (path.length > 0) {
+        dirQuery['_id.relativePath'] = {
+          $regex: new RegExp(`^${absolutePath}`),
+        };
+      }
+      const dirs = await (
+        await SyncFile.getCollection()
+      )
+        .aggregate<AggregateFilesByConfig>([
+          {
+            $unwind: {
+              path: '$revisions',
+              includeArrayIndex: 'revisionsIndex',
+              preserveNullAndEmptyArrays: false,
+            },
+          },
+          {
+            $unwind: {
+              path: '$path',
+              includeArrayIndex: 'pathIndex',
+              preserveNullAndEmptyArrays: false,
+            },
+          },
+          { $match: dirQuery },
+          {
+            $group: {
+              _id: '$path',
+              size: { $sum: '$revisions.size' },
+              date: { $last: '$revisions.date' },
+            },
+          },
+        ])
+        .map(({ _id, size, date }) => ({ relativePath: _id, date, size }))
+        .toArray();
+
+      return { files, dirs };
     },
   },
 };
