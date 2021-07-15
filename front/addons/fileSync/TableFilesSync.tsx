@@ -55,6 +55,7 @@ interface FileSync extends SyncBase {
 }
 interface DirSync extends SyncBase {
   type: TreeType.dir;
+  expanded: boolean;
   children: TreeSync[] | null;
 }
 type TreeSync = FileSync | DirSync;
@@ -85,6 +86,7 @@ export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
         path: dir.path,
         date: new Date(dir.date),
         type: TreeType.dir,
+        expanded: false,
         children: null,
       });
     }
@@ -185,8 +187,33 @@ function FileRow({ value }: { value: FileSync }) {
   );
 }
 
+function changeNodeValue(
+  tree: TreeSync[],
+  path: string[],
+  name: string,
+  callback: (node: DirSync) => DirSync,
+) {
+  return produce(tree, (draft) => {
+    let edges: TreeSync[] = draft;
+    for (const step of path) {
+      edges =
+        (
+          edges.find(({ id, type }) => id === step && type === TreeType.dir) as
+            | DirSync
+            | undefined
+        )?.children ?? [];
+    }
+    let node: DirSync | undefined = edges.find(
+      ({ id, type }) => id === name && type === TreeType.dir,
+    ) as DirSync | undefined;
+
+    if (node) {
+      node = callback(node);
+    }
+  });
+}
+
 function DirRow({ value }: { value: DirSync }) {
-  const [expanded, setExpanded] = useState(false);
   const context = useContext(TreeContext);
   const [fetchChild, { loading, called, data }] = useFilesByConfigLazyQuery({
     variables: { id: context.id, path: [...value.path, value.id] },
@@ -197,40 +224,27 @@ function DirRow({ value }: { value: DirSync }) {
     if (called && !loading && data && !value.children) {
       const { files, dirs } = data.filesByConfig;
       context.setState(
-        produce(context.state, (draft: TreeSync[]) => {
-          let edges: TreeSync[] = draft;
-          for (const step of value.path) {
-            edges =
-              (
-                edges.find(
-                  ({ id, type }) => id === step && type === TreeType.dir,
-                ) as DirSync | undefined
-              )?.children ?? [];
-          }
-          let node: DirSync | undefined = edges.find(
-            ({ id, type }) => id === value.id && type === TreeType.dir,
-          ) as DirSync | undefined;
-
-          if (node) {
-            node.children = [
-              ...dirs.map((dir) => ({
-                id: dir.relativePath,
-                name: dir.relativePath,
-                size: dir.size,
-                path: dir.path,
-                date: new Date(dir.date),
-                type: TreeType.dir as const,
-                children: null,
-              })),
-              ...files.map((file) => ({
-                ...file,
-                date: new Date(file.date),
-                name: file.filename,
-                id: file.relativePath,
-                type: TreeType.file as const,
-              })),
-            ];
-          }
+        changeNodeValue(context.state, value.path, value.id, (node) => {
+          node.children = [
+            ...dirs.map((dir) => ({
+              id: dir.relativePath,
+              name: dir.relativePath,
+              size: dir.size,
+              path: dir.path,
+              date: new Date(dir.date),
+              type: TreeType.dir as const,
+              expanded: false,
+              children: null,
+            })),
+            ...files.map((file) => ({
+              ...file,
+              date: new Date(file.date),
+              name: file.filename,
+              id: file.relativePath,
+              type: TreeType.file as const,
+            })),
+          ];
+          return node;
         }),
       );
     }
@@ -251,11 +265,16 @@ function DirRow({ value }: { value: DirSync }) {
             className="mr-2"
             title="Expand"
             onClick={() => {
-              setExpanded(!expanded);
+              context.setState(
+                changeNodeValue(context.state, value.path, value.id, (node) => {
+                  node.expanded = !node.expanded;
+                  return node;
+                }),
+              );
               if (!called && !value.children) fetchChild();
             }}
           >
-            {expanded ? (
+            {value.expanded ? (
               <ChevronUpIcon className="w-3 h-3" />
             ) : (
               <ChevronDownIcon className="w-3 h-3" />
@@ -270,8 +289,10 @@ function DirRow({ value }: { value: DirSync }) {
         <Td />
         <Td />
       </tr>
-      {expanded && loading && <Spinner className="w-10 h-10 text-danger-500" />}
-      {expanded && value.children
+      {value.expanded && loading && (
+        <Spinner className="w-10 h-10 text-danger-500" />
+      )}
+      {value.expanded && value.children
         ? value.children.map((child) => <Row key={child.id} value={child} />)
         : null}
     </>
