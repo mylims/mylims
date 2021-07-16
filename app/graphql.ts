@@ -200,6 +200,7 @@ export type GqlSyncFileRevision = GqlSyncElementRevision & {
 
 export type GqlSyncTreeRevision = {
   __typename?: 'SyncTreeRevision';
+  _id: Scalars['String'];
   files: Array<GqlSyncFileRevision>;
   dirs: Array<GqlSyncDirRevision>;
 };
@@ -593,6 +594,7 @@ export type GqlSyncTreeRevisionResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['SyncTreeRevision'] = GqlResolversParentTypes['SyncTreeRevision'],
 > = ResolversObject<{
+  _id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   files?: Resolver<
     Array<GqlResolversTypes['SyncFileRevision']>,
     ParentType,
