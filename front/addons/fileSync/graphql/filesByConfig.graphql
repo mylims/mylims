@@ -7,6 +7,8 @@ fragment RevisionFields on SyncElementRevision {
 
 query FilesByConfig($id: String!, $path: [String!]!) {
   filesByConfig(configId: $id, path: $path) {
+    __typename
+    _id
     files {
       ...RevisionFields
       countRevisions

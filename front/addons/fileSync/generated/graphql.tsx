@@ -180,6 +180,7 @@ export type SyncFileRevision = SyncElementRevision & {
 };
 
 export type SyncTreeRevision = {
+  _id: Scalars['String'];
   files: Array<SyncFileRevision>;
   dirs: Array<SyncDirRevision>;
 };
@@ -270,16 +271,19 @@ export type FilesByConfigQueryVariables = Exact<{
 }>;
 
 export type FilesByConfigQuery = {
-  filesByConfig: {
-    files: Array<
-      Pick<
-        SyncFileRevision,
-        'countRevisions' | 'status' | 'downloadUrl' | 'filename'
-      > &
-        RevisionFields_SyncFileRevision_Fragment
-    >;
-    dirs: Array<RevisionFields_SyncDirRevision_Fragment>;
-  };
+  filesByConfig: { __typename: 'SyncTreeRevision' } & Pick<
+    SyncTreeRevision,
+    '_id'
+  > & {
+      files: Array<
+        Pick<
+          SyncFileRevision,
+          'countRevisions' | 'status' | 'downloadUrl' | 'filename'
+        > &
+          RevisionFields_SyncFileRevision_Fragment
+      >;
+      dirs: Array<RevisionFields_SyncDirRevision_Fragment>;
+    };
 };
 
 export type ReadyChecksQueryVariables = Exact<{ [key: string]: never }>;
@@ -650,6 +654,8 @@ export type DeleteFileSyncOptionMutationOptions = Apollo.BaseMutationOptions<
 export const FilesByConfigDocument = gql`
   query FilesByConfig($id: String!, $path: [String!]!) {
     filesByConfig(configId: $id, path: $path) {
+      __typename
+      _id
       files {
         ...RevisionFields
         countRevisions

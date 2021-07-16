@@ -76,7 +76,7 @@ const resolvers: GqlResolvers = {
         .map(({ _id, size, date }) => ({ relativePath: _id, date, size, path }))
         .toArray();
 
-      return { files, dirs };
+      return { _id: `${configId}:root/${path.join('/')}`, files, dirs };
     },
   },
 };

@@ -180,6 +180,7 @@ export type SyncFileRevision = SyncElementRevision & {
 };
 
 export type SyncTreeRevision = {
+  _id: Scalars['String'];
   files: Array<SyncFileRevision>;
   dirs: Array<SyncDirRevision>;
 };

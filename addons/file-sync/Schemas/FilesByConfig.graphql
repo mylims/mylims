@@ -10,6 +10,7 @@ interface SyncElementRevision {
 }
 
 type SyncTreeRevision {
+  _id: String!
   files: [SyncFileRevision!]!
   dirs: [SyncDirRevision!]!
 }
