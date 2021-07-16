@@ -1,6 +1,3 @@
-import { join } from 'path';
-
-import escapeStr from 'escape-string-regexp';
 import type { FilterQuery } from 'mongodb';
 
 import Env from '@ioc:Adonis/Core/Env';
@@ -19,19 +16,13 @@ interface AggregateFilesByConfig {
 const resolvers: GqlResolvers = {
   Query: {
     async filesByConfig(_, { configId, path }) {
-      const absolutePath = escapeStr(join(...path));
-      const latestPath = path[path.length - 1];
-
       // Queries for files by configId and path
       let fileQuery: FilterQuery<SyncFile> = {
         '_id.configId': new ObjectId(configId),
         path: { $size: path.length },
       };
-      if (path.length > 0) {
-        fileQuery['_id.relativePath'] = {
-          $regex: new RegExp(`^${absolutePath}`),
-        };
-        fileQuery[`path.${path.length - 1}`] = latestPath;
+      for (let index = 0; index < path.length; index++) {
+        fileQuery[`path.${index}`] = path[index];
       }
       const syncFiles = await (await SyncFile.find(fileQuery)).all();
       const files = syncFiles.map<GqlSyncFileRevision>(
@@ -57,38 +48,28 @@ const resolvers: GqlResolvers = {
       // Queries for directories for configId and path
       let dirQuery: Record<string, unknown> = {
         '_id.configId': new ObjectId(configId),
-        pathIndex: path.length,
-        revisionsIndex: 0,
       };
-      if (path.length > 0) {
-        dirQuery['_id.relativePath'] = {
-          $regex: new RegExp(`^${absolutePath}`),
-        };
+      for (let index = 0; index < path.length; index++) {
+        dirQuery[`path.${index}`] = path[index];
       }
+      dirQuery[`path.${path.length}`] = { $exists: true };
+
       const dirs = await (
         await SyncFile.getCollection()
       )
         .aggregate<AggregateFilesByConfig>([
-          {
-            $unwind: {
-              path: '$revisions',
-              includeArrayIndex: 'revisionsIndex',
-              preserveNullAndEmptyArrays: false,
-            },
-          },
-          {
-            $unwind: {
-              path: '$path',
-              includeArrayIndex: 'pathIndex',
-              preserveNullAndEmptyArrays: false,
-            },
-          },
           { $match: dirQuery },
           {
+            $project: {
+              firstRevision: { $first: '$revisions' },
+              nextPath: { $arrayElemAt: ['$path', path.length] },
+            },
+          },
+          {
             $group: {
-              _id: '$path',
-              size: { $sum: '$revisions.size' },
-              date: { $last: '$revisions.date' },
+              _id: '$nextPath',
+              size: { $sum: '$firstRevision.size' },
+              date: { $last: '$firstRevision.date' },
             },
           },
         ])
