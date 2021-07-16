@@ -11,16 +11,16 @@ export default function ListFiles() {
   const { data, loading, error } = useFilesByConfigQuery({
     variables: { id: id as string, path: [] },
   });
+
   if (id === undefined) {
     void router.push('list');
     return null;
   }
 
-  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
   if (error) {
     return (
       <Alert
-        title={'Error while fetching file sync option'}
+        title="Error while fetching file sync option"
         type={AlertType.ERROR}
       >
         Unexpected error {error.message}
@@ -28,7 +28,7 @@ export default function ListFiles() {
     );
   }
 
-  return <TableFilesSync data={data} id={id as string} />;
+  return <TableFilesSync loading={loading} data={data} id={id as string} />;
 }
 
 ListFiles.getLayout = (page: React.ReactNode) => (
