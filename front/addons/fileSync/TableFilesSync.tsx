@@ -33,6 +33,7 @@ import {
 interface TableFilesSyncProps {
   data?: FilesByConfigQuery;
   id: string;
+  loading: boolean;
 }
 
 enum TreeType {
@@ -70,39 +71,46 @@ const TreeContext = React.createContext<TreeContextType>({
   setState(): void {},
   id: '',
 });
-export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
+export default function TableFilesSync({
+  data,
+  id,
+  loading,
+}: TableFilesSyncProps) {
   const [state, setState] = useState<TreeSync[]>([]);
 
   useEffect(() => {
-    const filesQuery = data?.filesByConfig.files ?? [];
-    const dirsQuery = data?.filesByConfig.dirs ?? [];
-    let tree: TreeSync[] = [];
+    if (state.length === 0) {
+      const filesQuery = data?.filesByConfig.files ?? [];
+      const dirsQuery = data?.filesByConfig.dirs ?? [];
+      let tree: TreeSync[] = [];
 
-    for (const dir of dirsQuery) {
-      tree.push({
-        id: dir.relativePath,
-        name: dir.relativePath,
-        size: dir.size,
-        path: dir.path,
-        date: new Date(dir.date),
-        type: TreeType.dir,
-        expanded: false,
-        children: null,
-      });
+      for (const dir of dirsQuery) {
+        tree.push({
+          id: dir.relativePath,
+          name: dir.relativePath,
+          size: dir.size,
+          path: dir.path,
+          date: new Date(dir.date),
+          type: TreeType.dir,
+          expanded: false,
+          children: null,
+        });
+      }
+
+      for (const file of filesQuery) {
+        tree.push({
+          ...file,
+          date: new Date(file.date),
+          name: file.filename,
+          id: file.relativePath,
+          type: TreeType.file,
+        });
+      }
+      setState(tree);
     }
+  }, [data, state]);
 
-    for (const file of filesQuery) {
-      tree.push({
-        ...file,
-        date: new Date(file.date),
-        name: file.filename,
-        id: file.relativePath,
-        type: TreeType.file,
-      });
-    }
-    setState(tree);
-  }, [data]);
-
+  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
   return (
     <TreeContext.Provider value={{ state, setState, id }}>
       <Table
@@ -289,9 +297,6 @@ function DirRow({ value }: { value: DirSync }) {
         <Td />
         <Td />
       </tr>
-      {value.expanded && loading && (
-        <Spinner className="w-10 h-10 text-danger-500" />
-      )}
       {value.expanded && value.children
         ? value.children.map((child) => <Row key={child.id} value={child} />)
         : null}
