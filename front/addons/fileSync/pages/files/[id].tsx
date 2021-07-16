@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 import ElnLayout from '../../../../components/ElnLayout';
-import { Alert, AlertType, Spinner } from '../../../../components/tailwind-ui';
+import { Alert, AlertType } from '../../../../components/tailwind-ui';
 import TableFilesSync from '../../TableFilesSync';
 import { useFilesByConfigQuery } from '../../generated/graphql';
 
