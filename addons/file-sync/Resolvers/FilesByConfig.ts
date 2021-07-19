@@ -1,5 +1,3 @@
-import type { FilterQuery } from 'mongodb';
-
 import Env from '@ioc:Adonis/Core/Env';
 import ObjectId from '@ioc:Mongodb/ObjectId';
 
@@ -17,14 +15,12 @@ const resolvers: GqlResolvers = {
   Query: {
     async filesByConfig(_, { configId, path }) {
       // Queries for files by configId and path
-      let fileQuery: FilterQuery<SyncFile> = {
-        '_id.configId': new ObjectId(configId),
-        path: { $size: path.length },
-      };
-      for (let index = 0; index < path.length; index++) {
-        fileQuery[`path.${index}`] = path[index];
-      }
-      const syncFiles = await (await SyncFile.find(fileQuery)).all();
+      const syncFiles = await (
+        await SyncFile.find({
+          '_id.configId': new ObjectId(configId),
+          path,
+        })
+      ).all();
       const files = syncFiles.map<GqlSyncFileRevision>(
         ({ _id: { relativePath }, revisions, filename }) => {
           const latestRevision = revisions[0];

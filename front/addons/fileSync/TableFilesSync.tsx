@@ -68,7 +68,9 @@ interface TreeContextType {
 }
 const TreeContext = React.createContext<TreeContextType>({
   state: [],
-  setState(): void {},
+  setState(): void {
+    // do nothing
+  },
   id: '',
 });
 export default function TableFilesSync({
