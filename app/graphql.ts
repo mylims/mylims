@@ -87,6 +87,35 @@ export type GqlFileSyncOptionPatternInput = {
   pattern: Scalars['String'];
 };
 
+export type GqlFilesFilterInput = {
+  minSize?: Maybe<Scalars['Int']>;
+  maxSize?: Maybe<Scalars['Int']>;
+  minDate?: Maybe<Scalars['DateTime']>;
+  maxDate?: Maybe<Scalars['DateTime']>;
+  status?: Maybe<Array<GqlFileStatus>>;
+  path?: Maybe<Array<Scalars['String']>>;
+  filename?: Maybe<Scalars['String']>;
+};
+
+export type GqlFilesFilterPage = {
+  __typename?: 'FilesFilterPage';
+  _id: Scalars['String'];
+  files: Array<GqlSyncFileRevision>;
+  totalCount: Scalars['Int'];
+};
+
+export enum GqlFilesSortField {
+  CREATIONDATE = 'creationDate',
+  MODIFICATIONDATE = 'modificationDate',
+  SIZE = 'size',
+  FILENAME = 'filename',
+}
+
+export type GqlFilesSortInput = {
+  direction: GqlSortDirection;
+  field: GqlFilesSortField;
+};
+
 export type GqlMutation = {
   __typename?: 'Mutation';
   createFileSyncOption: GqlFileSyncOption;
@@ -131,6 +160,7 @@ export type GqlQuery = {
   directoryTree: Array<GqlDirectoryEntry>;
   fileByPath: GqlFileContent;
   filesByConfig: GqlSyncTreeRevision;
+  filesByConfigFiltered: GqlFilesFilterPage;
   fileSyncOptions: Array<GqlFileSyncOption>;
   fileSyncOption: GqlFileSyncOption;
   readyChecks: Array<GqlReadyCheckDescriptor>;
@@ -147,6 +177,14 @@ export type GqlQueryFileByPathArgs = {
 export type GqlQueryFilesByConfigArgs = {
   configId: Scalars['String'];
   path: Array<Scalars['String']>;
+};
+
+export type GqlQueryFilesByConfigFilteredArgs = {
+  id: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  filterBy?: Maybe<GqlFilesFilterInput>;
+  sortBy?: Maybe<GqlFilesSortInput>;
 };
 
 export type GqlQueryFileSyncOptionArgs = {
@@ -169,6 +207,11 @@ export type GqlReadyCheckInput = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
 };
+
+export enum GqlSortDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
 
 export type GqlSyncDirRevision = GqlSyncElementRevision & {
   __typename?: 'SyncDirRevision';
@@ -347,6 +390,10 @@ export type GqlResolversTypes = ResolversObject<{
   FileStatus: GqlFileStatus;
   FileSyncOption: ResolverTypeWrapper<FileSyncOption>;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
+  FilesFilterInput: GqlFilesFilterInput;
+  FilesFilterPage: ResolverTypeWrapper<GqlFilesFilterPage>;
+  FilesSortField: GqlFilesSortField;
+  FilesSortInput: GqlFilesSortInput;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -357,6 +404,7 @@ export type GqlResolversTypes = ResolversObject<{
   ReadyCheck: ResolverTypeWrapper<GqlReadyCheck>;
   ReadyCheckDescriptor: ResolverTypeWrapper<GqlReadyCheckDescriptor>;
   ReadyCheckInput: GqlReadyCheckInput;
+  SortDirection: GqlSortDirection;
   SyncDirRevision: ResolverTypeWrapper<GqlSyncDirRevision>;
   SyncElementRevision:
     | GqlResolversTypes['SyncDirRevision']
@@ -379,6 +427,9 @@ export type GqlResolversParentTypes = ResolversObject<{
   FileContent: GqlFileContent;
   FileSyncOption: FileSyncOption;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
+  FilesFilterInput: GqlFilesFilterInput;
+  FilesFilterPage: GqlFilesFilterPage;
+  FilesSortInput: GqlFilesSortInput;
   JSON: Scalars['JSON'];
   JSONObject: Scalars['JSONObject'];
   Mutation: {};
@@ -443,6 +494,20 @@ export type GqlFileSyncOptionResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlFilesFilterPageResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['FilesFilterPage'] = GqlResolversParentTypes['FilesFilterPage'],
+> = ResolversObject<{
+  _id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  files?: Resolver<
+    Array<GqlResolversTypes['SyncFileRevision']>,
+    ParentType,
+    ContextType
+  >;
+  totalCount?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -511,6 +576,12 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlQueryFilesByConfigArgs, 'configId' | 'path'>
+  >;
+  filesByConfigFiltered?: Resolver<
+    GqlResolversTypes['FilesFilterPage'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryFilesByConfigFilteredArgs, 'id'>
   >;
   fileSyncOptions?: Resolver<
     Array<GqlResolversTypes['FileSyncOption']>,
@@ -642,6 +713,7 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   DirectoryEntry?: GqlDirectoryEntryResolvers<ContextType>;
   FileContent?: GqlFileContentResolvers<ContextType>;
   FileSyncOption?: GqlFileSyncOptionResolvers<ContextType>;
+  FilesFilterPage?: GqlFilesFilterPageResolvers<ContextType>;
   JSON?: GraphQLScalarType;
   JSONObject?: GraphQLScalarType;
   Mutation?: GqlMutationResolvers<ContextType>;
