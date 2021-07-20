@@ -1,0 +1,22 @@
+query FilesByConfigFiltered(
+  $id: String!
+  $limit: Int
+  $skip: Int
+  $filterBy: FilesFilterInput
+  $sortBy: FilesSortInput
+) {
+  filesByConfigFiltered(
+    configId: $id
+    limit: $limit
+    skip: $skip
+    filterBy: $filterBy
+    sortBy: $sortBy
+  ) {
+    __typename
+    _id
+    totalCount
+    files {
+      filename
+    }
+  }
+}

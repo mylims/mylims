@@ -1,0 +1,39 @@
+type Query {
+  filesByConfigFiltered(
+    id: String!
+    limit: Int
+    skip: Int
+    filterBy: FilesFilterInput
+    sortBy: FilesSortInput
+  ): FilesFilterPage!
+}
+
+input FilesFilterInput {
+  minSize: Int
+  maxSize: Int
+  minDate: DateTime
+  maxDate: DateTime
+  status: [FileStatus!]
+}
+
+enum FilesSortField {
+  creationDate
+  modificationDate
+  date
+  size
+  filename
+}
+enum SortDirection {
+  ASC
+  DESC
+}
+input FilesSortInput {
+  direction: SortDirection!
+  field: FilesSortField!
+}
+
+type FilesFilterPage {
+  _id: String!
+  files: [SyncFileRevision!]!
+  totalCount: Int!
+}
