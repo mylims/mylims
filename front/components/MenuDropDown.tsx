@@ -49,7 +49,7 @@ export default function MenuDropDown(): JSX.Element {
 
   function handleClick(selected: DropdownOption<DropdownCustoms>) {
     // eslint-disable-next-line no-console
-    selected.data?.onClick().catch((err) => console.log(err));
+    selected.data?.onClick().catch((err) => console.error(err));
   }
 
   return (
