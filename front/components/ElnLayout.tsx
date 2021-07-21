@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,10 +12,15 @@ import { ZakodiumSolidSvg } from './tailwind-ui';
 
 interface ElnLayoutProps {
   pageTitle?: string;
+  backButton?: boolean;
   children: React.ReactNode;
 }
 
-export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
+export default function ElnLayout({
+  pageTitle,
+  backButton,
+  children,
+}: ElnLayoutProps) {
   const router = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { isAuth } = useAuth();
@@ -48,14 +54,14 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
   return (
     <div>
       <nav className="bg-neutral-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <ZakodiumSolidSvg className="w-24 fill-current text-alternative-100" />
               </div>
               <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-4">
+                <div className="flex items-baseline ml-10 space-x-4">
                   {ROUTES.map((route) => {
                     const match = picomatch(route.pathmatch || route.pathname);
                     return (
@@ -79,7 +85,7 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
               </div>
             </div>
             <MenuDropDown />
-            <div className="-mr-2 flex md:hidden">
+            <div className="flex -mr-2 md:hidden">
               <button
                 className="inline-flex items-center justify-center"
                 type="button"
@@ -149,15 +155,21 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
         </div>
       </nav>
 
-      <header className="bg-neutral-100 shadow">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <header className="shadow bg-neutral-100">
+        <div className="flex items-center px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          {backButton ? (
+            <ArrowLeftIcon
+              className="w-6 h-6 mr-2"
+              onClick={() => router.back()}
+            />
+          ) : null}
           <h1 className="text-3xl font-bold leading-tight text-neutral-900">
             {currentTitle}
           </h1>
         </div>
       </header>
       <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">{children}</div>
         </div>
       </main>

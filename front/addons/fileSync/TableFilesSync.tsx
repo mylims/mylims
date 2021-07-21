@@ -9,7 +9,9 @@ import {
 import bytes from 'byte-size';
 import { format } from 'date-fns';
 import { produce } from 'immer';
+import Link from 'next/link';
 import React, { useContext, useEffect, useState } from 'react';
+import ElnLayout from '../../components/ElnLayout';
 
 import {
   Badge,
@@ -114,15 +116,23 @@ export default function TableFilesSync({
 
   if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
   return (
-    <TreeContext.Provider value={{ state, setState, id }}>
-      <Table
-        tableClassName="table-fixed"
-        Header={Header}
-        Empty={Empty}
-        Tr={Row}
-        data={state}
-      />
-    </TreeContext.Provider>
+    <div>
+      <Link href="[id]?page=1" as={`${id}?page=1`}>
+        <Button className="ml-2" title="Configuration">
+          First page
+        </Button>
+      </Link>
+
+      <TreeContext.Provider value={{ state, setState, id }}>
+        <Table
+          tableClassName="table-fixed"
+          Header={Header}
+          Empty={Empty}
+          Tr={Row}
+          data={state}
+        />
+      </TreeContext.Provider>
+    </div>
   );
 }
 
@@ -330,3 +340,7 @@ function FileStatusLabel({ status }: { status: FileStatus }) {
     />
   );
 }
+
+TableFilesSync.getLayout = (page: React.ReactNode) => (
+  <ElnLayout pageTitle="Table of synchronized files">{page}</ElnLayout>
+);

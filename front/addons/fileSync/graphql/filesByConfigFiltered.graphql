@@ -6,7 +6,7 @@ query FilesByConfigFiltered(
   $sortBy: FilesSortInput
 ) {
   filesByConfigFiltered(
-    configId: $id
+    id: $id
     limit: $limit
     skip: $skip
     filterBy: $filterBy
@@ -16,7 +16,13 @@ query FilesByConfigFiltered(
     _id
     totalCount
     files {
+      revisionId
       filename
+      size
+      relativePath
+      status
+      date
+      downloadUrl
     }
   }
 }

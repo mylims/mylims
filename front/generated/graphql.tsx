@@ -75,6 +75,33 @@ export type FileSyncOptionPatternInput = {
   pattern: Scalars['String'];
 };
 
+export type FilesFilterInput = {
+  minSize?: Maybe<Scalars['Int']>;
+  maxSize?: Maybe<Scalars['Int']>;
+  minDate?: Maybe<Scalars['DateTime']>;
+  maxDate?: Maybe<Scalars['DateTime']>;
+  status?: Maybe<Array<FileStatus>>;
+};
+
+export type FilesFilterPage = {
+  _id: Scalars['String'];
+  files: Array<SyncFileRevision>;
+  totalCount: Scalars['Int'];
+};
+
+export enum FilesSortField {
+  CREATIONDATE = 'creationDate',
+  MODIFICATIONDATE = 'modificationDate',
+  DATE = 'date',
+  SIZE = 'size',
+  FILENAME = 'filename',
+}
+
+export type FilesSortInput = {
+  direction: SortDirection;
+  field: FilesSortField;
+};
+
 export type Mutation = {
   createFileSyncOption: FileSyncOption;
   editFileSyncOption: FileSyncOption;
@@ -116,6 +143,7 @@ export type Query = {
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
   filesByConfig: SyncTreeRevision;
+  filesByConfigFiltered: FilesFilterPage;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -132,6 +160,14 @@ export type QueryFileByPathArgs = {
 export type QueryFilesByConfigArgs = {
   configId: Scalars['String'];
   path: Array<Scalars['String']>;
+};
+
+export type QueryFilesByConfigFilteredArgs = {
+  id: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  filterBy?: Maybe<FilesFilterInput>;
+  sortBy?: Maybe<FilesSortInput>;
 };
 
 export type QueryFileSyncOptionArgs = {
@@ -152,6 +188,11 @@ export type ReadyCheckInput = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
 };
+
+export enum SortDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
 
 export type SyncDirRevision = SyncElementRevision & {
   size: Scalars['Int'];

@@ -75,6 +75,33 @@ export type FileSyncOptionPatternInput = {
   pattern: Scalars['String'];
 };
 
+export type FilesFilterInput = {
+  minSize?: Maybe<Scalars['Int']>;
+  maxSize?: Maybe<Scalars['Int']>;
+  minDate?: Maybe<Scalars['DateTime']>;
+  maxDate?: Maybe<Scalars['DateTime']>;
+  status?: Maybe<Array<FileStatus>>;
+};
+
+export type FilesFilterPage = {
+  _id: Scalars['String'];
+  files: Array<SyncFileRevision>;
+  totalCount: Scalars['Int'];
+};
+
+export enum FilesSortField {
+  CREATIONDATE = 'creationDate',
+  MODIFICATIONDATE = 'modificationDate',
+  DATE = 'date',
+  SIZE = 'size',
+  FILENAME = 'filename',
+}
+
+export type FilesSortInput = {
+  direction: SortDirection;
+  field: FilesSortField;
+};
+
 export type Mutation = {
   createFileSyncOption: FileSyncOption;
   editFileSyncOption: FileSyncOption;
@@ -116,6 +143,7 @@ export type Query = {
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
   filesByConfig: SyncTreeRevision;
+  filesByConfigFiltered: FilesFilterPage;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -132,6 +160,14 @@ export type QueryFileByPathArgs = {
 export type QueryFilesByConfigArgs = {
   configId: Scalars['String'];
   path: Array<Scalars['String']>;
+};
+
+export type QueryFilesByConfigFilteredArgs = {
+  id: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  filterBy?: Maybe<FilesFilterInput>;
+  sortBy?: Maybe<FilesSortInput>;
 };
 
 export type QueryFileSyncOptionArgs = {
@@ -152,6 +188,11 @@ export type ReadyCheckInput = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
 };
+
+export enum SortDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
 
 export type SyncDirRevision = SyncElementRevision & {
   size: Scalars['Int'];
@@ -283,6 +324,34 @@ export type FilesByConfigQuery = {
           RevisionFields_SyncFileRevision_Fragment
       >;
       dirs: Array<RevisionFields_SyncDirRevision_Fragment>;
+    };
+};
+
+export type FilesByConfigFilteredQueryVariables = Exact<{
+  id: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  filterBy?: Maybe<FilesFilterInput>;
+  sortBy?: Maybe<FilesSortInput>;
+}>;
+
+export type FilesByConfigFilteredQuery = {
+  filesByConfigFiltered: { __typename: 'FilesFilterPage' } & Pick<
+    FilesFilterPage,
+    '_id' | 'totalCount'
+  > & {
+      files: Array<
+        Pick<
+          SyncFileRevision,
+          | 'revisionId'
+          | 'filename'
+          | 'size'
+          | 'relativePath'
+          | 'status'
+          | 'date'
+          | 'downloadUrl'
+        >
+      >;
     };
 };
 
@@ -726,6 +795,96 @@ export function refetchFilesByConfigQuery(
   variables?: FilesByConfigQueryVariables,
 ) {
   return { query: FilesByConfigDocument, variables: variables };
+}
+export const FilesByConfigFilteredDocument = gql`
+  query FilesByConfigFiltered(
+    $id: String!
+    $limit: Int
+    $skip: Int
+    $filterBy: FilesFilterInput
+    $sortBy: FilesSortInput
+  ) {
+    filesByConfigFiltered(
+      id: $id
+      limit: $limit
+      skip: $skip
+      filterBy: $filterBy
+      sortBy: $sortBy
+    ) {
+      __typename
+      _id
+      totalCount
+      files {
+        revisionId
+        filename
+        size
+        relativePath
+        status
+        date
+        downloadUrl
+      }
+    }
+  }
+`;
+
+/**
+ * __useFilesByConfigFilteredQuery__
+ *
+ * To run a query within a React component, call `useFilesByConfigFilteredQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFilesByConfigFilteredQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFilesByConfigFilteredQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      skip: // value for 'skip'
+ *      filterBy: // value for 'filterBy'
+ *      sortBy: // value for 'sortBy'
+ *   },
+ * });
+ */
+export function useFilesByConfigFilteredQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    FilesByConfigFilteredQuery,
+    FilesByConfigFilteredQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    FilesByConfigFilteredQuery,
+    FilesByConfigFilteredQueryVariables
+  >(FilesByConfigFilteredDocument, options);
+}
+export function useFilesByConfigFilteredLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    FilesByConfigFilteredQuery,
+    FilesByConfigFilteredQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    FilesByConfigFilteredQuery,
+    FilesByConfigFilteredQueryVariables
+  >(FilesByConfigFilteredDocument, options);
+}
+export type FilesByConfigFilteredQueryHookResult = ReturnType<
+  typeof useFilesByConfigFilteredQuery
+>;
+export type FilesByConfigFilteredLazyQueryHookResult = ReturnType<
+  typeof useFilesByConfigFilteredLazyQuery
+>;
+export type FilesByConfigFilteredQueryResult = Apollo.QueryResult<
+  FilesByConfigFilteredQuery,
+  FilesByConfigFilteredQueryVariables
+>;
+export function refetchFilesByConfigFilteredQuery(
+  variables?: FilesByConfigFilteredQueryVariables,
+) {
+  return { query: FilesByConfigFilteredDocument, variables: variables };
 }
 export const ReadyChecksDocument = gql`
   query ReadyChecks {
