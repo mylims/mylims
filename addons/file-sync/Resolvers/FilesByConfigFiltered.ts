@@ -1,7 +1,7 @@
 import Env from '@ioc:Adonis/Core/Env';
 import ObjectId from '@ioc:Mongodb/ObjectId';
 
-import { GqlResolvers, GqlSyncFileRevision } from 'App/graphql';
+import { GqlResolvers, GqlSyncFileRevision, GqlFileStatus } from 'App/graphql';
 
 import { SyncFile } from '../Models/SyncFile';
 
@@ -13,7 +13,7 @@ const resolvers: GqlResolvers = {
         maxSize = Infinity,
         minDate = new Date(0),
         maxDate = new Date(Date.now()),
-        status = [],
+        status = [GqlFileStatus.IMPORTED],
       } = filterBy || {};
       const { field = 'date', direction = 'desc' } = sortBy || {};
       const sortField = field === 'filename' ? field : `revisions.0.${field}`;
@@ -49,7 +49,13 @@ const resolvers: GqlResolvers = {
         },
       );
       return {
-        _id: [minSize, maxSize, minDate, maxDate, status].join(','),
+        _id: [
+          minSize,
+          maxSize,
+          minDate?.toLocaleDateString('fr-ch') || '',
+          maxDate?.toLocaleDateString('fr-ch') || '',
+          status,
+        ].join(','),
         files,
         totalCount,
       };
