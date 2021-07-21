@@ -28,9 +28,9 @@ const resolvers: GqlResolvers = {
         .sort({ [sortField]: direction === 'desc' ? -1 : 1 });
       const totalCount = await fileCursor.count();
 
-      if (skip && limit) {
-        fileCursor = fileCursor.skip(skip).limit(limit);
-      }
+      if (skip) fileCursor = fileCursor.skip(skip);
+      if (limit) fileCursor = fileCursor.limit(limit);
+
       const files = (await fileCursor.toArray()).map<GqlSyncFileRevision>(
         ({ _id: { relativePath }, revisions, filename, path }) => {
           const { id, size, date, status } = revisions[0];

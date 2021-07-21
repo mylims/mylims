@@ -40,6 +40,8 @@ export default function ListFiles() {
     sortField = FilesSortField.DATE,
     sortDirection = SortDirection.DESC,
   } = router.query;
+  console.log(router.query);
+
   if (id === undefined) {
     void router.push('list');
     return null;
@@ -105,6 +107,12 @@ function FilterTable({
       },
       sortBy: { field: sortField, direction: sortDirection },
     },
+  });
+  console.log({
+    id,
+    limit: PAGE_SIZE,
+    skip: (pageNum - 1) * PAGE_SIZE,
+    ...filters,
   });
 
   if (error) {
