@@ -1,7 +1,8 @@
-'use strict';
+'use strict'
 
 module.exports = {
   plugins: {
     tailwindcss: {},
-  },
-};
+    autoprefixer: {}
+  }
+}

@@ -14,20 +14,20 @@ config:
     enumValues: change-case#upperCase
   skipTypename: true
 generates:
-  generated/graphql.tsx:
-    documents: 'graphql/*.graphql'
+  src/generated/graphql.tsx:
+    documents: 'src/graphql/*.graphql'
     plugins:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
-  generated/fragmentTypes.ts:
-    documents: 'graphql/*.graphql'
+  src/generated/fragmentTypes.ts:
+    documents: 'src/graphql/*.graphql'
     plugins:
       - 'fragment-matcher'
     config:
       apolloClientVersion: 3
-  addons/fileSync/generated/graphql.tsx:
-    documents: 'addons/fileSync/graphql/*.graphql'
+  src/addons/fileSync/generated/graphql.tsx:
+    documents: 'src/addons/fileSync/graphql/*.graphql'
     plugins:
       - 'typescript'
       - 'typescript-operations'
