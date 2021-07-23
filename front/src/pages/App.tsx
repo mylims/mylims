@@ -81,7 +81,7 @@ function SetupEln({ children }: SetupElnProps) {
 }
 
 type MyAppProps = {
-  Component: React.ReactNode & {
+  Component: React.ComponentType<{}> & {
     getLayout?: (component: React.ReactNode) => React.ReactNode;
   };
 };
@@ -95,7 +95,7 @@ export default function App({ Component }: MyAppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ApolloProvider client={client}>
-        <SetupEln>{getLayout(Component)}</SetupEln>
+        <SetupEln>{getLayout(<Component />)}</SetupEln>
       </ApolloProvider>
     </QueryClientProvider>
   );
