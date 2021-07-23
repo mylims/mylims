@@ -1,8 +1,8 @@
+import React, { useState, useMemo } from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
-import picomatch from 'picomatch';
-import React, { useState, useMemo } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
+import minimatch from 'minimatch';
 
 import useAuth from '../hooks/useAuth';
 
@@ -61,13 +61,10 @@ export default function ElnLayout({
               <div className="hidden md:block">
                 <div className="flex items-baseline ml-10 space-x-4">
                   {ROUTES.map((route) => {
-                    // const match = picomatch(route.pathmatch || route.pathname);
-                    console.log({
-                      routePathmatch: route.pathmatch,
-                      routePathname: route.pathname,
+                    const isMatch = minimatch(
                       pathname,
-                    });
-                    const isMatch = true;
+                      route.pathmatch || route.pathname,
+                    );
                     return (
                       <Link to={route.pathname}>
                         <a
