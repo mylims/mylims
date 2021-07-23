@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { Alert, AlertType } from '@components/tailwind-ui';
 import TableFilesSync from '../TableFilesSync';
@@ -134,5 +134,7 @@ function FilterTable({
 }
 
 ListFiles.getLayout = (page: React.ReactNode) => (
-  <ElnLayout pageTitle="Table of filtered files">{page}</ElnLayout>
+  <ElnLayout pageTitle="Table of filtered files" backButton={true}>
+    {page}
+  </ElnLayout>
 );

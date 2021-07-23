@@ -11,7 +11,6 @@ import bytes from 'byte-size';
 import { format } from 'date-fns';
 import { produce } from 'immer';
 import { Link } from 'react-router-dom';
-import ElnLayout from '@components/ElnLayout';
 
 import {
   Badge,
@@ -340,7 +339,3 @@ function FileStatusLabel({ status }: { status: FileStatus }) {
     />
   );
 }
-
-TableFilesSync.getLayout = (page: React.ReactNode) => (
-  <ElnLayout pageTitle="Table of synchronized files">{page}</ElnLayout>
-);
