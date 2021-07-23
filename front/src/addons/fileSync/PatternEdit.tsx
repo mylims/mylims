@@ -1,6 +1,6 @@
+import React from 'react';
 import { TrashIcon } from '@heroicons/react/solid';
 import { ArrayHelpers } from 'formik';
-import React from 'react';
 
 import {
   Button,

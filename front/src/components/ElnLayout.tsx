@@ -33,8 +33,8 @@ export default function ElnLayout({
       { label: 'Users', pathname: `/eln/users` },
       {
         label: 'File synchronization',
-        pathname: `/eln/addons/fileSync/list`,
-        pathmatch: `/eln/addons/fileSync/**`,
+        pathname: `/fileSync/list`,
+        pathmatch: `/fileSync/**`,
       },
     ];
   }, []);
@@ -66,18 +66,18 @@ export default function ElnLayout({
                       route.pathmatch || route.pathname,
                     );
                     return (
-                      <Link to={route.pathname}>
-                        <a
-                          className={clsx(
-                            'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
-                            {
-                              'text-neutral-100 bg-neutral-900': isMatch,
-                              'text-neutral-300': !isMatch,
-                            },
-                          )}
-                        >
-                          {route.label}
-                        </a>
+                      <Link
+                        to={route.pathname}
+                        key={route.pathname}
+                        className={clsx(
+                          'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
+                          {
+                            'text-neutral-100 bg-neutral-900': isMatch,
+                            'text-neutral-300': !isMatch,
+                          },
+                        )}
+                      >
+                        {route.label}
                       </Link>
                     );
                   })}
@@ -136,19 +136,19 @@ export default function ElnLayout({
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {ROUTES.map((route) => (
-              <Link to={route.pathname}>
-                <a
-                  className={clsx(
-                    'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
-                    {
-                      'text-neutral-100 bg-neutral-900':
-                        pathname === route.pathname,
-                      'text-neutral-300': pathname !== route.pathname,
-                    },
-                  )}
-                >
-                  {route.label}
-                </a>
+              <Link
+                to={route.pathname}
+                key={route.pathname}
+                className={clsx(
+                  'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
+                  {
+                    'text-neutral-100 bg-neutral-900':
+                      pathname === route.pathname,
+                    'text-neutral-300': pathname !== route.pathname,
+                  },
+                )}
+              >
+                {route.label}
               </Link>
             ))}
           </div>
