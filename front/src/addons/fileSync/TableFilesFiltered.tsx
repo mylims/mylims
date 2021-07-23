@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import bytes from 'byte-size';
 import { format } from 'date-fns';
 
-import ElnLayout from '@components/ElnLayout';
 import {
   Badge,
   BadgeVariant,
@@ -39,6 +38,7 @@ type File = Pick<
   | 'date'
   | 'downloadUrl'
 > & { id: string };
+
 export default function TableFilesFiltered({
   id,
   data,
@@ -149,7 +149,3 @@ function FileStatusLabel({ status }: { status: FileStatus }) {
     />
   );
 }
-
-TableFilesFiltered.getLayout = (page: React.ReactNode) => (
-  <ElnLayout pageTitle="Table of synchronized files">{page}</ElnLayout>
-);
