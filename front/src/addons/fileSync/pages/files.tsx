@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import { Alert, AlertType } from '@components/tailwind-ui';
 import TableFilesSync from '../TableFilesSync';
@@ -12,6 +12,7 @@ import {
   FileStatus,
 } from '../generated/graphql';
 import ElnLayout from '@components/ElnLayout';
+import { useQuery } from 'src/hooks/useQuery';
 
 interface RouterQuery {
   id: string;
@@ -29,8 +30,8 @@ const PAGE_SIZE = 10;
 
 export default function ListFiles() {
   const router = useHistory();
+  const { id } = useParams<{ id: string }>();
   const {
-    id,
     page,
     minSize = '0',
     maxSize = '1000000000',
@@ -39,7 +40,7 @@ export default function ListFiles() {
     status = 'imported',
     sortField = FilesSortField.DATE,
     sortDirection = SortDirection.DESC,
-  } = useParams<RouterQuery>();
+  } = useQuery();
 
   if (id === undefined) {
     void router.push('list');
@@ -49,19 +50,19 @@ export default function ListFiles() {
   if (page) {
     return (
       <FilterTable
-        id={id as string}
-        page={page as string}
-        minSize={minSize as string}
-        maxSize={maxSize as string}
-        minDate={minDate as string}
-        maxDate={maxDate as string}
+        id={id}
+        page={page}
+        minSize={minSize}
+        maxSize={maxSize}
+        minDate={minDate}
+        maxDate={maxDate}
         status={status as FileStatus}
         sortField={sortField as FilesSortField}
         sortDirection={sortDirection as SortDirection}
       />
     );
   } else {
-    return <NestedTable id={id as string} />;
+    return <NestedTable id={id} />;
   }
 }
 
@@ -132,6 +133,6 @@ function FilterTable({
   );
 }
 
-FilterTable.getLayout = (page: React.ReactNode) => (
+ListFiles.getLayout = (page: React.ReactNode) => (
   <ElnLayout pageTitle="Table of filtered files">{page}</ElnLayout>
 );
