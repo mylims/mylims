@@ -93,8 +93,6 @@ export type GqlFilesFilterInput = {
   minDate?: Maybe<Scalars['DateTime']>;
   maxDate?: Maybe<Scalars['DateTime']>;
   status?: Maybe<Array<GqlFileStatus>>;
-  path?: Maybe<Array<Scalars['String']>>;
-  filename?: Maybe<Scalars['String']>;
 };
 
 export type GqlFilesFilterPage = {
@@ -107,6 +105,7 @@ export type GqlFilesFilterPage = {
 export enum GqlFilesSortField {
   CREATIONDATE = 'creationDate',
   MODIFICATIONDATE = 'modificationDate',
+  DATE = 'date',
   SIZE = 'size',
   FILENAME = 'filename',
 }
