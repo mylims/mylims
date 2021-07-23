@@ -1,0 +1,75 @@
+import { FormikHelpers } from 'formik';
+import { useHistory, useParams } from 'react-router-dom';
+import { useMemo } from 'react';
+
+import ElnLayout from '@components/ElnLayout';
+import { Alert, AlertType, Spinner } from '@components/tailwind-ui';
+import FileSyncConfigForm from '../../FileSyncConfigForm';
+import {
+  EditFileSyncOptionInput,
+  NewFileSyncOptionInput,
+  useEditFileSyncOptionMutation,
+  useFileSyncOptionQuery,
+} from '../../generated/graphql';
+
+export default function EditConfig() {
+  const [editFileSyncOption, { loading: mutationLoading }] =
+    useEditFileSyncOptionMutation();
+  const router = useHistory();
+  const { id } = useParams<{ id: string }>();
+  const {
+    data,
+    loading: queryLoading,
+    error,
+  } = useFileSyncOptionQuery({
+    variables: { id },
+  });
+
+  const onSubmit = useMemo(
+    () =>
+      async (
+        values: EditFileSyncOptionInput | NewFileSyncOptionInput,
+        {
+          resetForm,
+        }: FormikHelpers<EditFileSyncOptionInput | NewFileSyncOptionInput>,
+      ) => {
+        await editFileSyncOption({
+          variables: { input: { ...values, id } },
+        });
+        resetForm();
+        await router.push('../list');
+      },
+    [editFileSyncOption, router, id],
+  );
+
+  if (id === undefined) {
+    void router.push('list');
+    return null;
+  }
+
+  return (
+    <>
+      {queryLoading ? (
+        <Spinner className="w-10 h-10 text-danger-500" />
+      ) : error ? (
+        <Alert
+          title={'Error while fetching file sync option'}
+          type={AlertType.ERROR}
+        >
+          Unexpected error {error.message}
+        </Alert>
+      ) : (
+        <FileSyncConfigForm
+          title="Edit synchronization"
+          submitLabel="Save"
+          initialValues={data?.fileSyncOption}
+          onSubmit={onSubmit}
+          loading={mutationLoading}
+        />
+      )}
+    </>
+  );
+}
+EditConfig.getLayout = (page: React.ReactNode) => (
+  <ElnLayout pageTitle="File synchronization: edit">{page}</ElnLayout>
+);
