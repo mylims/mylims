@@ -15,7 +15,6 @@ import AddonsContext from '../contexts/AddonsContext';
 import AuthContext from '../contexts/AuthContext';
 import { client } from '../graphql/apollo';
 import { useElnQuery } from '../hooks/useElnQuery';
-import ReactDOM from 'react-dom';
 
 const queryClient = new QueryClient();
 

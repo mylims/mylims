@@ -2,15 +2,15 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { Alert, AlertType } from '@components/tailwind-ui';
-import TableFilesSync from '../../TableFilesSync';
-import TableFilesFiltered from '../../TableFilesFiltered';
+import TableFilesSync from '../TableFilesSync';
+import TableFilesFiltered from '../TableFilesFiltered';
 import {
   useFilesByConfigQuery,
   useFilesByConfigFilteredQuery,
   FilesSortField,
   SortDirection,
   FileStatus,
-} from '../../generated/graphql';
+} from '../generated/graphql';
 import ElnLayout from '@components/ElnLayout';
 
 interface RouterQuery {
