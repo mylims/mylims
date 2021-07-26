@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext } from 'react';
 
-const AddonsContext = React.createContext<string[]>([]);
+const AddonsContext = createContext<string[]>([]);
 export default AddonsContext;

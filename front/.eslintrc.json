@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "settings": {
+    "import/resolver": { "typescript": {} }
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": "./"
+  },
+  "plugins": ["@typescript-eslint", "import"],
+  "extends": "@zakodium/eslint-config/typescript-react"
+}

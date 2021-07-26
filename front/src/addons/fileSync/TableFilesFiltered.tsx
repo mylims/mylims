@@ -1,6 +1,8 @@
-import React, { useMemo } from 'react';
+import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/outline';
 import bytes from 'byte-size';
 import { format } from 'date-fns';
+import React, { useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import {
   Badge,
@@ -8,18 +10,18 @@ import {
   Button,
   Color,
   Roundness,
+  Spinner,
   Table,
   Td,
   Th,
   Variant,
 } from '@components/tailwind-ui';
+
 import {
   FilesByConfigFilteredQuery,
   FileStatus,
   SyncFileRevision,
 } from './generated/graphql';
-import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/outline';
-import { useHistory } from 'react-router-dom';
 
 interface TableFilesFilteredProps {
   id: string;
@@ -58,6 +60,8 @@ export default function TableFilesFiltered({
     totalCount,
     onPageChange: (newPage: number) => router.push(`${id}?page=${newPage}`),
   };
+
+  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
   return (
     <Table
       tableClassName="table-fixed"

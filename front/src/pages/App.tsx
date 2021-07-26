@@ -11,6 +11,7 @@ import {
   Spinner,
   ToastNotificationCenter,
 } from '@components/tailwind-ui';
+
 import AddonsContext from '../contexts/AddonsContext';
 import AuthContext from '../contexts/AuthContext';
 import { client } from '../graphql/apollo';
@@ -79,11 +80,11 @@ function SetupEln({ children }: SetupElnProps) {
   );
 }
 
-type MyAppProps = {
-  Component: React.ComponentType<{}> & {
+interface MyAppProps {
+  Component: React.ComponentType<Record<string, never>> & {
     getLayout?: (component: React.ReactNode) => React.ReactNode;
   };
-};
+}
 
 export default function App({ Component }: MyAppProps) {
   const getLayout = useMemo(

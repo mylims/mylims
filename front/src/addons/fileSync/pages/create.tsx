@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
 import { FormikHelpers } from 'formik';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import ElnLayout from '@components/ElnLayout';
 import { Alert, AlertType } from '@components/tailwind-ui';
+
 import FileSyncConfigForm from '../FileSyncConfigForm';
 import {
   NewFileSyncOptionInput,
@@ -23,7 +24,7 @@ export default function CreateConfig() {
       ) => {
         await createFileSyncOption({ variables: { input: values } });
         resetForm();
-        await router.push('list');
+        router.push('list');
       },
     [createFileSyncOption, router],
   );

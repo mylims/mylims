@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
-import { useHistory, useLocation, Link } from 'react-router-dom';
 import minimatch from 'minimatch';
+import React, { useState, useMemo } from 'react';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 
 import useAuth from '../hooks/useAuth';
 
