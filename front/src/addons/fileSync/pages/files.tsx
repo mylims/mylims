@@ -1,9 +1,12 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import ElnLayout from '@components/ElnLayout';
 import { Alert, AlertType } from '@components/tailwind-ui';
-import TableFilesSync from '../TableFilesSync';
+import { useQuery } from 'src/hooks/useQuery';
+
 import TableFilesFiltered from '../TableFilesFiltered';
+import TableFilesSync from '../TableFilesSync';
 import {
   useFilesByConfigQuery,
   useFilesByConfigFilteredQuery,
@@ -11,8 +14,6 @@ import {
   SortDirection,
   FileStatus,
 } from '../generated/graphql';
-import ElnLayout from '@components/ElnLayout';
-import { useQuery } from 'src/hooks/useQuery';
 
 interface RouterQuery {
   id: string;
@@ -134,7 +135,7 @@ function FilterTable({
 }
 
 ListFiles.getLayout = (page: React.ReactNode) => (
-  <ElnLayout pageTitle="Table of filtered files" backButton={true}>
+  <ElnLayout pageTitle="Table of filtered files" backButton>
     {page}
   </ElnLayout>
 );

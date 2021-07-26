@@ -1,21 +1,22 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import App from './pages/App';
-import Login from './pages/login';
+// File sync
+import Create from './addons/fileSync/pages/create';
+import Edit from './addons/fileSync/pages/edit';
+import Files from './addons/fileSync/pages/files';
+import List from './addons/fileSync/pages/list';
+// Base
 import NoMatch from './pages/404';
+import App from './pages/App';
 // Eln
 import Eln from './pages/eln';
 import Users from './pages/eln/users';
-// File sync
-import List from './addons/fileSync/pages/list';
-import Create from './addons/fileSync/pages/create';
-import Files from './addons/fileSync/pages/files';
-import Edit from './addons/fileSync/pages/edit';
+import Login from './pages/login';
 
 interface RouteType {
-  Component: React.ComponentType<{}>;
+  Component: React.ComponentType<Record<string, never>>;
   path: string;
 }
 const routes: RouteType[] = [
@@ -29,7 +30,7 @@ const routes: RouteType[] = [
   { Component: NoMatch, path: '*' },
 ];
 
-ReactDOM.render(
+render(
   <React.StrictMode>
     <Router>
       <Switch>

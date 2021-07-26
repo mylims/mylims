@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import path from 'path';
+
 import { DocumentIcon, FolderOpenIcon } from '@heroicons/react/solid';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   Button,
@@ -30,7 +31,6 @@ export default function SelectFolderSlideOver({
 
   const selectPath = useCallback(
     (newPath: string) => {
-      console.log(path);
       _selectPath(path.join(selectedPath, newPath));
     },
     [_selectPath, selectedPath],

@@ -1,4 +1,3 @@
-import React, { useContext, useEffect, useState } from 'react';
 import {
   InboxIcon,
   DownloadIcon,
@@ -10,6 +9,7 @@ import {
 import bytes from 'byte-size';
 import { format } from 'date-fns';
 import { produce } from 'immer';
+import React, { useContext, useEffect, useState, createContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -67,7 +67,7 @@ interface TreeContextType {
   setState: (state: TreeSync[]) => void;
   id: string;
 }
-const TreeContext = React.createContext<TreeContextType>({
+const TreeContext = createContext<TreeContextType>({
   state: [],
   setState(): void {
     // do nothing

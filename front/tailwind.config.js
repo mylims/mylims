@@ -1,12 +1,12 @@
-'use strict'
+'use strict';
 
 module.exports = {
   presets: [
     require('@zakodium/tailwind-config')({
       colors: {
-        neutral: 'cool-gray'
-      }
-    })
+        neutral: 'cool-gray',
+      },
+    }),
   ],
   theme: {
     minWidth: {
@@ -15,7 +15,7 @@ module.exports = {
       '1/3': '33%',
       '1/2': '50%',
       '3/4': '75%',
-      full: '100%'
-    }
-  }
-}
+      full: '100%',
+    },
+  },
+};

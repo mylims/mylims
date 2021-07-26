@@ -1,5 +1,5 @@
-import React from 'react';
 import { Field, FieldArray, FormikConfig } from 'formik';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import {
@@ -15,6 +15,7 @@ import {
   SubmitButton,
   ToggleField,
 } from '@components/tailwind-ui';
+
 import { omitDeep } from '../../utils/omit-deep';
 
 import PatternEdit from './PatternEdit';

@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 interface SVGRProps {
   title?: string;
   titleId?: string;

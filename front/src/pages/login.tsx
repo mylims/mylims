@@ -1,7 +1,8 @@
-import { useHistory } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import LocalAuthForm from '@components/LocalAuthForm';
+
 import AddonsContext from '../contexts/AddonsContext';
 import useAuth from '../hooks/useAuth';
 
@@ -32,14 +33,16 @@ export default function Login() {
     const promises = definedAddons.map((addon) =>
       loginAddons[addon as AddonsKeys](),
     );
-    Promise.all(promises).then((list) =>
-      setAddonsList(
-        list.map((module, i) => {
-          const Module = module.default;
-          return <Module key={definedAddons[i]} />;
-        }),
-      ),
-    );
+    Promise.all(promises)
+      .then((list) =>
+        setAddonsList(
+          list.map((module, i) => {
+            const Module = module.default;
+            return <Module key={definedAddons[i]} />;
+          }),
+        ),
+      )
+      .catch(() => setAddonsList([]));
   }, [addons]);
 
   return (

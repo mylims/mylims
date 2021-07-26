@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   CheckIcon,
   CogIcon,
@@ -7,6 +6,7 @@ import {
   XIcon,
   InboxIcon,
 } from '@heroicons/react/outline';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import ElnLayout from '@components/ElnLayout';
@@ -21,6 +21,7 @@ import {
   Td,
   Th,
 } from '@components/tailwind-ui';
+
 import {
   FileSyncOptionsQuery,
   useFileSyncOptionsQuery,

@@ -1,12 +1,6 @@
-import {
-  InMemoryCache,
-  ApolloClient,
-  ApolloLink,
-  Observable,
-} from '@apollo/client';
+import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
-import { useHistory } from 'react-router-dom';
 
 import { API_URL } from '../../env';
 import introspectionQueryResultData from '../generated/fragmentTypes';
