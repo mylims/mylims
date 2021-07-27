@@ -8,9 +8,8 @@ import {
   FormError,
   Card,
 } from '@components/tailwind-ui';
-
-import useAuth from '../../hooks/useAuth';
-import { useElnMutation } from '../../hooks/useElnQuery';
+import useAuth from '@hooks/useAuth';
+import { useElnMutation } from '@hooks/useElnQuery';
 
 const initialValues = {
   uid: '',

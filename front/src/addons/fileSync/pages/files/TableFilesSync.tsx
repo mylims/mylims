@@ -12,9 +12,8 @@ import { produce } from 'immer';
 import React, { useContext, useEffect, useState, createContext } from 'react';
 import { Link } from 'react-router-dom';
 
+import { FileStatusLabel } from '@components/FileStatusLabel';
 import {
-  Badge,
-  BadgeVariant,
   Button,
   Color,
   Roundness,
@@ -24,12 +23,12 @@ import {
   Th,
   Variant,
 } from '@components/tailwind-ui';
+import { FileStatus } from '@generated/graphql';
 
 import {
   FilesByConfigQuery,
-  FileStatus,
   useFilesByConfigLazyQuery,
-} from './generated/graphql';
+} from '../../generated/graphql';
 
 interface TableFilesSyncProps {
   data?: FilesByConfigQuery;
@@ -117,8 +116,8 @@ export default function TableFilesSync({
   return (
     <div>
       <Link to={`${id}?page=1`}>
-        <Button className="ml-2" title="Configuration">
-          First page
+        <Button className="mb-2" variant={Variant.secondary}>
+          Filters
         </Button>
       </Link>
 
@@ -312,30 +311,5 @@ function DirRow({ value }: { value: DirSync }) {
         ? value.children.map((child) => <Row key={child.id} value={child} />)
         : null}
     </>
-  );
-}
-
-function FileStatusLabel({ status }: { status: FileStatus }) {
-  let color: Color;
-  switch (status) {
-    case 'imported': {
-      color = Color.primary;
-      break;
-    }
-    case 'import_fail': {
-      color = Color.danger;
-      break;
-    }
-    default: {
-      color = Color.warning;
-      break;
-    }
-  }
-  return (
-    <Badge
-      variant={BadgeVariant.COLORED_BACKGROUND}
-      label={status}
-      color={color}
-    />
   );
 }

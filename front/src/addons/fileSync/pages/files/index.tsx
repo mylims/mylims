@@ -3,17 +3,18 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import ElnLayout from '@components/ElnLayout';
 import { Alert, AlertType } from '@components/tailwind-ui';
-import { useQuery } from 'src/hooks/useQuery';
+import { useFilterQuery } from 'src/hooks/useQuery';
 
-import TableFilesFiltered from '../TableFilesFiltered';
-import TableFilesSync from '../TableFilesSync';
 import {
   useFilesByConfigQuery,
   useFilesByConfigFilteredQuery,
   FilesSortField,
   SortDirection,
   FileStatus,
-} from '../generated/graphql';
+} from '../../generated/graphql';
+
+import TableFilesFiltered from './TableFilesFiltered';
+import TableFilesSync from './TableFilesSync';
 
 interface RouterQuery {
   id: string;
@@ -22,7 +23,7 @@ interface RouterQuery {
   maxSize?: string;
   minDate?: string;
   maxDate?: string;
-  status?: FileStatus;
+  status?: FileStatus[];
   sortField?: FilesSortField;
   sortDirection?: SortDirection;
 }
@@ -32,16 +33,7 @@ const PAGE_SIZE = 10;
 export default function ListFiles() {
   const router = useHistory();
   const { id } = useParams<{ id: string }>();
-  const {
-    page,
-    minSize = '0',
-    maxSize = '1000000000',
-    minDate = new Date(0).toISOString(),
-    maxDate = new Date().toISOString(),
-    status = 'imported',
-    sortField = FilesSortField.DATE,
-    sortDirection = SortDirection.DESC,
-  } = useQuery();
+  const [{ page, ...filters }] = useFilterQuery('');
 
   if (id === undefined) {
     void router.push('list');
@@ -49,19 +41,7 @@ export default function ListFiles() {
   }
 
   if (page) {
-    return (
-      <FilterTable
-        id={id}
-        page={page}
-        minSize={minSize}
-        maxSize={maxSize}
-        minDate={minDate}
-        maxDate={maxDate}
-        status={status as FileStatus}
-        sortField={sortField as FilesSortField}
-        sortDirection={sortDirection as SortDirection}
-      />
-    );
+    return <FilterTable id={id} page={page} {...filters} />;
   } else {
     return <NestedTable id={id} />;
   }
@@ -93,7 +73,6 @@ function FilterTable({
   sortDirection,
   minSize,
   maxSize,
-  status,
   ...filters
 }: Required<RouterQuery>) {
   const pageNum = parseInt(page, 10);
@@ -105,7 +84,6 @@ function FilterTable({
       filterBy: {
         minSize: parseInt(minSize, 10),
         maxSize: parseInt(maxSize, 10),
-        status: [status],
         ...filters,
       },
       sortBy: { field: sortField, direction: sortDirection },
