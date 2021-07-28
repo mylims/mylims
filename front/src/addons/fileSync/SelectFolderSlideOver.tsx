@@ -1,5 +1,3 @@
-import path from 'path';
-
 import { DocumentIcon, FolderOpenIcon } from '@heroicons/react/solid';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -22,6 +20,11 @@ interface SelectFolderSlideOverProps {
   returnPath: (path: string) => void;
 }
 
+function join(selectedPath: string, newPath: string) {
+  const url = new URL(selectedPath + newPath + '/', 'https://example.com');
+  return url.pathname;
+}
+
 export default function SelectFolderSlideOver({
   returnPath,
 }: SelectFolderSlideOverProps) {
@@ -31,9 +34,9 @@ export default function SelectFolderSlideOver({
 
   const selectPath = useCallback(
     (newPath: string) => {
-      _selectPath(path.join(selectedPath, newPath));
+      _selectPath((selectedPath) => join(selectedPath, newPath));
     },
-    [_selectPath, selectedPath],
+    [_selectPath],
   );
 
   const [getDirectoryTree, { loading, data }] = useDirectoryTreeLazyQuery();
