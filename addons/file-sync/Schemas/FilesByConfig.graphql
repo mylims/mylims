@@ -3,6 +3,7 @@ type Query {
 }
 
 interface SyncElementRevision {
+  id: String!
   size: Int!
   relativePath: String!
   date: DateTime!
@@ -23,7 +24,7 @@ enum FileStatus {
 }
 
 type SyncFileRevision implements SyncElementRevision {
-  revisionId: String!
+  id: String!
   countRevisions: Int!
   size: Int!
   relativePath: String!
@@ -35,6 +36,7 @@ type SyncFileRevision implements SyncElementRevision {
 }
 
 type SyncDirRevision implements SyncElementRevision {
+  id: String!
   size: Int!
   relativePath: String!
   date: DateTime!

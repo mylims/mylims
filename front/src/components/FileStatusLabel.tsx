@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 import { Badge, BadgeVariant, Color } from '@components/tailwind-ui';

@@ -22,7 +22,6 @@ import {
   Th,
 } from '@components/tailwind-ui';
 
-
 import {
   FileSyncOptionsQuery,
   useFileSyncOptionsQuery,

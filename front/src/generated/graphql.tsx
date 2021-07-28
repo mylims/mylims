@@ -83,8 +83,7 @@ export type FilesFilterInput = {
   status?: Maybe<Array<FileStatus>>;
 };
 
-export type FilesFilterPage = {
-  _id: Scalars['String'];
+export type FilesFlatPage = {
   files: Array<SyncFileRevision>;
   totalCount: Scalars['Int'];
 };
@@ -143,7 +142,7 @@ export type Query = {
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
   filesByConfig: SyncTreeRevision;
-  filesByConfigFiltered: FilesFilterPage;
+  filesByConfigFlat: FilesFlatPage;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -162,7 +161,7 @@ export type QueryFilesByConfigArgs = {
   path: Array<Scalars['String']>;
 };
 
-export type QueryFilesByConfigFilteredArgs = {
+export type QueryFilesByConfigFlatArgs = {
   id: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
@@ -195,6 +194,7 @@ export enum SortDirection {
 }
 
 export type SyncDirRevision = SyncElementRevision & {
+  id: Scalars['String'];
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   date: Scalars['DateTime'];
@@ -202,6 +202,7 @@ export type SyncDirRevision = SyncElementRevision & {
 };
 
 export type SyncElementRevision = {
+  id: Scalars['String'];
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   date: Scalars['DateTime'];
@@ -209,7 +210,7 @@ export type SyncElementRevision = {
 };
 
 export type SyncFileRevision = SyncElementRevision & {
-  revisionId: Scalars['String'];
+  id: Scalars['String'];
   countRevisions: Scalars['Int'];
   size: Scalars['Int'];
   relativePath: Scalars['String'];

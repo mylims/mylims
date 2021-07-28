@@ -83,8 +83,7 @@ export type FilesFilterInput = {
   status?: Maybe<Array<FileStatus>>;
 };
 
-export type FilesFilterPage = {
-  _id: Scalars['String'];
+export type FilesFlatPage = {
   files: Array<SyncFileRevision>;
   totalCount: Scalars['Int'];
 };
@@ -143,7 +142,7 @@ export type Query = {
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
   filesByConfig: SyncTreeRevision;
-  filesByConfigFiltered: FilesFilterPage;
+  filesByConfigFlat: FilesFlatPage;
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -162,7 +161,7 @@ export type QueryFilesByConfigArgs = {
   path: Array<Scalars['String']>;
 };
 
-export type QueryFilesByConfigFilteredArgs = {
+export type QueryFilesByConfigFlatArgs = {
   id: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
@@ -195,6 +194,7 @@ export enum SortDirection {
 }
 
 export type SyncDirRevision = SyncElementRevision & {
+  id: Scalars['String'];
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   date: Scalars['DateTime'];
@@ -202,6 +202,7 @@ export type SyncDirRevision = SyncElementRevision & {
 };
 
 export type SyncElementRevision = {
+  id: Scalars['String'];
   size: Scalars['Int'];
   relativePath: Scalars['String'];
   date: Scalars['DateTime'];
@@ -209,7 +210,7 @@ export type SyncElementRevision = {
 };
 
 export type SyncFileRevision = SyncElementRevision & {
-  revisionId: Scalars['String'];
+  id: Scalars['String'];
   countRevisions: Scalars['Int'];
   size: Scalars['Int'];
   relativePath: Scalars['String'];
@@ -294,12 +295,12 @@ export type DeleteFileSyncOptionMutation = {
 
 type RevisionFields_SyncDirRevision_Fragment = Pick<
   SyncDirRevision,
-  'size' | 'relativePath' | 'date' | 'path'
+  'id' | 'size' | 'relativePath' | 'date' | 'path'
 >;
 
 type RevisionFields_SyncFileRevision_Fragment = Pick<
   SyncFileRevision,
-  'size' | 'relativePath' | 'date' | 'path'
+  'id' | 'size' | 'relativePath' | 'date' | 'path'
 >;
 
 export type RevisionFieldsFragment =
@@ -327,7 +328,7 @@ export type FilesByConfigQuery = {
     };
 };
 
-export type FilesByConfigFilteredQueryVariables = Exact<{
+export type FilesByConfigFlatQueryVariables = Exact<{
   id: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
@@ -335,24 +336,21 @@ export type FilesByConfigFilteredQueryVariables = Exact<{
   sortBy?: Maybe<FilesSortInput>;
 }>;
 
-export type FilesByConfigFilteredQuery = {
-  filesByConfigFiltered: { __typename: 'FilesFilterPage' } & Pick<
-    FilesFilterPage,
-    '_id' | 'totalCount'
-  > & {
-      files: Array<
-        Pick<
-          SyncFileRevision,
-          | 'revisionId'
-          | 'filename'
-          | 'size'
-          | 'relativePath'
-          | 'status'
-          | 'date'
-          | 'downloadUrl'
-        >
-      >;
-    };
+export type FilesByConfigFlatQuery = {
+  filesByConfigFlat: Pick<FilesFlatPage, 'totalCount'> & {
+    files: Array<
+      { __typename: 'SyncFileRevision' } & Pick<
+        SyncFileRevision,
+        | 'id'
+        | 'filename'
+        | 'size'
+        | 'relativePath'
+        | 'status'
+        | 'date'
+        | 'downloadUrl'
+      >
+    >;
+  };
 };
 
 export type ReadyChecksQueryVariables = Exact<{ [key: string]: never }>;
@@ -379,6 +377,7 @@ export const FileSyncOptionFieldsFragmentDoc = gql`
 `;
 export const RevisionFieldsFragmentDoc = gql`
   fragment RevisionFields on SyncElementRevision {
+    id
     size
     relativePath
     date
@@ -796,26 +795,25 @@ export function refetchFilesByConfigQuery(
 ) {
   return { query: FilesByConfigDocument, variables: variables };
 }
-export const FilesByConfigFilteredDocument = gql`
-  query FilesByConfigFiltered(
+export const FilesByConfigFlatDocument = gql`
+  query FilesByConfigFlat(
     $id: String!
     $limit: Int
     $skip: Int
     $filterBy: FilesFilterInput
     $sortBy: FilesSortInput
   ) {
-    filesByConfigFiltered(
+    filesByConfigFlat(
       id: $id
       limit: $limit
       skip: $skip
       filterBy: $filterBy
       sortBy: $sortBy
     ) {
-      __typename
-      _id
       totalCount
       files {
-        revisionId
+        __typename
+        id
         filename
         size
         relativePath
@@ -828,16 +826,16 @@ export const FilesByConfigFilteredDocument = gql`
 `;
 
 /**
- * __useFilesByConfigFilteredQuery__
+ * __useFilesByConfigFlatQuery__
  *
- * To run a query within a React component, call `useFilesByConfigFilteredQuery` and pass it any options that fit your needs.
- * When your component renders, `useFilesByConfigFilteredQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFilesByConfigFlatQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFilesByConfigFlatQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFilesByConfigFilteredQuery({
+ * const { data, loading, error } = useFilesByConfigFlatQuery({
  *   variables: {
  *      id: // value for 'id'
  *      limit: // value for 'limit'
@@ -847,44 +845,44 @@ export const FilesByConfigFilteredDocument = gql`
  *   },
  * });
  */
-export function useFilesByConfigFilteredQuery(
+export function useFilesByConfigFlatQuery(
   baseOptions: ApolloReactHooks.QueryHookOptions<
-    FilesByConfigFilteredQuery,
-    FilesByConfigFilteredQueryVariables
+    FilesByConfigFlatQuery,
+    FilesByConfigFlatQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return ApolloReactHooks.useQuery<
-    FilesByConfigFilteredQuery,
-    FilesByConfigFilteredQueryVariables
-  >(FilesByConfigFilteredDocument, options);
+    FilesByConfigFlatQuery,
+    FilesByConfigFlatQueryVariables
+  >(FilesByConfigFlatDocument, options);
 }
-export function useFilesByConfigFilteredLazyQuery(
+export function useFilesByConfigFlatLazyQuery(
   baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    FilesByConfigFilteredQuery,
-    FilesByConfigFilteredQueryVariables
+    FilesByConfigFlatQuery,
+    FilesByConfigFlatQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return ApolloReactHooks.useLazyQuery<
-    FilesByConfigFilteredQuery,
-    FilesByConfigFilteredQueryVariables
-  >(FilesByConfigFilteredDocument, options);
+    FilesByConfigFlatQuery,
+    FilesByConfigFlatQueryVariables
+  >(FilesByConfigFlatDocument, options);
 }
-export type FilesByConfigFilteredQueryHookResult = ReturnType<
-  typeof useFilesByConfigFilteredQuery
+export type FilesByConfigFlatQueryHookResult = ReturnType<
+  typeof useFilesByConfigFlatQuery
 >;
-export type FilesByConfigFilteredLazyQueryHookResult = ReturnType<
-  typeof useFilesByConfigFilteredLazyQuery
+export type FilesByConfigFlatLazyQueryHookResult = ReturnType<
+  typeof useFilesByConfigFlatLazyQuery
 >;
-export type FilesByConfigFilteredQueryResult = Apollo.QueryResult<
-  FilesByConfigFilteredQuery,
-  FilesByConfigFilteredQueryVariables
+export type FilesByConfigFlatQueryResult = Apollo.QueryResult<
+  FilesByConfigFlatQuery,
+  FilesByConfigFlatQueryVariables
 >;
-export function refetchFilesByConfigFilteredQuery(
-  variables?: FilesByConfigFilteredQueryVariables,
+export function refetchFilesByConfigFlatQuery(
+  variables?: FilesByConfigFlatQueryVariables,
 ) {
-  return { query: FilesByConfigFilteredDocument, variables: variables };
+  return { query: FilesByConfigFlatDocument, variables: variables };
 }
 export const ReadyChecksDocument = gql`
   query ReadyChecks {

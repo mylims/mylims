@@ -1,22 +1,21 @@
-query FilesByConfigFiltered(
+query FilesByConfigFlat(
   $id: String!
   $limit: Int
   $skip: Int
   $filterBy: FilesFilterInput
   $sortBy: FilesSortInput
 ) {
-  filesByConfigFiltered(
+  filesByConfigFlat(
     id: $id
     limit: $limit
     skip: $skip
     filterBy: $filterBy
     sortBy: $sortBy
   ) {
-    __typename
-    _id
     totalCount
     files {
-      revisionId
+      __typename
+      id
       filename
       size
       relativePath

@@ -1,11 +1,11 @@
 type Query {
-  filesByConfigFiltered(
+  filesByConfigFlat(
     id: String!
     limit: Int
     skip: Int
     filterBy: FilesFilterInput
     sortBy: FilesSortInput
-  ): FilesFilterPage!
+  ): FilesFlatPage!
 }
 
 input FilesFilterInput {
@@ -32,8 +32,7 @@ input FilesSortInput {
   field: FilesSortField!
 }
 
-type FilesFilterPage {
-  _id: String!
+type FilesFlatPage {
   files: [SyncFileRevision!]!
   totalCount: Int!
 }

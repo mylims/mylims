@@ -2,3 +2,4 @@ src/components/tailwind-ui
 generated
 postcss.config.js
 tailwind.config.js
+dist

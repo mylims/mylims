@@ -7,7 +7,7 @@ import { SyncFile } from '../Models/SyncFile';
 
 const resolvers: GqlResolvers = {
   Query: {
-    async filesByConfigFiltered(_, { id, limit, skip, filterBy, sortBy }) {
+    async filesByConfigFlat(_, { id, limit, skip, filterBy, sortBy }) {
       const {
         minSize = 0,
         maxSize = Infinity,
@@ -39,7 +39,7 @@ const resolvers: GqlResolvers = {
             relativePath,
             path,
             filename,
-            revisionId: id,
+            id,
             countRevisions: revisions.length,
             size,
             status,
@@ -49,13 +49,6 @@ const resolvers: GqlResolvers = {
         },
       );
       return {
-        _id: [
-          minSize,
-          maxSize,
-          minDate?.toLocaleDateString('fr-ch') || '',
-          maxDate?.toLocaleDateString('fr-ch') || '',
-          status,
-        ].join(','),
         files,
         totalCount,
       };

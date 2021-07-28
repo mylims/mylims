@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import ElnLayout from '@components/ElnLayout';
 import { Alert, AlertType } from '@components/tailwind-ui';
 
-
 import FileSyncConfigForm from '../FileSyncConfigForm';
 import {
   NewFileSyncOptionInput,
