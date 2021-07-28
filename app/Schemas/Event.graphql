@@ -1,0 +1,34 @@
+type Query {
+  eventsByTopic(topic: String!): [Event!]!
+  eventsByTopicFrom(topic: String!, from: Int!): [Event!]!
+}
+
+type Mutation {
+  createEvent(topic: String!, emitter: String): Event!
+  changeStatusEvent(
+    topic: String!
+    id: Int!
+    status: EventStatus!
+    emitter: String
+  ): Event!
+}
+
+enum EventStatus {
+  open
+  taken
+  failed
+  done
+  canceled
+}
+
+type EventHistory {
+  status: EventStatus!
+  date: DateTime!
+  emitter: String
+}
+
+type Event {
+  id: Int!
+  topic: String!
+  history: [EventHistory!]!
+}
