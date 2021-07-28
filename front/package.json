@@ -49,6 +49,7 @@
     "@graphql-codegen/typescript-operations": "^1.18.2",
     "@graphql-codegen/typescript-react-apollo": "^2.2.7",
     "@types/apollo-upload-client": "^14.1.0",
+    "@types/minimatch": "^3.0.5",
     "@types/node": "^16.3.2",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",

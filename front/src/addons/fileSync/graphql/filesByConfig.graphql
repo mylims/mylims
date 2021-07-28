@@ -1,4 +1,5 @@
 fragment RevisionFields on SyncElementRevision {
+  id
   size
   relativePath
   date

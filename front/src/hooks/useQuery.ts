@@ -2,7 +2,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { FilesSortField, FileStatus, SortDirection } from '@generated/graphql';
 
-
 interface FilterQuery {
   page?: string;
   minSize: string;

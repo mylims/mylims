@@ -1,7 +1,7 @@
 import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/outline';
 import bytes from 'byte-size';
 import { format } from 'date-fns';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { FileStatusLabel, getTagColor } from '@components/FileStatusLabel';
@@ -21,30 +21,28 @@ import {
 import { FileStatus } from '@generated/graphql';
 import { useFilterQuery } from '@hooks/useQuery';
 
-
-
 import {
-  FilesByConfigFilteredQuery,
+  FilesByConfigFlatQuery,
   SyncFileRevision,
 } from '../../generated/graphql';
 
 interface TableFilesFilteredProps {
   id: string;
-  data?: FilesByConfigFilteredQuery;
+  data?: FilesByConfigFlatQuery;
   page: number;
   pageSize: number;
   loading: boolean;
 }
 type File = Pick<
   SyncFileRevision,
-  | 'revisionId'
+  | 'id'
   | 'filename'
   | 'size'
   | 'relativePath'
   | 'status'
   | 'date'
   | 'downloadUrl'
-> & { id: string };
+>;
 interface TagsMultiSearch {
   value: FileStatus;
   label: string;
@@ -57,11 +55,7 @@ export default function TableFilesFiltered({
   pageSize,
   loading,
 }: TableFilesFilteredProps) {
-  const { files = [], totalCount = 0 } = data?.filesByConfigFiltered ?? {};
-  const tableData = useMemo(
-    () => files.map((file) => ({ id: file.revisionId, ...file })),
-    [files],
-  );
+  const { files = [], totalCount = 0 } = data?.filesByConfigFlat ?? {};
 
   const selectTags = useMultiSearchSelect({
     options: [
@@ -150,7 +144,7 @@ export default function TableFilesFiltered({
         Header={Header}
         Empty={Empty}
         Tr={Row}
-        data={tableData}
+        data={files}
         pagination={pagination}
       />
     </div>

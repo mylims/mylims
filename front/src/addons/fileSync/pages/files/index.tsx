@@ -7,7 +7,7 @@ import { useFilterQuery } from 'src/hooks/useQuery';
 
 import {
   useFilesByConfigQuery,
-  useFilesByConfigFilteredQuery,
+  useFilesByConfigFlatQuery,
   FilesSortField,
   SortDirection,
   FileStatus,
@@ -76,7 +76,7 @@ function FilterTable({
   ...filters
 }: Required<RouterQuery>) {
   const pageNum = parseInt(page, 10);
-  const { data, loading, error } = useFilesByConfigFilteredQuery({
+  const { data, loading, error } = useFilesByConfigFlatQuery({
     variables: {
       id,
       skip: (pageNum - 1) * PAGE_SIZE,

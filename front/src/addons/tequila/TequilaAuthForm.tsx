@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Button, Card } from '@components/tailwind-ui';
 
-
 import { API_URL } from '../../../env';
 
 export default function TequilaAuthForm() {

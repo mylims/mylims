@@ -11,7 +11,6 @@ import {
   useOnOff,
 } from '@components/tailwind-ui';
 
-
 import {
   DirectoryEntryType,
   useDirectoryTreeLazyQuery,
@@ -22,7 +21,7 @@ interface SelectFolderSlideOverProps {
 }
 
 function join(selectedPath: string, newPath: string) {
-  const url = new URL(`${selectedPath + newPath }/`, 'https://example.com');
+  const url = new URL(`${selectedPath + newPath}/`, 'https://example.com');
   return url.pathname;
 }
 
