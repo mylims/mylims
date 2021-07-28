@@ -1,7 +1,9 @@
 {
   "root": true,
   "settings": {
-    "import/resolver": { "typescript": {} }
+    "import/resolver": {
+      "typescript": { "alwaysTryTypes": true }
+    }
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -9,5 +11,8 @@
     "tsconfigRootDir": "./"
   },
   "plugins": ["@typescript-eslint", "import"],
-  "extends": "@zakodium/eslint-config/typescript-react"
+  "extends": "@zakodium/eslint-config/typescript-react",
+  "rules": {
+    "import/no-unresolved": 0
+  }
 }
