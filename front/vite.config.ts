@@ -11,7 +11,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        fileSync: resolve(__dirname, 'src/addons/fileSync/pages/index.html'),
       },
     },
   },
