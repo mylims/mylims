@@ -20,8 +20,7 @@ const resolvers: GqlResolvers = {
       });
     },
     async fileSyncOption(_, { id }) {
-      const fileSyncOption = await FileSyncOption.findBy(
-        '_id',
+      const fileSyncOption = await FileSyncOption.find(
         new ObjectId(id),
       );
       if (!fileSyncOption) {
@@ -41,8 +40,7 @@ const resolvers: GqlResolvers = {
       });
     },
     async editFileSyncOption(_, { input }) {
-      const fileSyncOption = await FileSyncOption.findBy(
-        '_id',
+      const fileSyncOption = await FileSyncOption.find(
         new ObjectId(input.id),
       );
       if (!fileSyncOption) {
@@ -62,8 +60,7 @@ const resolvers: GqlResolvers = {
       return fileSyncOption;
     },
     async deleteFileSyncOption(_, { input }) {
-      const fileSyncOption = await FileSyncOption.findBy(
-        '_id',
+      const fileSyncOption = await FileSyncOption.find(
         new ObjectId(input.id),
       );
       if (!fileSyncOption) {
