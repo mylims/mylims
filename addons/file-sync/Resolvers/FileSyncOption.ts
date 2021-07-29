@@ -20,9 +20,7 @@ const resolvers: GqlResolvers = {
       });
     },
     async fileSyncOption(_, { id }) {
-      const fileSyncOption = await FileSyncOption.find(
-        new ObjectId(id),
-      );
+      const fileSyncOption = await FileSyncOption.find(new ObjectId(id));
       if (!fileSyncOption) {
         throw new NotFoundError('file sync option not found');
       }
@@ -40,9 +38,7 @@ const resolvers: GqlResolvers = {
       });
     },
     async editFileSyncOption(_, { input }) {
-      const fileSyncOption = await FileSyncOption.find(
-        new ObjectId(input.id),
-      );
+      const fileSyncOption = await FileSyncOption.find(new ObjectId(input.id));
       if (!fileSyncOption) {
         throw new NotFoundError('file sync option not found');
       }
@@ -60,9 +56,7 @@ const resolvers: GqlResolvers = {
       return fileSyncOption;
     },
     async deleteFileSyncOption(_, { input }) {
-      const fileSyncOption = await FileSyncOption.find(
-        new ObjectId(input.id),
-      );
+      const fileSyncOption = await FileSyncOption.find(new ObjectId(input.id));
       if (!fileSyncOption) {
         throw new NotFoundError('file sync option not found');
       }
