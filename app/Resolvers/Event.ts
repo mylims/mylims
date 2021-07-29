@@ -8,21 +8,23 @@ function eventMapper({ _id: { id, topic }, history }: Event) {
 const resolvers: GqlResolvers = {
   Query: {
     async eventsByTopic(_, { topic }) {
-      const events = await (await Event.find({ '_id.topic': topic })).all();
+      const events = await Event.query({ '_id.topic': topic }).all();
       return events.map(eventMapper);
     },
 
     async eventsByTopicFrom(_, { topic, from }) {
-      const events = await (
-        await Event.find({ '_id.topic': topic, '_id.id': { $gte: from } })
-      ).all();
+      const events = await Event.query({
+        '_id.topic': topic,
+        '_id.id': { $gte: from },
+      }).all();
       return events.map(eventMapper);
     },
   },
 
   Mutation: {
     async createEvent(_, { topic, emitter }) {
-      const previousEvent = await (await Event.getCollection())
+      const events = await Event.getCollection();
+      const previousEvent = await events
         .find({ '_id.topic': topic })
         .sort({ '_id.id': -1 })
         .limit(1)
@@ -46,7 +48,7 @@ const resolvers: GqlResolvers = {
     },
 
     async changeStatusEvent(_, { topic, emitter, id, status }) {
-      const event = await Event.findById({ id, topic });
+      const event = await Event.findBy('_id', { id, topic });
       if (!event) throw new Error(`Event not found with id: ${topic}_${id}`);
 
       event.history.unshift({

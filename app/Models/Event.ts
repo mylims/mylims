@@ -1,4 +1,4 @@
-import { Model } from '@ioc:Mongodb/Model';
+import { BaseModel, field } from '@ioc:Zakodium/Mongodb/Odm';
 
 import { GqlEventStatus } from 'App/graphql';
 
@@ -13,6 +13,8 @@ interface EventHistory {
   emitter?: string;
 }
 
-export default class User extends Model<EventId> {
+export default class Event extends BaseModel {
+  @field()
+  public _id: EventId;
   public history: EventHistory[];
 }
