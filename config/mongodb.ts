@@ -1,10 +1,10 @@
-import { MongodbConfig } from '@ioc:Mongodb/Database';
+import { MongodbConfig } from '@ioc:Zakodium/Mongodb/Database';
 
 import { getConfig } from '../app/AppConfig';
 
 const mongodb = getConfig('mongodb');
 const config: MongodbConfig = {
-  default: 'mongodb',
+  connection: 'mongodb',
   connections: { mongodb },
 };
 

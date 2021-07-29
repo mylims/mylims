@@ -14,7 +14,7 @@ export default class AuthController {
   }: HttpContextContract) {
     const { email, password } = await request.validate(LoginValidator);
 
-    const credential = await Credential.findOne({ email });
+    const credential = await Credential.findBy('email', email);
     if (
       credential === null ||
       !(await Hash.verify(credential.hash, password))
@@ -24,7 +24,7 @@ export default class AuthController {
       });
     }
 
-    const user = await User.findOne({ emails: email });
+    const user = await User.findBy('emails', email);
     if (user === null) {
       return response.notFound({ errors: [{ message: 'User not found' }] });
     }

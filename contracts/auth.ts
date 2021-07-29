@@ -1,7 +1,7 @@
 import {
   MongodbModelAuthProviderContract,
   MongodbModelAuthProviderConfig,
-} from '@ioc:Mongodb/Model';
+} from '@ioc:Zakodium/Mongodb/Odm';
 
 import User from 'App/Models/User';
 

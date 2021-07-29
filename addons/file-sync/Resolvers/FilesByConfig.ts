@@ -1,5 +1,5 @@
 import Env from '@ioc:Adonis/Core/Env';
-import ObjectId from '@ioc:Mongodb/ObjectId';
+import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import { GqlResolvers, GqlSyncFileRevision } from 'App/graphql';
 
@@ -15,12 +15,10 @@ const resolvers: GqlResolvers = {
   Query: {
     async filesByConfig(_, { configId, path }) {
       // Queries for files by configId and path
-      const syncFiles = await (
-        await SyncFile.find({
-          '_id.configId': new ObjectId(configId),
-          path,
-        })
-      ).all();
+      const syncFiles = await SyncFile.query({
+        '_id.configId': new ObjectId(configId),
+        path,
+      }).all();
       const files = syncFiles.map<GqlSyncFileRevision>(
         ({ _id: { relativePath }, revisions, filename }) => {
           const latestRevision = revisions[0];

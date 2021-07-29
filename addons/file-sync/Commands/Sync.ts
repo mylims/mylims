@@ -6,7 +6,7 @@ import { BaseCommand, flags } from '@adonisjs/core/build/standalone';
 import { v4 as uuid } from '@lukeed/uuid';
 import { FileInfo, FileSynchronizer } from 'fs-synchronizer';
 
-import ObjectId from '@ioc:Mongodb/ObjectId';
+import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import type { FileSyncOption } from '../Models/FileSyncOption';
 import type { SyncFile, SyncState } from '../Models/SyncFile';
@@ -66,7 +66,8 @@ export default class Sync extends BaseCommand {
         return;
       }
 
-      const fileSyncOption = await this.deps.FileSyncOption.findById(
+      const fileSyncOption = await this.deps.FileSyncOption.findBy(
+        '_id',
         new ObjectId(this.fileSyncOptionId),
       );
       if (fileSyncOption === null) {
@@ -83,9 +84,9 @@ export default class Sync extends BaseCommand {
 
       fileSyncOptionsToProcess.push(fileSyncOption);
     } else {
-      const fileSyncOptions = await (
-        await this.deps.FileSyncOption.find({ enabled: true })
-      ).all();
+      const fileSyncOptions = await this.deps.FileSyncOption.query({
+        enabled: true,
+      }).all();
       fileSyncOptionsToProcess.push(...fileSyncOptions);
     }
 
@@ -124,7 +125,7 @@ export default class Sync extends BaseCommand {
     );
 
     const { filename } = fileInfo;
-    const file = await this.deps.SyncFile.findOne({ filename });
+    const file = await this.deps.SyncFile.findBy('filename', filename);
     if (file === null) {
       return this.handleUnknownFile(fileInfo, fileSyncOption);
     }
