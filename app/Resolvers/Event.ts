@@ -23,15 +23,12 @@ const resolvers: GqlResolvers = {
 
   Mutation: {
     async createEvent(_, { topic, emitter }) {
-      const events = await Event.getCollection();
-      const previousEvent = await events
-        .find({ '_id.topic': topic })
-        .sort({ '_id.id': -1 })
-        .limit(1)
-        .toArray();
+      const previousEvent = await Event.query(
+        { '_id.topic': topic },
+        { driverOptions: { sort: { '_id.id': -1 } } },
+      ).first();
 
-      const nextId =
-        previousEvent.length === 1 ? previousEvent[0]._id.id + 1 : 0;
+      const nextId = previousEvent ? previousEvent._id.id + 1 : 0;
 
       const newEvent = await Event.create({
         _id: { topic, id: nextId },
