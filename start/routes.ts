@@ -17,10 +17,10 @@ Route.group(() => {
     const { lastname, firstname, email } = request.all();
     const credential = await Credential.create({ email });
     await User.create({
-      lastname,
-      firstname,
-      email,
-      auth: { local: credential._id },
+      lastName: lastname as string,
+      firstName: firstname as string,
+      emails: [email],
+      authMethods: { local: credential._id as string },
     });
 
     return Route.makeSignedUrl('setPassword', {
@@ -33,7 +33,7 @@ Route.group(() => {
   Route.post('/password/:email', async ({ request, response, params }) => {
     const { password } = request.all();
     const { email } = params;
-    const credentials = await Credential.findOne({ email });
+    const credentials = await Credential.findBy('email', email);
     if (credentials === null) return response.notFound(email);
     credentials.hash = await Hash.make(password);
     return credentials.save();

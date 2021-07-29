@@ -1,7 +1,6 @@
 import { Pattern, SyncOptions } from 'fs-synchronizer';
 
-import { Model } from '@ioc:Mongodb/Model';
-import ObjectId from '@ioc:Mongodb/ObjectId';
+import { ObjectId, BaseModel, field } from '@ioc:Zakodium/Mongodb/Odm';
 
 export interface ReadyCheck {
   name: string;
@@ -9,7 +8,7 @@ export interface ReadyCheck {
 }
 
 export interface FileSyncOptionFields extends SyncOptions {
-  id?: ObjectId;
+  id: ObjectId;
   root: string;
   enabled: boolean;
   maxDepth: number;
@@ -17,9 +16,11 @@ export interface FileSyncOptionFields extends SyncOptions {
   readyChecks: ReadyCheck[];
 }
 
-export class FileSyncOption extends Model implements FileSyncOptionFields {
+export class FileSyncOption extends BaseModel {
   public static collectionName = 'fileSync.syncOptions';
 
+  @field()
+  public id: ObjectId;
   public root: string;
   public enabled: boolean;
   public maxDepth: number;

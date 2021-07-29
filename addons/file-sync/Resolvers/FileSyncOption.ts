@@ -1,6 +1,6 @@
 import { Pattern } from 'fs-synchronizer';
 
-import ObjectId from '@ioc:Mongodb/ObjectId';
+import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import { NotFoundError } from 'App/Exceptions/ApolloErrors';
 import { GqlResolvers } from 'App/graphql';
@@ -12,9 +12,7 @@ import { deserializeReadyChecks, serializeReadyChecks } from './ReadyCheck';
 const resolvers: GqlResolvers = {
   Query: {
     async fileSyncOptions() {
-      const fileSyncOptions = await FileSyncOption.find({});
-      const allFileSyncOptions = await fileSyncOptions.all();
-      return allFileSyncOptions.map((fileSyncOption) => {
+      return (await FileSyncOption.all()).map((fileSyncOption) => {
         fileSyncOption.readyChecks = serializeReadyChecks(
           fileSyncOption.readyChecks,
         );
@@ -22,7 +20,10 @@ const resolvers: GqlResolvers = {
       });
     },
     async fileSyncOption(_, { id }) {
-      const fileSyncOption = await FileSyncOption.findById(new ObjectId(id));
+      const fileSyncOption = await FileSyncOption.findBy(
+        '_id',
+        new ObjectId(id),
+      );
       if (!fileSyncOption) {
         throw new NotFoundError('file sync option not found');
       }
@@ -40,7 +41,8 @@ const resolvers: GqlResolvers = {
       });
     },
     async editFileSyncOption(_, { input }) {
-      const fileSyncOption = await FileSyncOption.findById(
+      const fileSyncOption = await FileSyncOption.findBy(
+        '_id',
         new ObjectId(input.id),
       );
       if (!fileSyncOption) {
@@ -60,7 +62,8 @@ const resolvers: GqlResolvers = {
       return fileSyncOption;
     },
     async deleteFileSyncOption(_, { input }) {
-      const fileSyncOption = await FileSyncOption.findById(
+      const fileSyncOption = await FileSyncOption.findBy(
+        '_id',
         new ObjectId(input.id),
       );
       if (!fileSyncOption) {
@@ -69,8 +72,7 @@ const resolvers: GqlResolvers = {
 
       await fileSyncOption.delete();
 
-      const fileSyncOptions = await FileSyncOption.find({});
-      return fileSyncOptions.all();
+      return FileSyncOption.all();
     },
   },
 };

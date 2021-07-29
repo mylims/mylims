@@ -13,7 +13,7 @@ import isMyFileReady, {
 } from 'is-my-file-ready';
 
 import type DataDrive from '@ioc:DataDrive';
-import ObjectId from '@ioc:Mongodb/ObjectId';
+import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import type { File } from '../Models/File';
 import type { FileSyncOption, ReadyCheck } from '../Models/FileSyncOption';
@@ -88,7 +88,8 @@ export default class Import extends BaseCommand {
       }
 
       const fileSyncOptionId = new ObjectId(this.fileSyncOptionId);
-      const fileSyncOption = await this.deps.FileSyncOption.findById(
+      const fileSyncOption = await this.deps.FileSyncOption.findBy(
+        'id',
         fileSyncOptionId,
       );
       if (fileSyncOption == null) {
@@ -100,10 +101,10 @@ export default class Import extends BaseCommand {
       fileSyncOptionsToProcess.push(fileSyncOption);
     } else {
       this.logger.debug('no file sync option id found');
-      const fileSyncOptions = await (
-        await this.deps.FileSyncOption.find({ enabled: true })
-      ).all();
-      this.logger.debug(`pushing ${fileSyncOptions.length} to process`);
+      const fileSyncOptions = await this.deps.FileSyncOption.query({
+        enabled: true,
+      }).all();
+      this.logger.debug(`pushing ${fileSyncOptions?.length} to process`);
       fileSyncOptionsToProcess.push(...fileSyncOptions);
     }
 
@@ -116,7 +117,7 @@ export default class Import extends BaseCommand {
     const fileSyncOptionId = fileSyncOption.id.toHexString();
     const root = fileSyncOption.root;
     this.logger.info('handling file sync option', fileSyncOptionId);
-    const syncFiles = await this.deps.SyncFile.find({
+    const syncFiles = this.deps.SyncFile.query({
       '_id.configId': fileSyncOption.id,
       'revisions.0.status': {
         $in: [this.deps.SyncState.PENDING, this.deps.SyncState.IMPORT_FAIL],

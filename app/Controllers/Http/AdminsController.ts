@@ -35,7 +35,7 @@ export default class AdminsController {
   public async auth({ request, response, session }: HttpContextContract) {
     const pass = request.input('password');
 
-    // Pasword validation
+    // Password validation
     if (!adminPass) {
       session.flash('error', 'Missing admin password');
       return response.redirect().back();
@@ -95,9 +95,8 @@ export default class AdminsController {
   ): Promise<{ status: boolean }> {
     try {
       const connection = await MongoClient.connect(mongoUrl);
-      const status = connection.isConnected();
       await connection.close();
-      return { status };
+      return { status: true };
     } catch (error) {
       return { status: false };
     }

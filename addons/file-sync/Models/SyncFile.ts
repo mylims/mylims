@@ -1,7 +1,6 @@
 import { FileInfo } from 'fs-synchronizer';
 
-import { Model } from '@ioc:Mongodb/Model';
-import ObjectId from '@ioc:Mongodb/ObjectId';
+import { ObjectId, BaseModel, field } from '@ioc:Zakodium/Mongodb/Odm';
 
 import { GqlFileStatus } from 'App/graphql';
 
@@ -19,9 +18,11 @@ export interface Revision
 
 export const SyncState = GqlFileStatus;
 
-export class SyncFile extends Model<FileId> {
+export class SyncFile extends BaseModel {
   public static collectionName = 'fileSync.syncFiles';
 
+  @field()
+  public _id: FileId;
   public filename: string;
   public path: string[];
   public revisions: Revision[];

@@ -1,5 +1,5 @@
 import Env from '@ioc:Adonis/Core/Env';
-import ObjectId from '@ioc:Mongodb/ObjectId';
+import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import { GqlResolvers, GqlSyncFileRevision, GqlFileStatus } from 'App/graphql';
 

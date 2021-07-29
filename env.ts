@@ -7,4 +7,7 @@ export default Env.rules({
   ADMIN_PASSWORD: Env.schema.string(),
   BACKEND_URL: Env.schema.string(),
   FRONTEND_URL: Env.schema.string(),
+  MONGODB_CONNECTION: Env.schema.string(),
+  MONGODB_URL: Env.schema.string(),
+  MONGODB_DATABASE: Env.schema.string(),
 });

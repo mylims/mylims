@@ -14,7 +14,7 @@ export default class UserManager {
   }
 
   private getUserByUID(authProvider: string, id: string): Promise<User | null> {
-    return User.findOne({ [`authMethods.${authProvider}`]: id });
+    return User.findBy(`authMethods.${authProvider}`, id);
   }
 
   private async getUserByEmail(
@@ -22,7 +22,7 @@ export default class UserManager {
     id: string,
     email: string,
   ): Promise<User | null> {
-    const user = await User.findOne({ emails: email });
+    const user = await User.findBy('emails', email);
     if (user === null) {
       return null;
     } else {

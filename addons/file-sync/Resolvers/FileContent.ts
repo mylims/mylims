@@ -8,11 +8,11 @@ import { SyncFile } from '../Models/SyncFile';
 const resolvers: GqlResolvers = {
   Query: {
     async fileByPath(_, { path }) {
-      const [syncFile] = await (
-        await SyncFile.find({ '_id.relativePath': path })
-      ).all();
+      const [syncFile] = await SyncFile.query({
+        '_id.relativePath': path,
+      }).all();
       const id = syncFile.revisions[0].id;
-      const file = await File.findByIdOrThrow(id);
+      const file = await File.findByOrFail('_id', id);
       const urlPath = 'addons/file-sync/file-content';
       return {
         filename: file.filename,
