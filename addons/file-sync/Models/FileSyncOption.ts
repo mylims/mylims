@@ -20,7 +20,7 @@ export class FileSyncOption extends BaseModel {
   public static collectionName = 'fileSync.syncOptions';
 
   @field()
-  public id: ObjectId;
+  public _id: ObjectId;
   public root: string;
   public enabled: boolean;
   public maxDepth: number;

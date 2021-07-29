@@ -88,8 +88,7 @@ export default class Import extends BaseCommand {
       }
 
       const fileSyncOptionId = new ObjectId(this.fileSyncOptionId);
-      const fileSyncOption = await this.deps.FileSyncOption.findBy(
-        'id',
+      const fileSyncOption = await this.deps.FileSyncOption.find(
         fileSyncOptionId,
       );
       if (fileSyncOption == null) {
@@ -104,7 +103,7 @@ export default class Import extends BaseCommand {
       const fileSyncOptions = await this.deps.FileSyncOption.query({
         enabled: true,
       }).all();
-      this.logger.debug(`pushing ${fileSyncOptions?.length} to process`);
+      this.logger.debug(`pushing ${fileSyncOptions.length} to process`);
       fileSyncOptionsToProcess.push(...fileSyncOptions);
     }
 

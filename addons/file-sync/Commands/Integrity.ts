@@ -87,7 +87,7 @@ export default class Import extends BaseCommand {
         continue;
       }
 
-      const foundFile = await this.deps.File.findBy('_id', name);
+      const foundFile = await this.deps.File.find(name);
       if (foundFile === null) {
         const result = await this.promptFileForDeletion(
           path,
@@ -107,7 +107,7 @@ export default class Import extends BaseCommand {
 
   private async checkDatabaseIntegrity() {
     let skippedDeletions = 0;
-    for (const file of await this.deps.File.all()) {
+    for await (const file of this.deps.File.query()) {
       this.logger.info('checking', undefined, file.id);
       let size = 0;
       try {

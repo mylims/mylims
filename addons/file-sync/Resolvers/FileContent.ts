@@ -12,7 +12,7 @@ const resolvers: GqlResolvers = {
         '_id.relativePath': path,
       }).all();
       const id = syncFile.revisions[0].id;
-      const file = await File.findByOrFail('_id', id);
+      const file = await File.findOrFail(id);
       const urlPath = 'addons/file-sync/file-content';
       return {
         filename: file.filename,

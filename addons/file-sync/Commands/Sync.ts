@@ -66,8 +66,7 @@ export default class Sync extends BaseCommand {
         return;
       }
 
-      const fileSyncOption = await this.deps.FileSyncOption.findBy(
-        '_id',
+      const fileSyncOption = await this.deps.FileSyncOption.find(
         new ObjectId(this.fileSyncOptionId),
       );
       if (fileSyncOption === null) {

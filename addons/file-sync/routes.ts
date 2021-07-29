@@ -20,7 +20,7 @@ Route.get(
     }
 
     // Query file content
-    const file = await File.findByOrFail('_id', id);
+    const file = await File.findOrFail(id);
     const content = DataDrive.drive('local').getStream(file);
 
     response.header(
