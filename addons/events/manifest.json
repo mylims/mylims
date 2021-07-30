@@ -1,0 +1,7 @@
+{
+  "displayName": "Events management",
+  "description": "System for pub/sub events and processors",
+  "schemas": "./Schemas",
+  "resolvers": "./Resolvers",
+  "routes": "./routes"
+}
