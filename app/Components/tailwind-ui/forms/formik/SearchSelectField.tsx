@@ -8,7 +8,7 @@ import {
 } from '../basic/SearchSelect';
 import { SimpleSelectOption } from '../basic/Select';
 
-interface SearchSelectFieldProps<OptionType>
+export interface SearchSelectFieldProps<OptionType>
   extends Omit<
     SearchSelectProps<OptionType>,
     'selected' | 'onSelect' | 'error'
@@ -16,7 +16,7 @@ interface SearchSelectFieldProps<OptionType>
   name: string;
 }
 
-interface SimpleSearchSelectFieldProps<OptionType>
+export interface SimpleSearchSelectFieldProps<OptionType>
   extends Omit<
     SimpleSearchSelectProps<OptionType>,
     'selected' | 'onSelect' | 'error' | 'onBlur'

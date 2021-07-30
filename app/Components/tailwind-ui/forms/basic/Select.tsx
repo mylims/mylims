@@ -136,6 +136,15 @@ export function Select<OptionType>(
   const { setReferenceElement, setPopperElement, popperProps } =
     useSameWidthPopper({ placement: 'bottom', distance: 5 });
 
+  if (
+    selected &&
+    !options.some((element) => getValue(element) === selectedValue)
+  ) {
+    throw new Error(
+      'Select component contains a selected value that is not in options',
+    );
+  }
+
   function handleChange(value: string | number | undefined) {
     if (!onSelect) {
       return;

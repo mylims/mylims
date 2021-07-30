@@ -45,7 +45,6 @@ export * from './forms/formik/SubmitButton';
 export * from './forms/formik/TextAreaField';
 export * from './forms/formik/ToggleField';
 
-export * from './hooks/globalKeyboardActions';
 export * from './hooks/useDebounce';
 export * from './hooks/useDropzone';
 export * from './hooks/useDurationFromNow';
@@ -81,7 +80,6 @@ export * from './overlays/SlideOver';
 export * from './shells/SidebarLayout';
 
 export * from './shortcuts/KeyboardActionHelp';
-export * from './shortcuts/KeyboardActionProvider';
 
 export * from './svg/shutterstock';
 

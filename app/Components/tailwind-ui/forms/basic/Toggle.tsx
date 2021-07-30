@@ -11,6 +11,7 @@ export interface ToggleProps {
   disabled?: boolean;
   className?: string;
   size?: ToggleSize;
+  name?: string;
 }
 
 export enum ToggleSize {
@@ -31,7 +32,7 @@ export function Toggle(props: ToggleProps) {
 }
 
 function LargeToggle(props: ToggleProps): JSX.Element {
-  const { label, activated, onToggle, disabled } = props;
+  const { label, activated, onToggle, disabled, name } = props;
 
   return (
     <Switch.Group
@@ -50,12 +51,17 @@ function LargeToggle(props: ToggleProps): JSX.Element {
         )}
       >
         {({ checked }) => (
-          <span
-            className={clsx(
-              'translate-x-0 inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200',
-              checked ? 'translate-x-5' : 'translate-x-0',
+          <>
+            {name && (
+              <input name={name} value={String(checked)} type="hidden" />
             )}
-          />
+            <span
+              className={clsx(
+                'translate-x-0 inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200',
+                checked ? 'translate-x-5' : 'translate-x-0',
+              )}
+            />
+          </>
         )}
       </Switch>
       <Switch.Label
@@ -71,7 +77,7 @@ function LargeToggle(props: ToggleProps): JSX.Element {
 }
 
 function SmallToggle(props: ToggleProps) {
-  const { label, activated, onToggle, disabled } = props;
+  const { label, activated, onToggle, disabled, name } = props;
 
   return (
     <Switch.Group
@@ -90,6 +96,9 @@ function SmallToggle(props: ToggleProps) {
       >
         {({ checked }) => (
           <>
+            {name && (
+              <input name={name} value={String(checked)} type="hidden" />
+            )}
             <span
               className={clsx(
                 'absolute h-4 w-9 mx-auto rounded-full transition-colors ease-in-out duration-200',

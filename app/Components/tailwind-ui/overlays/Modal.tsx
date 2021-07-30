@@ -6,13 +6,12 @@ import React, {
   createElement,
   ElementType,
   ReactNode,
-  useContext,
   useEffect,
   useRef,
 } from 'react';
+import { useKbsDisableGlobal } from 'react-kbs';
 
 import { useLockBodyScroll } from '../hooks/useLockBodyScroll';
-import { dispatchContext } from '../shortcuts/KeyboardActionContext';
 import { Color, PropsOf } from '../types';
 
 import { Portal } from './Portal';
@@ -65,26 +64,9 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
   } = props;
 
   useLockBodyScroll(isOpen);
-  const { dispatch } = useContext(dispatchContext);
-  const ref = useRef(props.isOpen);
-  useEffect(() => {
-    if (!ref.current) {
-      dispatch({ type: 'DISABLE_COUNT' });
-    }
-  }, [dispatch]);
-  useEffect(() => {
-    if (isOpen) {
-      dispatch({
-        type: 'DISABLE_COUNT',
-      });
-    } else {
-      dispatch({
-        type: 'ENABLE_COUNT',
-      });
-    }
-  }, [dispatch, isOpen]);
-
+  useKbsDisableGlobal(isOpen);
   const dialogRef = useRef<HTMLDialogElement>(null);
+
   useEffect(() => {
     function onEsc(event: Event) {
       event.preventDefault();
@@ -98,11 +80,13 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
       return () => dialog.removeEventListener('cancel', onEsc);
     }
   }, [onRequestClose, requestCloseOnEsc]);
+
   useEffect(() => {
     if (dialogRef.current) {
       polyfill.registerDialog(dialogRef.current);
     }
   }, []);
+
   useEffect(() => {
     if (isOpen) {
       dialogRef.current?.showModal();
