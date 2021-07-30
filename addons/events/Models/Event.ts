@@ -1,20 +1,35 @@
-import { BaseModel, field } from '@ioc:Zakodium/Mongodb/Odm';
+import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
-import { GqlEventStatus } from 'App/graphql';
+enum EventStatus {
+  PENDING = 'pending',
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
 
-interface EventId {
-  topic: string;
-  id: number;
+enum EventDataType {
+  FILE = 'file',
+}
+
+interface EventProcessor {
+  processorId: string;
+  history: EventHistory[];
 }
 
 interface EventHistory {
-  status: GqlEventStatus;
+  status: EventStatus;
   date: Date;
   emitter?: string;
 }
 
+interface EventData {
+  type: EventDataType.FILE;
+  fileId: string;
+}
+
 export default class Event extends BaseModel {
   @field()
-  public _id: EventId;
-  public history: EventHistory[];
+  public _id: ObjectId;
+  public topic: string;
+  public data: EventData;
+  public processors: EventProcessor[];
 }

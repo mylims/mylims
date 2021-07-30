@@ -22,7 +22,7 @@ const defaultConfig: ConfigFile = {
     mongodb: { url: 'mongodb://localhost:27017', database: 'mylims' },
     session: { sessionAge: '2h' },
     fileSync: { root: '' },
-    enabledAddons: [],
+    enabledAddons: ['events'],
   },
   history: [],
 };

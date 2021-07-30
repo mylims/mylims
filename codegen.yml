@@ -20,3 +20,4 @@ config:
     User: ./Models/User#default
     FileSyncOption: ../addons/file-sync/Models/FileSyncOption#FileSyncOption
     SyncFile: ../addons/file-sync/Models/SyncFile#SyncFile
+    Event: ../addons/events/Models/Event#default
