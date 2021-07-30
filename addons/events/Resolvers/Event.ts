@@ -1,5 +1,6 @@
-import Event from 'App/Models/Event';
 import { GqlEventStatus, GqlResolvers } from 'App/graphql';
+
+import Event from '../Models/Event';
 
 function eventMapper({ _id: { id, topic }, history }: Event) {
   return { id, topic, history };
