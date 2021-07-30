@@ -20,14 +20,10 @@ Route.group(() => {
       lastName: lastname as string,
       firstName: firstname as string,
       emails: [email],
-      authMethods: { local: credential._id as string },
+      authMethods: { local: credential._id.toHexString() },
     });
 
-    return Route.makeSignedUrl('setPassword', {
-      params: {
-        email,
-      },
-    });
+    return Route.makeSignedUrl('setPassword', { params: { email } });
   });
 
   Route.post('/password/:email', async ({ request, response, params }) => {
