@@ -2,7 +2,7 @@ import { PaperClipIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
 
-interface DescriptionListProps {
+export interface DescriptionListProps {
   title: ReactNode;
   subtitle?: ReactNode;
   stripes?: boolean;

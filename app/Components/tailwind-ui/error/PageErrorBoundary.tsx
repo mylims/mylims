@@ -1,41 +1,27 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { ErrorPage } from './ErrorPage';
 import { ErrorReport } from './ErrorReport';
 
-interface ErrorState {
-  error: Error | null;
-  componentStack: string | null;
+function ErrorReported(props: { error: Error }) {
+  return (
+    <ErrorPage title="Oooops" subtitle="Something unexpectedly went wrong">
+      <div className="mr-8">
+        <ErrorReport error={props.error} />
+      </div>
+    </ErrorPage>
+  );
 }
 
-export class PageErrorBoundary extends React.Component<unknown, ErrorState> {
-  public constructor(props: unknown) {
-    super(props);
-    this.state = { error: null, componentStack: null };
-  }
+interface PageErrorBoundaryProps {
+  children: ReactNode;
+}
 
-  public componentDidCatch(
-    error: Error,
-    componentStack: { componentStack: string },
-  ) {
-    this.setState({
-      error,
-      componentStack: componentStack.componentStack,
-    });
-  }
-
-  public render() {
-    const { error, componentStack } = this.state;
-    if (error) {
-      return (
-        <ErrorPage title="Oooops" subtitle="Something unexpectedly went wrong">
-          <div className="mr-8">
-            <ErrorReport error={error} componentStack={componentStack} />
-          </div>
-        </ErrorPage>
-      );
-    }
-
-    return this.props.children;
-  }
+export function PageErrorBoundary(props: PageErrorBoundaryProps) {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorReported}>
+      {props.children}
+    </ErrorBoundary>
+  );
 }

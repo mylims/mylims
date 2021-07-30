@@ -1,39 +1,48 @@
 import { InformationCircleIcon } from '@heroicons/react/outline';
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
+import {
+  KbsDefinition,
+  KbsKeyDefinition,
+  KbsShortcut,
+  useKbsGlobal,
+  useKbsGlobalList,
+} from 'react-kbs';
 
-import { useGlobalKeyboardActions } from '../hooks/globalKeyboardActions';
 import { useOnOff } from '../hooks/useOnOff';
 import { TrProps, Table, Td } from '../lists/Table';
 import { Modal } from '../overlays/Modal';
 import { Color } from '../types';
 import { commandKeyExists } from '../util';
 
-import { context } from './KeyboardActionContext';
-import { KeyboardActionState } from './KeyboardActionProvider';
-
 export interface KeyboardActionHelpProps {
-  key?: string;
-  alt?: boolean;
+  shortcut?: KbsKeyDefinition;
 }
 
+const defaultShortcut = { key: '?' };
+
 export function KeyboardActionHelp(props: KeyboardActionHelpProps) {
-  const { key = '?', alt = false } = props;
+  const { shortcut = defaultShortcut } = props;
   const [showHelp, helpOn, helpOff] = useOnOff();
 
-  const helpActions = useMemo(() => {
+  const helpActions = useMemo<Array<KbsDefinition>>(() => {
     return [
       {
-        description: 'Show keyboard shortcut documentation',
-        handler: helpOn,
-        alt,
-        keys: [key],
+        shortcut,
+        meta: {
+          description: 'Show this documentation',
+        },
+        handler: () => helpOn(),
       },
     ];
-  }, [helpOn, key, alt]);
+  }, [helpOn, shortcut]);
 
-  useGlobalKeyboardActions(helpActions);
+  useKbsGlobal(helpActions);
 
-  const { actions } = useContext(context);
+  const actions = useKbsGlobalList();
+  const shortcuts = actions.map((shortcut, index) => ({
+    id: index,
+    ...shortcut,
+  }));
 
   return (
     <Modal
@@ -45,29 +54,74 @@ export function KeyboardActionHelp(props: KeyboardActionHelpProps) {
     >
       <Modal.Header>Keyboard shortcut documentation</Modal.Header>
       <Modal.Body>
-        <Table data={actions} Tr={Tr} />
+        <Table data={shortcuts} Tr={Tr} />
       </Modal.Body>
     </Modal>
   );
 }
 
-function Tr(props: TrProps<KeyboardActionState>) {
+function Tr({ value }: TrProps<KbsShortcut>) {
   return (
     <tr>
-      <Td>
-        {props.value.keys.map((key, index) => (
+      <Td className="flex flex-row gap-1">
+        <KbdLine kbs={value.shortcut} />
+        {value.aliases.length > 0 ? ',' : ''}
+
+        {value.aliases.map((alias, index) => (
           <>
-            {props.value.cmdKey === true && (
-              <>
-                <kbd>{commandKeyExists ? 'Cmd' : 'Ctrl'}</kbd>+
-              </>
-            )}
-            <kbd key={key}>{key}</kbd>
-            {index < props.value.keys.length - 1 ? ' or ' : ''}
+            <KbdLine key={alias.key} kbs={alias} />
+            {index < value.aliases.length - 1 ? ',' : ''}
           </>
         ))}
       </Td>
-      <Td align="right">{props.value.description}</Td>
+      <Td align="right">{value.meta?.description}</Td>
     </tr>
   );
+}
+
+interface KbdLineProps {
+  kbs: KbsKeyDefinition;
+}
+
+function KbdLine(props: KbdLineProps) {
+  const { key, alt, ctrl, shift } = props.kbs;
+  return (
+    <kbd className="text-sm font-light leading-3 text-neutral-700">
+      {ctrl && renderModifierKey('ctrl')}
+      {alt && renderModifierKey('alt')}
+      {shift && renderModifierKey('shift')}
+      {keyToLabel(key)}
+    </kbd>
+  );
+}
+
+// Correct alignment for some keys that render too high otherwise and use smaller
+// gap than with plain text.
+const modifierMap = {
+  ctrl: <span className="mr-0.5 align-text-bottom">⌘</span>,
+  alt: <span className="mr-0.5 align-text-bottom">⌥</span>,
+  shift: <span className="mr-0.5">⇧</span>,
+};
+
+function renderModifierKey(key: 'ctrl' | 'alt' | 'shift') {
+  if (commandKeyExists) {
+    return modifierMap[key];
+  } else {
+    return `${key} `;
+  }
+}
+
+function keyToLabel(key: string): string {
+  switch (key) {
+    case 'arrowleft':
+      return '←';
+    case 'arrowright':
+      return '→';
+    case 'arrowup':
+      return '↑';
+    case 'arrowdown':
+      return '↓';
+    default:
+      return key;
+  }
 }

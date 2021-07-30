@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SvgSickRobot } from '../svg/shutterstock';
 
-interface ErrorPageProps {
+export interface ErrorPageProps {
   title: string;
   subtitle: string;
   hideImage?: boolean;
