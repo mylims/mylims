@@ -6,6 +6,7 @@ import {
 import User from './Models/User';
 import { FileSyncOption } from '../addons/file-sync/Models/FileSyncOption';
 import { SyncFile } from '../addons/file-sync/Models/SyncFile';
+import Event from '../addons/events/Models/Event';
 import { ApolloBaseContext } from '@ioc:Apollo/Config';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -60,24 +61,43 @@ export type GqlEditFileSyncOptionInput = {
 
 export type GqlEvent = {
   __typename?: 'Event';
-  id: Scalars['Int'];
+  id: Scalars['String'];
   topic: Scalars['String'];
-  history: Array<GqlEventHistory>;
+  data: GqlEventData;
+  processors: Array<GqlEventProcessor>;
 };
+
+export type GqlEventData = {
+  type: GqlEventDataType;
+};
+
+export type GqlEventDataFile = {
+  __typename?: 'EventDataFile';
+  type: GqlEventDataType;
+  fileId: Scalars['String'];
+};
+
+export enum GqlEventDataType {
+  FILE = 'file',
+}
 
 export type GqlEventHistory = {
   __typename?: 'EventHistory';
   status: GqlEventStatus;
   date: Scalars['DateTime'];
-  emitter?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export type GqlEventProcessor = {
+  __typename?: 'EventProcessor';
+  processorId: Scalars['String'];
+  history: Array<GqlEventHistory>;
 };
 
 export enum GqlEventStatus {
-  OPEN = 'open',
-  TAKEN = 'taken',
-  FAILED = 'failed',
-  DONE = 'done',
-  CANCELED = 'canceled',
+  PENDING = 'pending',
+  SUCCESS = 'success',
+  ERROR = 'error',
 }
 
 export type GqlFileContent = {
@@ -190,9 +210,9 @@ export enum GqlPatternType {
 
 export type GqlQuery = {
   __typename?: 'Query';
+  users: Array<GqlUser>;
   eventsByTopic: Array<GqlEvent>;
   eventsByTopicFrom: Array<GqlEvent>;
-  users: Array<GqlUser>;
   directoryTree: Array<GqlDirectoryEntry>;
   fileByPath: GqlFileContent;
   filesByConfig: GqlSyncTreeRevision;
@@ -310,6 +330,10 @@ export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
   fragment: string;
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
@@ -324,6 +348,7 @@ export type StitchingResolver<TResult, TParent, TContext, TArgs> =
   | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
+  | ResolverWithResolve<TResult, TParent, TContext, TArgs>
   | StitchingResolver<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
@@ -433,8 +458,12 @@ export type GqlResolversTypes = ResolversObject<{
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  Event: ResolverTypeWrapper<GqlEvent>;
+  Event: ResolverTypeWrapper<Event>;
+  EventData: never;
+  EventDataFile: ResolverTypeWrapper<GqlEventDataFile>;
+  EventDataType: GqlEventDataType;
   EventHistory: ResolverTypeWrapper<GqlEventHistory>;
+  EventProcessor: ResolverTypeWrapper<GqlEventProcessor>;
   EventStatus: GqlEventStatus;
   FileContent: ResolverTypeWrapper<GqlFileContent>;
   FileStatus: GqlFileStatus;
@@ -474,8 +503,11 @@ export type GqlResolversParentTypes = ResolversObject<{
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   Boolean: Scalars['Boolean'];
   Int: Scalars['Int'];
-  Event: GqlEvent;
+  Event: Event;
+  EventData: never;
+  EventDataFile: GqlEventDataFile;
   EventHistory: GqlEventHistory;
+  EventProcessor: GqlEventProcessor;
   FileContent: GqlFileContent;
   FileSyncOption: FileSyncOption;
   FileSyncOptionPatternInput: GqlFileSyncOptionPatternInput;
@@ -522,13 +554,31 @@ export type GqlEventResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['Event'] = GqlResolversParentTypes['Event'],
 > = ResolversObject<{
-  id?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   topic?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
-  history?: Resolver<
-    Array<GqlResolversTypes['EventHistory']>,
+  data?: Resolver<GqlResolversTypes['EventData'], ParentType, ContextType>;
+  processors?: Resolver<
+    Array<GqlResolversTypes['EventProcessor']>,
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlEventDataResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['EventData'] = GqlResolversParentTypes['EventData'],
+> = ResolversObject<{
+  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
+  type?: Resolver<GqlResolversTypes['EventDataType'], ParentType, ContextType>;
+}>;
+
+export type GqlEventDataFileResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['EventDataFile'] = GqlResolversParentTypes['EventDataFile'],
+> = ResolversObject<{
+  type?: Resolver<GqlResolversTypes['EventDataType'], ParentType, ContextType>;
+  fileId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -538,8 +588,21 @@ export type GqlEventHistoryResolvers<
 > = ResolversObject<{
   status?: Resolver<GqlResolversTypes['EventStatus'], ParentType, ContextType>;
   date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
-  emitter?: Resolver<
+  message?: Resolver<
     Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlEventProcessorResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['EventProcessor'] = GqlResolversParentTypes['EventProcessor'],
+> = ResolversObject<{
+  processorId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  history?: Resolver<
+    Array<GqlResolversTypes['EventHistory']>,
     ParentType,
     ContextType
   >;
@@ -649,6 +712,7 @@ export type GqlQueryResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['Query'] = GqlResolversParentTypes['Query'],
 > = ResolversObject<{
+  users?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
   eventsByTopic?: Resolver<
     Array<GqlResolversTypes['Event']>,
     ParentType,
@@ -661,7 +725,6 @@ export type GqlQueryResolvers<
     ContextType,
     RequireFields<GqlQueryEventsByTopicFromArgs, 'topic' | 'from'>
   >;
-  users?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
   directoryTree?: Resolver<
     Array<GqlResolversTypes['DirectoryEntry']>,
     ParentType,
@@ -817,7 +880,10 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   DirectoryEntry?: GqlDirectoryEntryResolvers<ContextType>;
   Event?: GqlEventResolvers<ContextType>;
+  EventData?: GqlEventDataResolvers<ContextType>;
+  EventDataFile?: GqlEventDataFileResolvers<ContextType>;
   EventHistory?: GqlEventHistoryResolvers<ContextType>;
+  EventProcessor?: GqlEventProcessorResolvers<ContextType>;
   FileContent?: GqlFileContentResolvers<ContextType>;
   FileSyncOption?: GqlFileSyncOptionResolvers<ContextType>;
   FilesFlatPage?: GqlFilesFlatPageResolvers<ContextType>;

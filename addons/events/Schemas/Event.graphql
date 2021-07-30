@@ -1,34 +1,39 @@
 type Query {
   eventsByTopic(topic: String!): [Event!]!
-  eventsByTopicFrom(topic: String!, from: Int!): [Event!]!
-}
-
-type Mutation {
-  createEvent(topic: String!, emitter: String): Event!
-  changeStatusEvent(
-    topic: String!
-    id: Int!
-    status: EventStatus!
-    emitter: String
-  ): Event!
 }
 
 enum EventStatus {
-  open
-  taken
-  failed
-  done
-  canceled
+  pending
+  success
+  error
+}
+
+enum EventDataType {
+  file
 }
 
 type EventHistory {
   status: EventStatus!
   date: DateTime!
-  emitter: String
+  message: String
+}
+
+interface EventData {
+  type: EventDataType!
+}
+type EventDataFile {
+  type: EventDataType!
+  fileId: String!
+}
+
+type EventProcessor {
+  processorId: String!
+  history: [EventHistory!]!
 }
 
 type Event {
-  id: Int!
+  id: String!
   topic: String!
-  history: [EventHistory!]!
+  data: EventData!
+  processors: [EventProcessor!]!
 }
