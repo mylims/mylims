@@ -10,11 +10,8 @@ export default async function nextEvent(
       processors: {
         $elemMatch: {
           processorId,
-          history: {
-            $or: [
-              { $elemMatch: { status: EventStatus.PENDING } },
-              { $size: 0 },
-            ],
+          'history.0': {
+            $or: [{ status: EventStatus.PENDING }, { $exist: false }],
           },
         },
       },
