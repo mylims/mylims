@@ -27,8 +27,6 @@ interface EventData {
 }
 
 export class Event extends BaseModel {
-  public static collectionName = 'events';
-
   @field()
   public _id: ObjectId;
   public topic: string;
