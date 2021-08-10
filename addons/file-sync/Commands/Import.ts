@@ -15,6 +15,7 @@ import isMyFileReady, {
 import type DataDrive from '@ioc:DataDrive';
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
+import { Event, EventDataType } from '../../events/Models/Event';
 import type { File } from '../Models/File';
 import type { FileSyncOption, ReadyCheck } from '../Models/FileSyncOption';
 import type { SyncFile, SyncState } from '../Models/SyncFile';
@@ -53,6 +54,7 @@ export default class Import extends BaseCommand {
     SyncState: typeof SyncState;
     DataDrive: typeof DataDrive;
     File: typeof File;
+    Event: typeof Event;
   };
 
   public async run() {
@@ -60,12 +62,15 @@ export default class Import extends BaseCommand {
     const { FileSyncOption } = await import('../Models/FileSyncOption');
     const { default: DataDrive } = await import('@ioc:DataDrive');
     const { File } = await import('../Models/File');
+    const { Event } = await import('../../events/Models/Event');
+
     this.deps = {
       SyncFile,
       FileSyncOption,
       SyncState,
       DataDrive,
       File,
+      Event,
     };
 
     if (this.interval !== undefined) {
@@ -150,7 +155,7 @@ export default class Import extends BaseCommand {
       await syncFile.save();
 
       try {
-        await this.importFile(syncFile, root);
+        await this.importFile(syncFile, fileSyncOption);
         syncFile.revisions[0].status = this.deps.SyncState.IMPORTED;
       } catch (err) {
         syncFile.revisions[0].status = this.deps.SyncState.IMPORT_FAIL;
@@ -203,9 +208,9 @@ export default class Import extends BaseCommand {
     return checkResult.isReady;
   }
 
-  private async importFile(syncFile: SyncFile, root: string) {
+  private async importFile(syncFile: SyncFile, fileSyncOption: FileSyncOption) {
     const drive = this.deps.DataDrive.drive('local');
-    const filePath = join(root, syncFile._id.relativePath);
+    const filePath = join(fileSyncOption.root, syncFile._id.relativePath);
     const id = syncFile.revisions[0].id;
     const driveFile = await drive.put(
       syncFile.filename,
@@ -217,6 +222,24 @@ export default class Import extends BaseCommand {
       filename: driveFile.filename,
       size: driveFile.size,
     });
+
+    // Notify the events with topic
+    for (const topic of fileSyncOption.topics) {
+      try {
+        await this.deps.Event.create({
+          topic,
+          data: { type: EventDataType.FILE, fileId: id },
+          processors: [],
+        });
+      } catch (err) {
+        this.logger.error(err, `${topic}:${id}`);
+      }
+    }
+    this.logger.debug(
+      `created events for topics: ${JSON.stringify(fileSyncOption.topics)}`,
+      this.fileSyncOptionId,
+      id,
+    );
   }
 
   private async wait() {
