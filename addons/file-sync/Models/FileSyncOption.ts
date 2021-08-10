@@ -13,6 +13,7 @@ export class FileSyncOption extends BaseModel {
   @field()
   public _id: ObjectId;
   public root: string;
+  public topics: string[];
   public enabled: boolean;
   public maxDepth: number;
   public patterns: Pattern[];

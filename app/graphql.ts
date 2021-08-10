@@ -158,23 +158,9 @@ export type GqlFilesSortInput = {
 
 export type GqlMutation = {
   __typename?: 'Mutation';
-  createEvent: GqlEvent;
-  changeStatusEvent: GqlEvent;
   createFileSyncOption: GqlFileSyncOption;
   editFileSyncOption: GqlFileSyncOption;
   deleteFileSyncOption: Array<GqlFileSyncOption>;
-};
-
-export type GqlMutationCreateEventArgs = {
-  topic: Scalars['String'];
-  emitter?: Maybe<Scalars['String']>;
-};
-
-export type GqlMutationChangeStatusEventArgs = {
-  topic: Scalars['String'];
-  id: Scalars['Int'];
-  status: GqlEventStatus;
-  emitter?: Maybe<Scalars['String']>;
 };
 
 export type GqlMutationCreateFileSyncOptionArgs = {
@@ -212,7 +198,6 @@ export type GqlQuery = {
   __typename?: 'Query';
   users: Array<GqlUser>;
   eventsByTopic: Array<GqlEvent>;
-  eventsByTopicFrom: Array<GqlEvent>;
   directoryTree: Array<GqlDirectoryEntry>;
   fileByPath: GqlFileContent;
   filesByConfig: GqlSyncTreeRevision;
@@ -224,11 +209,6 @@ export type GqlQuery = {
 
 export type GqlQueryEventsByTopicArgs = {
   topic: Scalars['String'];
-};
-
-export type GqlQueryEventsByTopicFromArgs = {
-  topic: Scalars['String'];
-  from: Scalars['Int'];
 };
 
 export type GqlQueryDirectoryTreeArgs = {
@@ -667,18 +647,6 @@ export type GqlMutationResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['Mutation'] = GqlResolversParentTypes['Mutation'],
 > = ResolversObject<{
-  createEvent?: Resolver<
-    GqlResolversTypes['Event'],
-    ParentType,
-    ContextType,
-    RequireFields<GqlMutationCreateEventArgs, 'topic'>
-  >;
-  changeStatusEvent?: Resolver<
-    GqlResolversTypes['Event'],
-    ParentType,
-    ContextType,
-    RequireFields<GqlMutationChangeStatusEventArgs, 'topic' | 'id' | 'status'>
-  >;
   createFileSyncOption?: Resolver<
     GqlResolversTypes['FileSyncOption'],
     ParentType,
@@ -718,12 +686,6 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlQueryEventsByTopicArgs, 'topic'>
-  >;
-  eventsByTopicFrom?: Resolver<
-    Array<GqlResolversTypes['Event']>,
-    ParentType,
-    ContextType,
-    RequireFields<GqlQueryEventsByTopicFromArgs, 'topic' | 'from'>
   >;
   directoryTree?: Resolver<
     Array<GqlResolversTypes['DirectoryEntry']>,

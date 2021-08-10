@@ -8,18 +8,18 @@ import { FileInfo, FileSynchronizer } from 'fs-synchronizer';
 
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
+import { Event, EventDataType } from '../../events/Models/Event';
 import type { FileSyncOption } from '../Models/FileSyncOption';
 import type { SyncFile, SyncState } from '../Models/SyncFile';
 
 const asyncTimeout = promisify(setTimeout);
+
 export default class Sync extends BaseCommand {
   public static commandName = 'file:sync';
 
   public static description = 'Synchronize files';
 
-  @flags.string({
-    description: 'File sync option to use',
-  })
+  @flags.string({ description: 'File sync option to use' })
   public fileSyncOptionId: string;
 
   @flags.number({
@@ -36,15 +36,19 @@ export default class Sync extends BaseCommand {
     FileSyncOption: typeof FileSyncOption;
     SyncFile: typeof SyncFile;
     SyncState: typeof SyncState;
+    Event: typeof Event;
   };
 
   public async run() {
     const { FileSyncOption } = await import('../Models/FileSyncOption');
     const { SyncFile, SyncState } = await import('../Models/SyncFile');
+    const { Event } = await import('../../events/Models/Event');
+
     this.deps = {
       FileSyncOption,
       SyncFile,
       SyncState,
+      Event,
     };
 
     if (this.interval !== undefined) {
@@ -128,7 +132,7 @@ export default class Sync extends BaseCommand {
     if (file === null) {
       return this.handleUnknownFile(fileInfo, fileSyncOption);
     }
-    return this.handleKnownFile(fileInfo, file);
+    return this.handleKnownFile(fileInfo, fileSyncOption, file);
   }
 
   private async handleUnknownFile(
@@ -142,15 +146,18 @@ export default class Sync extends BaseCommand {
 
     const { filename, relativePath, size, creationDate, modificationDate } =
       fileInfo;
+
     let path = relativePath.split(sep);
     path.pop();
+
+    const fileId = uuid();
     await this.deps.SyncFile.create({
       _id: { configId: fileSyncOption.id, relativePath },
       filename,
       path,
       revisions: [
         {
-          id: uuid(),
+          id: fileId,
           date: new Date(),
           status: this.deps.SyncState.PENDING,
           size,
@@ -159,11 +166,31 @@ export default class Sync extends BaseCommand {
         },
       ],
     });
+
+    // Notify the events with topic
+    for (const topic of fileSyncOption.topics) {
+      try {
+        await this.deps.Event.create({
+          topic,
+          data: { type: EventDataType.FILE, fileId },
+          processors: [],
+        });
+      } catch (err) {
+        this.logger.error(err, `${topic}:${fileId}`);
+      }
+    }
+    this.logger.debug(
+      `updated topics: ${JSON.stringify(fileSyncOption.topics)}`,
+      this.fileSyncOptionId,
+      fileId,
+    );
+
     return;
   }
 
   private async handleKnownFile(
     fileInfo: FileInfo,
+    fileSyncOption: FileSyncOption,
     file: InstanceType<typeof SyncFile>,
   ) {
     const { creationDate, modificationDate, size, filename } = fileInfo;
@@ -205,8 +232,9 @@ export default class Sync extends BaseCommand {
       filename,
     );
 
+    const fileId = uuid();
     file.revisions.unshift({
-      id: uuid(),
+      id: fileId,
       date: new Date(),
       status: this.deps.SyncState.PENDING,
       size,
@@ -215,6 +243,24 @@ export default class Sync extends BaseCommand {
     });
 
     await file.save();
+
+    // Notify the events with topic
+    for (const topic of fileSyncOption.topics) {
+      try {
+        await this.deps.Event.create({
+          topic,
+          data: { type: EventDataType.FILE, fileId },
+          processors: [],
+        });
+      } catch (err) {
+        this.logger.error(err, `${topic}:${fileId}`);
+      }
+    }
+    this.logger.debug(
+      `updated topics: ${JSON.stringify(fileSyncOption.topics)}`,
+      this.fileSyncOptionId,
+      fileId,
+    );
   }
 
   private async wait() {

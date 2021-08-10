@@ -26,7 +26,9 @@ interface EventData {
   fileId: string;
 }
 
-export default class Event extends BaseModel {
+export class Event extends BaseModel {
+  public static collectionName = 'events';
+
   @field()
   public _id: ObjectId;
   public topic: string;
