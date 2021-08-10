@@ -128,7 +128,7 @@ export default class Sync extends BaseCommand {
     if (file === null) {
       return this.handleUnknownFile(fileInfo, fileSyncOption);
     }
-    return this.handleKnownFile(fileInfo, fileSyncOption, file);
+    return this.handleKnownFile(fileInfo, file);
   }
 
   private async handleUnknownFile(
@@ -167,7 +167,6 @@ export default class Sync extends BaseCommand {
 
   private async handleKnownFile(
     fileInfo: FileInfo,
-    fileSyncOption: FileSyncOption,
     file: InstanceType<typeof SyncFile>,
   ) {
     const { creationDate, modificationDate, size, filename } = fileInfo;
