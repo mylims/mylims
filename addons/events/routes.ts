@@ -21,9 +21,7 @@ Route.get(
       });
     }
     if (!params.topic) {
-      return response.internalServerError({
-        errors: ['Topic not specified'],
-      });
+      return response.internalServerError({ errors: ['Topic not specified'] });
     }
 
     // Gets the next event
@@ -44,9 +42,7 @@ Route.put(
     // Checks that the params are valid
     const params: Record<string, string | undefined> = request.all();
     if (!params.eventId) {
-      return response.internalServerError({
-        errors: ['Event not specified'],
-      });
+      return response.internalServerError({ errors: ['Event not specified'] });
     }
     if (!params.processorId) {
       return response.internalServerError({
@@ -54,9 +50,7 @@ Route.put(
       });
     }
     if (!params.status) {
-      return response.internalServerError({
-        errors: ['Status not specified'],
-      });
+      return response.internalServerError({ errors: ['Status not specified'] });
     }
 
     // Gets the next event

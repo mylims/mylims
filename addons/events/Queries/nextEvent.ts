@@ -1,4 +1,4 @@
-import Event, { EventStatus } from '../Models/Event';
+import { Event, EventStatus } from '../Models/Event';
 
 export default async function nextEvent(
   processorId: string,

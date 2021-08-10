@@ -1,6 +1,6 @@
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
-import Event, { EventStatus } from '../Models/Event';
+import { Event, EventStatus } from '../Models/Event';
 
 export default async function setEventStatus(
   eventId: string,

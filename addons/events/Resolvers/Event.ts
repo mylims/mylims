@@ -1,6 +1,6 @@
 import { GqlResolvers } from 'App/graphql';
 
-import Event from '../Models/Event';
+import { Event } from '../Models/Event';
 
 const resolvers: GqlResolvers = {
   Query: {
