@@ -16,8 +16,5 @@ export default async function nextEvent(
         },
       },
     },
-    {
-      driverOptions: { sort: { _id: -1 } },
-    },
   ).firstOrFail();
 }
