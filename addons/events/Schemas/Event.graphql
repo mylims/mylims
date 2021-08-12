@@ -1,5 +1,6 @@
 type Query {
   eventsByTopic(topic: String!): [Event!]!
+  eventsByFileId(fileId: String!): [Event!]!
 }
 
 enum EventStatus {

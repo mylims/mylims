@@ -48,6 +48,43 @@ export type EditFileSyncOptionInput = {
   readyChecks: Array<ReadyCheckInput>;
 };
 
+export type Event = {
+  id: Scalars['String'];
+  topic: Scalars['String'];
+  data: EventData;
+  processors: Array<EventProcessor>;
+};
+
+export type EventData = {
+  type: EventDataType;
+};
+
+export type EventDataFile = {
+  type: EventDataType;
+  fileId: Scalars['String'];
+};
+
+export enum EventDataType {
+  FILE = 'file',
+}
+
+export type EventHistory = {
+  status: EventStatus;
+  date: Scalars['DateTime'];
+  message?: Maybe<Scalars['String']>;
+};
+
+export type EventProcessor = {
+  processorId: Scalars['String'];
+  history: Array<EventHistory>;
+};
+
+export enum EventStatus {
+  PENDING = 'pending',
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+
 export type FileContent = {
   filename: Scalars['String'];
   size: Scalars['Int'];
@@ -139,6 +176,8 @@ export enum PatternType {
 
 export type Query = {
   users: Array<User>;
+  eventsByTopic: Array<Event>;
+  eventsByFileId: Array<Event>;
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
   filesByConfig: SyncTreeRevision;
@@ -146,6 +185,14 @@ export type Query = {
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
+};
+
+export type QueryEventsByTopicArgs = {
+  topic: Scalars['String'];
+};
+
+export type QueryEventsByFileIdArgs = {
+  fileId: Scalars['String'];
 };
 
 export type QueryDirectoryTreeArgs = {
@@ -326,6 +373,22 @@ export type FilesByConfigQuery = {
       >;
       dirs: Array<RevisionFields_SyncDirRevision_Fragment>;
     };
+};
+
+export type EventsByFileIdQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type EventsByFileIdQuery = {
+  eventsByFileId: Array<
+    { __typename: 'Event' } & Pick<Event, 'id' | 'topic'> & {
+        processors: Array<
+          Pick<EventProcessor, 'processorId'> & {
+            history: Array<Pick<EventHistory, 'status' | 'date' | 'message'>>;
+          }
+        >;
+      }
+  >;
 };
 
 export type FilesByConfigFlatQueryVariables = Exact<{
@@ -794,6 +857,79 @@ export function refetchFilesByConfigQuery(
   variables?: FilesByConfigQueryVariables,
 ) {
   return { query: FilesByConfigDocument, variables: variables };
+}
+export const EventsByFileIdDocument = gql`
+  query EventsByFileId($id: String!) {
+    eventsByFileId(fileId: $id) {
+      __typename
+      id
+      topic
+      processors {
+        processorId
+        history {
+          status
+          date
+          message
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useEventsByFileIdQuery__
+ *
+ * To run a query within a React component, call `useEventsByFileIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventsByFileIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEventsByFileIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEventsByFileIdQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    EventsByFileIdQuery,
+    EventsByFileIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    EventsByFileIdQuery,
+    EventsByFileIdQueryVariables
+  >(EventsByFileIdDocument, options);
+}
+export function useEventsByFileIdLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    EventsByFileIdQuery,
+    EventsByFileIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    EventsByFileIdQuery,
+    EventsByFileIdQueryVariables
+  >(EventsByFileIdDocument, options);
+}
+export type EventsByFileIdQueryHookResult = ReturnType<
+  typeof useEventsByFileIdQuery
+>;
+export type EventsByFileIdLazyQueryHookResult = ReturnType<
+  typeof useEventsByFileIdLazyQuery
+>;
+export type EventsByFileIdQueryResult = Apollo.QueryResult<
+  EventsByFileIdQuery,
+  EventsByFileIdQueryVariables
+>;
+export function refetchEventsByFileIdQuery(
+  variables?: EventsByFileIdQueryVariables,
+) {
+  return { query: EventsByFileIdDocument, variables: variables };
 }
 export const FilesByConfigFlatDocument = gql`
   query FilesByConfigFlat(
