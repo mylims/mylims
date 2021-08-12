@@ -2,12 +2,18 @@ import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import { Event, EventStatus } from '../Models/Event';
 
-export default async function setEventStatus(
-  eventId: string,
-  processorId: string,
-  status: string,
-  message: string | undefined,
-): Promise<Event> {
+interface SetEventStatusParams {
+  eventId: string;
+  processorId: string;
+  status: string;
+  message?: string;
+}
+export default async function setEventStatus({
+  eventId,
+  processorId,
+  status,
+  message,
+}: SetEventStatusParams): Promise<Event> {
   const event = await Event.findOrFail(new ObjectId(eventId));
   const eventProcessor = event.processors.find(
     (p) => p.processorId === processorId,
