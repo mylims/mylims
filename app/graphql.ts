@@ -198,6 +198,7 @@ export type GqlQuery = {
   __typename?: 'Query';
   users: Array<GqlUser>;
   eventsByTopic: Array<GqlEvent>;
+  eventsByFileId: Array<GqlEvent>;
   directoryTree: Array<GqlDirectoryEntry>;
   fileByPath: GqlFileContent;
   filesByConfig: GqlSyncTreeRevision;
@@ -209,6 +210,10 @@ export type GqlQuery = {
 
 export type GqlQueryEventsByTopicArgs = {
   topic: Scalars['String'];
+};
+
+export type GqlQueryEventsByFileIdArgs = {
+  fileId: Scalars['String'];
 };
 
 export type GqlQueryDirectoryTreeArgs = {
@@ -686,6 +691,12 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlQueryEventsByTopicArgs, 'topic'>
+  >;
+  eventsByFileId?: Resolver<
+    Array<GqlResolversTypes['Event']>,
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryEventsByFileIdArgs, 'fileId'>
   >;
   directoryTree?: Resolver<
     Array<GqlResolversTypes['DirectoryEntry']>,
