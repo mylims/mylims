@@ -48,6 +48,43 @@ export type EditFileSyncOptionInput = {
   readyChecks: Array<ReadyCheckInput>;
 };
 
+export type Event = {
+  id: Scalars['String'];
+  topic: Scalars['String'];
+  data: EventData;
+  processors: Array<EventProcessor>;
+};
+
+export type EventData = {
+  type: EventDataType;
+};
+
+export type EventDataFile = {
+  type: EventDataType;
+  fileId: Scalars['String'];
+};
+
+export enum EventDataType {
+  FILE = 'file',
+}
+
+export type EventHistory = {
+  status: EventStatus;
+  date: Scalars['DateTime'];
+  message?: Maybe<Scalars['String']>;
+};
+
+export type EventProcessor = {
+  processorId: Scalars['String'];
+  history: Array<EventHistory>;
+};
+
+export enum EventStatus {
+  PENDING = 'pending',
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+
 export type FileContent = {
   filename: Scalars['String'];
   size: Scalars['Int'];
@@ -139,6 +176,8 @@ export enum PatternType {
 
 export type Query = {
   users: Array<User>;
+  eventsByTopic: Array<Event>;
+  eventsByFileId: Array<Event>;
   directoryTree: Array<DirectoryEntry>;
   fileByPath: FileContent;
   filesByConfig: SyncTreeRevision;
@@ -146,6 +185,14 @@ export type Query = {
   fileSyncOptions: Array<FileSyncOption>;
   fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
+};
+
+export type QueryEventsByTopicArgs = {
+  topic: Scalars['String'];
+};
+
+export type QueryEventsByFileIdArgs = {
+  fileId: Scalars['String'];
 };
 
 export type QueryDirectoryTreeArgs = {
