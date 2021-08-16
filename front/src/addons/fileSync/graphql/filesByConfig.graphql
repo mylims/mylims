@@ -22,3 +22,19 @@ query FilesByConfig($id: String!, $path: [String!]!) {
     }
   }
 }
+
+query EventsByFileId($id: String!) {
+  eventsByFileId(fileId: $id) {
+    __typename
+    id
+    topic
+    processors {
+      processorId
+      history {
+        status
+        date
+        message
+      }
+    }
+  }
+}
