@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Badge, BadgeVariant, Color } from '@components/tailwind-ui';
+import { Color } from '@components/tailwind-ui';
 import { FileStatus } from '@generated/graphql';
+import { StatusLabel } from '@components/StatusLabel';
 
 interface FileStatusLabelProps {
   status: FileStatus;
@@ -21,12 +22,5 @@ export function getTagColor(status: FileStatus): Color {
   }
 }
 export function FileStatusLabel({ status }: FileStatusLabelProps) {
-  const color = getTagColor(status);
-  return (
-    <Badge
-      variant={BadgeVariant.COLORED_BACKGROUND}
-      label={status}
-      color={color}
-    />
-  );
+  return <StatusLabel status={status} getTagColor={getTagColor} />;
 }

@@ -11,6 +11,7 @@ import { useEventsByFileIdLazyQuery } from '../../../generated/graphql';
 
 import { changeNodeValue, TreeContext } from './TreeContext';
 import { EventsProcessors, FileSync } from './types';
+import { StatusLabel } from '@components/StatusLabel';
 
 export default function FileRow({ value }: { value: FileSync }) {
   const size = bytes(value.size).toString();
@@ -80,14 +81,49 @@ export default function FileRow({ value }: { value: FileSync }) {
       {value.expanded &&
         (events.length === 0 ? (
           <tr>
-            <Td>No events</Td>
+            <Td>
+              <span className="pl-8 font-light">No events</span>
+            </Td>
           </tr>
         ) : (
           events.map(({ topic, processorId, status, date }) => (
             <tr key={processorId}>
-              <Td>{topic}</Td>
-              <Td>{status}</Td>
-              <Td>{date}</Td>
+              <Td className="flex">
+                <div className="pr-2">
+                  <span className="pr-1 font-bold text-alternative-600">
+                    Topic:
+                  </span>
+                  {topic}
+                </div>
+                <div className="pr-2">
+                  <span className="pr-1 font-bold text-alternative-600">
+                    Processor:
+                  </span>
+                  {processorId}
+                </div>
+              </Td>
+              <Td></Td>
+              <Td>{format(new Date(date), 'dd.MM.yyyy')}</Td>
+              <Td></Td>
+              <Td>
+                <StatusLabel
+                  status={status}
+                  getTagColor={(status) => {
+                    switch (status) {
+                      case 'success': {
+                        return Color.success;
+                      }
+                      case 'error': {
+                        return Color.danger;
+                      }
+                      default: {
+                        return Color.warning;
+                      }
+                    }
+                  }}
+                />
+              </Td>
+              <Td></Td>
             </tr>
           ))
         ))}
