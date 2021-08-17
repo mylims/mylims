@@ -26,6 +26,7 @@ type FileSyncOption {
   maxDepth: Int!
   patterns: [Pattern!]!
   readyChecks: [ReadyCheck!]!
+  topics: [String!]!
 }
 
 input NewFileSyncOptionInput {

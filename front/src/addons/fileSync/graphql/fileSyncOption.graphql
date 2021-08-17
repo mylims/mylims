@@ -3,6 +3,7 @@ fragment FileSyncOptionFields on FileSyncOption {
   enabled
   root
   maxDepth
+  topics
   patterns {
     type
     pattern
