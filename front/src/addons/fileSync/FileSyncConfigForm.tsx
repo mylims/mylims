@@ -14,6 +14,7 @@ import {
   Size,
   SubmitButton,
   ToggleField,
+  Variant,
 } from '@components/tailwind-ui';
 
 import { omitDeep } from '../../utils/omit-deep';
@@ -101,13 +102,14 @@ export default function FileSyncConfigForm({
                         Patterns
                         <Button
                           size={Size.xSmall}
+                          variant={Variant.secondary}
                           className="ml-2"
                           onClick={() => push({ type: 'include', pattern: '' })}
                         >
-                          Add
+                          + add
                         </Button>
                       </h3>
-                      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+                      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
                         {values.patterns.length > 0 &&
                           values.patterns.map((_, index) => (
                             <PatternEdit
@@ -129,13 +131,14 @@ export default function FileSyncConfigForm({
                           Ready checks
                           <Button
                             size={Size.xSmall}
+                            variant={Variant.secondary}
                             className="ml-2"
                             onClick={() => push({ name: '' })}
                           >
-                            Add
+                            + add
                           </Button>
                         </h3>
-                        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+                        <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
                           {values.readyChecks.length > 0 &&
                             values.readyChecks.map((readyCheck, index) => (
                               <ReadyCheckEdit

@@ -122,6 +122,7 @@ export type GqlFileSyncOption = {
   maxDepth: Scalars['Int'];
   patterns: Array<GqlPattern>;
   readyChecks: Array<GqlReadyCheck>;
+  topics: Array<Scalars['String']>;
 };
 
 export type GqlFileSyncOptionPatternInput = {
@@ -619,6 +620,11 @@ export type GqlFileSyncOptionResolvers<
   >;
   readyChecks?: Resolver<
     Array<GqlResolversTypes['ReadyCheck']>,
+    ParentType,
+    ContextType
+  >;
+  topics?: Resolver<
+    Array<GqlResolversTypes['String']>,
     ParentType,
     ContextType
   >;

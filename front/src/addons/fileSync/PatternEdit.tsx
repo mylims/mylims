@@ -9,6 +9,7 @@ import {
   InputField,
   RadioField,
   Size,
+  Variant,
 } from '@components/tailwind-ui';
 
 interface PatternEditProps {
@@ -18,35 +19,33 @@ interface PatternEditProps {
 
 export default function PatternEdit({ remove, index }: PatternEditProps) {
   return (
-    <div className="p-2">
-      <Card>
-        <Card.Header>
-          <Button
-            size={Size.xSmall}
-            color={Color.danger}
-            onClick={() => remove(index)}
-          >
-            <TrashIcon className="w-5 h-5" />
-          </Button>
-        </Card.Header>
-        <div className="p-2">
-          <RadioField
-            value="include"
-            name={`patterns.${index}.type`}
-            label="Include"
-          />
-          <RadioField
-            value="exclude"
-            name={`patterns.${index}.type`}
-            label="Exclude"
-          />
-          <InputField
-            name={`patterns.${index}.pattern`}
-            label="Pattern"
-            hiddenLabel
-          />
-        </div>
-      </Card>
+    <div className="grid grid-cols-3 p-2 m-1 rounded-lg shadow">
+      <div className="col-span-2">
+        <RadioField
+          value="include"
+          name={`patterns.${index}.type`}
+          label="Include"
+        />
+        <RadioField
+          value="exclude"
+          name={`patterns.${index}.type`}
+          label="Exclude"
+        />
+        <InputField
+          name={`patterns.${index}.pattern`}
+          label="Pattern"
+          hiddenLabel
+        />
+      </div>
+      <Button
+        className="self-center justify-self-center"
+        size={Size.xSmall}
+        color={Color.danger}
+        variant={Variant.secondary}
+        onClick={() => remove(index)}
+      >
+        <TrashIcon className="w-5 h-5" />
+      </Button>
     </div>
   );
 }
