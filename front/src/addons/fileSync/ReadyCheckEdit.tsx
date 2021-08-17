@@ -9,6 +9,7 @@ import {
   InputField,
   SelectField,
   Size,
+  Variant,
 } from '@components/tailwind-ui';
 
 import { ReadyCheckDescriptor, ReadyCheckInput } from './generated/graphql';
@@ -35,31 +36,30 @@ export default function ReadyCheckEdit({
   }, [checks]);
 
   return (
-    <div className="p-2">
-      <Card>
-        <Card.Header>
-          <Button
-            size={Size.xSmall}
-            color={Color.danger}
-            onClick={() => remove(index)}
-          >
-            <TrashIcon className="w-5 h-5" />
-          </Button>
-        </Card.Header>
-        <div className="p-2 space-y-2">
-          <SelectField
-            name={`readyChecks.${index}.name`}
-            options={checkNamesOptions}
-            getValue={simpleGetValueRenderOption}
-            renderOption={simpleGetValueRenderOption}
-          />
-          {checks.some(
-            (check) => check.name === readyCheck.name && check.hasArg,
-          ) && (
-            <InputField name={`readyChecks.${index}.value`} label="Parameter" />
-          )}
-        </div>
-      </Card>
+    <div className="grid grid-cols-3 p-2 m-1 space-x-4 rounded-lg shadow">
+      <div className="col-span-2">
+        <SelectField
+          name={`readyChecks.${index}.name`}
+          options={checkNamesOptions}
+          getValue={simpleGetValueRenderOption}
+          renderOption={simpleGetValueRenderOption}
+        />
+        {checks.some(
+          (check) => check.name === readyCheck.name && check.hasArg,
+        ) && (
+          <InputField name={`readyChecks.${index}.value`} label="Parameter" />
+        )}
+      </div>
+      <div className="justify-self-center self-center">
+        <Button
+          size={Size.xSmall}
+          color={Color.danger}
+          variant={Variant.secondary}
+          onClick={() => remove(index)}
+        >
+          <TrashIcon className="w-5 h-5" />
+        </Button>
+      </div>
     </div>
   );
 }
