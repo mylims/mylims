@@ -105,6 +105,7 @@ export type FileSyncOption = {
   maxDepth: Scalars['Int'];
   patterns: Array<Pattern>;
   readyChecks: Array<ReadyCheck>;
+  topics: Array<Scalars['String']>;
 };
 
 export type FileSyncOptionPatternInput = {

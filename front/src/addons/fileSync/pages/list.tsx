@@ -13,6 +13,8 @@ import ElnLayout from '@components/ElnLayout';
 import {
   Alert,
   AlertType,
+  Badge,
+  BadgeVariant,
   Button,
   Color,
   Roundness,
@@ -68,11 +70,12 @@ export default function ConfigList() {
 function Header() {
   return (
     <tr>
-      <Th className="w-1/4">Enabled</Th>
-      <Th className="w-1/4">Root</Th>
-      <Th className="w-1/4">Patterns</Th>
-      <Th className="w-1/4">Ready checks</Th>
-      <Th>Actions</Th>
+      <Th className="w-1/12">Enabled</Th>
+      <Th className="w-4/12">Root</Th>
+      <Th className="w-3/12">Topics</Th>
+      <Th className="w-1/12">Patterns</Th>
+      <Th className="w-1/12">Ready checks</Th>
+      <Th className="w-2/12">Actions</Th>
     </tr>
   );
 }
@@ -80,11 +83,11 @@ function Header() {
 function Row(
   deleteFileSyncOption: ReturnType<typeof useDeleteFileSyncOptionMutation>[0],
 ) {
-  return (props: {
+  return ({
+    value,
+  }: {
     value: FileSyncOptionsQuery['fileSyncOptions'][number];
   }) => {
-    const { value } = props;
-
     return (
       <tr>
         <Td>
@@ -94,7 +97,19 @@ function Row(
             <XIcon className="w-5 h-5" />
           )}
         </Td>
-        <Td>{value.root}</Td>
+        <Td title={value.root} className="truncate">
+          {value.root}
+        </Td>
+        <Td>
+          {value.topics.map((topic) => (
+            <Badge
+              key={topic}
+              variant={BadgeVariant.COLORED_BACKGROUND}
+              label={topic}
+              color={Color.primary}
+            />
+          ))}
+        </Td>
         <Td>{value.patterns.length}</Td>
         <Td>{value.readyChecks.length}</Td>
         <Td>

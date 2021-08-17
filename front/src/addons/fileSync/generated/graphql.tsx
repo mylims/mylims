@@ -105,6 +105,7 @@ export type FileSyncOption = {
   maxDepth: Scalars['Int'];
   patterns: Array<Pattern>;
   readyChecks: Array<ReadyCheck>;
+  topics: Array<Scalars['String']>;
 };
 
 export type FileSyncOptionPatternInput = {
@@ -293,7 +294,7 @@ export type DirectoryTreeQuery = {
 
 export type FileSyncOptionFieldsFragment = Pick<
   FileSyncOption,
-  'id' | 'enabled' | 'root' | 'maxDepth'
+  'id' | 'enabled' | 'root' | 'maxDepth' | 'topics'
 > & {
   patterns: Array<Pick<Pattern, 'type' | 'pattern'>>;
   readyChecks: Array<Pick<ReadyCheck, 'name' | 'value'>>;
@@ -428,6 +429,7 @@ export const FileSyncOptionFieldsFragmentDoc = gql`
     enabled
     root
     maxDepth
+    topics
     patterns {
       type
       pattern

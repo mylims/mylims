@@ -10,13 +10,19 @@ export default async function nextEvent({
 }: NextEventParams): Promise<Event> {
   return Event.query({
     topic,
-    processors: {
-      $elemMatch: {
-        processorId,
-        'history.0': {
-          $or: [{ status: EventStatus.PENDING }, { $exist: false }],
+    $or: [
+      { processors: { $size: 0 } },
+      {
+        processors: {
+          $elemMatch: {
+            processorId,
+            $or: [
+              { history: { $size: 0 } },
+              { 'history.0.status': EventStatus.PENDING },
+            ],
+          },
         },
       },
-    },
+    ],
   }).firstOrFail();
 }
