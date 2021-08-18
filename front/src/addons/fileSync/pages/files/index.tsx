@@ -1,4 +1,5 @@
-import React from 'react';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import ElnLayout from '@components/ElnLayout';
@@ -11,14 +12,11 @@ import {
   FilesSortField,
   SortDirection,
   FileStatus,
-  useFileSyncOptionQuery,
   FileSyncOptionDocument,
 } from '../../generated/graphql';
 
 import TableFilesFiltered from './TableFilesFiltered';
 import TableFilesSync from './TableFilesSync';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
-import { useEffect } from 'react';
 
 interface RouterQuery {
   id: string;
@@ -120,8 +118,18 @@ ListFiles.getLayout = (
   page: React.ReactNode,
   client?: ApolloClient<NormalizedCacheObject>,
 ) => {
+  return <Layout page={page} client={client} />;
+};
+
+const Layout = ({
+  page,
+  client,
+}: {
+  page: React.ReactNode;
+  client?: ApolloClient<NormalizedCacheObject>;
+}) => {
   const { id } = useParams<{ id: string }>();
-  const [title, setTitle] = React.useState('Table of filtered files');
+  const [title, setTitle] = useState('Table of filtered files');
   const query = client?.query({
     query: FileSyncOptionDocument,
     variables: { id },
@@ -129,17 +137,16 @@ ListFiles.getLayout = (
 
   useEffect(() => {
     if (query) {
-      query.then(({ data }) => {
-        if (data) {
-          setTitle(data.fileSyncOption.root);
-        }
-      });
+      query
+        .then(({ data }) => {
+          if (data) {
+            setTitle(data.fileSyncOption.root);
+          }
+        })
+        // eslint-disable-next-line no-console
+        .catch((error) => console.error(error));
     }
-  }, [id]);
+  }, [id, query]);
 
-  return (
-    <ElnLayout pageTitle={title} backButton>
-      {page}
-    </ElnLayout>
-  );
+  return <ElnLayout pageTitle={title}>{page}</ElnLayout>;
 };
