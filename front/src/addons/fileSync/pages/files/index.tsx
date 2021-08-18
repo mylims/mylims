@@ -113,7 +113,5 @@ function FilterTable({
 }
 
 ListFiles.getLayout = (page: React.ReactNode) => (
-  <ElnLayout pageTitle="Table of filtered files" backButton>
-    {page}
-  </ElnLayout>
+  <ElnLayout pageTitle="Table of filtered files">{page}</ElnLayout>
 );

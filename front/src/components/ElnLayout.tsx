@@ -1,4 +1,3 @@
-import { ArrowLeftIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import minimatch from 'minimatch';
 import React, { useState, useMemo } from 'react';
@@ -11,15 +10,10 @@ import { ZakodiumSolidSvg } from './tailwind-ui';
 
 interface ElnLayoutProps {
   pageTitle?: string;
-  backButton?: boolean;
   children: React.ReactNode;
 }
 
-export default function ElnLayout({
-  pageTitle,
-  backButton,
-  children,
-}: ElnLayoutProps) {
+export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
   const router = useHistory();
   const { pathname } = useLocation();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -157,12 +151,6 @@ export default function ElnLayout({
 
       <header className="shadow bg-neutral-100">
         <div className="flex items-center px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          {backButton ? (
-            <ArrowLeftIcon
-              className="w-6 h-6 mr-2"
-              onClick={() => router.goBack()}
-            />
-          ) : null}
           <h1 className="text-3xl font-bold leading-tight text-neutral-900">
             {currentTitle}
           </h1>
