@@ -25,15 +25,6 @@ export const client = new ApolloClient({
         if (networkError) {
           // eslint-disable-next-line no-console
           console.error('Network error', networkError);
-          // if (
-          //   (networkError as typeof networkError & { statusCode: number })
-          //     .statusCode === 401
-          // ) {
-          //   return new Observable((observer) => {
-          //     nextRouter.push('/login');
-          //     observer.complete();
-          //   });
-          // }
         }
       }
     }),
