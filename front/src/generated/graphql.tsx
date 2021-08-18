@@ -44,6 +44,7 @@ export type EditFileSyncOptionInput = {
   enabled: Scalars['Boolean'];
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
+  topics: Array<Scalars['String']>;
   patterns: Array<FileSyncOptionPatternInput>;
   readyChecks: Array<ReadyCheckInput>;
 };
@@ -161,6 +162,7 @@ export type NewFileSyncOptionInput = {
   enabled: Scalars['Boolean'];
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
+  topics: Array<Scalars['String']>;
   patterns: Array<FileSyncOptionPatternInput>;
   readyChecks: Array<ReadyCheckInput>;
 };

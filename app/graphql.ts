@@ -55,6 +55,7 @@ export type GqlEditFileSyncOptionInput = {
   enabled: Scalars['Boolean'];
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
+  topics: Array<Scalars['String']>;
   patterns: Array<GqlFileSyncOptionPatternInput>;
   readyChecks: Array<GqlReadyCheckInput>;
 };
@@ -180,6 +181,7 @@ export type GqlNewFileSyncOptionInput = {
   enabled: Scalars['Boolean'];
   root: Scalars['String'];
   maxDepth: Scalars['Int'];
+  topics: Array<Scalars['String']>;
   patterns: Array<GqlFileSyncOptionPatternInput>;
   readyChecks: Array<GqlReadyCheckInput>;
 };

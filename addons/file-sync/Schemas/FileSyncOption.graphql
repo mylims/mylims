@@ -33,6 +33,7 @@ input NewFileSyncOptionInput {
   enabled: Boolean!
   root: String!
   maxDepth: Int!
+  topics: [String!]!
   patterns: [FileSyncOptionPatternInput!]!
   readyChecks: [ReadyCheckInput!]!
 }
@@ -42,6 +43,7 @@ input EditFileSyncOptionInput {
   enabled: Boolean!
   root: String!
   maxDepth: Int!
+  topics: [String!]!
   patterns: [FileSyncOptionPatternInput!]!
   readyChecks: [ReadyCheckInput!]!
 }

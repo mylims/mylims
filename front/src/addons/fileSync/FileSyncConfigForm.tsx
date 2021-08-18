@@ -22,6 +22,7 @@ import { omitDeep } from '../../utils/omit-deep';
 import PatternEdit from './PatternEdit';
 import ReadyCheckEdit from './ReadyCheckEdit';
 import SelectFolderSlideOver from './SelectFolderSlideOver';
+import TopicsEdit from './TopicsEdit';
 import {
   EditFileSyncOptionInput,
   NewFileSyncOptionInput,
@@ -32,6 +33,7 @@ const defaultInitialValues: NewFileSyncOptionInput = {
   enabled: true,
   root: '',
   maxDepth: 0,
+  topics: [],
   patterns: [],
   readyChecks: [],
 };
@@ -110,15 +112,14 @@ export default function FileSyncConfigForm({
                         </Button>
                       </h3>
                       <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-                        {values.patterns.length > 0 &&
-                          values.patterns.map((_, index) => (
-                            <PatternEdit
-                              // eslint-disable-next-line react/no-array-index-key
-                              key={index}
-                              remove={remove}
-                              index={index}
-                            />
-                          ))}
+                        {values.patterns.map((_, index) => (
+                          <PatternEdit
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={index}
+                            remove={remove}
+                            index={index}
+                          />
+                        ))}
                       </div>
                     </>
                   )}
@@ -139,21 +140,46 @@ export default function FileSyncConfigForm({
                           </Button>
                         </h3>
                         <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
-                          {values.readyChecks.length > 0 &&
-                            values.readyChecks.map((readyCheck, index) => (
-                              <ReadyCheckEdit
-                                key={readyCheck.name + readyCheck.value}
-                                remove={remove}
-                                index={index}
-                                readyCheck={readyCheck}
-                                checks={data?.readyChecks ?? []}
-                              />
-                            ))}
+                          {values.readyChecks.map((readyCheck, index) => (
+                            <ReadyCheckEdit
+                              key={readyCheck.name + readyCheck.value}
+                              remove={remove}
+                              index={index}
+                              readyCheck={readyCheck}
+                              checks={data?.readyChecks ?? []}
+                            />
+                          ))}
                         </div>
                       </>
                     )}
                   </FieldArray>
                 )}
+                <FieldArray name="topics">
+                  {({ push, remove }) => (
+                    <>
+                      <h3 className="font-medium leading-6 text-md text-cool-gray-900">
+                        Topics
+                        <Button
+                          size={Size.xSmall}
+                          variant={Variant.secondary}
+                          className="ml-2"
+                          onClick={() => push('')}
+                        >
+                          + add
+                        </Button>
+                      </h3>
+                      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+                        {values.topics.map((topic, index) => (
+                          <TopicsEdit
+                            key={topic}
+                            remove={remove}
+                            index={index}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </FieldArray>
               </div>
               <Card.Footer>
                 <div className="flex flex-wrap justify-between">

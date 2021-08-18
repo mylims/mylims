@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { StatusLabel } from '@components/StatusLabel';
 import { Color } from '@components/tailwind-ui';
 import { FileStatus } from '@generated/graphql';
-import { StatusLabel } from '@components/StatusLabel';
 
 interface FileStatusLabelProps {
   status: FileStatus;
