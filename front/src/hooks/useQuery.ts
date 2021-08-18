@@ -26,7 +26,7 @@ export function useSetQuery(base: string) {
   const search = new URLSearchParams(useLocation().search);
   return (key: keyof FilterQuery, value: string) => {
     search.set(key, value);
-    router.push(`${base}?${search.toString()}`);
+    router.replace(`${base}?${search.toString()}`);
   };
 }
 
