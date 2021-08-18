@@ -9,9 +9,10 @@ export function omitDeep(obj: any, props: string[] | string) {
     .filter((objKey) => !props.includes(objKey))
     .forEach((objKey) => {
       if (Array.isArray(obj[objKey])) {
-        newObj[objKey] = obj[objKey].map((subObj: any) =>
-          omitDeep(subObj, props),
-        );
+        newObj[objKey] = obj[objKey].map((subObj: any) => {
+          if (typeof subObj === 'object') return omitDeep(subObj, props);
+          return subObj;
+        });
       } else if (typeof obj[objKey] === 'object' && obj[objKey] !== null) {
         newObj[objKey] = omitDeep(obj[objKey], props);
       } else {

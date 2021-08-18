@@ -5,13 +5,13 @@ import React, { useContext, useMemo } from 'react';
 
 import ExpandButton from '@components/ExpandButton';
 import { FileStatusLabel } from '@components/FileStatusLabel';
+import { StatusLabel } from '@components/StatusLabel';
 import { Td, Button, Color, Roundness, Variant } from '@components/tailwind-ui';
 
 import { useEventsByFileIdLazyQuery } from '../../../generated/graphql';
 
 import { changeNodeValue, TreeContext } from './TreeContext';
 import { EventsProcessors, FileSync } from './types';
-import { StatusLabel } from '@components/StatusLabel';
 
 export default function FileRow({ value }: { value: FileSync }) {
   const size = bytes(value.size).toString();
@@ -102,9 +102,9 @@ export default function FileRow({ value }: { value: FileSync }) {
                   {processorId}
                 </div>
               </Td>
-              <Td></Td>
+              <Td />
               <Td>{format(new Date(date), 'dd.MM.yyyy')}</Td>
-              <Td></Td>
+              <Td />
               <Td>
                 <StatusLabel
                   status={status}
@@ -123,7 +123,7 @@ export default function FileRow({ value }: { value: FileSync }) {
                   }}
                 />
               </Td>
-              <Td></Td>
+              <Td />
             </tr>
           ))
         ))}

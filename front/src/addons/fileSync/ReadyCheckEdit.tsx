@@ -4,7 +4,6 @@ import React, { useMemo } from 'react';
 
 import {
   Button,
-  Card,
   Color,
   InputField,
   SelectField,
@@ -50,7 +49,7 @@ export default function ReadyCheckEdit({
           <InputField name={`readyChecks.${index}.value`} label="Parameter" />
         )}
       </div>
-      <div className="justify-self-center self-center">
+      <div className="self-center justify-self-center">
         <Button
           size={Size.xSmall}
           color={Color.danger}
