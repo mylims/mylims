@@ -11,10 +11,14 @@ import {
   FilesSortField,
   SortDirection,
   FileStatus,
+  useFileSyncOptionQuery,
+  FileSyncOptionDocument,
 } from '../../generated/graphql';
 
 import TableFilesFiltered from './TableFilesFiltered';
 import TableFilesSync from './TableFilesSync';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { useEffect } from 'react';
 
 interface RouterQuery {
   id: string;
@@ -112,6 +116,30 @@ function FilterTable({
   );
 }
 
-ListFiles.getLayout = (page: React.ReactNode) => (
-  <ElnLayout pageTitle="Table of filtered files">{page}</ElnLayout>
-);
+ListFiles.getLayout = (
+  page: React.ReactNode,
+  client?: ApolloClient<NormalizedCacheObject>,
+) => {
+  const { id } = useParams<{ id: string }>();
+  const [title, setTitle] = React.useState('Table of filtered files');
+  const query = client?.query({
+    query: FileSyncOptionDocument,
+    variables: { id },
+  });
+
+  useEffect(() => {
+    if (query) {
+      query.then(({ data }) => {
+        if (data) {
+          setTitle(data.fileSyncOption.root);
+        }
+      });
+    }
+  }, [id]);
+
+  return (
+    <ElnLayout pageTitle={title} backButton>
+      {page}
+    </ElnLayout>
+  );
+};

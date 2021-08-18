@@ -1,6 +1,10 @@
 import '../../tailwind.css';
 
-import { ApolloProvider } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloProvider,
+  NormalizedCacheObject,
+} from '@apollo/client';
 import React, { useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
@@ -82,7 +86,10 @@ function SetupEln({ children }: SetupElnProps) {
 
 interface MyAppProps {
   Component: React.ComponentType<Record<string, never>> & {
-    getLayout?: (component: React.ReactNode) => React.ReactNode;
+    getLayout?: (
+      component: React.ReactNode,
+      client?: ApolloClient<NormalizedCacheObject>,
+    ) => React.ReactNode;
   };
 }
 
@@ -95,7 +102,7 @@ export default function App({ Component }: MyAppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ApolloProvider client={client}>
-        <SetupEln>{getLayout(<Component />)}</SetupEln>
+        <SetupEln>{getLayout(<Component />, client)}</SetupEln>
       </ApolloProvider>
     </QueryClientProvider>
   );
