@@ -105,7 +105,6 @@ export default function TableFilesFiltered({
       setQuery({ ...query, page: newPage.toString() }),
   };
 
-  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
   return (
     <Form
       initialValues={query}
@@ -135,6 +134,7 @@ export default function TableFilesFiltered({
           <AutoSubmitForm />
         </div>
 
+        {loading && <Spinner className="w-10 h-10 text-danger-500" />}
         <Table
           tableClassName="table-fixed"
           Header={Header}
