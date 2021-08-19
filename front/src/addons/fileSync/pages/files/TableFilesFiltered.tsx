@@ -1,6 +1,4 @@
 import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/outline';
-import bytes from 'byte-size';
-import { format } from 'date-fns';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
@@ -24,6 +22,7 @@ import {
 } from '@components/tailwind-ui';
 import { FileStatus } from '@generated/graphql';
 import { useFilterQuery } from '@hooks/useQuery';
+import { formatBytes, formatDate } from '@utils/formatFields';
 
 import {
   FilesByConfigFlatQuery,
@@ -174,15 +173,14 @@ function Empty() {
   );
 }
 function Row({ value }: { value: File }) {
-  const size = bytes(value.size).toString();
   return (
     <tr>
       <Td title={value.relativePath} className="flex items-center truncate">
         <DocumentTextIcon className="w-5 h-5 mr-1" />
         {value.relativePath}
       </Td>
-      <Td>{size}</Td>
-      <Td>{format(new Date(value.date), 'dd.MM.yyyy')}</Td>
+      <Td>{formatBytes(value.size)}</Td>
+      <Td>{formatDate(value.date)}</Td>
       <Td>
         <FileStatusLabel status={value.status} />
       </Td>

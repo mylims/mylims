@@ -1,6 +1,4 @@
 import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/solid';
-import bytes from 'byte-size';
-import { format } from 'date-fns';
 import React, { useContext, useMemo } from 'react';
 
 import ExpandButton from '@components/ExpandButton';
@@ -15,6 +13,7 @@ import {
 
 import { changeNodeValue, TreeContext } from './TreeContext';
 import { EventsProcessors, FileSync } from './types';
+import { formatBytes, formatDate } from '@utils/formatFields';
 
 function getTagColor(status: EventStatus) {
   switch (status) {
@@ -31,7 +30,6 @@ function getTagColor(status: EventStatus) {
 }
 
 export default function FileRow({ value }: { value: FileSync }) {
-  const size = bytes(value.size).toString();
   const context = useContext(TreeContext);
   const [fetchChild, { called, data }] = useEventsByFileIdLazyQuery({
     variables: { id: value.id },
@@ -75,8 +73,8 @@ export default function FileRow({ value }: { value: FileSync }) {
           <DocumentTextIcon className="w-5 h-5 mr-1" />
           {value.name}
         </Td>
-        <Td>{size}</Td>
-        <Td>{format(value.date, 'dd.MM.yyyy')}</Td>
+        <Td>{formatBytes(value.size)}</Td>
+        <Td>{formatDate(value.date)}</Td>
         <Td>{value.countRevisions}</Td>
         <Td>
           <FileStatusLabel status={value.status} />
@@ -122,7 +120,7 @@ export default function FileRow({ value }: { value: FileSync }) {
                   </div>
                 </Td>
                 <Td />
-                <Td>{format(new Date(date), 'dd.MM.yyyy')}</Td>
+                <Td>{formatDate(date)}</Td>
                 <Td />
                 <Td>
                   <StatusLabel status={status} color={color} />
