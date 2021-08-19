@@ -3,12 +3,12 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { FilesSortField, FileStatus, SortDirection } from '@generated/graphql';
 
 interface FilterQuery {
-  page?: string;
-  minSize: string;
-  maxSize: string;
-  minDate: string;
-  maxDate: string;
-  status: FileStatus[];
+  page: string;
+  minSize: number;
+  maxSize: number;
+  minDate: Date;
+  maxDate: Date;
+  status: Record<'value' | 'label', FileStatus>[];
   sortField: FilesSortField;
   sortDirection: SortDirection;
 }
@@ -24,40 +24,50 @@ export function useQuery() {
 export function useSetQuery(base: string) {
   const router = useHistory();
   const search = new URLSearchParams(useLocation().search);
-  return (key: keyof FilterQuery, value: string) => {
-    search.set(key, value);
+  return (newQuery: Partial<FilterQuery>) => {
+    // set keys to url search params
+    for (const [key, value] of Object.entries(newQuery)) {
+      if (value !== undefined) {
+        if (typeof value === 'string') {
+          search.set(key, value);
+        } else if (typeof value === 'number') {
+          search.set(key, value.toString());
+        } else if (key === 'status') {
+          const status = (value as FilterQuery['status'])
+            .map((s) => s.value)
+            .join(',');
+          search.set(key, status);
+        } else {
+          search.set(key, (value as Date).toISOString());
+        }
+      }
+    }
     router.replace(`${base}?${search.toString()}`);
   };
 }
 
 export function useFilterQuery(
   base: string,
-): [FilterQuery, (key: keyof FilterQuery, value: string) => void] {
+): [Partial<FilterQuery>, (newQuery: Partial<FilterQuery>) => void] {
   const setQuery = useSetQuery(base);
-  const {
-    page,
-    minSize = '0',
-    maxSize = '1000000000',
-    minDate = new Date(0).toISOString(),
-    maxDate = new Date().toISOString(),
-    status = FileStatus.IMPORTED,
-    sortField = FilesSortField.DATE,
-    sortDirection = SortDirection.DESC,
-  } = useQuery();
-  const statusList: FileStatus[] = status
-    .split(',')
-    .map((s) => s.trim() as FileStatus);
+  const query = useQuery();
+  const statusList = query.status?.split(',').map((s) => {
+    const value = s.trim() as FileStatus;
+    return { value, label: value };
+  }) ?? [{ value: FileStatus.IMPORTED, label: FileStatus.IMPORTED }];
+  const minSize = query.minSize ? parseInt(query.minSize, 10) : undefined;
+  const maxSize = query.maxSize ? parseInt(query.maxSize, 10) : undefined;
+  const minDate = query.minDate ? new Date(query.minDate) : undefined;
+  const maxDate = query.maxDate ? new Date(query.maxDate) : undefined;
 
   return [
     {
-      page,
+      ...query,
+      status: statusList,
       minSize,
       maxSize,
       minDate,
       maxDate,
-      status: statusList,
-      sortField: sortField as FilesSortField,
-      sortDirection: sortDirection as SortDirection,
     },
     setQuery,
   ];

@@ -3,13 +3,17 @@ import bytes from 'byte-size';
 import { format } from 'date-fns';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import * as yup from 'yup';
 
+import AutoSubmitForm from '@components/AutoSubmitForm';
 import { FileStatusLabel, getTagColor } from '@components/FileStatusLabel';
-import InputDebounce from '@components/InputDebounce';
 import {
   Button,
   Color,
-  MultiSearchSelect,
+  DatePickerField,
+  Form,
+  InputField,
+  MultiSearchSelectField,
   Roundness,
   Spinner,
   Table,
@@ -48,6 +52,32 @@ interface TagsMultiSearch {
   label: string;
 }
 
+const schema = yup.object().shape({
+  minSize: yup.number().integer().nullable().min(0),
+  maxSize: yup
+    .number()
+    .integer()
+    .nullable()
+    .min(0)
+    .moreThan(yup.ref('minSize'), 'Should be greater than min size'),
+  minDate: yup.date().nullable().min(new Date(0)).max(new Date()),
+  maxDate: yup
+    .date()
+    .nullable()
+    .min(yup.ref('minDate'), 'Should be greater than min date')
+    .max(new Date()),
+  status: yup
+    .array()
+    .of(
+      yup.object().shape({
+        value: yup.string().required(),
+        label: yup.string().required(),
+      }),
+    )
+    .nullable()
+    .min(1),
+});
+
 export default function TableFilesFiltered({
   id,
   data,
@@ -71,83 +101,50 @@ export default function TableFilesFiltered({
     page,
     itemsPerPage: pageSize,
     totalCount,
-    onPageChange: (newPage: number) => setQuery('page', newPage.toString()),
+    onPageChange: (newPage: number) =>
+      setQuery({ ...query, page: newPage.toString() }),
   };
 
   if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
   return (
-    <div>
-      <div className="flex items-end mb-2">
-        <InputDebounce
-          name="minSize"
-          label="Min size"
-          className="w-1/4 mr-2"
-          type="number"
-          value={query.minSize}
-          onChange={(newValue) => setQuery('minSize', newValue)}
-        />
-        <InputDebounce
-          name="maxSize"
-          label="Max size"
-          className="w-1/4 mr-2"
-          type="number"
-          value={query.maxSize}
-          onChange={(newValue) => setQuery('maxSize', newValue)}
-        />
-        <InputDebounce
-          name="minDate"
-          label="Min date"
-          className="w-1/4 mr-2"
-          type="date"
-          value={format(new Date(query.minDate), 'yyyy-MM-dd')}
-          onChange={(value) =>
-            setQuery('minDate', new Date(value).toISOString())
-          }
-        />
-        <InputDebounce
-          name="maxDate"
-          label="Max date"
-          className="w-1/4 mr-2"
-          type="date"
-          value={format(new Date(query.maxDate), 'yyyy-MM-dd')}
-          onChange={(value) =>
-            setQuery('maxDate', new Date(value).toISOString())
-          }
-        />
-      </div>
-      <div className="flex items-end mb-2">
-        <MultiSearchSelect
-          {...selectTags}
-          label="Status"
-          getBadgeColor={(option: TagsMultiSearch) => getTagColor(option.value)}
-          selected={query.status.map((value) => ({ value, label: value }))}
-          onSelect={(tags: TagsMultiSearch[]) =>
-            setQuery(
-              'status',
-              tags.map(({ value }) => value).join(',') || FileStatus.IMPORTED,
-            )
-          }
-        />
-        <Link to={id}>
-          <Button
-            className="ml-2"
-            variant={Variant.secondary}
-            color={Color.danger}
-          >
-            Remove filters
-          </Button>
-        </Link>
-      </div>
+    <Form
+      initialValues={query}
+      validationSchema={schema}
+      onSubmit={(values) => setQuery(values)}
+    >
+      <div>
+        <div className="grid grid-cols-4 gap-4 mb-4">
+          <InputField name="minSize" label="Min size" type="number" />
+          <InputField name="maxSize" label="Max size" type="number" />
+          <DatePickerField name="minDate" label="Min date" />
+          <DatePickerField name="maxDate" label="Max date" />
+          <div className="col-span-2">
+            <MultiSearchSelectField
+              {...selectTags}
+              name="status"
+              label="Status"
+              clearable
+              getBadgeColor={({ value }: TagsMultiSearch) => getTagColor(value)}
+            />
+          </div>
+          <Link to={id} className="self-end">
+            <Button variant={Variant.secondary} color={Color.danger}>
+              Remove filters
+            </Button>
+          </Link>
+          <AutoSubmitForm />
+        </div>
 
-      <Table
-        tableClassName="table-fixed"
-        Header={Header}
-        Empty={Empty}
-        Tr={Row}
-        data={files}
-        pagination={pagination}
-      />
-    </div>
+        <Table
+          tableClassName="table-fixed"
+          Header={Header}
+          Empty={Empty}
+          Tr={Row}
+          data={files}
+          pagination={pagination}
+        />
+      </div>
+    </Form>
   );
 }
 

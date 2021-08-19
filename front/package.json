@@ -40,7 +40,8 @@
     "react-popper": "^2.2.5",
     "react-query": "^3.19.0",
     "react-router-dom": "^5.2.0",
-    "tailwindcss": "^2.2.4"
+    "tailwindcss": "^2.2.4",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.21.5",

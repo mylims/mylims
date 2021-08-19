@@ -21,11 +21,11 @@ import TableFilesSync from './TableFilesSync';
 interface RouterQuery {
   id: string;
   page?: string;
-  minSize?: string;
-  maxSize?: string;
-  minDate?: string;
-  maxDate?: string;
-  status?: FileStatus[];
+  minSize?: number;
+  maxSize?: number;
+  minDate?: Date;
+  maxDate?: Date;
+  status?: Record<'value' | 'label', FileStatus>[];
   sortField?: FilesSortField;
   sortDirection?: SortDirection;
 }
@@ -73,22 +73,23 @@ function FilterTable({
   page,
   sortField,
   sortDirection,
-  minSize,
-  maxSize,
+  status,
   ...filters
-}: Required<RouterQuery>) {
-  const pageNum = parseInt(page, 10);
+}: RouterQuery) {
+  const pageNum = page !== undefined ? parseInt(page, 10) : 1;
   const { data, loading, error } = useFilesByConfigFlatQuery({
     variables: {
       id,
       skip: (pageNum - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
       filterBy: {
-        minSize: parseInt(minSize, 10),
-        maxSize: parseInt(maxSize, 10),
         ...filters,
+        status: status?.map(({ value }) => value),
       },
-      sortBy: { field: sortField, direction: sortDirection },
+      sortBy: {
+        field: sortField || FilesSortField.DATE,
+        direction: sortDirection || SortDirection.DESC,
+      },
     },
   });
 
