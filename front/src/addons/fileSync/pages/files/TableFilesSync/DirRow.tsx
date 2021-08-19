@@ -1,6 +1,4 @@
 import { FolderOpenIcon } from '@heroicons/react/solid';
-import bytes from 'byte-size';
-import { format } from 'date-fns';
 import React, { useContext, useEffect } from 'react';
 
 import ExpandButton from '@components/ExpandButton';
@@ -12,13 +10,13 @@ import { TreeContext, changeNodeValue } from './TreeContext';
 import { DirSync, TreeType } from './types';
 
 import { Row } from './index';
+import { formatBytes, formatDate } from '@utils/formatFields';
 
 export default function DirRow({ value }: { value: DirSync }) {
   const context = useContext(TreeContext);
   const [fetchChild, { loading, called, data }] = useFilesByConfigLazyQuery({
     variables: { id: context.id, path: [...value.path, value.id] },
   });
-  const size = bytes(value.size).toString();
 
   useEffect(() => {
     if (called && !loading && data && !value.children) {
@@ -77,8 +75,8 @@ export default function DirRow({ value }: { value: DirSync }) {
           <FolderOpenIcon className="w-5 h-5 mr-1" />
           {value.name}
         </Td>
-        <Td>{size}</Td>
-        <Td>{format(new Date(value.date), 'dd.MM.yyyy')}</Td>
+        <Td>{formatBytes(value.size)}</Td>
+        <Td>{formatDate(value.date)}</Td>
         <Td />
         <Td />
         <Td />
