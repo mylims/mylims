@@ -20,14 +20,14 @@ import TableFilesSync from './TableFilesSync';
 
 interface RouterQuery {
   id: string;
-  page?: string;
-  minSize?: number;
-  maxSize?: number;
-  minDate?: Date;
-  maxDate?: Date;
-  status?: Record<'value' | 'label', FileStatus>[];
-  sortField?: FilesSortField;
-  sortDirection?: SortDirection;
+  page: string;
+  minSize: number | null;
+  maxSize: number | null;
+  minDate: Date | null;
+  maxDate: Date | null;
+  status: Record<'value' | 'label', FileStatus>[] | null;
+  sortField: { value: FilesSortField; label: string } | null;
+  sortDirection: { value: SortDirection; label: string } | null;
 }
 
 const PAGE_SIZE = 10;
@@ -88,8 +88,8 @@ function FilterTable({
         status: status?.map(({ value }) => value),
       },
       sortBy: {
-        field: sortField || FilesSortField.DATE,
-        direction: sortDirection || SortDirection.DESC,
+        field: sortField?.value || FilesSortField.DATE,
+        direction: sortDirection?.value || SortDirection.DESC,
       },
     },
   });
@@ -141,9 +141,7 @@ const Layout = ({
     if (query) {
       query
         .then(({ data }) => {
-          if (data) {
-            setTitle(data.fileSyncOption.root);
-          }
+          if (data) setTitle(data.fileSyncOption.root);
         })
         // eslint-disable-next-line no-console
         .catch((error) => console.error(error));

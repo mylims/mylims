@@ -13,6 +13,7 @@ import {
   InputField,
   MultiSearchSelectField,
   Roundness,
+  SelectField,
   Spinner,
   Table,
   Td,
@@ -20,12 +21,13 @@ import {
   useMultiSearchSelect,
   Variant,
 } from '@components/tailwind-ui';
-import { FileStatus } from '@generated/graphql';
-import { useFilterQuery } from '@hooks/useQuery';
+import { FileStatus, SortDirection } from '@generated/graphql';
+import { useFilterQuery, selectOrder, selectField } from '@hooks/useQuery';
 import { formatBytes, formatDate } from '@utils/formatFields';
 
 import {
   FilesByConfigFlatQuery,
+  FilesSortField,
   SyncFileRevision,
 } from '../../generated/graphql';
 
@@ -77,6 +79,27 @@ const schema = yup.object().shape({
     .min(1),
 });
 
+const selectOrderOptions = [
+  { value: SortDirection.ASC, label: selectOrder[SortDirection.ASC] },
+  { value: SortDirection.DESC, label: selectOrder[SortDirection.DESC] },
+];
+const selectFieldOptions = [
+  {
+    value: FilesSortField.CREATIONDATE,
+    label: selectField[FilesSortField.CREATIONDATE],
+  },
+  { value: FilesSortField.DATE, label: selectField[FilesSortField.DATE] },
+  {
+    value: FilesSortField.FILENAME,
+    label: selectField[FilesSortField.FILENAME],
+  },
+  {
+    value: FilesSortField.MODIFICATIONDATE,
+    label: selectField[FilesSortField.MODIFICATIONDATE],
+  },
+  { value: FilesSortField.SIZE, label: selectField[FilesSortField.SIZE] },
+];
+
 export default function TableFilesFiltered({
   id,
   data,
@@ -111,7 +134,13 @@ export default function TableFilesFiltered({
       onSubmit={(values) => setQuery(values)}
     >
       <div>
-        <div className="grid grid-cols-4 gap-4 mb-4">
+        <Link to={id}>
+          <Button variant={Variant.secondary} color={Color.danger}>
+            Remove filters
+          </Button>
+        </Link>
+
+        <div className="grid grid-cols-4 gap-4 my-4">
           <InputField name="minSize" label="Min size" type="number" />
           <InputField name="maxSize" label="Max size" type="number" />
           <DatePickerField name="minDate" label="Min date" />
@@ -125,11 +154,16 @@ export default function TableFilesFiltered({
               getBadgeColor={({ value }: TagsMultiSearch) => getTagColor(value)}
             />
           </div>
-          <Link to={id} className="self-end">
-            <Button variant={Variant.secondary} color={Color.danger}>
-              Remove filters
-            </Button>
-          </Link>
+          <SelectField
+            options={selectFieldOptions}
+            name="sortField"
+            label="Sort field"
+          />
+          <SelectField
+            options={selectOrderOptions}
+            name="sortDirection"
+            label="Sort direction"
+          />
           <AutoSubmitForm />
         </div>
 

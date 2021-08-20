@@ -2,6 +2,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { FilesSortField, FileStatus, SortDirection } from '@generated/graphql';
 
+type Nullable<T> = { [P in keyof T]: T[P] | null };
 interface FilterQuery {
   page: string;
   minSize: number;
@@ -9,10 +10,21 @@ interface FilterQuery {
   minDate: Date;
   maxDate: Date;
   status: Record<'value' | 'label', FileStatus>[];
-  sortField: FilesSortField;
-  sortDirection: SortDirection;
+  sortField: { value: FilesSortField; label: string };
+  sortDirection: { value: SortDirection; label: string };
 }
 
+export const selectOrder = {
+  [SortDirection.ASC]: 'Ascend',
+  [SortDirection.DESC]: 'Descend',
+};
+export const selectField = {
+  [FilesSortField.CREATIONDATE]: 'Creation date',
+  [FilesSortField.DATE]: 'Date',
+  [FilesSortField.FILENAME]: 'Filename',
+  [FilesSortField.MODIFICATIONDATE]: 'Modification date',
+  [FilesSortField.SIZE]: 'Size',
+};
 export function useQuery() {
   let query: Record<string, string | undefined> = {};
   for (const [key, value] of new URLSearchParams(useLocation().search)) {
@@ -24,50 +36,82 @@ export function useQuery() {
 export function useSetQuery(base: string) {
   const router = useHistory();
   const search = new URLSearchParams(useLocation().search);
-  return (newQuery: Partial<FilterQuery>) => {
+  return (newQuery: Nullable<FilterQuery>) => {
     // set keys to url search params
     for (const [key, value] of Object.entries(newQuery)) {
-      if (value !== undefined) {
-        if (typeof value === 'string') {
-          search.set(key, value);
-        } else if (typeof value === 'number') {
-          search.set(key, value.toString());
-        } else if (key === 'status') {
-          const status = (value as FilterQuery['status'])
-            .map((s) => s.value)
-            .join(',');
-          search.set(key, status);
-        } else {
-          search.set(key, (value as Date).toISOString());
+      if (value !== null) {
+        switch (key) {
+          case 'minSize':
+          case 'maxSize': {
+            search.set(key, value.toString());
+            break;
+          }
+          case 'minDate':
+          case 'maxDate': {
+            search.set(key, (value as Date).toISOString());
+            break;
+          }
+          case 'status': {
+            const status = (value as FilterQuery['status'])
+              .map((s) => s.value)
+              .join(',');
+            search.set(key, status);
+            break;
+          }
+          case 'page': {
+            search.set(key, value as FilterQuery['page']);
+            break;
+          }
+          case 'sortField':
+          case 'sortDirection': {
+            search.set(
+              key,
+              (value as FilterQuery['sortField' | 'sortDirection']).value,
+            );
+            break;
+          }
+          default: {
+            throw new Error(`Unknown key: ${key}`);
+          }
         }
       }
     }
+    console.log(newQuery, search.toString());
     router.replace(`${base}?${search.toString()}`);
   };
 }
 
 export function useFilterQuery(
   base: string,
-): [Partial<FilterQuery>, (newQuery: Partial<FilterQuery>) => void] {
+): [Nullable<FilterQuery>, (newQuery: Nullable<FilterQuery>) => void] {
   const setQuery = useSetQuery(base);
   const query = useQuery();
   const statusList = query.status?.split(',').map((s) => {
     const value = s.trim() as FileStatus;
     return { value, label: value };
   }) ?? [{ value: FileStatus.IMPORTED, label: FileStatus.IMPORTED }];
-  const minSize = query.minSize ? parseInt(query.minSize, 10) : undefined;
-  const maxSize = query.maxSize ? parseInt(query.maxSize, 10) : undefined;
-  const minDate = query.minDate ? new Date(query.minDate) : undefined;
-  const maxDate = query.maxDate ? new Date(query.maxDate) : undefined;
+  const minSize = query.minSize ? parseInt(query.minSize, 10) : null;
+  const maxSize = query.maxSize ? parseInt(query.maxSize, 10) : null;
+  const minDate = query.minDate ? new Date(query.minDate) : null;
+  const maxDate = query.maxDate ? new Date(query.maxDate) : null;
+  const sortField =
+    (query.sortField as FilesSortField) || FilesSortField.CREATIONDATE;
+  const sortDirection =
+    (query.sortDirection as SortDirection) || SortDirection.DESC;
 
   return [
     {
-      ...query,
+      page: query.page ?? null,
       status: statusList,
       minSize,
       maxSize,
       minDate,
       maxDate,
+      sortField: { value: sortField, label: selectField[sortField] },
+      sortDirection: {
+        value: sortDirection,
+        label: selectOrder[sortDirection],
+      },
     },
     setQuery,
   ];
