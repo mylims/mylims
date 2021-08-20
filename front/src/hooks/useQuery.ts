@@ -76,6 +76,7 @@ export function useSetQuery(base: string) {
         }
       }
     }
+    console.log(newQuery, search.toString());
     router.replace(`${base}?${search.toString()}`);
   };
 }
