@@ -1,7 +1,13 @@
 import Env from '@ioc:Adonis/Core/Env';
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
-import { GqlResolvers, GqlSyncFileRevision, GqlFileStatus } from 'App/graphql';
+import {
+  GqlResolvers,
+  GqlSyncFileRevision,
+  GqlFileStatus,
+  GqlFilesSortField,
+  GqlSortDirection,
+} from 'App/graphql';
 
 import { SyncFile } from '../Models/SyncFile';
 
@@ -15,7 +21,10 @@ const resolvers: GqlResolvers = {
         maxDate = new Date(Date.now()),
         status = [GqlFileStatus.IMPORTED],
       } = filterBy || {};
-      const { field = 'date', direction = 'desc' } = sortBy || {};
+      const {
+        field = GqlFilesSortField.DATE,
+        direction = GqlSortDirection.DESC,
+      } = sortBy || {};
       const sortField = field === 'filename' ? field : `revisions.0.${field}`;
 
       let fileCursor = (await SyncFile.getCollection())
@@ -25,7 +34,7 @@ const resolvers: GqlResolvers = {
           'revisions.0.date': { $gte: minDate, $lte: maxDate },
           'revisions.0.status': { $in: status },
         })
-        .sort({ [sortField]: direction === 'desc' ? -1 : 1 });
+        .sort({ [sortField]: direction === GqlSortDirection.DESC ? -1 : 1 });
       const totalCount = await fileCursor.count();
 
       if (skip) fileCursor = fileCursor.skip(skip);
