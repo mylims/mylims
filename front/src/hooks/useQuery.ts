@@ -43,7 +43,7 @@ export function useSetQuery(base: string) {
         switch (key) {
           case 'minSize':
           case 'maxSize': {
-            search.set(key, value.toString());
+            search.set(key, (value as number).toString());
             break;
           }
           case 'minDate':
@@ -76,7 +76,6 @@ export function useSetQuery(base: string) {
         }
       }
     }
-    console.log(newQuery, search.toString());
     router.replace(`${base}?${search.toString()}`);
   };
 }
