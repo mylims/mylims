@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import ElnLayout from '@components/ElnLayout';
 import { Alert, AlertType, Spinner } from '@components/tailwind-ui';
 import { useFilterQuery } from 'src/hooks/useQuery';
+import filesizeParser from 'src/utils/filesize-parser';
 
 import {
   useFilesByConfigQuery,
@@ -21,8 +22,8 @@ import TableFilesSync from './TableFilesSync';
 interface RouterQuery {
   id: string;
   page: string;
-  minSize: number | null;
-  maxSize: number | null;
+  minSize: string | null;
+  maxSize: string | null;
   minDate: Date | null;
   maxDate: Date | null;
   status: Record<'value' | 'label', FileStatus>[] | null;
@@ -78,6 +79,8 @@ function FilterTable({
   ...filters
 }: RouterQuery) {
   const pageNum = page !== undefined ? parseInt(page, 10) : 1;
+  const minSize = filters.minSize ? filesizeParser(filters.minSize) : undefined;
+  const maxSize = filters.maxSize ? filesizeParser(filters.maxSize) : undefined;
   const { data, loading, error } = useFilesByConfigFlatQuery({
     variables: {
       id,
@@ -85,6 +88,8 @@ function FilterTable({
       limit: PAGE_SIZE,
       filterBy: {
         ...filters,
+        minSize,
+        maxSize,
         status: status?.map(({ value }) => value),
       },
       sortBy: {
