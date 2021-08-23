@@ -1,12 +1,15 @@
+import bytes from 'byte-size';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { FilesSortField, FileStatus, SortDirection } from '@generated/graphql';
 
+import filesizeParser from '../utils/filesize-parser';
+
 type Nullable<T> = { [P in keyof T]: T[P] | null };
 interface FilterQuery {
   page: string;
-  minSize: number;
-  maxSize: number;
+  minSize: string;
+  maxSize: string;
   minDate: Date;
   maxDate: Date;
   status: Record<'value' | 'label', FileStatus>[];
@@ -43,12 +46,18 @@ export function useSetQuery(base: string) {
         switch (key) {
           case 'minSize':
           case 'maxSize': {
-            search.set(key, (value as number).toString());
+            const size = filesizeParser(
+              value as FilterQuery['minSize' | 'maxSize'],
+            );
+            search.set(key, size.toString());
             break;
           }
           case 'minDate':
           case 'maxDate': {
-            search.set(key, (value as Date).toISOString());
+            search.set(
+              key,
+              (value as FilterQuery['minDate' | 'maxDate']).toISOString(),
+            );
             break;
           }
           case 'status': {
@@ -90,8 +99,8 @@ export function useFilterQuery(
     const value = s.trim() as FileStatus;
     return { value, label: value };
   }) ?? [{ value: FileStatus.IMPORTED, label: FileStatus.IMPORTED }];
-  const minSize = query.minSize ? parseInt(query.minSize, 10) : null;
-  const maxSize = query.maxSize ? parseInt(query.maxSize, 10) : null;
+  const minSize = query.minSize ? bytes(query.minSize).toString() : null;
+  const maxSize = query.maxSize ? bytes(query.maxSize).toString() : null;
   const minDate = query.minDate ? new Date(query.minDate) : null;
   const maxDate = query.maxDate ? new Date(query.maxDate) : null;
   const sortField =

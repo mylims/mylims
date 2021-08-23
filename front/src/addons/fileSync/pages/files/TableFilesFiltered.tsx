@@ -25,11 +25,23 @@ import { FileStatus, SortDirection } from '@generated/graphql';
 import { useFilterQuery, selectOrder, selectField } from '@hooks/useQuery';
 import { formatBytes, formatDate } from '@utils/formatFields';
 
+import filesizeParser from '../../../../utils/filesize-parser';
 import {
   FilesByConfigFlatQuery,
   FilesSortField,
   SyncFileRevision,
 } from '../../generated/graphql';
+
+function isByteSize(value: string | null | undefined): boolean {
+  if (!value) return true;
+
+  try {
+    filesizeParser(value);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 interface TableFilesFilteredProps {
   id: string;
@@ -54,13 +66,27 @@ interface TagsMultiSearch {
 }
 
 const schema = yup.object().shape({
-  minSize: yup.number().integer().nullable().min(0),
-  maxSize: yup
-    .number()
-    .integer()
+  minSize: yup
+    .string()
     .nullable()
-    .min(0)
-    .moreThan(yup.ref('minSize'), 'Should be greater than min size'),
+    .test('is-bytesize', 'Not a valid file size', isByteSize),
+  maxSize: yup
+    .string()
+    .nullable()
+    .test('is-bytesize', 'Not a valid file size', isByteSize)
+    .test(
+      'is-greater-than',
+      'Should be greater than min size',
+      (value, context) => {
+        if (value && context.parent.minSize) {
+          const maxSize = filesizeParser(value);
+          const minSize = filesizeParser(context.parent.minSize);
+          return maxSize >= minSize;
+        } else {
+          return true;
+        }
+      },
+    ),
   minDate: yup.date().nullable().min(new Date(0)).max(new Date()),
   maxDate: yup
     .date()
@@ -141,8 +167,8 @@ export default function TableFilesFiltered({
         </Link>
 
         <div className="grid grid-cols-4 gap-4 my-4">
-          <InputField name="minSize" label="Min size" type="number" />
-          <InputField name="maxSize" label="Max size" type="number" />
+          <InputField name="minSize" label="Min size" />
+          <InputField name="maxSize" label="Max size" />
           <DatePickerField name="minDate" label="Min date" />
           <DatePickerField name="maxDate" label="Max date" />
           <div className="col-span-2">
