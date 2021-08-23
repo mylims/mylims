@@ -1,0 +1,6 @@
+{
+  "displayName": "Processor for B1505 files",
+  "description": "Converts all files to B1505 format",
+  "commands": "./Commands",
+  "routes": "./routes"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "addon-processor-b1505",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@lukeed/uuid": "^2.0.0",
+    "common-spectrum": "^0.40.0",
+    "iv-spectrum": "^0.14.1"
+  }
+}
