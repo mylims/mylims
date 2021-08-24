@@ -10,12 +10,12 @@ import {
   Variant,
 } from '@components/tailwind-ui';
 
-interface PatternEditProps {
+interface TopicsEditProps {
   remove: ArrayHelpers['remove'];
   index: number;
 }
 
-export default function PatternEdit({ remove, index }: PatternEditProps) {
+export default function TopicsEdit({ remove, index }: TopicsEditProps) {
   return (
     <div className="grid grid-cols-3 p-2 m-1 rounded-lg shadow">
       <div className="col-span-2">

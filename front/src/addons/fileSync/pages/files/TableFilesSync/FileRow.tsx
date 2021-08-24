@@ -8,10 +8,27 @@ import { FileStatusLabel } from '@components/FileStatusLabel';
 import { StatusLabel } from '@components/StatusLabel';
 import { Td, Button, Color, Roundness, Variant } from '@components/tailwind-ui';
 
-import { useEventsByFileIdLazyQuery } from '../../../generated/graphql';
+import {
+  EventStatus,
+  useEventsByFileIdLazyQuery,
+} from '../../../generated/graphql';
 
 import { changeNodeValue, TreeContext } from './TreeContext';
 import { EventsProcessors, FileSync } from './types';
+
+function getTagColor(status: EventStatus) {
+  switch (status) {
+    case EventStatus.SUCCESS: {
+      return Color.success;
+    }
+    case EventStatus.ERROR: {
+      return Color.danger;
+    }
+    default: {
+      return Color.warning;
+    }
+  }
+}
 
 export default function FileRow({ value }: { value: FileSync }) {
   const size = bytes(value.size).toString();
@@ -86,46 +103,34 @@ export default function FileRow({ value }: { value: FileSync }) {
             </Td>
           </tr>
         ) : (
-          events.map(({ topic, processorId, status, date }) => (
-            <tr key={processorId}>
-              <Td className="flex">
-                <div className="pr-2">
-                  <span className="pr-1 font-bold text-alternative-600">
-                    Topic:
-                  </span>
-                  {topic}
-                </div>
-                <div className="pr-2">
-                  <span className="pr-1 font-bold text-alternative-600">
-                    Processor:
-                  </span>
-                  {processorId}
-                </div>
-              </Td>
-              <Td />
-              <Td>{format(new Date(date), 'dd.MM.yyyy')}</Td>
-              <Td />
-              <Td>
-                <StatusLabel
-                  status={status}
-                  getTagColor={(status) => {
-                    switch (status) {
-                      case 'success': {
-                        return Color.success;
-                      }
-                      case 'error': {
-                        return Color.danger;
-                      }
-                      default: {
-                        return Color.warning;
-                      }
-                    }
-                  }}
-                />
-              </Td>
-              <Td />
-            </tr>
-          ))
+          events.map(({ topic, processorId, status, date }) => {
+            const color = getTagColor(status);
+            return (
+              <tr key={processorId}>
+                <Td className="flex">
+                  <div className="pr-2">
+                    <span className="pr-1 font-bold text-alternative-600">
+                      Topic:
+                    </span>
+                    {topic}
+                  </div>
+                  <div className="pr-2">
+                    <span className="pr-1 font-bold text-alternative-600">
+                      Processor:
+                    </span>
+                    {processorId}
+                  </div>
+                </Td>
+                <Td />
+                <Td>{format(new Date(date), 'dd.MM.yyyy')}</Td>
+                <Td />
+                <Td>
+                  <StatusLabel status={status} color={color} />
+                </Td>
+                <Td />
+              </tr>
+            );
+          })
         ))}
     </>
   );
