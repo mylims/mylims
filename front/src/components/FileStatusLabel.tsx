@@ -22,5 +22,6 @@ export function getTagColor(status: FileStatus): Color {
   }
 }
 export function FileStatusLabel({ status }: FileStatusLabelProps) {
-  return <StatusLabel status={status} getTagColor={getTagColor} />;
+  const color = getTagColor(status);
+  return <StatusLabel status={status} color={color} />;
 }
