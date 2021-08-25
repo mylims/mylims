@@ -5,6 +5,7 @@ import ExpandButton from '@components/ExpandButton';
 import { FileStatusLabel } from '@components/FileStatusLabel';
 import { StatusLabel } from '@components/StatusLabel';
 import { Td, Button, Color, Roundness, Variant } from '@components/tailwind-ui';
+import { formatBytes, formatDate } from '@utils/formatFields';
 
 import {
   EventStatus,
@@ -13,7 +14,6 @@ import {
 
 import { changeNodeValue, TreeContext } from './TreeContext';
 import { EventsProcessors, FileSync } from './types';
-import { formatBytes, formatDate } from '@utils/formatFields';
 
 function getTagColor(status: EventStatus) {
   switch (status) {
