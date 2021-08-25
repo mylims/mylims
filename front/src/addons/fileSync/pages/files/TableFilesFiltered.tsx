@@ -23,9 +23,9 @@ import {
 } from '@components/tailwind-ui';
 import { FileStatus, SortDirection } from '@generated/graphql';
 import { useFilterQuery, selectOrder, selectField } from '@hooks/useQuery';
+import filesizeParser from '@utils/filesize-parser';
 import { formatBytes, formatDate } from '@utils/formatFields';
 
-import filesizeParser from '../../../../utils/filesize-parser';
 import {
   FilesByConfigFlatQuery,
   FilesSortField,

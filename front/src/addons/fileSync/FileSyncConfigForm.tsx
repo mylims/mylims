@@ -16,8 +16,7 @@ import {
   ToggleField,
   Variant,
 } from '@components/tailwind-ui';
-
-import { omitDeep } from '../../utils/omit-deep';
+import { omitDeep } from '@utils/omit-deep';
 
 import PatternEdit from './PatternEdit';
 import ReadyCheckEdit from './ReadyCheckEdit';
