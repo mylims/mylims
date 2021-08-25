@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from 'react';
 
 import ExpandButton from '@components/ExpandButton';
 import { Td } from '@components/tailwind-ui';
+import { formatBytes, formatDate } from '@utils/formatFields';
 
 import { useFilesByConfigLazyQuery } from '../../../generated/graphql';
 
@@ -10,7 +11,6 @@ import { TreeContext, changeNodeValue } from './TreeContext';
 import { DirSync, TreeType } from './types';
 
 import { Row } from './index';
-import { formatBytes, formatDate } from '@utils/formatFields';
 
 export default function DirRow({ value }: { value: DirSync }) {
   const context = useContext(TreeContext);
