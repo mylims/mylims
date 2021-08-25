@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import ElnLayout from '@components/ElnLayout';
-import { Alert, AlertType } from '@components/tailwind-ui';
+import { Alert, AlertType, Spinner } from '@components/tailwind-ui';
 import { useFilterQuery } from 'src/hooks/useQuery';
 
 import {
@@ -63,7 +63,8 @@ function NestedTable({ id }: Pick<RouterQuery, 'id'>) {
     );
   }
 
-  return <TableFilesSync loading={loading} data={data} id={id} />;
+  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
+  return <TableFilesSync data={data} id={id} />;
 }
 
 function FilterTable({

@@ -1,61 +1,45 @@
 import { InboxIcon } from '@heroicons/react/outline';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  Button,
-  Spinner,
-  Table,
-  Td,
-  Th,
-  Variant,
-} from '@components/tailwind-ui';
+import { Button, Table, Td, Th, Variant } from '@components/tailwind-ui';
 
 import DirRow from './DirRow';
 import FileRow from './FileRow';
 import { TreeContext } from './TreeContext';
 import { TableFilesSyncProps, TreeType, TreeSync } from './types';
 
-export default function TableFilesSync({
-  data,
-  id,
-  loading,
-}: TableFilesSyncProps) {
-  const [state, setState] = useState<TreeSync[]>([]);
+export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
+  const [state, setState] = useState<TreeSync[]>(() => {
+    const filesQuery = data?.filesByConfig.files ?? [];
+    const dirsQuery = data?.filesByConfig.dirs ?? [];
+    let tree: TreeSync[] = [];
 
-  useEffect(() => {
-    if (state.length === 0) {
-      const filesQuery = data?.filesByConfig.files ?? [];
-      const dirsQuery = data?.filesByConfig.dirs ?? [];
-      let tree: TreeSync[] = [];
-
-      for (const dir of dirsQuery) {
-        tree.push({
-          id: dir.id,
-          name: dir.relativePath,
-          size: dir.size,
-          path: dir.path,
-          date: new Date(dir.date),
-          type: TreeType.dir,
-          expanded: false,
-          children: null,
-        });
-      }
-
-      for (const file of filesQuery) {
-        tree.push({
-          ...file,
-          date: new Date(file.date),
-          name: file.filename,
-          type: TreeType.file,
-          expanded: false,
-        });
-      }
-      setState(tree);
+    for (const dir of dirsQuery) {
+      tree.push({
+        id: dir.id,
+        name: dir.relativePath,
+        size: dir.size,
+        path: dir.path,
+        date: new Date(dir.date),
+        type: TreeType.dir,
+        expanded: false,
+        children: null,
+      });
     }
-  }, [data, state]);
 
-  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
+    for (const file of filesQuery) {
+      tree.push({
+        ...file,
+        date: new Date(file.date),
+        name: file.filename,
+        type: TreeType.file,
+        expanded: false,
+      });
+    }
+    return tree;
+  });
+
   return (
     <div>
       <Link to={`${id}?page=1`}>

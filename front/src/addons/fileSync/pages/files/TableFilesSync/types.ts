@@ -7,7 +7,6 @@ import type {
 export interface TableFilesSyncProps {
   data?: FilesByConfigQuery;
   id: string;
-  loading: boolean;
 }
 
 export enum TreeType {
