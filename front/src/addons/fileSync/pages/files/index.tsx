@@ -4,8 +4,8 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import ElnLayout from '@components/ElnLayout';
 import { Alert, AlertType, Spinner } from '@components/tailwind-ui';
-import { useFilterQuery } from 'src/hooks/useQuery';
-import filesizeParser from 'src/utils/filesize-parser';
+import { useFilterQuery } from '@hooks/useQuery';
+import filesizeParser from '@utils/filesize-parser';
 
 import {
   useFilesByConfigQuery,
