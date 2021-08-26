@@ -7,17 +7,22 @@ import { fromB1505 } from 'iv-spectrum';
 
 import type DataDrive from '@ioc:DataDrive';
 
-import { Event, EventDataType, EventStatus } from '../../events/Models/Event';
+import {
+  TopicEvent,
+  EventDataType,
+  EventStatus,
+} from '../../events/Models/Event';
 import nextEvent from '../../events/Queries/nextEvent';
 import setEventStatus from '../../events/Queries/setEventStatus';
-import { File } from '../../file-sync/Models/File';
+import { File as SyncFile } from '../../file-sync/Models/File';
+import { File } from '../Models/File';
 
 const asyncTimeout = promisify(setTimeout);
 
 export default class Processor extends BaseCommand {
-  public static commandName = 'processor:jcamp';
+  public static commandName = 'processor:b1505';
 
-  public static description = 'Processor for Jcamp files';
+  public static description = 'Processor for B1505 files';
 
   @flags.string({ description: 'Processor id' })
   public processorId: string;
@@ -30,7 +35,8 @@ export default class Processor extends BaseCommand {
   };
 
   private deps: {
-    Event: typeof Event;
+    Event: typeof TopicEvent;
+    SyncFile: typeof SyncFile;
     File: typeof File;
     DataDrive: typeof DataDrive;
     nextEvent: typeof nextEvent;
@@ -38,21 +44,24 @@ export default class Processor extends BaseCommand {
   };
 
   private topic = 'b1505';
+  private processor = fromB1505;
 
   public async run() {
-    const { Event } = await import('../../events/Models/Event');
+    const { TopicEvent: Event } = await import('../../events/Models/Event');
     const { default: nextEvent } = await import(
       '../../events/Queries/nextEvent'
     );
     const { default: setEventStatus } = await import(
       '../../events/Queries/setEventStatus'
     );
-    const { File } = await import('../../file-sync/Models/File');
+    const { File: SyncFile } = await import('../../file-sync/Models/File');
+    const { File } = await import('../Models/File');
     const { default: DataDrive } = await import('@ioc:DataDrive');
 
     this.deps = {
       Event,
       File,
+      SyncFile,
       DataDrive,
       nextEvent,
       setEventStatus,
@@ -74,7 +83,7 @@ export default class Processor extends BaseCommand {
   }
 
   private async executeProcessor() {
-    let event: Event | undefined;
+    let event: TopicEvent | undefined;
     try {
       // Separate next available event
       const { id } = await this.deps.nextEvent({
@@ -91,32 +100,35 @@ export default class Processor extends BaseCommand {
     }
 
     if (event) {
+      const eventId = event.id.toHexString();
+
       try {
         const drive = this.deps.DataDrive.drive('local');
 
         if (event.data.type === EventDataType.FILE) {
           // Process file
           const { fileId } = event.data;
-          const file = await this.deps.File.findOrFail(fileId);
-          const content = await drive.get(file);
+          const originalFile = await this.deps.SyncFile.findOrFail(fileId);
+          const content = await drive.get(originalFile);
 
-          const analyses = fromB1505(content);
+          const analyses = this.processor(content);
           const jcamp = analyses.map((val) => toJcamp(val)).join('\n');
 
-          const filename = `${file.filename}.jdx`;
+          const filename = `${originalFile.filename}.jdx`;
           const id = uuid();
-          const driveFile = await drive.put(filename, jcamp, {
-            id,
-          });
+          const driveFile = await drive.put(filename, jcamp, { id });
           await this.deps.File.create({
             _id: id,
             filename: driveFile.filename,
             size: driveFile.size,
+            originalId: originalFile._id,
+            eventId,
+            topic: this.topic,
           });
 
           // Set event status to done
           await this.deps.setEventStatus({
-            eventId: event.id.toHexString(),
+            eventId,
             status: EventStatus.SUCCESS,
             processorId: this.processorId,
           });
@@ -124,7 +136,7 @@ export default class Processor extends BaseCommand {
       } catch (error) {
         // Defines the error for the event
         await this.deps.setEventStatus({
-          eventId: event.id.toHexString(),
+          eventId,
           status: EventStatus.ERROR,
           processorId: this.processorId,
         });

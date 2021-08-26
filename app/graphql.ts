@@ -6,7 +6,7 @@ import {
 import User from './Models/User';
 import { FileSyncOption } from '../addons/file-sync/Models/FileSyncOption';
 import { SyncFile } from '../addons/file-sync/Models/SyncFile';
-import { Event } from '../addons/events/Models/Event';
+import { TopicEvent } from '../addons/events/Models/Event';
 import { ApolloBaseContext } from '@ioc:Apollo/Config';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
