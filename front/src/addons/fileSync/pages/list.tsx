@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import ElnLayout from '@components/ElnLayout';
+import ElnLayout from '@/components/ElnLayout';
 import {
   Alert,
   AlertType,
@@ -22,7 +22,7 @@ import {
   Table,
   Td,
   Th,
-} from '@components/tailwind-ui';
+} from '@/components/tailwind-ui';
 
 import {
   FileSyncOptionsQuery,

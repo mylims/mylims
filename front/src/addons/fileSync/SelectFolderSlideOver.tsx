@@ -9,7 +9,7 @@ import {
   Td,
   Th,
   useOnOff,
-} from '@components/tailwind-ui';
+} from '@/components/tailwind-ui';
 
 import {
   DirectoryEntryType,

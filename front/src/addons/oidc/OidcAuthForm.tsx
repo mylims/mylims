@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
-import { Button, Card, Select } from '@components/tailwind-ui';
-import { useElnQuery } from '@hooks/useElnQuery';
+import { Button, Card, Select } from '@/components/tailwind-ui';
+import { useElnQuery } from '@/hooks/useElnQuery';
 
 import { API_URL } from '../../../env';
 

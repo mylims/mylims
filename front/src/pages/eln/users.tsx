@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import ElnLayout from '@components/ElnLayout';
+import ElnLayout from '@/components/ElnLayout';
 import {
   Table,
   Spinner,
@@ -8,8 +8,8 @@ import {
   Th,
   Alert,
   AlertType,
-} from '@components/tailwind-ui';
-import { useUsersQuery, UsersQuery } from '@generated/graphql';
+} from '@/components/tailwind-ui';
+import { useUsersQuery, UsersQuery } from '@/generated/graphql';
 
 export default function Users() {
   const { loading, error, data } = useUsersQuery();

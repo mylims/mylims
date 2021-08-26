@@ -1,11 +1,17 @@
 import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/solid';
 import React, { useContext, useMemo } from 'react';
 
-import ExpandButton from '@components/ExpandButton';
-import { FileStatusLabel } from '@components/FileStatusLabel';
-import { StatusLabel } from '@components/StatusLabel';
-import { Td, Button, Color, Roundness, Variant } from '@components/tailwind-ui';
-import { formatBytes, formatDate } from '@utils/formatFields';
+import ExpandButton from '@/components/ExpandButton';
+import { FileStatusLabel } from '@/components/FileStatusLabel';
+import { StatusLabel } from '@/components/StatusLabel';
+import {
+  Td,
+  Button,
+  Color,
+  Roundness,
+  Variant,
+} from '@/components/tailwind-ui';
+import { formatBytes, formatDate } from '@/utils/formatFields';
 
 import {
   EventStatus,

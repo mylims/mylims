@@ -15,8 +15,8 @@ import {
   SubmitButton,
   ToggleField,
   Variant,
-} from '@components/tailwind-ui';
-import { omitDeep } from '@utils/omit-deep';
+} from '@/components/tailwind-ui';
+import { omitDeep } from '@/utils/omit-deep';
 
 import PatternEdit from './PatternEdit';
 import ReadyCheckEdit from './ReadyCheckEdit';

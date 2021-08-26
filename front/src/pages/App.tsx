@@ -14,8 +14,8 @@ import {
   NotificationProvider,
   Spinner,
   ToastNotificationCenter,
-} from '@components/tailwind-ui';
-import { useElnQuery } from '@hooks/useElnQuery';
+} from '@/components/tailwind-ui';
+import { useElnQuery } from '@/hooks/useElnQuery';
 
 import AddonsContext from '../contexts/AddonsContext';
 import AuthContext from '../contexts/AuthContext';
