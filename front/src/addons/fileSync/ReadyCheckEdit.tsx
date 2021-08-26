@@ -9,7 +9,7 @@ import {
   SelectField,
   Size,
   Variant,
-} from '@components/tailwind-ui';
+} from '@/components/tailwind-ui';
 
 import { ReadyCheckDescriptor, ReadyCheckInput } from './generated/graphql';
 

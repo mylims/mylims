@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Badge, BadgeVariant, Color } from '@components/tailwind-ui';
+import { Badge, BadgeVariant, Color } from '@/components/tailwind-ui';
 
 export interface StatusLabelProps {
   status: string;

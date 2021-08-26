@@ -9,7 +9,7 @@ import {
   RadioField,
   Size,
   Variant,
-} from '@components/tailwind-ui';
+} from '@/components/tailwind-ui';
 
 interface PatternEditProps {
   remove: ArrayHelpers['remove'];

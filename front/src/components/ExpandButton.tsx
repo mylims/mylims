@@ -1,7 +1,7 @@
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import React from 'react';
 
-import { Button, Color, Roundness, Variant } from '@components/tailwind-ui';
+import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 
 interface ExpandButtonProps {
   expanded: boolean;

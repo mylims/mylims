@@ -2,8 +2,8 @@ import { FormikHelpers } from 'formik';
 import React, { useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import ElnLayout from '@components/ElnLayout';
-import { Alert, AlertType, Spinner } from '@components/tailwind-ui';
+import ElnLayout from '@/components/ElnLayout';
+import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
 
 import FileSyncConfigForm from '../FileSyncConfigForm';
 import {

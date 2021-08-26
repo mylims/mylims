@@ -8,7 +8,7 @@ import {
   InputField,
   Size,
   Variant,
-} from '@components/tailwind-ui';
+} from '@/components/tailwind-ui';
 
 interface TopicsEditProps {
   remove: ArrayHelpers['remove'];

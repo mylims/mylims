@@ -3,8 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
-import AutoSubmitForm from '@components/AutoSubmitForm';
-import { FileStatusLabel, getTagColor } from '@components/FileStatusLabel';
+import AutoSubmitForm from '@/components/AutoSubmitForm';
+import { FileStatusLabel, getTagColor } from '@/components/FileStatusLabel';
 import {
   Button,
   Color,
@@ -20,11 +20,11 @@ import {
   Th,
   useMultiSearchSelect,
   Variant,
-} from '@components/tailwind-ui';
-import { FileStatus, SortDirection } from '@generated/graphql';
-import { useFilterQuery, selectOrder, selectField } from '@hooks/useQuery';
-import filesizeParser from '@utils/filesize-parser';
-import { formatBytes, formatDate } from '@utils/formatFields';
+} from '@/components/tailwind-ui';
+import { FileStatus, SortDirection } from '@/generated/graphql';
+import { useFilterQuery, selectOrder, selectField } from '@/hooks/useQuery';
+import filesizeParser from '@/utils/filesize-parser';
+import { formatBytes, formatDate } from '@/utils/formatFields';
 
 import {
   FilesByConfigFlatQuery,

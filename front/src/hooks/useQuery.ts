@@ -1,8 +1,8 @@
 import bytes from 'byte-size';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import { FilesSortField, FileStatus, SortDirection } from '@generated/graphql';
-import filesizeParser from '@utils/filesize-parser';
+import { FilesSortField, FileStatus, SortDirection } from '@/generated/graphql';
+import filesizeParser from '@/utils/filesize-parser';
 
 type Nullable<T> = { [P in keyof T]: T[P] | null };
 interface FilterQuery {
