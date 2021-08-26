@@ -7,11 +7,7 @@ import { fromB1505 } from 'iv-spectrum';
 
 import type DataDrive from '@ioc:DataDrive';
 
-import {
-  TopicEvent,
-  EventDataType,
-  EventStatus,
-} from '../../events/Models/Event';
+import { Event, EventDataType, EventStatus } from '../../events/Models/Event';
 import nextEvent from '../../events/Queries/nextEvent';
 import setEventStatus from '../../events/Queries/setEventStatus';
 import { File as SyncFile } from '../../file-sync/Models/File';
@@ -35,7 +31,7 @@ export default class Processor extends BaseCommand {
   };
 
   private deps: {
-    Event: typeof TopicEvent;
+    Event: typeof Event;
     SyncFile: typeof SyncFile;
     File: typeof File;
     DataDrive: typeof DataDrive;
@@ -47,7 +43,7 @@ export default class Processor extends BaseCommand {
   private processor = fromB1505;
 
   public async run() {
-    const { TopicEvent: Event } = await import('../../events/Models/Event');
+    const { Event } = await import('../../events/Models/Event');
     const { default: nextEvent } = await import(
       '../../events/Queries/nextEvent'
     );
@@ -83,7 +79,7 @@ export default class Processor extends BaseCommand {
   }
 
   private async executeProcessor() {
-    let event: TopicEvent | undefined;
+    let event: Event | undefined;
     try {
       // Separate next available event
       const { id } = await this.deps.nextEvent({
