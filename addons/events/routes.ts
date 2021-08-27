@@ -6,32 +6,28 @@ import setEventStatus from './Queries/setEventStatus';
 import NextEventValidator from './Validators/NextEventValidator';
 import SetEventValidator from './Validators/SetEventValidator';
 
-Route.get(
-  '/next-event',
-  async ({ request, response, auth }: HttpContextContract) => {
-    // Validates that is already authenticated
-    await auth.authenticate();
+Route.group(() => {
+  Route.get(
+    '/next-event',
+    async ({ request, response }: HttpContextContract) => {
+      // Checks that the params are valid
+      const params = await request.validate(NextEventValidator);
 
-    // Checks that the params are valid
-    const params = await request.validate(NextEventValidator);
+      // Gets the next event
+      const event = await nextEvent(params);
+      return response.json(event);
+    },
+  );
 
-    // Gets the next event
-    const event = await nextEvent(params);
-    return response.json(event);
-  },
-);
+  Route.put(
+    '/set-event',
+    async ({ request, response }: HttpContextContract) => {
+      // Checks that the params are valid
+      const params = await request.validate(SetEventValidator);
 
-Route.put(
-  '/set-event',
-  async ({ request, response, auth }: HttpContextContract) => {
-    // Validates that is already authenticated
-    await auth.authenticate();
-
-    // Checks that the params are valid
-    const params = await request.validate(SetEventValidator);
-
-    // Gets the next event
-    const event = await setEventStatus(params);
-    return response.json(event);
-  },
-);
+      // Gets the next event
+      const event = await setEventStatus(params);
+      return response.json(event);
+    },
+  );
+}).middleware('auth');
