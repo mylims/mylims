@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { Ref, useMemo } from 'react';
 
+import { forwardRefWithGeneric } from '../../util';
 import {
   defaultCanCreate,
   defaultGetValue,
@@ -8,7 +9,12 @@ import {
   useSearchSelectInternals,
 } from '../../utils/search-select-utils';
 
-import { SimpleSelectOption, GetValue, RenderOption } from './Select';
+import {
+  SimpleStringSelectOption,
+  SimpleNumberSelectOption,
+  GetValue,
+  RenderOption,
+} from './Select';
 
 export interface SimpleSearchSelectProps<OptionType> {
   /**
@@ -103,10 +109,15 @@ export interface SearchSelectProps<OptionType>
   renderOption: RenderOption<OptionType>;
 }
 
-export function SearchSelect<OptionType>(
-  props: OptionType extends SimpleSelectOption
+export const SearchSelect = forwardRefWithGeneric(SearchSelectForwardRef);
+
+function SearchSelectForwardRef<OptionType>(
+  props: OptionType extends SimpleStringSelectOption
+    ? SimpleSearchSelectProps<OptionType>
+    : OptionType extends SimpleNumberSelectOption
     ? SimpleSearchSelectProps<OptionType>
     : SearchSelectProps<OptionType>,
+  ref: Ref<HTMLInputElement>,
 ): JSX.Element {
   const {
     onSearchChange,
@@ -145,6 +156,7 @@ export function SearchSelect<OptionType>(
     <InternalSearchSelect
       {...internalProps}
       {...otherProps}
+      inputRef={ref}
       formattedSelected={formattedSelected}
       hasValue={formattedSelected !== undefined}
     />

@@ -1,14 +1,12 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 export const labelColor = 'text-neutral-700';
 export const labelDisabledColor = 'text-neutral-500';
-export const helpColor = 'text-neutral-400';
-export const hintColor = 'text-neutral-500';
 export const inputColor =
-  'focus-within:ring-primary-500 focus-within:border-primary-500 border-neutral-300 disabled:bg-neutral-50 disabled:text-neutral-500';
+  'placeholder-neutral-400 focus-within:ring-primary-500 focus-within:border-primary-500 border-neutral-300 disabled:bg-neutral-50 disabled:text-neutral-500';
 export const inputError =
-  'border-danger-300 text-danger-900 placeholder-danger-500 focus-within:border-danger-500 focus-within:ring-danger-500';
+  'border-danger-300 text-danger-900 placeholder-danger-300 focus-within:border-danger-500 focus-within:ring-danger-500';
 export const inputValid =
   'border-success-400 text-success-900 placeholder-success-600 focus-within:border-success-600 focus-within:ring-success-600';
 export interface LabelProps {
@@ -35,18 +33,42 @@ export function Label(props: LabelProps) {
   );
 }
 
-export function Help(props: { text: string }) {
-  return <p className={clsx('mt-2 text-sm', helpColor)}>{props.text}</p>;
+const helpColorMap = {
+  error: 'text-danger-600',
+  valid: 'text-success-700',
+  help: 'text-neutral-500',
+};
+
+export function Help(props: {
+  error?: string;
+  valid?: string | boolean;
+  help?: string;
+  noMargin?: boolean;
+}) {
+  const { error, valid, help, noMargin } = props;
+  if (!error && !(typeof valid === 'string') && !help) {
+    return null;
+  }
+
+  let toDisplay = error
+    ? ({ type: 'error', value: error } as const)
+    : typeof valid === 'string'
+    ? ({ type: 'valid', value: valid } as const)
+    : ({ type: 'help', value: help } as const);
+
+  return (
+    <p
+      className={clsx(
+        'text-sm whitespace-pre-line',
+        helpColorMap[toDisplay.type],
+        !noMargin && 'mt-2',
+      )}
+    >
+      {toDisplay.value}
+    </p>
+  );
 }
 
-export function Error(props: { text: string }) {
-  return <p className="mt-2 text-sm text-danger-600">{props.text}</p>;
-}
-
-export function Valid(props: { text: string }) {
-  return <p className="mt-2 text-sm text-success-700">{props.text}</p>;
-}
-
-export function Hint(props: { text: string }) {
-  return <span className={clsx('text-sm', hintColor)}>{props.text}</span>;
+export function InputCorner(props: { children: ReactNode }) {
+  return <div className="text-sm">{props.children}</div>;
 }

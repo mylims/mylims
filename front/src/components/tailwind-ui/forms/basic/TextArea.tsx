@@ -1,9 +1,7 @@
 import clsx from 'clsx';
-import React, { Ref } from 'react';
+import React, { forwardRef, ReactNode, Ref } from 'react';
 
-import { forwardRefWithAs } from '../../util';
-
-import { Error, Help, Hint, inputColor, inputError, Label } from './common';
+import { inputColor, inputError, Label, Help, InputCorner } from './common';
 
 export interface TextAreaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -11,57 +9,65 @@ export interface TextAreaProps
   error?: string;
   label: string;
   hiddenLabel?: boolean;
-  hint?: string;
   help?: string;
   textAreaClassName?: string;
-
-  ref?: Ref<HTMLTextAreaElement>;
+  /**
+   * Custom react node to display in the upper right corner of the input
+   */
+  corner?: ReactNode;
 }
 
-export const TextArea = forwardRefWithAs(
-  (props: TextAreaProps, ref: Ref<HTMLTextAreaElement>) => {
-    const {
-      name,
-      id = name,
-      className,
-      error,
-      label,
-      hiddenLabel = false,
-      hint,
-      help,
-      textAreaClassName,
-      ...otherProps
-    } = props;
-    return (
-      <div className={className}>
-        <div className="flex justify-between">
-          <Label
-            id={id}
-            text={label}
-            hidden={hiddenLabel}
-            required={props.required}
-            disabled={props.disabled}
-          />
-          {hint && <Hint text={hint} />}
-        </div>
-        <div className="flex mt-1">
-          <textarea
-            ref={ref}
-            id={id}
-            name={name}
-            className={clsx(
-              'form-textarea shadow-sm block w-full sm:text-sm border-neutral-300 rounded-md',
-              {
-                [inputColor]: !error,
-                [inputError]: error,
-              },
-              textAreaClassName,
-            )}
-            {...otherProps}
-          />
-        </div>
-        {error ? <Error text={error} /> : help && <Help text={help} />}
+export const TextArea = forwardRef(function TextAreaForwardRef(
+  props: TextAreaProps,
+  ref: Ref<HTMLTextAreaElement>,
+) {
+  const {
+    name,
+    id = name,
+    className,
+    error,
+    label,
+    hiddenLabel = false,
+    corner,
+    help,
+    textAreaClassName,
+    rows = 5,
+    ...otherProps
+  } = props;
+  return (
+    <div className={className}>
+      <div className="flex items-baseline justify-between">
+        <Label
+          id={id}
+          text={label}
+          hidden={hiddenLabel}
+          required={props.required}
+          disabled={props.disabled}
+        />
+        <InputCorner>{corner}</InputCorner>
       </div>
-    );
-  },
-);
+      <div
+        className={clsx('flex', {
+          'mt-1': !hiddenLabel || corner,
+        })}
+      >
+        <textarea
+          ref={ref}
+          id={id}
+          name={name}
+          className={clsx(
+            'form-textarea shadow-sm block w-full sm:text-sm border-neutral-300 rounded-md',
+            {
+              [inputColor]: !error,
+              [inputError]: error,
+            },
+            textAreaClassName,
+          )}
+          rows={rows}
+          {...otherProps}
+        />
+      </div>
+      <Help error={error} help={help} />
+    </div>
+  );
+});

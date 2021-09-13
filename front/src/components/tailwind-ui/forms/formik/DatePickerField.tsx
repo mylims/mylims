@@ -10,8 +10,8 @@ if (typeof window !== 'undefined') {
   void import('react-datepicker/dist/react-datepicker.css');
 }
 
-export type DatePickerFieldProps = Omit<
-  ReactDatePickerProps,
+export type DatePickerFieldProps<Modifiers extends string = never> = Omit<
+  ReactDatePickerProps<Modifiers>,
   'selected' | 'onChange' | 'onBlur' | 'selectsRange' | 'customInput'
 > & {
   name: string;
@@ -19,7 +19,9 @@ export type DatePickerFieldProps = Omit<
   inputProps?: Omit<CustomInputProps, 'label'>;
 };
 
-export function DatePickerField(props: DatePickerFieldProps) {
+export function DatePickerField<Modifiers extends string = never>(
+  props: DatePickerFieldProps<Modifiers>,
+) {
   const { isClearable, name, label, inputProps, ...otherProps } = props;
   const [field, meta, handler] = useField<Date | null>(props.name);
   const { value, onBlur } = field;

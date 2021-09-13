@@ -1,7 +1,11 @@
 import { useField } from 'formik';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { SimpleSelectOption } from '../forms/basic/Select';
+import {
+  SimpleStringSelectOption,
+  SimpleNumberSelectOption,
+} from '../forms/basic/Select';
 import { defaultOptionsFilter } from '../utils/search-select-utils';
 
 import {
@@ -21,9 +25,8 @@ export interface MultiSearchSelectFieldHookResult<OptionType>
   name: string;
 }
 
-export interface SimpleMultiSearchSelectHookConfig<
-  OptionType extends SimpleSelectOption,
-> extends SimpleSearchSelectHookConfig<OptionType> {}
+export interface SimpleMultiSearchSelectHookConfig<OptionType>
+  extends SimpleSearchSelectHookConfig<OptionType> {}
 export interface MultiSearchSelectHookConfig<OptionType>
   extends SearchSelectHookConfig<OptionType> {}
 
@@ -32,14 +35,15 @@ export interface MultiSearchSelectFieldHookConfig<OptionType>
   name: string;
 }
 
-export interface SimpleMultiSearchSelectFieldHookConfig<
-  OptionType extends SimpleSelectOption,
-> extends SimpleMultiSearchSelectHookConfig<OptionType> {
+export interface SimpleMultiSearchSelectFieldHookConfig<OptionType>
+  extends SimpleMultiSearchSelectHookConfig<OptionType> {
   name: string;
 }
 
 export function useMultiSearchSelectField<OptionType>(
-  config: OptionType extends SimpleSelectOption
+  config: OptionType extends SimpleStringSelectOption
+    ? SimpleMultiSearchSelectFieldHookConfig<OptionType>
+    : OptionType extends SimpleNumberSelectOption
     ? SimpleMultiSearchSelectFieldHookConfig<OptionType>
     : MultiSearchSelectFieldHookConfig<OptionType>,
 ): MultiSearchSelectFieldHookResult<OptionType> {
@@ -54,8 +58,35 @@ export function useMultiSearchSelectField<OptionType>(
   };
 }
 
+export function useMultiSearchSelectFieldRHF<OptionType>(
+  config: OptionType extends SimpleStringSelectOption
+    ? SimpleMultiSearchSelectFieldHookConfig<OptionType>
+    : OptionType extends SimpleNumberSelectOption
+    ? SimpleMultiSearchSelectFieldHookConfig<OptionType>
+    : MultiSearchSelectFieldHookConfig<OptionType>,
+): MultiSearchSelectFieldHookResult<OptionType> {
+  const searchSelect = useMultiSearchSelect<OptionType>(config);
+  const { setValue } = useFormContext();
+  const fieldValue = useWatch({ name: config.name });
+  const handleSelect = useCallback(
+    (value: OptionType[]) => {
+      setValue(config.name, value);
+    },
+    [setValue, config.name],
+  );
+
+  return {
+    ...searchSelect,
+    onSelect: handleSelect,
+    selected: fieldValue,
+    name: config.name,
+  };
+}
+
 export function useMultiSearchSelect<OptionType>(
-  config: OptionType extends SimpleSelectOption
+  config: OptionType extends SimpleStringSelectOption
+    ? SimpleMultiSearchSelectHookConfig<OptionType>
+    : OptionType extends SimpleNumberSelectOption
     ? SimpleMultiSearchSelectHookConfig<OptionType>
     : MultiSearchSelectHookConfig<OptionType>,
 ): MultiSearchSelectHookResult<OptionType> {
