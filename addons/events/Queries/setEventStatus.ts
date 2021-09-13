@@ -4,12 +4,14 @@ import { Event, EventStatus } from '../Models/Event';
 
 interface SetEventStatusParams {
   eventId: string;
+  processId: string;
   processorId: string;
   status: string;
   message?: string;
 }
 export default async function setEventStatus({
   eventId,
+  processId,
   processorId,
   status,
   message,
@@ -20,6 +22,7 @@ export default async function setEventStatus({
   );
 
   const newHistory = {
+    processId,
     status: status as EventStatus,
     date: new Date(),
     message,
@@ -33,14 +36,50 @@ export default async function setEventStatus({
     });
   } else {
     // Validates that the status is valid
-    if (
-      eventProcessor.history.length !== 0 ||
-      eventProcessor.history[0].status !== EventStatus.PENDING
-    ) {
-      throw new Error(`Event processor ${processorId} is not pending`);
-    }
+    const previousStatus = eventProcessor.history[0]?.status;
 
-    eventProcessor.history.unshift(newHistory);
+    switch (status as EventStatus) {
+      case EventStatus.PENDING: {
+        if (eventProcessor.history.length === 0) {
+          eventProcessor.history.unshift(newHistory);
+        } else if (previousStatus === EventStatus.PENDING) {
+          // add event before the previous processId
+          const latestIndex = eventProcessor.history.findIndex(
+            (p) => p.processId === processId,
+          );
+          if (latestIndex > 0) {
+            eventProcessor.history.splice(latestIndex, 0, newHistory);
+          } else {
+            throw new Error(
+              `Event processor ${processId} doesn't have a processId ${processId}`,
+            );
+          }
+        } else {
+          throw new Error(
+            `Event processor ${processId} previous status is ${previousStatus}`,
+          );
+        }
+        break;
+      }
+      case EventStatus.PROCESSING: {
+        if (previousStatus === EventStatus.PENDING) {
+          eventProcessor.history.unshift(newHistory);
+        } else {
+          throw new Error(
+            `Event processor ${processId} previous status is ${previousStatus}`,
+          );
+        }
+        break;
+      }
+      case EventStatus.SUCCESS:
+      case EventStatus.ERROR: {
+        eventProcessor.history.unshift(newHistory);
+        break;
+      }
+      default: {
+        throw new Error(`Event processor ${processId} status is invalid`);
+      }
+    }
   }
   await event.save();
   return event;

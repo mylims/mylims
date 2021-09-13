@@ -5,6 +5,7 @@ type Query {
 
 enum EventStatus {
   pending
+  processing
   success
   error
 }
@@ -14,6 +15,7 @@ enum EventDataType {
 }
 
 type EventHistory {
+  processId: String!
   status: EventStatus!
   date: DateTime!
   message: String

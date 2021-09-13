@@ -2,6 +2,7 @@ import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 export enum EventStatus {
   PENDING = 'pending',
+  PROCESSING = 'processing',
   SUCCESS = 'success',
   ERROR = 'error',
 }
@@ -16,6 +17,7 @@ interface EventProcessor {
 }
 
 interface EventHistory {
+  processId: string;
   status: EventStatus;
   date: Date;
   message?: string;
