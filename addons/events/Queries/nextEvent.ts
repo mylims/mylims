@@ -1,28 +1,22 @@
+import { v4 as uuid } from '@lukeed/uuid';
+
 import { Event, EventStatus } from '../Models/Event';
+
+import freeEvent from './freeEvent';
+import setEventStatus from './setEventStatus';
 
 interface NextEventParams {
   processorId: string;
   topic: string;
 }
-export default async function nextEvent({
-  processorId,
-  topic,
-}: NextEventParams): Promise<Event> {
-  return Event.query({
-    topic,
-    $or: [
-      { processors: { $size: 0 } },
-      {
-        processors: {
-          $elemMatch: {
-            processorId,
-            $or: [
-              { history: { $size: 0 } },
-              { 'history.0.status': EventStatus.PENDING },
-            ],
-          },
-        },
-      },
-    ],
-  }).firstOrFail();
+export default async function nextEvent(
+  eventParams: NextEventParams,
+): Promise<Event> {
+  const event = await freeEvent(eventParams);
+  return setEventStatus({
+    eventId: event.id.toHexString(),
+    processId: uuid(),
+    processorId: eventParams.processorId,
+    status: EventStatus.PROCESSING,
+  });
 }

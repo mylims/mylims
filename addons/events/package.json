@@ -1,5 +1,8 @@
 {
   "name": "addon-events",
   "version": "0.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@lukeed/uuid": "^2.0.0"
+  }
 }

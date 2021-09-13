@@ -6,6 +6,7 @@ export default class NextEventValidator {
 
   public schema = schema.create({
     eventId: schema.string(),
+    processId: schema.string(),
     processorId: schema.string(),
     status: schema.string(),
     message: schema.string.optional(),
