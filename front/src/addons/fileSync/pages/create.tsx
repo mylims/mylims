@@ -2,14 +2,15 @@ import { FormikHelpers } from 'formik';
 import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import ElnLayout from '@/components/ElnLayout';
-import { Alert, AlertType } from '@/components/tailwind-ui';
-
 import FileSyncConfigForm from '../FileSyncConfigForm';
 import {
   NewFileSyncOptionInput,
   useCreateFileSyncOptionMutation,
 } from '../generated/graphql';
+
+import ElnLayout from '@/components/ElnLayout';
+import { Alert, AlertType } from '@/components/tailwind-ui';
+
 
 export default function CreateConfig() {
   const [createFileSyncOption, { loading, error }] =

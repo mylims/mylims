@@ -2,6 +2,16 @@ import { Field, FieldArray, FormikConfig } from 'formik';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
+import PatternEdit from './PatternEdit';
+import ReadyCheckEdit from './ReadyCheckEdit';
+import SelectFolderSlideOver from './SelectFolderSlideOver';
+import TopicsEdit from './TopicsEdit';
+import {
+  EditFileSyncOptionInput,
+  NewFileSyncOptionInput,
+  useReadyChecksQuery,
+} from './generated/graphql';
+
 import {
   Alert,
   AlertType,
@@ -17,16 +27,6 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import { omitDeep } from '@/utils/omit-deep';
-
-import PatternEdit from './PatternEdit';
-import ReadyCheckEdit from './ReadyCheckEdit';
-import SelectFolderSlideOver from './SelectFolderSlideOver';
-import TopicsEdit from './TopicsEdit';
-import {
-  EditFileSyncOptionInput,
-  NewFileSyncOptionInput,
-  useReadyChecksQuery,
-} from './generated/graphql';
 
 const defaultInitialValues: NewFileSyncOptionInput = {
   enabled: true,

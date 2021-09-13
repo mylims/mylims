@@ -3,6 +3,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
+import {
+  FilesByConfigFlatQuery,
+  FilesSortField,
+  SyncFileRevision,
+} from '../../generated/graphql';
+
 import AutoSubmitForm from '@/components/AutoSubmitForm';
 import { FileStatusLabel, getTagColor } from '@/components/FileStatusLabel';
 import {
@@ -26,11 +32,6 @@ import { useFilterQuery, selectOrder, selectField } from '@/hooks/useQuery';
 import filesizeParser from '@/utils/filesize-parser';
 import { formatBytes, formatDate } from '@/utils/formatFields';
 
-import {
-  FilesByConfigFlatQuery,
-  FilesSortField,
-  SyncFileRevision,
-} from '../../generated/graphql';
 
 function isByteSize(value: string | null | undefined): boolean {
   if (!value) return true;
