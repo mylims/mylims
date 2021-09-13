@@ -2,12 +2,13 @@ import { InboxIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Button, Table, Td, Th, Variant } from '@/components/tailwind-ui';
 
 import DirRow from './DirRow';
 import FileRow from './FileRow';
 import { TreeContext } from './TreeContext';
 import { TableFilesSyncProps, TreeType, TreeSync } from './types';
+
+import { Button, Table, Td, Th, Variant } from '@/components/tailwind-ui';
 
 export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
   const [state, setState] = useState<TreeSync[]>(() => {

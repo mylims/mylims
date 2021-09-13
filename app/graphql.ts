@@ -84,6 +84,7 @@ export enum GqlEventDataType {
 
 export type GqlEventHistory = {
   __typename?: 'EventHistory';
+  processId: Scalars['String'];
   status: GqlEventStatus;
   date: Scalars['DateTime'];
   message?: Maybe<Scalars['String']>;
@@ -97,6 +98,7 @@ export type GqlEventProcessor = {
 
 export enum GqlEventStatus {
   PENDING = 'pending',
+  PROCESSING = 'processing',
   SUCCESS = 'success',
   ERROR = 'error',
 }
@@ -574,6 +576,7 @@ export type GqlEventHistoryResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['EventHistory'] = GqlResolversParentTypes['EventHistory'],
 > = ResolversObject<{
+  processId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<GqlResolversTypes['EventStatus'], ParentType, ContextType>;
   date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
   message?: Resolver<
