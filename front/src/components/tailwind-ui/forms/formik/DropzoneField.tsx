@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { useDropzoneField } from '../../hooks/useDropzone';
-
-import { Dropzone, DropzoneProps } from './Dropzone';
-import { DropzoneList } from './DropzoneList';
-import { Error, Label } from './common';
+import { Dropzone, DropzoneProps } from '../basic/Dropzone';
+import { DropzoneList } from '../basic/DropzoneList';
+import { Help, Label } from '../basic/common';
 
 export interface DropzoneFieldProps extends Omit<DropzoneProps, 'onDrop'> {
   name: string;
@@ -33,7 +32,7 @@ export function DropzoneField(props: DropzoneFieldProps) {
         header={header}
       />
       {props.showList && <DropzoneList {...dropzoneListProps} />}
-      {meta.touched && meta.error && <Error text={meta.error} />}
+      {meta.touched && meta.error && <Help error={meta.error} />}
     </div>
   );
 }

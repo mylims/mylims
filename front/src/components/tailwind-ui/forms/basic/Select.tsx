@@ -11,21 +11,32 @@ import {
   labelColor,
   inputError,
   inputColor,
+  Help,
+  InputCorner,
 } from './common';
 
-export interface SimpleSelectOption {
-  value: string | number;
+export interface SimpleStringSelectOption {
+  value: string;
+  label: ReactNode;
+}
+
+export interface SimpleNumberSelectOption {
+  value: number;
   label: ReactNode;
 }
 
 export type GetValue<OptionType> = (option: OptionType) => string | number;
 export type RenderOption<OptionType> = (option: OptionType) => ReactNode;
 
-function simpleGetValue(option: SimpleSelectOption) {
+function simpleGetValue(
+  option: SimpleStringSelectOption | SimpleNumberSelectOption,
+) {
   return option.value;
 }
 
-function simpleRenderOption(option: SimpleSelectOption) {
+function simpleRenderOption(
+  option: SimpleStringSelectOption | SimpleNumberSelectOption,
+) {
   return option.label;
 }
 
@@ -68,6 +79,10 @@ export interface SimpleSelectProps<OptionType> {
    */
   label?: string;
   /**
+   * Do not display the label.
+   */
+  hiddenLabel?: string;
+  /**
    * Explanation or precisions about what the field is for.
    */
   help?: string;
@@ -102,14 +117,15 @@ export interface SimpleSelectProps<OptionType> {
    */
   highlightClassName?: string;
   /**
-   * Whether the component is supposed to be rendered inline.
-   * Currently only affects the placement of the clear button.
+   * Custom react node to display in the upper right corner of the input
    */
-  inline?: boolean;
+  corner?: ReactNode;
 }
 
 export function Select<OptionType>(
-  props: OptionType extends SimpleSelectOption
+  props: OptionType extends SimpleStringSelectOption
+    ? SimpleSelectProps<OptionType>
+    : OptionType extends SimpleNumberSelectOption
     ? SimpleSelectProps<OptionType>
     : SelectProps<OptionType>,
 ): JSX.Element {
@@ -119,13 +135,14 @@ export function Select<OptionType>(
     onSelect,
     className,
     label,
+    hiddenLabel = false,
     error,
     help,
     placeholder,
     required = false,
     clearable = false,
     disabled = false,
-    inline = false,
+    corner,
     getValue = simpleGetValue,
     renderOption = simpleRenderOption,
     highlightClassName = 'text-white bg-primary-600',
@@ -170,25 +187,24 @@ export function Select<OptionType>(
       >
         {({ open }) => (
           <>
-            <div className="flex items-center justify-between w-full">
+            <div
+              className={clsx(
+                'flex items-baseline justify-between',
+                // Cancel the margin from "space-y-1"
+                hiddenLabel && !corner && '-mb-1',
+              )}
+            >
               <Listbox.Label
                 className={clsx(
                   'block text-sm font-semibold',
                   disabled ? labelDisabledColor : labelColor,
+                  hiddenLabel && 'sr-only',
                 )}
               >
                 {label}
                 {required && <span className="text-warning-600"> *</span>}
               </Listbox.Label>
-              {!disabled && clearable && selected && !inline ? (
-                <button
-                  type="button"
-                  className="text-xs focus:outline-none text-primary-600 focus:ring-1 focus:ring-primary-600 focus:ring-offset-1"
-                  onClick={() => onSelect?.(undefined)}
-                >
-                  Clear
-                </button>
-              ) : null}
+              <InputCorner>{corner}</InputCorner>
             </div>
             <div ref={setReferenceElement} className="relative">
               <span className="inline-block w-full rounded-md shadow-sm">
@@ -212,7 +228,7 @@ export function Select<OptionType>(
                     )}
                   </span>
 
-                  {!disabled && clearable && selected && inline && (
+                  {!disabled && clearable && selected && (
                     <div
                       className="absolute inset-y-0 flex items-center mr-2 cursor-pointer right-6"
                       onPointerUp={(event) => {
@@ -299,15 +315,7 @@ export function Select<OptionType>(
                   </div>
                 </Transition>
               )}
-              {(error || help) && (
-                <p
-                  className={clsx('mt-2 text-sm text-neutral-500', {
-                    'text-danger-600': error,
-                  })}
-                >
-                  {error || help}
-                </p>
-              )}
+              <Help error={error} help={help} />
             </div>
           </>
         )}

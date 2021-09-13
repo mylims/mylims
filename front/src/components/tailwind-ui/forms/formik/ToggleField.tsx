@@ -10,15 +10,15 @@ export interface ToggleFieldProps
 }
 
 export function ToggleField(props: ToggleFieldProps): JSX.Element {
-  const { name, ...otherProps } = props;
-  const [field, , helper] = useField(name);
+  const { name, label } = props;
+  const [field, meta, helper] = useField(name);
 
   return (
     <Toggle
+      label={label}
       onToggle={helper.setValue}
       activated={Boolean(field.value)}
-      {...otherProps}
-      {...field}
+      error={meta.touched ? meta.error : undefined}
     />
   );
 }

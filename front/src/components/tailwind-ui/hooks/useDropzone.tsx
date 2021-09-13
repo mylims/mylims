@@ -1,10 +1,82 @@
 import { FieldHookConfig, useField } from 'formik';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DropzoneProps } from 'react-dropzone';
+import { useController, useFormContext, useWatch } from 'react-hook-form';
 
 export interface DropzoneHookOptions extends Omit<DropzoneProps, 'onDrop'> {
   replace?: boolean;
 }
+
+export function useDropzoneFieldRHF(
+  dropzoneOptions: DropzoneHookOptions,
+  name: string,
+) {
+  const { replace, ...dropzoneProps } = dropzoneOptions;
+  const { setValue } = useFormContext();
+  const {
+    field,
+    fieldState: { error },
+    formState: { isSubmitted },
+  } = useController({ name });
+  const files: File[] = useWatch({ name });
+  const onDrop = useCallback(
+    (newFiles: File[]) => {
+      if (replace) {
+        setValue(name, newFiles);
+      } else {
+        const doesNotAlreadyExist = (newFile: File) => {
+          return (
+            files.filter((file: File) => newFile.name === file.name).length ===
+            0
+          );
+        };
+        setValue(name, files.concat(newFiles.filter(doesNotAlreadyExist)), {
+          shouldTouch: true,
+          shouldValidate: isSubmitted,
+        });
+      }
+    },
+    [files, setValue, name, replace, isSubmitted],
+  );
+
+  const removeFile = useCallback(
+    (fileToRemove: File) => {
+      setValue(
+        name,
+        files.filter((file) => file.name !== fileToRemove.name),
+        {
+          shouldTouch: true,
+          shouldValidate: isSubmitted,
+        },
+      );
+    },
+    [setValue, files, name, isSubmitted],
+  );
+
+  const clearFiles = useCallback(() => {
+    setValue(name, [], {
+      shouldTouch: true,
+      shouldValidate: isSubmitted,
+    });
+  }, [name, setValue, isSubmitted]);
+
+  return {
+    removeFile,
+    clearFiles,
+    dropzoneProps: {
+      ...dropzoneProps,
+      ...field,
+      onDrop,
+    },
+    dropzoneListProps: {
+      files,
+      onRemove: removeFile,
+    },
+    field,
+    error,
+  };
+}
+
 export function useDropzoneField(
   dropzoneOptions: DropzoneHookOptions,
   fieldConfig: FieldHookConfig<File[]>,

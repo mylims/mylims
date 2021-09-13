@@ -20,7 +20,7 @@ type StackedListRowProps<T> = {
   children: [ReactNode, ReactNode];
 } & PropsOf<T>;
 
-StackedList.Row = function <
+StackedList.Row = function StackedListRow<
   T extends React.ElementType = typeof React.Fragment,
 >(props: StackedListRowProps<T>) {
   const { as: Element = React.Fragment, children, ...otherProps } = props;

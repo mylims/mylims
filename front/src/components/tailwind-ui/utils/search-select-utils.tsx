@@ -19,22 +19,22 @@ import { Input } from '../forms/basic/Input';
 import {
   GetValue,
   RenderOption,
-  SimpleSelectOption,
+  SimpleStringSelectOption,
+  SimpleNumberSelectOption,
 } from '../forms/basic/Select';
 import { useSameWidthPopper } from '../hooks/popper';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import { useOnOff } from '../hooks/useOnOff';
 import { Color } from '../types';
 
-export type FilterOptions<OptionType> = (
+export type OptionsFilter<OptionType> = (
   query: string,
   options: OptionType[],
 ) => OptionType[];
 
-export function defaultOptionsFilter<OptionType extends SimpleSelectOption>(
-  query: string,
-  options: OptionType[],
-): OptionType[] {
+export function defaultOptionsFilter<
+  OptionType extends SimpleStringSelectOption | SimpleNumberSelectOption,
+>(query: string, options: OptionType[]): OptionType[] {
   const lowerQuery = query.toLowerCase();
   return options.filter((option) =>
     String(option.label).toLowerCase().includes(lowerQuery),
@@ -58,11 +58,15 @@ function DefaultNoResultsHint() {
 
 export const defaultNoResultsHint = <DefaultNoResultsHint />;
 
-export function defaultRenderOption(option: SimpleSelectOption) {
+export function defaultRenderOption(
+  option: SimpleStringSelectOption | SimpleNumberSelectOption,
+) {
   return option.label;
 }
 
-export function defaultGetValue(option: SimpleSelectOption) {
+export function defaultGetValue(
+  option: SimpleStringSelectOption | SimpleNumberSelectOption,
+) {
   return option.value;
 }
 
@@ -342,6 +346,7 @@ interface InternalSearchSelectProps<OptionType>
   leadingInlineAddon?: ReactNode;
   highlightClassName?: string;
   required?: boolean;
+  inputRef?: Ref<HTMLInputElement>;
   onBlur?: (e: React.FocusEvent) => void;
   name?: string;
 }
@@ -351,6 +356,7 @@ export function InternalSearchSelect<OptionType>(
 ): JSX.Element {
   const {
     mainRef,
+    inputRef,
     closeList,
     openList,
     isListOpen,
@@ -387,6 +393,7 @@ export function InternalSearchSelect<OptionType>(
   return (
     <div ref={mainRef}>
       <Input
+        ref={inputRef}
         required={required}
         wrapperRef={setReferenceElement}
         type="text"

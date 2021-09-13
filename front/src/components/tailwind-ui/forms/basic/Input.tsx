@@ -1,19 +1,16 @@
 import { CheckIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
-import React, { ReactNode, Ref } from 'react';
+import React, { forwardRef, ReactNode, Ref } from 'react';
 
 import { Spinner } from '../../elements/spinner/Spinner';
-import { forwardRefWithAs } from '../../util';
 
 import {
-  Error,
-  Help,
-  Hint,
   inputColor,
   inputError,
   inputValid,
   Label,
-  Valid,
+  Help,
+  InputCorner,
 } from './common';
 
 export interface CustomInputProps {
@@ -26,10 +23,13 @@ export interface CustomInputProps {
   loading?: boolean;
   label: string;
   hiddenLabel?: boolean;
-  hint?: string;
   help?: string;
   inlinePlaceholder?: ReactNode;
   inputClassName?: string;
+  /**
+   * Custom react node to display in the upper right corner of the input
+   */
+  corner?: ReactNode;
 }
 
 export interface InputProps
@@ -37,120 +37,121 @@ export interface InputProps
     CustomInputProps {
   name: string;
   /**
-   * Ref for the <input> element.
-   */
-  ref?: Ref<HTMLInputElement>;
-  /**
    * Ref for the <div> wrapping the <input> element.
    */
   wrapperRef?: Ref<HTMLDivElement>;
 }
 
-export const Input = forwardRefWithAs(
-  (props: InputProps, ref: Ref<HTMLInputElement>) => {
-    const {
-      name,
-      id = name,
-      className,
-      style,
-      error,
-      valid,
-      leadingAddon,
-      leadingInlineAddon,
-      trailingAddon,
-      trailingInlineAddon,
-      loading,
-      label,
-      hiddenLabel = false,
-      hint,
-      help,
-      placeholder,
-      inlinePlaceholder,
-      wrapperRef,
-      type = 'text',
-      inputClassName,
-      ...otherProps
-    } = props;
+export const Input = forwardRef(function InputForwardRef(
+  props: InputProps,
+  ref: Ref<HTMLInputElement>,
+) {
+  const {
+    name,
+    id = name,
+    className,
+    style,
+    error,
+    valid,
+    leadingAddon,
+    leadingInlineAddon,
+    trailingAddon,
+    trailingInlineAddon,
+    loading,
+    label,
+    corner,
+    hiddenLabel = false,
+    help,
+    placeholder,
+    inlinePlaceholder,
+    wrapperRef,
+    type = 'text',
+    inputClassName,
+    ...otherProps
+  } = props;
 
-    return (
-      <div className={className}>
-        <div className="flex justify-between">
-          <Label
+  return (
+    <div className={className}>
+      <div className="flex items-baseline justify-between">
+        <Label
+          id={id}
+          text={label}
+          hidden={hiddenLabel}
+          required={props.required}
+          disabled={props.disabled}
+        />
+        <InputCorner>{corner}</InputCorner>
+      </div>
+      <div
+        ref={wrapperRef}
+        className={clsx('flex rounded-md shadow-sm', {
+          'mt-1': !hiddenLabel || corner,
+        })}
+      >
+        {leadingAddon && <LeadingAddon value={leadingAddon} />}
+        <label
+          htmlFor={id}
+          className={clsx(
+            'bg-white border py-2 px-3 focus-within:ring-1',
+            'flex-1 flex flex-row items-center relative text-base sm:text-sm shadow-sm',
+            {
+              [inputColor]: !error,
+              [inputError]: error,
+              [inputValid]: valid,
+              'rounded-r-md': leadingAddon && !trailingAddon,
+              'rounded-l-md': trailingAddon && !leadingAddon,
+              'rounded-md': !leadingAddon && !trailingAddon,
+              'bg-neutral-50 text-neutral-500': props.disabled,
+            },
+          )}
+          style={style}
+        >
+          {leadingInlineAddon && (
+            <LeadingInlineAddon value={leadingInlineAddon} />
+          )}
+          {inlinePlaceholder && (
+            <div className="absolute pointer-events-none">
+              {inlinePlaceholder}
+            </div>
+          )}
+          <input
+            ref={ref}
             id={id}
-            text={label}
-            hidden={hiddenLabel}
-            required={props.required}
-            disabled={props.disabled}
-          />
-          {hint && <Hint text={hint} />}
-        </div>
-        <div ref={wrapperRef} className="flex mt-1 rounded-md shadow-sm">
-          {leadingAddon && <LeadingAddon value={leadingAddon} />}
-          <label
-            htmlFor={id}
+            name={name}
+            placeholder={
+              placeholder && !inlinePlaceholder ? placeholder : undefined
+            }
             className={clsx(
-              'bg-white border py-2 px-3 focus-within:ring-1 placeholder-neutral-500 placeholder-opacity-100',
-              'flex-1 flex flex-row items-center relative text-base sm:text-sm shadow-sm',
               {
-                [inputColor]: !error,
-                [inputError]: error,
-                [inputValid]: valid,
-                'rounded-r-md': leadingAddon && !trailingAddon,
-                'rounded-l-md': trailingAddon && !leadingAddon,
-                'rounded-md': !leadingAddon && !trailingAddon,
+                'flex-1 focus:outline-none focus:ring-0 sm:text-sm border-none p-0':
+                  true,
                 'bg-neutral-50 text-neutral-500': props.disabled,
               },
+              error
+                ? 'placeholder-danger-300'
+                : valid
+                ? 'placeholder-success-600'
+                : 'placeholder-neutral-400',
+              inputClassName,
             )}
-            style={style}
-          >
-            {leadingInlineAddon && (
-              <LeadingInlineAddon value={leadingInlineAddon} />
+            type={type}
+            {...otherProps}
+          />
+          <div className="inline-flex flex-row items-center space-x-1 cursor-default">
+            {loading && <Spinner className="w-5 h-5 text-neutral-400" />}
+            {trailingInlineAddon && (
+              <TrailingInlineAddon value={trailingInlineAddon} />
             )}
-            {inlinePlaceholder && (
-              <div className="absolute pointer-events-none">
-                {inlinePlaceholder}
-              </div>
-            )}
-            <input
-              ref={ref}
-              id={id}
-              name={name}
-              placeholder={
-                placeholder && !inlinePlaceholder ? placeholder : undefined
-              }
-              className={clsx(
-                {
-                  'flex-1 focus:outline-none focus:ring-0 sm:text-sm border-none p-0':
-                    true,
-                  'bg-neutral-50 text-neutral-500': props.disabled,
-                },
-                inputClassName,
-              )}
-              type={type}
-              {...otherProps}
-            />
-            <div className="inline-flex flex-row items-center space-x-1 cursor-default">
-              {loading && <Spinner className="w-5 h-5 text-neutral-400" />}
-              {trailingInlineAddon && (
-                <TrailingInlineAddon value={trailingInlineAddon} />
-              )}
-            </div>
-            {error && <InputErrorIcon />}
-            {valid && <InputValidIcon />}
-          </label>
-          {trailingAddon && <TrailingAddon value={trailingAddon} />}
-        </div>
-        {error ? (
-          <Error text={error} />
-        ) : valid && typeof valid === 'string' ? (
-          <Valid text={valid} />
-        ) : (
-          help && <Help text={help} />
-        )}
+          </div>
+          {error && <InputErrorIcon />}
+          {valid && <InputValidIcon />}
+        </label>
+        {trailingAddon && <TrailingAddon value={trailingAddon} />}
       </div>
-    );
-  },
-);
+      <Help error={error} valid={valid} help={help} />
+    </div>
+  );
+});
 
 function InputErrorIcon() {
   return <ExclamationCircleIcon className="w-5 h-5 ml-2 text-danger-500" />;

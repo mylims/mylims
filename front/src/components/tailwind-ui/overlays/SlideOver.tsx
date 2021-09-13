@@ -122,15 +122,19 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
   );
 }
 
-SlideOver.Header = function (props: { children: ReactNode }) {
+SlideOver.Header = function SlideOverHeader(props: { children: ReactNode }) {
   return <>{props.children}</>;
 };
 
-SlideOver.Content = function (props: { children: ReactNode }) {
-  return <div className="relative flex-1 px-4 sm:px-6">{props.children}</div>;
+SlideOver.Content = function SlideOverContent(props: { children: ReactNode }) {
+  return (
+    <div className="relative flex-1 px-4 overflow-y-auto sm:px-6">
+      {props.children}
+    </div>
+  );
 };
 
-SlideOver.Footer = function (props: { children: ReactNode }) {
+SlideOver.Footer = function SlideOverFooter(props: { children: ReactNode }) {
   return (
     <div className="flex justify-end flex-shrink-0 px-4 py-4 space-x-3">
       {props.children}
