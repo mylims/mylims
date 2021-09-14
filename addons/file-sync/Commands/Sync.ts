@@ -1,9 +1,9 @@
+import { randomUUID } from 'crypto';
 import { sep } from 'path';
 import { promisify } from 'util';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BaseCommand, flags } from '@adonisjs/core/build/standalone';
-import { v4 as uuid } from '@lukeed/uuid';
 import { FileInfo, FileSynchronizer } from 'fs-synchronizer';
 
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
@@ -146,7 +146,7 @@ export default class Sync extends BaseCommand {
     let path = relativePath.split(sep);
     path.pop();
 
-    const fileId = uuid();
+    const fileId = randomUUID();
     await this.deps.SyncFile.create({
       _id: { configId: fileSyncOption.id, relativePath },
       filename,
@@ -208,7 +208,7 @@ export default class Sync extends BaseCommand {
       filename,
     );
 
-    const fileId = uuid();
+    const fileId = randomUUID();
     file.revisions.unshift({
       id: fileId,
       date: new Date(),
