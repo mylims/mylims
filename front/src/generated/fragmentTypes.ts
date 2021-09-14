@@ -5,7 +5,7 @@ export interface PossibleTypesResultData {
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
-    EventData: [],
+    EventData: ['EventDataFile'],
     SyncElementRevision: ['SyncDirRevision', 'SyncFileRevision'],
   },
 };

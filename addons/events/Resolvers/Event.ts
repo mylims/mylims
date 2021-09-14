@@ -1,4 +1,9 @@
-import { GqlEventSortField, GqlResolvers, GqlSortDirection } from 'App/graphql';
+import {
+  GqlEventDataType,
+  GqlEventSortField,
+  GqlResolvers,
+  GqlSortDirection,
+} from 'App/graphql';
 
 import filteredEvents from '../Queries/filteredEvents';
 
@@ -9,6 +14,18 @@ const sortMap = {
   [GqlEventSortField.STATUS]: 'processors.0.history.0.status',
 };
 const resolvers: GqlResolvers = {
+  EventData: {
+    __resolveType(obj) {
+      switch (obj.type) {
+        case GqlEventDataType.FILE: {
+          return 'EventDataFile';
+        }
+        default: {
+          return null;
+        }
+      }
+    },
+  },
   Query: {
     async events(_, { limit, skip, filterBy, sortBy }) {
       const {

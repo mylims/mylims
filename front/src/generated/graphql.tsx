@@ -5,10 +5,12 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -40,85 +42,115 @@ export enum DirectoryEntryType {
 }
 
 export type EditFileSyncOptionInput = {
-  id: Scalars['ID'];
   enabled: Scalars['Boolean'];
-  root: Scalars['String'];
+  id: Scalars['ID'];
   maxDepth: Scalars['Int'];
-  topics: Array<Scalars['String']>;
   patterns: Array<FileSyncOptionPatternInput>;
   readyChecks: Array<ReadyCheckInput>;
+  root: Scalars['String'];
+  topics: Array<Scalars['String']>;
 };
 
+/** Main event type */
 export type Event = {
-  id: Scalars['String'];
-  topic: Scalars['String'];
+  _id: Scalars['String'];
   data: EventData;
   processors: Array<EventProcessor>;
+  topic: Scalars['String'];
 };
 
 export type EventData = {
   type: EventDataType;
 };
 
-export type EventDataFile = {
-  type: EventDataType;
+export type EventDataFile = EventData & {
   fileId: Scalars['String'];
+  type: EventDataType;
 };
 
 export enum EventDataType {
   FILE = 'file',
 }
 
+export type EventFilterInput = {
+  fileId?: Maybe<Scalars['String']>;
+  processorId?: Maybe<Scalars['String']>;
+  status?: Maybe<Array<EventStatus>>;
+  topic?: Maybe<Scalars['String']>;
+};
+
+/** Intermediary type for event data */
 export type EventHistory = {
-  status: EventStatus;
   date: Scalars['DateTime'];
   message?: Maybe<Scalars['String']>;
+  processId: Scalars['String'];
+  status: EventStatus;
+};
+
+export type EventPage = {
+  events: Array<Event>;
+  totalCount: Scalars['Int'];
 };
 
 export type EventProcessor = {
-  processorId: Scalars['String'];
   history: Array<EventHistory>;
+  processorId: Scalars['String'];
 };
 
+/** Paginated list of events */
+export enum EventSortField {
+  DATE = 'date',
+  PROCESSORID = 'processorId',
+  STATUS = 'status',
+  TOPIC = 'topic',
+}
+
+export type EventSortInput = {
+  direction: SortDirection;
+  field: EventSortField;
+};
+
+/** Enums for event fields */
 export enum EventStatus {
-  PENDING = 'pending',
-  SUCCESS = 'success',
   ERROR = 'error',
+  PENDING = 'pending',
+  PROCESSING = 'processing',
+  SUCCESS = 'success',
 }
 
 export type FileContent = {
+  content: Scalars['String'];
   filename: Scalars['String'];
   size: Scalars['Int'];
-  content: Scalars['String'];
 };
 
 export enum FileStatus {
-  PENDING = 'pending',
-  IMPORTING = 'importing',
-  IMPORTED = 'imported',
   IMPORT_FAIL = 'import_fail',
+  IMPORTED = 'imported',
+  IMPORTING = 'importing',
+  PENDING = 'pending',
 }
 
 export type FileSyncOption = {
-  id: Scalars['ID'];
   enabled: Scalars['Boolean'];
-  root: Scalars['String'];
+  id: Scalars['ID'];
   maxDepth: Scalars['Int'];
   patterns: Array<Pattern>;
   readyChecks: Array<ReadyCheck>;
+  root: Scalars['String'];
   topics: Array<Scalars['String']>;
 };
 
 export type FileSyncOptionPatternInput = {
-  type: PatternType;
   pattern: Scalars['String'];
+  type: PatternType;
 };
 
 export type FilesFilterInput = {
-  minSize?: Maybe<Scalars['Int']>;
+  maxDate?: Maybe<Scalars['DateTime']>;
   maxSize?: Maybe<Scalars['Int']>;
   minDate?: Maybe<Scalars['DateTime']>;
-  maxDate?: Maybe<Scalars['DateTime']>;
+  minSize?: Maybe<Scalars['Int']>;
   status?: Maybe<Array<FileStatus>>;
 };
 
@@ -129,10 +161,10 @@ export type FilesFlatPage = {
 
 export enum FilesSortField {
   CREATIONDATE = 'creationDate',
-  MODIFICATIONDATE = 'modificationDate',
   DATE = 'date',
-  SIZE = 'size',
   FILENAME = 'filename',
+  MODIFICATIONDATE = 'modificationDate',
+  SIZE = 'size',
 }
 
 export type FilesSortInput = {
@@ -142,34 +174,34 @@ export type FilesSortInput = {
 
 export type Mutation = {
   createFileSyncOption: FileSyncOption;
-  editFileSyncOption: FileSyncOption;
   deleteFileSyncOption: Array<FileSyncOption>;
+  editFileSyncOption: FileSyncOption;
 };
 
 export type MutationCreateFileSyncOptionArgs = {
   input: NewFileSyncOptionInput;
 };
 
-export type MutationEditFileSyncOptionArgs = {
-  input: EditFileSyncOptionInput;
-};
-
 export type MutationDeleteFileSyncOptionArgs = {
   input: DeleteFileSyncOptionInput;
 };
 
+export type MutationEditFileSyncOptionArgs = {
+  input: EditFileSyncOptionInput;
+};
+
 export type NewFileSyncOptionInput = {
   enabled: Scalars['Boolean'];
-  root: Scalars['String'];
   maxDepth: Scalars['Int'];
-  topics: Array<Scalars['String']>;
   patterns: Array<FileSyncOptionPatternInput>;
   readyChecks: Array<ReadyCheckInput>;
+  root: Scalars['String'];
+  topics: Array<Scalars['String']>;
 };
 
 export type Pattern = {
-  type: PatternType;
   pattern: Scalars['String'];
+  type: PatternType;
 };
 
 export enum PatternType {
@@ -178,32 +210,34 @@ export enum PatternType {
 }
 
 export type Query = {
-  users: Array<User>;
-  eventsByTopic: Array<Event>;
-  eventsByFileId: Array<Event>;
   directoryTree: Array<DirectoryEntry>;
+  events: EventPage;
   fileByPath: FileContent;
+  fileSyncOption: FileSyncOption;
+  fileSyncOptions: Array<FileSyncOption>;
   filesByConfig: SyncTreeRevision;
   filesByConfigFlat: FilesFlatPage;
-  fileSyncOptions: Array<FileSyncOption>;
-  fileSyncOption: FileSyncOption;
   readyChecks: Array<ReadyCheckDescriptor>;
-};
-
-export type QueryEventsByTopicArgs = {
-  topic: Scalars['String'];
-};
-
-export type QueryEventsByFileIdArgs = {
-  fileId: Scalars['String'];
+  users: Array<User>;
 };
 
 export type QueryDirectoryTreeArgs = {
   root: Scalars['String'];
 };
 
+export type QueryEventsArgs = {
+  filterBy?: Maybe<EventFilterInput>;
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<EventSortInput>;
+};
+
 export type QueryFileByPathArgs = {
   path: Scalars['String'];
+};
+
+export type QueryFileSyncOptionArgs = {
+  id: Scalars['ID'];
 };
 
 export type QueryFilesByConfigArgs = {
@@ -212,15 +246,11 @@ export type QueryFilesByConfigArgs = {
 };
 
 export type QueryFilesByConfigFlatArgs = {
+  filterBy?: Maybe<FilesFilterInput>;
   id: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
-  filterBy?: Maybe<FilesFilterInput>;
   sortBy?: Maybe<FilesSortInput>;
-};
-
-export type QueryFileSyncOptionArgs = {
-  id: Scalars['ID'];
 };
 
 export type ReadyCheck = {
@@ -229,8 +259,8 @@ export type ReadyCheck = {
 };
 
 export type ReadyCheckDescriptor = {
-  name: Scalars['String'];
   hasArg: Scalars['Boolean'];
+  name: Scalars['String'];
 };
 
 export type ReadyCheckInput = {
@@ -244,57 +274,59 @@ export enum SortDirection {
 }
 
 export type SyncDirRevision = SyncElementRevision & {
-  id: Scalars['String'];
-  size: Scalars['Int'];
-  relativePath: Scalars['String'];
   date: Scalars['DateTime'];
+  id: Scalars['String'];
   path: Array<Scalars['String']>;
+  relativePath: Scalars['String'];
+  size: Scalars['Int'];
 };
 
 export type SyncElementRevision = {
-  id: Scalars['String'];
-  size: Scalars['Int'];
-  relativePath: Scalars['String'];
   date: Scalars['DateTime'];
+  id: Scalars['String'];
   path: Array<Scalars['String']>;
+  relativePath: Scalars['String'];
+  size: Scalars['Int'];
 };
 
 export type SyncFileRevision = SyncElementRevision & {
-  id: Scalars['String'];
   countRevisions: Scalars['Int'];
-  size: Scalars['Int'];
-  relativePath: Scalars['String'];
-  status: FileStatus;
   date: Scalars['DateTime'];
   downloadUrl: Scalars['String'];
-  path: Array<Scalars['String']>;
   filename: Scalars['String'];
+  id: Scalars['String'];
+  path: Array<Scalars['String']>;
+  relativePath: Scalars['String'];
+  size: Scalars['Int'];
+  status: FileStatus;
 };
 
 export type SyncTreeRevision = {
   _id: Scalars['String'];
-  files: Array<SyncFileRevision>;
   dirs: Array<SyncDirRevision>;
+  files: Array<SyncFileRevision>;
 };
 
 export type User = {
-  id: Scalars['ID'];
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  emails: Array<Scalars['String']>;
-  role: Scalars['String'];
   authMethods: Scalars['JSONObject'];
+  emails: Array<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  lastName?: Maybe<Scalars['String']>;
+  role: Scalars['String'];
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UsersQuery = {
-  users: Array<
-    Pick<
-      User,
-      'id' | 'lastName' | 'firstName' | 'emails' | 'role' | 'authMethods'
-    >
-  >;
+  users: Array<{
+    id: string;
+    lastName?: Maybe<string>;
+    firstName?: Maybe<string>;
+    emails: Array<string>;
+    role: string;
+    authMethods: any;
+  }>;
 };
 
 export const UsersDocument = gql`
