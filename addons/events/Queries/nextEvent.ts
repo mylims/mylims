@@ -1,4 +1,4 @@
-import { v4 as uuid } from '@lukeed/uuid';
+import { randomUUID } from 'crypto';
 
 import { Event, EventStatus } from '../Models/Event';
 
@@ -15,7 +15,7 @@ export default async function nextEvent(
   const event = await freeEvent(eventParams);
   return setEventStatus({
     eventId: event.id.toHexString(),
-    processId: uuid(),
+    processId: randomUUID(),
     processorId: eventParams.processorId,
     status: EventStatus.PROCESSING,
   });
