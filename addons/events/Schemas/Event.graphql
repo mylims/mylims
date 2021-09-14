@@ -18,6 +18,7 @@ input EventFilterInput {
   topic: String
   processorId: String
   status: [EventStatus!]
+  fileId: String
 }
 input EventSortInput {
   direction: SortDirection!

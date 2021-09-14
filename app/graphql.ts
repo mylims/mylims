@@ -88,6 +88,7 @@ export type GqlEventFilterInput = {
   topic?: Maybe<Scalars['String']>;
   processorId?: Maybe<Scalars['String']>;
   status?: Maybe<Array<GqlEventStatus>>;
+  fileId?: Maybe<Scalars['String']>;
 };
 
 /** Intermediary type for event data */

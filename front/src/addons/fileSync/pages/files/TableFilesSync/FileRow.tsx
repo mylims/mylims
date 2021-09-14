@@ -21,8 +21,6 @@ import {
 } from '@/components/tailwind-ui';
 import { formatBytes, formatDate } from '@/utils/formatFields';
 
-
-
 function getTagColor(status: EventStatus) {
   switch (status) {
     case EventStatus.SUCCESS: {
@@ -45,7 +43,7 @@ export default function FileRow({ value }: { value: FileSync }) {
   const events = useMemo(() => {
     if (!data) return [];
     let res: EventsProcessors[] = [];
-    for (const { topic, processors } of data.eventsByFileId) {
+    for (const { topic, processors } of data.events.events) {
       for (const { processorId, history } of processors) {
         res.push({
           topic,
