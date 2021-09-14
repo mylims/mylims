@@ -1,19 +1,48 @@
 type Query {
-  eventsByTopic(topic: String!): [Event!]!
-  eventsByFileId(fileId: String!): [Event!]!
+  events(
+    limit: Int
+    skip: Int
+    filterBy: EventFilterInput
+    sortBy: EventSortInput
+  ): EventPage!
 }
 
+# Paginated list of events
+enum EventSortField {
+  date
+  topic
+  processorId
+  status
+}
+input EventFilterInput {
+  topic: String
+  processorId: String
+  status: [EventStatus!]
+}
+input EventSortInput {
+  direction: SortDirection!
+  field: EventSortField!
+}
+type EventPage {
+  events: [Event!]!
+  totalCount: Int!
+}
+
+# Enums for event fields
 enum EventStatus {
   pending
   processing
   success
   error
 }
-
 enum EventDataType {
   file
 }
+interface EventData {
+  type: EventDataType!
+}
 
+# Intermediary type for event data
 type EventHistory {
   processId: String!
   status: EventStatus!
@@ -21,10 +50,7 @@ type EventHistory {
   message: String
 }
 
-interface EventData {
-  type: EventDataType!
-}
-type EventDataFile {
+type EventDataFile implements EventData {
   type: EventDataType!
   fileId: String!
 }
@@ -34,8 +60,9 @@ type EventProcessor {
   history: [EventHistory!]!
 }
 
+# Main event type
 type Event {
-  id: String!
+  _id: String!
   topic: String!
   data: EventData!
   processors: [EventProcessor!]!
