@@ -11,6 +11,7 @@ import filteredEvents from '../Queries/filteredEvents';
 const sortMap = {
   [GqlEventSortField.DATE]: 'processors.0.history.0.date',
   [GqlEventSortField.TOPIC]: 'topic',
+  [GqlEventSortField.CREATEDAT]: 'createdAt',
   [GqlEventSortField.PROCESSORID]: 'processors.0.processorId',
   [GqlEventSortField.STATUS]: 'processors.0.history.0.status',
 };

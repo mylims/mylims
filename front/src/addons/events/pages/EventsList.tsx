@@ -1,23 +1,19 @@
 import React, { useMemo } from 'react';
 
+import EventRow from '../components/EventRow';
+
 import ElnLayout from '@/components/ElnLayout';
-import { StatusLabel } from '@/components/StatusLabel';
 import TableEmpty from '@/components/TableEmpty';
 import TableHeader from '@/components/TableHeader';
-import {
-  Alert,
-  AlertType,
-  Spinner,
-  Table,
-  Td,
-  Color,
-} from '@/components/tailwind-ui';
+import { Alert, AlertType, Spinner, Table } from '@/components/tailwind-ui';
 import {
   EventsFilteredQuery,
   EventStatus,
   useEventsFilteredQuery,
 } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
+import { useFilterEventQuery } from '@/hooks/useEventQuery';
+import EventFormFilter from '@/addons/events/components/EventFormFilter';
 
 type EventRowType = EventsFilteredQuery['events']['events'][number] & {
   id: string;
@@ -25,20 +21,28 @@ type EventRowType = EventsFilteredQuery['events']['events'][number] & {
 
 const PAGE_SIZE = 10;
 const titles = [
+  { className: 'w-2/12', name: 'Event id' },
   { className: 'w-2/12', name: 'File' },
   { className: 'w-2/12', name: 'Processor id' },
   { className: 'w-1/12', name: 'Topic' },
   { className: 'w-1/12', name: 'Status' },
   { className: 'w-2/12', name: 'Process id' },
-  { className: 'w-1/12', name: 'Date' },
+  { className: 'w-1/12', name: 'Creation date' },
+  { className: 'w-1/12', name: 'Process date' },
 ];
 
 export default function EventsList() {
-  const pageNum = 1;
+  const [query, setQuery] = useFilterEventQuery();
+  const pageNum = query.page !== null ? parseInt(query.page, 10) : 1;
   const { loading, error, data } = useEventsFilteredQuery({
     variables: {
       skip: (pageNum - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
+      filterBy: {
+        status: query.status?.map(({ value }) => value) ?? null,
+        topic: query.topic,
+        processorId: query.processorId,
+      },
     },
   });
   const events = useMemo(
@@ -46,14 +50,20 @@ export default function EventsList() {
       (data?.events.events ?? []).map((event) => ({ ...event, id: event._id })),
     [data],
   );
+
   const pagination = {
     page: pageNum,
     itemsPerPage: PAGE_SIZE,
     totalCount: data?.events.totalCount ?? 0,
-    onPageChange: (newPage: number) => console.log(newPage),
+    onPageChange: (newPage: number) =>
+      setQuery({ ...query, page: newPage.toString() }),
   };
+
   return (
-    <>
+    <EventFormFilter
+      initialValues={query}
+      onSubmit={(values) => setQuery(values)}
+    >
       {error && (
         <Alert title={'Error'} type={AlertType.ERROR}>
           Unexpected error: {error.message}
@@ -72,7 +82,7 @@ export default function EventsList() {
           pagination={pagination}
         />
       )}
-    </>
+    </EventFormFilter>
   );
 }
 
@@ -80,12 +90,14 @@ function Row({ value }: { value: EventRowType }) {
   if (value.processors.length === 0) {
     return (
       <EventRow
+        id={value.id}
         file={value.data.file.name}
         topic={value.topic}
         status={EventStatus.PENDING}
         processId="-"
         processorId="-"
         date="-"
+        createdAt={formatDate(value.createdAt)}
       />
     );
   }
@@ -95,67 +107,22 @@ function Row({ value }: { value: EventRowType }) {
     return (
       <EventRow
         key={processor.processorId}
+        id={value.id}
         file={value.data.file.name}
         topic={value.topic}
-        status={processor.history[0]?.status.trim() ?? EventStatus.PENDING}
+        status={
+          (processor.history[0]?.status.trim() ??
+            EventStatus.PENDING) as EventStatus
+        }
         processId={processor.history[0]?.processId ?? '-'}
         processorId={processor.processorId}
         date={date ? formatDate(date) : '-'}
+        createdAt={formatDate(value.createdAt)}
       />
     );
   });
 
   return <>{processors}</>;
-}
-
-interface EventRowProps {
-  file: string;
-  topic: string;
-  status: string;
-  processorId: string;
-  processId: string;
-  date: string;
-}
-function EventRow({
-  file,
-  topic,
-  status,
-  processorId,
-  processId,
-  date,
-}: EventRowProps) {
-  let color: Color;
-  switch (status) {
-    case EventStatus.SUCCESS: {
-      color = Color.success;
-      break;
-    }
-    case EventStatus.ERROR: {
-      color = Color.danger;
-      break;
-    }
-    default: {
-      color = Color.warning;
-      break;
-    }
-  }
-
-  return (
-    <tr>
-      <Td>{file}</Td>
-      <Td title={processorId} className="truncate">
-        {processorId}
-      </Td>
-      <Td>{topic}</Td>
-      <Td>
-        <StatusLabel status={status} color={color} />
-      </Td>
-      <Td title={processId} className="truncate">
-        {processId}
-      </Td>
-      <Td>{date}</Td>
-    </tr>
-  );
 }
 
 EventsList.getLayout = (page: React.ReactNode) => <ElnLayout>{page}</ElnLayout>;

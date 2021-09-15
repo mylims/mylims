@@ -2,7 +2,6 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-
 import TableFilesFiltered from './TableFilesFiltered';
 import TableFilesSync from './TableFilesSync';
 
@@ -16,7 +15,7 @@ import {
   FileStatus,
   FileSyncOptionDocument,
 } from '@/generated/graphql';
-import { useFilterQuery } from '@/hooks/useQuery';
+import { useFilterFilesQuery } from '@/hooks/useFileQuery';
 import filesizeParser from '@/utils/filesize-parser';
 
 interface RouterQuery {
@@ -36,7 +35,7 @@ const PAGE_SIZE = 10;
 export default function ListFiles() {
   const router = useHistory();
   const { id } = useParams<{ id: string }>();
-  const [{ page, ...filters }] = useFilterQuery('');
+  const [{ page, ...filters }] = useFilterFilesQuery('');
 
   if (id === undefined) {
     void router.push('list');

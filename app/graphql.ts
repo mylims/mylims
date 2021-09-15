@@ -67,6 +67,7 @@ export type GqlEvent = {
   _id: Scalars['String'];
   topic: Scalars['String'];
   data: GqlEventData;
+  createdAt: Scalars['DateTime'];
   processors: Array<GqlEventProcessor>;
 };
 
@@ -125,6 +126,7 @@ export enum GqlEventSortField {
   TOPIC = 'topic',
   PROCESSORID = 'processorId',
   STATUS = 'status',
+  CREATEDAT = 'createdAt',
 }
 
 export type GqlEventSortInput = {
@@ -595,6 +597,7 @@ export type GqlEventResolvers<
   _id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   topic?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   data?: Resolver<GqlResolversTypes['EventData'], ParentType, ContextType>;
+  createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
   processors?: Resolver<
     Array<GqlResolversTypes['EventProcessor']>,
     ParentType,
@@ -627,7 +630,6 @@ export type GqlEventFileResolvers<
 > = ResolversObject<{
   id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
-  size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

@@ -13,6 +13,7 @@ enum EventSortField {
   topic
   processorId
   status
+  createdAt
 }
 input EventFilterInput {
   topic: String
@@ -71,5 +72,6 @@ type Event {
   _id: String!
   topic: String!
   data: EventData!
+  createdAt: DateTime!
   processors: [EventProcessor!]!
 }
