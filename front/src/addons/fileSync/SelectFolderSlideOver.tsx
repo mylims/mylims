@@ -2,11 +2,6 @@ import { DocumentIcon, FolderOpenIcon } from '@heroicons/react/solid';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  DirectoryEntryType,
-  useDirectoryTreeLazyQuery,
-} from '@/generated/graphql';
-
-import {
   Button,
   SlideOver,
   Spinner,
@@ -15,6 +10,11 @@ import {
   Th,
   useOnOff,
 } from '@/components/tailwind-ui';
+import {
+  DirectoryEntryType,
+  useDirectoryTreeLazyQuery,
+} from '@/generated/graphql';
+
 
 interface SelectFolderSlideOverProps {
   returnPath: (path: string) => void;

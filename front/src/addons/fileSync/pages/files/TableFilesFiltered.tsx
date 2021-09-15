@@ -3,14 +3,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
-import {
-  FilesByConfigFlatQuery,
-  FilesSortField,
-  SyncFileRevision,
-} from '@/generated/graphql';
-
 import AutoSubmitForm from '@/components/AutoSubmitForm';
 import { FileStatusLabel, getTagColor } from '@/components/FileStatusLabel';
+import TableEmpty from '@/components/TableEmpty';
+import TableHeader from '@/components/TableHeader';
 import {
   Button,
   Color,
@@ -23,11 +19,14 @@ import {
   Spinner,
   Table,
   Td,
-  Th,
   useMultiSearchSelect,
   Variant,
 } from '@/components/tailwind-ui';
-import { FileStatus, SortDirection } from '@/generated/graphql';
+import {
+  FilesByConfigFlatQuery,
+  FilesSortField,
+  SyncFileRevision,
+ FileStatus, SortDirection } from '@/generated/graphql';
 import { useFilterQuery, selectOrder, selectField } from '@/hooks/useQuery';
 import filesizeParser from '@/utils/filesize-parser';
 import { formatBytes, formatDate } from '@/utils/formatFields';
@@ -126,6 +125,14 @@ const selectFieldOptions = [
   { value: FilesSortField.SIZE, label: selectField[FilesSortField.SIZE] },
 ];
 
+const titles = [
+  { className: 'w-1/2', name: 'Relative path' },
+  { className: 'w-1/12', name: 'Size' },
+  { className: 'w-1/12', name: 'Update date' },
+  { className: 'w-1/12', name: 'Status' },
+  { className: 'w-1/12', name: 'Actions' },
+];
+
 export default function TableFilesFiltered({
   id,
   data,
@@ -196,8 +203,8 @@ export default function TableFilesFiltered({
         {loading && <Spinner className="w-10 h-10 text-danger-500" />}
         <Table
           tableClassName="table-fixed"
-          Header={Header}
-          Empty={Empty}
+          Header={() => <TableHeader titles={titles} />}
+          Empty={() => <TableEmpty titles={titles} />}
           Tr={Row}
           data={files}
           pagination={pagination}
@@ -207,31 +214,6 @@ export default function TableFilesFiltered({
   );
 }
 
-function Header() {
-  return (
-    <tr>
-      <Th className="w-1/2">Relative path</Th>
-      <Th className="w-1/12">Size</Th>
-      <Th className="w-1/12">Update date</Th>
-      <Th className="w-1/12">Status</Th>
-      <Th className="w-1/12">Actions</Th>
-    </tr>
-  );
-}
-function Empty() {
-  return (
-    <>
-      <Header />
-      <tr>
-        <Td colSpan={4} align="center">
-          <div className="flex flex-row justify-center text-neutral-500">
-            <span>Empty</span>
-          </div>
-        </Td>
-      </tr>
-    </>
-  );
-}
 function Row({ value }: { value: File }) {
   return (
     <tr>
