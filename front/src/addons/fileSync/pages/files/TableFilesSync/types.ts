@@ -2,7 +2,7 @@ import type {
   EventStatus,
   FilesByConfigQuery,
   FileStatus,
-} from '../../../generated/graphql';
+} from '@/generated/graphql';
 
 export interface TableFilesSyncProps {
   data?: FilesByConfigQuery;

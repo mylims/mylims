@@ -12,7 +12,6 @@ import {
 } from '@/components/tailwind-ui';
 import { ReadyCheckDescriptor, ReadyCheckInput } from '@/generated/graphql';
 
-
 function simpleGetValueRenderOption(option: string) {
   return option;
 }

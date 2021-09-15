@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-
 import AddonsContext from '../contexts/AddonsContext';
 import useAuth from '../hooks/useAuth';
 
