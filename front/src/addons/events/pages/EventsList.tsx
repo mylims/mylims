@@ -1,29 +1,37 @@
 import React, { useMemo } from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
-import {
-  EventsFilteredQuery,
-  EventStatus,
-  useEventsFilteredQuery,
-} from '@/generated/graphql';
+import { StatusLabel } from '@/components/StatusLabel';
+import TableEmpty from '@/components/TableEmpty';
+import TableHeader from '@/components/TableHeader';
 import {
   Alert,
   AlertType,
   Spinner,
   Table,
-  Th,
   Td,
   Color,
 } from '@/components/tailwind-ui';
-import { InboxIcon } from '@heroicons/react/solid';
+import {
+  EventsFilteredQuery,
+  EventStatus,
+  useEventsFilteredQuery,
+} from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
-import { StatusLabel } from '@/components/StatusLabel';
 
-type EventRow = EventsFilteredQuery['events']['events'][number] & {
+type EventRowType = EventsFilteredQuery['events']['events'][number] & {
   id: string;
 };
 
 const PAGE_SIZE = 10;
+const titles = [
+  { className: 'w-2/12', name: 'File' },
+  { className: 'w-2/12', name: 'Processor id' },
+  { className: 'w-1/12', name: 'Topic' },
+  { className: 'w-1/12', name: 'Status' },
+  { className: 'w-2/12', name: 'Process id' },
+  { className: 'w-1/12', name: 'Date' },
+];
 
 export default function EventsList() {
   const pageNum = 1;
@@ -57,8 +65,8 @@ export default function EventsList() {
       ) : (
         <Table
           tableClassName="table-fixed"
-          Header={Header}
-          Empty={Empty}
+          Header={() => <TableHeader titles={titles} />}
+          Empty={() => <TableEmpty titles={titles} />}
           Tr={Row}
           data={events}
           pagination={pagination}
@@ -68,45 +76,16 @@ export default function EventsList() {
   );
 }
 
-function Header() {
-  return (
-    <tr>
-      <Th className="w-2/12">File</Th>
-      <Th className="w-2/12">Processor id</Th>
-      <Th className="w-1/12">Topic</Th>
-      <Th className="w-1/12">Status</Th>
-      <Th className="w-2/12">Process id</Th>
-      <Th className="w-1/12">Date</Th>
-    </tr>
-  );
-}
-
-function Empty() {
-  return (
-    <>
-      <Header />
-      <tr>
-        <Td colSpan={4} align="center">
-          <div className="flex flex-row justify-center text-neutral-500">
-            <InboxIcon className="w-5 h-5 mr-2" />
-            <span>Empty</span>
-          </div>
-        </Td>
-      </tr>
-    </>
-  );
-}
-
-function Row({ value }: { value: EventRow }) {
+function Row({ value }: { value: EventRowType }) {
   if (value.processors.length === 0) {
     return (
       <EventRow
-        file={value.data.fileId}
+        file={value.data.file.name}
         topic={value.topic}
         status={EventStatus.PENDING}
-        processId=""
-        processorId=""
-        date=""
+        processId="-"
+        processorId="-"
+        date="-"
       />
     );
   }
@@ -116,12 +95,12 @@ function Row({ value }: { value: EventRow }) {
     return (
       <EventRow
         key={processor.processorId}
-        file={value.data.fileId}
+        file={value.data.file.name}
         topic={value.topic}
         status={processor.history[0]?.status.trim() ?? EventStatus.PENDING}
-        processId={processor.history[0]?.processId ?? ''}
+        processId={processor.history[0]?.processId ?? '-'}
         processorId={processor.processorId}
-        date={date ? formatDate(date) : ''}
+        date={date ? formatDate(date) : '-'}
       />
     );
   });
