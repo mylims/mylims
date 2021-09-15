@@ -1,0 +1,28 @@
+query EventsFiltered(
+  $limit: Int
+  $skip: Int
+  $filterBy: EventFilterInput
+  $sortBy: EventSortInput
+) {
+  events(limit: $limit, skip: $skip, filterBy: $filterBy, sortBy: $sortBy) {
+    totalCount
+    events {
+      _id
+      topic
+      data {
+        ... on EventDataFile {
+          fileId
+        }
+      }
+      processors {
+        processorId
+        history {
+          processId
+          status
+          date
+          message
+        }
+      }
+    }
+  }
+}
