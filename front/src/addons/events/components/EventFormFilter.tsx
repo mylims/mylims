@@ -1,4 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import * as yup from 'yup';
+
 import AutoSubmitForm from '@/components/AutoSubmitForm';
 import { getTagColor } from '@/components/EventStatusLabel';
 import {
@@ -11,8 +14,6 @@ import {
   useMultiSearchSelect,
   Variant,
 } from '@/components/tailwind-ui';
-import { Link } from 'react-router-dom';
-import * as yup from 'yup';
 import {
   EventSortField,
   EventStatus,

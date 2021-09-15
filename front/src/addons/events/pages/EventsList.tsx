@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 
 import EventRow from '../components/EventRow';
 
+import EventFormFilter from '@/addons/events/components/EventFormFilter';
 import ElnLayout from '@/components/ElnLayout';
 import TableEmpty from '@/components/TableEmpty';
 import TableHeader from '@/components/TableHeader';
@@ -11,9 +12,8 @@ import {
   EventStatus,
   useEventsFilteredQuery,
 } from '@/generated/graphql';
-import { formatDate } from '@/utils/formatFields';
 import { useFilterEventQuery } from '@/hooks/useEventQuery';
-import EventFormFilter from '@/addons/events/components/EventFormFilter';
+import { formatDate } from '@/utils/formatFields';
 
 type EventRowType = EventsFilteredQuery['events']['events'][number] & {
   id: string;
