@@ -1,15 +1,23 @@
-import { InboxIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 
 import DirRow from './DirRow';
 import FileRow from './FileRow';
 import { TreeContext } from './TreeContext';
 import { TableFilesSyncProps, TreeType, TreeSync } from './types';
 
-import { Button, Table, Td, Th, Variant } from '@/components/tailwind-ui';
+import TableEmpty from '@/components/TableEmpty';
+import TableHeader from '@/components/TableHeader';
+import { Button, Table, Variant } from '@/components/tailwind-ui';
 
+const titles = [
+  { className: 'w-1/12', name: 'Relative path' },
+  { className: 'w-1/12', name: 'Size' },
+  { className: 'w-1/12', name: 'Update date' },
+  { className: 'w-1/12', name: 'Revisions' },
+  { className: 'w-1/12', name: 'Status' },
+  { className: 'w-1/12', name: 'Actions' },
+];
 export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
   const [state, setState] = useState<TreeSync[]>(() => {
     const filesQuery = data?.filesByConfig.files ?? [];
@@ -52,8 +60,8 @@ export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
       <TreeContext.Provider value={{ state, setState, id }}>
         <Table
           tableClassName="table-fixed"
-          Header={Header}
-          Empty={Empty}
+          Header={() => <TableHeader titles={titles} />}
+          Empty={() => <TableEmpty titles={titles} />}
           Tr={Row}
           data={state}
         />
@@ -62,33 +70,6 @@ export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
   );
 }
 
-function Header() {
-  return (
-    <tr>
-      <Th className="w-1/2">Relative path</Th>
-      <Th className="w-1/12">Size</Th>
-      <Th className="w-1/12">Update date</Th>
-      <Th className="w-1/12">Revisions</Th>
-      <Th className="w-1/12">Status</Th>
-      <Th className="w-1/12">Actions</Th>
-    </tr>
-  );
-}
-function Empty() {
-  return (
-    <>
-      <Header />
-      <tr>
-        <Td colSpan={4} align="center">
-          <div className="flex flex-row justify-center text-neutral-500">
-            <InboxIcon className="w-5 h-5 mr-2" />
-            <span>Empty</span>
-          </div>
-        </Td>
-      </tr>
-    </>
-  );
-}
 export function Row({ value }: { value: TreeSync }) {
   return value.type === TreeType.file ? (
     <FileRow value={value} />

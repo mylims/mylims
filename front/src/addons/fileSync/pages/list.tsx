@@ -4,12 +4,13 @@ import {
   TableIcon,
   TrashIcon,
   XIcon,
-  InboxIcon,
 } from '@heroicons/react/outline';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
+import TableEmpty from '@/components/TableEmpty';
+import TableHeader from '@/components/TableHeader';
 import {
   Alert,
   AlertType,
@@ -21,7 +22,6 @@ import {
   Spinner,
   Table,
   Td,
-  Th,
 } from '@/components/tailwind-ui';
 import {
   FileSyncOptionsQuery,
@@ -30,6 +30,14 @@ import {
   refetchFileSyncOptionsQuery,
 } from '@/generated/graphql';
 
+const titles = [
+  { className: 'w-1/12', name: 'Enabled' },
+  { className: 'w-4/12', name: 'Root' },
+  { className: 'w-3/12', name: 'Topics' },
+  { className: 'w-1/12', name: 'Patterns' },
+  { className: 'w-1/12', name: 'Ready checks' },
+  { className: 'w-2/12', name: 'Actions' },
+];
 export default function ConfigList() {
   const { loading, error: queryError, data } = useFileSyncOptionsQuery();
 
@@ -56,26 +64,13 @@ export default function ConfigList() {
       ) : (
         <Table
           tableClassName="table-fixed"
-          Header={Header}
-          Empty={Empty}
+          Header={() => <TableHeader titles={titles} />}
+          Empty={() => <TableEmpty titles={titles} />}
           Tr={Row(deleteFileSyncOptionMutation)}
           data={data?.fileSyncOptions ?? []}
         />
       )}
     </>
-  );
-}
-
-function Header() {
-  return (
-    <tr>
-      <Th className="w-1/12">Enabled</Th>
-      <Th className="w-4/12">Root</Th>
-      <Th className="w-3/12">Topics</Th>
-      <Th className="w-1/12">Patterns</Th>
-      <Th className="w-1/12">Ready checks</Th>
-      <Th className="w-2/12">Actions</Th>
-    </tr>
   );
 }
 
@@ -145,22 +140,6 @@ function Row(
       </tr>
     );
   };
-}
-
-function Empty() {
-  return (
-    <>
-      <Header />
-      <tr>
-        <Td colSpan={4} align="center">
-          <div className="flex flex-row justify-center text-neutral-500">
-            <InboxIcon className="w-5 h-5 mr-2" />
-            <span>Empty</span>
-          </div>
-        </Td>
-      </tr>
-    </>
-  );
 }
 
 ConfigList.getLayout = (page: React.ReactNode) => <ElnLayout>{page}</ElnLayout>;

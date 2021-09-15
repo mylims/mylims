@@ -2,8 +2,6 @@ import { TrashIcon } from '@heroicons/react/solid';
 import { ArrayHelpers } from 'formik';
 import React, { useMemo } from 'react';
 
-import { ReadyCheckDescriptor, ReadyCheckInput } from '@/generated/graphql';
-
 import {
   Button,
   Color,
@@ -12,6 +10,8 @@ import {
   Size,
   Variant,
 } from '@/components/tailwind-ui';
+import { ReadyCheckDescriptor, ReadyCheckInput } from '@/generated/graphql';
+
 
 function simpleGetValueRenderOption(option: string) {
   return option;

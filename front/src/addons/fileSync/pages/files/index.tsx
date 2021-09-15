@@ -2,6 +2,12 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+
+import TableFilesFiltered from './TableFilesFiltered';
+import TableFilesSync from './TableFilesSync';
+
+import ElnLayout from '@/components/ElnLayout';
+import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
 import {
   useFilesByConfigQuery,
   useFilesByConfigFlatQuery,
@@ -10,12 +16,6 @@ import {
   FileStatus,
   FileSyncOptionDocument,
 } from '@/generated/graphql';
-
-import TableFilesFiltered from './TableFilesFiltered';
-import TableFilesSync from './TableFilesSync';
-
-import ElnLayout from '@/components/ElnLayout';
-import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
 import { useFilterQuery } from '@/hooks/useQuery';
 import filesizeParser from '@/utils/filesize-parser';
 
