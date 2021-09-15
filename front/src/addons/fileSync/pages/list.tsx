@@ -9,13 +9,6 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  FileSyncOptionsQuery,
-  useFileSyncOptionsQuery,
-  useDeleteFileSyncOptionMutation,
-  refetchFileSyncOptionsQuery,
-} from '../generated/graphql';
-
 import ElnLayout from '@/components/ElnLayout';
 import {
   Alert,
@@ -30,7 +23,12 @@ import {
   Td,
   Th,
 } from '@/components/tailwind-ui';
-
+import {
+  FileSyncOptionsQuery,
+  useFileSyncOptionsQuery,
+  useDeleteFileSyncOptionMutation,
+  refetchFileSyncOptionsQuery,
+} from '@/generated/graphql';
 
 export default function ConfigList() {
   const { loading, error: queryError, data } = useFileSyncOptionsQuery();

@@ -3,16 +3,16 @@ import React, { useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import FileSyncConfigForm from '../FileSyncConfigForm';
+
+
+import ElnLayout from '@/components/ElnLayout';
+import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
 import {
   EditFileSyncOptionInput,
   NewFileSyncOptionInput,
   useEditFileSyncOptionMutation,
   useFileSyncOptionQuery,
-} from '../generated/graphql';
-
-import ElnLayout from '@/components/ElnLayout';
-import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
-
+} from '@/generated/graphql';
 
 export default function EditConfig() {
   const [editFileSyncOption, { loading: mutationLoading }] =

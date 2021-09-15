@@ -7,7 +7,7 @@ import {
   FilesByConfigFlatQuery,
   FilesSortField,
   SyncFileRevision,
-} from '../../generated/graphql';
+} from '@/generated/graphql';
 
 import AutoSubmitForm from '@/components/AutoSubmitForm';
 import { FileStatusLabel, getTagColor } from '@/components/FileStatusLabel';
@@ -31,7 +31,6 @@ import { FileStatus, SortDirection } from '@/generated/graphql';
 import { useFilterQuery, selectOrder, selectField } from '@/hooks/useQuery';
 import filesizeParser from '@/utils/filesize-parser';
 import { formatBytes, formatDate } from '@/utils/formatFields';
-
 
 function isByteSize(value: string | null | undefined): boolean {
   if (!value) return true;
