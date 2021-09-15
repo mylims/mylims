@@ -15,7 +15,6 @@ import {
   useDirectoryTreeLazyQuery,
 } from '@/generated/graphql';
 
-
 interface SelectFolderSlideOverProps {
   returnPath: (path: string) => void;
 }

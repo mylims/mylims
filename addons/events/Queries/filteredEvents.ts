@@ -22,17 +22,13 @@ export default async function filteredEvents(
 
   let query: Filter<ModelAttributes<Event>> = {
     $or: [
-      {
-        processors: {
-          $elemMatch: {
-            'history.0.status': { $in: status },
-            processorId: processorId || { $exists: true },
-          },
-        },
-      },
+      { processors: { $elemMatch: { 'history.0.status': { $in: status } } } },
     ],
   };
 
+  if (processorId) {
+    query.processors = { $elemMatch: { processorId } };
+  }
   if (status?.includes(GqlEventStatus.PENDING)) {
     query.$or?.push({ processors: { $size: 0 } });
     query.$or?.push({ processors: { history: { $size: 0 } } });

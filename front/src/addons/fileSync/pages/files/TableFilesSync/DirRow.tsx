@@ -1,7 +1,6 @@
 import { FolderOpenIcon } from '@heroicons/react/solid';
 import React, { useContext, useEffect } from 'react';
 
-
 import { TreeContext, changeNodeValue } from './TreeContext';
 import { DirSync, TreeType } from './types';
 
