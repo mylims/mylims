@@ -1,10 +1,6 @@
 import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/solid';
 import React, { useContext, useMemo } from 'react';
 
-import {
-  EventStatus,
-  useEventsByFileIdLazyQuery,
-} from '../../../generated/graphql';
 
 import { changeNodeValue, TreeContext } from './TreeContext';
 import { EventsProcessors, FileSync } from './types';
@@ -19,6 +15,7 @@ import {
   Roundness,
   Variant,
 } from '@/components/tailwind-ui';
+import { EventStatus, useEventsByFileIdLazyQuery } from '@/generated/graphql';
 import { formatBytes, formatDate } from '@/utils/formatFields';
 
 function getTagColor(status: EventStatus) {

@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   DirectoryEntryType,
   useDirectoryTreeLazyQuery,
-} from './generated/graphql';
+} from '@/generated/graphql';
 
 import {
   Button,
@@ -15,7 +15,6 @@ import {
   Th,
   useOnOff,
 } from '@/components/tailwind-ui';
-
 
 interface SelectFolderSlideOverProps {
   returnPath: (path: string) => void;

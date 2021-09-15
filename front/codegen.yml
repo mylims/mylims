@@ -15,20 +15,14 @@ config:
   skipTypename: true
 generates:
   src/generated/graphql.tsx:
-    documents: 'src/graphql/*.graphql'
+    documents: 'src/**/*.graphql'
     plugins:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
   src/generated/fragmentTypes.ts:
-    documents: 'src/graphql/*.graphql'
+    documents: 'src/**/*.graphql'
     plugins:
       - 'fragment-matcher'
     config:
       apolloClientVersion: 3
-  src/addons/fileSync/generated/graphql.tsx:
-    documents: 'src/addons/fileSync/graphql/*.graphql'
-    plugins:
-      - 'typescript'
-      - 'typescript-operations'
-      - 'typescript-react-apollo'

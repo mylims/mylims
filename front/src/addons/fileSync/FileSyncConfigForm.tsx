@@ -10,7 +10,7 @@ import {
   EditFileSyncOptionInput,
   NewFileSyncOptionInput,
   useReadyChecksQuery,
-} from './generated/graphql';
+} from '@/generated/graphql';
 
 import {
   Alert,

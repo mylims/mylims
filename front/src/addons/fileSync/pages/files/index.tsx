@@ -9,7 +9,7 @@ import {
   SortDirection,
   FileStatus,
   FileSyncOptionDocument,
-} from '../../generated/graphql';
+} from '@/generated/graphql';
 
 import TableFilesFiltered from './TableFilesFiltered';
 import TableFilesSync from './TableFilesSync';
@@ -18,8 +18,6 @@ import ElnLayout from '@/components/ElnLayout';
 import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
 import { useFilterQuery } from '@/hooks/useQuery';
 import filesizeParser from '@/utils/filesize-parser';
-
-
 
 interface RouterQuery {
   id: string;
