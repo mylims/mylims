@@ -54,6 +54,7 @@ export type EditFileSyncOptionInput = {
 /** Main event type */
 export type Event = {
   _id: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   data: EventData;
   processors: Array<EventProcessor>;
   topic: Scalars['String'];
@@ -105,6 +106,7 @@ export type EventProcessor = {
 
 /** Paginated list of events */
 export enum EventSortField {
+  CREATEDAT = 'createdAt',
   DATE = 'date',
   PROCESSORID = 'processorId',
   STATUS = 'status',
@@ -335,6 +337,7 @@ export type EventsFilteredQuery = {
     events: Array<{
       _id: string;
       topic: string;
+      createdAt: any;
       data: { file: { id: string; name: string } };
       processors: Array<{
         processorId: string;
@@ -598,6 +601,7 @@ export const EventsFilteredDocument = gql`
       events {
         _id
         topic
+        createdAt
         data {
           ... on EventDataFile {
             file {

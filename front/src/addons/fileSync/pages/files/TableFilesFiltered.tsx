@@ -26,8 +26,14 @@ import {
   FilesByConfigFlatQuery,
   FilesSortField,
   SyncFileRevision,
- FileStatus, SortDirection } from '@/generated/graphql';
-import { useFilterQuery, selectOrder, selectField } from '@/hooks/useQuery';
+  FileStatus,
+  SortDirection,
+} from '@/generated/graphql';
+import {
+  useFilterFilesQuery,
+  selectOrder,
+  selectField,
+} from '@/hooks/useFileQuery';
 import filesizeParser from '@/utils/filesize-parser';
 import { formatBytes, formatDate } from '@/utils/formatFields';
 
@@ -151,7 +157,7 @@ export default function TableFilesFiltered({
     ],
   });
 
-  const [query, setQuery] = useFilterQuery(id);
+  const [query, setQuery] = useFilterFilesQuery(id);
   const pagination = {
     page,
     itemsPerPage: pageSize,

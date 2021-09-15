@@ -9,6 +9,7 @@ query EventsFiltered(
     events {
       _id
       topic
+      createdAt
       data {
         ... on EventDataFile {
           file {
