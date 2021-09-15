@@ -1,6 +1,6 @@
 import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/solid';
 import React, { useContext, useMemo } from 'react';
-
+import { Link } from 'react-router-dom';
 
 import { changeNodeValue, TreeContext } from './TreeContext';
 import { EventsProcessors, FileSync } from './types';
@@ -109,24 +109,29 @@ export default function FileRow({ value }: { value: FileSync }) {
             return (
               <tr key={processorId}>
                 <Td className="flex">
-                  <div className="pr-2">
+                  <Link className="pr-2" to={`/event/list?topic=${topic}`}>
                     <span className="pr-1 font-bold text-alternative-600">
                       Topic:
                     </span>
                     {topic}
-                  </div>
-                  <div className="pr-2">
+                  </Link>
+                  <Link
+                    className="pr-2"
+                    to={`/event/list?processorId=${processorId}`}
+                  >
                     <span className="pr-1 font-bold text-alternative-600">
                       Processor:
                     </span>
                     {processorId}
-                  </div>
+                  </Link>
                 </Td>
                 <Td />
                 <Td>{formatDate(date)}</Td>
                 <Td />
                 <Td>
-                  <StatusLabel status={status} color={color} />
+                  <Link to={`/event/list?status=${status}`}>
+                    <StatusLabel status={status} color={color} />
+                  </Link>
                 </Td>
                 <Td />
               </tr>

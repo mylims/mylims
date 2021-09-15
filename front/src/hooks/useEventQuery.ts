@@ -1,11 +1,12 @@
 import { useHistory, useLocation } from 'react-router-dom';
 
+import { useQuery } from './useQuery';
+
 import {
   EventSortField,
   EventStatus,
   SortDirection,
 } from '@/generated/graphql';
-import { useQuery } from './useQuery';
 
 type Nullable<T> = { [P in keyof T]: T[P] | null };
 interface FilterQuery {

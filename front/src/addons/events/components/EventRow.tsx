@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { getTagColor } from '@/components/EventStatusLabel';
 import { StatusLabel } from '@/components/StatusLabel';
 import { Td } from '@/components/tailwind-ui';
-import { getTagColor } from '@/components/EventStatusLabel';
 import { EventStatus } from '@/generated/graphql';
 
 interface EventRowProps {
