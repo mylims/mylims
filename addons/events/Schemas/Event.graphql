@@ -51,9 +51,14 @@ type EventHistory {
   message: String
 }
 
+type EventFile {
+  id: String!
+  name: String!
+}
 type EventDataFile implements EventData {
   type: EventDataType!
   fileId: String!
+  file: EventFile!
 }
 
 type EventProcessor {
