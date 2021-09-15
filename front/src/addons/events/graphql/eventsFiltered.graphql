@@ -11,7 +11,10 @@ query EventsFiltered(
       topic
       data {
         ... on EventDataFile {
-          fileId
+          file {
+            id
+            name
+          }
         }
       }
       processors {

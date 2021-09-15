@@ -5,6 +5,7 @@ import {
   GqlSortDirection,
 } from 'App/graphql';
 
+import { SyncFile } from '../../file-sync/Models/SyncFile';
 import filteredEvents from '../Queries/filteredEvents';
 
 const sortMap = {
@@ -24,6 +25,15 @@ const resolvers: GqlResolvers = {
           return null;
         }
       }
+    },
+  },
+  EventDataFile: {
+    async file({ fileId }) {
+      const file = await SyncFile.findByOrFail('revisions.0.id', fileId);
+      return {
+        id: fileId,
+        name: file._id.relativePath,
+      };
     },
   },
   Query: {

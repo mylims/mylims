@@ -78,11 +78,18 @@ export type GqlEventDataFile = GqlEventData & {
   __typename?: 'EventDataFile';
   type: GqlEventDataType;
   fileId: Scalars['String'];
+  file: GqlEventFile;
 };
 
 export enum GqlEventDataType {
   FILE = 'file',
 }
+
+export type GqlEventFile = {
+  __typename?: 'EventFile';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
 
 export type GqlEventFilterInput = {
   topic?: Maybe<Scalars['String']>;
@@ -480,6 +487,7 @@ export type GqlResolversTypes = ResolversObject<{
   EventData: GqlResolversTypes['EventDataFile'];
   EventDataFile: ResolverTypeWrapper<GqlEventDataFile>;
   EventDataType: GqlEventDataType;
+  EventFile: ResolverTypeWrapper<GqlEventFile>;
   EventFilterInput: GqlEventFilterInput;
   EventHistory: ResolverTypeWrapper<GqlEventHistory>;
   EventPage: ResolverTypeWrapper<
@@ -530,6 +538,7 @@ export type GqlResolversParentTypes = ResolversObject<{
   Event: Event;
   EventData: GqlResolversParentTypes['EventDataFile'];
   EventDataFile: GqlEventDataFile;
+  EventFile: GqlEventFile;
   EventFilterInput: GqlEventFilterInput;
   EventHistory: GqlEventHistory;
   EventPage: Omit<GqlEventPage, 'events'> & {
@@ -608,6 +617,17 @@ export type GqlEventDataFileResolvers<
 > = ResolversObject<{
   type?: Resolver<GqlResolversTypes['EventDataType'], ParentType, ContextType>;
   fileId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  file?: Resolver<GqlResolversTypes['EventFile'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlEventFileResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['EventFile'] = GqlResolversParentTypes['EventFile'],
+> = ResolversObject<{
+  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -908,6 +928,7 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   Event?: GqlEventResolvers<ContextType>;
   EventData?: GqlEventDataResolvers<ContextType>;
   EventDataFile?: GqlEventDataFileResolvers<ContextType>;
+  EventFile?: GqlEventFileResolvers<ContextType>;
   EventHistory?: GqlEventHistoryResolvers<ContextType>;
   EventPage?: GqlEventPageResolvers<ContextType>;
   EventProcessor?: GqlEventProcessorResolvers<ContextType>;

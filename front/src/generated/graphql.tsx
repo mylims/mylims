@@ -64,6 +64,7 @@ export type EventData = {
 };
 
 export type EventDataFile = EventData & {
+  file: EventFile;
   fileId: Scalars['String'];
   type: EventDataType;
 };
@@ -71,6 +72,11 @@ export type EventDataFile = EventData & {
 export enum EventDataType {
   FILE = 'file',
 }
+
+export type EventFile = {
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
 
 export type EventFilterInput = {
   fileId?: Maybe<Scalars['String']>;
@@ -329,7 +335,7 @@ export type EventsFilteredQuery = {
     events: Array<{
       _id: string;
       topic: string;
-      data: { fileId: string };
+      data: { file: { id: string; name: string } };
       processors: Array<{
         processorId: string;
         history: Array<{
@@ -594,7 +600,10 @@ export const EventsFilteredDocument = gql`
         topic
         data {
           ... on EventDataFile {
-            fileId
+            file {
+              id
+              name
+            }
           }
         }
         processors {
