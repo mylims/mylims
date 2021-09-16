@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import EventRow from '../components/EventRow';
 
@@ -45,11 +45,6 @@ export default function EventsList() {
       },
     },
   });
-  const events = useMemo(
-    () =>
-      (data?.events.events ?? []).map((event) => ({ ...event, id: event._id })),
-    [data],
-  );
 
   const pagination = {
     page: pageNum,
@@ -78,7 +73,7 @@ export default function EventsList() {
           Header={() => <TableHeader titles={titles} />}
           Empty={() => <TableEmpty titles={titles} />}
           Tr={Row}
-          data={events}
+          data={data?.events.events ?? []}
           pagination={pagination}
         />
       )}

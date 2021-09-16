@@ -1,6 +1,8 @@
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
-import { Event, EventStatus } from '../Models/Event';
+import { GqlEventStatus } from 'App/graphql';
+
+import { Event } from '../Models/Event';
 
 interface SetEventStatusParams {
   eventId: string;
@@ -23,7 +25,7 @@ export default async function setEventStatus({
 
   const newHistory = {
     processId,
-    status: status as EventStatus,
+    status: status as GqlEventStatus,
     date: new Date(),
     message,
   };
@@ -38,11 +40,11 @@ export default async function setEventStatus({
     // Validates that the status is valid
     const previousStatus = eventProcessor.history[0]?.status;
 
-    switch (status as EventStatus) {
-      case EventStatus.PENDING: {
+    switch (status as GqlEventStatus) {
+      case GqlEventStatus.PENDING: {
         if (eventProcessor.history.length === 0) {
           eventProcessor.history.unshift(newHistory);
-        } else if (previousStatus === EventStatus.PENDING) {
+        } else if (previousStatus === GqlEventStatus.PENDING) {
           // add event before the previous processId
           const latestIndex = eventProcessor.history.findIndex(
             (p) => p.processId === processId,
@@ -61,8 +63,8 @@ export default async function setEventStatus({
         }
         break;
       }
-      case EventStatus.PROCESSING: {
-        if (previousStatus === EventStatus.PENDING) {
+      case GqlEventStatus.PROCESSING: {
+        if (previousStatus === GqlEventStatus.PENDING) {
           eventProcessor.history.unshift(newHistory);
         } else {
           throw new Error(
@@ -71,8 +73,8 @@ export default async function setEventStatus({
         }
         break;
       }
-      case EventStatus.SUCCESS:
-      case EventStatus.ERROR: {
+      case GqlEventStatus.SUCCESS:
+      case GqlEventStatus.ERROR: {
         eventProcessor.history.unshift(newHistory);
         break;
       }

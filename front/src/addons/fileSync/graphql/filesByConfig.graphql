@@ -27,7 +27,7 @@ query EventsByFileId($id: String!) {
   events(filterBy: { fileId: $id }) {
     __typename
     events {
-      _id
+      id
       topic
       processors {
         processorId
