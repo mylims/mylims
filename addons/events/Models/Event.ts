@@ -1,14 +1,12 @@
 import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
+import { GqlEventDataType, GqlEventStatus } from 'App/graphql';
+
 export enum EventStatus {
   PENDING = 'pending',
   PROCESSING = 'processing',
   SUCCESS = 'success',
   ERROR = 'error',
-}
-
-export enum EventDataType {
-  FILE = 'file',
 }
 
 interface EventProcessor {
@@ -18,13 +16,13 @@ interface EventProcessor {
 
 interface EventHistory {
   processId: string;
-  status: EventStatus;
+  status: GqlEventStatus;
   date: Date;
   message?: string;
 }
 
 interface EventData {
-  type: EventDataType.FILE;
+  type: GqlEventDataType.FILE;
   fileId: string;
 }
 

@@ -7,7 +7,7 @@ query EventsFiltered(
   events(limit: $limit, skip: $skip, filterBy: $filterBy, sortBy: $sortBy) {
     totalCount
     events {
-      _id
+      id
       topic
       createdAt
       data {

@@ -29,10 +29,11 @@ export const selectField = {
   [EventSortField.PROCESSORID]: 'Processor Id',
   [EventSortField.STATUS]: 'Status',
 };
+export type EventQueryType = Nullable<FilterQuery>;
 export function useSetEventQuery() {
   const router = useHistory();
   const search = new URLSearchParams(useLocation().search);
-  return (newQuery: Nullable<FilterQuery>) => {
+  return (newQuery: EventQueryType) => {
     // set keys to url search params
     for (const [key, value] of Object.entries(newQuery)) {
       if (value !== null) {
@@ -67,8 +68,8 @@ export function useSetEventQuery() {
 }
 
 export function useFilterEventQuery(): [
-  Nullable<FilterQuery>,
-  (newQuery: Nullable<FilterQuery>) => void,
+  EventQueryType,
+  (newQuery: EventQueryType) => void,
 ] {
   const setQuery = useSetEventQuery();
   const query = useQuery();

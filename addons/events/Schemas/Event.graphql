@@ -69,7 +69,7 @@ type EventProcessor {
 
 # Main event type
 type Event {
-  _id: String!
+  id: String!
   topic: String!
   data: EventData!
   createdAt: DateTime!

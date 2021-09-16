@@ -15,7 +15,9 @@ import isMyFileReady, {
 import type DataDrive from '@ioc:DataDrive';
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
-import { Event, EventDataType } from '../../events/Models/Event';
+import { GqlEventDataType } from 'App/graphql';
+
+import { Event } from '../../events/Models/Event';
 import type { File } from '../Models/File';
 import type { FileSyncOption, ReadyCheck } from '../Models/FileSyncOption';
 import type { SyncFile, SyncState } from '../Models/SyncFile';
@@ -228,7 +230,7 @@ export default class Import extends BaseCommand {
       try {
         await this.deps.Event.create({
           topic,
-          data: { type: EventDataType.FILE, fileId: id },
+          data: { type: GqlEventDataType.FILE, fileId: id },
           processors: [],
         });
       } catch (err) {

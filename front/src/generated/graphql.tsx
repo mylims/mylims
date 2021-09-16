@@ -55,9 +55,9 @@ export type EditFileSyncOptionInput = {
 
 /** Main event type */
 export type Event = {
-  _id: Scalars['String'];
   createdAt: Scalars['DateTime'];
   data: EventData;
+  id: Scalars['String'];
   processors: Array<EventProcessor>;
   topic: Scalars['String'];
 };
@@ -337,7 +337,7 @@ export type EventsFilteredQuery = {
   events: {
     totalCount: number;
     events: Array<{
-      _id: string;
+      id: string;
       topic: string;
       createdAt: any;
       data: { file: { id: string; name: string } };
@@ -508,7 +508,7 @@ export type EventsByFileIdQuery = {
   events: {
     __typename: 'EventPage';
     events: Array<{
-      _id: string;
+      id: string;
       topic: string;
       processors: Array<{
         processorId: string;
@@ -601,7 +601,7 @@ export const EventsFilteredDocument = gql`
     events(limit: $limit, skip: $skip, filterBy: $filterBy, sortBy: $sortBy) {
       totalCount
       events {
-        _id
+        id
         topic
         createdAt
         data {
@@ -1100,7 +1100,7 @@ export const EventsByFileIdDocument = gql`
     events(filterBy: { fileId: $id }) {
       __typename
       events {
-        _id
+        id
         topic
         processors {
           processorId

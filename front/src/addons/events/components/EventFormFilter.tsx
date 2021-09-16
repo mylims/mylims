@@ -19,11 +19,15 @@ import {
   EventStatus,
   SortDirection,
 } from '@/generated/graphql';
-import { selectOrder, selectField } from '@/hooks/useEventQuery';
+import {
+  selectOrder,
+  selectField,
+  EventQueryType,
+} from '@/hooks/useEventQuery';
 
 interface EventFormFilterProps {
-  initialValues: any;
-  onSubmit: (values: any) => void;
+  initialValues: EventQueryType;
+  onSubmit: (values: EventQueryType) => void;
   children: React.ReactNode[];
 }
 interface TagsMultiSearch {
