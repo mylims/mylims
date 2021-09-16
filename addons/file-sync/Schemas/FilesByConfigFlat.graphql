@@ -23,10 +23,7 @@ enum FilesSortField {
   size
   filename
 }
-enum SortDirection {
-  ASC
-  DESC
-}
+
 input FilesSortInput {
   direction: SortDirection!
   field: FilesSortField!
