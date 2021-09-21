@@ -10,7 +10,7 @@ import {
 
 import { Event } from '../Models/Event';
 
-export default async function filteredEvents(
+export default function filteredEvents(
   filterBy: GqlQueryEventsArgs['filterBy'],
 ) {
   const {
@@ -40,5 +40,5 @@ export default async function filteredEvents(
     query['data.type'] = GqlEventDataType.FILE;
   }
 
-  return (await Event.getCollection()).find(query);
+  return Event.query(query);
 }

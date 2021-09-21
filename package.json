@@ -57,7 +57,7 @@
     "@slynova/flydrive": "^1.0.3",
     "@targos/adonis-drive": "^4.0.8",
     "@types/react-datepicker": "^4.1.3",
-    "@zakodium/adonis-mongodb": "^0.10.4",
+    "@zakodium/adonis-mongodb": "^0.11.0",
     "adonis-apollo": "^0.14.0",
     "adonis-datadrive": "^0.3.0",
     "adonis-react": "^0.2.1",

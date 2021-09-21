@@ -44,17 +44,23 @@ const resolvers: GqlResolvers = {
         direction = GqlSortDirection.DESC,
       } = sortBy || {};
 
-      let eventCursor = (await filteredEvents(filterBy)).sort({
-        [sortMap[field]]: direction === GqlSortDirection.DESC ? -1 : 1,
-      });
+      let eventCursor = filteredEvents(filterBy).sortBy(
+        sortMap[field],
+        direction === GqlSortDirection.DESC ? -1 : 1,
+      );
       const totalCount = await eventCursor.count();
       if (skip) eventCursor = eventCursor.skip(skip);
       if (limit) eventCursor = eventCursor.limit(limit);
 
-      const events = (await eventCursor.toArray()).map(({ _id, ...rest }) => ({
-        id: _id.toHexString(),
-        ...rest,
-      }));
+      const events = (await eventCursor.all()).map(
+        ({ _id, topic, data, createdAt, processors }) => ({
+          id: _id.toHexString(),
+          topic,
+          data,
+          createdAt,
+          processors,
+        }),
+      );
       return { events, totalCount };
     },
   },
