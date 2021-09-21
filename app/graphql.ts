@@ -6,6 +6,7 @@ import {
 import User from './Models/User';
 import { FileSyncOption } from '../addons/file-sync/Models/FileSyncOption';
 import { SyncFile } from '../addons/file-sync/Models/SyncFile';
+import { Event } from '../addons/events/Models/Event';
 import { ApolloBaseContext } from '@ioc:Apollo/Config';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -15,6 +16,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
   { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
   { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = {
   [X in Exclude<keyof T, K>]?: T[X];
 } &
@@ -483,14 +485,16 @@ export type GqlResolversTypes = ResolversObject<{
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  Event: ResolverTypeWrapper<GqlEvent>;
+  Event: ResolverTypeWrapper<Event>;
   EventData: GqlResolversTypes['EventDataFile'];
   EventDataFile: ResolverTypeWrapper<GqlEventDataFile>;
   EventDataType: GqlEventDataType;
   EventFile: ResolverTypeWrapper<GqlEventFile>;
   EventFilterInput: GqlEventFilterInput;
   EventHistory: ResolverTypeWrapper<GqlEventHistory>;
-  EventPage: ResolverTypeWrapper<GqlEventPage>;
+  EventPage: ResolverTypeWrapper<
+    Omit<GqlEventPage, 'events'> & { events: Array<GqlResolversTypes['Event']> }
+  >;
   EventProcessor: ResolverTypeWrapper<GqlEventProcessor>;
   EventSortField: GqlEventSortField;
   EventSortInput: GqlEventSortInput;
@@ -533,13 +537,15 @@ export type GqlResolversParentTypes = ResolversObject<{
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   Boolean: Scalars['Boolean'];
   Int: Scalars['Int'];
-  Event: GqlEvent;
+  Event: Event;
   EventData: GqlResolversParentTypes['EventDataFile'];
   EventDataFile: GqlEventDataFile;
   EventFile: GqlEventFile;
   EventFilterInput: GqlEventFilterInput;
   EventHistory: GqlEventHistory;
-  EventPage: GqlEventPage;
+  EventPage: Omit<GqlEventPage, 'events'> & {
+    events: Array<GqlResolversParentTypes['Event']>;
+  };
   EventProcessor: GqlEventProcessor;
   EventSortInput: GqlEventSortInput;
   FileContent: GqlFileContent;
