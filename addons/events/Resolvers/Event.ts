@@ -52,15 +52,7 @@ const resolvers: GqlResolvers = {
       if (skip) eventCursor = eventCursor.skip(skip);
       if (limit) eventCursor = eventCursor.limit(limit);
 
-      const events = (await eventCursor.all()).map(
-        ({ _id, topic, data, createdAt, processors }) => ({
-          id: _id.toHexString(),
-          topic,
-          data,
-          createdAt,
-          processors,
-        }),
-      );
+      const events = await eventCursor.all();
       return { events, totalCount };
     },
   },
