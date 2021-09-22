@@ -6,6 +6,10 @@ const dataDriveConfig: DataDriveConfig = {
       disk: 'local',
       prefix: 'fileSync/imports',
     },
+    files: {
+      disk: 'local',
+      prefix: 'generated/files',
+    },
   },
 };
 

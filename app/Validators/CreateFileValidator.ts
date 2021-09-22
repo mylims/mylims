@@ -7,6 +7,7 @@ export default class CreateFileValidator {
   public schema = schema.create({
     file: schema.file(),
     filename: schema.string(),
-    eventId: schema.string.optional(),
+    eventId: schema.string(),
+    sampleId: schema.string(),
   });
 }

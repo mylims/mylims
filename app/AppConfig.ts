@@ -7,6 +7,7 @@ const defaultConfig: ConfigFile = {
   config: {
     appKey: randomString(32),
     date: '2020-10-07T14:48:00.000Z',
+    filesRoot: './',
     ldap: {
       id: 'uid',
       uid: 'uid',
@@ -41,6 +42,7 @@ export interface ConfigFile {
 export interface ConfigProps {
   date: string;
   appKey: string;
+  filesRoot: string;
   ldap: {
     id: string;
     uid: string;
