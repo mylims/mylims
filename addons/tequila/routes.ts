@@ -34,7 +34,6 @@ Route.get('/login', async ({ response }: HttpContextContract) => {
         errors: ['Empty body response from tequila'],
       });
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     return response.badRequest({ errors: [err.message] });
   }
@@ -77,7 +76,6 @@ Route.get(
       session.put('mylims.auth.method', 'tequila');
 
       return response.redirect(`${Env.get('FRONTEND_URL')}/eln`);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       return response.badRequest({ errors: [err.message] });
     }
