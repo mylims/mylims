@@ -28,7 +28,7 @@ Route.post(
     let content: OicdContent, state: OidcState;
     try {
       [content, state] = await oidc.callback<OicdContent>();
-    } catch (err: any) {
+    } catch (err) {
       return response.badRequest({ errors: [err.message] });
     }
 
