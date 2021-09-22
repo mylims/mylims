@@ -108,7 +108,7 @@ export default class Sync extends BaseCommand {
 
     try {
       await sync.walk();
-    } catch (err: any) {
+    } catch (err) {
       this.logger.error(err.message, this.fileSyncOptionId);
     }
 
