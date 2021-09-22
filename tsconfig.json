@@ -17,6 +17,7 @@
     "esModuleInterop": true,
     "strict": true,
     "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": false,
     "lib": ["ES2020", "DOM"],
     "jsx": "react",
     "paths": {

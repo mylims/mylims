@@ -1,6 +1,3 @@
 {
-  "extends": ["@zakodium/eslint-config/adonis"],
-  "rules": {
-    "useUnknownInCatchVariable": "off"
-  }
+  "extends": ["@zakodium/eslint-config/adonis"]
 }
