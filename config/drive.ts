@@ -20,13 +20,19 @@ import { getConfig } from 'App/AppConfig';
 | Make sure to check `contracts/drive.ts` file for defining extra disks
 */
 const driveConfig = {
-  default: 'local',
+  disk: 'local',
 
   disks: {
     local: {
       driver: 'local',
       config: {
         root: getConfig('fileSync').root,
+      },
+    },
+    files: {
+      driver: 'local',
+      config: {
+        root: getConfig('filesRoot'),
       },
     },
   },
