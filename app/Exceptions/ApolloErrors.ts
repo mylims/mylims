@@ -1,4 +1,4 @@
-import { ApolloError } from '@ioc:Apollo/Errors';
+import { ApolloError } from '@ioc:Zakodium/Apollo/Errors';
 
 export class NotFoundError extends ApolloError {
   public constructor(message: string) {

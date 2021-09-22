@@ -1,7 +1,7 @@
 import Application from '@ioc:Adonis/Core/Application';
 import Hash from '@ioc:Adonis/Core/Hash';
 import Route from '@ioc:Adonis/Core/Route';
-import ApolloServer from '@ioc:Apollo/Server';
+import ApolloServer from '@ioc:Zakodium/Apollo/Server';
 
 import * as AddonsManager from 'App/AddonsManager';
 import Credential from 'App/Models/Credential';
@@ -54,11 +54,18 @@ Route.group(() => {
   Route.post('/logout', 'AuthController.logout');
 }).prefix('/auth');
 
+Route.group(() => {
+  Route.get('/:id', 'FileController.fetch');
+  Route.post('/create', 'FileController.create');
+})
+  .middleware('auth')
+  .prefix('/files');
+
 // Require routes from addons
 AddonsManager.registerRoutes(Route);
 
 const apolloGroup = Route.group(() => {
-  ApolloServer.applyMiddleware({ Route });
+  ApolloServer.applyMiddleware();
 });
 
 if (Application.inProduction) {

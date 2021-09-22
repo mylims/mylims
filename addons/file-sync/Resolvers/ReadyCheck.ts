@@ -1,6 +1,6 @@
 import { Binary } from 'bson';
 
-import { UserInputError } from '@ioc:Apollo/Errors';
+import { UserInputError } from '@ioc:Zakodium/Apollo/Errors';
 
 import { GqlReadyCheckInput, GqlResolvers } from 'App/graphql';
 

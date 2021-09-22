@@ -108,7 +108,8 @@ export default class Sync extends BaseCommand {
 
     try {
       await sync.walk();
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       this.logger.error(err.message, this.fileSyncOptionId);
     }
 
