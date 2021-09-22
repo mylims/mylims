@@ -14,7 +14,7 @@ config:
   scalars:
     DateTime: Date
     URL: string
-  contextType: '@ioc:Apollo/Config#ApolloBaseContext'
+  contextType: '@ioc:Zakodium/Apollo/Server#ApolloBaseContext'
   useIndexSignature: true
   mappers:
     User: ./Models/User#default

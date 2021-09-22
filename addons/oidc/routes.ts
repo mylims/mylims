@@ -28,7 +28,8 @@ Route.post(
     let content: OicdContent, state: OidcState;
     try {
       [content, state] = await oidc.callback<OicdContent>();
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       return response.badRequest({ errors: [err.message] });
     }
 

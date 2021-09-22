@@ -234,7 +234,7 @@ export default class Import extends BaseCommand {
           processors: [],
         });
       } catch (err) {
-        this.logger.error(err, `${topic}:${id}`);
+        this.logger.error(JSON.stringify(err), `${topic}:${id}`);
       }
     }
     this.logger.debug(

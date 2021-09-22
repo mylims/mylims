@@ -1,4 +1,4 @@
-import { ApolloConfig, ApolloBaseContext } from '@ioc:Apollo/Config';
+import { ApolloConfig, ApolloBaseContext } from '@ioc:Zakodium/Apollo/Server';
 
 import { getResolvers, getSchemas } from '../app/AddonsManager';
 
@@ -17,7 +17,7 @@ const config: ApolloConfig = {
   executableSchema: {
     inheritResolversFromInterfaces: true,
   },
-  playgroundSettings: {},
+  playgroundOptions: {},
 };
 
 export default config;
