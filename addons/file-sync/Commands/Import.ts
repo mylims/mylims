@@ -12,7 +12,7 @@ import isMyFileReady, {
   sameSize,
 } from 'is-my-file-ready';
 
-import type DataDrive from '@ioc:DataDrive';
+import type DataDrive from '@ioc:Zakodium/DataDrive';
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import { GqlEventDataType } from 'App/graphql';
@@ -62,7 +62,7 @@ export default class Import extends BaseCommand {
   public async run() {
     const { SyncFile, SyncState } = await import('../Models/SyncFile');
     const { FileSyncOption } = await import('../Models/FileSyncOption');
-    const { default: DataDrive } = await import('@ioc:DataDrive');
+    const { default: DataDrive } = await import('@ioc:Zakodium/DataDrive');
     const { File } = await import('../Models/File');
     const { Event } = await import('../../events/Models/Event');
 
@@ -211,10 +211,10 @@ export default class Import extends BaseCommand {
   }
 
   private async importFile(syncFile: SyncFile, fileSyncOption: FileSyncOption) {
-    const drive = this.deps.DataDrive.drive('local');
+    const drive = this.deps.DataDrive.use('local');
     const filePath = join(fileSyncOption.root, syncFile._id.relativePath);
     const id = syncFile.revisions[0].id;
-    const driveFile = await drive.put(
+    const driveFile = await drive.putStream(
       syncFile.filename,
       createReadStream(filePath),
       { id },

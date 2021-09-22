@@ -6,9 +6,9 @@ import type { LocalFileSystemStorage } from '@slynova/flydrive';
 
 import type Drive from '@ioc:Adonis/Addons/Drive';
 // eslint-disable-next-line import/no-duplicates
-import type { DataDrive } from '@ioc:DataDrive';
+import type { DataDriveContract } from '@ioc:Zakodium/DataDrive';
 // eslint-disable-next-line import/no-duplicates
-import type DataDriveManager from '@ioc:DataDrive';
+import type DataDriveManager from '@ioc:Zakodium/DataDrive';
 
 import type { File } from '../Models/File';
 import type { SyncFile, SyncState } from '../Models/SyncFile';
@@ -43,11 +43,13 @@ export default class Import extends BaseCommand {
   };
 
   private drive: LocalFileSystemStorage;
-  private dataDrive: DataDrive;
+  private dataDrive: DataDriveContract;
 
   public async run() {
     const { SyncFile, SyncState } = await import('../Models/SyncFile');
-    const { default: DataDriveManager } = await import('@ioc:DataDrive');
+    const { default: DataDriveManager } = await import(
+      '@ioc:Zakodium/DataDrive'
+    );
     const { default: Drive } = await import('@ioc:Adonis/Addons/Drive');
     const { File } = await import('../Models/File');
 
@@ -60,7 +62,7 @@ export default class Import extends BaseCommand {
     };
 
     this.drive = this.deps.Drive.disk('local');
-    this.dataDrive = this.deps.DataDriveManager.drive('local');
+    this.dataDrive = this.deps.DataDriveManager.use('local');
 
     await this.checkDatabaseIntegrity();
     await this.checkDiskIntegrity();
@@ -111,7 +113,7 @@ export default class Import extends BaseCommand {
       this.logger.info('checking', undefined, file.id);
       let size = 0;
       try {
-        size = (await this.dataDrive.getStat(file)).size;
+        size = (await this.dataDrive.getStats(file)).size;
       } catch (err) {
         const result = await this.promptDBEntryForDeletion(
           file,

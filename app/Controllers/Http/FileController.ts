@@ -2,7 +2,7 @@ import { createReadStream } from 'fs';
 
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import DataDrive, { PutOptions } from '@ioc:DataDrive';
+import DataDrive, { PutOptions } from '@ioc:Zakodium/DataDrive';
 
 import File from 'App/Models/File';
 import CreateFileValidator from 'App/Validators/CreateFileValidator';
@@ -18,7 +18,7 @@ export default class FileController {
       return response.notFound({ errors: [{ message: 'File not found' }] });
     }
 
-    const content = DataDrive.drive('local').getStream(file);
+    const content = await DataDrive.use('local').getStream(file);
     response.header(
       'Content-Disposition',
       `attachment; filename="${file.filename}"`,
@@ -44,7 +44,7 @@ export default class FileController {
     const { tmpPath } = file;
     if (!tmpPath) throw new Error('File path is missing');
 
-    return DataDrive.drive('local').put(
+    return DataDrive.use('local').putStream(
       filename,
       createReadStream(tmpPath),
       options,
