@@ -1,4 +1,4 @@
-import { DataDriveConfig } from '@ioc:DataDrive';
+import { DataDriveConfig } from '@ioc:Zakodium/DataDrive';
 
 const dataDriveConfig: DataDriveConfig = {
   drives: {

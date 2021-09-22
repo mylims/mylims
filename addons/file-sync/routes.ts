@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Route from '@ioc:Adonis/Core/Route';
-import DataDrive from '@ioc:DataDrive';
+import DataDrive from '@ioc:Zakodium/DataDrive';
 
 import { File } from './Models/File';
 
@@ -21,7 +21,7 @@ Route.get(
 
     // Query file content
     const file = await File.findOrFail(id);
-    const content = DataDrive.drive('local').getStream(file);
+    const content = await DataDrive.use('local').getStream(file);
 
     response.header(
       'Content-Disposition',
