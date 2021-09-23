@@ -1,10 +1,93 @@
 import { FieldHookConfig, useField } from 'formik';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DropzoneProps } from 'react-dropzone';
+import { useController, useFormContext, useWatch } from 'react-hook-form';
+
+import { RHFControlledProps } from '..';
 
 export interface DropzoneHookOptions extends Omit<DropzoneProps, 'onDrop'> {
   replace?: boolean;
 }
+
+export function useDropzoneFieldRHF(
+  dropzoneOptions: DropzoneHookOptions & RHFControlledProps,
+  name: string,
+) {
+  const { replace, deps, ...dropzoneProps } = dropzoneOptions;
+  const { setValue, trigger } = useFormContext();
+  const {
+    field,
+    fieldState: { error },
+    formState: { isSubmitted },
+  } = useController({ name });
+  const files: File[] = useWatch({ name });
+  const onDrop = useCallback(
+    (newFiles: File[]) => {
+      if (replace) {
+        setValue(name, newFiles);
+      } else {
+        const doesNotAlreadyExist = (newFile: File) => {
+          return (
+            files.filter((file: File) => newFile.name === file.name).length ===
+            0
+          );
+        };
+        setValue(name, files.concat(newFiles.filter(doesNotAlreadyExist)), {
+          shouldTouch: true,
+          shouldValidate: isSubmitted,
+        });
+      }
+      if (deps && isSubmitted) {
+        void trigger(deps);
+      }
+    },
+    [files, setValue, name, replace, isSubmitted, trigger, deps],
+  );
+
+  const removeFile = useCallback(
+    (fileToRemove: File) => {
+      setValue(
+        name,
+        files.filter((file) => file.name !== fileToRemove.name),
+        {
+          shouldTouch: true,
+          shouldValidate: isSubmitted,
+        },
+      );
+      if (deps && isSubmitted) {
+        void trigger(deps);
+      }
+    },
+    [setValue, files, name, isSubmitted, deps, trigger],
+  );
+
+  const clearFiles = useCallback(() => {
+    setValue(name, [], {
+      shouldTouch: true,
+      shouldValidate: isSubmitted,
+    });
+    if (deps && isSubmitted) {
+      void trigger(deps);
+    }
+  }, [name, setValue, isSubmitted, trigger, deps]);
+
+  return {
+    removeFile,
+    clearFiles,
+    dropzoneProps: {
+      ...dropzoneProps,
+      ...field,
+      onDrop,
+    },
+    dropzoneListProps: {
+      files,
+      onRemove: removeFile,
+    },
+    field,
+    error,
+  };
+}
+
 export function useDropzoneField(
   dropzoneOptions: DropzoneHookOptions,
   fieldConfig: FieldHookConfig<File[]>,

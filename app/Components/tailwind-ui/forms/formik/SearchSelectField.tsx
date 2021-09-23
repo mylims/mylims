@@ -6,26 +6,28 @@ import {
   SearchSelectProps,
   SimpleSearchSelectProps,
 } from '../basic/SearchSelect';
-import { SimpleSelectOption } from '../basic/Select';
+import {
+  SimpleStringSelectOption,
+  SimpleNumberSelectOption,
+} from '../basic/Select';
+import { FieldProps } from '../util';
 
-export interface SearchSelectFieldProps<OptionType>
-  extends Omit<
-    SearchSelectProps<OptionType>,
-    'selected' | 'onSelect' | 'error'
-  > {
-  name: string;
-}
+export type SearchSelectFieldProps<OptionType> = Omit<
+  SearchSelectProps<OptionType>,
+  'selected' | 'onSelect' | 'error'
+> &
+  FieldProps;
 
-export interface SimpleSearchSelectFieldProps<OptionType>
-  extends Omit<
-    SimpleSearchSelectProps<OptionType>,
-    'selected' | 'onSelect' | 'error' | 'onBlur'
-  > {
-  name: string;
-}
+export type SimpleSearchSelectFieldProps<OptionType> = Omit<
+  SimpleSearchSelectProps<OptionType>,
+  'selected' | 'onSelect' | 'error' | 'onBlur'
+> &
+  FieldProps;
 
 export function SearchSelectField<OptionType>(
-  props: OptionType extends SimpleSelectOption
+  props: OptionType extends SimpleStringSelectOption
+    ? SimpleSearchSelectFieldProps<OptionType>
+    : OptionType extends SimpleNumberSelectOption
     ? SimpleSearchSelectFieldProps<OptionType>
     : SearchSelectFieldProps<OptionType>,
 ): JSX.Element {
@@ -33,8 +35,8 @@ export function SearchSelectField<OptionType>(
   const [field, meta, formik] = useField<OptionType | null>(name);
 
   return (
-    // @ts-ignore
-    <SearchSelect
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    <SearchSelect<any>
       name={name}
       onBlur={field.onBlur}
       error={meta.touched ? meta.error : undefined}

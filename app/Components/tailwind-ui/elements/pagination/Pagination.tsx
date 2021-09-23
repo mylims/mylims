@@ -77,9 +77,8 @@ export function Pagination(props: PaginationProps) {
               {pages.map((element, index) => {
                 return (
                   <Button
-                    className={clsx({
-                      'border border-neutral-300': page === element,
-                    })}
+                    noBorder
+                    className="border border-neutral-300"
                     style={{ minWidth: '3rem' }}
                     variant={
                       element === page ? Variant.secondary : Variant.white

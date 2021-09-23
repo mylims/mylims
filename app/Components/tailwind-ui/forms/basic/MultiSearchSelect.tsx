@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import React, { MouseEvent, useCallback, useMemo } from 'react';
+import React, { MouseEvent, Ref, useCallback, useMemo } from 'react';
 
 import { Badge, BadgeVariant } from '../../elements/badge/Badge';
 import { Color } from '../../types';
+import { forwardRefWithGeneric } from '../../util';
 import {
   defaultCanCreate,
   defaultGetValue,
@@ -13,7 +14,7 @@ import {
 } from '../../utils/search-select-utils';
 
 import { SearchSelectProps, SimpleSearchSelectProps } from './SearchSelect';
-import { SimpleSelectOption } from './Select';
+import { SimpleStringSelectOption, SimpleNumberSelectOption } from './Select';
 
 export interface SimpleMultiSearchSelectProps<OptionType>
   extends Omit<SimpleSearchSelectProps<OptionType>, 'selected' | 'onSelect'> {
@@ -29,10 +30,17 @@ export interface MultiSearchSelectProps<OptionType>
   getBadgeColor?: (option: OptionType) => Color;
 }
 
-export function MultiSearchSelect<OptionType>(
-  props: OptionType extends SimpleSelectOption
+export const MultiSearchSelect = forwardRefWithGeneric(
+  MultiSearchSelectForwardRef,
+);
+
+function MultiSearchSelectForwardRef<OptionType>(
+  props: OptionType extends SimpleStringSelectOption
+    ? SimpleMultiSearchSelectProps<OptionType>
+    : OptionType extends SimpleNumberSelectOption
     ? SimpleMultiSearchSelectProps<OptionType>
     : MultiSearchSelectProps<OptionType>,
+  ref: Ref<HTMLInputElement>,
 ): JSX.Element {
   const {
     onSearchChange,
@@ -104,6 +112,7 @@ export function MultiSearchSelect<OptionType>(
     <InternalSearchSelect
       {...internalProps}
       {...otherProps}
+      inputRef={ref}
       clearable={clearable}
       disabled={disabled}
       hasValue={selected.length !== 0}

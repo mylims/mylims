@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { forwardRef, Ref } from 'react';
 
-import { Error, helpColor, labelColor, labelDisabledColor } from './common';
+import { Help, labelColor, labelDisabledColor } from './common';
 
 export interface CheckboxProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
@@ -11,10 +11,13 @@ export interface CheckboxProps
   error?: string;
 }
 
-export function Checkbox(props: CheckboxProps): JSX.Element {
+export const Checkbox = forwardRef(function CheckboxForwardRef(
+  props: CheckboxProps,
+  ref: Ref<HTMLInputElement>,
+) {
   const {
     name,
-    value = 'no-value',
+    value,
     id = `${name}-${String(value)}`,
     label,
     help,
@@ -31,6 +34,7 @@ export function Checkbox(props: CheckboxProps): JSX.Element {
           name={name}
           value={value}
           type="checkbox"
+          ref={ref}
           className={clsx(
             'w-4 h-4 rounded form-checkbox text-primary-600 disabled:text-neutral-300',
             error
@@ -52,10 +56,8 @@ export function Checkbox(props: CheckboxProps): JSX.Element {
             {label}
           </label>
         )}
-
-        {help && !error && <p className={helpColor}>{help}</p>}
-        {error && <Error text={error} />}
+        <Help error={error} help={help} noMargin />
       </div>
     </div>
   );
-}
+});
