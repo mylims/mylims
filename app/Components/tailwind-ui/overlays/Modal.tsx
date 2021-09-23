@@ -49,7 +49,7 @@ export interface ModalProps<T extends ElementType> {
   wrapperProps?: Omit<PropsOf<T>, 'children'>;
 }
 
-// @ts-ignore Chrome isn't in the standard
+// @ts-expect-error Chrome isn't in the standard
 const isChrome = typeof window !== 'undefined' && window.chrome;
 
 export function Modal<T extends ElementType>(props: ModalProps<T>) {
@@ -89,14 +89,16 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
 
   useEffect(() => {
     if (isOpen) {
+      // @ts-ignore
       dialogRef.current?.showModal();
     } else if (!isOpen && dialogRef.current?.hasAttribute('open')) {
+      // @ts-ignore
       dialogRef.current?.close();
     }
   }, [isOpen]);
 
   let modalContents = (
-    <div>
+    <div className="flex">
       {onRequestClose && hasCloseButton ? (
         <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
           <button
@@ -110,7 +112,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
         </div>
       ) : null}
 
-      <div className="w-full max-h-full sm:flex sm:items-start">
+      <div className="flex flex-col w-full max-h-full mt-3 sm:flex-row sm:items-start">
         <div
           className={clsx(
             'flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full sm:mx-0 sm:h-10 sm:w-10',
@@ -123,7 +125,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
             {props.icon}
           </span>
         </div>
-        <div className="flex flex-col flex-grow min-w-0 mt-3 text-center sm:max-h-full sm:mt-0 sm:ml-4 sm:text-left">
+        <div className="flex flex-col flex-grow min-w-0 min-h-0 text-center sm:max-h-full sm:mt-0 sm:ml-4 sm:text-left">
           {props.children}
         </div>
       </div>
@@ -156,12 +158,11 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
                 top: '50%',
                 transform: 'translate(0, -50%)',
                 maxHeight: 'calc((100% - 6px) - 2em)',
-                overflow: 'auto',
               }
             : undefined
         }
         className={clsx(
-          'text-left align-bottom bg-white rounded-lg shadow-xl',
+          'fixed text-left flex align-bottom bg-white rounded-lg shadow-xl',
           {
             'sm:max-w-lg sm:w-full': !fluid,
             'max-w-full': fluid,
@@ -178,7 +179,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
           })}
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          className="px-4 pt-5 pb-4"
+          className="flex px-4"
         >
           {modalContents}
         </Transition>
@@ -189,10 +190,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
 
 Modal.Header = function ModalHeader(props: { children: ReactNode }) {
   return (
-    <h3
-      className="mr-10 text-lg font-semibold text-neutral-900"
-      id="modal-headline"
-    >
+    <h3 className="text-lg font-semibold sm:mr-10 text-neutral-900">
       {props.children}
     </h3>
   );
@@ -200,7 +198,7 @@ Modal.Header = function ModalHeader(props: { children: ReactNode }) {
 
 Modal.Body = function ModalBody(props: { children: ReactNode }) {
   return (
-    <div className="max-w-full min-h-0 mt-2 overflow-auto">
+    <div className="flex flex-col max-w-full min-h-0 mt-2 overflow-auto">
       {props.children}
     </div>
   );
@@ -218,7 +216,7 @@ Modal.Footer = function ModalFooter(props: {
   return (
     <div
       className={clsx(
-        'mt-5 sm:mt-4 flex space-y-2 flex-col sm:flex-row sm:space-x-3 sm:space-y-0',
+        'mt-5 sm:mt-4 flex space-y-2 flex-col sm:flex-row sm:space-x-3 sm:space-y-0 mb-2',
         {
           'sm:justify-end': align === 'right',
           'sm:justify-center': align === 'center',

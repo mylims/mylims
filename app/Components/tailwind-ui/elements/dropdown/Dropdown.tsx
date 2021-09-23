@@ -20,6 +20,7 @@ export interface DropdownStaticOption {
 
 export interface DropdownProps<T> {
   children?: ReactNode;
+  className?: string;
   title?: string;
   options: DropdownElement<T>[][];
   onSelect: (selected: DropdownOption<T>) => void;
@@ -32,7 +33,7 @@ const iconClassName =
 
 export function Dropdown<T>(props: DropdownProps<T>): React.ReactElement {
   return (
-    <div className="relative inline-block text-left">
+    <div className={clsx('relative text-left', props.className)}>
       <Menu>
         {(menu) => (
           <>

@@ -51,7 +51,7 @@ export function Feed(props: FeedProps) {
   );
 }
 
-Feed.Item = function (props: FeedItemProps) {
+Feed.Item = function FeedItem(props: FeedItemProps) {
   const {
     description,
     icon,

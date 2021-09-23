@@ -13,11 +13,12 @@ export interface ButtonGroupProps {
 export function ButtonGroup(props: ButtonGroupProps): JSX.Element {
   const { children, variant = Variant.primary, color = Color.primary } = props;
 
-  const elements = React.Children.map(children, (child, index) => {
+  const definedChildren = children.filter((child) => child != null);
+  const elements = React.Children.map(definedChildren, (child, index) => {
     const group =
       index === 0
         ? 'left'
-        : index === (props.size ? props.size - 1 : props.children.length - 1)
+        : index === (props.size ? props.size - 1 : definedChildren.length - 1)
         ? 'right'
         : 'middle';
 

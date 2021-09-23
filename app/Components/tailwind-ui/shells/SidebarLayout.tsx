@@ -79,10 +79,7 @@ export function SidebarLayout(props: SidebarLayoutProps) {
           {sidebar}
         </div>
       </div>
-      <div
-        className="flex flex-col flex-1 overflow-auto focus:outline-none"
-        tabIndex={0}
-      >
+      <div className="flex flex-col flex-1 overflow-auto focus:outline-none">
         <div className="relative z-10 flex flex-shrink-0 h-16 bg-white border-b border-neutral-200">
           <button
             type="button"
@@ -106,14 +103,20 @@ interface SidebarLayoutChildProps {
   children: ReactNode;
 }
 
-SidebarLayout.Sidebar = function (props: SidebarLayoutChildProps) {
+SidebarLayout.Sidebar = function SidebarLayoutSidebar(
+  props: SidebarLayoutChildProps,
+) {
   return <>{props.children}</>;
 };
 
-SidebarLayout.Header = function (props: SidebarLayoutChildProps) {
+SidebarLayout.Header = function SidebarLayoutHeader(
+  props: SidebarLayoutChildProps,
+) {
   return <>{props.children}</>;
 };
 
-SidebarLayout.Body = function (props: SidebarLayoutChildProps) {
+SidebarLayout.Body = function SidebarLayoutBody(
+  props: SidebarLayoutChildProps,
+) {
   return <>{props.children}</>;
 };
