@@ -1,8 +1,5 @@
-import { createReadStream } from 'fs';
-
-import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import DataDrive, { PutOptions } from '@ioc:Zakodium/DataDrive';
+import DataDrive from '@ioc:Zakodium/DataDrive';
 
 import File from 'App/Models/File';
 import CreateFileValidator from 'App/Validators/CreateFileValidator';
@@ -31,7 +28,10 @@ export default class FileController {
   public async create({ request, response }: HttpContextContract) {
     try {
       const params = await request.validate(CreateFileValidator);
-      const file = await this.moveFromMultipart(params.file, params.filename);
+      const file = await this.drive.moveFromMultipart(
+        params.file,
+        params.filename,
+      );
       const createdFile = await File.create({
         _id: file.id,
         filename: file.filename,
@@ -43,16 +43,5 @@ export default class FileController {
     } catch (error) {
       return response.badRequest({ errors: [error] });
     }
-  }
-
-  private async moveFromMultipart(
-    file: MultipartFileContract,
-    filename: string,
-    options?: PutOptions,
-  ) {
-    const { tmpPath } = file;
-    if (!tmpPath) throw new Error('File path is missing');
-
-    return this.drive.putStream(filename, createReadStream(tmpPath), options);
   }
 }
