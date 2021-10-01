@@ -5,6 +5,8 @@
  * file.
  */
 
+import { DriveConfig } from '@ioc:Adonis/Core/Drive';
+
 import { getConfig } from 'App/AppConfig';
 
 /*
@@ -19,21 +21,19 @@ import { getConfig } from 'App/AppConfig';
 |
 | Make sure to check `contracts/drive.ts` file for defining extra disks
 */
-const driveConfig = {
+const driveConfig: DriveConfig = {
   disk: 'local',
 
   disks: {
     local: {
       driver: 'local',
-      config: {
-        root: getConfig('fileSync').root,
-      },
+      visibility: 'private',
+      root: getConfig('fileSync').root,
     },
     files: {
       driver: 'local',
-      config: {
-        root: getConfig('filesRoot'),
-      },
+      visibility: 'private',
+      root: getConfig('filesRoot'),
     },
   },
 };

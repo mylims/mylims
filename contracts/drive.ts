@@ -6,11 +6,12 @@
  */
 
 declare module '@ioc:Adonis/Core/Drive' {
-  import { LocalFileSystemStorageConfig } from '@slynova/flydrive';
-
   interface DisksList {
     local: {
-      config: LocalFileSystemStorageConfig;
+      config: LocalDriverConfig;
+    };
+    files: {
+      config: LocalDriverConfig;
     };
   }
 }

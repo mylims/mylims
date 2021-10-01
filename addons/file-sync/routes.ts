@@ -6,13 +6,7 @@ import { File } from './Models/File';
 
 Route.get(
   '/file-content',
-  async ({ request, response, auth }: HttpContextContract) => {
-    // Validates that is already authenticated
-    const isAuth = await auth.check();
-    if (!isAuth) {
-      return response.internalServerError({ errors: ['Not authorized'] });
-    }
-
+  async ({ request, response }: HttpContextContract) => {
     // Checks that the path is valid
     const id: string = request.all().id.trim();
     if (!id) {
@@ -29,4 +23,4 @@ Route.get(
     );
     return response.stream(content);
   },
-);
+).middleware('auth');
