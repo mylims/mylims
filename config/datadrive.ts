@@ -8,7 +8,7 @@ const dataDriveConfig: DataDriveConfig = {
     },
     files: {
       disk: 'local',
-      prefix: 'generated/files',
+      prefix: 'events/files',
     },
   },
 };
