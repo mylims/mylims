@@ -51,7 +51,6 @@ export type EditFileSyncOptionInput = {
   topics: Array<Scalars['String']>;
 };
 
-/** Main event type */
 export type Event = {
   createdAt: Scalars['DateTime'];
   data: EventData;
@@ -86,7 +85,6 @@ export type EventFilterInput = {
   topic?: Maybe<Scalars['String']>;
 };
 
-/** Intermediary type for event data */
 export type EventHistory = {
   date: Scalars['DateTime'];
   message?: Maybe<Scalars['String']>;
@@ -104,7 +102,6 @@ export type EventProcessor = {
   processorId: Scalars['String'];
 };
 
-/** Paginated list of events */
 export enum EventSortField {
   CREATEDAT = 'createdAt',
   DATE = 'date',
@@ -118,7 +115,6 @@ export type EventSortInput = {
   field: EventSortField;
 };
 
-/** Enums for event fields */
 export enum EventStatus {
   ERROR = 'error',
   PENDING = 'pending',
