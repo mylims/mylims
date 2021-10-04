@@ -87,10 +87,14 @@ export function useFilterFilesQuery(
 ): [Nullable<FilterQuery>, (newQuery: Nullable<FilterQuery>) => void] {
   const setQuery = useSetFilesQuery(base);
   const query = useQuery();
-  const statusList = query.status?.split(',').map((s) => {
-    const value = s.trim() as FileStatus;
-    return { value, label: value };
-  }) ?? [{ value: FileStatus.IMPORTED, label: FileStatus.IMPORTED }];
+  const statusList =
+    query.status
+      ?.split(',')
+      .filter((s) => !!s)
+      .map((s) => {
+        const value = s.trim() as FileStatus;
+        return { value, label: value };
+      }) ?? [];
   const minSize = query.minSize ? bytes(query.minSize).toString() : null;
   const maxSize = query.maxSize ? bytes(query.maxSize).toString() : null;
   const minDate = query.minDate ? new Date(query.minDate) : null;

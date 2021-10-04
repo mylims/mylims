@@ -73,10 +73,14 @@ export function useFilterEventQuery(): [
 ] {
   const setQuery = useSetEventQuery();
   const query = useQuery();
-  const statusList = query.status?.split(',').map((s) => {
-    const value = s.trim() as EventStatus;
-    return { value, label: value };
-  }) ?? [{ value: EventStatus.PENDING, label: EventStatus.PENDING }];
+  const statusList =
+    query.status
+      ?.split(',')
+      .filter((s) => !!s)
+      .map((s) => {
+        const value = s.trim() as EventStatus;
+        return { value, label: value };
+      }) ?? [];
   const sortField =
     (query.sortField as EventSortField) || EventSortField.CREATEDAT;
   const sortDirection =
