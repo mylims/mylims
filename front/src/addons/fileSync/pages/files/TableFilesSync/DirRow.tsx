@@ -38,7 +38,6 @@ export default function DirRow({ value }: { value: DirSync }) {
                 ...file,
                 date: new Date(file.date),
                 name: file.filename,
-                id: file.relativePath,
                 type: TreeType.file as const,
                 expanded: false,
               })),
