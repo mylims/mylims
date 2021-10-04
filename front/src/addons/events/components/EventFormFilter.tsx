@@ -46,8 +46,7 @@ const schema = yup.object().shape({
         label: yup.string().required(),
       }),
     )
-    .nullable()
-    .min(1),
+    .nullable(),
 });
 const selectOrderOptions = [
   { value: SortDirection.ASC, label: selectOrder[SortDirection.ASC] },
