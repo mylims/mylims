@@ -5,6 +5,5 @@ export default class File extends BaseModel {
   public _id: string;
   public filename: string;
   public size: number;
-  public eventId: string;
-  public sampleId: string;
+  public collection: string;
 }
