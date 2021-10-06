@@ -22,7 +22,8 @@
     "jsx": "react",
     "paths": {
       "App/*": ["./app/*"],
-      "Contracts/*": ["./contracts/*"]
+      "Contracts/*": ["./contracts/*"],
+      "Addons/*": ["./addons/*"]
     },
     "types": [
       "@adonisjs/core",
