@@ -1,3 +1,5 @@
+import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
+
 import {
   GqlEventDataType,
   GqlEventSortField,
@@ -6,6 +8,7 @@ import {
 } from 'App/graphql';
 
 import { SyncFile } from '../../file-sync/Models/SyncFile';
+import { Event } from '../Models/Event';
 import filteredEvents from '../Queries/filteredEvents';
 
 const sortMap = {
@@ -54,6 +57,9 @@ const resolvers: GqlResolvers = {
 
       const events = await eventCursor.all();
       return { events, totalCount };
+    },
+    async event(_, { id }) {
+      return Event.findOrFail(new ObjectId(id));
     },
   },
 };

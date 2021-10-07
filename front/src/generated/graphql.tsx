@@ -215,6 +215,7 @@ export enum PatternType {
 
 export type Query = {
   directoryTree: Array<DirectoryEntry>;
+  event: Event;
   events: EventPage;
   fileByPath: FileContent;
   fileSyncOption: FileSyncOption;
@@ -227,6 +228,10 @@ export type Query = {
 
 export type QueryDirectoryTreeArgs = {
   root: Scalars['String'];
+};
+
+export type QueryEventArgs = {
+  id: Scalars['String'];
 };
 
 export type QueryEventsArgs = {
@@ -320,6 +325,28 @@ export type User = {
   role: Scalars['String'];
 };
 
+export type EventQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type EventQuery = {
+  event: {
+    id: string;
+    topic: string;
+    createdAt: any;
+    data: { file: { id: string; name: string } };
+    processors: Array<{
+      processorId: string;
+      history: Array<{
+        processId: string;
+        status: EventStatus;
+        date: any;
+        message?: Maybe<string>;
+      }>;
+    }>;
+  };
+};
+
 export type EventsFilteredQueryVariables = Exact<{
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
@@ -338,7 +365,6 @@ export type EventsFilteredQuery = {
       processors: Array<{
         processorId: string;
         history: Array<{
-          processId: string;
           status: EventStatus;
           date: any;
           message?: Maybe<string>;
@@ -585,6 +611,82 @@ export const RevisionFieldsFragmentDoc = gql`
     path
   }
 `;
+export const EventDocument = gql`
+  query Event($id: String!) {
+    event(id: $id) {
+      id
+      topic
+      createdAt
+      data {
+        ... on EventDataFile {
+          file {
+            id
+            name
+          }
+        }
+      }
+      processors {
+        processorId
+        history {
+          processId
+          status
+          date
+          message
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useEventQuery__
+ *
+ * To run a query within a React component, call `useEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEventQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEventQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    EventQuery,
+    EventQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<EventQuery, EventQueryVariables>(
+    EventDocument,
+    options,
+  );
+}
+export function useEventLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    EventQuery,
+    EventQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<EventQuery, EventQueryVariables>(
+    EventDocument,
+    options,
+  );
+}
+export type EventQueryHookResult = ReturnType<typeof useEventQuery>;
+export type EventLazyQueryHookResult = ReturnType<typeof useEventLazyQuery>;
+export type EventQueryResult = Apollo.QueryResult<
+  EventQuery,
+  EventQueryVariables
+>;
+export function refetchEventQuery(variables?: EventQueryVariables) {
+  return { query: EventDocument, variables: variables };
+}
 export const EventsFilteredDocument = gql`
   query EventsFiltered(
     $limit: Int
@@ -609,7 +711,6 @@ export const EventsFilteredDocument = gql`
         processors {
           processorId
           history {
-            processId
             status
             date
             message
