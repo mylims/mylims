@@ -21,14 +21,13 @@ type EventRowType = EventsFilteredQuery['events']['events'][number] & {
 
 const PAGE_SIZE = 10;
 const titles = [
-  { className: 'w-2/12', name: 'Event id' },
-  { className: 'w-2/12', name: 'File' },
+  { className: 'w-2/12', name: 'Original file' },
   { className: 'w-2/12', name: 'Processor id' },
   { className: 'w-1/12', name: 'Topic' },
   { className: 'w-1/12', name: 'Status' },
-  { className: 'w-2/12', name: 'Process id' },
   { className: 'w-1/12', name: 'Creation date' },
   { className: 'w-1/12', name: 'Process date' },
+  { className: 'w-1/12', name: 'Actions' },
 ];
 
 export default function EventsList() {
@@ -89,7 +88,6 @@ function Row({ value }: { value: EventRowType }) {
         file={value.data.file.name}
         topic={value.topic}
         status={EventStatus.PENDING}
-        processId="-"
         processorId="-"
         date="-"
         createdAt={formatDate(value.createdAt)}
@@ -109,7 +107,6 @@ function Row({ value }: { value: EventRowType }) {
           (processor.history[0]?.status.trim() ??
             EventStatus.PENDING) as EventStatus
         }
-        processId={processor.history[0]?.processId ?? '-'}
         processorId={processor.processorId}
         date={date ? formatDate(date) : '-'}
         createdAt={formatDate(value.createdAt)}

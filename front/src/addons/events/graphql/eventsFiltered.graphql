@@ -21,7 +21,6 @@ query EventsFiltered(
       processors {
         processorId
         history {
-          processId
           status
           date
           message

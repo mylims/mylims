@@ -16,6 +16,7 @@ import Users from './pages/eln/users';
 import Login from './pages/login';
 
 import EventsList from '@/addons/events/pages/EventsList';
+import EventDetail from '@/addons/events/pages/EventDetail';
 
 interface RouteType {
   Component: React.ComponentType<Record<string, never>>;
@@ -29,6 +30,7 @@ const routes: RouteType[] = [
   { Component: Files, path: '/fileSync/files/:id' },
   { Component: Edit, path: '/fileSync/edit/:id' },
   { Component: EventsList, path: '/event/list' },
+  { Component: EventDetail, path: '/event/detail/:id' },
   { Component: Login, path: '/login' },
   { Component: NoMatch, path: '*' },
 ];

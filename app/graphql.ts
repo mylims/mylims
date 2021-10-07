@@ -238,6 +238,7 @@ export enum GqlPatternType {
 export type GqlQuery = {
   __typename?: 'Query';
   directoryTree: Array<GqlDirectoryEntry>;
+  event: GqlEvent;
   events: GqlEventPage;
   fileByPath: GqlFileContent;
   fileSyncOption: GqlFileSyncOption;
@@ -250,6 +251,10 @@ export type GqlQuery = {
 
 export type GqlQueryDirectoryTreeArgs = {
   root: Scalars['String'];
+};
+
+export type GqlQueryEventArgs = {
+  id: Scalars['String'];
 };
 
 export type GqlQueryEventsArgs = {
@@ -754,6 +759,12 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlQueryDirectoryTreeArgs, 'root'>
+  >;
+  event?: Resolver<
+    GqlResolversTypes['Event'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryEventArgs, 'id'>
   >;
   events?: Resolver<
     GqlResolversTypes['EventPage'],

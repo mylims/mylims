@@ -1,4 +1,6 @@
+import { InformationCircleIcon } from '@heroicons/react/outline';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { getTagColor } from '@/components/EventStatusLabel';
 import { StatusLabel } from '@/components/StatusLabel';
@@ -11,7 +13,6 @@ interface EventRowProps {
   topic: string;
   status: EventStatus;
   processorId: string;
-  processId: string;
   createdAt: string;
   date: string;
 }
@@ -21,15 +22,11 @@ export default function EventRow({
   topic,
   status,
   processorId,
-  processId,
   createdAt,
   date,
 }: EventRowProps) {
   return (
     <tr>
-      <Td title={id} className="truncate">
-        {id}
-      </Td>
       <Td>{file}</Td>
       <Td title={processorId} className="truncate">
         {processorId}
@@ -38,11 +35,13 @@ export default function EventRow({
       <Td>
         <StatusLabel status={status} color={getTagColor(status)} />
       </Td>
-      <Td title={processId} className="truncate">
-        {processId}
-      </Td>
       <Td>{createdAt}</Td>
       <Td>{date}</Td>
+      <Td>
+        <Link title={id} to={`/event/detail/${id}`}>
+          <InformationCircleIcon className="w-5 h-5" />
+        </Link>
+      </Td>
     </tr>
   );
 }

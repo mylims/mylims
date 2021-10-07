@@ -5,6 +5,7 @@ type Query {
     filterBy: EventFilterInput
     sortBy: EventSortInput
   ): EventPage!
+  event(id: String!): Event!
 }
 
 # Paginated list of events
