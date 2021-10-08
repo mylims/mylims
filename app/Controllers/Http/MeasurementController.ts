@@ -1,5 +1,8 @@
 import { randomUUID } from 'crypto';
 
+import { Event } from 'Addons/events/Models/Event';
+import { SyncFile } from 'Addons/file-sync/Models/SyncFile';
+
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import DataDrive from '@ioc:Zakodium/DataDrive';
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
@@ -64,8 +67,6 @@ export default class MeasurementController {
   }
 
   private async _filenameByEvent(eventId: string): Promise<string> {
-    const { Event } = await import('Addons/events/Models/Event');
-    const { SyncFile } = await import('Addons/file-sync/Models/SyncFile');
     const event = await Event.findOrFail(new ObjectId(eventId));
     const file = await SyncFile.findByOrFail(
       'revisions.0.id',

@@ -8,6 +8,7 @@
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
     "App": "app",
+    "Addons": "addons",
     "Contracts": "contracts",
     "Config": "config"
   },
