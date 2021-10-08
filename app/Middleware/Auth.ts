@@ -7,7 +7,7 @@ export default class Auth {
     { auth, response, request }: HttpContextContract,
     next: () => Promise<void>,
   ) {
-    const token = request.input('token');
+    const token: string | undefined = request.input('token');
     if (token) {
       if (getConfig('serviceToken') !== token) return response.unauthorized();
     } else {
