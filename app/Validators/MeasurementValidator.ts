@@ -7,9 +7,10 @@ export default class MeasurementValidator {
   public schema = schema.create({
     collection: schema.string(),
     eventId: schema.string(),
-    sampleId: schema.string(),
+    sampleCode: schema.string(),
+    username: schema.string(),
     file: schema.file.optional(),
     derived: schema.string.optional(),
-    meta: schema.string.optional(),
+    description: schema.string.optional(),
   });
 }

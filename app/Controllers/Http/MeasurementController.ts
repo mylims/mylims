@@ -81,8 +81,8 @@ export default class MeasurementController {
     rest: MeasurementParams,
   ) {
     const derived = rest.derived ? JSON.parse(rest.derived) : undefined;
-    const meta = rest.meta ? JSON.parse(rest.meta) : undefined;
-    const measurement = { ...rest, derived, meta };
+    const sampleCode = rest.sampleCode.split(',');
+    const measurement = { ...rest, derived, sampleCode };
 
     switch (collection) {
       case 'transfer': {
