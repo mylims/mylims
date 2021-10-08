@@ -15,7 +15,7 @@ export interface TransferType {
 }
 
 export class TransferMeasurement extends BaseMeasurement {
-  public static collectionName = 'measurement.transfer';
+  public static collectionName = 'measurement.transfers';
 
   @field()
   public derived: TransferType;
