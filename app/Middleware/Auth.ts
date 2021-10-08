@@ -1,12 +1,19 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
+import { getConfig } from 'App/AppConfig';
+
 export default class Auth {
   public async handle(
-    { auth, response }: HttpContextContract,
+    { auth, response, request }: HttpContextContract,
     next: () => Promise<void>,
   ) {
-    const result = await auth.authenticate();
-    if (!result) return response.unauthorized();
+    const token = request.input('token');
+    if (token) {
+      if (getConfig('serviceToken') !== token) return response.unauthorized();
+    } else {
+      const result = await auth.authenticate();
+      if (!result) return response.unauthorized();
+    }
     await next();
   }
 }

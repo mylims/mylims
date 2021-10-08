@@ -8,6 +8,7 @@ const defaultConfig: ConfigFile = {
     appKey: randomString(32),
     date: '2020-10-07T14:48:00.000Z',
     filesRoot: './',
+    serviceToken: 'token',
     ldap: {
       id: 'uid',
       uid: 'uid',
@@ -43,6 +44,7 @@ export interface ConfigProps {
   date: string;
   appKey: string;
   filesRoot: string;
+  serviceToken: string;
   ldap: {
     id: string;
     uid: string;
