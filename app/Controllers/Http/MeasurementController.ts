@@ -11,6 +11,8 @@ import File from 'App/Models/File';
 import { MeasurementParams } from 'App/Models/Measurement/Base';
 import { GeneralMeasurement } from 'App/Models/Measurement/General';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
+import { Sample, ActivityType } from 'App/Models/Sample';
+import User from 'App/Models/User';
 import MeasurementValidator from 'App/Validators/MeasurementValidator';
 
 export default class MeasurementController {
@@ -37,7 +39,8 @@ export default class MeasurementController {
   public async create({ request, response }: HttpContextContract) {
     try {
       const params = await request.validate(MeasurementValidator);
-      const { eventId, file, collection, ...restParams } = params;
+      const { eventId, file, collection, sampleCode, ...restParams } = params;
+      const sampleCodeList = sampleCode.split(',');
 
       // Create the file
       let fileId: string | undefined;
@@ -54,18 +57,42 @@ export default class MeasurementController {
         fileId = dbFile._id;
       }
 
+      // Create user relationship
+      const user = await this._getOrCreateUser(restParams.username);
+      const userId = (user._id as ObjectId).toHexString();
+      const sample = await this._getOrCreateSample(userId, sampleCodeList);
+
       // Create the measurement
       const measurement = await this._createMeasurement(collection, {
         ...restParams,
         eventId,
         fileId,
+        sampleCode: sampleCodeList,
+        createdBy: userId,
       });
+
+      // Add activity to the sample
+      if (fileId) {
+        sample.activities.push({
+          type: ActivityType.FILE,
+          fileId,
+          date: new Date(),
+        });
+      }
+      sample.activities.push({
+        type: ActivityType.MEASUREMENT,
+        measurementId: (measurement._id as ObjectId).toHexString(),
+        date: new Date(),
+      });
+      await sample.save();
 
       return response.ok(measurement);
     } catch (error) {
       return response.badRequest({ errors: [error] });
     }
   }
+
+  // ---------------------------------------------------------------------------
 
   private async _filenameByEvent(eventId: string): Promise<string> {
     const event = await Event.findOrFail(new ObjectId(eventId));
@@ -76,13 +103,39 @@ export default class MeasurementController {
     return file.filename;
   }
 
+  private async _getOrCreateUser(username: string): Promise<User> {
+    const cursor = User.query({ usernames: { $elemMatch: { $eq: username } } });
+    const length = await cursor.count();
+    if (length === 0) {
+      return User.create({ usernames: [username], role: 'MEMBER' });
+    } else if (length === 1) {
+      return cursor.firstOrFail();
+    } else {
+      throw new Error('Multiple users with same username');
+    }
+  }
+
+  private async _getOrCreateSample(
+    userId: string,
+    sampleCode: string[],
+  ): Promise<Sample> {
+    const cursor = Sample.query({ userId, sampleCode });
+    const length = await cursor.count();
+    if (length === 0) {
+      return Sample.create({ userId, sampleCode, activities: [] });
+    } else if (length === 1) {
+      return cursor.firstOrFail();
+    } else {
+      throw new Error('Multiple samples with same code');
+    }
+  }
+
   private async _createMeasurement(
     collection: string,
     rest: MeasurementParams,
   ) {
     const derived = rest.derived ? JSON.parse(rest.derived) : undefined;
-    const sampleCode = rest.sampleCode.split(',');
-    const measurement = { ...rest, derived, sampleCode };
+    const measurement = { ...rest, derived };
 
     switch (collection) {
       case 'transfer': {
