@@ -8,6 +8,7 @@ export default class User extends BaseModel {
   @field()
   public firstName: string;
   public lastName: string;
+  public usernames: string[];
   public emails: string[];
   public role: 'ADMIN' | 'MEMBER';
   public authMethods: AuthMethods;
