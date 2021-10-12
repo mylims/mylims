@@ -9,7 +9,6 @@ export default class MeasurementValidator {
     eventId: schema.string(),
     sampleId: schema.string(),
     file: schema.file.optional(),
-    filename: schema.string.optional(),
     derived: schema.string.optional(),
     meta: schema.string.optional(),
   });

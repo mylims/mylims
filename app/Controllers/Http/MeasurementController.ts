@@ -37,13 +37,14 @@ export default class MeasurementController {
   public async create({ request, response }: HttpContextContract) {
     try {
       const params = await request.validate(MeasurementValidator);
-      const { eventId, file, filename, collection, ...restParams } = params;
+      const { eventId, file, collection, ...restParams } = params;
 
       // Create the file
       let fileId: string | undefined;
       if (file) {
-        const name = filename ?? (await this._filenameByEvent(params.eventId));
-        const localFile = await this.drive.moveFromMultipart(file, name);
+        const filename =
+          file.fileName ?? (await this._filenameByEvent(params.eventId));
+        const localFile = await this.drive.moveFromMultipart(file, filename);
         const dbFile = await File.create({
           _id: randomUUID(),
           collection,
