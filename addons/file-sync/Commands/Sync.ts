@@ -61,6 +61,7 @@ export default class Sync extends BaseCommand {
     const fileSyncOptionsToProcess: FileSyncOption[] = [];
 
     if (this.fileSyncOptionId) {
+      this.logger.info(`processing file sync option: ${this.fileSyncOptionId}`);
       if (!ObjectId.isValid(this.fileSyncOptionId)) {
         this.logger.error(`invalid ObjectId: ${this.fileSyncOptionId}`);
         return;
