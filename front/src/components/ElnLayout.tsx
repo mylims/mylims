@@ -31,6 +31,11 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
         pathmatch: `/fileSync/**`,
       },
       { label: 'Events', pathname: `/event/list`, pathmatch: `/event/**` },
+      {
+        label: 'Measurements',
+        pathname: `/measurement/list`,
+        pathmatch: `/measurement/**`,
+      },
     ];
   }, []);
 

@@ -1,0 +1,27 @@
+type TransferMeasurement implements Measurement {
+  id: String!
+  type: MeasurementTypes!
+  eventId: String!
+  username: String!
+  sampleCode: [String!]!
+  createdBy: String!
+  fileId: String
+  description: String
+  derived: TransferDerived!
+  createdAt: DateTime!
+}
+
+type TransferDerived {
+  thresholdVoltage: DerivedValue!
+  subthresholdSlope: DerivedSlope!
+}
+
+type DerivedValue {
+  index: Int!
+  value: Float!
+}
+type DerivedSlope {
+  medianSlope: Float!
+  toIndex: Int!
+  fromIndex: Int!
+}

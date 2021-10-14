@@ -1,4 +1,4 @@
-import { BaseModel, field } from '@ioc:Zakodium/Mongodb/Odm';
+import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 interface AuthMethods {
   [key: string]: string | undefined;
@@ -6,6 +6,7 @@ interface AuthMethods {
 
 export default class User extends BaseModel {
   @field()
+  public _id: ObjectId;
   public firstName: string;
   public lastName: string;
   public usernames: string[];

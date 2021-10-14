@@ -1,4 +1,4 @@
-import { BaseModel, field } from '@ioc:Zakodium/Mongodb/Odm';
+import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 export interface MeasurementParams {
   eventId: string;
@@ -12,6 +12,7 @@ export interface MeasurementParams {
 
 export class BaseMeasurement extends BaseModel {
   @field()
+  public _id: ObjectId;
   public eventId: string;
   public username: string;
   public sampleCode: string[];

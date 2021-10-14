@@ -1,0 +1,61 @@
+type Query {
+  measurements(
+    type: MeasurementTypes
+    limit: Int
+    skip: Int
+    filterBy: MeasurementFilterInput
+    sortBy: MeasurementSortInput
+  ): MeasurementPage!
+  measurement(id: String!): Measurement!
+}
+
+# Paginated list of measurements
+enum MeasurementSortField {
+  username
+  createdBy
+  createdAt
+}
+input MeasurementFilterInput {
+  username: String
+  sampleCode: [String!]
+  createdBy: String
+}
+input MeasurementSortInput {
+  direction: SortDirection!
+  field: MeasurementSortField!
+}
+type MeasurementPage {
+  measurements: [Measurement!]!
+  totalCount: Int!
+}
+
+# Measurement specific data
+enum MeasurementTypes {
+  general
+  transfer
+}
+
+interface Measurement {
+  id: String!
+  type: MeasurementTypes!
+  eventId: String!
+  username: String!
+  sampleCode: [String!]!
+  createdBy: String!
+  fileId: String
+  description: String
+  createdAt: DateTime!
+}
+
+type GeneralMeasurement implements Measurement {
+  id: String!
+  type: MeasurementTypes!
+  eventId: String!
+  username: String!
+  sampleCode: [String!]!
+  createdBy: String!
+  fileId: String
+  description: String
+  createdAt: DateTime!
+  derived: JSON
+}

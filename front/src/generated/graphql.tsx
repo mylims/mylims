@@ -31,6 +31,17 @@ export type DeleteFileSyncOptionInput = {
   id: Scalars['ID'];
 };
 
+export type DerivedSlope = {
+  fromIndex: Scalars['Int'];
+  medianSlope: Scalars['Float'];
+  toIndex: Scalars['Int'];
+};
+
+export type DerivedValue = {
+  index: Scalars['Int'];
+  value: Scalars['Float'];
+};
+
 export type DirectoryEntry = {
   path: Scalars['String'];
   type: DirectoryEntryType;
@@ -176,6 +187,58 @@ export type FilesSortInput = {
   field: FilesSortField;
 };
 
+export type GeneralMeasurement = Measurement & {
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  derived?: Maybe<Scalars['JSON']>;
+  description?: Maybe<Scalars['String']>;
+  eventId: Scalars['String'];
+  fileId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  sampleCode: Array<Scalars['String']>;
+  type: MeasurementTypes;
+  username: Scalars['String'];
+};
+
+export type Measurement = {
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  eventId: Scalars['String'];
+  fileId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  sampleCode: Array<Scalars['String']>;
+  type: MeasurementTypes;
+  username: Scalars['String'];
+};
+
+export type MeasurementFilterInput = {
+  createdBy?: Maybe<Scalars['String']>;
+  sampleCode?: Maybe<Array<Scalars['String']>>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type MeasurementPage = {
+  measurements: Array<Measurement>;
+  totalCount: Scalars['Int'];
+};
+
+export enum MeasurementSortField {
+  CREATEDAT = 'createdAt',
+  CREATEDBY = 'createdBy',
+  USERNAME = 'username',
+}
+
+export type MeasurementSortInput = {
+  direction: SortDirection;
+  field: MeasurementSortField;
+};
+
+export enum MeasurementTypes {
+  GENERAL = 'general',
+  TRANSFER = 'transfer',
+}
+
 export type Mutation = {
   createFileSyncOption: FileSyncOption;
   deleteFileSyncOption: Array<FileSyncOption>;
@@ -222,6 +285,8 @@ export type Query = {
   fileSyncOptions: Array<FileSyncOption>;
   filesByConfig: SyncTreeRevision;
   filesByConfigFlat: FilesFlatPage;
+  measurement: Measurement;
+  measurements: MeasurementPage;
   readyChecks: Array<ReadyCheckDescriptor>;
   users: Array<User>;
 };
@@ -260,6 +325,18 @@ export type QueryFilesByConfigFlatArgs = {
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<FilesSortInput>;
+};
+
+export type QueryMeasurementArgs = {
+  id: Scalars['String'];
+};
+
+export type QueryMeasurementsArgs = {
+  filterBy?: Maybe<MeasurementFilterInput>;
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<MeasurementSortInput>;
+  type?: Maybe<MeasurementTypes>;
 };
 
 export type ReadyCheck = {
@@ -314,6 +391,24 @@ export type SyncTreeRevision = {
   _id: Scalars['String'];
   dirs: Array<SyncDirRevision>;
   files: Array<SyncFileRevision>;
+};
+
+export type TransferDerived = {
+  subthresholdSlope: DerivedSlope;
+  thresholdVoltage: DerivedValue;
+};
+
+export type TransferMeasurement = Measurement & {
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  derived: TransferDerived;
+  description?: Maybe<Scalars['String']>;
+  eventId: Scalars['String'];
+  fileId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  sampleCode: Array<Scalars['String']>;
+  type: MeasurementTypes;
+  username: Scalars['String'];
 };
 
 export type User = {
@@ -572,6 +667,111 @@ export type ReadyChecksQuery = {
   readyChecks: Array<{ name: string; hasArg: boolean }>;
 };
 
+type MeasurementFields_GeneralMeasurement_Fragment = {
+  __typename: 'GeneralMeasurement';
+  id: string;
+  eventId: string;
+  username: string;
+  sampleCode: Array<string>;
+  createdBy: string;
+  fileId?: Maybe<string>;
+  description?: Maybe<string>;
+  createdAt: any;
+};
+
+type MeasurementFields_TransferMeasurement_Fragment = {
+  __typename: 'TransferMeasurement';
+  id: string;
+  eventId: string;
+  username: string;
+  sampleCode: Array<string>;
+  createdBy: string;
+  fileId?: Maybe<string>;
+  description?: Maybe<string>;
+  createdAt: any;
+};
+
+export type MeasurementFieldsFragment =
+  | MeasurementFields_GeneralMeasurement_Fragment
+  | MeasurementFields_TransferMeasurement_Fragment;
+
+export type MeasurementsFilteredQueryVariables = Exact<{
+  type: MeasurementTypes;
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  filterBy?: Maybe<MeasurementFilterInput>;
+  sortBy?: Maybe<MeasurementSortInput>;
+}>;
+
+export type MeasurementsFilteredQuery = {
+  measurements: {
+    totalCount: number;
+    measurements: Array<
+      | {
+          __typename: 'GeneralMeasurement';
+          id: string;
+          eventId: string;
+          username: string;
+          sampleCode: Array<string>;
+          createdBy: string;
+          fileId?: Maybe<string>;
+          description?: Maybe<string>;
+          createdAt: any;
+        }
+      | {
+          __typename: 'TransferMeasurement';
+          id: string;
+          eventId: string;
+          username: string;
+          sampleCode: Array<string>;
+          createdBy: string;
+          fileId?: Maybe<string>;
+          description?: Maybe<string>;
+          createdAt: any;
+        }
+    >;
+  };
+};
+
+export type MeasurementQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type MeasurementQuery = {
+  measurement:
+    | {
+        __typename: 'GeneralMeasurement';
+        derived?: Maybe<any>;
+        id: string;
+        eventId: string;
+        username: string;
+        sampleCode: Array<string>;
+        createdBy: string;
+        fileId?: Maybe<string>;
+        description?: Maybe<string>;
+        createdAt: any;
+      }
+    | {
+        __typename: 'TransferMeasurement';
+        id: string;
+        eventId: string;
+        username: string;
+        sampleCode: Array<string>;
+        createdBy: string;
+        fileId?: Maybe<string>;
+        description?: Maybe<string>;
+        createdAt: any;
+        transferDerived: {
+          thresholdVoltage: { index: number; value: number };
+          subthresholdSlope: {
+            medianSlope: number;
+            toIndex: number;
+            fromIndex: number;
+          };
+        };
+      };
+};
+
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UsersQuery = {
@@ -609,6 +809,19 @@ export const RevisionFieldsFragmentDoc = gql`
     relativePath
     date
     path
+  }
+`;
+export const MeasurementFieldsFragmentDoc = gql`
+  fragment MeasurementFields on Measurement {
+    __typename
+    id
+    eventId
+    username
+    sampleCode
+    createdBy
+    fileId
+    description
+    createdAt
   }
 `;
 export const EventDocument = gql`
@@ -1412,6 +1625,165 @@ export type ReadyChecksQueryResult = Apollo.QueryResult<
 >;
 export function refetchReadyChecksQuery(variables?: ReadyChecksQueryVariables) {
   return { query: ReadyChecksDocument, variables: variables };
+}
+export const MeasurementsFilteredDocument = gql`
+  query MeasurementsFiltered(
+    $type: MeasurementTypes!
+    $limit: Int
+    $skip: Int
+    $filterBy: MeasurementFilterInput
+    $sortBy: MeasurementSortInput
+  ) {
+    measurements(
+      type: $type
+      limit: $limit
+      skip: $skip
+      filterBy: $filterBy
+      sortBy: $sortBy
+    ) {
+      totalCount
+      measurements {
+        ...MeasurementFields
+      }
+    }
+  }
+  ${MeasurementFieldsFragmentDoc}
+`;
+
+/**
+ * __useMeasurementsFilteredQuery__
+ *
+ * To run a query within a React component, call `useMeasurementsFilteredQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeasurementsFilteredQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeasurementsFilteredQuery({
+ *   variables: {
+ *      type: // value for 'type'
+ *      limit: // value for 'limit'
+ *      skip: // value for 'skip'
+ *      filterBy: // value for 'filterBy'
+ *      sortBy: // value for 'sortBy'
+ *   },
+ * });
+ */
+export function useMeasurementsFilteredQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    MeasurementsFilteredQuery,
+    MeasurementsFilteredQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    MeasurementsFilteredQuery,
+    MeasurementsFilteredQueryVariables
+  >(MeasurementsFilteredDocument, options);
+}
+export function useMeasurementsFilteredLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    MeasurementsFilteredQuery,
+    MeasurementsFilteredQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    MeasurementsFilteredQuery,
+    MeasurementsFilteredQueryVariables
+  >(MeasurementsFilteredDocument, options);
+}
+export type MeasurementsFilteredQueryHookResult = ReturnType<
+  typeof useMeasurementsFilteredQuery
+>;
+export type MeasurementsFilteredLazyQueryHookResult = ReturnType<
+  typeof useMeasurementsFilteredLazyQuery
+>;
+export type MeasurementsFilteredQueryResult = Apollo.QueryResult<
+  MeasurementsFilteredQuery,
+  MeasurementsFilteredQueryVariables
+>;
+export function refetchMeasurementsFilteredQuery(
+  variables?: MeasurementsFilteredQueryVariables,
+) {
+  return { query: MeasurementsFilteredDocument, variables: variables };
+}
+export const MeasurementDocument = gql`
+  query Measurement($id: String!) {
+    measurement(id: $id) {
+      ...MeasurementFields
+      ... on GeneralMeasurement {
+        derived
+      }
+      ... on TransferMeasurement {
+        transferDerived: derived {
+          thresholdVoltage {
+            index
+            value
+          }
+          subthresholdSlope {
+            medianSlope
+            toIndex
+            fromIndex
+          }
+        }
+      }
+    }
+  }
+  ${MeasurementFieldsFragmentDoc}
+`;
+
+/**
+ * __useMeasurementQuery__
+ *
+ * To run a query within a React component, call `useMeasurementQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeasurementQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeasurementQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMeasurementQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    MeasurementQuery,
+    MeasurementQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<MeasurementQuery, MeasurementQueryVariables>(
+    MeasurementDocument,
+    options,
+  );
+}
+export function useMeasurementLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    MeasurementQuery,
+    MeasurementQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    MeasurementQuery,
+    MeasurementQueryVariables
+  >(MeasurementDocument, options);
+}
+export type MeasurementQueryHookResult = ReturnType<typeof useMeasurementQuery>;
+export type MeasurementLazyQueryHookResult = ReturnType<
+  typeof useMeasurementLazyQuery
+>;
+export type MeasurementQueryResult = Apollo.QueryResult<
+  MeasurementQuery,
+  MeasurementQueryVariables
+>;
+export function refetchMeasurementQuery(variables?: MeasurementQueryVariables) {
+  return { query: MeasurementDocument, variables: variables };
 }
 export const UsersDocument = gql`
   query Users {
