@@ -1,4 +1,4 @@
-import { BaseModel, field } from '@ioc:Zakodium/Mongodb/Odm';
+import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 export enum ActivityType {
   FILE = 'file',
@@ -16,6 +16,7 @@ export type Activity = BaseActivity &
 
 export class Sample extends BaseModel {
   @field()
+  public _id: ObjectId;
   public sampleCode: string[];
   public userId: string;
   public title?: string;

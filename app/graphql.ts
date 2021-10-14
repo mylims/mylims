@@ -41,6 +41,19 @@ export type GqlDeleteFileSyncOptionInput = {
   id: Scalars['ID'];
 };
 
+export type GqlDerivedSlope = {
+  __typename?: 'DerivedSlope';
+  fromIndex: Scalars['Int'];
+  medianSlope: Scalars['Float'];
+  toIndex: Scalars['Int'];
+};
+
+export type GqlDerivedValue = {
+  __typename?: 'DerivedValue';
+  index: Scalars['Int'];
+  value: Scalars['Float'];
+};
+
 export type GqlDirectoryEntry = {
   __typename?: 'DirectoryEntry';
   path: Scalars['String'];
@@ -196,6 +209,60 @@ export type GqlFilesSortInput = {
   field: GqlFilesSortField;
 };
 
+export type GqlGeneralMeasurement = GqlMeasurement & {
+  __typename?: 'GeneralMeasurement';
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  derived?: Maybe<Scalars['JSON']>;
+  description?: Maybe<Scalars['String']>;
+  eventId: Scalars['String'];
+  fileId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  sampleCode: Array<Scalars['String']>;
+  type: GqlMeasurementTypes;
+  username: Scalars['String'];
+};
+
+export type GqlMeasurement = {
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  eventId: Scalars['String'];
+  fileId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  sampleCode: Array<Scalars['String']>;
+  type: GqlMeasurementTypes;
+  username: Scalars['String'];
+};
+
+export type GqlMeasurementFilterInput = {
+  createdBy?: Maybe<Scalars['String']>;
+  sampleCode?: Maybe<Array<Scalars['String']>>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type GqlMeasurementPage = {
+  __typename?: 'MeasurementPage';
+  measurements: Array<GqlMeasurement>;
+  totalCount: Scalars['Int'];
+};
+
+export enum GqlMeasurementSortField {
+  CREATEDAT = 'createdAt',
+  CREATEDBY = 'createdBy',
+  USERNAME = 'username',
+}
+
+export type GqlMeasurementSortInput = {
+  direction: GqlSortDirection;
+  field: GqlMeasurementSortField;
+};
+
+export enum GqlMeasurementTypes {
+  GENERAL = 'general',
+  TRANSFER = 'transfer',
+}
+
 export type GqlMutation = {
   __typename?: 'Mutation';
   createFileSyncOption: GqlFileSyncOption;
@@ -245,6 +312,8 @@ export type GqlQuery = {
   fileSyncOptions: Array<GqlFileSyncOption>;
   filesByConfig: GqlSyncTreeRevision;
   filesByConfigFlat: GqlFilesFlatPage;
+  measurement: GqlMeasurement;
+  measurements: GqlMeasurementPage;
   readyChecks: Array<GqlReadyCheckDescriptor>;
   users: Array<GqlUser>;
 };
@@ -283,6 +352,18 @@ export type GqlQueryFilesByConfigFlatArgs = {
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<GqlFilesSortInput>;
+};
+
+export type GqlQueryMeasurementArgs = {
+  id: Scalars['String'];
+};
+
+export type GqlQueryMeasurementsArgs = {
+  filterBy?: Maybe<GqlMeasurementFilterInput>;
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<GqlMeasurementSortInput>;
+  type?: Maybe<GqlMeasurementTypes>;
 };
 
 export type GqlReadyCheck = {
@@ -342,6 +423,26 @@ export type GqlSyncTreeRevision = {
   _id: Scalars['String'];
   dirs: Array<GqlSyncDirRevision>;
   files: Array<GqlSyncFileRevision>;
+};
+
+export type GqlTransferDerived = {
+  __typename?: 'TransferDerived';
+  subthresholdSlope: GqlDerivedSlope;
+  thresholdVoltage: GqlDerivedValue;
+};
+
+export type GqlTransferMeasurement = GqlMeasurement & {
+  __typename?: 'TransferMeasurement';
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  derived: GqlTransferDerived;
+  description?: Maybe<Scalars['String']>;
+  eventId: Scalars['String'];
+  fileId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  sampleCode: Array<Scalars['String']>;
+  type: GqlMeasurementTypes;
+  username: Scalars['String'];
 };
 
 export type GqlUser = {
@@ -467,6 +568,8 @@ export type GqlResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
+  DerivedSlope: ResolverTypeWrapper<GqlDerivedSlope>;
+  DerivedValue: ResolverTypeWrapper<GqlDerivedValue>;
   DirectoryEntry: ResolverTypeWrapper<GqlDirectoryEntry>;
   DirectoryEntryType: GqlDirectoryEntryType;
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
@@ -492,10 +595,20 @@ export type GqlResolversTypes = ResolversObject<{
   FilesFlatPage: ResolverTypeWrapper<GqlFilesFlatPage>;
   FilesSortField: GqlFilesSortField;
   FilesSortInput: GqlFilesSortInput;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
+  GeneralMeasurement: ResolverTypeWrapper<GqlGeneralMeasurement>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
+  Measurement:
+    | GqlResolversTypes['GeneralMeasurement']
+    | GqlResolversTypes['TransferMeasurement'];
+  MeasurementFilterInput: GqlMeasurementFilterInput;
+  MeasurementPage: ResolverTypeWrapper<GqlMeasurementPage>;
+  MeasurementSortField: GqlMeasurementSortField;
+  MeasurementSortInput: GqlMeasurementSortInput;
+  MeasurementTypes: GqlMeasurementTypes;
   Mutation: ResolverTypeWrapper<{}>;
   NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
   Pattern: ResolverTypeWrapper<GqlPattern>;
@@ -512,6 +625,8 @@ export type GqlResolversTypes = ResolversObject<{
     | GqlResolversTypes['SyncFileRevision'];
   SyncFileRevision: ResolverTypeWrapper<GqlSyncFileRevision>;
   SyncTreeRevision: ResolverTypeWrapper<GqlSyncTreeRevision>;
+  TransferDerived: ResolverTypeWrapper<GqlTransferDerived>;
+  TransferMeasurement: ResolverTypeWrapper<GqlTransferMeasurement>;
   User: ResolverTypeWrapper<User>;
 }>;
 
@@ -520,6 +635,8 @@ export type GqlResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   DateTime: Scalars['DateTime'];
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
+  DerivedSlope: GqlDerivedSlope;
+  DerivedValue: GqlDerivedValue;
   DirectoryEntry: GqlDirectoryEntry;
   EditFileSyncOptionInput: GqlEditFileSyncOptionInput;
   Event: Event;
@@ -539,10 +656,18 @@ export type GqlResolversParentTypes = ResolversObject<{
   FilesFilterInput: GqlFilesFilterInput;
   FilesFlatPage: GqlFilesFlatPage;
   FilesSortInput: GqlFilesSortInput;
+  Float: Scalars['Float'];
+  GeneralMeasurement: GqlGeneralMeasurement;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   JSON: Scalars['JSON'];
   JSONObject: Scalars['JSONObject'];
+  Measurement:
+    | GqlResolversParentTypes['GeneralMeasurement']
+    | GqlResolversParentTypes['TransferMeasurement'];
+  MeasurementFilterInput: GqlMeasurementFilterInput;
+  MeasurementPage: GqlMeasurementPage;
+  MeasurementSortInput: GqlMeasurementSortInput;
   Mutation: {};
   NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
   Pattern: GqlPattern;
@@ -557,6 +682,8 @@ export type GqlResolversParentTypes = ResolversObject<{
     | GqlResolversParentTypes['SyncFileRevision'];
   SyncFileRevision: GqlSyncFileRevision;
   SyncTreeRevision: GqlSyncTreeRevision;
+  TransferDerived: GqlTransferDerived;
+  TransferMeasurement: GqlTransferMeasurement;
   User: User;
 }>;
 
@@ -564,6 +691,25 @@ export interface GqlDateTimeScalarConfig
   extends GraphQLScalarTypeConfig<GqlResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
+
+export type GqlDerivedSlopeResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['DerivedSlope'] = GqlResolversParentTypes['DerivedSlope'],
+> = ResolversObject<{
+  fromIndex?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  medianSlope?: Resolver<GqlResolversTypes['Float'], ParentType, ContextType>;
+  toIndex?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlDerivedValueResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['DerivedValue'] = GqlResolversParentTypes['DerivedValue'],
+> = ResolversObject<{
+  index?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  value?: Resolver<GqlResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export type GqlDirectoryEntryResolvers<
   ContextType = ApolloBaseContext,
@@ -707,6 +853,39 @@ export type GqlFilesFlatPageResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type GqlGeneralMeasurementResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['GeneralMeasurement'] = GqlResolversParentTypes['GeneralMeasurement'],
+> = ResolversObject<{
+  createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  createdBy?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  derived?: Resolver<Maybe<GqlResolversTypes['JSON']>, ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  eventId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  fileId?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  sampleCode?: Resolver<
+    Array<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  type?: Resolver<
+    GqlResolversTypes['MeasurementTypes'],
+    ParentType,
+    ContextType
+  >;
+  username?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export interface GqlJsonScalarConfig
   extends GraphQLScalarTypeConfig<GqlResolversTypes['JSON'], any> {
   name: 'JSON';
@@ -716,6 +895,55 @@ export interface GqlJsonObjectScalarConfig
   extends GraphQLScalarTypeConfig<GqlResolversTypes['JSONObject'], any> {
   name: 'JSONObject';
 }
+
+export type GqlMeasurementResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['Measurement'] = GqlResolversParentTypes['Measurement'],
+> = ResolversObject<{
+  __resolveType: TypeResolveFn<
+    'GeneralMeasurement' | 'TransferMeasurement',
+    ParentType,
+    ContextType
+  >;
+  createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  createdBy?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  eventId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  fileId?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  sampleCode?: Resolver<
+    Array<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  type?: Resolver<
+    GqlResolversTypes['MeasurementTypes'],
+    ParentType,
+    ContextType
+  >;
+  username?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+}>;
+
+export type GqlMeasurementPageResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['MeasurementPage'] = GqlResolversParentTypes['MeasurementPage'],
+> = ResolversObject<{
+  measurements?: Resolver<
+    Array<GqlResolversTypes['Measurement']>,
+    ParentType,
+    ContextType
+  >;
+  totalCount?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export type GqlMutationResolvers<
   ContextType = ApolloBaseContext,
@@ -800,6 +1028,18 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlQueryFilesByConfigFlatArgs, 'id'>
+  >;
+  measurement?: Resolver<
+    GqlResolversTypes['Measurement'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryMeasurementArgs, 'id'>
+  >;
+  measurements?: Resolver<
+    GqlResolversTypes['MeasurementPage'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryMeasurementsArgs, never>
   >;
   readyChecks?: Resolver<
     Array<GqlResolversTypes['ReadyCheckDescriptor']>,
@@ -889,6 +1129,60 @@ export type GqlSyncTreeRevisionResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type GqlTransferDerivedResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['TransferDerived'] = GqlResolversParentTypes['TransferDerived'],
+> = ResolversObject<{
+  subthresholdSlope?: Resolver<
+    GqlResolversTypes['DerivedSlope'],
+    ParentType,
+    ContextType
+  >;
+  thresholdVoltage?: Resolver<
+    GqlResolversTypes['DerivedValue'],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlTransferMeasurementResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['TransferMeasurement'] = GqlResolversParentTypes['TransferMeasurement'],
+> = ResolversObject<{
+  createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  createdBy?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  derived?: Resolver<
+    GqlResolversTypes['TransferDerived'],
+    ParentType,
+    ContextType
+  >;
+  description?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  eventId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  fileId?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  sampleCode?: Resolver<
+    Array<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  type?: Resolver<
+    GqlResolversTypes['MeasurementTypes'],
+    ParentType,
+    ContextType
+  >;
+  username?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type GqlUserResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['User'] = GqlResolversParentTypes['User'],
@@ -920,6 +1214,8 @@ export type GqlUserResolvers<
 
 export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
+  DerivedSlope?: GqlDerivedSlopeResolvers<ContextType>;
+  DerivedValue?: GqlDerivedValueResolvers<ContextType>;
   DirectoryEntry?: GqlDirectoryEntryResolvers<ContextType>;
   Event?: GqlEventResolvers<ContextType>;
   EventData?: GqlEventDataResolvers<ContextType>;
@@ -931,8 +1227,11 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   FileContent?: GqlFileContentResolvers<ContextType>;
   FileSyncOption?: GqlFileSyncOptionResolvers<ContextType>;
   FilesFlatPage?: GqlFilesFlatPageResolvers<ContextType>;
+  GeneralMeasurement?: GqlGeneralMeasurementResolvers<ContextType>;
   JSON?: GraphQLScalarType;
   JSONObject?: GraphQLScalarType;
+  Measurement?: GqlMeasurementResolvers<ContextType>;
+  MeasurementPage?: GqlMeasurementPageResolvers<ContextType>;
   Mutation?: GqlMutationResolvers<ContextType>;
   Pattern?: GqlPatternResolvers<ContextType>;
   Query?: GqlQueryResolvers<ContextType>;
@@ -942,5 +1241,7 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   SyncElementRevision?: GqlSyncElementRevisionResolvers<ContextType>;
   SyncFileRevision?: GqlSyncFileRevisionResolvers<ContextType>;
   SyncTreeRevision?: GqlSyncTreeRevisionResolvers<ContextType>;
+  TransferDerived?: GqlTransferDerivedResolvers<ContextType>;
+  TransferMeasurement?: GqlTransferMeasurementResolvers<ContextType>;
   User?: GqlUserResolvers<ContextType>;
 }>;

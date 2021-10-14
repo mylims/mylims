@@ -1,0 +1,54 @@
+fragment MeasurementFields on Measurement {
+  __typename
+  id
+  eventId
+  username
+  sampleCode
+  createdBy
+  fileId
+  description
+  createdAt
+}
+
+query MeasurementsFiltered(
+  $type: MeasurementTypes!
+  $limit: Int
+  $skip: Int
+  $filterBy: MeasurementFilterInput
+  $sortBy: MeasurementSortInput
+) {
+  measurements(
+    type: $type
+    limit: $limit
+    skip: $skip
+    filterBy: $filterBy
+    sortBy: $sortBy
+  ) {
+    totalCount
+    measurements {
+      ...MeasurementFields
+    }
+  }
+}
+
+query Measurement($id: String!) {
+  measurement(id: $id) {
+    ...MeasurementFields
+    ... on GeneralMeasurement {
+      derived
+    }
+    ... on TransferMeasurement {
+      transferDerived: derived {
+        thresholdVoltage {
+          index
+          value
+        }
+        subthresholdSlope {
+          medianSlope
+          toIndex
+          fromIndex
+        }
+      }
+    }
+  }
+}

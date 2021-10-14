@@ -59,7 +59,7 @@ export default class MeasurementController {
 
       // Create user relationship
       const user = await this._getOrCreateUser(restParams.username);
-      const userId = (user._id as ObjectId).toHexString();
+      const userId = user._id.toHexString();
       const sample = await this._getOrCreateSample(userId, sampleCodeList);
 
       // Create the measurement
@@ -81,7 +81,7 @@ export default class MeasurementController {
       }
       sample.activities.push({
         type: ActivityType.MEASUREMENT,
-        measurementId: (measurement._id as ObjectId).toHexString(),
+        measurementId: measurement._id.toHexString(),
         date: new Date(),
       });
       await sample.save();
