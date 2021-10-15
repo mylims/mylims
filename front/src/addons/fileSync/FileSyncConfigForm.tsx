@@ -168,9 +168,9 @@ export default function FileSyncConfigForm({
                         </Button>
                       </h3>
                       <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-                        {values.topics.map((topic, index) => (
+                        {values.topics.map((_, index) => (
                           <TopicsEdit
-                            key={topic}
+                            key={`topic-${index}`}
                             remove={remove}
                             index={index}
                           />
