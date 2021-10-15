@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { API_URL } from '@/../env';
 import {
   Button,
   Color,
@@ -13,7 +14,6 @@ import {
   Td,
   Variant,
 } from '@/components/tailwind-ui';
-import { API_URL } from '@/../env';
 
 interface MeasurementRowProps {
   id: string;
