@@ -32,12 +32,12 @@ export default function MeasurementsList() {
   const pageNum = query.page !== null ? parseInt(query.page, 10) : 1;
   const { loading, error, data } = useMeasurementsFilteredQuery({
     variables: {
-      type: MeasurementTypes.TRANSFER,
+      type: (query.type?.value ?? MeasurementTypes.GENERAL) as MeasurementTypes,
       skip: (pageNum - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
       filterBy: {
         username: query.username,
-        sampleCode: query.sampleCode,
+        sampleCode: query.sampleCode?.split(','),
       },
     },
   });

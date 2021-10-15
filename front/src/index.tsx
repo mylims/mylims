@@ -14,11 +14,12 @@ import App from './pages/App';
 import Eln from './pages/eln';
 import Users from './pages/eln/users';
 import Login from './pages/login';
-
+// Measurements
+import MeasurementsList from './pages/measurements/MeasurementsList';
+import MeasurementDetail from './pages/measurements/MeasurementDetail';
+// Events
 import EventsList from '@/addons/events/pages/EventsList';
 import EventDetail from '@/addons/events/pages/EventDetail';
-import MeasurementsList from '@/pages/measurements/MeasurementsList';
-import MeasurementDetail from '@/pages/measurements/MeasurementDetail';
 
 interface RouteType {
   Component: React.ComponentType<Record<string, never>>;

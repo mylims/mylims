@@ -2,15 +2,18 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { useQuery } from './useQuery';
 
-import { MeasurementSortField, SortDirection } from '@/generated/graphql';
+import {
+  MeasurementSortField,
+  MeasurementTypes,
+  SortDirection,
+} from '@/generated/graphql';
 
 type Nullable<T> = { [P in keyof T]: T[P] | null };
 interface FilterQuery {
   page: string;
-  type: string;
+  type: { value: MeasurementTypes; label: string };
   username: string;
-  sampleCode: string[];
-  createdBy: string;
+  sampleCode: string;
   sortField: { value: MeasurementSortField; label: string };
   sortDirection: { value: SortDirection; label: string };
 }
@@ -37,11 +40,13 @@ export function useSetMeasurementQuery() {
             search.set(key, value as FilterQuery['page']);
             break;
           }
+          case 'type':
           case 'sortField':
           case 'sortDirection': {
             search.set(
               key,
-              (value as FilterQuery['sortField' | 'sortDirection']).value,
+              (value as FilterQuery['sortField' | 'sortDirection' | 'type'])
+                .value,
             );
             break;
           }
@@ -61,19 +66,18 @@ export function useFilterMeasurementQuery(): [
 ] {
   const setQuery = useSetMeasurementQuery();
   const query = useQuery();
-  const sampleCode = query.sampleCode?.split(',') ?? null;
   const sortField =
     (query.sortField as MeasurementSortField) || MeasurementSortField.CREATEDAT;
   const sortDirection =
     (query.sortDirection as SortDirection) || SortDirection.DESC;
+  const type = (query.type ?? MeasurementTypes.GENERAL) as MeasurementTypes;
 
   return [
     {
       page: query.page ?? null,
-      type: query.type ?? null,
+      type: { value: type, label: type },
       username: query.username ?? null,
-      sampleCode,
-      createdBy: query.createdBy ?? null,
+      sampleCode: query.sampleCode ?? null,
       sortField: { value: sortField, label: selectField[sortField] },
       sortDirection: {
         value: sortDirection,

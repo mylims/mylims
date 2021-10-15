@@ -13,6 +13,7 @@ import {
   Td,
   Variant,
 } from '@/components/tailwind-ui';
+import { API_URL } from '@/../env';
 
 interface MeasurementRowProps {
   id: string;
@@ -61,7 +62,10 @@ export default function MeasurementRow({
             </Button>
           </Link>
           {fileId && (
-            <Link title="download file" to={`/event/detail/${fileId}`}>
+            <Link
+              title="download file"
+              to={`${API_URL}/addons/file-sync/file-content?id=${fileId}`}
+            >
               <Button
                 color={Color.neutral}
                 roundness={Roundness.circular}

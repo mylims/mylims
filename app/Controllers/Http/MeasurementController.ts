@@ -107,7 +107,12 @@ export default class MeasurementController {
     const cursor = User.query({ usernames: { $elemMatch: { $eq: username } } });
     const length = await cursor.count();
     if (length === 0) {
-      return User.create({ usernames: [username], role: 'MEMBER' });
+      return User.create({
+        usernames: [username],
+        role: 'MEMBER',
+        emails: [],
+        authMethods: {},
+      });
     } else if (length === 1) {
       return cursor.firstOrFail();
     } else {
