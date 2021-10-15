@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
-import { useEventQuery } from '@/generated/graphql';
+import { EventStatusLabel } from '@/components/EventStatusLabel';
 import {
   Alert,
   AlertType,
@@ -10,8 +10,8 @@ import {
   SimpleListContainer,
   Spinner,
 } from '@/components/tailwind-ui';
+import { useEventQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
-import { EventStatusLabel } from '@/components/EventStatusLabel';
 
 export default function EventDetail() {
   const { id } = useParams<{ id: string }>();

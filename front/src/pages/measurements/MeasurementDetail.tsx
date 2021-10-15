@@ -2,8 +2,8 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
-import { useMeasurementQuery } from '@/generated/graphql';
 import { Alert, AlertType, Card, Spinner } from '@/components/tailwind-ui';
+import { useMeasurementQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
 
 export default function MeasurementDetail() {

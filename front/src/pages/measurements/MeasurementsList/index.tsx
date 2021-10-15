@@ -1,7 +1,7 @@
 import React from 'react';
 
-import MeasurementRow from './MeasurementRow';
 import MeasurementFormFilter from './MeasurementFormFilter';
+import MeasurementRow from './MeasurementRow';
 
 import ElnLayout from '@/components/ElnLayout';
 import TableEmpty from '@/components/TableEmpty';
@@ -32,7 +32,7 @@ export default function MeasurementsList() {
   const pageNum = query.page !== null ? parseInt(query.page, 10) : 1;
   const { loading, error, data } = useMeasurementsFilteredQuery({
     variables: {
-      type: (query.type?.value ?? MeasurementTypes.GENERAL) as MeasurementTypes,
+      type: query.type?.value ?? MeasurementTypes.GENERAL,
       skip: (pageNum - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
       filterBy: {
