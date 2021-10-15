@@ -28,17 +28,47 @@ export default function MeasurementDetail() {
       </Card.Header>
       <Card.Body>
         <div className="grid grid-cols-3 gap-4 mb-4">
-          <MeasurementField title="Topic" description={measurement.username} />
+          <MeasurementField
+            title="Sample code"
+            description={measurement.sampleCode.join(',')}
+          />
+          <MeasurementField
+            title="Owner's username"
+            description={measurement.username}
+          />
           <MeasurementField
             title="Creation date"
             description={formatDate(measurement.createdAt)}
           />
           <MeasurementField
-            title="Relative path"
-            description={measurement.sampleCode.join('/')}
+            title="Created by"
+            description={measurement.createdBy}
           />
+          {measurement.fileId && (
+            <MeasurementField title="File" description={measurement.fileId} />
+          )}
         </div>
       </Card.Body>
+      {measurement.__typename === 'TransferMeasurement' &&
+        measurement.transferDerived && (
+          <Card.Footer>
+            <div className="mb-4 text-xl font-semibold">Derived data</div>
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <div>Threshold voltage</div>
+                <div className="text-neutral-400">
+                  {measurement.transferDerived.thresholdVoltage.value}
+                </div>
+              </div>
+              <div>
+                <div>Subthreshold slope</div>
+                <div className="text-neutral-400">
+                  {measurement.transferDerived.subthresholdSlope.medianSlope}
+                </div>
+              </div>
+            </div>
+          </Card.Footer>
+        )}
     </Card>
   );
 }

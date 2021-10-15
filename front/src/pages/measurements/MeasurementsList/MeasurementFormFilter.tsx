@@ -11,7 +11,11 @@ import {
   SelectField,
   Variant,
 } from '@/components/tailwind-ui';
-import { MeasurementSortField, SortDirection } from '@/generated/graphql';
+import {
+  MeasurementSortField,
+  MeasurementTypes,
+  SortDirection,
+} from '@/generated/graphql';
 import {
   selectOrder,
   selectField,
@@ -25,18 +29,20 @@ interface MeasurementFormFilterProps {
 }
 
 const schema = yup.object().shape({
-  topic: yup.string().nullable(),
-  processorId: yup.string().nullable(),
-  status: yup
-    .array()
-    .of(
-      yup.object().shape({
-        value: yup.string().required(),
-        label: yup.string().required(),
-      }),
-    )
-    .nullable(),
+  type: yup
+    .object()
+    .shape({
+      value: yup.string().required(),
+      label: yup.string().required(),
+    })
+    .required(),
+  username: yup.string().nullable(),
+  sampleCode: yup.string().nullable(),
 });
+const selectTypeOptions = [
+  { value: MeasurementTypes.GENERAL, label: MeasurementTypes.GENERAL },
+  { value: MeasurementTypes.TRANSFER, label: MeasurementTypes.TRANSFER },
+];
 const selectOrderOptions = [
   { value: SortDirection.ASC, label: selectOrder[SortDirection.ASC] },
   { value: SortDirection.DESC, label: selectOrder[SortDirection.DESC] },
@@ -68,15 +74,20 @@ export default function MeasurementFormFilter({
       onSubmit={onSubmit}
     >
       <div>
-        <Link to="/event/list">
+        <Link to="/measurement/list">
           <Button variant={Variant.secondary} color={Color.danger}>
             Remove filters
           </Button>
         </Link>
 
-        <div className="grid grid-cols-4 gap-4 my-4">
-          <InputField name="topic" label="Topic" />
-          <InputField name="processorId" label="Processor Id" />
+        <div className="grid grid-cols-3 gap-4 my-4">
+          <SelectField
+            options={selectTypeOptions}
+            name="type"
+            label="Measurement type"
+          />
+          <InputField name="username" label="Username" />
+          <InputField name="sampleCode" label="Sample code" />
           <SelectField
             options={selectFieldOptions}
             name="sortField"
