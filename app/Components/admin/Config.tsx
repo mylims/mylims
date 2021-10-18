@@ -188,7 +188,7 @@ export default function Config(props: { config: ConfigProps }) {
         <Card>
           <Card.Header>
             <h3 className="text-lg font-medium leading-6 text-neutral-900">
-              File sync
+              File storage location
             </h3>
           </Card.Header>
           <Card.Body>
