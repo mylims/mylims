@@ -1,4 +1,4 @@
-query Event($id: String!) {
+query Event($id: ID!) {
   event(id: $id) {
     id
     topic

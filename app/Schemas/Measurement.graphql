@@ -6,7 +6,7 @@ type Query {
     filterBy: MeasurementFilterInput
     sortBy: MeasurementSortInput
   ): MeasurementPage!
-  measurement(id: String!): Measurement!
+  measurement(id: ID!): Measurement!
 }
 
 # Paginated list of measurements
@@ -36,7 +36,7 @@ enum MeasurementTypes {
 }
 
 interface Measurement {
-  id: String!
+  id: ID!
   type: MeasurementTypes!
   eventId: String!
   username: String!
@@ -48,7 +48,7 @@ interface Measurement {
 }
 
 type GeneralMeasurement implements Measurement {
-  id: String!
+  id: ID!
   type: MeasurementTypes!
   eventId: String!
   username: String!

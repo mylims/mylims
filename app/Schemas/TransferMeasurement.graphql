@@ -1,5 +1,5 @@
 type TransferMeasurement implements Measurement {
-  id: String!
+  id: ID!
   type: MeasurementTypes!
   eventId: String!
   username: String!

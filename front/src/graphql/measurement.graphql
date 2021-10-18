@@ -31,7 +31,7 @@ query MeasurementsFiltered(
   }
 }
 
-query Measurement($id: String!) {
+query Measurement($id: ID!) {
   measurement(id: $id) {
     ...MeasurementFields
     ... on GeneralMeasurement {
