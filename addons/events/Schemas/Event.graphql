@@ -5,7 +5,7 @@ type Query {
     filterBy: EventFilterInput
     sortBy: EventSortInput
   ): EventPage!
-  event(id: String!): Event!
+  event(id: ID!): Event!
 }
 
 # Paginated list of events
@@ -54,7 +54,7 @@ type EventHistory {
 }
 
 type EventFile {
-  id: String!
+  id: ID!
   name: String!
 }
 type EventDataFile implements EventData {
@@ -70,7 +70,7 @@ type EventProcessor {
 
 # Main event type
 type Event {
-  id: String!
+  id: ID!
   topic: String!
   data: EventData!
   createdAt: DateTime!

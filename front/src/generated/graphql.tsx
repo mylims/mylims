@@ -65,7 +65,7 @@ export type EditFileSyncOptionInput = {
 export type Event = {
   createdAt: Scalars['DateTime'];
   data: EventData;
-  id: Scalars['String'];
+  id: Scalars['ID'];
   processors: Array<EventProcessor>;
   topic: Scalars['String'];
 };
@@ -85,7 +85,7 @@ export enum EventDataType {
 }
 
 export type EventFile = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
   name: Scalars['String'];
 };
 
@@ -194,7 +194,7 @@ export type GeneralMeasurement = Measurement & {
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
   fileId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
+  id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: MeasurementTypes;
   username: Scalars['String'];
@@ -206,7 +206,7 @@ export type Measurement = {
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
   fileId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
+  id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: MeasurementTypes;
   username: Scalars['String'];
@@ -296,7 +296,7 @@ export type QueryDirectoryTreeArgs = {
 };
 
 export type QueryEventArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 export type QueryEventsArgs = {
@@ -328,7 +328,7 @@ export type QueryFilesByConfigFlatArgs = {
 };
 
 export type QueryMeasurementArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 export type QueryMeasurementsArgs = {
@@ -405,7 +405,7 @@ export type TransferMeasurement = Measurement & {
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
   fileId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
+  id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: MeasurementTypes;
   username: Scalars['String'];
@@ -421,7 +421,7 @@ export type User = {
 };
 
 export type EventQueryVariables = Exact<{
-  id: Scalars['String'];
+  id: Scalars['ID'];
 }>;
 
 export type EventQuery = {
@@ -734,7 +734,7 @@ export type MeasurementsFilteredQuery = {
 };
 
 export type MeasurementQueryVariables = Exact<{
-  id: Scalars['String'];
+  id: Scalars['ID'];
 }>;
 
 export type MeasurementQuery = {
@@ -825,7 +825,7 @@ export const MeasurementFieldsFragmentDoc = gql`
   }
 `;
 export const EventDocument = gql`
-  query Event($id: String!) {
+  query Event($id: ID!) {
     event(id: $id) {
       id
       topic
@@ -1710,7 +1710,7 @@ export function refetchMeasurementsFilteredQuery(
   return { query: MeasurementsFilteredDocument, variables: variables };
 }
 export const MeasurementDocument = gql`
-  query Measurement($id: String!) {
+  query Measurement($id: ID!) {
     measurement(id: $id) {
       ...MeasurementFields
       ... on GeneralMeasurement {

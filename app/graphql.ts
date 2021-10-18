@@ -79,7 +79,7 @@ export type GqlEvent = {
   __typename?: 'Event';
   createdAt: Scalars['DateTime'];
   data: GqlEventData;
-  id: Scalars['String'];
+  id: Scalars['ID'];
   processors: Array<GqlEventProcessor>;
   topic: Scalars['String'];
 };
@@ -101,7 +101,7 @@ export enum GqlEventDataType {
 
 export type GqlEventFile = {
   __typename?: 'EventFile';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   name: Scalars['String'];
 };
 
@@ -217,7 +217,7 @@ export type GqlGeneralMeasurement = GqlMeasurement & {
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
   fileId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
+  id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: GqlMeasurementTypes;
   username: Scalars['String'];
@@ -229,7 +229,7 @@ export type GqlMeasurement = {
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
   fileId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
+  id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: GqlMeasurementTypes;
   username: Scalars['String'];
@@ -323,7 +323,7 @@ export type GqlQueryDirectoryTreeArgs = {
 };
 
 export type GqlQueryEventArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 export type GqlQueryEventsArgs = {
@@ -355,7 +355,7 @@ export type GqlQueryFilesByConfigFlatArgs = {
 };
 
 export type GqlQueryMeasurementArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 export type GqlQueryMeasurementsArgs = {
@@ -439,7 +439,7 @@ export type GqlTransferMeasurement = GqlMeasurement & {
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
   fileId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
+  id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: GqlMeasurementTypes;
   username: Scalars['String'];
@@ -730,7 +730,7 @@ export type GqlEventResolvers<
 > = ResolversObject<{
   createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
   data?: Resolver<GqlResolversTypes['EventData'], ParentType, ContextType>;
-  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
   processors?: Resolver<
     Array<GqlResolversTypes['EventProcessor']>,
     ParentType,
@@ -762,7 +762,7 @@ export type GqlEventFileResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['EventFile'] = GqlResolversParentTypes['EventFile'],
 > = ResolversObject<{
-  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -871,7 +871,7 @@ export type GqlGeneralMeasurementResolvers<
     ParentType,
     ContextType
   >;
-  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
   sampleCode?: Resolver<
     Array<GqlResolversTypes['String']>,
     ParentType,
@@ -918,7 +918,7 @@ export type GqlMeasurementResolvers<
     ParentType,
     ContextType
   >;
-  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
   sampleCode?: Resolver<
     Array<GqlResolversTypes['String']>,
     ParentType,
@@ -1168,7 +1168,7 @@ export type GqlTransferMeasurementResolvers<
     ParentType,
     ContextType
   >;
-  id?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
   sampleCode?: Resolver<
     Array<GqlResolversTypes['String']>,
     ParentType,
