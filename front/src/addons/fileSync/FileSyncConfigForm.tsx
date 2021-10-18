@@ -22,6 +22,7 @@ import {
   useReadyChecksQuery,
 } from '@/generated/graphql';
 import { omitDeep } from '@/utils/omit-deep';
+import HelpButton from '@/components/HelpButton';
 
 import PatternEdit from './PatternEdit';
 import ReadyCheckEdit from './ReadyCheckEdit';
@@ -103,11 +104,14 @@ export default function FileSyncConfigForm({
                   {({ push, remove }) => (
                     <>
                       <h3 className="font-medium leading-6 text-md text-cool-gray-900">
-                        Patterns
+                        File filtering patterns
+                        <HelpButton
+                          description="Add a pattern (like *.csv) for including or excluding this kind of files"
+                          className="mx-3"
+                        />
                         <Button
                           size={Size.xSmall}
                           variant={Variant.secondary}
-                          className="ml-2"
                           onClick={() => push({ type: 'include', pattern: '' })}
                         >
                           + add
@@ -131,10 +135,13 @@ export default function FileSyncConfigForm({
                       <>
                         <h3 className="font-medium leading-6 text-md text-cool-gray-900">
                           Ready checks
+                          <HelpButton
+                            description="How to know if a file isn't changing and is ready to be imported"
+                            className="mx-3"
+                          />
                           <Button
                             size={Size.xSmall}
                             variant={Variant.secondary}
-                            className="ml-2"
                             onClick={() => push({ name: '' })}
                           >
                             + add
@@ -160,10 +167,13 @@ export default function FileSyncConfigForm({
                     <>
                       <h3 className="font-medium leading-6 text-md text-cool-gray-900">
                         Topics
+                        <HelpButton
+                          description="Topics that a different processor will handle"
+                          className="mx-3"
+                        />
                         <Button
                           size={Size.xSmall}
                           variant={Variant.secondary}
-                          className="ml-2"
                           onClick={() => push('')}
                         >
                           + add
