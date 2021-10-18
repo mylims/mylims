@@ -61,7 +61,7 @@ export default function AddonPage(props: { availableAddons: Addon[] }) {
               className="space-y-2"
             >
               <Button type="submit" className="mb-2">
-                Save
+                Save and reboot
               </Button>
               <Table
                 Header={Header}
