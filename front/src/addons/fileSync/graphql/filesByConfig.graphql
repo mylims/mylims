@@ -10,6 +10,7 @@ query FilesByConfig($id: String!, $path: [String!]!) {
   filesByConfig(configId: $id, path: $path) {
     __typename
     _id
+    ignoredFiles
     files {
       ...RevisionFields
       countRevisions

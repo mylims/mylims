@@ -13,12 +13,15 @@ interface AggregateFilesByConfig {
 
 const resolvers: GqlResolvers = {
   Query: {
-    async filesByConfig(_, { configId, path }) {
+    async filesByConfig(_, { configId, path, limit }) {
+      const fileLimit = limit ?? 50;
+      const id = new ObjectId(configId);
+
       // Queries for files by configId and path
-      const syncFiles = await SyncFile.query({
-        '_id.configId': new ObjectId(configId),
-        path,
-      }).all();
+      const syncFilesCursor = SyncFile.query({ '_id.configId': id, path });
+      const filesCount = await syncFilesCursor.count();
+      const ignoredFiles = filesCount > fileLimit ? filesCount - fileLimit : 0;
+      const syncFiles = await syncFilesCursor.limit(fileLimit).all();
       const files = syncFiles.map<GqlSyncFileRevision>(
         ({ _id: { relativePath }, revisions, filename }) => {
           const latestRevision = revisions[0];
@@ -40,9 +43,7 @@ const resolvers: GqlResolvers = {
       );
 
       // Queries for directories for configId and path
-      let dirQuery: Record<string, unknown> = {
-        '_id.configId': new ObjectId(configId),
-      };
+      let dirQuery: Record<string, unknown> = { '_id.configId': id };
       for (let index = 0; index < path.length; index++) {
         dirQuery[`path.${index}`] = path[index];
       }
@@ -76,7 +77,12 @@ const resolvers: GqlResolvers = {
         }))
         .toArray();
 
-      return { _id: `${configId}:root/${path.join('/')}`, files, dirs };
+      return {
+        _id: `${configId}:root/${path.join('/')}`,
+        files,
+        dirs,
+        ignoredFiles,
+      };
     },
   },
 };

@@ -19,7 +19,7 @@ export default function DirRow({ value }: { value: DirSync }) {
 
   useEffect(() => {
     if (called && !loading && data && !value.children) {
-      const { files, dirs } = data.filesByConfig;
+      const { files, dirs, ignoredFiles } = data.filesByConfig;
       context.setState(
         changeNodeValue(context.state, value.path, value.id, (node) => {
           if (node.type === TreeType.dir) {
@@ -42,6 +42,13 @@ export default function DirRow({ value }: { value: DirSync }) {
                 expanded: false,
               })),
             ];
+            if (ignoredFiles > 0) {
+              node.children.unshift({
+                id: 'ignored',
+                ignoredFiles,
+                type: TreeType.limit as const,
+              });
+            }
           }
           return node;
         }),
@@ -61,7 +68,9 @@ export default function DirRow({ value }: { value: DirSync }) {
             onExpand={() => {
               context.setState(
                 changeNodeValue(context.state, value.path, value.id, (node) => {
-                  node.expanded = !node.expanded;
+                  if (node.type !== TreeType.limit) {
+                    node.expanded = !node.expanded;
+                  }
                   return node;
                 }),
               );

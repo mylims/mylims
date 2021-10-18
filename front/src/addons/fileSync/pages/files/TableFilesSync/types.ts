@@ -12,6 +12,7 @@ export interface TableFilesSyncProps {
 export enum TreeType {
   file = 'file',
   dir = 'dir',
+  limit = 'limit',
 }
 export interface SyncBase {
   id: string;
@@ -32,7 +33,12 @@ export interface DirSync extends SyncBase {
   type: TreeType.dir;
   children: TreeSync[] | null;
 }
-export type TreeSync = FileSync | DirSync;
+export interface LimitSync {
+  id: string;
+  type: TreeType.limit;
+  ignoredFiles: number;
+}
+export type TreeSync = FileSync | DirSync | LimitSync;
 
 export interface TreeContextType {
   state: TreeSync[];

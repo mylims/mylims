@@ -343,6 +343,7 @@ export type GqlQueryFileSyncOptionArgs = {
 
 export type GqlQueryFilesByConfigArgs = {
   configId: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
   path: Array<Scalars['String']>;
 };
 
@@ -423,6 +424,7 @@ export type GqlSyncTreeRevision = {
   _id: Scalars['String'];
   dirs: Array<GqlSyncDirRevision>;
   files: Array<GqlSyncFileRevision>;
+  ignoredFiles: Scalars['Int'];
 };
 
 export type GqlTransferDerived = {
@@ -1126,6 +1128,7 @@ export type GqlSyncTreeRevisionResolvers<
     ParentType,
     ContextType
   >;
+  ignoredFiles?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
