@@ -73,6 +73,16 @@ export default class AdminsController {
         break;
       }
 
+      case 'fileSync': {
+        const { interval, root } = currConf;
+        if (interval && interval !== '0') {
+          setConfig(confKey, currConf);
+        } else {
+          setConfig(confKey, { root });
+        }
+        break;
+      }
+
       default: {
         setConfig(confKey, currConf);
         break;
