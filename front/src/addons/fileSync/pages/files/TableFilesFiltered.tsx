@@ -179,10 +179,11 @@ export default function TableFilesFiltered({
         </Link>
 
         <div className="grid grid-cols-4 gap-4 my-4">
-          <InputField name="minSize" label="Min size" />
-          <InputField name="maxSize" label="Max size" />
-          <DatePickerField name="minDate" label="Min date" />
-          <DatePickerField name="maxDate" label="Max date" />
+          <InputField
+            className="col-span-2"
+            name="filename"
+            label="File name"
+          />
           <div className="col-span-2">
             <MultiSearchSelectField
               {...selectTags}
@@ -192,6 +193,10 @@ export default function TableFilesFiltered({
               getBadgeColor={({ value }: TagsMultiSearch) => getTagColor(value)}
             />
           </div>
+          <InputField name="minSize" label="Min size" />
+          <InputField name="maxSize" label="Max size" />
+          <DatePickerField name="minDate" label="Min date" />
+          <DatePickerField name="maxDate" label="Max date" />
           <SelectField
             options={selectFieldOptions}
             name="sortField"

@@ -12,10 +12,15 @@ import {
 
 import { SyncFile } from '../Models/SyncFile';
 
+function escapeRegex(text: string) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
 const resolvers: GqlResolvers = {
   Query: {
     async filesByConfigFlat(_, { id, limit, skip, filterBy, sortBy }) {
       const {
+        filename,
         minSize = 0,
         maxSize = Infinity,
         minDate = new Date(0),
@@ -35,6 +40,10 @@ const resolvers: GqlResolvers = {
       };
       if (status && status.length !== 0) {
         query['revisions.0.status'] = { $in: status };
+      }
+      if (filename) {
+        const regex = new RegExp(escapeRegex(filename), 'gi');
+        query['_id.relativePath'] = regex;
       }
       let fileCursor = SyncFile.query(query).sortBy(
         sortField,

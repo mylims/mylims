@@ -9,6 +9,7 @@ import filesizeParser from '@/utils/filesize-parser';
 type Nullable<T> = { [P in keyof T]: T[P] | null };
 interface FilterQuery {
   page: string;
+  filename: string;
   minSize: string;
   maxSize: string;
   minDate: Date;
@@ -60,8 +61,9 @@ export function useSetFilesQuery(base: string) {
             search.set(key, status);
             break;
           }
-          case 'page': {
-            search.set(key, value as FilterQuery['page']);
+          case 'page':
+          case 'filename': {
+            search.set(key, value as FilterQuery['page' | 'filename']);
             break;
           }
           case 'sortField':
@@ -107,6 +109,7 @@ export function useFilterFilesQuery(
   return [
     {
       page: query.page ?? null,
+      filename: query.filename ?? '',
       status: statusList,
       minSize,
       maxSize,

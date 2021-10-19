@@ -9,6 +9,7 @@ type Query {
 }
 
 input FilesFilterInput {
+  filename: String
   minSize: Int
   maxSize: Int
   minDate: DateTime
