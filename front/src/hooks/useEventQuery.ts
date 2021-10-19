@@ -1,4 +1,4 @@
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { useQuery } from './useQuery';
 
@@ -32,11 +32,11 @@ export const selectField = {
 export type EventQueryType = Nullable<FilterQuery>;
 export function useSetEventQuery() {
   const router = useHistory();
-  const search = new URLSearchParams(useLocation().search);
+  const search = new URLSearchParams();
   return (newQuery: EventQueryType) => {
     // set keys to url search params
     for (const [key, value] of Object.entries(newQuery)) {
-      if (value !== null) {
+      if (value) {
         switch (key) {
           case 'status': {
             const status = (value as FilterQuery['status'])
@@ -89,8 +89,8 @@ export function useFilterEventQuery(): [
   return [
     {
       page: query.page ?? null,
-      topic: query.topic ?? null,
-      processorId: query.processorId ?? null,
+      topic: query.topic ?? '',
+      processorId: query.processorId ?? '',
       status: statusList,
       sortField: { value: sortField, label: selectField[sortField] },
       sortDirection: {
