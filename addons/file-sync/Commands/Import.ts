@@ -15,6 +15,7 @@ import isMyFileReady, {
 import type DataDrive from '@ioc:Zakodium/DataDrive';
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
+import type { ConfigProps } from 'App/AppConfig';
 import { GqlEventDataType } from 'App/graphql';
 
 import { Event } from '../../events/Models/Event';
@@ -40,15 +41,7 @@ export default class Import extends BaseCommand {
   })
   public fileSyncOptionId: string;
 
-  @flags.number({
-    description:
-      'Interval, import runs one time execution if it is not provided.',
-  })
-  public interval: number;
-
-  public static settings = {
-    loadApp: true,
-  };
+  public static settings = { loadApp: true };
 
   private deps: {
     SyncFile: typeof SyncFile;
@@ -65,6 +58,7 @@ export default class Import extends BaseCommand {
     const { default: DataDrive } = await import('@ioc:Zakodium/DataDrive');
     const { File } = await import('../Models/File');
     const { Event } = await import('../../events/Models/Event');
+    const { getConfig } = await import('App/AppConfig');
 
     this.deps = {
       SyncFile,
@@ -75,10 +69,12 @@ export default class Import extends BaseCommand {
       Event,
     };
 
-    if (this.interval !== undefined) {
+    const { interval }: ConfigProps['fileSync'] = getConfig('fileSync');
+
+    if (interval !== undefined) {
       while (true) {
         await this.executeImporter();
-        await this.wait();
+        await this.wait(parseInt(interval, 10));
       }
     } else {
       await this.executeImporter();
@@ -248,8 +244,8 @@ export default class Import extends BaseCommand {
     );
   }
 
-  private async wait() {
-    this.logger.info(`waiting ${this.interval}s...`);
-    await asyncTimeout(this.interval * 1000);
+  private async wait(interval: number) {
+    this.logger.info(`waiting ${interval}s...`);
+    await asyncTimeout(interval * 1000);
   }
 }

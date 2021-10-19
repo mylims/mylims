@@ -8,9 +8,15 @@ import { useBackendUrl } from '../hooks/useBackendUrl';
 import Admin from '../layouts/Admin';
 import { Card, Input, Button } from '../tailwind-ui';
 
+const SubmitButton = () => <Button type="submit">Update and reboot</Button>;
+
 export default function Config(props: { config: ConfigProps }) {
   const { makeUrl } = useAdonisContext();
   const backendUrl = useBackendUrl();
+
+  const changeConfAction = makeUrl('AdminsController.changeConf', undefined, {
+    prefixUrl: backendUrl,
+  });
 
   return (
     <Admin>
@@ -23,13 +29,7 @@ export default function Config(props: { config: ConfigProps }) {
             </h3>
           </Card.Header>
           <Card.Body>
-            <form
-              action={makeUrl('AdminsController.changeConf', undefined, {
-                prefixUrl: backendUrl,
-              })}
-              method="POST"
-              className="space-y-2"
-            >
+            <form action={changeConfAction} method="POST" className="space-y-2">
               <input
                 type="hidden"
                 id="confkey"
@@ -43,7 +43,7 @@ export default function Config(props: { config: ConfigProps }) {
                 name="sessionAge"
                 defaultValue={props.config.session.sessionAge}
               />
-              <Button type="submit">Update configuration</Button>
+              <SubmitButton />
             </form>
           </Card.Body>
         </Card>
@@ -56,13 +56,7 @@ export default function Config(props: { config: ConfigProps }) {
             </h3>
           </Card.Header>
           <Card.Body>
-            <form
-              action={makeUrl('AdminsController.changeConf', undefined, {
-                prefixUrl: backendUrl,
-              })}
-              method="POST"
-              className="space-y-2"
-            >
+            <form action={changeConfAction} method="POST" className="space-y-2">
               <input
                 type="hidden"
                 id="confkey"
@@ -83,7 +77,7 @@ export default function Config(props: { config: ConfigProps }) {
                 name="database"
                 defaultValue={props.config.mongodb.database}
               />
-              <Button type="submit">Update configuration</Button>
+              <SubmitButton />
             </form>
           </Card.Body>
         </Card>
@@ -96,13 +90,7 @@ export default function Config(props: { config: ConfigProps }) {
             </h3>
           </Card.Header>
           <Card.Body>
-            <form
-              action={makeUrl('AdminsController.changeConf', undefined, {
-                prefixUrl: backendUrl,
-              })}
-              method="POST"
-              className="space-y-2"
-            >
+            <form action={changeConfAction} method="POST" className="space-y-2">
               <input type="hidden" id="confkey" name="confkey" value="ldap" />
               <Input
                 id="id"
@@ -146,7 +134,7 @@ export default function Config(props: { config: ConfigProps }) {
                 name="baseUserDN"
                 defaultValue={props.config.ldap.baseUserDN}
               />
-              <Button type="submit">Update configuration</Button>
+              <SubmitButton />
             </form>
           </Card.Body>
         </Card>
@@ -159,13 +147,7 @@ export default function Config(props: { config: ConfigProps }) {
             </h3>
           </Card.Header>
           <Card.Body>
-            <form
-              action={makeUrl('AdminsController.changeConf', undefined, {
-                prefixUrl: backendUrl,
-              })}
-              method="POST"
-              className="space-y-2"
-            >
+            <form action={changeConfAction} method="POST" className="space-y-2">
               <input
                 type="hidden"
                 id="confkey"
@@ -179,7 +161,7 @@ export default function Config(props: { config: ConfigProps }) {
                 name="hostUrl"
                 defaultValue={props.config.tequila.hostUrl}
               />
-              <Button type="submit">Update configuration</Button>
+              <SubmitButton />
             </form>
           </Card.Body>
         </Card>
@@ -192,13 +174,7 @@ export default function Config(props: { config: ConfigProps }) {
             </h3>
           </Card.Header>
           <Card.Body>
-            <form
-              action={makeUrl('AdminsController.changeConf', undefined, {
-                prefixUrl: backendUrl,
-              })}
-              method="POST"
-              className="space-y-2"
-            >
+            <form action={changeConfAction} method="POST" className="space-y-2">
               <input
                 type="hidden"
                 id="confkey"
@@ -212,7 +188,14 @@ export default function Config(props: { config: ConfigProps }) {
                 name="root"
                 defaultValue={props.config.fileSync.root}
               />
-              <Button type="submit">Update configuration</Button>
+              <Input
+                id="interval"
+                label="Refetch interval for crons"
+                type="number"
+                name="interval"
+                defaultValue={props.config.fileSync.interval ?? ''}
+              />
+              <SubmitButton />
             </form>
           </Card.Body>
         </Card>

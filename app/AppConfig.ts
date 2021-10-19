@@ -69,6 +69,7 @@ export interface ConfigProps {
   };
   fileSync: {
     root: string;
+    interval?: string;
   };
   enabledAddons: string[];
 }

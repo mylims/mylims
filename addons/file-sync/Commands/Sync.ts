@@ -8,6 +8,8 @@ import { FileInfo, FileSynchronizer } from 'fs-synchronizer';
 
 import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
+import type { ConfigProps } from 'App/AppConfig';
+
 import type { FileSyncOption } from '../Models/FileSyncOption';
 import type { SyncFile, SyncState } from '../Models/SyncFile';
 
@@ -21,15 +23,7 @@ export default class Sync extends BaseCommand {
   @flags.string({ description: 'File sync option to use' })
   public fileSyncOptionId: string;
 
-  @flags.number({
-    description:
-      'Interval, sync runs one time execution if it is not provided.',
-  })
-  public interval: number;
-
-  public static settings = {
-    loadApp: true,
-  };
+  public static settings = { loadApp: true };
 
   private deps: {
     FileSyncOption: typeof FileSyncOption;
@@ -40,6 +34,7 @@ export default class Sync extends BaseCommand {
   public async run() {
     const { FileSyncOption } = await import('../Models/FileSyncOption');
     const { SyncFile, SyncState } = await import('../Models/SyncFile');
+    const { getConfig } = await import('App/AppConfig');
 
     this.deps = {
       FileSyncOption,
@@ -47,10 +42,11 @@ export default class Sync extends BaseCommand {
       SyncState,
     };
 
-    if (this.interval !== undefined) {
+    const { interval }: ConfigProps['fileSync'] = getConfig('fileSync');
+    if (interval !== undefined) {
       while (true) {
         await this.executeSynchronizer();
-        await this.wait();
+        await this.wait(parseInt(interval, 10));
       }
     } else {
       await this.executeSynchronizer();
@@ -222,8 +218,8 @@ export default class Sync extends BaseCommand {
     await file.save();
   }
 
-  private async wait() {
-    this.logger.info(`waiting ${this.interval}s...`);
-    await asyncTimeout(this.interval * 1000);
+  private async wait(interval: number) {
+    this.logger.info(`waiting ${interval}s...`);
+    await asyncTimeout(interval * 1000);
   }
 }
