@@ -15,7 +15,11 @@ import {
   Roundness,
   Variant,
 } from '@/components/tailwind-ui';
-import { EventStatus, useEventsByFileIdLazyQuery } from '@/generated/graphql';
+import {
+  EventStatus,
+  FileStatus,
+  useEventsByFileIdLazyQuery,
+} from '@/generated/graphql';
 import { formatBytes, formatDate } from '@/utils/formatFields';
 
 function getTagColor(status: EventStatus) {
@@ -85,17 +89,19 @@ export default function FileRow({ value }: { value: FileSync }) {
           <FileStatusLabel status={value.status} />
         </Td>
         <Td>
-          <a href={value.downloadUrl} target="_blank" rel="noreferrer">
-            <Button
-              color={Color.neutral}
-              roundness={Roundness.circular}
-              variant={Variant.secondary}
-              className="ml-2"
-              title="Download"
-            >
-              <DownloadIcon className="w-3 h-3" />
-            </Button>
-          </a>
+          {value.status !== FileStatus.IMPORTED ? null : (
+            <a href={value.downloadUrl} target="_blank" rel="noreferrer">
+              <Button
+                color={Color.neutral}
+                roundness={Roundness.circular}
+                variant={Variant.secondary}
+                className="ml-2"
+                title="Download"
+              >
+                <DownloadIcon className="w-3 h-3" />
+              </Button>
+            </a>
+          )}
         </Td>
       </tr>
       {value.expanded &&
