@@ -3,7 +3,7 @@ import React, { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { changeNodeValue, TreeContext } from './TreeContext';
-import { EventsProcessors, FileSync } from './types';
+import { EventsProcessors, FileSync, TreeType } from './types';
 
 import ExpandButton from '@/components/ExpandButton';
 import { FileStatusLabel } from '@/components/FileStatusLabel';
@@ -65,7 +65,9 @@ export default function FileRow({ value }: { value: FileSync }) {
             onExpand={() => {
               context.setState(
                 changeNodeValue(context.state, value.path, value.id, (node) => {
-                  node.expanded = !node.expanded;
+                  if (node.type !== TreeType.limit) {
+                    node.expanded = !node.expanded;
+                  }
                   return node;
                 }),
               );
