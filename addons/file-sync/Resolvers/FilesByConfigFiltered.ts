@@ -1,3 +1,4 @@
+import escapeStringRegexp from 'escape-string-regexp';
 import type { Filter } from 'mongodb';
 
 import Env from '@ioc:Adonis/Core/Env';
@@ -11,10 +12,6 @@ import {
 } from 'App/graphql';
 
 import { SyncFile } from '../Models/SyncFile';
-
-function escapeRegex(text: string) {
-  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}
 
 const resolvers: GqlResolvers = {
   Query: {
@@ -42,8 +39,10 @@ const resolvers: GqlResolvers = {
         query['revisions.0.status'] = { $in: status };
       }
       if (filename) {
-        const regex = new RegExp(escapeRegex(filename), 'gi');
-        query['_id.relativePath'] = regex;
+        query['_id.relativePath'] = {
+          $regex: escapeStringRegexp(filename),
+          $options: 'i',
+        };
       }
       let fileCursor = SyncFile.query(query).sortBy(
         sortField,
