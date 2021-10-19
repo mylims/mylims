@@ -45,6 +45,7 @@ interface FileSyncConfigFormProps {
   >['onSubmit'];
   submitLabel: string;
   initialValues?: EditFileSyncOptionInput;
+  children?: React.ReactNode;
 }
 
 export default function FileSyncConfigForm({
@@ -53,6 +54,7 @@ export default function FileSyncConfigForm({
   onSubmit,
   submitLabel,
   initialValues,
+  children,
 }: FileSyncConfigFormProps) {
   const router = useHistory();
 
@@ -85,6 +87,7 @@ export default function FileSyncConfigForm({
                 </h3>
               </Card.Header>
               <div className="p-4 space-y-4">
+                {children}
                 <FormError />
                 {initialValues && <Field name="id" label="id" type="hidden" />}
                 <ToggleField name="enabled" label="Enabled" />

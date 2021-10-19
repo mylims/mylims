@@ -49,7 +49,7 @@ export default function EditConfig() {
   }
 
   return (
-    <>
+    <div>
       {queryLoading ? (
         <Spinner className="w-10 h-10 text-danger-500" />
       ) : error ? (
@@ -60,15 +60,22 @@ export default function EditConfig() {
           Unexpected error {error.message}
         </Alert>
       ) : (
-        <FileSyncConfigForm
-          title="Edit synchronization"
-          submitLabel="Save"
-          initialValues={data?.fileSyncOption}
-          onSubmit={onSubmit}
-          loading={mutationLoading}
-        />
+        <>
+          <FileSyncConfigForm
+            title="Edit synchronization"
+            submitLabel="Save"
+            initialValues={data?.fileSyncOption}
+            onSubmit={onSubmit}
+            loading={mutationLoading}
+          >
+            <div>
+              <span className="font-medium">Synchronization Id: </span>
+              <span className="text-neutral-500">{id}</span>
+            </div>
+          </FileSyncConfigForm>
+        </>
       )}
-    </>
+    </div>
   );
 }
 EditConfig.getLayout = (page: React.ReactNode) => (
