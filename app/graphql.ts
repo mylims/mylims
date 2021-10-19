@@ -183,6 +183,7 @@ export type GqlFileSyncOptionPatternInput = {
 };
 
 export type GqlFilesFilterInput = {
+  filename?: Maybe<Scalars['String']>;
   maxDate?: Maybe<Scalars['DateTime']>;
   maxSize?: Maybe<Scalars['Int']>;
   minDate?: Maybe<Scalars['DateTime']>;
