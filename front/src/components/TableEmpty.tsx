@@ -10,16 +10,20 @@ interface TableEmptyProps {
 
 export default function TableEmpty({ titles }: TableEmptyProps) {
   return (
-    <>
-      <TableHeader titles={titles} />
-      <tr>
-        <Td colSpan={4} align="center">
-          <div className="flex flex-row justify-center text-neutral-500">
-            <InboxIcon className="w-5 h-5 mr-2" />
-            <span>Empty</span>
-          </div>
-        </Td>
-      </tr>
-    </>
+    <table>
+      <thead>
+        <TableHeader titles={titles} />
+      </thead>
+      <tbody>
+        <tr>
+          <Td colSpan={4} align="center">
+            <div className="flex flex-row justify-center text-neutral-500">
+              <InboxIcon className="w-5 h-5 mr-2" />
+              <span>Empty</span>
+            </div>
+          </Td>
+        </tr>
+      </tbody>
+    </table>
   );
 }
