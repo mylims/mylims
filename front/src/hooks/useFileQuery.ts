@@ -1,5 +1,5 @@
 import bytes from 'byte-size';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { useQuery } from './useQuery';
 
@@ -31,11 +31,11 @@ export const selectField = {
 };
 export function useSetFilesQuery(base: string) {
   const router = useHistory();
-  const search = new URLSearchParams(useLocation().search);
+  const search = new URLSearchParams();
   return (newQuery: Nullable<FilterQuery>) => {
     // set keys to url search params
     for (const [key, value] of Object.entries(newQuery)) {
-      if (value !== null) {
+      if (value) {
         switch (key) {
           case 'minSize':
           case 'maxSize': {
@@ -95,8 +95,8 @@ export function useFilterFilesQuery(
         const value = s.trim() as FileStatus;
         return { value, label: value };
       }) ?? [];
-  const minSize = query.minSize ? bytes(query.minSize).toString() : null;
-  const maxSize = query.maxSize ? bytes(query.maxSize).toString() : null;
+  const minSize = query.minSize ? bytes(query.minSize).toString() : '';
+  const maxSize = query.maxSize ? bytes(query.maxSize).toString() : '';
   const minDate = query.minDate ? new Date(query.minDate) : null;
   const maxDate = query.maxDate ? new Date(query.maxDate) : null;
   const sortField =

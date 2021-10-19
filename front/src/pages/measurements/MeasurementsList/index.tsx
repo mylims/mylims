@@ -37,7 +37,7 @@ export default function MeasurementsList() {
       limit: PAGE_SIZE,
       filterBy: {
         username: query.username,
-        sampleCode: query.sampleCode?.split(','),
+        sampleCode: query.sampleCode ? query.sampleCode.split(',') : null,
       },
     },
   });

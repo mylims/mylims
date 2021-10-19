@@ -1,4 +1,4 @@
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { useQuery } from './useQuery';
 
@@ -30,11 +30,11 @@ export const selectField = {
 export type MeasurementQueryType = Nullable<FilterQuery>;
 export function useSetMeasurementQuery() {
   const router = useHistory();
-  const search = new URLSearchParams(useLocation().search);
+  const search = new URLSearchParams();
   return (newQuery: MeasurementQueryType) => {
     // set keys to url search params
     for (const [key, value] of Object.entries(newQuery)) {
-      if (value !== null) {
+      if (value) {
         switch (key) {
           case 'page': {
             search.set(key, value as FilterQuery['page']);
@@ -76,8 +76,8 @@ export function useFilterMeasurementQuery(): [
     {
       page: query.page ?? null,
       type: { value: type, label: type },
-      username: query.username ?? null,
-      sampleCode: query.sampleCode ?? null,
+      username: query.username ?? '',
+      sampleCode: query.sampleCode ?? '',
       sortField: { value: sortField, label: selectField[sortField] },
       sortDirection: {
         value: sortDirection,
