@@ -8,7 +8,7 @@ import { TableFilesSyncProps, TreeType, TreeSync } from './types';
 
 import TableEmpty from '@/components/TableEmpty';
 import TableHeader from '@/components/TableHeader';
-import { Button, Table, Variant } from '@/components/tailwind-ui';
+import { Button, Table, Td, Variant } from '@/components/tailwind-ui';
 
 const titles = [
   { className: 'w-1/12', name: 'Relative path' },
@@ -22,8 +22,16 @@ export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
   const [state, setState] = useState<TreeSync[]>(() => {
     const filesQuery = data?.filesByConfig.files ?? [];
     const dirsQuery = data?.filesByConfig.dirs ?? [];
+    const ignoredFiles = data?.filesByConfig.ignoredFiles ?? 0;
     let tree: TreeSync[] = [];
 
+    if (ignoredFiles > 0) {
+      tree.push({
+        id,
+        type: TreeType.limit,
+        ignoredFiles,
+      });
+    }
     for (const dir of dirsQuery) {
       tree.push({
         id: dir.id,
@@ -71,9 +79,29 @@ export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
 }
 
 export function Row({ value }: { value: TreeSync }) {
-  return value.type === TreeType.file ? (
-    <FileRow value={value} />
-  ) : (
-    <DirRow value={value} />
-  );
+  switch (value.type) {
+    case TreeType.file: {
+      return <FileRow value={value} />;
+    }
+    case TreeType.dir: {
+      return <DirRow value={value} />;
+    }
+    case TreeType.limit: {
+      return (
+        <tr>
+          <Td className="ml-4 text-danger-500">
+            {value.ignoredFiles} files not being displayed
+          </Td>
+          <Td />
+          <Td />
+          <Td />
+          <Td />
+          <Td />
+        </tr>
+      );
+    }
+    default: {
+      throw new Error('Unknown type');
+    }
+  }
 }

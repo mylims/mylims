@@ -1,5 +1,9 @@
 type Query {
-  filesByConfig(configId: String!, path: [String!]!): SyncTreeRevision!
+  filesByConfig(
+    configId: String!
+    path: [String!]!
+    limit: Int
+  ): SyncTreeRevision!
 }
 
 interface SyncElementRevision {
@@ -14,6 +18,7 @@ type SyncTreeRevision {
   _id: String!
   files: [SyncFileRevision!]!
   dirs: [SyncDirRevision!]!
+  ignoredFiles: Int!
 }
 
 enum FileStatus {

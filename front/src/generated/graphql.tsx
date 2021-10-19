@@ -316,6 +316,7 @@ export type QueryFileSyncOptionArgs = {
 
 export type QueryFilesByConfigArgs = {
   configId: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
   path: Array<Scalars['String']>;
 };
 
@@ -391,6 +392,7 @@ export type SyncTreeRevision = {
   _id: Scalars['String'];
   dirs: Array<SyncDirRevision>;
   files: Array<SyncFileRevision>;
+  ignoredFiles: Scalars['Int'];
 };
 
 export type TransferDerived = {
@@ -594,6 +596,7 @@ export type FilesByConfigQuery = {
   filesByConfig: {
     __typename: 'SyncTreeRevision';
     _id: string;
+    ignoredFiles: number;
     files: Array<{
       countRevisions: number;
       status: FileStatus;
@@ -1332,6 +1335,7 @@ export const FilesByConfigDocument = gql`
     filesByConfig(configId: $id, path: $path) {
       __typename
       _id
+      ignoredFiles
       files {
         ...RevisionFields
         countRevisions
