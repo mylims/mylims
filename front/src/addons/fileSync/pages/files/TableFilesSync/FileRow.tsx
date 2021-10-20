@@ -36,6 +36,11 @@ function getTagColor(status: EventStatus) {
   }
 }
 
+type EventsByProcessor = Omit<EventsProcessors, 'status' | 'date'> & {
+  status?: EventStatus;
+  date?: Date;
+};
+
 export default function FileRow({ value }: { value: FileSync }) {
   const context = useContext(TreeContext);
   const [fetchChild, { called, data }] = useEventsByFileIdLazyQuery({
@@ -43,14 +48,21 @@ export default function FileRow({ value }: { value: FileSync }) {
   });
   const events = useMemo(() => {
     if (!data) return [];
-    let res: EventsProcessors[] = [];
+    let res: EventsByProcessor[] = [];
     for (const { topic, processors } of data.events.events) {
-      for (const { processorId, history } of processors) {
+      if (processors.length !== 0) {
+        for (const { processorId, history } of processors) {
+          res.push({
+            topic,
+            processorId,
+            status: history[0]?.status,
+            date: history[0]?.date,
+          });
+        }
+      } else {
         res.push({
           topic,
-          processorId,
-          status: history[0]?.status,
-          date: history[0]?.date,
+          processorId: '',
         });
       }
     }
@@ -112,39 +124,46 @@ export default function FileRow({ value }: { value: FileSync }) {
             </Td>
           </tr>
         ) : (
-          events.map(({ topic, processorId, status, date }) => {
-            const color = getTagColor(status);
-            return (
-              <tr key={processorId}>
-                <Td className="flex">
-                  <Link className="pr-2" to={`/event/list?topic=${topic}`}>
-                    <span className="pr-1 font-bold text-alternative-600">
-                      Topic:
-                    </span>
-                    {topic}
-                  </Link>
-                  <Link
-                    className="pr-2"
-                    to={`/event/list?processorId=${processorId}`}
-                  >
-                    <span className="pr-1 font-bold text-alternative-600">
-                      Processor:
-                    </span>
-                    {processorId}
-                  </Link>
-                </Td>
-                <Td />
-                <Td>{formatDate(date)}</Td>
-                <Td />
-                <Td>
-                  <Link to={`/event/list?status=${status}`}>
-                    <StatusLabel status={status} color={color} />
-                  </Link>
-                </Td>
-                <Td />
-              </tr>
-            );
-          })
+          events.map(
+            (
+              { topic, processorId, status = EventStatus.PENDING, date },
+              index,
+            ) => {
+              const color = getTagColor(status);
+              return (
+                <tr key={processorId + topic + index}>
+                  <Td className="flex">
+                    <Link className="pr-2" to={`/event/list?topic=${topic}`}>
+                      <span className="pr-1 font-bold text-alternative-600">
+                        Topic:
+                      </span>
+                      {topic}
+                    </Link>
+                    {processorId ? (
+                      <Link
+                        className="pr-2"
+                        to={`/event/list?processorId=${processorId}`}
+                      >
+                        <span className="pr-1 font-bold text-alternative-600">
+                          Processor:
+                        </span>
+                        {processorId}
+                      </Link>
+                    ) : null}
+                  </Td>
+                  <Td />
+                  <Td>{date ? formatDate(date) : ''}</Td>
+                  <Td />
+                  <Td>
+                    <Link to={`/event/list?status=${status}`}>
+                      <StatusLabel status={status} color={color} />
+                    </Link>
+                  </Td>
+                  <Td />
+                </tr>
+              );
+            },
+          )
         ))}
     </>
   );
