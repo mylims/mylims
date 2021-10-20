@@ -115,7 +115,11 @@ export default class Import extends BaseCommand {
     }
 
     for (const fileSyncOptionToProcess of fileSyncOptionsToProcess) {
-      await this.handleFileSyncOption(fileSyncOptionToProcess);
+      try {
+        await this.handleFileSyncOption(fileSyncOptionToProcess);
+      } catch (error) {
+        this.logger.error(error);
+      }
     }
   }
 
@@ -139,24 +143,24 @@ export default class Import extends BaseCommand {
 
     let importCount = 0;
     for await (const syncFile of syncFiles) {
-      const isReady = await this.isReady(
-        fileSyncOption.readyChecks,
-        syncFile,
-        root,
-      );
-      if (!isReady) {
-        this.logger.debug(
-          `still not ready, skipping...`,
-          fileSyncOptionId,
-          syncFile.filename,
-        );
-        continue;
-      }
-
-      syncFile.revisions[0].status = this.deps.SyncState.IMPORTING;
-      await syncFile.save();
-
       try {
+        const isReady = await this.isReady(
+          fileSyncOption.readyChecks,
+          syncFile,
+          root,
+        );
+        if (!isReady) {
+          this.logger.debug(
+            `still not ready, skipping...`,
+            fileSyncOptionId,
+            syncFile.filename,
+          );
+          continue;
+        }
+
+        syncFile.revisions[0].status = this.deps.SyncState.IMPORTING;
+        await syncFile.save();
+
         await this.importFile(syncFile, fileSyncOption);
         syncFile.revisions[0].status = this.deps.SyncState.IMPORTED;
       } catch (err) {
