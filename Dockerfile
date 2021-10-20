@@ -2,6 +2,7 @@ FROM node:16 AS deps
 WORKDIR /usr/mylims
 COPY .env.example ./.env
 COPY package*.json ./
+RUN npm install -g concurrently
 RUN npm ci --ignore-scripts
 RUN npm rebuild
 
@@ -21,4 +22,6 @@ COPY --from=builder /usr/mylims/build ./
 COPY --from=deps /usr/mylims/package*.json ./
 RUN npm ci --ignore-scripts
 EXPOSE 3333
-CMD [ "node", "server.js" ]
+COPY ./production/deploy.sh ./deploy.sh
+RUN chmod +x deploy.sh
+CMD ["sh", "deploy.sh"]
