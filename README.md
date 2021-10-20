@@ -53,11 +53,14 @@ node ace user:create
 
 ### Production
 
-TBD
+```shell
+docker-compose -f ./docker-compose.prod.yml build
+docker-compose -f ./docker-compose.prod.yml up -d
+```
 
 ## Design
 
-The new ELN is meant to be highly modular, allowing developers to add new functionnalities by creating addons.
+The new ELN is meant to be highly modular, allowing developers to add new functionalities by creating addons.
 
 ### Core
 
