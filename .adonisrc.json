@@ -30,12 +30,13 @@
     "adonis-datadrive"
   ],
   "metaFiles": [
-    {
-      "pattern": "app/Schemas/*",
-      "reloadServer": true
-    },
+    { "pattern": "app/Schemas/*", "reloadServer": true },
+    { "pattern": "addons/**/*.json", "reloadServer": false },
+    { "pattern": "addons/**/*.graphql", "reloadServer": false },
+    { "pattern": "addons/**/node_modules/*", "reloadServer": false },
     ".env",
     ".adonisrc.json",
+    "ace-manifest.json",
     "public/**"
   ]
 }
