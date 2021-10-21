@@ -7,6 +7,7 @@ RUN npm rebuild
 
 FROM node:16 AS builder
 WORKDIR /usr/mylims
+ENV NODE_ENV production
 COPY . .
 COPY --from=deps /usr/mylims/node_modules ./node_modules
 # RUN node scripts/prune-addons.mjs
