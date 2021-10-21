@@ -3,7 +3,8 @@ import fs from 'fs/promises';
 import path from 'path';
 
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-const addonsPath = 'build/addons';
+const addonsPath =
+  process.env.NODE_ENV === 'production' ? 'build/addons' : 'addons';
 
 function spawn(addon) {
   return new Promise((resolve, reject) => {
