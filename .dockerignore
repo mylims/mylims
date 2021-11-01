@@ -1,9 +1,11 @@
 # Folders
 .git
 .github
-build
-node_modules
-tests
+front
+**/build
+**/node_modules
+**/tests
+copyfiles
 
 # Files
 .dockerignore
@@ -15,4 +17,4 @@ tests
 Dockerfile
 docker-compose.yml
 README.md
-*.log
+**/*.log

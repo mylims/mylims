@@ -4,6 +4,7 @@ coverage
 .vscode
 .DS_STORE
 .env
+.env.prod
 tmp
 .eslintcache
 config.json
