@@ -1,19 +1,35 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
 import { Alert, AlertType, Card, Spinner } from '@/components/tailwind-ui';
 import { useMeasurementQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
+import B1505Transfer from './B1505Transfer';
 
 export default function MeasurementDetail() {
   const { id } = useParams<{ id: string }>();
   const { data, loading, error } = useMeasurementQuery({ variables: { id } });
+  const measurementBody = useMemo(() => {
+    switch (data?.measurement.__typename) {
+      case 'TransferMeasurement': {
+        return (
+          <B1505Transfer
+            file={data.measurement.file ?? null}
+            derived={data.measurement.transferDerived}
+          />
+        );
+      }
+      default: {
+        return null;
+      }
+    }
+  }, [data?.measurement.__typename]);
 
   if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
   if (error || !data) {
     return (
-      <Alert title={'Error while fetching user'} type={AlertType.ERROR}>
+      <Alert title="Error while fetching measurement" type={AlertType.ERROR}>
         Unexpected error: {error?.message}
       </Alert>
     );
@@ -26,7 +42,8 @@ export default function MeasurementDetail() {
         <div className="text-xl font-semibold">Measurement</div>
         <div className="text-neutral-500">{id}</div>
       </Card.Header>
-      <Card.Body>
+      {measurementBody}
+      <Card.Footer>
         <div className="grid grid-cols-3 gap-4 mb-4">
           <MeasurementField
             title="Sample code"
@@ -44,31 +61,14 @@ export default function MeasurementDetail() {
             title="Created by"
             description={measurement.createdBy}
           />
-          {measurement.fileId && (
-            <MeasurementField title="File" description={measurement.fileId} />
+          {measurement.file && (
+            <MeasurementField
+              title="File"
+              description={measurement.file.filename}
+            />
           )}
         </div>
-      </Card.Body>
-      {measurement.__typename === 'TransferMeasurement' &&
-        measurement.transferDerived && (
-          <Card.Footer>
-            <div className="mb-4 text-xl font-semibold">Derived data</div>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <div>Threshold voltage</div>
-                <div className="text-neutral-400">
-                  {measurement.transferDerived.thresholdVoltage.value}
-                </div>
-              </div>
-              <div>
-                <div>Subthreshold slope</div>
-                <div className="text-neutral-400">
-                  {measurement.transferDerived.subthresholdSlope.medianSlope}
-                </div>
-              </div>
-            </div>
-          </Card.Footer>
-        )}
+      </Card.Footer>
     </Card>
   );
 }
