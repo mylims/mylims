@@ -28,6 +28,11 @@ type MeasurementPage {
   measurements: [Measurement!]!
   totalCount: Int!
 }
+type MeasurementFile {
+  downloadUrl: String!
+  filename: String!
+  size: Int!
+}
 
 # Measurement specific data
 enum MeasurementTypes {
@@ -43,6 +48,7 @@ interface Measurement {
   sampleCode: [String!]!
   createdBy: String!
   fileId: String
+  file: MeasurementFile
   description: String
   createdAt: DateTime!
 }
@@ -55,6 +61,7 @@ type GeneralMeasurement implements Measurement {
   sampleCode: [String!]!
   createdBy: String!
   fileId: String
+  file: MeasurementFile
   description: String
   createdAt: DateTime!
   derived: JSON

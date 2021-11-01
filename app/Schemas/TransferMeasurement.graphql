@@ -6,6 +6,7 @@ type TransferMeasurement implements Measurement {
   sampleCode: [String!]!
   createdBy: String!
   fileId: String
+  file: MeasurementFile
   description: String
   derived: TransferDerived!
   createdAt: DateTime!

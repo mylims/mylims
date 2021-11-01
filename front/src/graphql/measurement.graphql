@@ -5,7 +5,11 @@ fragment MeasurementFields on Measurement {
   username
   sampleCode
   createdBy
-  fileId
+  file {
+    filename
+    size
+    downloadUrl
+  }
   description
   createdAt
 }

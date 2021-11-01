@@ -1,8 +1,10 @@
 import type { Filter } from 'mongodb';
 
+import Env from '@ioc:Adonis/Core/Env';
 import { UserInputError } from '@ioc:Zakodium/Apollo/Errors';
 import { ModelAttributes, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
+import File from 'App/Models/File';
 import { GeneralMeasurement } from 'App/Models/Measurement/General';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
 import {
@@ -19,7 +21,10 @@ const measurements = {
   [GqlMeasurementTypes.GENERAL]: GeneralMeasurement,
   [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
 };
-type MeasurementType = Omit<GqlMeasurement, 'id'> & { _id: ObjectId };
+type MeasurementType = Omit<GqlMeasurement, 'id' | 'file'> & {
+  _id: ObjectId;
+  fileId?: string;
+};
 
 const resolvers: GqlResolvers = {
   Measurement: {
@@ -32,6 +37,17 @@ const resolvers: GqlResolvers = {
           return 'GeneralMeasurement';
         }
       }
+    },
+    async file(parent) {
+      const fileId = parent.fileId ?? null;
+      if (!fileId) return null;
+      const urlPath = 'measurements/file';
+      const file = await File.findOrFail(fileId);
+      return {
+        downloadUrl: `${Env.get('BACKEND_URL')}/${urlPath}/${fileId}`,
+        filename: file.filename,
+        size: file.size,
+      };
     },
   },
   Query: {
