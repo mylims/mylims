@@ -1,5 +1,3 @@
-import { randomUUID } from 'crypto';
-
 import { Event } from 'Addons/events/Models/Event';
 import { SyncFile } from 'Addons/file-sync/Models/SyncFile';
 
@@ -49,7 +47,7 @@ export default class MeasurementController {
           file.fileName ?? (await this._filenameByEvent(params.eventId));
         const localFile = await this.drive.moveFromMultipart(file, filename);
         const dbFile = await File.create({
-          _id: randomUUID(),
+          _id: localFile.id,
           collection,
           size: localFile.size,
           filename: localFile.filename,
@@ -139,7 +137,7 @@ export default class MeasurementController {
     collection: string,
     rest: MeasurementParams,
   ) {
-    const derived = rest.derived ? JSON.parse(rest.derived) : undefined;
+    const derived = rest.derived ? this._deepParse(rest.derived) : undefined;
     const measurement = { ...rest, derived };
 
     switch (collection) {
@@ -150,5 +148,13 @@ export default class MeasurementController {
         return GeneralMeasurement.create({ ...measurement, collection });
       }
     }
+  }
+
+  private _deepParse(str: string) {
+    const object = JSON.parse(str);
+    for (const key in object) {
+      object[key] = JSON.parse(object[key]);
+    }
+    return object;
   }
 }
