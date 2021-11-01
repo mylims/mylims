@@ -6,7 +6,7 @@ import { isDeepStrictEqual } from 'util';
 const defaultConfig: ConfigFile = {
   config: {
     appKey: randomString(32),
-    date: '2020-10-07T14:48:00.000Z',
+    date: new Date().toISOString(),
     filesRoot: './',
     serviceToken: 'token',
     ldap: {
@@ -21,7 +21,10 @@ const defaultConfig: ConfigFile = {
       hostUrl: 'https://test-tequila.epfl.ch/cgi-bin/tequila',
       serviceName: 'myLIMS',
     },
-    mongodb: { url: 'mongodb://localhost:27017', database: 'mylims' },
+    mongodb: {
+      url: 'mongodb://localhost:27017?directConnection=true',
+      database: 'mylims',
+    },
     session: { sessionAge: '2h' },
     fileSync: { root: '' },
     enabledAddons: ['events'],
