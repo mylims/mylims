@@ -194,6 +194,7 @@ export type GeneralMeasurement = Measurement & {
   derived?: Maybe<Scalars['JSON']>;
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
+  file?: Maybe<MeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
@@ -206,11 +207,18 @@ export type Measurement = {
   createdBy: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
+  file?: Maybe<MeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: MeasurementTypes;
   username: Scalars['String'];
+};
+
+export type MeasurementFile = {
+  downloadUrl: Scalars['String'];
+  filename: Scalars['String'];
+  size: Scalars['Int'];
 };
 
 export type MeasurementFilterInput = {
@@ -407,6 +415,7 @@ export type TransferMeasurement = Measurement & {
   derived: TransferDerived;
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
+  file?: Maybe<MeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
@@ -678,9 +687,9 @@ type MeasurementFields_GeneralMeasurement_Fragment = {
   username: string;
   sampleCode: Array<string>;
   createdBy: string;
-  fileId?: Maybe<string>;
   description?: Maybe<string>;
   createdAt: any;
+  file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
 };
 
 type MeasurementFields_TransferMeasurement_Fragment = {
@@ -690,9 +699,9 @@ type MeasurementFields_TransferMeasurement_Fragment = {
   username: string;
   sampleCode: Array<string>;
   createdBy: string;
-  fileId?: Maybe<string>;
   description?: Maybe<string>;
   createdAt: any;
+  file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
 };
 
 export type MeasurementFieldsFragment =
@@ -718,9 +727,9 @@ export type MeasurementsFilteredQuery = {
           username: string;
           sampleCode: Array<string>;
           createdBy: string;
-          fileId?: Maybe<string>;
           description?: Maybe<string>;
           createdAt: any;
+          file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
         }
       | {
           __typename: 'TransferMeasurement';
@@ -729,9 +738,9 @@ export type MeasurementsFilteredQuery = {
           username: string;
           sampleCode: Array<string>;
           createdBy: string;
-          fileId?: Maybe<string>;
           description?: Maybe<string>;
           createdAt: any;
+          file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
         }
     >;
   };
@@ -751,9 +760,9 @@ export type MeasurementQuery = {
         username: string;
         sampleCode: Array<string>;
         createdBy: string;
-        fileId?: Maybe<string>;
         description?: Maybe<string>;
         createdAt: any;
+        file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
       }
     | {
         __typename: 'TransferMeasurement';
@@ -762,7 +771,6 @@ export type MeasurementQuery = {
         username: string;
         sampleCode: Array<string>;
         createdBy: string;
-        fileId?: Maybe<string>;
         description?: Maybe<string>;
         createdAt: any;
         transferDerived: {
@@ -773,6 +781,7 @@ export type MeasurementQuery = {
             fromIndex: number;
           };
         };
+        file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
       };
 };
 
@@ -823,7 +832,11 @@ export const MeasurementFieldsFragmentDoc = gql`
     username
     sampleCode
     createdBy
-    fileId
+    file {
+      filename
+      size
+      downloadUrl
+    }
     description
     createdAt
   }

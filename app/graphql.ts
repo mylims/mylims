@@ -217,6 +217,7 @@ export type GqlGeneralMeasurement = GqlMeasurement & {
   derived?: Maybe<Scalars['JSON']>;
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
+  file?: Maybe<GqlMeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
@@ -229,11 +230,19 @@ export type GqlMeasurement = {
   createdBy: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
+  file?: Maybe<GqlMeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: GqlMeasurementTypes;
   username: Scalars['String'];
+};
+
+export type GqlMeasurementFile = {
+  __typename?: 'MeasurementFile';
+  downloadUrl: Scalars['String'];
+  filename: Scalars['String'];
+  size: Scalars['Int'];
 };
 
 export type GqlMeasurementFilterInput = {
@@ -441,6 +450,7 @@ export type GqlTransferMeasurement = GqlMeasurement & {
   derived: GqlTransferDerived;
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
+  file?: Maybe<GqlMeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
@@ -607,6 +617,7 @@ export type GqlResolversTypes = ResolversObject<{
   Measurement:
     | GqlResolversTypes['GeneralMeasurement']
     | GqlResolversTypes['TransferMeasurement'];
+  MeasurementFile: ResolverTypeWrapper<GqlMeasurementFile>;
   MeasurementFilterInput: GqlMeasurementFilterInput;
   MeasurementPage: ResolverTypeWrapper<GqlMeasurementPage>;
   MeasurementSortField: GqlMeasurementSortField;
@@ -668,6 +679,7 @@ export type GqlResolversParentTypes = ResolversObject<{
   Measurement:
     | GqlResolversParentTypes['GeneralMeasurement']
     | GqlResolversParentTypes['TransferMeasurement'];
+  MeasurementFile: GqlMeasurementFile;
   MeasurementFilterInput: GqlMeasurementFilterInput;
   MeasurementPage: GqlMeasurementPage;
   MeasurementSortInput: GqlMeasurementSortInput;
@@ -869,6 +881,11 @@ export type GqlGeneralMeasurementResolvers<
     ContextType
   >;
   eventId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  file?: Resolver<
+    Maybe<GqlResolversTypes['MeasurementFile']>,
+    ParentType,
+    ContextType
+  >;
   fileId?: Resolver<
     Maybe<GqlResolversTypes['String']>,
     ParentType,
@@ -916,6 +933,11 @@ export type GqlMeasurementResolvers<
     ContextType
   >;
   eventId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  file?: Resolver<
+    Maybe<GqlResolversTypes['MeasurementFile']>,
+    ParentType,
+    ContextType
+  >;
   fileId?: Resolver<
     Maybe<GqlResolversTypes['String']>,
     ParentType,
@@ -933,6 +955,16 @@ export type GqlMeasurementResolvers<
     ContextType
   >;
   username?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+}>;
+
+export type GqlMeasurementFileResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['MeasurementFile'] = GqlResolversParentTypes['MeasurementFile'],
+> = ResolversObject<{
+  downloadUrl?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  filename?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GqlMeasurementPageResolvers<
@@ -1167,6 +1199,11 @@ export type GqlTransferMeasurementResolvers<
     ContextType
   >;
   eventId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  file?: Resolver<
+    Maybe<GqlResolversTypes['MeasurementFile']>,
+    ParentType,
+    ContextType
+  >;
   fileId?: Resolver<
     Maybe<GqlResolversTypes['String']>,
     ParentType,
@@ -1235,6 +1272,7 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   JSON?: GraphQLScalarType;
   JSONObject?: GraphQLScalarType;
   Measurement?: GqlMeasurementResolvers<ContextType>;
+  MeasurementFile?: GqlMeasurementFileResolvers<ContextType>;
   MeasurementPage?: GqlMeasurementPageResolvers<ContextType>;
   Mutation?: GqlMutationResolvers<ContextType>;
   Pattern?: GqlPatternResolvers<ContextType>;
