@@ -25,16 +25,30 @@ services:
       - mongo
     ports:
       - '3333:3333'
-    environment:
-      - PORT=3333
-      - HOST=0.0.0.0
-      - NODE_ENV=production
-      - ADMIN_PASSWORD=zakodium
-      - LOG_LEVEL=info
-      - BACKEND_URL=http://127.0.0.1:3333
-      - FRONTEND_URL=http://frontend:3000
-      - DRIVE_DISK=local
-      - DRIVE_ROOT=files
+    init: true
+    volumes:
+      - ./production/config.json:/usr/mylims/app/config.json
+      - ./.env.prod:/usr/mylims/.env
+
+  command-sync:
+    build: .
+    command: ['node', 'ace', 'file:sync']
+    depends_on:
+      - mongo
+      - backend
+    volumes:
+      - ./production/config.json:/usr/mylims/app/config.json
+      - ./.env.prod:/usr/mylims/.env
+
+  command-import:
+    build: .
+    command: ['node', 'ace', 'file:import']
+    depends_on:
+      - mongo
+      - backend
+    volumes:
+      - ./production/config.json:/usr/mylims/app/config.json
+      - ./.env.prod:/usr/mylims/.env
 
   frontend:
     build: ./front
