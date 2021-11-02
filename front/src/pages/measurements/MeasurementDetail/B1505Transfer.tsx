@@ -5,6 +5,10 @@ import { useQuery } from 'react-query';
 import { PlotJcamp } from '@/components/PlotJcamp';
 import { Alert, AlertType, Card } from '@/components/tailwind-ui';
 
+import { fromJcamp, getReactPlotJSON } from 'common-spectrum';
+import { Annotation, PlotObject } from 'react-plot';
+import { PlotJcamp } from '@/components/PlotJcamp';
+
 interface B1505TransferProps {
   file: null | { filename: string; downloadUrl: string; size: number };
   fileId: null | string;
