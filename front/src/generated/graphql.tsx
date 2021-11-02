@@ -448,7 +448,7 @@ export type EventQuery = {
         processId: string;
         status: EventStatus;
         date: any;
-        message?: Maybe<string>;
+        message?: string | null | undefined;
       }>;
     }>;
   };
@@ -474,7 +474,7 @@ export type EventsFilteredQuery = {
         history: Array<{
           status: EventStatus;
           date: any;
-          message?: Maybe<string>;
+          message?: string | null | undefined;
         }>;
       }>;
     }>;
@@ -496,7 +496,7 @@ export type FileSyncOptionFieldsFragment = {
   maxDepth: number;
   topics: Array<string>;
   patterns: Array<{ type: PatternType; pattern: string }>;
-  readyChecks: Array<{ name: string; value?: Maybe<string> }>;
+  readyChecks: Array<{ name: string; value?: string | null | undefined }>;
 };
 
 export type FileSyncOptionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -509,7 +509,7 @@ export type FileSyncOptionsQuery = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: Maybe<string> }>;
+    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
   }>;
 };
 
@@ -525,7 +525,7 @@ export type FileSyncOptionQuery = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: Maybe<string> }>;
+    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
   };
 };
 
@@ -541,7 +541,7 @@ export type CreateFileSyncOptionMutation = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: Maybe<string> }>;
+    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
   };
 };
 
@@ -557,7 +557,7 @@ export type EditFileSyncOptionMutation = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: Maybe<string> }>;
+    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
   };
 };
 
@@ -573,7 +573,7 @@ export type DeleteFileSyncOptionMutation = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: Maybe<string> }>;
+    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
   }>;
 };
 
@@ -643,7 +643,7 @@ export type EventsByFileIdQuery = {
         history: Array<{
           status: EventStatus;
           date: any;
-          message?: Maybe<string>;
+          message?: string | null | undefined;
         }>;
       }>;
     }>;
@@ -687,9 +687,12 @@ type MeasurementFields_GeneralMeasurement_Fragment = {
   username: string;
   sampleCode: Array<string>;
   createdBy: string;
-  description?: Maybe<string>;
+  description?: string | null | undefined;
   createdAt: any;
-  file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
+  file?:
+    | { filename: string; size: number; downloadUrl: string }
+    | null
+    | undefined;
 };
 
 type MeasurementFields_TransferMeasurement_Fragment = {
@@ -699,9 +702,12 @@ type MeasurementFields_TransferMeasurement_Fragment = {
   username: string;
   sampleCode: Array<string>;
   createdBy: string;
-  description?: Maybe<string>;
+  description?: string | null | undefined;
   createdAt: any;
-  file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
+  file?:
+    | { filename: string; size: number; downloadUrl: string }
+    | null
+    | undefined;
 };
 
 export type MeasurementFieldsFragment =
@@ -727,9 +733,12 @@ export type MeasurementsFilteredQuery = {
           username: string;
           sampleCode: Array<string>;
           createdBy: string;
-          description?: Maybe<string>;
+          description?: string | null | undefined;
           createdAt: any;
-          file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
+          file?:
+            | { filename: string; size: number; downloadUrl: string }
+            | null
+            | undefined;
         }
       | {
           __typename: 'TransferMeasurement';
@@ -738,9 +747,12 @@ export type MeasurementsFilteredQuery = {
           username: string;
           sampleCode: Array<string>;
           createdBy: string;
-          description?: Maybe<string>;
+          description?: string | null | undefined;
           createdAt: any;
-          file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
+          file?:
+            | { filename: string; size: number; downloadUrl: string }
+            | null
+            | undefined;
         }
     >;
   };
@@ -754,15 +766,18 @@ export type MeasurementQuery = {
   measurement:
     | {
         __typename: 'GeneralMeasurement';
-        derived?: Maybe<any>;
+        derived?: any | null | undefined;
         id: string;
         eventId: string;
         username: string;
         sampleCode: Array<string>;
         createdBy: string;
-        description?: Maybe<string>;
+        description?: string | null | undefined;
         createdAt: any;
-        file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
+        file?:
+          | { filename: string; size: number; downloadUrl: string }
+          | null
+          | undefined;
       }
     | {
         __typename: 'TransferMeasurement';
@@ -771,7 +786,7 @@ export type MeasurementQuery = {
         username: string;
         sampleCode: Array<string>;
         createdBy: string;
-        description?: Maybe<string>;
+        description?: string | null | undefined;
         createdAt: any;
         transferDerived: {
           thresholdVoltage: { index: number; value: number };
@@ -781,7 +796,10 @@ export type MeasurementQuery = {
             fromIndex: number;
           };
         };
-        file?: Maybe<{ filename: string; size: number; downloadUrl: string }>;
+        file?:
+          | { filename: string; size: number; downloadUrl: string }
+          | null
+          | undefined;
       };
 };
 
@@ -790,8 +808,8 @@ export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 export type UsersQuery = {
   users: Array<{
     id: string;
-    lastName?: Maybe<string>;
-    firstName?: Maybe<string>;
+    lastName?: string | null | undefined;
+    firstName?: string | null | undefined;
     emails: Array<string>;
     role: string;
     authMethods: any;
