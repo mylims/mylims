@@ -6,7 +6,9 @@ import { PlotJcamp } from '@/components/PlotJcamp';
 import { Alert, AlertType, Card } from '@/components/tailwind-ui';
 
 import { Annotation } from 'react-plot';
+
 import { PlotJcamp } from '@/components/PlotJcamp';
+import { Alert, AlertType, Card } from '@/components/tailwind-ui';
 
 interface B1505TransferProps {
   file: null | { filename: string; downloadUrl: string; size: number };
