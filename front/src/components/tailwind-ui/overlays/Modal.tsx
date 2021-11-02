@@ -1,9 +1,10 @@
 import { Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { XIcon, AnnotationIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import polyfill from 'dialog-polyfill-universal';
 import React, {
   createElement,
+  CSSProperties,
   ElementType,
   ReactNode,
   useEffect,
@@ -38,8 +39,8 @@ export interface ModalProps<T extends ElementType> {
   children: ReactNode;
   isOpen: boolean;
   onRequestClose?: () => void;
-  icon: ReactNode;
-  iconColor: Color;
+  icon?: ReactNode;
+  iconColor?: Color;
   hasCloseButton?: boolean;
   requestCloseOnBackdrop?: boolean;
   requestCloseOnEsc?: boolean;
@@ -47,6 +48,7 @@ export interface ModalProps<T extends ElementType> {
   animated?: boolean;
   fluid?: boolean;
   wrapperProps?: Omit<PropsOf<T>, 'children'>;
+  dialogStyle?: CSSProperties;
 }
 
 // @ts-expect-error Chrome isn't in the standard
@@ -56,11 +58,17 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
   const {
     isOpen,
     onRequestClose,
+    icon = <AnnotationIcon />,
+    iconColor = Color.primary,
     hasCloseButton = true,
     requestCloseOnBackdrop = true,
     requestCloseOnEsc = true,
     animated = true,
     fluid = true,
+    dialogStyle,
+    wrapperComponent,
+    wrapperProps,
+    children,
   } = props;
 
   useLockBodyScroll(isOpen);
@@ -98,7 +106,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
   }, [isOpen]);
 
   let modalContents = (
-    <div className="flex">
+    <div className="flex flex-1">
       {onRequestClose && hasCloseButton ? (
         <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
           <button
@@ -112,30 +120,26 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
         </div>
       ) : null}
 
-      <div className="flex flex-col w-full max-h-full mt-3 sm:flex-row sm:items-start">
+      <div className="flex flex-col w-full max-h-full sm:flex-row sm:items-start">
         <div
           className={clsx(
             'flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full sm:mx-0 sm:h-10 sm:w-10',
-            bgColors[props.iconColor],
+            bgColors[iconColor],
           )}
         >
-          <span
-            className={clsx(textColors[props.iconColor], 'text-2xl w-6 h-6')}
-          >
-            {props.icon}
-          </span>
+          <span className={clsx(textColors[iconColor], 'w-6 h-6')}>{icon}</span>
         </div>
-        <div className="flex flex-col flex-grow min-w-0 min-h-0 text-center sm:max-h-full sm:mt-0 sm:ml-4 sm:text-left">
-          {props.children}
+        <div className="flex flex-col flex-grow min-w-0 min-h-0 gap-2 text-center sm:gap-3 sm:max-h-full sm:mt-0 sm:ml-4 sm:text-left">
+          {children}
         </div>
       </div>
     </div>
   );
 
-  if (props.wrapperComponent) {
+  if (wrapperComponent) {
     modalContents = createElement(
-      props.wrapperComponent,
-      props.wrapperProps,
+      wrapperComponent,
+      wrapperProps,
       modalContents,
     );
   }
@@ -151,26 +155,29 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
           }
         }}
         ref={dialogRef}
-        style={
+        style={Object.assign(
+          { maxWidth: fluid ? 'calc(100% - 2rem)' : undefined },
+          dialogStyle,
           !isChrome
             ? {
-                position: 'fixed',
                 top: '50%',
-                transform: 'translate(0, -50%)',
+                // Custom transform is cumulative
+                transform: `translateY(-50%) ${
+                  dialogStyle?.transform ? dialogStyle.transform : ''
+                }`,
                 maxHeight: 'calc((100% - 6px) - 2em)',
               }
-            : undefined
-        }
+            : {},
+        )}
         className={clsx(
           'fixed text-left flex align-bottom bg-white rounded-lg shadow-xl',
           {
             'sm:max-w-lg sm:w-full': !fluid,
-            'max-w-full': fluid,
           },
         )}
       >
         <Transition
-          show={props.isOpen}
+          show={isOpen}
           enter={clsx('ease-out', { 'duration-300': animated })}
           enterFrom="opacity-0"
           enterTo="opacity-100"
@@ -179,7 +186,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
           })}
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          className="flex px-4"
+          className="flex flex-1 px-2 pt-5 pb-4 sm:pl-6 sm:pr-4 sm:py-6"
         >
           {modalContents}
         </Transition>
@@ -188,39 +195,64 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
   );
 }
 
-Modal.Header = function ModalHeader(props: { children: ReactNode }) {
+Modal.Header = function ModalHeader(props: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
-    <h3 className="text-lg font-semibold sm:mr-10 text-neutral-900">
+    <h3
+      className={clsx(
+        'pl-2 text-lg font-semibold sm:mr-8 text-neutral-900',
+        props.className,
+      )}
+    >
       {props.children}
     </h3>
   );
 };
 
-Modal.Body = function ModalBody(props: { children: ReactNode }) {
+Modal.Body = function ModalBody(props: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="flex flex-col max-w-full min-h-0 mt-2 overflow-auto">
+    <div
+      className={clsx(
+        'px-2 pb-2 flex flex-col max-w-full min-h-0 overflow-auto',
+        props.className,
+      )}
+    >
       {props.children}
     </div>
   );
 };
 
-Modal.Description = function ModalDescription(props: { children: ReactNode }) {
-  return <div className="text-sm text-neutral-500">{props.children}</div>;
+Modal.Description = function ModalDescription(props: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={clsx('text-sm text-neutral-500', props.className)}>
+      {props.children}
+    </div>
+  );
 };
 
 Modal.Footer = function ModalFooter(props: {
   children: ReactNode;
+  className?: string;
   align?: 'right' | 'left' | 'center';
 }) {
   const { align = 'right' } = props;
   return (
     <div
       className={clsx(
-        'mt-5 sm:mt-4 flex space-y-2 flex-col sm:flex-row sm:space-x-3 sm:space-y-0 mb-2',
+        'px-2 flex gap-2 sm:gap-3 flex-col-reverse sm:flex-row',
         {
           'sm:justify-end': align === 'right',
           'sm:justify-center': align === 'center',
         },
+        props.className,
       )}
     >
       {props.children}

@@ -18,7 +18,7 @@ export function Divider(props: DividerProps) {
 
   if (!children) {
     return (
-      <div className="relative">
+      <div className="relative" style={{ minHeight: 1 }}>
         <div className="absolute inset-0 flex items-center" aria-hidden="true">
           <div className="w-full border-t border-neutral-300" />
         </div>
@@ -84,7 +84,7 @@ export function DividerSide(props: {
 
   if (side === 'both' && Array.isArray(children)) {
     return (
-      <div className="flex">
+      <div className="flex items-center">
         <div className="flex">{children[0]}</div>
         <div className="flex items-center flex-1">
           <div className="w-full border-t border-neutral-300" />

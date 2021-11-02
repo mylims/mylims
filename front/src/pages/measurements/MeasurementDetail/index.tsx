@@ -1,11 +1,19 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import B1505Transfer from './B1505Transfer';
+
 import ElnLayout from '@/components/ElnLayout';
-import { Alert, AlertType, Card, Spinner } from '@/components/tailwind-ui';
+import {
+  Alert,
+  AlertType,
+  Button,
+  Card,
+  Spinner,
+  Variant,
+} from '@/components/tailwind-ui';
 import { useMeasurementQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
-import B1505Transfer from './B1505Transfer';
 
 export default function MeasurementDetail() {
   const { id } = useParams<{ id: string }>();
@@ -24,7 +32,7 @@ export default function MeasurementDetail() {
         return null;
       }
     }
-  }, [data?.measurement.__typename]);
+  }, [data?.measurement]);
 
   if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
   if (error || !data) {
@@ -39,8 +47,24 @@ export default function MeasurementDetail() {
   return (
     <Card>
       <Card.Header>
-        <div className="text-xl font-semibold">Measurement</div>
-        <div className="text-neutral-500">{id}</div>
+        <div className="flex justify-between">
+          <div>
+            <div className="text-xl font-semibold">Measurement</div>
+            <div className="text-neutral-500">{id}</div>
+          </div>
+
+          {measurement.file?.downloadUrl && (
+            <div>
+              <a
+                href={measurement.file.downloadUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Button variant={Variant.secondary}>Download file</Button>
+              </a>
+            </div>
+          )}
+        </div>
       </Card.Header>
       {measurementBody}
       <Card.Footer>

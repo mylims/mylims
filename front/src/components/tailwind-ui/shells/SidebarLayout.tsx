@@ -3,15 +3,16 @@ import { MenuAlt1Icon, XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React, { ReactNode, useEffect, ReactElement } from 'react';
 
-interface SidebarLayoutProps {
+export interface SidebarLayoutProps {
   children: ReactElement[];
+  revealOnLargeViewport?: boolean;
   open: () => void;
   close: () => void;
   isOpen: boolean;
 }
 
 export function SidebarLayout(props: SidebarLayoutProps) {
-  const { open, close, isOpen, children } = props;
+  const { open, close, isOpen, children, revealOnLargeViewport = true } = props;
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -22,15 +23,19 @@ export function SidebarLayout(props: SidebarLayoutProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [close]);
 
-  const sidebar = children.find(
-    (child) => child.type === SidebarLayout.Sidebar,
-  );
-  const header = children.find((child) => child.type === SidebarLayout.Header);
-  const body = children.find((child) => child.type === SidebarLayout.Body);
+  // @ts-expect-error Should be removed when we move to CSS Grid implementation.
+  const sidebar = children.find((child) => child.type.name.endsWith('Sidebar'));
+  // @ts-expect-error Ditto.
+  const header = children.find((child) => child.type.name.endsWith('Header'));
+  // @ts-expect-error Ditto.
+  const body = children.find((child) => child.type.name.endsWith('Body'));
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <Transition show={isOpen} className="lg:hidden">
+      <Transition
+        show={isOpen}
+        className={revealOnLargeViewport ? 'lg:hidden' : undefined}
+      >
         <div className="fixed inset-0 z-40 flex">
           <Transition.Child
             enter="transition-opacity ease-linear duration-300"
@@ -51,7 +56,7 @@ export function SidebarLayout(props: SidebarLayoutProps) {
             leave="transition ease-in-out duration-300 transform"
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
-            className="relative flex flex-col flex-1 w-full h-full max-w-xs pt-5 pb-4 bg-white"
+            className="relative flex flex-col flex-1 w-full h-full max-w-xs bg-white"
           >
             <div className="absolute top-0 right-0 p-1 -mr-14">
               <button
@@ -68,22 +73,29 @@ export function SidebarLayout(props: SidebarLayoutProps) {
                 <XIcon className="w-6 h-6 text-white" />
               </button>
             </div>
-            <div>{sidebar}</div>
+            <div className="h-full">{sidebar}</div>
           </Transition.Child>
           <div className="flex-shrink-0 w-14" />
         </div>
       </Transition>
 
-      <div className="hidden lg:flex lg:flex-shrink-0">
+      <div
+        className={clsx('hidden', {
+          'lg:flex lg:flex-shrink-0': revealOnLargeViewport,
+        })}
+      >
         <div className="flex flex-col w-64 bg-white border-r border-neutral-200">
           {sidebar}
         </div>
       </div>
       <div className="flex flex-col flex-1 overflow-auto focus:outline-none">
-        <div className="relative z-10 flex flex-shrink-0 h-16 bg-white border-b border-neutral-200">
+        <div className="relative z-10 flex flex-shrink-0 bg-white border-b border-neutral-200">
           <button
             type="button"
-            className="px-4 border-r text-neutral-400 border-neutral-200 focus:outline-none focus:bg-neutral-100 focus:text-neutral-600 lg:hidden"
+            className={clsx(
+              'px-4 border-r text-neutral-400 border-neutral-200 focus:outline-none focus:bg-neutral-100 focus:text-neutral-600',
+              { 'lg:hidden': revealOnLargeViewport },
+            )}
             aria-label="Open sidebar"
             onClick={open}
           >

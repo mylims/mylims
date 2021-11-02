@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { MultiSearchSelect } from '../basic/MultiSearchSelect';
 import {
   SimpleStringSelectOption,
@@ -22,10 +23,11 @@ export function MultiSearchSelectFieldRHF<OptionType>(
   const {
     name,
     serializeError = defaultErrorSerializer,
+    deps,
     ...otherProps
   } = props;
 
-  const { setValue } = useFormContext();
+  const { setValue, trigger } = useCheckedFormRHFContext();
   const {
     field,
     fieldState: { error },
@@ -40,8 +42,11 @@ export function MultiSearchSelectFieldRHF<OptionType>(
         shouldTouch: true,
         shouldValidate: isSubmitted,
       });
+      if (deps && isSubmitted) {
+        void trigger(deps);
+      }
     },
-    [setValue, isSubmitted, name],
+    [setValue, isSubmitted, name, trigger, deps],
   );
 
   return (

@@ -1,6 +1,7 @@
 import React from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import {
   Select,
   SimpleStringSelectOption,
@@ -22,9 +23,10 @@ export function SelectFieldRHF<OptionType>(
   const {
     name,
     serializeError = defaultErrorSerializer,
+    deps,
     ...selectProps
   } = props;
-  const { setValue } = useFormContext();
+  const { setValue, trigger } = useCheckedFormRHFContext();
   const {
     field,
     fieldState: { error },
@@ -42,6 +44,9 @@ export function SelectFieldRHF<OptionType>(
           shouldValidate: isSubmitted,
           shouldTouch: true,
         });
+        if (deps && isSubmitted) {
+          void trigger(deps);
+        }
       }}
       error={serializeError(error)}
       {...selectProps}

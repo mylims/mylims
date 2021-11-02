@@ -1,6 +1,6 @@
 import { Analysis, fromJcamp, getReactPlotJSON } from 'common-spectrum';
 import React, { ReactNode, useMemo, useState } from 'react';
-import { Annotation, PlotObject } from 'react-plot';
+import { PlotObject } from 'react-plot';
 
 interface PlotJcampProps {
   content: string | null;
@@ -52,6 +52,7 @@ export function PlotJcamp({ content, initialQuery, children }: PlotJcampProps) {
             const { data: list, ...other } = element;
             return { ...other, data: list.filter((point) => point.y > 0) };
           });
+          break;
         }
         case 'abs':
         default: {
@@ -63,6 +64,7 @@ export function PlotJcamp({ content, initialQuery, children }: PlotJcampProps) {
               data: list.map((point) => ({ ...point, y: Math.abs(point.y) })),
             };
           });
+          break;
         }
       }
     }
@@ -71,8 +73,6 @@ export function PlotJcamp({ content, initialQuery, children }: PlotJcampProps) {
   }, [analysis, query]);
   if (!plotContent || !analysis) return null;
   return (
-    <PlotObject plot={plotContent}>
-      {children && children(analysis, query)}
-    </PlotObject>
+    <PlotObject plot={plotContent}>{children?.(analysis, query)}</PlotObject>
   );
 }

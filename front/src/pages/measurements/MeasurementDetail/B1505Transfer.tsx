@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, AlertType, Card } from '@/components/tailwind-ui';
-
 import { Annotation } from 'react-plot';
+
 import { PlotJcamp } from '@/components/PlotJcamp';
+import { Alert, AlertType, Card } from '@/components/tailwind-ui';
 
 interface B1505TransferProps {
   file: null | { filename: string; downloadUrl: string; size: number };
@@ -45,7 +45,7 @@ export default function B1505Transfer({ file, derived }: B1505TransferProps) {
         .then((data) => setState({ content: data, error: null }))
         .catch((error) => setState({ content: null, error }));
     }
-  }, [file?.downloadUrl]);
+  }, [file, file?.downloadUrl]);
 
   if (error) {
     return (

@@ -1,26 +1,30 @@
 import React, { ChangeEvent, useCallback } from 'react';
-import { get, useFormContext, useWatch } from 'react-hook-form';
+import { get, useWatch } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { useInputAsyncValidation } from '../../hooks/useInputAsyncValidationHook';
 import { InputProps, Input } from '../basic/Input';
 import { AsyncInputFieldProps } from '../formik/InputField';
-import { defaultErrorSerializer, FieldProps } from '../util';
+import { defaultErrorSerializer, FieldProps, RHFRegisterProps } from '../util';
 
-export type AsyncInputFieldRHFProps = AsyncInputFieldProps & FieldProps;
+export type AsyncInputFieldRHFProps = AsyncInputFieldProps &
+  FieldProps &
+  RHFRegisterProps;
 
 export function AsyncInputFieldRHF(
-  props: AsyncInputFieldProps & FieldProps,
+  props: AsyncInputFieldRHFProps,
 ): JSX.Element {
   const {
     asyncValidationCallback,
     debounceDelay = 500,
     serializeError = defaultErrorSerializer,
+    rhfOptions,
     ...inputProps
   } = props;
   const {
     register,
     formState: { errors, touchedFields },
-  } = useFormContext();
+  } = useCheckedFormRHFContext();
   const fieldValue = useWatch({
     name: props.name,
   });
@@ -43,7 +47,7 @@ export function AsyncInputFieldRHF(
   return (
     <Input
       {...inputProps}
-      {...register(props.name)}
+      {...register(props.name, rhfOptions)}
       error={errorMessage}
       valid={error ? undefined : inputValidationProps.valid}
       loading={inputValidationProps.loading || inputProps.loading}
@@ -51,28 +55,35 @@ export function AsyncInputFieldRHF(
   );
 }
 
-export type InputFieldRHFProps = InputProps & FieldProps;
+export type InputFieldRHFProps = InputProps & FieldProps & RHFRegisterProps;
 
 export function InputFieldRHF(props: InputFieldRHFProps) {
   const {
     defaultValue,
     onChange: inputOnChange,
     serializeError = defaultErrorSerializer,
+    rhfOptions,
     ...otherInputProps
   } = props;
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useCheckedFormRHFContext();
   const error = get(errors, props.name);
   const rhfProps = register(props.name, {
     setValueAs:
       props.type === 'number'
-        ? (value: string) => {
+        ? (value: string | number) => {
+            // setValueAs also receives the default value, which should normally be a number
+            if (typeof value === 'number') {
+              return value;
+            }
+
             if (!value) return undefined;
             return Number(value);
           }
         : undefined,
+    ...rhfOptions,
   });
 
   const { onChange: formHookOnChange, ...inputProps } = rhfProps;

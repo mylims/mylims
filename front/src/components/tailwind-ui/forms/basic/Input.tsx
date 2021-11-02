@@ -82,6 +82,7 @@ export const Input = forwardRef(function InputForwardRef(
         />
         <InputCorner>{corner}</InputCorner>
       </div>
+
       <div
         ref={wrapperRef}
         className={clsx('flex rounded-md shadow-sm', {

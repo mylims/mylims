@@ -22,7 +22,7 @@ import {
   SimpleStringSelectOption,
   SimpleNumberSelectOption,
 } from '../forms/basic/Select';
-import { useSameWidthPopper } from '../hooks/popper';
+import { useSameWidthPopper, UseSameWidthPopperReturn } from '../hooks/popper';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import { useOnOff } from '../hooks/useOnOff';
 import { Color } from '../types';
@@ -64,6 +64,8 @@ export function defaultRenderOption(
   return option.label;
 }
 
+export function defaultGetValue(option: SimpleStringSelectOption): string;
+export function defaultGetValue(option: SimpleNumberSelectOption): number;
 export function defaultGetValue(
   option: SimpleStringSelectOption | SimpleNumberSelectOption,
 ) {
@@ -76,6 +78,10 @@ export function defaultCanCreate() {
 
 export function defaultGetBadgeColor() {
   return Color.neutral;
+}
+
+export function defaultIsOptionRemovable() {
+  return true;
 }
 
 export function preventDefault(event: UIEvent) {
@@ -315,7 +321,7 @@ export function useSearchSelectInternals<OptionType>(
 }
 
 interface UseSearchSelectInternalsReturn<OptionType>
-  extends ReturnType<typeof useSameWidthPopper> {
+  extends UseSameWidthPopperReturn {
   mainRef: Ref<HTMLDivElement>;
   closeList: () => void;
   openList: () => void;

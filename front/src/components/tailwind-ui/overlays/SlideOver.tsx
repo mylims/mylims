@@ -35,6 +35,8 @@ export interface SlideOverProps<T extends ElementType> {
   requestCloseOnClickOutside?: boolean;
   maxWidth?: Size;
   allowPageInteraction?: boolean;
+  afterOpen?: () => void;
+  afterClose?: () => void;
 }
 
 export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
@@ -51,10 +53,17 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
     }
   });
 
-  const Header = props.children.find((node) => node.type === SlideOver.Header);
-  const Footer = props.children.find((node) => node.type === SlideOver.Footer);
-  const Content = props.children.find(
-    (node) => node.type === SlideOver.Content,
+  const Header = props.children.find((node) =>
+    // @ts-expect-error Should be removed when we move to CSS Grid implementation.
+    node.type.name?.endsWith('Header'),
+  );
+  const Footer = props.children.find((node) =>
+    // @ts-expect-error Ditto.
+    node.type.name?.endsWith('Footer'),
+  );
+  const Content = props.children.find((node) =>
+    // @ts-expect-error Ditto.
+    node.type.name?.endsWith('Content'),
   );
 
   let slideOverContents = (
@@ -68,12 +77,14 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
           leaveFrom="translate-x-0"
           leaveTo="translate-x-full"
           className={clsx('w-screen', getSizeClassname(maxWidthSlideOver))}
+          afterEnter={props.afterOpen}
+          afterLeave={props.afterClose}
         >
           <div
             ref={ref}
             className="flex flex-col h-full bg-white divide-y shadow divide-neutral-200"
           >
-            <div className="flex flex-col flex-1 min-h-0 py-6 space-y-6 ">
+            <div className="flex flex-col flex-1 min-h-0 gap-6 py-6 ">
               <header className="px-4 sm:px-6">
                 <div className="flex items-start justify-between space-x-3">
                   {Header}
@@ -122,21 +133,40 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
   );
 }
 
-SlideOver.Header = function SlideOverHeader(props: { children: ReactNode }) {
-  return <>{props.children}</>;
+SlideOver.Header = function SlideOverHeader(props: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <div className={props.className}>{props.children}</div>;
 };
 
-SlideOver.Content = function SlideOverContent(props: { children: ReactNode }) {
+SlideOver.Content = function SlideOverContent(props: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="relative flex-1 px-4 overflow-y-auto sm:px-6">
+    <div
+      className={clsx(
+        'relative flex-1 px-4 overflow-y-auto sm:px-6',
+        props.className,
+      )}
+    >
       {props.children}
     </div>
   );
 };
 
-SlideOver.Footer = function SlideOverFooter(props: { children: ReactNode }) {
+SlideOver.Footer = function SlideOverFooter(props: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="flex justify-end flex-shrink-0 px-4 py-4 space-x-3">
+    <div
+      className={clsx(
+        'flex justify-end flex-shrink-0 px-4 py-4 space-x-3',
+        props.className,
+      )}
+    >
       {props.children}
     </div>
   );

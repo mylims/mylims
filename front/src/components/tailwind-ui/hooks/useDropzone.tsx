@@ -1,18 +1,22 @@
 import { FieldHookConfig, useField } from 'formik';
 import { useCallback, useState } from 'react';
 import { DropzoneProps } from 'react-dropzone';
-import { useController, useFormContext, useWatch } from 'react-hook-form';
+import { useController, useWatch } from 'react-hook-form';
+
+import { RHFControlledProps } from '..';
+
+import { useCheckedFormRHFContext } from './useCheckedFormRHF';
 
 export interface DropzoneHookOptions extends Omit<DropzoneProps, 'onDrop'> {
   replace?: boolean;
 }
 
 export function useDropzoneFieldRHF(
-  dropzoneOptions: DropzoneHookOptions,
+  dropzoneOptions: DropzoneHookOptions & RHFControlledProps,
   name: string,
 ) {
-  const { replace, ...dropzoneProps } = dropzoneOptions;
-  const { setValue } = useFormContext();
+  const { replace, deps, ...dropzoneProps } = dropzoneOptions;
+  const { setValue, trigger } = useCheckedFormRHFContext();
   const {
     field,
     fieldState: { error },
@@ -35,8 +39,11 @@ export function useDropzoneFieldRHF(
           shouldValidate: isSubmitted,
         });
       }
+      if (deps && isSubmitted) {
+        void trigger(deps);
+      }
     },
-    [files, setValue, name, replace, isSubmitted],
+    [files, setValue, name, replace, isSubmitted, trigger, deps],
   );
 
   const removeFile = useCallback(
@@ -49,8 +56,11 @@ export function useDropzoneFieldRHF(
           shouldValidate: isSubmitted,
         },
       );
+      if (deps && isSubmitted) {
+        void trigger(deps);
+      }
     },
-    [setValue, files, name, isSubmitted],
+    [setValue, files, name, isSubmitted, deps, trigger],
   );
 
   const clearFiles = useCallback(() => {
@@ -58,7 +68,10 @@ export function useDropzoneFieldRHF(
       shouldTouch: true,
       shouldValidate: isSubmitted,
     });
-  }, [name, setValue, isSubmitted]);
+    if (deps && isSubmitted) {
+      void trigger(deps);
+    }
+  }, [name, setValue, isSubmitted, trigger, deps]);
 
   return {
     removeFile,

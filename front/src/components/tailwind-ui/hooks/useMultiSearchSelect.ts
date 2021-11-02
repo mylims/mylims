@@ -1,6 +1,6 @@
 import { useField } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
 import {
   SimpleStringSelectOption,
@@ -8,6 +8,7 @@ import {
 } from '../forms/basic/Select';
 import { defaultOptionsFilter } from '../utils/search-select-utils';
 
+import { useCheckedFormRHFContext } from './useCheckedFormRHF';
 import {
   SearchSelectHookConfig,
   SearchSelectHookResult,
@@ -66,7 +67,7 @@ export function useMultiSearchSelectFieldRHF<OptionType>(
     : MultiSearchSelectFieldHookConfig<OptionType>,
 ): MultiSearchSelectFieldHookResult<OptionType> {
   const searchSelect = useMultiSearchSelect<OptionType>(config);
-  const { setValue } = useFormContext();
+  const { setValue } = useCheckedFormRHFContext();
   const fieldValue = useWatch({ name: config.name });
   const handleSelect = useCallback(
     (value: OptionType[]) => {
