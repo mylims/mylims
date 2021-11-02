@@ -1,11 +1,16 @@
 import { XIcon } from '@heroicons/react/outline';
 import React, { useCallback } from 'react';
 import ReactDatePicker from 'react-datepicker';
-import { useController, useFormContext } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { Input } from '../basic/Input';
 import { DatePickerFieldProps } from '../formik/DatePickerField';
-import { defaultErrorSerializer, FieldProps } from '../util';
+import {
+  defaultErrorSerializer,
+  FieldProps,
+  RHFControlledProps,
+} from '../util';
 
 if (typeof window !== 'undefined') {
   // @ts-ignore
@@ -13,7 +18,7 @@ if (typeof window !== 'undefined') {
 }
 
 export function DatePickerFieldRHF<Modifiers extends string = never>(
-  props: DatePickerFieldProps<Modifiers> & FieldProps,
+  props: DatePickerFieldProps<Modifiers> & FieldProps & RHFControlledProps,
 ) {
   const {
     isClearable,
@@ -21,9 +26,10 @@ export function DatePickerFieldRHF<Modifiers extends string = never>(
     label,
     inputProps,
     serializeError = defaultErrorSerializer,
+    deps,
     ...otherProps
   } = props;
-  const { setValue } = useFormContext();
+  const { setValue, trigger } = useCheckedFormRHFContext();
   const {
     field,
     fieldState: { error },
@@ -39,8 +45,11 @@ export function DatePickerFieldRHF<Modifiers extends string = never>(
         shouldTouch: true,
         shouldValidate: isSubmitted,
       });
+      if (deps && isSubmitted) {
+        void trigger(deps);
+      }
     },
-    [setValue, name, isSubmitted],
+    [setValue, name, isSubmitted, deps, trigger],
   );
 
   return (

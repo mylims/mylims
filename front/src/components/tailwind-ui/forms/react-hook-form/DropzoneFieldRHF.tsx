@@ -5,11 +5,17 @@ import { Dropzone } from '../basic/Dropzone';
 import { DropzoneList } from '../basic/DropzoneList';
 import { Help, Label } from '../basic/common';
 import { DropzoneFieldProps } from '../formik/DropzoneField';
-import { defaultErrorSerializer, FieldProps } from '../util';
+import {
+  defaultErrorSerializer,
+  FieldProps,
+  RHFControlledProps,
+} from '../util';
 
 export type DropzoneFieldRHFProps = DropzoneFieldProps & FieldProps;
 
-export function DropzoneFieldRHF(props: DropzoneFieldRHFProps) {
+export function DropzoneFieldRHF(
+  props: DropzoneFieldRHFProps & RHFControlledProps,
+) {
   const {
     message,
     header,

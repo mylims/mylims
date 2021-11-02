@@ -81,7 +81,7 @@ export interface SimpleSelectProps<OptionType> {
   /**
    * Do not display the label.
    */
-  hiddenLabel?: string;
+  hiddenLabel?: boolean;
   /**
    * Explanation or precisions about what the field is for.
    */
@@ -151,7 +151,7 @@ export function Select<OptionType>(
   const selectedValue = selected ? getValue(selected) : undefined;
 
   const { setReferenceElement, setPopperElement, popperProps } =
-    useSameWidthPopper({ placement: 'bottom', distance: 5 });
+    useSameWidthPopper<HTMLSpanElement>({ placement: 'bottom', distance: 5 });
 
   if (
     selected &&
@@ -167,7 +167,7 @@ export function Select<OptionType>(
       return;
     }
     if (value === undefined) {
-      return onSelect(value);
+      return onSelect(undefined);
     }
     const option = options.find((option) => getValue(option) === value);
     if (!option) {
@@ -187,27 +187,32 @@ export function Select<OptionType>(
       >
         {({ open }) => (
           <>
-            <div
-              className={clsx(
-                'flex items-baseline justify-between',
-                // Cancel the margin from "space-y-1"
-                hiddenLabel && !corner && '-mb-1',
-              )}
-            >
-              <Listbox.Label
+            {(label || corner) && (
+              <div
                 className={clsx(
-                  'block text-sm font-semibold',
-                  disabled ? labelDisabledColor : labelColor,
-                  hiddenLabel && 'sr-only',
+                  'flex items-baseline justify-between',
+                  // Cancel the margin from "space-y-1"
+                  hiddenLabel && !corner && '-mb-1',
                 )}
               >
-                {label}
-                {required && <span className="text-warning-600"> *</span>}
-              </Listbox.Label>
-              <InputCorner>{corner}</InputCorner>
-            </div>
-            <div ref={setReferenceElement} className="relative">
-              <span className="inline-block w-full rounded-md shadow-sm">
+                <Listbox.Label
+                  className={clsx(
+                    'block text-sm font-semibold',
+                    disabled ? labelDisabledColor : labelColor,
+                    hiddenLabel && 'sr-only',
+                  )}
+                >
+                  {label}
+                  {required && <span className="text-warning-600"> *</span>}
+                </Listbox.Label>
+                <InputCorner>{corner}</InputCorner>
+              </div>
+            )}
+            <div className="relative">
+              <span
+                ref={setReferenceElement}
+                className="inline-block w-full rounded-md shadow-sm"
+              >
                 <Listbox.Button
                   className={clsx(
                     'bg-white relative w-full border rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 sm:text-sm',
@@ -315,8 +320,8 @@ export function Select<OptionType>(
                   </div>
                 </Transition>
               )}
-              <Help error={error} help={help} />
             </div>
+            <Help error={error} help={help} />
           </>
         )}
       </Listbox>

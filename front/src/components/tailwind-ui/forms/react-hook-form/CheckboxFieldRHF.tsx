@@ -1,26 +1,32 @@
 import React from 'react';
-import { useFormContext, get } from 'react-hook-form';
+import { get } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { Checkbox } from '../basic/Checkbox';
 import { CheckboxFieldProps } from '../formik/CheckboxField';
-import { defaultErrorSerializer, FieldProps } from '../util';
+import { defaultErrorSerializer, FieldProps, RHFRegisterProps } from '../util';
 
 export type CheckboxFieldRHFProps = Omit<CheckboxFieldProps, 'checked'> &
-  FieldProps;
+  FieldProps &
+  RHFRegisterProps;
 
 export function CheckboxFieldRHF(props: CheckboxFieldRHFProps): JSX.Element {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useCheckedFormRHFContext();
 
   const error = get(errors, props.name);
 
-  const { serializeError = defaultErrorSerializer, ...otherProps } = props;
+  const {
+    serializeError = defaultErrorSerializer,
+    rhfOptions,
+    ...otherProps
+  } = props;
   return (
     <Checkbox
       {...otherProps}
-      {...register(props.name)}
+      {...register(props.name, rhfOptions)}
       error={serializeError(error)}
     />
   );

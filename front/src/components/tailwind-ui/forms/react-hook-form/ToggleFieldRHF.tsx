@@ -1,23 +1,27 @@
 import React, { useCallback } from 'react';
-import { get, useFormContext, useWatch } from 'react-hook-form';
+import { get, useWatch } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { Toggle } from '../basic/Toggle';
 import { ToggleFieldProps } from '../formik/ToggleField';
-import { defaultErrorSerializer, FieldProps } from '../util';
+import { defaultErrorSerializer, FieldProps, RHFRegisterProps } from '../util';
 
-export type ToggleFieldRHFProps = ToggleFieldProps & FieldProps;
+export type ToggleFieldRHFProps = ToggleFieldProps &
+  FieldProps &
+  RHFRegisterProps;
 
 export function ToggleFieldRHF(props: ToggleFieldRHFProps): JSX.Element {
   const {
     name,
     serializeError = defaultErrorSerializer,
+    rhfOptions,
     ...otherProps
   } = props;
   const {
     setValue,
     register,
     formState: { errors, isSubmitted },
-  } = useFormContext();
+  } = useCheckedFormRHFContext();
   const activated = useWatch({
     name: props.name,
   });
@@ -37,7 +41,7 @@ export function ToggleFieldRHF(props: ToggleFieldRHFProps): JSX.Element {
   return (
     <Toggle
       onToggle={handleToggle}
-      {...register(props.name)}
+      {...register(props.name, rhfOptions)}
       activated={activated}
       error={serializeError(error)}
       {...otherProps}

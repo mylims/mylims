@@ -1,6 +1,6 @@
 import { useField } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
 import {
   SimpleStringSelectOption,
@@ -10,6 +10,8 @@ import {
   OptionsFilter,
   defaultOptionsFilter,
 } from '../utils/search-select-utils';
+
+import { useCheckedFormRHFContext } from './useCheckedFormRHF';
 
 export type { OptionsFilter };
 
@@ -71,7 +73,7 @@ export function useSearchSelectFieldRHF<OptionType>(
     : SearchSelectFieldHookConfig<OptionType>,
 ): SearchSelectFieldHookResult<OptionType> {
   const searchSelect = useSearchSelect<OptionType>(config);
-  const { setValue } = useFormContext();
+  const { setValue } = useCheckedFormRHFContext();
   const fieldValue = useWatch({
     name: config.name,
   });

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { SearchSelect } from '../basic/SearchSelect';
 import {
   SimpleStringSelectOption,
@@ -22,9 +23,10 @@ export function SearchSelectFieldRHF<OptionType>(
   const {
     name,
     serializeError = defaultErrorSerializer,
+    deps,
     ...searchSelectProps
   } = props;
-  const { setValue } = useFormContext();
+  const { setValue, trigger } = useCheckedFormRHFContext();
   const {
     field,
     fieldState: { error },
@@ -39,8 +41,11 @@ export function SearchSelectFieldRHF<OptionType>(
         shouldTouch: true,
         shouldValidate: isSubmitted,
       });
+      if (deps && isSubmitted) {
+        void trigger(deps);
+      }
     },
-    [setValue, name, isSubmitted],
+    [setValue, name, isSubmitted, trigger, deps],
   );
   return (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

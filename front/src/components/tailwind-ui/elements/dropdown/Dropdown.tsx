@@ -20,6 +20,13 @@ export interface DropdownStaticOption {
 
 export interface DropdownProps<T> {
   children?: ReactNode;
+  buttonClassName?: string;
+  disabled?: boolean;
+  /**
+   * If set to true only the custom style passed in buttonClassName will be used to
+   * style the dropdown button
+   */
+  noDefaultButtonStyle?: boolean;
   className?: string;
   title?: string;
   options: DropdownElement<T>[][];
@@ -33,111 +40,123 @@ const iconClassName =
 
 export function Dropdown<T>(props: DropdownProps<T>): React.ReactElement {
   return (
-    <div className={clsx('relative text-left', props.className)}>
-      <Menu>
-        {(menu) => (
-          <>
-            <Menu.Button
-              className={props.children ? iconClassName : titleClassName}
-            >
-              {props.children ? (
-                props.children
-              ) : (
-                <>
-                  {props.title}
-                  <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" />
-                </>
-              )}
-            </Menu.Button>
+    <Menu>
+      {(menu) => (
+        <div
+          className={clsx(
+            'text-left',
+            { relative: menu.open },
+            props.className || 'inline-block',
+          )}
+        >
+          <Menu.Button
+            disabled={props.disabled}
+            className={
+              props.noDefaultButtonStyle
+                ? props.buttonClassName
+                : clsx(
+                    props.children ? iconClassName : titleClassName,
+                    props.buttonClassName,
+                  )
+            }
+          >
+            {props.children ? (
+              props.children
+            ) : (
+              <>
+                {props.title}
+                <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" />
+              </>
+            )}
+          </Menu.Button>
 
-            <Transition
-              show={menu.open}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
+          <Transition
+            show={menu.open}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Menu.Items
+              static
+              className="absolute right-0 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg focus:outline-none ring-1 ring-black ring-opacity-5"
             >
-              <Menu.Items
-                static
-                className="absolute right-0 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg focus:outline-none ring-1 ring-black ring-opacity-5"
-              >
-                <div className="py-1 divide-y divide-neutral-100" role="menu">
-                  {props.options.map((options, index1) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <div className="py-1" key={index1}>
-                      {options.map((option, index2) => {
-                        if (option.type === 'option') {
-                          return (
-                            <Menu.Item
-                              disabled={option.disabled}
-                              onClick={() => props.onSelect(option)}
-                              // eslint-disable-next-line react/no-array-index-key
-                              key={`${index1}-${index2}`}
-                            >
-                              {({ active }) => (
-                                <div
+              <div className="py-1 divide-y divide-neutral-100" role="menu">
+                {props.options.map((options, index1) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <div className="py-1" key={index1}>
+                    {options.map((option, index2) => {
+                      if (option.type === 'option') {
+                        return (
+                          <Menu.Item
+                            disabled={option.disabled}
+                            onClick={() => props.onSelect(option)}
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={`${index1}-${index2}`}
+                          >
+                            {({ active }) => (
+                              <div
+                                className={clsx(
+                                  'focus:outline-none',
+                                  option.disabled
+                                    ? 'text-neutral-400'
+                                    : 'text-neutral-700',
+                                  {
+                                    'bg-neutral-100 text-neutral-900': active,
+                                  },
+                                )}
+                              >
+                                <span
                                   className={clsx(
-                                    'focus:outline-none',
+                                    'w-full text-left block px-4 py-2 text-sm focus:outline-none',
                                     option.disabled
-                                      ? 'text-neutral-400'
-                                      : 'text-neutral-700',
+                                      ? 'cursor-default'
+                                      : 'cursor-pointer',
                                     {
-                                      'bg-neutral-100 text-neutral-900': active,
+                                      'group flex items-center': option.icon,
+                                      'block justify-between ': !option.icon,
                                     },
                                   )}
                                 >
-                                  <span
-                                    className={clsx(
-                                      'w-full text-left block px-4 py-2 text-sm focus:outline-none',
-                                      option.disabled
-                                        ? 'cursor-default'
-                                        : 'cursor-pointer',
-                                      {
-                                        'group flex items-center': option.icon,
-                                        'block justify-between ': !option.icon,
-                                      },
-                                    )}
-                                  >
-                                    {option.icon !== undefined && (
-                                      <span
-                                        className={clsx(
-                                          'w-5 h-5 mr-3',
-                                          active
-                                            ? 'text-neutral-500'
-                                            : ' text-neutral-400',
-                                        )}
-                                      >
-                                        {option.icon}
-                                      </span>
-                                    )}
-                                    {option.label}
-                                  </span>
-                                </div>
-                              )}
-                            </Menu.Item>
-                          );
-                        } else {
-                          return (
-                            <div
-                              className="px-4 py-2 text-sm"
-                              // eslint-disable-next-line react/no-array-index-key
-                              key={`${index1}-${index2}`}
-                            >
-                              {option.content}
-                            </div>
-                          );
-                        }
-                      })}
-                    </div>
-                  ))}
-                </div>
-              </Menu.Items>
-            </Transition>
-          </>
-        )}
-      </Menu>
-    </div>
+                                  {option.icon !== undefined && (
+                                    <span
+                                      className={clsx(
+                                        'w-5 h-5 mr-3',
+                                        active
+                                          ? 'text-neutral-500'
+                                          : ' text-neutral-400',
+                                      )}
+                                    >
+                                      {option.icon}
+                                    </span>
+                                  )}
+                                  {option.label}
+                                </span>
+                              </div>
+                            )}
+                          </Menu.Item>
+                        );
+                      } else {
+                        return (
+                          <div
+                            className="px-4 py-2 text-sm"
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={`${index1}-${index2}`}
+                          >
+                            {option.content}
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                ))}
+              </div>
+            </Menu.Items>
+          </Transition>
+        </div>
+      )}
+    </Menu>
   );
 }

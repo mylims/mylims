@@ -13,7 +13,7 @@ export interface ButtonProps
   size?: Size;
   variant?: Variant;
   roundness?: Roundness;
-  group?: string;
+  group?: 'left' | 'right' | 'middle';
   noBorder?: boolean;
 }
 

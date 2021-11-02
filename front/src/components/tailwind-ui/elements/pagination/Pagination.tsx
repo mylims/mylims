@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React, { useMemo } from 'react';
 
 import { Variant } from '../../types';
-import { Button } from '../buttons/Button';
 import { ButtonGroup } from '../buttons/ButtonGroup';
 
 import { paginate, ELLIPSIS } from './paginate';
@@ -68,15 +67,15 @@ export function Pagination(props: PaginationProps) {
       >
         {withText && <Text page={page} total={totalPages} />}
         <div>
-          <nav className="relative z-0 inline-flex shadow-sm">
+          <nav className="inline-flex shadow-sm">
             <ButtonGroup variant={Variant.white} size={pages.length + 2}>
-              <Button disabled={prevDisabled} onClick={goPrevious}>
+              <ButtonGroup.Button disabled={prevDisabled} onClick={goPrevious}>
                 Previous
-              </Button>
+              </ButtonGroup.Button>
 
               {pages.map((element, index) => {
                 return (
-                  <Button
+                  <ButtonGroup.Button
                     noBorder
                     className="border border-neutral-300"
                     style={{ minWidth: '3rem' }}
@@ -90,13 +89,13 @@ export function Pagination(props: PaginationProps) {
                     }
                   >
                     {element}
-                  </Button>
+                  </ButtonGroup.Button>
                 );
               })}
 
-              <Button disabled={nextDisabled} onClick={goNext}>
+              <ButtonGroup.Button disabled={nextDisabled} onClick={goNext}>
                 Next
-              </Button>
+              </ButtonGroup.Button>
             </ButtonGroup>
           </nav>
         </div>

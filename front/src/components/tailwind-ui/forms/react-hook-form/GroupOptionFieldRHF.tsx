@@ -1,13 +1,14 @@
 import React, { Children, cloneElement } from 'react';
-import { useFormContext, get } from 'react-hook-form';
+import { get } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { GroupOptionProps, OptionProps } from '../basic/GroupOption';
 import { Help } from '../basic/common';
 import {
   GroupOption as GroupOptionInternal,
   Option,
 } from '../basic/internal/GroupOption';
-import { defaultErrorSerializer, FieldProps } from '../util';
+import { defaultErrorSerializer, FieldProps, RHFRegisterProps } from '../util';
 
 export type GroupOptionFieldRHFProps = GroupOptionProps &
   FieldProps & {
@@ -17,7 +18,7 @@ export type GroupOptionFieldRHFProps = GroupOptionProps &
 export function GroupOptionFieldRHF(props: GroupOptionFieldRHFProps) {
   const {
     formState: { errors },
-  } = useFormContext();
+  } = useCheckedFormRHFContext();
   const error = get(errors, props.name);
   const childrenWithName = Children.map(props.children, (child) => {
     if (child.type !== OptionFieldRHF) {
@@ -37,9 +38,12 @@ export function GroupOptionFieldRHF(props: GroupOptionFieldRHFProps) {
   );
 }
 
-export function OptionFieldRHF(props: OptionProps): JSX.Element {
-  const { register } = useFormContext();
-  return <Option {...props} {...register(props.name)} />;
+export function OptionFieldRHF(
+  props: OptionProps & RHFRegisterProps,
+): JSX.Element {
+  const { register } = useCheckedFormRHFContext();
+  const { rhfOptions, ...otherProps } = props;
+  return <Option {...otherProps} {...register(props.name, rhfOptions)} />;
 }
 
 GroupOptionFieldRHF.Option = OptionFieldRHF as (

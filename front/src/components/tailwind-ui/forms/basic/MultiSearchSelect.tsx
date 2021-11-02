@@ -9,6 +9,7 @@ import {
   defaultGetValue,
   defaultRenderOption,
   defaultGetBadgeColor,
+  defaultIsOptionRemovable,
   InternalSearchSelect,
   useSearchSelectInternals,
 } from '../../utils/search-select-utils';
@@ -21,6 +22,7 @@ export interface SimpleMultiSearchSelectProps<OptionType>
   selected: OptionType[];
   onSelect: (newSelected: OptionType[]) => void;
   getBadgeColor?: (option: OptionType) => Color;
+  isOptionRemovable?: (option: OptionType) => boolean;
 }
 
 export interface MultiSearchSelectProps<OptionType>
@@ -28,6 +30,7 @@ export interface MultiSearchSelectProps<OptionType>
   selected: OptionType[];
   onSelect: (newSelected: OptionType[]) => void;
   getBadgeColor?: (option: OptionType) => Color;
+  isOptionRemovable?: (option: OptionType) => boolean;
 }
 
 export const MultiSearchSelect = forwardRefWithGeneric(
@@ -47,6 +50,7 @@ function MultiSearchSelectForwardRef<OptionType>(
     options,
     onSelect,
     getBadgeColor = defaultGetBadgeColor,
+    isOptionRemovable = defaultIsOptionRemovable,
     selected,
     getValue = defaultGetValue,
     renderOption = defaultRenderOption,
@@ -80,11 +84,21 @@ function MultiSearchSelectForwardRef<OptionType>(
           color={getBadgeColor(option)}
           rounded
           className="mt-1 mr-1"
-          onDismiss={disabled ? undefined : handleDismiss}
+          onDismiss={
+            disabled || !isOptionRemovable(option) ? undefined : handleDismiss
+          }
         />
       );
     });
-  }, [selected, getValue, renderOption, onSelect, getBadgeColor, disabled]);
+  }, [
+    selected,
+    getValue,
+    renderOption,
+    onSelect,
+    getBadgeColor,
+    disabled,
+    isOptionRemovable,
+  ]);
 
   const handleSelect = useCallback(
     (value: OptionType | undefined) => {

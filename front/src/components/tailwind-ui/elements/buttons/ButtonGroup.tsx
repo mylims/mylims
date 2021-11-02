@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 
 import { Variant, Color } from '../../types';
+
+import { Button, ButtonProps } from './Button';
+
+const context = createContext<{
+  variant: Variant;
+  color: Color;
+  position: 'left' | 'right' | 'middle';
+} | null>(null);
 
 export interface ButtonGroupProps {
   variant?: Variant;
@@ -15,23 +23,42 @@ export function ButtonGroup(props: ButtonGroupProps): JSX.Element {
 
   const definedChildren = children.filter((child) => child != null);
   const elements = React.Children.map(definedChildren, (child, index) => {
-    const group =
+    const position =
       index === 0
         ? 'left'
         : index === (props.size ? props.size - 1 : definedChildren.length - 1)
         ? 'right'
         : 'middle';
 
-    return React.cloneElement(child, {
-      group,
-      variant: child.props.variant ? child.props.variant : variant,
-      color,
-    });
+    return (
+      <context.Provider value={{ color, variant, position }}>
+        {child}
+      </context.Provider>
+    );
   });
 
-  return (
-    <span className="relative z-0 inline-flex rounded-md shadow-sm">
-      {elements}
-    </span>
-  );
+  return <span className="inline-flex rounded-md shadow-sm">{elements}</span>;
 }
+
+ButtonGroup.Button = function ButtonGroupButton(
+  props: Omit<ButtonProps, 'group'>,
+) {
+  const ctx = useContext(context);
+
+  if (ctx === null) {
+    throw new Error('context for ButtonGroup was not provided');
+  }
+
+  const {
+    children,
+    color = ctx.color,
+    variant = ctx.variant,
+    ...other
+  } = props;
+
+  return (
+    <Button color={color} variant={variant} group={ctx.position} {...other}>
+      {children}
+    </Button>
+  );
+};
