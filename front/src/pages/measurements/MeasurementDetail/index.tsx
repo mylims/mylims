@@ -23,6 +23,7 @@ export default function MeasurementDetail() {
       case 'TransferMeasurement': {
         return (
           <B1505Transfer
+            fileId={data.measurement.fileId ?? null}
             file={data.measurement.file ?? null}
             derived={data.measurement.transferDerived}
           />
