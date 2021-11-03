@@ -687,6 +687,7 @@ type MeasurementFields_GeneralMeasurement_Fragment = {
   username: string;
   sampleCode: Array<string>;
   createdBy: string;
+  fileId?: string | null | undefined;
   description?: string | null | undefined;
   createdAt: any;
   file?:
@@ -702,6 +703,7 @@ type MeasurementFields_TransferMeasurement_Fragment = {
   username: string;
   sampleCode: Array<string>;
   createdBy: string;
+  fileId?: string | null | undefined;
   description?: string | null | undefined;
   createdAt: any;
   file?:
@@ -733,6 +735,7 @@ export type MeasurementsFilteredQuery = {
           username: string;
           sampleCode: Array<string>;
           createdBy: string;
+          fileId?: string | null | undefined;
           description?: string | null | undefined;
           createdAt: any;
           file?:
@@ -747,6 +750,7 @@ export type MeasurementsFilteredQuery = {
           username: string;
           sampleCode: Array<string>;
           createdBy: string;
+          fileId?: string | null | undefined;
           description?: string | null | undefined;
           createdAt: any;
           file?:
@@ -772,6 +776,7 @@ export type MeasurementQuery = {
         username: string;
         sampleCode: Array<string>;
         createdBy: string;
+        fileId?: string | null | undefined;
         description?: string | null | undefined;
         createdAt: any;
         file?:
@@ -786,6 +791,7 @@ export type MeasurementQuery = {
         username: string;
         sampleCode: Array<string>;
         createdBy: string;
+        fileId?: string | null | undefined;
         description?: string | null | undefined;
         createdAt: any;
         transferDerived: {
@@ -850,6 +856,7 @@ export const MeasurementFieldsFragmentDoc = gql`
     username
     sampleCode
     createdBy
+    fileId
     file {
       filename
       size

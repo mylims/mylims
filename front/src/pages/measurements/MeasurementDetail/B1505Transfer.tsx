@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Annotation } from 'react-plot';
+import { useQuery } from 'react-query';
 
 import { PlotJcamp } from '@/components/PlotJcamp';
 import { Alert, AlertType, Card } from '@/components/tailwind-ui';
 
 interface B1505TransferProps {
   file: null | { filename: string; downloadUrl: string; size: number };
+  fileId: null | string;
   derived: {
     thresholdVoltage: {
       index: number;
@@ -19,11 +21,6 @@ interface B1505TransferProps {
   };
 }
 
-interface B1505TransferState {
-  content: string | null;
-  error: Error | null;
-}
-
 const dashedLine = { strokeWidth: 2, opacity: 0.75, strokeDasharray: '5,5' };
 const underline = (color: string) => ({
   textDecoration: 'underline',
@@ -32,29 +29,29 @@ const underline = (color: string) => ({
   textDecorationThickness: '2px',
 });
 
-export default function B1505Transfer({ file, derived }: B1505TransferProps) {
-  const [{ content, error }, setState] = useState<B1505TransferState>({
-    content: null,
-    error: null,
-  });
+export default function B1505Transfer({
+  file,
+  fileId,
+  derived,
+}: B1505TransferProps) {
+  const { isLoading, isError, data, error } = useQuery<string | null, Error>(
+    `file-${fileId ?? 'none'}`,
+    async () => {
+      if (!file) return null;
+      const response = await fetch(file.downloadUrl);
+      if (!response.ok) throw new Error('Fetch error');
+      return response.text();
+    },
+  );
 
-  useEffect(() => {
-    if (file) {
-      fetch(file.downloadUrl)
-        .then((res) => res.text())
-        .then((data) => setState({ content: data, error: null }))
-        .catch((error) => setState({ content: null, error }));
-    }
-  }, [file, file?.downloadUrl]);
-
-  if (error) {
+  if (isError) {
     return (
       <Card.Body>
         <Alert
           title="Error while fetching measurement plot"
           type={AlertType.ERROR}
         >
-          Unexpected error: {error.message}
+          Unexpected error: {error?.message}
         </Alert>
       </Card.Body>
     );
@@ -64,7 +61,7 @@ export default function B1505Transfer({ file, derived }: B1505TransferProps) {
       <div className="flex justify-around">
         <div>
           <PlotJcamp
-            content={content}
+            content={data && !isLoading ? data : null}
             initialQuery={{
               xLabel: 'Vg',
               xUnits: 'V',
@@ -83,8 +80,8 @@ export default function B1505Transfer({ file, derived }: B1505TransferProps) {
                     <Annotation.Line
                       x1={derived.thresholdVoltage.value}
                       x2={derived.thresholdVoltage.value}
-                      y1={y.min ?? '0'}
-                      y2={y.max ?? '500'}
+                      y1={y?.min ?? '0'}
+                      y2={y?.max ?? '500'}
                       style={{ stroke: 'green', ...dashedLine }}
                     />
                     <Annotation.Circle
