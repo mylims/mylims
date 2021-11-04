@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
-import { PlotQuery } from '@/components/PlotJcamp';
-import { PlotJcampMultiple } from '@/components/PlotJcampMultiple';
+import type { PlotQuery } from '@/components/PlotJcamp/types';
+import { PlotJcampMultiple } from '@/components/PlotJcamp/PlotJcampMultiple';
 import { Alert, AlertType } from '@/components/tailwind-ui';
 import { MeasurementTypes } from '@/generated/graphql';
 
