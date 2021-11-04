@@ -6,7 +6,8 @@ import {
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { API_URL } from '@/../env';
+import { MeasurementPlotContext } from '../../MeasurementPlot';
+
 import {
   Button,
   Color,
@@ -14,7 +15,6 @@ import {
   Td,
   Variant,
 } from '@/components/tailwind-ui';
-import { MeasurementPlotContext } from '../../MeasurementPlot';
 
 interface MeasurementRowProps {
   id: string;
