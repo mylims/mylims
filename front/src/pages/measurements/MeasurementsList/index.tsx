@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { MeasurementPlot } from '../../MeasurementPlot';
-
 import MeasurementFormFilter from './MeasurementFormFilter';
+import { MeasurementPlot } from './MeasurementPlot';
 import MeasurementRow from './MeasurementRow';
 
 import ElnLayout from '@/components/ElnLayout';
@@ -22,10 +21,10 @@ type MeasurementRowType =
 
 const PAGE_SIZE = 10;
 const titles = [
-  { className: 'w-4/12', name: 'Sample' },
+  { className: 'w-2/12', name: 'Sample' },
   { className: 'w-2/12', name: 'Creation date' },
   { className: 'w-2/12', name: 'Username' },
-  { className: 'w-4/12', name: 'Actions' },
+  { name: 'Actions' },
 ];
 
 export default function MeasurementsList() {

@@ -6,7 +6,7 @@ import {
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { MeasurementPlotContext } from '../../MeasurementPlot';
+import { MeasurementPlotContext } from './MeasurementPlot';
 
 import {
   Button,

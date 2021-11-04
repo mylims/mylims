@@ -10,7 +10,7 @@ interface TableEmptyProps {
 
 export default function TableEmpty({ titles }: TableEmptyProps) {
   return (
-    <table>
+    <table className="w-full">
       <thead>
         <TableHeader titles={titles} />
       </thead>
