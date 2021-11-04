@@ -1,5 +1,5 @@
 import { fromJcamp, getReactPlotJSON } from 'common-spectrum';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { PlotObject } from 'react-plot';
 
 interface PlotJcampMultipleProps {

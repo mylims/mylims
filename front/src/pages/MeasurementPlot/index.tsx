@@ -17,7 +17,13 @@ interface MeasurementContextState<T> {
 
 export const MeasurementPlotContext = createContext<
   MeasurementContextState<MeasurementState>
->({ enabled: false, state: {}, setState: () => {} });
+>({
+  enabled: false,
+  state: {},
+  setState: () => {
+    // empty function
+  },
+});
 
 export function MeasurementPlot({ type, children }: MeasurementPlotProps) {
   const [state, setState] = useState<MeasurementState>({});

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { MeasurementPlot } from '../../MeasurementPlot';
+
 import MeasurementFormFilter from './MeasurementFormFilter';
 import MeasurementRow from './MeasurementRow';
 
@@ -14,7 +16,6 @@ import {
 } from '@/generated/graphql';
 import { useFilterMeasurementQuery } from '@/hooks/useMeasurementQuery';
 import { formatDate } from '@/utils/formatFields';
-import { MeasurementPlot } from '../../MeasurementPlot';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['measurements'][number];
