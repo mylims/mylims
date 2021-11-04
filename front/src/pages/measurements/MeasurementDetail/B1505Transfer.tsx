@@ -1,14 +1,9 @@
 import React from 'react';
 import { Annotation } from 'react-plot';
-import { useQuery } from 'react-query';
 
 import { PlotJcamp } from '@/components/PlotJcamp';
 import { Alert, AlertType, Card } from '@/components/tailwind-ui';
-
-import { Annotation } from 'react-plot';
-
-import { PlotJcamp } from '@/components/PlotJcamp';
-import { Alert, AlertType, Card } from '@/components/tailwind-ui';
+import { useFetchFile } from '@/hooks/useFetchFile';
 
 interface B1505TransferProps {
   file: null | { filename: string; downloadUrl: string; size: number };
@@ -39,17 +34,9 @@ export default function B1505Transfer({
   fileId,
   derived,
 }: B1505TransferProps) {
-  const { isLoading, isError, data, error } = useQuery<string | null, Error>(
-    `file-${fileId ?? 'none'}`,
-    async () => {
-      if (!file) return null;
-      const response = await fetch(file.downloadUrl);
-      if (!response.ok) throw new Error('Fetch error');
-      return response.text();
-    },
-  );
+  const { data, error } = useFetchFile(fileId, file?.downloadUrl ?? null);
 
-  if (isError) {
+  if (error) {
     return (
       <Card.Body>
         <Alert
@@ -66,7 +53,7 @@ export default function B1505Transfer({
       <div className="flex justify-around">
         <div>
           <PlotJcamp
-            content={data && !isLoading ? data : null}
+            content={data}
             initialQuery={{
               xLabel: 'Vg',
               xUnits: 'V',

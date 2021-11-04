@@ -56,10 +56,6 @@ const selectFieldOptions = [
     value: MeasurementSortField.CREATEDAT,
     label: selectField[MeasurementSortField.CREATEDAT],
   },
-  {
-    value: MeasurementSortField.CREATEDBY,
-    label: selectField[MeasurementSortField.CREATEDBY],
-  },
 ];
 
 export default function MeasurementFormFilter({
