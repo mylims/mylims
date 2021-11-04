@@ -3,7 +3,7 @@ import {
   AnnotationIcon,
   DownloadIcon,
 } from '@heroicons/react/outline';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { API_URL } from '@/../env';
@@ -14,6 +14,7 @@ import {
   Td,
   Variant,
 } from '@/components/tailwind-ui';
+import { MeasurementPlotContext } from '../../MeasurementPlot';
 
 interface MeasurementRowProps {
   id: string;
@@ -21,8 +22,7 @@ interface MeasurementRowProps {
   username: string;
   sampleCode: string[];
   createdAt: string;
-  createdBy: string;
-  fileId?: string | null;
+  downloadUrl?: string | null;
 }
 export default function MeasurementRow({
   id,
@@ -30,15 +30,14 @@ export default function MeasurementRow({
   username,
   sampleCode,
   createdAt,
-  createdBy,
-  fileId,
+  downloadUrl,
 }: MeasurementRowProps) {
+  const { enabled, state, setState } = useContext(MeasurementPlotContext);
   return (
     <tr>
       <Td>{sampleCode.join('/')}</Td>
       <Td>{createdAt}</Td>
       <Td>{username}</Td>
-      <Td>{createdBy}</Td>
       <Td>
         <div className="flex">
           <Link title="detail" to={`/measurement/detail/${id}`}>
@@ -53,7 +52,7 @@ export default function MeasurementRow({
           </Link>
           <Link title="event" to={`/event/detail/${eventId}`}>
             <Button
-              color={Color.alternative}
+              color={Color.primary}
               roundness={Roundness.circular}
               variant={Variant.secondary}
               className="ml-2"
@@ -61,11 +60,8 @@ export default function MeasurementRow({
               <AnnotationIcon className="w-5 h-5" />
             </Button>
           </Link>
-          {fileId && (
-            <Link
-              title="download file"
-              to={`${API_URL}/addons/file-sync/file-content?id=${fileId}`}
-            >
+          {downloadUrl && (
+            <a href={downloadUrl} target="_blank" rel="noreferrer">
               <Button
                 color={Color.neutral}
                 roundness={Roundness.circular}
@@ -74,7 +70,26 @@ export default function MeasurementRow({
               >
                 <DownloadIcon className="w-5 h-5" />
               </Button>
-            </Link>
+            </a>
+          )}
+          {enabled && downloadUrl && (
+            <Button
+              color={Color.success}
+              variant={state[id] ? Variant.primary : Variant.secondary}
+              className="ml-2"
+              onClick={() => {
+                setState((prevState) => {
+                  const { [id]: currElement, ...restState } = prevState;
+                  if (currElement) {
+                    return restState;
+                  } else {
+                    return { ...prevState, [id]: downloadUrl };
+                  }
+                });
+              }}
+            >
+              {state[id] ? '- plot' : '+ plot'}
+            </Button>
           )}
         </div>
       </Td>
