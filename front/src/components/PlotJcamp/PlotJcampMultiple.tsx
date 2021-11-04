@@ -2,29 +2,30 @@ import { fromJcamp } from 'common-spectrum';
 import React, { useMemo } from 'react';
 import { PlotObject } from 'react-plot';
 
-import { getPlotJcamp } from './utils';
 import type { PlotQuery } from './types';
+import { getPlotJcamp } from './utils';
 
 interface PlotJcampMultipleProps {
   content: Array<string>;
   query: PlotQuery;
+  size: { width: number; height: number };
 }
 
-export function PlotJcampMultiple({ content, query }: PlotJcampMultipleProps) {
+export function PlotJcampMultiple({
+  content,
+  query,
+  size,
+}: PlotJcampMultipleProps) {
   const analyses = useMemo(
     () => content.map((jcamp) => fromJcamp(jcamp)),
     [content],
   );
   const plotContent = useMemo(() => {
-    if (!analyses) return null;
     return getPlotJcamp(query, analyses, {
-      width: 350,
-      height: 300,
+      ...size,
       margin: { bottom: 50, left: 90, top: 5, right: 5 },
     });
-  }, [analyses, query]);
-
-  if (!plotContent || !analyses) return null;
+  }, [analyses, query, size]);
 
   return <PlotObject plot={plotContent} />;
 }

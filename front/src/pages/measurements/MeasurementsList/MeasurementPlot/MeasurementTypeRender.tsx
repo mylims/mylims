@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
-import type { PlotQuery } from '@/components/PlotJcamp/types';
 import { PlotJcampMultiple } from '@/components/PlotJcamp/PlotJcampMultiple';
+import type { PlotQuery } from '@/components/PlotJcamp/types';
 import { Alert, AlertType } from '@/components/tailwind-ui';
 import { MeasurementTypes } from '@/generated/graphql';
 
@@ -11,6 +11,7 @@ interface MeasurementTypesProps {
   error: Error[];
 }
 
+const size = { width: 300, height: 250 };
 export default function MeasurementTypeRender({
   type,
   data,
@@ -32,7 +33,7 @@ export default function MeasurementTypeRender({
     );
   }
 
-  if (content.length === 0) return null;
+  if (content.length === 0) return <svg {...size} />;
 
   let query: PlotQuery;
   switch (type) {
@@ -57,5 +58,5 @@ export default function MeasurementTypeRender({
       };
     }
   }
-  return <PlotJcampMultiple content={content} query={query} />;
+  return <PlotJcampMultiple content={content} query={query} size={size} />;
 }

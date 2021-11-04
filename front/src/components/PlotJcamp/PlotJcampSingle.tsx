@@ -2,8 +2,8 @@ import { Analysis, fromJcamp } from 'common-spectrum';
 import React, { ReactNode, useMemo, useState } from 'react';
 import { PlotObject } from 'react-plot';
 
-import { getPlotJcamp } from './utils';
 import type { PlotQuery } from './types';
+import { getPlotJcamp } from './utils';
 
 interface PlotJcampProps {
   content: string | null;
