@@ -1,7 +1,7 @@
 import React from 'react';
 import { Annotation } from 'react-plot';
 
-import { PlotJcamp } from '@/components/PlotJcamp';
+import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
 import { Alert, AlertType, Card } from '@/components/tailwind-ui';
 import { useFetchFile } from '@/hooks/useFetchFile';
 
@@ -52,7 +52,7 @@ export default function B1505Transfer({
     <Card.Body>
       <div className="flex justify-around">
         <div>
-          <PlotJcamp
+          <PlotJcampSingle
             content={data}
             initialQuery={{
               xLabel: 'Vg',
@@ -110,7 +110,7 @@ export default function B1505Transfer({
               }
               return null;
             }}
-          </PlotJcamp>
+          </PlotJcampSingle>
         </div>
         <div>
           <div>
