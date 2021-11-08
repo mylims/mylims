@@ -7,7 +7,6 @@ import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import File from 'App/Models/File';
 import { MeasurementParams } from 'App/Models/Measurement/Base';
-import { GeneralMeasurement } from 'App/Models/Measurement/General';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
 import { Sample, ActivityType } from 'App/Models/Sample';
 import User from 'App/Models/User';
@@ -145,7 +144,7 @@ export default class MeasurementController {
         return TransferMeasurement.create(measurement);
       }
       default: {
-        return GeneralMeasurement.create({ ...measurement, collection });
+        throw new Error(`Unknown measurement collection ${collection}`);
       }
     }
   }
