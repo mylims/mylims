@@ -1,12 +1,12 @@
 type Query {
   measurements(
-    type: MeasurementTypes
+    type: MeasurementTypes!
     limit: Int
     skip: Int
     filterBy: MeasurementFilterInput
     sortBy: MeasurementSortInput
   ): MeasurementPage!
-  measurement(id: ID!): Measurement!
+  measurement(id: ID!, type: MeasurementTypes!): Measurement!
 }
 
 # Paginated list of measurements
@@ -36,24 +36,10 @@ type MeasurementFile {
 
 # Measurement specific data
 enum MeasurementTypes {
-  general
   transfer
 }
 
-interface Measurement {
-  id: ID!
-  type: MeasurementTypes!
-  eventId: String!
-  username: String!
-  sampleCode: [String!]!
-  createdBy: String!
-  fileId: String
-  file: MeasurementFile
-  description: String
-  createdAt: DateTime!
-}
-
-type GeneralMeasurement implements Measurement {
+type Measurement {
   id: ID!
   type: MeasurementTypes!
   eventId: String!

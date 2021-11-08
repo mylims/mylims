@@ -5,7 +5,6 @@ import { UserInputError } from '@ioc:Zakodium/Apollo/Errors';
 import { ModelAttributes, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import File from 'App/Models/File';
-import { GeneralMeasurement } from 'App/Models/Measurement/General';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
 import {
   GqlMeasurement,
@@ -18,7 +17,6 @@ import {
 } from 'App/graphql';
 
 const measurements = {
-  [GqlMeasurementTypes.GENERAL]: GeneralMeasurement,
   [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
 };
 type MeasurementType = Omit<GqlMeasurement, 'id' | 'file'> & {
@@ -28,16 +26,6 @@ type MeasurementType = Omit<GqlMeasurement, 'id' | 'file'> & {
 
 const resolvers: GqlResolvers = {
   Measurement: {
-    __resolveType(parent) {
-      switch (parent.type) {
-        case GqlMeasurementTypes.TRANSFER: {
-          return 'TransferMeasurement';
-        }
-        default: {
-          return 'GeneralMeasurement';
-        }
-      }
-    },
     async file(parent) {
       const fileId = parent.fileId ?? null;
       if (!fileId) return null;
@@ -51,28 +39,26 @@ const resolvers: GqlResolvers = {
     },
   },
   Query: {
-    async measurement(_, { id }) {
-      for (const [type, Measurement] of Object.entries(measurements)) {
-        const ans = await Measurement.find(new ObjectId(id));
-        if (ans) {
-          const { _id, ...rest } = ans.toJSON() as MeasurementType;
-          return {
-            ...rest,
-            id: _id.toHexString(),
-            type: type as GqlMeasurementTypes,
-          };
-        }
+    async measurement(_, { id, type }) {
+      const Measurement = measurements[type];
+      const ans = await Measurement.find(new ObjectId(id));
+      if (ans) {
+        const { _id, ...rest } = ans.toJSON() as MeasurementType;
+        return {
+          ...rest,
+          id: _id.toHexString(),
+          type: type as GqlMeasurementTypes,
+        };
       }
       throw new UserInputError('Id not found', { argumentName: 'id' });
     },
-    async measurements(_, { type: maybeType, limit, skip, filterBy, sortBy }) {
+    async measurements(_, { type, limit, skip, filterBy, sortBy }) {
       const {
         field = GqlMeasurementSortField.CREATEDAT,
         direction = GqlSortDirection.DESC,
       } = sortBy || {};
 
-      const type = maybeType || GqlMeasurementTypes.GENERAL;
-      let measurementCursor = (measurements[type] ?? measurements.general)
+      let measurementCursor = measurements[type]
         .query(createFilter(filterBy))
         .sortBy(field, direction === GqlSortDirection.DESC ? -1 : 1);
       const totalCount = await measurementCursor.count();
@@ -92,10 +78,8 @@ const resolvers: GqlResolvers = {
 
 function createFilter(
   filterBy: Maybe<GqlMeasurementFilterInput> | undefined,
-): Filter<ModelAttributes<GeneralMeasurement | TransferMeasurement>> {
-  let filter: Filter<
-    ModelAttributes<GeneralMeasurement | TransferMeasurement>
-  > = {};
+): Filter<ModelAttributes<TransferMeasurement>> {
+  let filter: Filter<ModelAttributes<TransferMeasurement>> = {};
   if (filterBy) {
     if (filterBy.username) filter.username = filterBy.username;
     if (filterBy.sampleCode) filter.sampleCode = filterBy.sampleCode;
