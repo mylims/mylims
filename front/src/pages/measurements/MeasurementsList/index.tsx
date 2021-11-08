@@ -32,7 +32,7 @@ export default function MeasurementsList() {
   const pageNum = query.page !== null ? parseInt(query.page, 10) : 1;
   const { loading, error, data } = useMeasurementsFilteredQuery({
     variables: {
-      type: query.type?.value ?? MeasurementTypes.GENERAL,
+      type: query.type?.value ?? MeasurementTypes.TRANSFER,
       skip: (pageNum - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
       filterBy: {
@@ -64,7 +64,7 @@ export default function MeasurementsList() {
       {loading ? (
         <Spinner className="w-10 h-10 text-danger-500" />
       ) : (
-        <MeasurementPlot type={query.type?.value ?? MeasurementTypes.GENERAL}>
+        <MeasurementPlot type={query.type?.value ?? MeasurementTypes.TRANSFER}>
           <Table
             tableClassName="table-fixed"
             Header={() => <TableHeader titles={titles} />}
