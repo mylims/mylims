@@ -40,7 +40,6 @@ const schema = yup.object().shape({
   sampleCode: yup.string().nullable(),
 });
 const selectTypeOptions = [
-  { value: MeasurementTypes.GENERAL, label: MeasurementTypes.GENERAL },
   { value: MeasurementTypes.TRANSFER, label: MeasurementTypes.TRANSFER },
 ];
 const selectOrderOptions = [

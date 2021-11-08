@@ -70,7 +70,7 @@ export function useFilterMeasurementQuery(): [
     (query.sortField as MeasurementSortField) || MeasurementSortField.CREATEDAT;
   const sortDirection =
     (query.sortDirection as SortDirection) || SortDirection.DESC;
-  const type = (query.type ?? MeasurementTypes.GENERAL) as MeasurementTypes;
+  const type = query.type as MeasurementTypes;
 
   return [
     {

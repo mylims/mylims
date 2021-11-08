@@ -31,16 +31,6 @@ export function MeasurementPlot({ type, children }: MeasurementPlotProps) {
   const [state, setState] = useState<MeasurementState>({});
   const { data, error } = useFetchFileDict(state);
 
-  if (type === MeasurementTypes.GENERAL) {
-    return (
-      <MeasurementPlotContext.Provider
-        value={{ enabled: false, state, setState }}
-      >
-        {children}
-      </MeasurementPlotContext.Provider>
-    );
-  }
-
   return (
     <MeasurementPlotContext.Provider value={{ enabled: true, state, setState }}>
       <div className="flex flex-col md:justify-between md:flex-row-reverse">

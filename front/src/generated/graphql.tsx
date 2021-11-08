@@ -31,17 +31,6 @@ export type DeleteFileSyncOptionInput = {
   id: Scalars['ID'];
 };
 
-export type DerivedSlope = {
-  fromIndex: Scalars['Int'];
-  medianSlope: Scalars['Float'];
-  toIndex: Scalars['Int'];
-};
-
-export type DerivedValue = {
-  index: Scalars['Int'];
-  value: Scalars['Float'];
-};
-
 export type DirectoryEntry = {
   path: Scalars['String'];
   type: DirectoryEntryType;
@@ -188,23 +177,10 @@ export type FilesSortInput = {
   field: FilesSortField;
 };
 
-export type GeneralMeasurement = Measurement & {
-  createdAt: Scalars['DateTime'];
-  createdBy: Scalars['String'];
-  derived?: Maybe<Scalars['JSON']>;
-  description?: Maybe<Scalars['String']>;
-  eventId: Scalars['String'];
-  file?: Maybe<MeasurementFile>;
-  fileId?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  sampleCode: Array<Scalars['String']>;
-  type: MeasurementTypes;
-  username: Scalars['String'];
-};
-
 export type Measurement = {
   createdAt: Scalars['DateTime'];
   createdBy: Scalars['String'];
+  derived?: Maybe<Scalars['JSON']>;
   description?: Maybe<Scalars['String']>;
   eventId: Scalars['String'];
   file?: Maybe<MeasurementFile>;
@@ -244,7 +220,6 @@ export type MeasurementSortInput = {
 };
 
 export enum MeasurementTypes {
-  GENERAL = 'general',
   TRANSFER = 'transfer',
 }
 
@@ -339,6 +314,7 @@ export type QueryFilesByConfigFlatArgs = {
 
 export type QueryMeasurementArgs = {
   id: Scalars['ID'];
+  type: MeasurementTypes;
 };
 
 export type QueryMeasurementsArgs = {
@@ -346,7 +322,7 @@ export type QueryMeasurementsArgs = {
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<MeasurementSortInput>;
-  type?: Maybe<MeasurementTypes>;
+  type: MeasurementTypes;
 };
 
 export type ReadyCheck = {
@@ -402,25 +378,6 @@ export type SyncTreeRevision = {
   dirs: Array<SyncDirRevision>;
   files: Array<SyncFileRevision>;
   ignoredFiles: Scalars['Int'];
-};
-
-export type TransferDerived = {
-  subthresholdSlope: DerivedSlope;
-  thresholdVoltage: DerivedValue;
-};
-
-export type TransferMeasurement = Measurement & {
-  createdAt: Scalars['DateTime'];
-  createdBy: Scalars['String'];
-  derived: TransferDerived;
-  description?: Maybe<Scalars['String']>;
-  eventId: Scalars['String'];
-  file?: Maybe<MeasurementFile>;
-  fileId?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  sampleCode: Array<Scalars['String']>;
-  type: MeasurementTypes;
-  username: Scalars['String'];
 };
 
 export type User = {
@@ -680,8 +637,7 @@ export type ReadyChecksQuery = {
   readyChecks: Array<{ name: string; hasArg: boolean }>;
 };
 
-type MeasurementFields_GeneralMeasurement_Fragment = {
-  __typename: 'GeneralMeasurement';
+export type MeasurementFieldsFragment = {
   id: string;
   eventId: string;
   username: string;
@@ -690,31 +646,13 @@ type MeasurementFields_GeneralMeasurement_Fragment = {
   fileId?: string | null | undefined;
   description?: string | null | undefined;
   createdAt: any;
+  derived?: any | null | undefined;
+  type: MeasurementTypes;
   file?:
     | { filename: string; size: number; downloadUrl: string }
     | null
     | undefined;
 };
-
-type MeasurementFields_TransferMeasurement_Fragment = {
-  __typename: 'TransferMeasurement';
-  id: string;
-  eventId: string;
-  username: string;
-  sampleCode: Array<string>;
-  createdBy: string;
-  fileId?: string | null | undefined;
-  description?: string | null | undefined;
-  createdAt: any;
-  file?:
-    | { filename: string; size: number; downloadUrl: string }
-    | null
-    | undefined;
-};
-
-export type MeasurementFieldsFragment =
-  | MeasurementFields_GeneralMeasurement_Fragment
-  | MeasurementFields_TransferMeasurement_Fragment;
 
 export type MeasurementsFilteredQueryVariables = Exact<{
   type: MeasurementTypes;
@@ -727,86 +665,47 @@ export type MeasurementsFilteredQueryVariables = Exact<{
 export type MeasurementsFilteredQuery = {
   measurements: {
     totalCount: number;
-    measurements: Array<
-      | {
-          __typename: 'GeneralMeasurement';
-          id: string;
-          eventId: string;
-          username: string;
-          sampleCode: Array<string>;
-          createdBy: string;
-          fileId?: string | null | undefined;
-          description?: string | null | undefined;
-          createdAt: any;
-          file?:
-            | { filename: string; size: number; downloadUrl: string }
-            | null
-            | undefined;
-        }
-      | {
-          __typename: 'TransferMeasurement';
-          id: string;
-          eventId: string;
-          username: string;
-          sampleCode: Array<string>;
-          createdBy: string;
-          fileId?: string | null | undefined;
-          description?: string | null | undefined;
-          createdAt: any;
-          file?:
-            | { filename: string; size: number; downloadUrl: string }
-            | null
-            | undefined;
-        }
-    >;
+    measurements: Array<{
+      id: string;
+      eventId: string;
+      username: string;
+      sampleCode: Array<string>;
+      createdBy: string;
+      fileId?: string | null | undefined;
+      description?: string | null | undefined;
+      createdAt: any;
+      derived?: any | null | undefined;
+      type: MeasurementTypes;
+      file?:
+        | { filename: string; size: number; downloadUrl: string }
+        | null
+        | undefined;
+    }>;
   };
 };
 
 export type MeasurementQueryVariables = Exact<{
   id: Scalars['ID'];
+  type: MeasurementTypes;
 }>;
 
 export type MeasurementQuery = {
-  measurement:
-    | {
-        __typename: 'GeneralMeasurement';
-        derived?: any | null | undefined;
-        id: string;
-        eventId: string;
-        username: string;
-        sampleCode: Array<string>;
-        createdBy: string;
-        fileId?: string | null | undefined;
-        description?: string | null | undefined;
-        createdAt: any;
-        file?:
-          | { filename: string; size: number; downloadUrl: string }
-          | null
-          | undefined;
-      }
-    | {
-        __typename: 'TransferMeasurement';
-        id: string;
-        eventId: string;
-        username: string;
-        sampleCode: Array<string>;
-        createdBy: string;
-        fileId?: string | null | undefined;
-        description?: string | null | undefined;
-        createdAt: any;
-        transferDerived: {
-          thresholdVoltage: { index: number; value: number };
-          subthresholdSlope: {
-            medianSlope: number;
-            toIndex: number;
-            fromIndex: number;
-          };
-        };
-        file?:
-          | { filename: string; size: number; downloadUrl: string }
-          | null
-          | undefined;
-      };
+  measurement: {
+    id: string;
+    eventId: string;
+    username: string;
+    sampleCode: Array<string>;
+    createdBy: string;
+    fileId?: string | null | undefined;
+    description?: string | null | undefined;
+    createdAt: any;
+    derived?: any | null | undefined;
+    type: MeasurementTypes;
+    file?:
+      | { filename: string; size: number; downloadUrl: string }
+      | null
+      | undefined;
+  };
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
@@ -850,7 +749,6 @@ export const RevisionFieldsFragmentDoc = gql`
 `;
 export const MeasurementFieldsFragmentDoc = gql`
   fragment MeasurementFields on Measurement {
-    __typename
     id
     eventId
     username
@@ -864,6 +762,8 @@ export const MeasurementFieldsFragmentDoc = gql`
     }
     description
     createdAt
+    derived
+    type
   }
 `;
 export const EventDocument = gql`
@@ -1753,25 +1653,9 @@ export function refetchMeasurementsFilteredQuery(
   return { query: MeasurementsFilteredDocument, variables: variables };
 }
 export const MeasurementDocument = gql`
-  query Measurement($id: ID!) {
-    measurement(id: $id) {
+  query Measurement($id: ID!, $type: MeasurementTypes!) {
+    measurement(id: $id, type: $type) {
       ...MeasurementFields
-      ... on GeneralMeasurement {
-        derived
-      }
-      ... on TransferMeasurement {
-        transferDerived: derived {
-          thresholdVoltage {
-            index
-            value
-          }
-          subthresholdSlope {
-            medianSlope
-            toIndex
-            fromIndex
-          }
-        }
-      }
     }
   }
   ${MeasurementFieldsFragmentDoc}
@@ -1790,6 +1674,7 @@ export const MeasurementDocument = gql`
  * const { data, loading, error } = useMeasurementQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      type: // value for 'type'
  *   },
  * });
  */

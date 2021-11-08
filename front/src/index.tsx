@@ -36,7 +36,7 @@ const routes: RouteType[] = [
   { Component: EventsList, path: '/event/list' },
   { Component: EventDetail, path: '/event/detail/:id' },
   { Component: MeasurementsList, path: '/measurement/list' },
-  { Component: MeasurementDetail, path: '/measurement/detail/:id' },
+  { Component: MeasurementDetail, path: '/measurement/detail/:type/:id' },
   { Component: Login, path: '/login' },
   { Component: NoMatch, path: '*' },
 ];

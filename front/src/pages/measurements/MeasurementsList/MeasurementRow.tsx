@@ -18,6 +18,7 @@ import {
 
 interface MeasurementRowProps {
   id: string;
+  type: string;
   eventId: string;
   username: string;
   sampleCode: string[];
@@ -26,6 +27,7 @@ interface MeasurementRowProps {
 }
 export default function MeasurementRow({
   id,
+  type,
   eventId,
   username,
   sampleCode,
@@ -40,7 +42,7 @@ export default function MeasurementRow({
       <Td>{username}</Td>
       <Td>
         <div className="flex">
-          <Link title="detail" to={`/measurement/detail/${id}`}>
+          <Link title="detail" to={`/measurement/detail/${type}/${id}`}>
             <Button
               color={Color.primary}
               roundness={Roundness.circular}

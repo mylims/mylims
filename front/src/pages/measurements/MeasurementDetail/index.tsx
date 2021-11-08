@@ -12,20 +12,22 @@ import {
   Spinner,
   Variant,
 } from '@/components/tailwind-ui';
-import { useMeasurementQuery } from '@/generated/graphql';
+import { MeasurementTypes, useMeasurementQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
 
 export default function MeasurementDetail() {
-  const { id } = useParams<{ id: string }>();
-  const { data, loading, error } = useMeasurementQuery({ variables: { id } });
+  const { id, type } = useParams<{ id: string; type: MeasurementTypes }>();
+  const { data, loading, error } = useMeasurementQuery({
+    variables: { id, type },
+  });
   const measurementBody = useMemo(() => {
-    switch (data?.measurement.__typename) {
-      case 'TransferMeasurement': {
+    switch (data?.measurement.type) {
+      case 'transfer': {
         return (
           <B1505Transfer
             fileId={data.measurement.fileId ?? null}
             file={data.measurement.file ?? null}
-            derived={data.measurement.transferDerived}
+            derived={data.measurement.derived}
           />
         );
       }

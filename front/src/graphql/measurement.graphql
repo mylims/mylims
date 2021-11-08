@@ -1,5 +1,4 @@
 fragment MeasurementFields on Measurement {
-  __typename
   id
   eventId
   username
@@ -13,6 +12,8 @@ fragment MeasurementFields on Measurement {
   }
   description
   createdAt
+  derived
+  type
 }
 
 query MeasurementsFiltered(
@@ -36,24 +37,8 @@ query MeasurementsFiltered(
   }
 }
 
-query Measurement($id: ID!) {
-  measurement(id: $id) {
+query Measurement($id: ID!, $type: MeasurementTypes!) {
+  measurement(id: $id, type: $type) {
     ...MeasurementFields
-    ... on GeneralMeasurement {
-      derived
-    }
-    ... on TransferMeasurement {
-      transferDerived: derived {
-        thresholdVoltage {
-          index
-          value
-        }
-        subthresholdSlope {
-          medianSlope
-          toIndex
-          fromIndex
-        }
-      }
-    }
   }
 }
