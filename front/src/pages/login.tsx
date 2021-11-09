@@ -22,7 +22,7 @@ export default function Login() {
 
   useEffect(() => {
     if (auth.isAuth) {
-      void router.push('/eln');
+      void router.push('/measurement/list');
     }
   }, [auth.isAuth, router]);
 

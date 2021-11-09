@@ -21,10 +21,6 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
   const { isAuth } = useAuth();
   const ROUTES = useMemo(() => {
     return [
-      {
-        label: 'Dashboard',
-        pathname: '/eln',
-      },
       { label: 'Users', pathname: `/eln/users` },
       {
         label: 'File synchronization',
