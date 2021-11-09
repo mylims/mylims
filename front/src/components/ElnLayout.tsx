@@ -6,7 +6,8 @@ import { useHistory, useLocation, Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 import MenuDropDown from './MenuDropDown';
-import { ZakodiumSolidSvg } from './tailwind-ui';
+
+import { LOGO } from '@/../env';
 
 interface ElnLayoutProps {
   pageTitle?: string;
@@ -56,7 +57,7 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <ZakodiumSolidSvg className="w-24 fill-current text-alternative-100" />
+                <img src={LOGO} alt="Logo" className="w-24" />
               </div>
               <div className="hidden md:block">
                 <div className="flex items-baseline ml-10 space-x-4">
