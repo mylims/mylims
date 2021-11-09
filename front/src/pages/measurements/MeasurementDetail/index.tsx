@@ -110,7 +110,7 @@ function MeasurementField({
   return (
     <div>
       <div className="font-medium">{title}</div>
-      <div className="text-neutral-400">{description}</div>
+      <div className="text-neutral-500">{description}</div>
     </div>
   );
 }
