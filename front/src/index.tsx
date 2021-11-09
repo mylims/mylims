@@ -11,7 +11,6 @@ import List from './addons/fileSync/pages/list';
 import NoMatch from './pages/404';
 import App from './pages/App';
 // Eln
-import Eln from './pages/eln';
 import Users from './pages/eln/users';
 import Login from './pages/login';
 // Measurements
@@ -28,7 +27,6 @@ interface RouteType {
 }
 const routes: RouteType[] = [
   { Component: Users, path: '/eln/users' },
-  { Component: Eln, path: '/eln' },
   { Component: List, path: '/fileSync/list' },
   { Component: Create, path: '/fileSync/create' },
   { Component: Files, path: '/fileSync/files/:id' },
