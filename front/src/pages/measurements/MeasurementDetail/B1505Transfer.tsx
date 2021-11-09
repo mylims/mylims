@@ -117,16 +117,16 @@ export default function B1505Transfer({
             <div className="font-medium" style={underline('green')}>
               Threshold Voltage
             </div>
-            <div className="text-neutral-400">
-              {derived.thresholdVoltage.value} V
+            <div className="text-neutral-500">
+              {derived.thresholdVoltage.value.toFixed(4)} V
             </div>
           </div>
           <div>
             <div className="font-medium" style={underline('blue')}>
               Subthreshold slope
             </div>
-            <div className="text-neutral-400">
-              {derived.subthresholdSlope.medianSlope * 1000} mV/dec
+            <div className="text-neutral-500">
+              {(derived.subthresholdSlope.medianSlope * 1000).toFixed(4)} mV/dec
             </div>
           </div>
         </div>
