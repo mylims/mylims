@@ -9,7 +9,7 @@ interface BaseActivity {
   date: Date;
   description?: string;
 }
-interface MeasurementType {
+interface SampleMeasurement {
   id: string;
   type: string;
 }
@@ -32,5 +32,5 @@ export class Sample extends BaseModel {
   public title?: string;
   public description?: string;
   public activities: Activity[];
-  public measurements: MeasurementType[];
+  public measurements: SampleMeasurement[];
 }
