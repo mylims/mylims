@@ -22,4 +22,5 @@ export class Sample extends BaseModel {
   public title?: string;
   public description?: string;
   public activities: Activity[];
+  public measurements: string[];
 }

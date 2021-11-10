@@ -76,11 +76,13 @@ export default class MeasurementController {
           date: new Date(),
         });
       }
+      const measurementId = measurement._id.toHexString();
       sample.activities.push({
         type: ActivityType.MEASUREMENT,
-        measurementId: measurement._id.toHexString(),
+        measurementId,
         date: new Date(),
       });
+      sample.measurements.push(measurementId);
       await sample.save();
 
       return response.ok(measurement);
@@ -124,7 +126,12 @@ export default class MeasurementController {
     const cursor = Sample.query({ userId, sampleCode });
     const length = await cursor.count();
     if (length === 0) {
-      return Sample.create({ userId, sampleCode, activities: [] });
+      return Sample.create({
+        userId,
+        sampleCode,
+        activities: [],
+        measurements: [],
+      });
     } else if (length === 1) {
       return cursor.firstOrFail();
     } else {
