@@ -79,10 +79,11 @@ export default class MeasurementController {
       const measurementId = measurement._id.toHexString();
       sample.activities.push({
         type: ActivityType.MEASUREMENT,
-        measurementId,
+        measurementId: measurementId,
+        measurementType: collection,
         date: new Date(),
       });
-      sample.measurements.push(measurementId);
+      sample.measurements.push({ id: measurementId, type: collection });
       await sample.save();
 
       return response.ok(measurement);

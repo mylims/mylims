@@ -4,14 +4,24 @@ export enum ActivityType {
   FILE = 'file',
   MEASUREMENT = 'measurement',
 }
+
 interface BaseActivity {
   date: Date;
   description?: string;
 }
+interface MeasurementType {
+  id: string;
+  type: string;
+}
+
 export type Activity = BaseActivity &
   (
     | { type: ActivityType.FILE; fileId: string }
-    | { type: ActivityType.MEASUREMENT; measurementId: string }
+    | {
+        type: ActivityType.MEASUREMENT;
+        measurementId: string;
+        measurementType: string;
+      }
   );
 
 export class Sample extends BaseModel {
@@ -22,5 +32,5 @@ export class Sample extends BaseModel {
   public title?: string;
   public description?: string;
   public activities: Activity[];
-  public measurements: string[];
+  public measurements: MeasurementType[];
 }
