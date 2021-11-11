@@ -28,6 +28,7 @@ export class Sample extends BaseModel {
   @field()
   public _id: ObjectId;
   public sampleCode: string[];
+  public uuid10: string;
   public userId: string;
   public title?: string;
   public description?: string;

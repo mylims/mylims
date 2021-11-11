@@ -1,5 +1,6 @@
 import { Event } from 'Addons/events/Models/Event';
 import { SyncFile } from 'Addons/file-sync/Models/SyncFile';
+import cryptoRandomString from 'crypto-random-string';
 
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import DataDrive from '@ioc:Zakodium/DataDrive';
@@ -126,10 +127,15 @@ export default class MeasurementController {
   ): Promise<Sample> {
     const cursor = Sample.query({ userId, sampleCode });
     const length = await cursor.count();
+    const uuid10 = cryptoRandomString({
+      length: 10,
+      characters: 'CDEHKMPRTUWXY0123456789',
+    });
     if (length === 0) {
       return Sample.create({
         userId,
         sampleCode,
+        uuid10,
         activities: [],
         measurements: [],
       });

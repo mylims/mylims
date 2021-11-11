@@ -65,6 +65,7 @@
     "base-x": "^3.0.8",
     "byte-size": "^8.1.0",
     "clsx": "^1.1.1",
+    "crypto-random-string": "^4.0.0",
     "date-fns": "^2.24.0",
     "dialog-polyfill-universal": "^0.1.0",
     "formik": "^2.2.9",
