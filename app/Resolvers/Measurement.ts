@@ -65,13 +65,11 @@ const resolvers: GqlResolvers = {
       if (skip) measurementCursor = measurementCursor.skip(skip);
       if (limit) measurementCursor = measurementCursor.limit(limit);
 
-      const measurementsList = (await measurementCursor.all()).map(
-        (measurement) => {
-          const { _id, ...rest } = measurement.toJSON() as MeasurementType;
-          return { ...rest, id: _id.toHexString(), type };
-        },
-      );
-      return { measurements: measurementsList, totalCount };
+      const list = (await measurementCursor.all()).map((measurement) => {
+        const { _id, ...rest } = measurement.toJSON() as MeasurementType;
+        return { ...rest, id: _id.toHexString(), type };
+      });
+      return { list, totalCount };
     },
   },
 };

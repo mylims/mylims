@@ -55,8 +55,8 @@ const resolvers: GqlResolvers = {
       if (skip) eventCursor = eventCursor.skip(skip);
       if (limit) eventCursor = eventCursor.limit(limit);
 
-      const events = await eventCursor.all();
-      return { events, totalCount };
+      const list = await eventCursor.all();
+      return { list, totalCount };
     },
     async event(_, { id }) {
       return Event.findOrFail(new ObjectId(id));

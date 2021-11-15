@@ -30,7 +30,7 @@ input FilesSortInput {
   field: FilesSortField!
 }
 
-type FilesFlatPage {
-  files: [SyncFileRevision!]!
+type FilesFlatPage implements Pagination {
+  list: [SyncFileRevision!]!
   totalCount: Int!
 }

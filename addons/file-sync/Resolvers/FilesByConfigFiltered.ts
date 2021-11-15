@@ -53,7 +53,7 @@ const resolvers: GqlResolvers = {
       if (skip) fileCursor = fileCursor.skip(skip);
       if (limit) fileCursor = fileCursor.limit(limit);
 
-      const files = (await fileCursor.all()).map<GqlSyncFileRevision>(
+      const list = (await fileCursor.all()).map<GqlSyncFileRevision>(
         ({ _id: { relativePath }, revisions, filename, path }) => {
           const { id, size, date, status } = revisions[0];
           const urlPath = 'addons/file-sync/file-content';
@@ -70,10 +70,7 @@ const resolvers: GqlResolvers = {
           };
         },
       );
-      return {
-        files,
-        totalCount,
-      };
+      return { list, totalCount };
     },
   },
 };

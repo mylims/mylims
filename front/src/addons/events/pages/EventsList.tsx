@@ -15,7 +15,7 @@ import {
 import { useFilterEventQuery } from '@/hooks/useEventQuery';
 import { formatDate } from '@/utils/formatFields';
 
-type EventRowType = EventsFilteredQuery['events']['events'][number] & {
+type EventRowType = EventsFilteredQuery['events']['list'][number] & {
   id: string;
 };
 
@@ -72,7 +72,7 @@ export default function EventsList() {
           Header={() => <TableHeader titles={titles} />}
           Empty={() => <TableEmpty titles={titles} />}
           Tr={Row}
-          data={data?.events.events ?? []}
+          data={data?.events.list ?? []}
           pagination={pagination}
         />
       )}

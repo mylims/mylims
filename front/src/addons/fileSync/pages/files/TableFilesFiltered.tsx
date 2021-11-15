@@ -145,7 +145,7 @@ export default function TableFilesFiltered({
   pageSize,
   loading,
 }: TableFilesFilteredProps) {
-  const { files = [], totalCount = 0 } = data?.filesByConfigFlat ?? {};
+  const { list = [], totalCount = 0 } = data?.filesByConfigFlat ?? {};
 
   const selectTags = useMultiSearchSelect({
     options: [
@@ -216,7 +216,7 @@ export default function TableFilesFiltered({
           Header={() => <TableHeader titles={titles} />}
           Empty={() => <TableEmpty titles={titles} />}
           Tr={Row}
-          data={files}
+          data={list}
           pagination={pagination}
         />
       </div>

@@ -107,9 +107,9 @@ export type GqlEventHistory = {
   status: GqlEventStatus;
 };
 
-export type GqlEventPage = {
+export type GqlEventPage = GqlPagination & {
   __typename?: 'EventPage';
-  events: Array<GqlEvent>;
+  list: Array<GqlEvent>;
   totalCount: Scalars['Int'];
 };
 
@@ -178,9 +178,9 @@ export type GqlFilesFilterInput = {
   status?: Maybe<Array<GqlFileStatus>>;
 };
 
-export type GqlFilesFlatPage = {
+export type GqlFilesFlatPage = GqlPagination & {
   __typename?: 'FilesFlatPage';
-  files: Array<GqlSyncFileRevision>;
+  list: Array<GqlSyncFileRevision>;
   totalCount: Scalars['Int'];
 };
 
@@ -225,9 +225,9 @@ export type GqlMeasurementFilterInput = {
   username?: Maybe<Scalars['String']>;
 };
 
-export type GqlMeasurementPage = {
+export type GqlMeasurementPage = GqlPagination & {
   __typename?: 'MeasurementPage';
-  measurements: Array<GqlMeasurement>;
+  list: Array<GqlMeasurement>;
   totalCount: Scalars['Int'];
 };
 
@@ -273,6 +273,13 @@ export type GqlNewFileSyncOptionInput = {
   root: Scalars['String'];
   topics: Array<Scalars['String']>;
 };
+
+export type GqlPagination = {
+  list: Array<GqlPaginationNode>;
+  totalCount: Scalars['Int'];
+};
+
+export type GqlPaginationNode = GqlEvent | GqlMeasurement | GqlSyncFileRevision;
 
 export type GqlPattern = {
   __typename?: 'Pattern';
@@ -545,7 +552,7 @@ export type GqlResolversTypes = ResolversObject<{
   EventFilterInput: GqlEventFilterInput;
   EventHistory: ResolverTypeWrapper<GqlEventHistory>;
   EventPage: ResolverTypeWrapper<
-    Omit<GqlEventPage, 'events'> & { events: Array<GqlResolversTypes['Event']> }
+    Omit<GqlEventPage, 'list'> & { list: Array<GqlResolversTypes['Event']> }
   >;
   EventProcessor: ResolverTypeWrapper<GqlEventProcessor>;
   EventSortField: GqlEventSortField;
@@ -572,6 +579,14 @@ export type GqlResolversTypes = ResolversObject<{
   MeasurementTypes: GqlMeasurementTypes;
   Mutation: ResolverTypeWrapper<{}>;
   NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
+  Pagination:
+    | GqlResolversTypes['EventPage']
+    | GqlResolversTypes['FilesFlatPage']
+    | GqlResolversTypes['MeasurementPage'];
+  PaginationNode:
+    | GqlResolversTypes['Event']
+    | GqlResolversTypes['Measurement']
+    | GqlResolversTypes['SyncFileRevision'];
   Pattern: ResolverTypeWrapper<GqlPattern>;
   PatternType: GqlPatternType;
   Query: ResolverTypeWrapper<{}>;
@@ -602,8 +617,8 @@ export type GqlResolversParentTypes = ResolversObject<{
   EventFile: GqlEventFile;
   EventFilterInput: GqlEventFilterInput;
   EventHistory: GqlEventHistory;
-  EventPage: Omit<GqlEventPage, 'events'> & {
-    events: Array<GqlResolversParentTypes['Event']>;
+  EventPage: Omit<GqlEventPage, 'list'> & {
+    list: Array<GqlResolversParentTypes['Event']>;
   };
   EventProcessor: GqlEventProcessor;
   EventSortInput: GqlEventSortInput;
@@ -624,6 +639,14 @@ export type GqlResolversParentTypes = ResolversObject<{
   MeasurementSortInput: GqlMeasurementSortInput;
   Mutation: {};
   NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
+  Pagination:
+    | GqlResolversParentTypes['EventPage']
+    | GqlResolversParentTypes['FilesFlatPage']
+    | GqlResolversParentTypes['MeasurementPage'];
+  PaginationNode:
+    | GqlResolversParentTypes['Event']
+    | GqlResolversParentTypes['Measurement']
+    | GqlResolversParentTypes['SyncFileRevision'];
   Pattern: GqlPattern;
   Query: {};
   ReadyCheck: GqlReadyCheck;
@@ -719,7 +742,7 @@ export type GqlEventPageResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['EventPage'] = GqlResolversParentTypes['EventPage'],
 > = ResolversObject<{
-  events?: Resolver<Array<GqlResolversTypes['Event']>, ParentType, ContextType>;
+  list?: Resolver<Array<GqlResolversTypes['Event']>, ParentType, ContextType>;
   totalCount?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -777,7 +800,7 @@ export type GqlFilesFlatPageResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['FilesFlatPage'] = GqlResolversParentTypes['FilesFlatPage'],
 > = ResolversObject<{
-  files?: Resolver<
+  list?: Resolver<
     Array<GqlResolversTypes['SyncFileRevision']>,
     ParentType,
     ContextType
@@ -848,7 +871,7 @@ export type GqlMeasurementPageResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['MeasurementPage'] = GqlResolversParentTypes['MeasurementPage'],
 > = ResolversObject<{
-  measurements?: Resolver<
+  list?: Resolver<
     Array<GqlResolversTypes['Measurement']>,
     ParentType,
     ContextType
@@ -878,6 +901,34 @@ export type GqlMutationResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlMutationEditFileSyncOptionArgs, 'input'>
+  >;
+}>;
+
+export type GqlPaginationResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['Pagination'] = GqlResolversParentTypes['Pagination'],
+> = ResolversObject<{
+  __resolveType: TypeResolveFn<
+    'EventPage' | 'FilesFlatPage' | 'MeasurementPage',
+    ParentType,
+    ContextType
+  >;
+  list?: Resolver<
+    Array<GqlResolversTypes['PaginationNode']>,
+    ParentType,
+    ContextType
+  >;
+  totalCount?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+}>;
+
+export type GqlPaginationNodeResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['PaginationNode'] = GqlResolversParentTypes['PaginationNode'],
+> = ResolversObject<{
+  __resolveType: TypeResolveFn<
+    'Event' | 'Measurement' | 'SyncFileRevision',
+    ParentType,
+    ContextType
   >;
 }>;
 
@@ -1090,6 +1141,8 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   MeasurementFile?: GqlMeasurementFileResolvers<ContextType>;
   MeasurementPage?: GqlMeasurementPageResolvers<ContextType>;
   Mutation?: GqlMutationResolvers<ContextType>;
+  Pagination?: GqlPaginationResolvers<ContextType>;
+  PaginationNode?: GqlPaginationNodeResolvers<ContextType>;
   Pattern?: GqlPatternResolvers<ContextType>;
   Query?: GqlQueryResolvers<ContextType>;
   ReadyCheck?: GqlReadyCheckResolvers<ContextType>;

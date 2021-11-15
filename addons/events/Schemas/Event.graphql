@@ -26,8 +26,8 @@ input EventSortInput {
   direction: SortDirection!
   field: EventSortField!
 }
-type EventPage {
-  events: [Event!]!
+type EventPage implements Pagination {
+  list: [Event!]!
   totalCount: Int!
 }
 

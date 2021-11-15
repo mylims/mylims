@@ -24,8 +24,8 @@ input MeasurementSortInput {
   direction: SortDirection!
   field: MeasurementSortField!
 }
-type MeasurementPage {
-  measurements: [Measurement!]!
+type MeasurementPage implements Pagination {
+  list: [Measurement!]!
   totalCount: Int!
 }
 type MeasurementFile {
