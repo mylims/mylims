@@ -1,4 +1,11 @@
-import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
+import cryptoRandomString from 'crypto-random-string';
+
+import {
+  BaseModel,
+  field,
+  ModelAttributes,
+  ObjectId,
+} from '@ioc:Zakodium/Mongodb/Odm';
 
 export enum ActivityType {
   FILE = 'file',
@@ -34,4 +41,16 @@ export class Sample extends BaseModel {
   public description?: string;
   public activities: Activity[];
   public measurements: SampleMeasurement[];
+
+  public async create(data: Partial<ModelAttributes<Sample>>) {
+    if (data.uuid10) return Sample.create(data);
+
+    const characters = 'CDEHKMPRTUWXY0123456789';
+    for (let i = 0; i < 10; i++) {
+      const uuid10 = cryptoRandomString({ length: 10, characters });
+      const sample = await Sample.findBy('uuid10', uuid10);
+      if (!sample) return Sample.create({ ...data, uuid10 });
+    }
+    throw new Error('Uuid10 was colliding 10 times');
+  }
 }
