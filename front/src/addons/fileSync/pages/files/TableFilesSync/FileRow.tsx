@@ -49,7 +49,7 @@ export default function FileRow({ value }: { value: FileSync }) {
   const events = useMemo(() => {
     if (!data) return [];
     let res: EventsByProcessor[] = [];
-    for (const { topic, processors } of data.events.events) {
+    for (const { topic, processors } of data.events.list) {
       if (processors.length !== 0) {
         for (const { processorId, history } of processors) {
           res.push({

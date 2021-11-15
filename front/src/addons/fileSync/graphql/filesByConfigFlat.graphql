@@ -13,7 +13,7 @@ query FilesByConfigFlat(
     sortBy: $sortBy
   ) {
     totalCount
-    files {
+    list {
       __typename
       id
       filename

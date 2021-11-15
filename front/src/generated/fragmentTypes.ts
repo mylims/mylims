@@ -6,6 +6,8 @@ export interface PossibleTypesResultData {
 const result: PossibleTypesResultData = {
   possibleTypes: {
     EventData: ['EventDataFile'],
+    Pagination: ['EventPage', 'FilesFlatPage', 'MeasurementPage'],
+    PaginationNode: ['Event', 'Measurement', 'SyncFileRevision'],
     SyncElementRevision: ['SyncDirRevision', 'SyncFileRevision'],
   },
 };

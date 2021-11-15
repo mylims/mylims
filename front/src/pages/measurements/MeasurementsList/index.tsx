@@ -17,7 +17,7 @@ import { useFilterMeasurementQuery } from '@/hooks/useMeasurementQuery';
 import { formatDate } from '@/utils/formatFields';
 
 type MeasurementRowType =
-  MeasurementsFilteredQuery['measurements']['measurements'][number];
+  MeasurementsFilteredQuery['measurements']['list'][number];
 
 const PAGE_SIZE = 10;
 const titles = [
@@ -70,7 +70,7 @@ export default function MeasurementsList() {
             Header={() => <TableHeader titles={titles} />}
             Empty={() => <TableEmpty titles={titles} />}
             Tr={Row}
-            data={data?.measurements.measurements ?? []}
+            data={data?.measurements.list ?? []}
             pagination={pagination}
           />
         </MeasurementPlot>

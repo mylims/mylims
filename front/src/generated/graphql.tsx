@@ -92,8 +92,8 @@ export type EventHistory = {
   status: EventStatus;
 };
 
-export type EventPage = {
-  events: Array<Event>;
+export type EventPage = Pagination & {
+  list: Array<Event>;
   totalCount: Scalars['Int'];
 };
 
@@ -159,8 +159,8 @@ export type FilesFilterInput = {
   status?: Maybe<Array<FileStatus>>;
 };
 
-export type FilesFlatPage = {
-  files: Array<SyncFileRevision>;
+export type FilesFlatPage = Pagination & {
+  list: Array<SyncFileRevision>;
   totalCount: Scalars['Int'];
 };
 
@@ -203,8 +203,8 @@ export type MeasurementFilterInput = {
   username?: Maybe<Scalars['String']>;
 };
 
-export type MeasurementPage = {
-  measurements: Array<Measurement>;
+export type MeasurementPage = Pagination & {
+  list: Array<Measurement>;
   totalCount: Scalars['Int'];
 };
 
@@ -249,6 +249,13 @@ export type NewFileSyncOptionInput = {
   root: Scalars['String'];
   topics: Array<Scalars['String']>;
 };
+
+export type Pagination = {
+  list: Array<PaginationNode>;
+  totalCount: Scalars['Int'];
+};
+
+export type PaginationNode = Event | Measurement | SyncFileRevision;
 
 export type Pattern = {
   pattern: Scalars['String'];
@@ -421,7 +428,7 @@ export type EventsFilteredQueryVariables = Exact<{
 export type EventsFilteredQuery = {
   events: {
     totalCount: number;
-    events: Array<{
+    list: Array<{
       id: string;
       topic: string;
       createdAt: any;
@@ -592,7 +599,7 @@ export type EventsByFileIdQueryVariables = Exact<{
 export type EventsByFileIdQuery = {
   events: {
     __typename: 'EventPage';
-    events: Array<{
+    list: Array<{
       id: string;
       topic: string;
       processors: Array<{
@@ -618,7 +625,7 @@ export type FilesByConfigFlatQueryVariables = Exact<{
 export type FilesByConfigFlatQuery = {
   filesByConfigFlat: {
     totalCount: number;
-    files: Array<{
+    list: Array<{
       __typename: 'SyncFileRevision';
       id: string;
       filename: string;
@@ -665,7 +672,7 @@ export type MeasurementsFilteredQueryVariables = Exact<{
 export type MeasurementsFilteredQuery = {
   measurements: {
     totalCount: number;
-    measurements: Array<{
+    list: Array<{
       id: string;
       eventId: string;
       username: string;
@@ -851,7 +858,7 @@ export const EventsFilteredDocument = gql`
   ) {
     events(limit: $limit, skip: $skip, filterBy: $filterBy, sortBy: $sortBy) {
       totalCount
-      events {
+      list {
         id
         topic
         createdAt
@@ -1350,7 +1357,7 @@ export const EventsByFileIdDocument = gql`
   query EventsByFileId($id: String!) {
     events(filterBy: { fileId: $id }) {
       __typename
-      events {
+      list {
         id
         topic
         processors {
@@ -1437,7 +1444,7 @@ export const FilesByConfigFlatDocument = gql`
       sortBy: $sortBy
     ) {
       totalCount
-      files {
+      list {
         __typename
         id
         filename
@@ -1585,7 +1592,7 @@ export const MeasurementsFilteredDocument = gql`
       sortBy: $sortBy
     ) {
       totalCount
-      measurements {
+      list {
         ...MeasurementFields
       }
     }

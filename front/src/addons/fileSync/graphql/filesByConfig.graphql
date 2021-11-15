@@ -27,7 +27,7 @@ query FilesByConfig($id: String!, $path: [String!]!) {
 query EventsByFileId($id: String!) {
   events(filterBy: { fileId: $id }) {
     __typename
-    events {
+    list {
       id
       topic
       processors {
