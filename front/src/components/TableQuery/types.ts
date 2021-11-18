@@ -15,6 +15,7 @@ export interface TableQueryContextType {
 export interface TableQueryProps<T> {
   data: { list: Array<T>; totalCount: number } | undefined;
   loading?: boolean;
+  itemsPerPage?: number;
   query: QueryType;
   onQueryChange(query: QueryType): void;
   children: ReactNode;
