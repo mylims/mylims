@@ -18,8 +18,13 @@ export default function RowRender<T extends Record<string, unknown>>({
     <tr className={`grid grid-cols-${columns.length} gap-4`}>
       {columns.map((column, index) => {
         let content: ReactNode;
+        let title: string | undefined;
+
         const model = objectPath(row);
-        if (!model.has(column.value.dataPath)) {
+        if (
+          !model.has(column.value.dataPath) &&
+          column.value.dataPath !== ColumnKind.ACTIONS
+        ) {
           console.error(
             `Column ${column.value.dataPath} doesn't exists on ${JSON.stringify(
               row,
@@ -31,14 +36,21 @@ export default function RowRender<T extends Record<string, unknown>>({
           switch (column.kind) {
             case ColumnKind.TEXT: {
               content = value as string;
+              title = value as string;
               break;
             }
             case ColumnKind.NUMBER: {
-              content = numeral(value as number).format(column.value.format);
+              title = numeral(value as number).format(column.value.format);
+              content = title;
               break;
             }
             case ColumnKind.DATE: {
-              content = format(new Date(value as string), column.value.format);
+              title = format(new Date(value as string), column.value.format);
+              content = title;
+              break;
+            }
+            case ColumnKind.ACTIONS: {
+              content = column.value.render(row);
               break;
             }
             default: {
@@ -49,7 +61,8 @@ export default function RowRender<T extends Record<string, unknown>>({
         return (
           <td
             key={`${column.value.dataPath}-${index}`}
-            className="px-4 py-3 text-sm font-semibold whitespace-nowrap text-neutral-900"
+            className="px-4 py-3 text-sm font-semibold truncate whitespace-nowrap text-neutral-900"
+            title={title}
           >
             {content}
           </td>

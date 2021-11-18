@@ -24,6 +24,7 @@ import NumberColumn from './components/NumberColumn';
 import RowRender from './components/RowRender';
 import TextColumn from './components/TextColumn';
 import DateColumn from './components/DateColumn';
+import ActionsColumn from './components/ActionsColumn';
 
 const reducerCurr: Reducer<TableState, ReducerActions> = produce(reducer);
 
@@ -82,3 +83,4 @@ export function Table<T extends Record<string, unknown>>({
 Table.DateColumn = DateColumn;
 Table.NumberColumn = NumberColumn;
 Table.TextColumn = TextColumn;
+Table.ActionsColumn = ActionsColumn;

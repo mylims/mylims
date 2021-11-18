@@ -35,6 +35,11 @@ export interface NumberColumnProps extends BaseColumnProps {
 export interface DateColumnProps extends BaseColumnProps {
   format?: string;
 }
+interface ActionsColumnProps {
+  index?: number;
+  render(row: Record<string, unknown>): ReactNode;
+  dataPath: string;
+}
 
 export interface TableQueryHook {
   pagination: Record<'page' | 'skip' | 'limit', number>;
@@ -46,6 +51,7 @@ export enum ColumnKind {
   TEXT = 'text',
   NUMBER = 'number',
   DATE = 'date',
+  ACTIONS = 'actions',
 }
 
 export type ReducerActions =
@@ -60,5 +66,6 @@ type RowStateGeneric<K, V> = {
 export type RowState =
   | RowStateGeneric<ColumnKind.TEXT, BaseColumnProps>
   | RowStateGeneric<ColumnKind.NUMBER, NumberColumnProps>
-  | RowStateGeneric<ColumnKind.DATE, DateColumnProps>;
+  | RowStateGeneric<ColumnKind.DATE, DateColumnProps>
+  | RowStateGeneric<ColumnKind.ACTIONS, ActionsColumnProps>;
 export type TableState = RowState[];
