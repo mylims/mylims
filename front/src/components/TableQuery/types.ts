@@ -1,19 +1,29 @@
 import { ReactNode } from 'react';
 
+export interface QueryType {
+  page: string;
+  sortField: string;
+  sortDirection: string;
+  [key: string]: string | null;
+}
 export interface TableQueryContextType {
-  columnsContext: {};
+  query: QueryType;
+  setQuery(query: QueryType): void;
+  submitQuery(query: QueryType): void;
   dispatch(action: ReducerActions): void;
 }
 export interface TableQueryProps<T> {
   data: { list: Array<T>; totalCount: number } | undefined;
-  pagination: unknown;
   loading?: boolean;
-  onQueryChange(query: unknown): void;
+  query: QueryType;
+  onQueryChange(query: QueryType): void;
   children: ReactNode;
 }
 
 export interface BaseColumnProps {
-  fieldPath: string;
+  title: string;
+  dataPath: string;
+  queryPath?: string;
   disableSearch?: boolean;
   disableSort?: boolean;
   nullable?: boolean;
@@ -26,10 +36,10 @@ export interface DateColumnProps extends BaseColumnProps {
   format?: string;
 }
 
-export interface TableQueryHook<T> {
+export interface TableQueryHook {
   pagination: Record<'page' | 'skip' | 'limit', number>;
-  query: T;
-  setQuery(query: T): T;
+  query: Record<string, string>;
+  setQuery(query: Record<string, string>): void;
 }
 
 export enum ColumnKind {
@@ -42,21 +52,13 @@ export type ReducerActions =
   | { type: 'ADD_COLUMN'; payload: RowState }
   | { type: 'REMOVE_COLUMN'; payload: { index: number } };
 
-type RemoveIndex<T> = Omit<Required<T>, 'index'>;
-type RowState =
-  | {
-      index: number;
-      kind: ColumnKind.TEXT;
-      value: RemoveIndex<BaseColumnProps>;
-    }
-  | {
-      index: number;
-      kind: ColumnKind.NUMBER;
-      value: RemoveIndex<NumberColumnProps>;
-    }
-  | {
-      index: number;
-      kind: ColumnKind.DATE;
-      value: RemoveIndex<DateColumnProps>;
-    };
+type RowStateGeneric<K, V> = {
+  index: number;
+  kind: K;
+  value: Omit<Required<V>, 'index' | 'title'>;
+};
+export type RowState =
+  | RowStateGeneric<ColumnKind.TEXT, BaseColumnProps>
+  | RowStateGeneric<ColumnKind.NUMBER, NumberColumnProps>
+  | RowStateGeneric<ColumnKind.DATE, DateColumnProps>;
 export type TableState = RowState[];

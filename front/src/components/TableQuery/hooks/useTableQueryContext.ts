@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 import { TableQueryContextType } from '../types';
 
 export const TableQueryContext = createContext<TableQueryContextType>({
-  columnsContext: {},
+  query: {},
   dispatch: () => {},
 });
 
