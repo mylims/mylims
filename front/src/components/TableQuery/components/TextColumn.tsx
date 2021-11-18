@@ -1,36 +1,63 @@
 import React, { useEffect } from 'react';
+import objectPath from 'object-path';
 
+import { Input } from '@/components/tailwind-ui';
 import { BaseColumnProps, ColumnKind } from '../types';
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
+import HeaderRender from './HeaderRender';
+import SortIcon from './SortIcon';
 
 export default function TextColumn({
-  fieldPath,
+  title,
+  dataPath,
+  queryPath,
   disableSearch = false,
   disableSort = false,
   nullable = false,
   index,
 }: BaseColumnProps) {
-  const { dispatch } = useTableQueryContext();
+  const { query, setQuery, submitQuery, dispatch } = useTableQueryContext();
+  const path = queryPath ?? dataPath;
 
   useEffect(() => {
     if (index === undefined) {
-      throw new Error(`Index is not defined by the context for ${fieldPath}`);
+      throw new Error(`Index is not defined by the context for ${dataPath}`);
     }
     dispatch({
       type: 'ADD_COLUMN',
       payload: {
         index,
-        value: { fieldPath, disableSearch, disableSort, nullable },
+        value: {
+          dataPath,
+          queryPath: path,
+          disableSearch,
+          disableSort,
+          nullable,
+        },
         kind: ColumnKind.TEXT,
       },
     });
 
     return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
-  }, [fieldPath, disableSearch, disableSort, nullable, index]);
+  }, [dataPath, path, disableSearch, disableSort, nullable, index]);
 
+  if (disableSearch) return <HeaderRender title={title} />;
+  const value = objectPath(query).get(path, '');
   return (
-    <th className="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase rounded-t-lg text-neutral-500 ">
-      {fieldPath}
-    </th>
+    <HeaderRender title={title}>
+      <Input
+        name={path}
+        label={path}
+        value={value}
+        hiddenLabel
+        onChange={({ currentTarget: { value } }) => {
+          setQuery({ ...query, [path]: value });
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') submitQuery(query);
+        }}
+        trailingInlineAddon={<SortIcon disableSort={disableSort} path={path} />}
+      />
+    </HeaderRender>
   );
 }

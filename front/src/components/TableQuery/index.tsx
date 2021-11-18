@@ -1,9 +1,20 @@
-import React, { Reducer, useMemo, useReducer } from 'react';
+import React, {
+  Reducer,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 import { produce } from 'immer';
 
-import { Input, Spinner } from '@/components/tailwind-ui';
+import { Spinner } from '@/components/tailwind-ui';
 
-import type { ReducerActions, TableQueryProps, TableState } from './types';
+import type {
+  QueryType,
+  ReducerActions,
+  TableQueryProps,
+  TableState,
+} from './types';
 
 import { reducer } from './reducer';
 import { splitChildren } from './utils';
@@ -19,26 +30,30 @@ const reducerCurr: Reducer<TableState, ReducerActions> = produce(reducer);
 export function Table<T extends Record<string, unknown>>({
   data,
   loading,
-  pagination,
-  onQueryChange,
+  query: originalQuery,
+  onQueryChange: submitQuery,
   children,
 }: TableQueryProps<T>) {
   const [state, dispatch] = useReducer(reducerCurr, [], undefined);
+  const [query, setQuery] = useState<QueryType>(originalQuery);
+  useEffect(() => {
+    setQuery(originalQuery);
+  }, [originalQuery]);
+
   const { columns } = useMemo(() => splitChildren(children), [children]);
   const { list = [] } = data ?? {};
   const orderedColumns = useMemo(() => {
     return produce(state, (copy) => copy.sort((a, b) => a.index - b.index));
   }, [state]);
   return (
-    <TableQueryContext.Provider value={{ columnsContext: {}, dispatch }}>
+    <TableQueryContext.Provider
+      value={{ query, setQuery, submitQuery, dispatch }}
+    >
       <div className="inline-block overflow-hidden align-middle border-b shadow border-neutral-200 sm:rounded-lg">
         <table className="divide-y divide-neutral-200">
           <thead className="bg-neutral-50">
             <tr className={`grid grid-cols-${columns.length} gap-4`}>
               {columns}
-            </tr>
-            <tr className={`grid grid-cols-${columns.length} gap-4`}>
-              <Input name="test" label="" />
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">

@@ -7,7 +7,10 @@ export function reducer(state: TableState, action: ReducerActions) {
       break;
     }
     case 'REMOVE_COLUMN': {
-      state.filter(({ index }) => index !== action.payload.index);
+      const index = state.findIndex(
+        ({ index }) => index !== action.payload.index,
+      );
+      if (index !== -1) state.splice(index, 1);
       break;
     }
     default: {
