@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { produce } from 'immer';
 
-import { Spinner } from '@/components/tailwind-ui';
+import { Pagination, Spinner } from '@/components/tailwind-ui';
 
 import type {
   QueryType,
@@ -32,6 +32,7 @@ export function Table<T extends Record<string, unknown>>({
   data,
   loading,
   query: originalQuery,
+  itemsPerPage = 10,
   onQueryChange: submitQuery,
   children,
 }: TableQueryProps<T>) {
@@ -42,10 +43,13 @@ export function Table<T extends Record<string, unknown>>({
   }, [originalQuery]);
 
   const { columns } = useMemo(() => splitChildren(children), [children]);
-  const { list = [] } = data ?? {};
   const orderedColumns = useMemo(() => {
     return produce(state, (copy) => copy.sort((a, b) => a.index - b.index));
   }, [state]);
+
+  const { list = [], totalCount = 0 } = data ?? {};
+  const page = parseInt(query.page, 10) ?? 1;
+
   return (
     <TableQueryContext.Provider
       value={{ query, setQuery, submitQuery, dispatch }}
@@ -75,6 +79,12 @@ export function Table<T extends Record<string, unknown>>({
             )}
           </tbody>
         </table>
+        <Pagination
+          totalCount={totalCount}
+          itemsPerPage={itemsPerPage}
+          page={page}
+          onPageChange={(page) => submitQuery({ ...query, page: `${page}` })}
+        />
       </div>
     </TableQueryContext.Provider>
   );

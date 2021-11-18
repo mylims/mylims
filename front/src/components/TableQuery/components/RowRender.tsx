@@ -25,11 +25,6 @@ export default function RowRender<T extends Record<string, unknown>>({
           !model.has(column.value.dataPath) &&
           column.value.dataPath !== ColumnKind.ACTIONS
         ) {
-          console.error(
-            `Column ${column.value.dataPath} doesn't exists on ${JSON.stringify(
-              row,
-            )}`,
-          );
           content = '-';
         } else {
           const value = model.get(column.value.dataPath);
