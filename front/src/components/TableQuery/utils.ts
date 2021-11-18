@@ -3,6 +3,7 @@ import { Children, cloneElement, isValidElement, ReactNode } from 'react';
 import DateColumn from './components/DateColumn';
 import NumberColumn from './components/NumberColumn';
 import TextColumn from './components/TextColumn';
+import ActionsColumn from './components/ActionsColumn';
 
 const invalidError = 'Invalid column child';
 export function splitChildren(children: ReactNode) {
@@ -17,7 +18,8 @@ export function splitChildren(children: ReactNode) {
     } else if (
       child.type === NumberColumn ||
       child.type === TextColumn ||
-      child.type === DateColumn
+      child.type === DateColumn ||
+      child.type === ActionsColumn
     ) {
       columns.push(cloneElement(child, { ...child.props, index }));
     } else {
