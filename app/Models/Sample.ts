@@ -1,8 +1,10 @@
 import cryptoRandomString from 'crypto-random-string';
+import type { InsertOneOptions } from 'mongodb';
 
 import {
   BaseModel,
   field,
+  ModelAdapterOptions,
   ModelAttributes,
   ObjectId,
 } from '@ioc:Zakodium/Mongodb/Odm';
@@ -42,15 +44,19 @@ export class Sample extends BaseModel {
   public activities: Activity[];
   public measurements: SampleMeasurement[];
 
-  public async create(data: Partial<ModelAttributes<Sample>>) {
-    if (data.uuid10) return Sample.create(data);
-
-    const characters = 'CDEHKMPRTUWXY0123456789';
-    for (let i = 0; i < 10; i++) {
-      const uuid10 = cryptoRandomString({ length: 10, characters });
-      const sample = await Sample.findBy('uuid10', uuid10);
-      if (!sample) return Sample.create({ ...data, uuid10 });
+  public async create(
+    data: Partial<ModelAttributes<Sample>>,
+    options?: ModelAdapterOptions<InsertOneOptions>,
+  ) {
+    let sample: Sample | undefined;
+    while (!sample) {
+      try {
+        const uuid10 = cryptoRandomString({ length: 10, type: 'alphanumeric' });
+        sample = await Sample.create({ ...data, uuid10 }, options);
+      } catch (e) {
+        sample = undefined;
+      }
     }
-    throw new Error('Uuid10 was colliding 10 times');
+    return sample;
   }
 }
