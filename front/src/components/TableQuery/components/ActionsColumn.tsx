@@ -30,5 +30,5 @@ export default function ActionsColumn({
     return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
   }, [index]);
 
-  return <HeaderRender title="Actions" />;
+  return <HeaderRender title="Actions" path="" />;
 }
