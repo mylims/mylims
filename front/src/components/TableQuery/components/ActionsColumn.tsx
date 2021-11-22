@@ -8,10 +8,7 @@ interface ActionsColumnProps {
   index?: number;
   children(row: Record<string, unknown>): ReactNode;
 }
-export default function ActionsColumn({
-  index,
-  children: render,
-}: ActionsColumnProps) {
+export default function ActionsColumn({ index, children }: ActionsColumnProps) {
   const { dispatch } = useTableQueryContext();
 
   useEffect(() => {
@@ -22,7 +19,7 @@ export default function ActionsColumn({
       type: 'ADD_COLUMN',
       payload: {
         index,
-        value: { render, dataPath: ColumnKind.ACTIONS },
+        value: { render: children, dataPath: ColumnKind.ACTIONS },
         kind: ColumnKind.ACTIONS,
       },
     });

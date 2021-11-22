@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import objectPath from 'object-path';
+import { format as dateFormat } from 'date-fns';
 
 import { Input } from '@/components/tailwind-ui';
 import { ColumnKind, DateColumnProps } from '../types';
@@ -15,9 +16,19 @@ export default function DateColumn({
   nullable = false,
   index,
   format = 'dd.MM.yyyy HH:mm',
+  children,
 }: DateColumnProps) {
   const { query, setQuery, submitQuery, dispatch } = useTableQueryContext();
   const path = queryPath ?? dataPath;
+  const value = objectPath(query).get(path, '');
+  const render =
+    children ??
+    ((row) => {
+      const model = objectPath(row);
+      if (!model.has(dataPath)) return '-';
+      const date = model.get(dataPath);
+      return dateFormat(new Date(date), format);
+    });
 
   useEffect(() => {
     if (index === undefined) {
@@ -33,7 +44,7 @@ export default function DateColumn({
           disableSearch,
           disableSort,
           nullable,
-          format,
+          render,
         },
         kind: ColumnKind.DATE,
       },
@@ -43,7 +54,6 @@ export default function DateColumn({
   }, [dataPath, path, disableSearch, disableSort, nullable, index]);
 
   if (disableSearch) return <HeaderRender title={title} path={path} />;
-  const value = objectPath(query).get(path, '');
   return (
     <HeaderRender title={title} path={path}>
       <Input

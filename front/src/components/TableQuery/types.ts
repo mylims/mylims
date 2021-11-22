@@ -29,6 +29,7 @@ export interface BaseColumnProps {
   disableSort?: boolean;
   nullable?: boolean;
   index?: number;
+  children?: (row: Record<string, unknown>) => ReactNode;
 }
 export interface NumberColumnProps extends BaseColumnProps {
   format?: string;
@@ -62,11 +63,17 @@ export type ReducerActions =
 type RowStateGeneric<K, V> = {
   index: number;
   kind: K;
-  value: Omit<Required<V>, 'index' | 'title'>;
+  value: Omit<Required<V>, 'index' | 'title' | 'children'> & {
+    render: ActionsColumnProps['render'];
+  };
 };
 export type RowState =
   | RowStateGeneric<ColumnKind.TEXT, BaseColumnProps>
-  | RowStateGeneric<ColumnKind.NUMBER, NumberColumnProps>
-  | RowStateGeneric<ColumnKind.DATE, DateColumnProps>
-  | RowStateGeneric<ColumnKind.ACTIONS, ActionsColumnProps>;
+  | RowStateGeneric<ColumnKind.NUMBER, BaseColumnProps>
+  | RowStateGeneric<ColumnKind.DATE, BaseColumnProps>
+  | {
+      index: number;
+      kind: ColumnKind.ACTIONS;
+      value: Omit<ActionsColumnProps, 'index'>;
+    };
 export type TableState = RowState[];

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import objectPath from 'object-path';
+import numeral from 'numeral';
 
 import { Input } from '@/components/tailwind-ui';
 import { ColumnKind, NumberColumnProps } from '../types';
@@ -15,9 +16,18 @@ export default function NumberColumn({
   nullable = false,
   index,
   format = '0.00',
+  children,
 }: NumberColumnProps) {
   const { query, setQuery, submitQuery, dispatch } = useTableQueryContext();
   const path = queryPath ?? dataPath;
+  const render =
+    children ??
+    ((row) => {
+      const model = objectPath(row);
+      if (!model.has(dataPath)) return '-';
+      const num = model.get(dataPath);
+      return numeral(num).format(format);
+    });
 
   useEffect(() => {
     if (index === undefined) {
@@ -33,7 +43,7 @@ export default function NumberColumn({
           disableSearch,
           disableSort,
           nullable,
-          format,
+          render,
         },
         kind: ColumnKind.NUMBER,
       },
