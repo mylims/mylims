@@ -5,7 +5,6 @@ import { Input } from '@/components/tailwind-ui';
 import { ColumnKind, NumberColumnProps } from '../types';
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import HeaderRender from './HeaderRender';
-import SortIcon from './SortIcon';
 
 export default function NumberColumn({
   title,
@@ -43,10 +42,10 @@ export default function NumberColumn({
     return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
   }, [dataPath, path, disableSearch, disableSort, nullable, index]);
 
-  if (disableSearch) return <HeaderRender title={title} />;
+  if (disableSearch) return <HeaderRender title={title} path={path} />;
   const value = objectPath(query).get(path, '');
   return (
-    <HeaderRender title={title}>
+    <HeaderRender title={title} path={path}>
       <Input
         name={path}
         label={path}
@@ -59,7 +58,6 @@ export default function NumberColumn({
         onKeyDown={(e) => {
           if (e.key === 'Enter') submitQuery(query);
         }}
-        trailingInlineAddon={<SortIcon disableSort={disableSort} path={path} />}
       />
     </HeaderRender>
   );
