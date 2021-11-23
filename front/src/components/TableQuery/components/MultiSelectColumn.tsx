@@ -1,18 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import objectPath from 'object-path';
 
 import {
-  Input,
   MultiSearchSelect,
   useMultiSearchSelect,
 } from '@/components/tailwind-ui';
-import { SelectColumnProps, ColumnKind } from '../types';
+import { SelectColumnProps, ColumnKind, SelectionValue } from '../types';
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import HeaderRender from './HeaderRender';
 
-function parseOptions(
-  options: SelectColumnProps['options'],
-): Array<{ value: string; label: string }> {
+function parseOptions(options: SelectColumnProps['options']): SelectionValue[] {
   return options.map((value) => {
     if (typeof value === 'string') return { value, label: value };
     return value;
@@ -30,10 +27,17 @@ export default function MultiSelectColumn({
   options,
   children,
 }: SelectColumnProps) {
-  const { query, setQuery, submitQuery, dispatch } = useTableQueryContext();
+  const { query, submitQuery, dispatch } = useTableQueryContext();
   const selectTags = useMultiSearchSelect({ options: parseOptions(options) });
   const path = queryPath ?? dataPath;
-  const value = objectPath(query).get(path, '');
+  const value = useMemo(
+    () =>
+      objectPath(query)
+        .get(path, '')
+        .split(',')
+        .filter((val) => val !== ''),
+    [query, path],
+  );
 
   const render =
     children ??
@@ -75,6 +79,13 @@ export default function MultiSelectColumn({
         label={path}
         clearable
         hiddenLabel
+        onSelect={(value: SelectionValue[]) => {
+          submitQuery({
+            ...query,
+            [path]: value.map((v) => v.value).join(','),
+          });
+        }}
+        selected={parseOptions(value)}
       />
     </HeaderRender>
   );
