@@ -37,6 +37,9 @@ export interface NumberColumnProps extends BaseColumnProps {
 export interface DateColumnProps extends BaseColumnProps {
   format?: string;
 }
+export interface SelectColumnProps extends BaseColumnProps {
+  options: Array<{ value: string; label: string }> | string[];
+}
 interface ActionsColumnProps {
   index?: number;
   render(row: Record<string, unknown>): ReactNode;
@@ -53,6 +56,7 @@ export enum ColumnKind {
   TEXT = 'text',
   NUMBER = 'number',
   DATE = 'date',
+  MULTI_SELECT = 'multiSelect',
   ACTIONS = 'actions',
 }
 
@@ -71,6 +75,7 @@ export type RowState =
   | RowStateGeneric<ColumnKind.TEXT, BaseColumnProps>
   | RowStateGeneric<ColumnKind.NUMBER, BaseColumnProps>
   | RowStateGeneric<ColumnKind.DATE, BaseColumnProps>
+  | RowStateGeneric<ColumnKind.MULTI_SELECT, BaseColumnProps>
   | {
       index: number;
       kind: ColumnKind.ACTIONS;

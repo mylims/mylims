@@ -4,6 +4,7 @@ import DateColumn from './components/DateColumn';
 import NumberColumn from './components/NumberColumn';
 import TextColumn from './components/TextColumn';
 import ActionsColumn from './components/ActionsColumn';
+import MultiSelectColumn from './components/MultiSelectColumn';
 
 const invalidError = 'Invalid column child';
 export function splitChildren(children: ReactNode) {
@@ -19,6 +20,7 @@ export function splitChildren(children: ReactNode) {
       child.type === NumberColumn ||
       child.type === TextColumn ||
       child.type === DateColumn ||
+      child.type === MultiSelectColumn ||
       child.type === ActionsColumn
     ) {
       columns.push(cloneElement(child, { ...child.props, index }));
