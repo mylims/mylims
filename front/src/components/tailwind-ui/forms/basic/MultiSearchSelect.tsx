@@ -23,6 +23,7 @@ export interface SimpleMultiSearchSelectProps<OptionType>
   onSelect: (newSelected: OptionType[]) => void;
   getBadgeColor?: (option: OptionType) => Color;
   isOptionRemovable?: (option: OptionType) => boolean;
+  hiddenLabel?: boolean;
 }
 
 export interface MultiSearchSelectProps<OptionType>
