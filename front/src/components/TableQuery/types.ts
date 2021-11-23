@@ -37,8 +37,9 @@ export interface NumberColumnProps extends BaseColumnProps {
 export interface DateColumnProps extends BaseColumnProps {
   format?: string;
 }
+export type SelectionValue = Record<'value' | 'label', string>;
 export interface SelectColumnProps extends BaseColumnProps {
-  options: Array<{ value: string; label: string }> | string[];
+  options: SelectionValue[] | string[];
 }
 interface ActionsColumnProps {
   index?: number;
@@ -47,9 +48,8 @@ interface ActionsColumnProps {
 }
 
 export interface TableQueryHook {
-  pagination: Record<'page' | 'skip' | 'limit', number>;
-  query: Record<string, string>;
-  setQuery(query: Record<string, string>): void;
+  query: QueryType;
+  setQuery(query: QueryType): void;
 }
 
 export enum ColumnKind {
