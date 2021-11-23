@@ -344,6 +344,7 @@ interface InternalSearchSelectProps<OptionType>
   noResultsHint?: ReactNode;
   error?: string;
   help?: string;
+  hiddenLabel?: boolean;
   label: string;
   placeholder?: string;
   searchValue: string;
@@ -385,6 +386,7 @@ export function InternalSearchSelect<OptionType>(
     noResultsHint = defaultNoResultsHint,
     error,
     help,
+    hiddenLabel,
     label,
     placeholder,
     searchValue,
@@ -409,6 +411,7 @@ export function InternalSearchSelect<OptionType>(
         disabled={disabled}
         error={error}
         help={help}
+        hiddenLabel={hiddenLabel}
         onBlur={(event) => {
           onBlur?.(event);
           closeList();
