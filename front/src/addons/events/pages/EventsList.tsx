@@ -1,120 +1,119 @@
 import React from 'react';
+import objectPath from 'object-path';
 
-import EventRow from '../components/EventRow';
-
-import EventFormFilter from '@/addons/events/components/EventFormFilter';
 import ElnLayout from '@/components/ElnLayout';
-import TableEmpty from '@/components/TableEmpty';
-import TableHeader from '@/components/TableHeader';
-import { Alert, AlertType, Spinner, Table } from '@/components/tailwind-ui';
+import { Table as TableQuery } from '@/components/TableQuery';
+import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 import {
-  EventsFilteredQuery,
+  EventSortField,
   EventStatus,
+  SortDirection,
   useEventsFilteredQuery,
 } from '@/generated/graphql';
-import { useFilterEventQuery } from '@/hooks/useEventQuery';
-import { formatDate } from '@/utils/formatFields';
-
-type EventRowType = EventsFilteredQuery['events']['list'][number] & {
-  id: string;
-};
+import { InformationCircleIcon } from '@heroicons/react/outline';
+import { Link } from 'react-router-dom';
+import { EventStatusLabel } from '@/components/EventStatusLabel';
+import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 
 const PAGE_SIZE = 10;
-const titles = [
-  { className: 'w-2/12', name: 'Original file' },
-  { className: 'w-2/12', name: 'Processor id' },
-  { className: 'w-1/12', name: 'Topic' },
-  { className: 'w-1/12', name: 'Status' },
-  { className: 'w-1/12', name: 'Creation date' },
-  { className: 'w-1/12', name: 'Process date' },
-  { className: 'w-1/12', name: 'Actions' },
-];
 
 export default function EventsList() {
-  const [query, setQuery] = useFilterEventQuery();
-  const pageNum = query.page !== null ? parseInt(query.page, 10) : 1;
+  const { query, setQuery } = useTableQuery({
+    page: '1',
+    sortField: EventSortField.CREATEDAT,
+    sortDirection: SortDirection.DESC,
+  });
+  const { page, status, sortField, sortDirection, ...filter } = query;
+  console.log({ page, query });
+  const pageNum = page !== null ? parseInt(page, 10) : 1;
   const { loading, error, data } = useEventsFilteredQuery({
     variables: {
       skip: (pageNum - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
       filterBy: {
-        status: query.status?.map(({ value }) => value) ?? null,
-        topic: query.topic,
-        processorId: query.processorId,
+        ...filter,
+        status:
+          status
+            ?.split(',')
+            .filter<EventStatus>((value): value is EventStatus => !!value) ??
+          null,
+      },
+      sortBy: {
+        direction: sortDirection as SortDirection,
+        field: sortField as EventSortField,
       },
     },
   });
 
-  const pagination = {
-    page: pageNum,
-    itemsPerPage: PAGE_SIZE,
-    totalCount: data?.events.totalCount ?? 0,
-    onPageChange: (newPage: number) =>
-      setQuery({ ...query, page: newPage.toString() }),
-  };
-
   return (
-    <EventFormFilter
-      initialValues={query}
-      onSubmit={(values) => setQuery(values)}
-    >
-      {error && (
-        <Alert title={'Error'} type={AlertType.ERROR}>
-          Unexpected error: {error.message}
-        </Alert>
-      )}
-
-      {loading ? (
-        <Spinner className="w-10 h-10 text-danger-500" />
-      ) : (
-        <Table
-          tableClassName="table-fixed"
-          Header={() => <TableHeader titles={titles} />}
-          Empty={() => <TableEmpty titles={titles} />}
-          Tr={Row}
-          data={data?.events.list ?? []}
-          pagination={pagination}
+    <div>
+      <Link to="/event/list">
+        <Button
+          className="mb-4"
+          variant={Variant.secondary}
+          color={Color.danger}
+        >
+          Remove filters
+        </Button>
+      </Link>
+      <TableQuery
+        data={data?.events}
+        loading={loading}
+        itemsPerPage={PAGE_SIZE}
+        query={query}
+        onQueryChange={(query) => setQuery(query)}
+      >
+        <TableQuery.TextColumn
+          title="Original file"
+          dataPath="data.file.name"
+          disableSearch
         />
-      )}
-    </EventFormFilter>
+        <TableQuery.TextColumn
+          title="Processor id"
+          dataPath="processors.0.processorId"
+        />
+        <TableQuery.TextColumn title="Topic" dataPath="topic" />
+        <TableQuery.MultiSelectColumn
+          title="Status"
+          dataPath="processors.0.history.0.status"
+          queryPath="status"
+          options={[
+            EventStatus.PENDING,
+            EventStatus.PROCESSING,
+            EventStatus.ERROR,
+            EventStatus.SUCCESS,
+          ]}
+        >
+          {(row) => {
+            const status = objectPath.get(
+              row,
+              'processors.0.history.0.status',
+              EventStatus.PENDING,
+            );
+            return <EventStatusLabel status={status} />;
+          }}
+        </TableQuery.MultiSelectColumn>
+        <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
+        <TableQuery.DateColumn
+          title="Process date"
+          dataPath="processors.0.history.0.date"
+        />
+        <TableQuery.ActionsColumn>
+          {({ id }) => (
+            <Link title="detail" to={`/event/detail/${id}`}>
+              <Button
+                color={Color.primary}
+                roundness={Roundness.circular}
+                variant={Variant.secondary}
+              >
+                <InformationCircleIcon className="w-5 h-5" />
+              </Button>
+            </Link>
+          )}
+        </TableQuery.ActionsColumn>
+      </TableQuery>
+    </div>
   );
-}
-
-function Row({ value }: { value: EventRowType }) {
-  if (value.processors.length === 0) {
-    return (
-      <EventRow
-        id={value.id}
-        file={value.data.file.name}
-        topic={value.topic}
-        status={EventStatus.PENDING}
-        processorId="-"
-        date="-"
-        createdAt={formatDate(value.createdAt)}
-      />
-    );
-  }
-
-  const processors = value.processors.map((processor) => {
-    const date = processor.history[0]?.date;
-    return (
-      <EventRow
-        key={processor.processorId}
-        id={value.id}
-        file={value.data.file.name}
-        topic={value.topic}
-        status={
-          (processor.history[0]?.status.trim() ??
-            EventStatus.PENDING) as EventStatus
-        }
-        processorId={processor.processorId}
-        date={date ? formatDate(date) : '-'}
-        createdAt={formatDate(value.createdAt)}
-      />
-    );
-  });
-
-  return <>{processors}</>;
 }
 
 EventsList.getLayout = (page: React.ReactNode) => <ElnLayout>{page}</ElnLayout>;
