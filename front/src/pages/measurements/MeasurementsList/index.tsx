@@ -71,7 +71,7 @@ export default function MeasurementsList() {
           </Button>
         </Link>
       </div>
-      <MeasurementPlot type={measurementType}>
+      <MeasurementPlot query={query} type={measurementType}>
         <TableQuery
           data={data?.measurements}
           loading={loading}
