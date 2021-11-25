@@ -58,6 +58,7 @@ export default function EventsList() {
       <TableQuery
         data={data?.events}
         loading={loading}
+        error={error}
         itemsPerPage={PAGE_SIZE}
         query={query}
         onQueryChange={(query) => setQuery(query)}

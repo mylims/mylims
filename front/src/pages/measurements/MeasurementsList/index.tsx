@@ -71,10 +71,11 @@ export default function MeasurementsList() {
           </Button>
         </Link>
       </div>
-      <MeasurementPlot type={MeasurementTypes.TRANSFER}>
+      <MeasurementPlot type={measurementType}>
         <TableQuery
           data={data?.measurements}
           loading={loading}
+          error={error}
           itemsPerPage={PAGE_SIZE}
           query={query}
           onQueryChange={(query) => setQuery(query)}

@@ -1,15 +1,15 @@
-import type { ReducerActions, TableState } from './types';
+import { ReducerActions, TableState } from './types';
 
 export function reducer(state: TableState, action: ReducerActions) {
   switch (action.type) {
     case 'ADD_COLUMN': {
-      state.push(action.payload);
+      if (findColumn(state, action.payload.value.dataPath) === -1) {
+        state.push(action.payload);
+      }
       break;
     }
     case 'REMOVE_COLUMN': {
-      const index = state.findIndex(
-        ({ index }) => index !== action.payload.index,
-      );
+      const index = findColumn(state, action.payload.dataPath);
       if (index !== -1) state.splice(index, 1);
       break;
     }
@@ -18,4 +18,7 @@ export function reducer(state: TableState, action: ReducerActions) {
       throw new Error(`Unknown reducer type ${(action as any).type}`);
     }
   }
+}
+function findColumn(state: TableState, dataPath: string): number {
+  return state.findIndex(({ value }) => value.dataPath === dataPath);
 }
