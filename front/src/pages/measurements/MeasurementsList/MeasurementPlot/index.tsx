@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 import MeasurementTypeRender from './MeasurementTypeRender';
 
@@ -8,6 +8,7 @@ import { useFetchFileDict } from '@/hooks/useFetchFile';
 
 interface MeasurementPlotProps {
   type: MeasurementTypes;
+  query: any;
   children: JSX.Element;
 }
 type MeasurementState = Record<string, string>;
@@ -25,9 +26,16 @@ export const MeasurementPlotContext = createContext<
   },
 });
 
-export function MeasurementPlot({ type, children }: MeasurementPlotProps) {
+export function MeasurementPlot({
+  type,
+  query,
+  children,
+}: MeasurementPlotProps) {
   const [state, setState] = useState<MeasurementState>({});
   const { data, error } = useFetchFileDict(state);
+  useEffect(() => {
+    setState({});
+  }, [query]);
 
   return (
     <MeasurementPlotContext.Provider value={{ state, setState }}>
