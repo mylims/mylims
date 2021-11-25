@@ -37,6 +37,7 @@ export interface SlideOverProps<T extends ElementType> {
   allowPageInteraction?: boolean;
   afterOpen?: () => void;
   afterClose?: () => void;
+  hasCloseButton?: boolean;
 }
 
 export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
@@ -44,27 +45,22 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
     requestCloseOnClickOutside = true,
     maxWidth: maxWidthSlideOver = Size.medium,
     allowPageInteraction = false,
+    hasCloseButton = true,
+    children,
+    isOpen,
+    onClose,
+    afterOpen,
+    afterClose,
+    wrapperComponent,
+    wrapperProps,
   } = props;
 
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => {
     if (requestCloseOnClickOutside) {
-      props.onClose?.();
+      onClose?.();
     }
   });
-
-  const Header = props.children.find((node) =>
-    // @ts-expect-error Should be removed when we move to CSS Grid implementation.
-    node.type.name?.endsWith('Header'),
-  );
-  const Footer = props.children.find((node) =>
-    // @ts-expect-error Ditto.
-    node.type.name?.endsWith('Footer'),
-  );
-  const Content = props.children.find((node) =>
-    // @ts-expect-error Ditto.
-    node.type.name?.endsWith('Content'),
-  );
 
   let slideOverContents = (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -77,43 +73,41 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
           leaveFrom="translate-x-0"
           leaveTo="translate-x-full"
           className={clsx('w-screen', getSizeClassname(maxWidthSlideOver))}
-          afterEnter={props.afterOpen}
-          afterLeave={props.afterClose}
+          afterEnter={afterOpen}
+          afterLeave={afterClose}
         >
           <div
             ref={ref}
-            className="flex flex-col h-full bg-white divide-y shadow divide-neutral-200"
+            style={{
+              gridTemplateColumns: '1fr auto',
+              gridTemplateRows: 'auto 1fr auto',
+              gridTemplateAreas:
+                "'header close' 'content content' 'footer footer'",
+            }}
+            className="grid h-full pt-6 bg-white shadow gap-y-6"
           >
-            <div className="flex flex-col flex-1 min-h-0 gap-6 py-6 ">
-              <header className="px-4 sm:px-6">
-                <div className="flex items-start justify-between space-x-3">
-                  {Header}
-                  {props.onClose && (
-                    <div className="flex items-center h-7">
-                      <button
-                        type="button"
-                        onClick={props.onClose}
-                        className="bg-white rounded-full text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
-                      >
-                        <XIcon className="w-6 h-6" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </header>
-              {Content}
-            </div>
-            {Footer}
+            {onClose && hasCloseButton && (
+              <div style={{ gridArea: 'close' }} className="pr-4 h-7 sm:pr-6">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="bg-white rounded-full text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
+                >
+                  <XIcon className="w-6 h-6" />
+                </button>
+              </div>
+            )}
+            {children}
           </div>
         </Transition.Child>
       </section>
     </div>
   );
 
-  if (props.wrapperComponent) {
+  if (wrapperComponent) {
     slideOverContents = createElement(
-      props.wrapperComponent,
-      props.wrapperProps,
+      wrapperComponent,
+      wrapperProps,
       slideOverContents,
     );
   }
@@ -121,7 +115,7 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
   return (
     <Portal>
       <Transition
-        show={props.isOpen}
+        show={isOpen}
         className={clsx(
           'fixed inset-0 z-50 overflow-hidden',
           allowPageInteraction && 'pointer-events-none',
@@ -137,7 +131,14 @@ SlideOver.Header = function SlideOverHeader(props: {
   children: ReactNode;
   className?: string;
 }) {
-  return <div className={props.className}>{props.children}</div>;
+  return (
+    <header
+      style={{ gridArea: 'header' }}
+      className={clsx('px-4 sm:px-6', props.className)}
+    >
+      {props.children}
+    </header>
+  );
 };
 
 SlideOver.Content = function SlideOverContent(props: {
@@ -145,14 +146,15 @@ SlideOver.Content = function SlideOverContent(props: {
   className?: string;
 }) {
   return (
-    <div
+    <main
+      style={{ gridArea: 'content' }}
       className={clsx(
-        'relative flex-1 px-4 overflow-y-auto sm:px-6',
+        'px-4 sm:px-6 relative flex-1 overflow-y-auto',
         props.className,
       )}
     >
       {props.children}
-    </div>
+    </main>
   );
 };
 
@@ -161,13 +163,14 @@ SlideOver.Footer = function SlideOverFooter(props: {
   className?: string;
 }) {
   return (
-    <div
+    <footer
+      style={{ gridArea: 'footer' }}
       className={clsx(
-        'flex justify-end flex-shrink-0 px-4 py-4 space-x-3',
+        'px-4 sm:px-6 flex justify-end flex-shrink-0 py-4 space-x-3 border-t border-neutral-200',
         props.className,
       )}
     >
       {props.children}
-    </div>
+    </footer>
   );
 };

@@ -68,7 +68,7 @@ export function Pagination(props: PaginationProps) {
         {withText && <Text page={page} total={totalPages} />}
         <div>
           <nav className="inline-flex shadow-sm">
-            <ButtonGroup variant={Variant.white} size={pages.length + 2}>
+            <ButtonGroup variant={Variant.white}>
               <ButtonGroup.Button disabled={prevDisabled} onClick={goPrevious}>
                 Previous
               </ButtonGroup.Button>

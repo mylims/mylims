@@ -1,29 +1,21 @@
-import { XIcon } from '@heroicons/react/outline';
 import React, { useCallback } from 'react';
-import ReactDatePicker from 'react-datepicker';
 import { useController } from 'react-hook-form';
 
+import { DatePicker, DatePickerProps } from '../..';
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
-import { Input } from '../basic/Input';
-import { DatePickerFieldProps } from '../formik/DatePickerField';
 import {
   defaultErrorSerializer,
   FieldProps,
   RHFControlledProps,
 } from '../util';
 
-if (typeof window !== 'undefined') {
-  // @ts-ignore
-  void import('react-datepicker/dist/react-datepicker.css');
-}
-
-export function DatePickerFieldRHF<Modifiers extends string = never>(
-  props: DatePickerFieldProps<Modifiers> & FieldProps & RHFControlledProps,
+export function DatePickerFieldRHF(
+  props: Omit<DatePickerProps, 'value' | 'onChange'> &
+    FieldProps &
+    RHFControlledProps,
 ) {
   const {
-    isClearable,
     name,
-    label,
     inputProps,
     serializeError = defaultErrorSerializer,
     deps,
@@ -54,39 +46,18 @@ export function DatePickerFieldRHF<Modifiers extends string = never>(
 
   return (
     <div className="flex">
-      <ReactDatePicker
-        selected={value}
-        // We do not allow ranges because the callback would not receive a Date
-        selectsRange={false}
-        customInput={
-          <Input
-            {...inputProps}
-            ref={ref}
-            name={name}
-            label={label}
-            error={serializeError(error)}
-            trailingInlineAddon={
-              value && props.isClearable ? (
-                <XIcon
-                  className="w-3.5 h-3.5 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setFieldValue(null);
-                  }}
-                />
-              ) : null
-            }
-          />
-        }
+      <DatePicker
+        value={value}
+        name={name}
+        inputProps={{
+          ...inputProps,
+        }}
+        inputRef={ref}
+        error={serializeError(error)}
         onChange={(date: Date | null) => {
           setFieldValue(date);
         }}
         onBlur={onBlur}
-        wrapperClassName="flex-1"
-        popperPlacement="bottom-start"
-        showPopperArrow={false}
-        name={name}
         // This is required to prevent react-date-picker from overriding
         // the ref passed to the custom input
         customInputRef="datePickerRef"

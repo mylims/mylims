@@ -1,9 +1,10 @@
-import React, { Ref, useMemo } from 'react';
+import React, { ReactNode, Ref, useMemo } from 'react';
 
 import { forwardRefWithGeneric } from '../../util';
 import {
   defaultCanCreate,
   defaultGetValue,
+  defaultRenderCreate,
   defaultRenderOption,
   InternalSearchSelect,
   useSearchSelectInternals,
@@ -39,6 +40,10 @@ export interface SimpleSearchSelectProps<OptionType> {
    * user. If it is present and doesn't return `true`, the option will not be displayed.
    */
   canCreate?: (value: string) => boolean;
+  /**
+   * Custom function to render the "create" option.
+   */
+  renderCreate?: (value: string) => ReactNode;
 
   /**
    * Function to get the value that uniquely identifies each option.
@@ -62,6 +67,14 @@ export interface SimpleSearchSelectProps<OptionType> {
    */
   label: string;
   /**
+   * Do not display the label, keeping it in the DOM for accessibility.
+   */
+  hiddenLabel?: boolean;
+  /**
+   * Custom react node to display in the upper right corner of the input
+   */
+  corner?: ReactNode;
+  /**
    * Placeholder to display when no value is selected and no search text is entered.
    */
   placeholder?: string;
@@ -73,6 +86,10 @@ export interface SimpleSearchSelectProps<OptionType> {
    * Called when the input field is blurred.
    */
   onBlur?: (e: React.FocusEvent) => void;
+  /**
+   * Input field's id.
+   */
+  id?: string;
   /**
    * Input field's name.
    */
@@ -101,6 +118,10 @@ export interface SimpleSearchSelectProps<OptionType> {
    * Class applied to the highlighted option.
    */
   highlightClassName?: string;
+  /**
+   * Size for Input
+   */
+  size?: number;
 }
 
 export interface SearchSelectProps<OptionType>
@@ -128,6 +149,7 @@ function SearchSelectForwardRef<OptionType>(
     renderOption = defaultRenderOption,
     onCreate,
     canCreate = defaultCanCreate,
+    renderCreate = defaultRenderCreate,
     ...otherProps
   } = props;
 
@@ -149,6 +171,7 @@ function SearchSelectForwardRef<OptionType>(
     renderOption,
     onCreate,
     canCreate,
+    renderCreate,
     formattedSelected,
   });
 

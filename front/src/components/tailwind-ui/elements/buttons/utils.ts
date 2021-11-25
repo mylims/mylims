@@ -1,3 +1,6 @@
+import clsx from 'clsx';
+
+import { Roundness } from '../..';
 import { Size, Color, Variant } from '../../types';
 
 const baseSizes: Record<Size, string> = {
@@ -74,6 +77,55 @@ function getVariantColor(variant: Variant, color: Color): string {
   }
 }
 
+function getButtonClassName(options: {
+  variant: Variant;
+  color: Color;
+  roundness: Roundness;
+  size: Size;
+  noBorder: boolean;
+  group?: 'left' | 'right' | 'middle';
+  className?: string;
+  disabled?: boolean;
+}) {
+  const {
+    variant,
+    color,
+    roundness,
+    size,
+    group,
+    className,
+    disabled,
+    noBorder,
+  } = options;
+  return clsx(
+    'font-semibold focus:outline-none',
+    getVariantColor(variant, color),
+    roundness === Roundness.circular ? circularSizes[size] : baseSizes[size],
+    className,
+    roundness === Roundness.full || roundness === Roundness.circular
+      ? {
+          'rounded-l-full rounded-r-none': group === 'left',
+          'rounded-none': group === 'middle',
+          'rounded-r-full rounded-l-none': group === 'right',
+          'rounded-full': !group,
+        }
+      : {
+          'rounded-l-md rounded-r-none': group === 'left',
+          'rounded-none': group === 'middle',
+          'rounded-r-md rounded-l-none': group === 'right',
+          'rounded-md': !group,
+        },
+    {
+      'cursor-default': disabled,
+      '-ml-px': group && group !== 'left',
+      'shadow-sm focus:ring-2 focus:ring-offset-2': !group,
+      'focus:ring-1 focus:z-10': group,
+      'border border-transparent': !noBorder && variant !== Variant.white,
+      'border border-neutral-300': !noBorder && variant === Variant.white,
+    },
+  );
+}
+
 export {
   baseSizes,
   circularSizes,
@@ -81,4 +133,5 @@ export {
   colorsPrimary,
   colorsSecondary,
   colorsWhite,
+  getButtonClassName,
 };

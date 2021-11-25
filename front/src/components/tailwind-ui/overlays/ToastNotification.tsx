@@ -3,10 +3,13 @@ import { XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React from 'react';
 
-import { NotificationState } from './NotificationCenter';
+import { NotificationState } from './NotificationContext';
 
-export interface NotificationToastProps
-  extends Omit<NotificationState, 'title' | 'content' | 'icon' | 'isToast'> {
+export interface ToastNotificationProps
+  extends Omit<
+    NotificationState,
+    'title' | 'content' | 'icon' | 'isToast' | 'type'
+  > {
   label: string;
   onDismiss: () => void;
   action?: {
@@ -16,7 +19,7 @@ export interface NotificationToastProps
   position: 'top' | 'bottom';
 }
 
-export function ToastNotification(props: NotificationToastProps) {
+export function ToastNotification(props: ToastNotificationProps) {
   return (
     <Transition
       appear

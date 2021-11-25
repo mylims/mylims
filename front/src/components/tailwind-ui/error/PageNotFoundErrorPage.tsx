@@ -2,7 +2,7 @@ import { CheckIcon } from '@heroicons/react/outline';
 import React, { useContext } from 'react';
 
 import { Button } from '../elements/buttons/Button';
-import { NotificationContext } from '../overlays/NotificationContext';
+import { notificationContext } from '../overlays/NotificationContext';
 import { Color } from '../types';
 
 import { ErrorPage } from './ErrorPage';
@@ -12,7 +12,7 @@ interface PageNotFoundErrorPageProps {
 }
 
 export function PageNotFoundErrorPage(props: PageNotFoundErrorPageProps) {
-  const context = useContext(NotificationContext);
+  const context = useContext(notificationContext);
   const errorReport = `The page ${props.url} was not found`;
 
   function handleCopyReport() {

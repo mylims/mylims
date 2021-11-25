@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { forwardRef, Ref } from 'react';
+import React, { Children, forwardRef, Ref } from 'react';
 
 import type { GroupOptionProps, OptionProps } from '../GroupOption';
 import { Label } from '../common';
@@ -23,7 +23,7 @@ export const Option = forwardRef(function OptionForwardRef(
             name={name}
             value={value}
             id={id}
-            className="w-4 h-4 border-gray-300 cursor-pointer focus:ring-primary-500 text-primary-600"
+            className="w-4 h-4 cursor-pointer border-neutral-300 focus:ring-primary-500 text-primary-600"
             checked={checked}
             {...otherProps}
           />
@@ -53,9 +53,8 @@ export const Option = forwardRef(function OptionForwardRef(
 });
 
 export function GroupOption(props: GroupOptionProps): JSX.Element {
-  const lastChildIndex = Array.isArray(props.children)
-    ? props.children.length - 1
-    : 0;
+  const lastChildIndex = Children.count(props.children) - 1;
+
   return (
     <div>
       {props.label && (
@@ -67,14 +66,14 @@ export function GroupOption(props: GroupOptionProps): JSX.Element {
         />
       )}
       <div className={clsx({ 'mt-1': !props.hiddenLabel })}>
-        {React.Children.map(props.children, (child, index) => {
+        {Children.map(props.children, (child, index) => {
           return (
             <div
               key={child.props.id}
               className={clsx('border border-neutral-200', {
                 'rounded-tl-md rounded-tr-md': index === 0,
                 'border-b-0': index !== lastChildIndex,
-                'rounded-bl-md rounded-br border-b-1': index === lastChildIndex,
+                'rounded-bl-md rounded-br border-b': index === lastChildIndex,
               })}
             >
               {props.disabled === true

@@ -22,6 +22,7 @@ export type { LabelProps as FieldLabelProps } from './forms/basic/common';
 
 export * from './forms/util';
 export * from './forms/basic/Checkbox';
+export * from './forms/basic/DatePicker';
 export * from './forms/basic/Dropzone';
 export * from './forms/basic/DropzoneList';
 export * from './forms/basic/Input';
@@ -104,5 +105,7 @@ export * from './shells/SidebarLayout';
 export * from './shortcuts/KeyboardActionHelp';
 
 export * from './types';
+
+export * from './util';
 
 export { customOptionsFilter } from './utils/search-select-utils';
