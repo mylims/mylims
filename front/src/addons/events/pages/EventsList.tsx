@@ -24,7 +24,6 @@ export default function EventsList() {
     sortDirection: SortDirection.DESC,
   });
   const { page, status, sortField, sortDirection, ...filter } = query;
-  console.log({ page, query });
   const pageNum = page !== null ? parseInt(page, 10) : 1;
   const { loading, error, data } = useEventsFilteredQuery({
     variables: {

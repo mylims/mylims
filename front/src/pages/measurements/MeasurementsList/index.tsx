@@ -1,95 +1,104 @@
 import React from 'react';
 
-import MeasurementFormFilter from './MeasurementFormFilter';
 import { MeasurementPlot } from './MeasurementPlot';
-import MeasurementRow from './MeasurementRow';
 
-import ElnLayout from '@/components/ElnLayout';
-import TableEmpty from '@/components/TableEmpty';
-import TableHeader from '@/components/TableHeader';
-import { Alert, AlertType, Spinner, Table } from '@/components/tailwind-ui';
+import { Table as TableQuery } from '@/components/TableQuery';
+import { Button, Color, Select, Variant } from '@/components/tailwind-ui';
 import {
   MeasurementsFilteredQuery,
+  MeasurementSortField,
   MeasurementTypes,
+  SortDirection,
   useMeasurementsFilteredQuery,
 } from '@/generated/graphql';
-import { useFilterMeasurementQuery } from '@/hooks/useMeasurementQuery';
-import { formatDate } from '@/utils/formatFields';
+import { Link } from 'react-router-dom';
+import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
+import ElnLayout from '@/components/ElnLayout';
+import MeasurementActions from '@/pages/measurements/MeasurementsList/MeasurementActions';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['list'][number];
 
 const PAGE_SIZE = 10;
-const titles = [
-  { className: 'w-2/12', name: 'Sample' },
-  { className: 'w-2/12', name: 'Creation date' },
-  { className: 'w-2/12', name: 'Username' },
-  { name: 'Actions' },
-];
 
 export default function MeasurementsList() {
-  const [query, setQuery] = useFilterMeasurementQuery();
+  const { query, setQuery } = useTableQuery({
+    page: '1',
+    sortField: MeasurementSortField.CREATEDAT,
+    sortDirection: SortDirection.DESC,
+  });
+  const { page, type, sortField, sortDirection, ...filter } = query;
+  const measurementType = (query.type ??
+    MeasurementTypes.TRANSFER) as MeasurementTypes;
   const pageNum = query.page !== null ? parseInt(query.page, 10) : 1;
   const { loading, error, data } = useMeasurementsFilteredQuery({
     variables: {
-      type: query.type?.value ?? MeasurementTypes.TRANSFER,
+      type: measurementType,
       skip: (pageNum - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
-      filterBy: {
-        username: query.username,
-        sampleCode: query.sampleCode ? query.sampleCode.split(',') : null,
+      filterBy: filter,
+      sortBy: {
+        direction: sortDirection as SortDirection,
+        field: sortField as MeasurementSortField,
       },
     },
   });
 
-  const pagination = {
-    page: pageNum,
-    itemsPerPage: PAGE_SIZE,
-    totalCount: data?.measurements.totalCount ?? 0,
-    onPageChange: (newPage: number) =>
-      setQuery({ ...query, page: newPage.toString() }),
-  };
-
   return (
-    <MeasurementFormFilter
-      initialValues={query}
-      onSubmit={(values) => setQuery(values)}
-    >
-      {error && (
-        <Alert title={'Error'} type={AlertType.ERROR}>
-          Unexpected error: {error.message}
-        </Alert>
-      )}
+    <div>
+      <div className="grid grid-cols-4 gap-4 my-4">
+        <Link to="/measurement/list" className="mt-auto">
+          <Button variant={Variant.secondary} color={Color.danger}>
+            Remove filters
+          </Button>
+        </Link>
 
-      {loading ? (
-        <Spinner className="w-10 h-10 text-danger-500" />
-      ) : (
-        <MeasurementPlot type={query.type?.value ?? MeasurementTypes.TRANSFER}>
-          <Table
-            tableClassName="table-fixed"
-            Header={() => <TableHeader titles={titles} />}
-            Empty={() => <TableEmpty titles={titles} />}
-            Tr={Row}
-            data={data?.measurements.list ?? []}
-            pagination={pagination}
+        <Select
+          options={[
+            {
+              value: MeasurementTypes.TRANSFER,
+              label: MeasurementTypes.TRANSFER,
+            },
+          ]}
+          selected={{ value: measurementType, label: measurementType }}
+          onSelect={(
+            selected: Record<'value' | 'label', MeasurementTypes> | undefined,
+          ) => {
+            setQuery({
+              ...query,
+              type: selected?.value ?? MeasurementTypes.TRANSFER,
+            });
+          }}
+          label="Measurement type"
+        />
+      </div>
+      <MeasurementPlot type={MeasurementTypes.TRANSFER}>
+        <TableQuery
+          data={data?.measurements}
+          loading={loading}
+          itemsPerPage={PAGE_SIZE}
+          query={query}
+          onQueryChange={(query) => setQuery(query)}
+        >
+          <TableQuery.TextColumn
+            title="Sample"
+            dataPath="sampleCode"
+            disableSort
           />
-        </MeasurementPlot>
-      )}
-    </MeasurementFormFilter>
-  );
-}
-
-function Row({
-  value: { createdAt, file, ...params },
-}: {
-  value: MeasurementRowType;
-}) {
-  return (
-    <MeasurementRow
-      {...params}
-      createdAt={formatDate(createdAt)}
-      downloadUrl={file?.downloadUrl}
-    />
+          <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
+          <TableQuery.TextColumn title="Username" dataPath="username" />
+          <TableQuery.ActionsColumn>
+            {(row) => {
+              const { file, id, type } = row as MeasurementRowType;
+              const fileUrl = file?.downloadUrl;
+              return (
+                <MeasurementActions id={id} type={type} fileUrl={fileUrl} />
+              );
+            }}
+          </TableQuery.ActionsColumn>
+        </TableQuery>
+      </MeasurementPlot>
+    </div>
   );
 }
 
