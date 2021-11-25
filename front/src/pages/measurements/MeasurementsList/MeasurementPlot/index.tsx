@@ -12,7 +12,6 @@ interface MeasurementPlotProps {
 }
 type MeasurementState = Record<string, string>;
 interface MeasurementContextState<T> {
-  enabled: boolean;
   state: T;
   setState: React.Dispatch<React.SetStateAction<T>>;
 }
@@ -20,7 +19,6 @@ interface MeasurementContextState<T> {
 export const MeasurementPlotContext = createContext<
   MeasurementContextState<MeasurementState>
 >({
-  enabled: false,
   state: {},
   setState: () => {
     // empty function
@@ -32,7 +30,7 @@ export function MeasurementPlot({ type, children }: MeasurementPlotProps) {
   const { data, error } = useFetchFileDict(state);
 
   return (
-    <MeasurementPlotContext.Provider value={{ enabled: true, state, setState }}>
+    <MeasurementPlotContext.Provider value={{ state, setState }}>
       <div className="flex flex-col md:justify-between md:flex-row-reverse">
         <div className="md:ml-3">
           <Card>
