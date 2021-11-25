@@ -190,7 +190,7 @@ export function Select<OptionType>(
             {(label || corner) && (
               <div
                 className={clsx(
-                  'flex items-baseline justify-between',
+                  'flex items-baseline justify-between gap-2',
                   // Cancel the margin from "space-y-1"
                   hiddenLabel && !corner && '-mb-1',
                 )}

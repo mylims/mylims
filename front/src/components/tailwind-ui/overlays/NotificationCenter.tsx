@@ -1,148 +1,107 @@
 import { v4 as uuid } from '@lukeed/uuid';
 import clsx from 'clsx';
-import React, { ReactNode, useCallback, useContext, useReducer } from 'react';
+import React, { ReactNode, useContext, useMemo, useReducer } from 'react';
+
+import { Color } from '..';
 
 import { Notification } from './Notification';
 import {
+  notificationContext,
   NotificationContext,
-  NotificationActions,
-  NotificationConfig,
+  notificationsReducer,
+  NotificationState,
+  ToastNotificationState,
 } from './NotificationContext';
 import { ToastNotification } from './ToastNotification';
 
-export interface NotificationCenterProps {
-  position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
-  className?: string;
-}
+export type {
+  AddNotification,
+  AddToastNotification,
+  DeleteNotification,
+  NotificationContext,
+  NotificationConfig,
+  ToastNotificationAction,
+  ToastNotificationConfig,
+} from './NotificationContext';
 
-export interface ToastNotificationCenterProps {
-  position: 'top' | 'bottom';
-  className?: string;
-}
-
-type ShowingOrRemoving = 'SHOWING' | 'REMOVING';
-
-export interface NotificationState extends NotificationConfig {
-  id: string;
-  state: ShowingOrRemoving;
-}
-
-export interface NotificationToastState {
-  id: string;
-  state: ShowingOrRemoving;
-
-  label: string;
-  action?: {
-    label: string;
-    handle: () => void;
-  };
-
-  isToast: true;
-}
-
-interface NotificationsState {
-  notifications: Array<NotificationState | NotificationToastState>;
-}
-
-function reducer(
-  previous: NotificationsState,
-  action: NotificationActions,
-): NotificationsState {
-  switch (action.type) {
-    case 'ADD_NOTIFICATION': {
-      const copy = previous.notifications.slice();
-      copy.push({ ...action.payload });
-      return { notifications: copy };
-    }
-    case 'DEL_NOTIFICATION': {
-      const array = previous.notifications.filter(
-        (element) => element.id !== action.payload,
-      );
-      return { notifications: array };
-    }
-    case 'DISAPPEAR': {
-      const notifications = previous.notifications.map((element) => {
-        if (element.id === action.payload) {
-          return { ...element, state: 'REMOVING' as ShowingOrRemoving };
-        }
-        return element;
-      });
-
-      return { notifications };
-    }
-    default:
-      throw new Error('NOPE');
-  }
-}
-
-export function NotificationProvider(props: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, { notifications: [] });
-
-  const dismiss = useCallback(
-    function dismiss(payload: string) {
-      dispatch({ type: 'DISAPPEAR', payload });
-      setTimeout(() => {
-        dispatch({ type: 'DEL_NOTIFICATION', payload });
-      }, 200);
-    },
-    [dispatch],
-  );
-
-  const utils = {
-    notifications: state.notifications,
-    addNotification: useCallback(
-      (notification, timeout) => {
-        const id = uuid();
-
-        if (timeout !== 0) {
-          setTimeout(() => dismiss(id), timeout || 10000);
-        }
-
-        dispatch({
-          type: 'ADD_NOTIFICATION',
-          payload: { ...notification, id, state: 'SHOWING' },
-        });
-
-        return id;
-      },
-
-      [dismiss, dispatch],
-    ),
-    addToastNotification: useCallback(
-      (notification, timeout) => {
-        const id = uuid();
-
-        if (timeout !== 0) {
-          setTimeout(() => dismiss(id), timeout || 10000);
-        }
-
-        dispatch({
-          type: 'ADD_NOTIFICATION',
-          payload: { ...notification, id, state: 'SHOWING', isToast: true },
-        });
-
-        return id;
-      },
-      [dismiss, dispatch],
-    ),
-    deleteNotification: dismiss,
-  };
-
-  return (
-    <NotificationContext.Provider value={utils}>
-      {props.children}
-    </NotificationContext.Provider>
-  );
-}
-
-export function useNotificationCenter() {
-  const context = useContext(NotificationContext);
+export function useNotificationCenter(): NotificationContext {
+  const context = useContext(notificationContext);
 
   if (context === null) {
     throw new Error('No context was provided');
   }
 
   return context;
+}
+
+export function NotificationProvider(props: { children: ReactNode }) {
+  const [state, dispatch] = useReducer(notificationsReducer, {
+    notifications: [],
+  });
+
+  const utils: NotificationContext = useMemo(() => {
+    function dismiss(payload: string) {
+      dispatch({ type: 'DISAPPEAR', payload });
+      setTimeout(() => {
+        dispatch({ type: 'DEL_NOTIFICATION', payload });
+      }, 200);
+    }
+
+    return {
+      notifications: state.notifications,
+      addNotification(notification, timeout) {
+        const id = uuid();
+
+        if (timeout !== 0) {
+          setTimeout(() => dismiss(id), timeout || 10000);
+        }
+
+        dispatch({
+          type: 'ADD_NOTIFICATION',
+          payload: {
+            ...notification,
+            id,
+            state: 'SHOWING',
+            type: notification.type || Color.neutral,
+            isToast: false,
+          },
+        });
+
+        return id;
+      },
+      addToastNotification(notification, timeout) {
+        const id = uuid();
+
+        if (timeout !== 0) {
+          setTimeout(() => dismiss(id), timeout || 10000);
+        }
+
+        dispatch({
+          type: 'ADD_NOTIFICATION',
+          payload: {
+            ...notification,
+            id,
+            state: 'SHOWING',
+            isToast: true,
+          },
+        });
+
+        return id;
+      },
+      deleteNotification: dismiss,
+    };
+  }, [state.notifications]);
+
+  return (
+    <notificationContext.Provider value={utils}>
+      {props.children}
+    </notificationContext.Provider>
+  );
+}
+
+export interface ToastNotificationCenterProps {
+  position: 'top' | 'bottom';
+  className?: string;
 }
 
 export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
@@ -167,8 +126,8 @@ export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
           })}
         >
           {notifications
-            .filter(
-              (element): element is NotificationToastState => !!element.isToast,
+            .filter((element): element is ToastNotificationState =>
+              Boolean(element.isToast),
             )
             .map((notification) => {
               return (
@@ -190,6 +149,11 @@ export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
       </div>
     </div>
   );
+}
+
+export interface NotificationCenterProps {
+  position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+  className?: string;
 }
 
 export function NotificationCenter(props: NotificationCenterProps) {
@@ -226,6 +190,7 @@ export function NotificationCenter(props: NotificationCenterProps) {
                   {...notification}
                   onDismiss={() => deleteNotification(notification.id)}
                   className="mb-5"
+                  type={notification.type}
                   title={notification.title}
                 >
                   {notification.content}

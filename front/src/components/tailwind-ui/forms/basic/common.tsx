@@ -1,3 +1,4 @@
+import { CheckIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
 
@@ -71,4 +72,12 @@ export function Help(props: {
 
 export function InputCorner(props: { children: ReactNode }) {
   return <div className="text-sm">{props.children}</div>;
+}
+
+export function InputErrorIcon() {
+  return <ExclamationCircleIcon className="w-5 h-5 ml-2 text-danger-500" />;
+}
+
+export function InputValidIcon() {
+  return <CheckIcon className="w-5 h-5 ml-2 text-success-600" />;
 }

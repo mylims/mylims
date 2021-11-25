@@ -36,7 +36,7 @@ export const TextArea = forwardRef(function TextAreaForwardRef(
   } = props;
   return (
     <div className={className}>
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-baseline justify-between gap-2">
         <Label
           id={id}
           text={label}

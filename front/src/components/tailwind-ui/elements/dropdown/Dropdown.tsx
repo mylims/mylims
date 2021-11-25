@@ -63,10 +63,20 @@ export function Dropdown<T>(props: DropdownProps<T>): React.ReactElement {
             {props.children ? (
               props.children
             ) : (
-              <>
-                {props.title}
-                <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" />
-              </>
+              <div className="flex items-center">
+                {props.title ? (
+                  props.title
+                ) : (
+                  // element with a line height but no width
+                  <span className="w-0 whitespace-pre-wrap"> </span>
+                )}
+                <ChevronDownIcon
+                  className={clsx(
+                    'w-5 h-5',
+                    props.title ? 'ml-2 -mr-1' : '-mx-2',
+                  )}
+                />
+              </div>
             )}
           </Menu.Button>
 

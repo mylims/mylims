@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React, { MouseEvent, Ref, useCallback, useMemo } from 'react';
 
 import { Badge, BadgeVariant } from '../../elements/badge/Badge';
@@ -10,8 +9,9 @@ import {
   defaultRenderOption,
   defaultGetBadgeColor,
   defaultIsOptionRemovable,
-  InternalSearchSelect,
   useSearchSelectInternals,
+  InternalMultiSearchSelect,
+  defaultRenderCreate,
 } from '../../utils/search-select-utils';
 
 import { SearchSelectProps, SimpleSearchSelectProps } from './SearchSelect';
@@ -23,11 +23,11 @@ export interface SimpleMultiSearchSelectProps<OptionType>
   onSelect: (newSelected: OptionType[]) => void;
   getBadgeColor?: (option: OptionType) => Color;
   isOptionRemovable?: (option: OptionType) => boolean;
-  hiddenLabel?: boolean;
 }
 
 export interface MultiSearchSelectProps<OptionType>
   extends Omit<SearchSelectProps<OptionType>, 'selected' | 'onSelect'> {
+  name: string;
   selected: OptionType[];
   onSelect: (newSelected: OptionType[]) => void;
   getBadgeColor?: (option: OptionType) => Color;
@@ -57,6 +57,7 @@ function MultiSearchSelectForwardRef<OptionType>(
     renderOption = defaultRenderOption,
     onCreate,
     canCreate = defaultCanCreate,
+    renderCreate = defaultRenderCreate,
     clearable = true,
     disabled = false,
     ...otherProps
@@ -84,7 +85,6 @@ function MultiSearchSelectForwardRef<OptionType>(
           label={rendered}
           color={getBadgeColor(option)}
           rounded
-          className="mt-1 mr-1"
           onDismiss={
             disabled || !isOptionRemovable(option) ? undefined : handleDismiss
           }
@@ -112,6 +112,15 @@ function MultiSearchSelectForwardRef<OptionType>(
     [selected, onSelect],
   );
 
+  const handleBackspace = useCallback(() => {
+    if (
+      selected.length > 0 &&
+      isOptionRemovable(selected[selected.length - 1])
+    ) {
+      onSelect(selected.slice(0, selected.length - 1));
+    }
+  }, [isOptionRemovable, onSelect, selected]);
+
   const internalProps = useSearchSelectInternals({
     searchValue: props.searchValue,
     onSearchChange,
@@ -121,25 +130,19 @@ function MultiSearchSelectForwardRef<OptionType>(
     renderOption,
     onCreate,
     canCreate,
+    renderCreate,
+    onBackspace: handleBackspace,
   });
 
   return (
-    <InternalSearchSelect
+    <InternalMultiSearchSelect
       {...internalProps}
       {...otherProps}
       inputRef={ref}
       clearable={clearable}
       disabled={disabled}
       hasValue={selected.length !== 0}
-      leadingInlineAddon={
-        <div
-          className={clsx('inline-flex flex-row flex-wrap -mt-1', {
-            'opacity-75': disabled,
-          })}
-        >
-          {renderedSelected}
-        </div>
-      }
+      selectedBadges={renderedSelected}
     />
   );
 }

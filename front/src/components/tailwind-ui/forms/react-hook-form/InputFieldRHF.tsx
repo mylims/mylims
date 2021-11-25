@@ -90,7 +90,7 @@ export function InputFieldRHF(props: InputFieldRHFProps) {
   const onChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       inputOnChange?.(event);
-      formHookOnChange?.(event);
+      void formHookOnChange?.(event);
     },
     [inputOnChange, formHookOnChange],
   );

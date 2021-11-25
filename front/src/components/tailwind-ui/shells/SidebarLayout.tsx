@@ -1,10 +1,12 @@
 import { Transition } from '@headlessui/react';
 import { MenuAlt1Icon, XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import React, { ReactNode, useEffect, ReactElement } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
 export interface SidebarLayoutProps {
-  children: ReactElement[];
+  header: ReactNode;
+  sidebar: ReactNode;
+  children: ReactNode;
   revealOnLargeViewport?: boolean;
   open: () => void;
   close: () => void;
@@ -12,7 +14,15 @@ export interface SidebarLayoutProps {
 }
 
 export function SidebarLayout(props: SidebarLayoutProps) {
-  const { open, close, isOpen, children, revealOnLargeViewport = true } = props;
+  const {
+    open,
+    close,
+    isOpen,
+    header,
+    sidebar,
+    children,
+    revealOnLargeViewport = true,
+  } = props;
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -22,13 +32,6 @@ export function SidebarLayout(props: SidebarLayoutProps) {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [close]);
-
-  // @ts-expect-error Should be removed when we move to CSS Grid implementation.
-  const sidebar = children.find((child) => child.type.name.endsWith('Sidebar'));
-  // @ts-expect-error Ditto.
-  const header = children.find((child) => child.type.name.endsWith('Header'));
-  // @ts-expect-error Ditto.
-  const body = children.find((child) => child.type.name.endsWith('Body'));
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -104,31 +107,9 @@ export function SidebarLayout(props: SidebarLayoutProps) {
           <div className="flex justify-between flex-1">{header}</div>
         </div>
         <main className="relative z-0 flex flex-col flex-1 pb-8 overflow-y-auto">
-          {body}
+          {children}
         </main>
       </div>
     </div>
   );
 }
-
-interface SidebarLayoutChildProps {
-  children: ReactNode;
-}
-
-SidebarLayout.Sidebar = function SidebarLayoutSidebar(
-  props: SidebarLayoutChildProps,
-) {
-  return <>{props.children}</>;
-};
-
-SidebarLayout.Header = function SidebarLayoutHeader(
-  props: SidebarLayoutChildProps,
-) {
-  return <>{props.children}</>;
-};
-
-SidebarLayout.Body = function SidebarLayoutBody(
-  props: SidebarLayoutChildProps,
-) {
-  return <>{props.children}</>;
-};

@@ -25,7 +25,8 @@ export interface FeedProps {
 }
 
 export function Feed(props: FeedProps) {
-  if (props.children.length === 0) return null;
+  const length = Children.count(props.children);
+  if (length === 0) return null;
 
   return (
     <div className={clsx('flow-root', props.className)}>
@@ -75,7 +76,7 @@ Feed.Item = function FeedItem(props: FeedItemProps) {
         <div className="flex-1 min-w-0 py-1">
           <div>{title}</div>
 
-          <div className="mt-2 text-sm text-gray-700">{description}</div>
+          <div className="mt-2 text-sm text-neutral-700">{description}</div>
         </div>
       </div>
     </div>

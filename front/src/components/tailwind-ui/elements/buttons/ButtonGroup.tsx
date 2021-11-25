@@ -1,43 +1,65 @@
-import React, { createContext, useContext } from 'react';
+import clsx from 'clsx';
+import React, { Children, createContext, ReactNode, useContext } from 'react';
 
+import { Roundness, Size } from '../..';
 import { Variant, Color } from '../../types';
+import { Dropdown, DropdownProps } from '../dropdown/Dropdown';
 
 import { Button, ButtonProps } from './Button';
+import { getButtonClassName } from './utils';
 
-const context = createContext<{
+interface ButtonGroupContext {
   variant: Variant;
   color: Color;
-  position: 'left' | 'right' | 'middle';
-} | null>(null);
+  group: 'left' | 'right' | 'middle';
+  size: Size;
+  roundness: Roundness.full | Roundness.light;
+}
+
+const context = createContext<ButtonGroupContext | null>(null);
 
 export interface ButtonGroupProps {
   variant?: Variant;
   color?: Color;
-  size?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  children: any[];
+  children: ReactNode;
+  size?: Size;
+  roundness?: Roundness.full | Roundness.light;
 }
 
 export function ButtonGroup(props: ButtonGroupProps): JSX.Element {
-  const { children, variant = Variant.primary, color = Color.primary } = props;
+  const {
+    children,
+    variant = Variant.white,
+    color = Color.primary,
+    size = Size.medium,
+    roundness = Roundness.light,
+  } = props;
 
-  const definedChildren = children.filter((child) => child != null);
-  const elements = React.Children.map(definedChildren, (child, index) => {
-    const position =
-      index === 0
-        ? 'left'
-        : index === (props.size ? props.size - 1 : definedChildren.length - 1)
-        ? 'right'
-        : 'middle';
+  const definedChildren = Children.toArray(children).filter(
+    (child) => child != null,
+  );
+  const childrenCount = Children.count(definedChildren);
+  const elements = Children.map(definedChildren, (child, index) => {
+    const group =
+      index === 0 ? 'left' : index === childrenCount - 1 ? 'right' : 'middle';
 
     return (
-      <context.Provider value={{ color, variant, position }}>
+      <context.Provider value={{ color, variant, group, size, roundness }}>
         {child}
       </context.Provider>
     );
   });
 
-  return <span className="inline-flex rounded-md shadow-sm">{elements}</span>;
+  return (
+    <span
+      className={clsx(
+        'inline-flex shadow-sm',
+        roundness === Roundness.full ? 'rounded-full' : 'rounded-md',
+      )}
+    >
+      {elements}
+    </span>
+  );
 }
 
 ButtonGroup.Button = function ButtonGroupButton(
@@ -50,15 +72,49 @@ ButtonGroup.Button = function ButtonGroupButton(
   }
 
   const {
-    children,
-    color = ctx.color,
     variant = ctx.variant,
-    ...other
+    color = ctx.color,
+    size = ctx.size,
+    roundness = ctx.roundness,
   } = props;
 
   return (
-    <Button color={color} variant={variant} group={ctx.position} {...other}>
-      {children}
-    </Button>
+    <Button
+      {...props}
+      group={ctx.group}
+      variant={variant}
+      color={color}
+      size={size}
+      roundness={roundness}
+    />
+  );
+};
+
+ButtonGroup.Dropdown = function ButtonGroupDropdown<T>(
+  props: Omit<DropdownProps<T>, 'buttonClassName' | 'noDefaultButtonStyle'> &
+    Pick<ButtonProps, 'variant' | 'color'>,
+) {
+  const ctx = useContext(context);
+
+  if (ctx === null) {
+    throw new Error('context for ButtonGroup was not provided');
+  }
+
+  const options = {
+    ...ctx,
+    ...props,
+  };
+  const className = getButtonClassName({
+    ...options,
+    noBorder: false,
+  });
+
+  return (
+    <Dropdown
+      {...props}
+      buttonClassName={className}
+      noDefaultButtonStyle
+      {...ctx}
+    />
   );
 };

@@ -1,4 +1,3 @@
-import { CheckIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import React, { forwardRef, ReactNode, Ref } from 'react';
 
@@ -11,6 +10,8 @@ import {
   Label,
   Help,
   InputCorner,
+  InputErrorIcon,
+  InputValidIcon,
 } from './common';
 
 export interface CustomInputProps {
@@ -30,6 +31,7 @@ export interface CustomInputProps {
    * Custom react node to display in the upper right corner of the input
    */
   corner?: ReactNode;
+  ref?: Ref<HTMLInputElement>;
 }
 
 export interface InputProps
@@ -72,7 +74,7 @@ export const Input = forwardRef(function InputForwardRef(
 
   return (
     <div className={className}>
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-baseline justify-between gap-2">
         <Label
           id={id}
           text={label}
@@ -153,14 +155,6 @@ export const Input = forwardRef(function InputForwardRef(
     </div>
   );
 });
-
-function InputErrorIcon() {
-  return <ExclamationCircleIcon className="w-5 h-5 ml-2 text-danger-500" />;
-}
-
-function InputValidIcon() {
-  return <CheckIcon className="w-5 h-5 ml-2 text-success-600" />;
-}
 
 function LeadingInlineAddon(props: { value: ReactNode }) {
   return (
