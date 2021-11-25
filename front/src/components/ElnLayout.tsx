@@ -14,27 +14,39 @@ interface ElnLayoutProps {
   children: React.ReactNode;
 }
 
+interface RouteType {
+  label: string;
+  pathname: string;
+  pathmatch?: string;
+}
+const ADMIN_ROUTES: RouteType[] = [
+  { label: 'Users', pathname: '/eln/users' },
+  {
+    label: 'File synchronization',
+    pathname: '/fileSync/list',
+    pathmatch: '/fileSync/**',
+  },
+  { label: 'Events', pathname: '/event/list', pathmatch: '/event/**' },
+];
+const MEMBER_ROUTES: RouteType[] = [
+  {
+    label: 'Content',
+    pathname: '/sample/list',
+    pathmatch: '/sample/**',
+  },
+  {
+    label: 'Measurements',
+    pathname: '/measurement/list',
+    pathmatch: '/measurement/**',
+  },
+];
+const ROUTES = [...MEMBER_ROUTES, ...ADMIN_ROUTES];
+
 export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
   const router = useHistory();
   const { pathname } = useLocation();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { isAuth } = useAuth();
-  const ROUTES = useMemo(() => {
-    return [
-      { label: 'Users', pathname: `/eln/users` },
-      {
-        label: 'File synchronization',
-        pathname: `/fileSync/list`,
-        pathmatch: `/fileSync/**`,
-      },
-      { label: 'Events', pathname: `/event/list`, pathmatch: `/event/**` },
-      {
-        label: 'Measurements',
-        pathname: `/measurement/list`,
-        pathmatch: `/measurement/**`,
-      },
-    ];
-  }, []);
 
   if (!isAuth) {
     router.push('/login');
@@ -55,36 +67,31 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
               <div className="flex-shrink-0">
                 <img src={LOGO} alt="Logo" className="w-24" />
               </div>
-              <div className="hidden md:block">
+              <div className="hidden md:flex md:flex-row md:w-full">
                 <div className="flex items-baseline ml-10 space-x-4">
-                  {ROUTES.map((route) => {
-                    const isMatch = minimatch(
-                      pathname,
-                      route.pathmatch || route.pathname,
-                    );
-                    return (
-                      <Link
-                        to={route.pathname}
-                        key={route.pathname}
-                        className={clsx(
-                          'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
-                          {
-                            'text-neutral-100 bg-neutral-900': isMatch,
-                            'text-neutral-300': !isMatch,
-                          },
-                        )}
-                      >
-                        {route.label}
-                      </Link>
-                    );
-                  })}
+                  {MEMBER_ROUTES.map((route) => (
+                    <RouteLink
+                      key={route.pathname}
+                      pathname={pathname}
+                      route={route}
+                    />
+                  ))}
+                </div>
+                <div className="flex items-baseline space-x-4 ml-52">
+                  {ADMIN_ROUTES.map((route) => (
+                    <RouteLink
+                      key={route.pathname}
+                      pathname={pathname}
+                      route={route}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
             <MenuDropDown />
             <div className="flex -mr-2 md:hidden">
               <button
-                className="inline-flex items-center justify-center"
+                className="inline-flex items-center justify-center text-neutral-300"
                 type="button"
                 onClick={() => setMobileNavOpen(!mobileNavOpen)}
               >
@@ -165,5 +172,29 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
         </div>
       </main>
     </div>
+  );
+}
+
+function RouteLink({
+  route,
+  pathname,
+}: {
+  route: RouteType;
+  pathname: string;
+}) {
+  const isMatch = minimatch(pathname, route.pathmatch || route.pathname);
+  return (
+    <Link
+      to={route.pathname}
+      className={clsx(
+        'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
+        {
+          'text-neutral-100 bg-neutral-900': isMatch,
+          'text-neutral-300': !isMatch,
+        },
+      )}
+    >
+      {route.label}
+    </Link>
   );
 }
