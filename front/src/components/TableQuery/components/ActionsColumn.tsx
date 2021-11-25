@@ -25,7 +25,11 @@ export default function ActionsColumn({ index, children }: ActionsColumnProps) {
       },
     });
 
-    return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
+    return () =>
+      dispatch({
+        type: 'REMOVE_COLUMN',
+        payload: { dataPath: ColumnKind.ACTIONS },
+      });
   }, [index, children, dispatch]);
 
   return <HeaderRender title="Actions" path="" />;

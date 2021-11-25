@@ -70,7 +70,7 @@ export default function MultiSelectColumn({
       },
     });
 
-    return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
+    return () => dispatch({ type: 'REMOVE_COLUMN', payload: { dataPath } });
   }, [
     dataPath,
     path,

@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client';
 import { ReactNode } from 'react';
 
 export interface QueryType {
@@ -15,6 +16,7 @@ export interface TableQueryContextType {
 export interface TableQueryProps<T> {
   data: { list: Array<T>; totalCount: number } | undefined;
   loading?: boolean;
+  error?: ApolloError;
   itemsPerPage?: number;
   query: QueryType;
   onQueryChange(query: QueryType): void;
@@ -62,7 +64,7 @@ export enum ColumnKind {
 
 export type ReducerActions =
   | { type: 'ADD_COLUMN'; payload: RowState }
-  | { type: 'REMOVE_COLUMN'; payload: { index: number } };
+  | { type: 'REMOVE_COLUMN'; payload: { dataPath: string } };
 
 interface RowStateGeneric<K, V> {
   index: number;

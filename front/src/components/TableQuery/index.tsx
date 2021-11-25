@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 
-
 import ActionsColumn from './components/ActionsColumn';
 import DateColumn from './components/DateColumn';
 import MultiSelectColumn from './components/MultiSelectColumn';
@@ -24,13 +23,28 @@ import type {
 } from './types';
 import { splitChildren } from './utils';
 
-import { Pagination, Spinner } from '@/components/tailwind-ui';
+import {
+  Alert,
+  AlertType,
+  Pagination,
+  Spinner,
+} from '@/components/tailwind-ui';
+import { ApolloError } from '@apollo/client';
+import { InboxIcon } from '@heroicons/react/solid';
+
+interface TableBodyProps<T> {
+  list: Array<T>;
+  columns: TableState;
+  loading?: boolean;
+  error?: ApolloError;
+}
 
 const reducerCurr: Reducer<TableState, ReducerActions> = produce(reducer);
 
 export function Table<T extends Record<string, unknown>>({
   data,
   loading,
+  error,
   query: originalQuery,
   itemsPerPage = 10,
   onQueryChange: submitQuery,
@@ -62,21 +76,12 @@ export function Table<T extends Record<string, unknown>>({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
-            {loading ? (
-              <tr>
-                <td>
-                  <Spinner className="w-10 h-10 text-danger-500" />
-                </td>
-              </tr>
-            ) : (
-              list.map((row, index) => (
-                <RowRender
-                  key={`table-row-${index}`}
-                  row={row}
-                  columns={orderedColumns}
-                />
-              ))
-            )}
+            <TableBody
+              list={list}
+              columns={orderedColumns}
+              loading={loading}
+              error={error}
+            />
           </tbody>
         </table>
         <Pagination
@@ -87,6 +92,51 @@ export function Table<T extends Record<string, unknown>>({
         />
       </div>
     </TableQueryContext.Provider>
+  );
+}
+
+function TableBody<T extends Record<string, unknown>>({
+  error,
+  loading,
+  list,
+  columns,
+}: TableBodyProps<T>) {
+  if (error) {
+    return (
+      <Alert title="Error from server" type={AlertType.ERROR}>
+        Unexpected error {error.message}
+      </Alert>
+    );
+  }
+  if (loading) {
+    return (
+      <tr>
+        <td>
+          <div className="flex flex-row justify-center py-4">
+            <Spinner className="w-10 h-10 text-danger-500" />
+          </div>
+        </td>
+      </tr>
+    );
+  }
+  if (list.length === 0) {
+    return (
+      <tr>
+        <td>
+          <div className="flex flex-row justify-center py-4 text-neutral-500">
+            <InboxIcon className="w-5 h-5 mr-2" />
+            <span>Empty</span>
+          </div>
+        </td>
+      </tr>
+    );
+  }
+  return (
+    <>
+      {list.map((row, index) => (
+        <RowRender key={`table-row-${index}`} row={row} columns={columns} />
+      ))}
+    </>
   );
 }
 
