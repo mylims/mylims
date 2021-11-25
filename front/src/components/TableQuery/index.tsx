@@ -104,7 +104,7 @@ function TableBody<T extends Record<string, unknown>>({
   if (error) {
     return (
       <Alert title="Error from server" type={AlertType.ERROR}>
-        Unexpected error {error.message}
+        {error.message}
       </Alert>
     );
   }
