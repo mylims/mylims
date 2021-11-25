@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
 import objectPath from 'object-path';
+import React, { useEffect } from 'react';
+
+import { useTableQueryContext } from '../hooks/useTableQueryContext';
+import { BaseColumnProps, ColumnKind } from '../types';
+
+import HeaderRender from './HeaderRender';
 
 import { Input } from '@/components/tailwind-ui';
-import { BaseColumnProps, ColumnKind } from '../types';
-import { useTableQueryContext } from '../hooks/useTableQueryContext';
-import HeaderRender from './HeaderRender';
 
 export default function TextColumn({
   title,
@@ -20,18 +22,19 @@ export default function TextColumn({
   const path = queryPath ?? dataPath;
   const value = objectPath(query).get(path, '');
 
-  const render =
-    children ??
-    ((row) => {
-      const model = objectPath(row);
-      if (!model.has(dataPath)) return '-';
-      return model.get(dataPath);
-    });
-
   useEffect(() => {
     if (index === undefined) {
       throw new Error(`Index is not defined by the context for ${dataPath}`);
     }
+
+    const render =
+      children ??
+      ((row) => {
+        const model = objectPath(row);
+        if (!model.has(dataPath)) return '-';
+        return model.get(dataPath);
+      });
+
     dispatch({
       type: 'ADD_COLUMN',
       payload: {
@@ -49,10 +52,20 @@ export default function TextColumn({
     });
 
     return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
-  }, [dataPath, path, disableSearch, disableSort, nullable, index]);
+  }, [
+    dataPath,
+    path,
+    disableSearch,
+    disableSort,
+    nullable,
+    index,
+    dispatch,
+    children,
+  ]);
 
-  if (disableSearch)
+  if (disableSearch) {
     return <HeaderRender title={title} path={path} disableSort={disableSort} />;
+  }
   return (
     <HeaderRender title={title} path={path} disableSort={disableSort}>
       <Input

@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
-import objectPath from 'object-path';
 import numeral from 'numeral';
+import objectPath from 'object-path';
+import React, { useEffect } from 'react';
+
+import { useTableQueryContext } from '../hooks/useTableQueryContext';
+import { ColumnKind, NumberColumnProps } from '../types';
+
+import HeaderRender from './HeaderRender';
 
 import { Input } from '@/components/tailwind-ui';
-import { ColumnKind, NumberColumnProps } from '../types';
-import { useTableQueryContext } from '../hooks/useTableQueryContext';
-import HeaderRender from './HeaderRender';
 
 export default function NumberColumn({
   title,
@@ -20,19 +22,21 @@ export default function NumberColumn({
 }: NumberColumnProps) {
   const { query, setQuery, submitQuery, dispatch } = useTableQueryContext();
   const path = queryPath ?? dataPath;
-  const render =
-    children ??
-    ((row) => {
-      const model = objectPath(row);
-      if (!model.has(dataPath)) return '-';
-      const num = model.get(dataPath);
-      return numeral(num).format(format);
-    });
 
   useEffect(() => {
     if (index === undefined) {
       throw new Error(`Index is not defined by the context for ${dataPath}`);
     }
+
+    const render =
+      children ??
+      ((row) => {
+        const model = objectPath(row);
+        if (!model.has(dataPath)) return '-';
+        const num = model.get(dataPath);
+        return numeral(num).format(format);
+      });
+
     dispatch({
       type: 'ADD_COLUMN',
       payload: {
@@ -50,7 +54,17 @@ export default function NumberColumn({
     });
 
     return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
-  }, [dataPath, path, disableSearch, disableSort, nullable, index]);
+  }, [
+    dataPath,
+    path,
+    disableSearch,
+    disableSort,
+    nullable,
+    index,
+    format,
+    dispatch,
+    children,
+  ]);
 
   if (disableSearch) return <HeaderRender title={title} path={path} />;
   const value = objectPath(query).get(path, '');

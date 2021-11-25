@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react';
-import clsx from 'clsx';
-import { DocumentSearchIcon } from '@heroicons/react/outline';
-
 import { Popover } from '@headlessui/react';
+import { DocumentSearchIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
+import React, { ReactNode } from 'react';
+
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
+
 import SortIcon from './SortIcon';
 
 interface HeaderRenderProps {

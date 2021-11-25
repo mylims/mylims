@@ -8,9 +8,9 @@ export interface QueryType {
 }
 export interface TableQueryContextType {
   query: QueryType;
-  setQuery(query: QueryType): void;
-  submitQuery(query: QueryType): void;
-  dispatch(action: ReducerActions): void;
+  setQuery(this: void, query: QueryType): void;
+  submitQuery(this: void, query: QueryType): void;
+  dispatch(this: void, action: ReducerActions): void;
 }
 export interface TableQueryProps<T> {
   data: { list: Array<T>; totalCount: number } | undefined;
@@ -49,7 +49,7 @@ interface ActionsColumnProps {
 
 export interface TableQueryHook {
   query: QueryType;
-  setQuery(query: QueryType): void;
+  setQuery(this: void, query: QueryType): void;
 }
 
 export enum ColumnKind {
@@ -64,13 +64,13 @@ export type ReducerActions =
   | { type: 'ADD_COLUMN'; payload: RowState }
   | { type: 'REMOVE_COLUMN'; payload: { index: number } };
 
-type RowStateGeneric<K, V> = {
+interface RowStateGeneric<K, V> {
   index: number;
   kind: K;
   value: Omit<Required<V>, 'index' | 'title' | 'children'> & {
     render: ActionsColumnProps['render'];
   };
-};
+}
 export type RowState =
   | RowStateGeneric<ColumnKind.TEXT, BaseColumnProps>
   | RowStateGeneric<ColumnKind.NUMBER, BaseColumnProps>

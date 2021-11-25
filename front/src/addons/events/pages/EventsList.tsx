@@ -1,8 +1,12 @@
-import React from 'react';
+import { InformationCircleIcon } from '@heroicons/react/outline';
 import objectPath from 'object-path';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
+import { EventStatusLabel } from '@/components/EventStatusLabel';
 import { Table as TableQuery } from '@/components/TableQuery';
+import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 import {
   EventSortField,
@@ -10,10 +14,6 @@ import {
   SortDirection,
   useEventsFilteredQuery,
 } from '@/generated/graphql';
-import { InformationCircleIcon } from '@heroicons/react/outline';
-import { Link } from 'react-router-dom';
-import { EventStatusLabel } from '@/components/EventStatusLabel';
-import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 
 const PAGE_SIZE = 10;
 
@@ -99,7 +99,7 @@ export default function EventsList() {
         />
         <TableQuery.ActionsColumn>
           {({ id }) => (
-            <Link title="detail" to={`/event/detail/${id}`}>
+            <Link title="detail" to={`/event/detail/${id as string}`}>
               <Button
                 color={Color.primary}
                 roundness={Roundness.circular}

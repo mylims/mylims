@@ -1,7 +1,8 @@
-import React from 'react';
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid';
+import React from 'react';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
+
 import { SortDirection } from '@/generated/graphql';
 
 interface SortIconProps {
@@ -11,7 +12,6 @@ interface SortIconProps {
 
 export default function SortIcon({ disableSort, path }: SortIconProps) {
   const { query, submitQuery } = useTableQueryContext();
-  console.log({ disableSort, path });
   if (disableSort) return null;
 
   const { sortField, sortDirection } = query;
