@@ -51,9 +51,10 @@ export default function TextColumn({
     return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
   }, [dataPath, path, disableSearch, disableSort, nullable, index]);
 
-  if (disableSearch) return <HeaderRender title={title} path={path} />;
+  if (disableSearch)
+    return <HeaderRender title={title} path={path} disableSort={disableSort} />;
   return (
-    <HeaderRender title={title} path={path}>
+    <HeaderRender title={title} path={path} disableSort={disableSort}>
       <Input
         name={path}
         label={path}
