@@ -1,0 +1,58 @@
+type Query {
+  samples(
+    limit: Int
+    skip: Int
+    filterBy: SampleFilterInput
+    sortBy: SampleSortInput
+  ): SamplePage!
+  sample(id: ID!): Sample!
+}
+
+# Paginated list of samples
+enum SampleSortField {
+  sampleCode
+  userId
+  title
+  description
+  createdAt
+}
+input SampleFilterInput {
+  sampleCode: [String!]
+  userId: String
+  title: String
+  description: String
+  measurement: ID
+}
+input SampleSortInput {
+  direction: SortDirection!
+  field: SampleSortField!
+}
+type SamplePage implements Pagination {
+  list: [Sample!]!
+  totalCount: Int!
+}
+
+# Sample specific data
+type Sample {
+  id: ID!
+  sampleCode: [String!]!
+  userId: ID!
+  title: String
+  description: String
+  activities: [Activity!]!
+  measurements: [Measurement!]!
+  createdAt: DateTime!
+}
+
+union Activity = ActivityFile | ActivityMeasurement
+type ActivityFile {
+  date: DateTime!
+  description: String
+  fileId: ID!
+}
+type ActivityMeasurement {
+  date: DateTime!
+  description: String
+  measurementId: ID!
+  measurementType: MeasurementTypes!
+}

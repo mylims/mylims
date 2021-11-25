@@ -39,6 +39,23 @@ export type Scalars = {
   JSONObject: any;
 };
 
+export type GqlActivity = GqlActivityFile | GqlActivityMeasurement;
+
+export type GqlActivityFile = {
+  __typename?: 'ActivityFile';
+  date: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  fileId: Scalars['ID'];
+};
+
+export type GqlActivityMeasurement = {
+  __typename?: 'ActivityMeasurement';
+  date: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  measurementId: Scalars['ID'];
+  measurementType: GqlMeasurementTypes;
+};
+
 export type GqlDeleteFileSyncOptionInput = {
   id: Scalars['ID'];
 };
@@ -676,6 +693,11 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type GqlResolversTypes = ResolversObject<{
+  Activity:
+    | GqlResolversTypes['ActivityFile']
+    | GqlResolversTypes['ActivityMeasurement'];
+  ActivityFile: ResolverTypeWrapper<GqlActivityFile>;
+  ActivityMeasurement: ResolverTypeWrapper<GqlActivityMeasurement>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
@@ -758,6 +780,11 @@ export type GqlResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type GqlResolversParentTypes = ResolversObject<{
+  Activity:
+    | GqlResolversParentTypes['ActivityFile']
+    | GqlResolversParentTypes['ActivityMeasurement'];
+  ActivityFile: GqlActivityFile;
+  ActivityMeasurement: GqlActivityMeasurement;
   Boolean: Scalars['Boolean'];
   DateTime: Scalars['DateTime'];
   DeleteFileSyncOptionInput: GqlDeleteFileSyncOptionInput;
@@ -825,6 +852,50 @@ export type GqlResolversParentTypes = ResolversObject<{
   SyncFileRevision: GqlSyncFileRevision;
   SyncTreeRevision: GqlSyncTreeRevision;
   User: User;
+}>;
+
+export type GqlActivityResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['Activity'] = GqlResolversParentTypes['Activity'],
+> = ResolversObject<{
+  __resolveType: TypeResolveFn<
+    'ActivityFile' | 'ActivityMeasurement',
+    ParentType,
+    ContextType
+  >;
+}>;
+
+export type GqlActivityFileResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['ActivityFile'] = GqlResolversParentTypes['ActivityFile'],
+> = ResolversObject<{
+  date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  fileId?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlActivityMeasurementResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['ActivityMeasurement'] = GqlResolversParentTypes['ActivityMeasurement'],
+> = ResolversObject<{
+  date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  measurementId?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
+  measurementType?: Resolver<
+    GqlResolversTypes['MeasurementTypes'],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export interface GqlDateTimeScalarConfig
@@ -1431,6 +1502,9 @@ export type GqlUserResolvers<
 }>;
 
 export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
+  Activity?: GqlActivityResolvers<ContextType>;
+  ActivityFile?: GqlActivityFileResolvers<ContextType>;
+  ActivityMeasurement?: GqlActivityMeasurementResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   DirectoryEntry?: GqlDirectoryEntryResolvers<ContextType>;
   Event?: GqlEventResolvers<ContextType>;
