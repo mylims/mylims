@@ -1,12 +1,10 @@
+import { InformationCircleIcon, DownloadIcon } from '@heroicons/react/outline';
 import React, { useContext } from 'react';
-import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
-import { MeasurementPlotContext } from './MeasurementPlot';
-import {
-  InformationCircleIcon,
-  AnnotationIcon,
-  DownloadIcon,
-} from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
+
+import { MeasurementPlotContext } from './MeasurementPlot';
+
+import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 
 interface MeasurementActionsProps {
   type: string;

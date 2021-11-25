@@ -1,8 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { MeasurementPlot } from './MeasurementPlot';
 
+import ElnLayout from '@/components/ElnLayout';
 import { Table as TableQuery } from '@/components/TableQuery';
+import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Button, Color, Select, Variant } from '@/components/tailwind-ui';
 import {
   MeasurementsFilteredQuery,
@@ -11,9 +14,6 @@ import {
   SortDirection,
   useMeasurementsFilteredQuery,
 } from '@/generated/graphql';
-import { Link } from 'react-router-dom';
-import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
-import ElnLayout from '@/components/ElnLayout';
 import MeasurementActions from '@/pages/measurements/MeasurementsList/MeasurementActions';
 
 type MeasurementRowType =
@@ -46,13 +46,7 @@ export default function MeasurementsList() {
 
   return (
     <div>
-      <div className="grid grid-cols-4 gap-4 my-4">
-        <Link to="/measurement/list" className="mt-auto">
-          <Button variant={Variant.secondary} color={Color.danger}>
-            Remove filters
-          </Button>
-        </Link>
-
+      <div className="grid grid-cols-4 gap-2 mb-3">
         <Select
           options={[
             {
@@ -71,6 +65,11 @@ export default function MeasurementsList() {
           }}
           label="Measurement type"
         />
+        <Link to="/measurement/list" className="mt-auto">
+          <Button variant={Variant.secondary} color={Color.danger}>
+            Remove filters
+          </Button>
+        </Link>
       </div>
       <MeasurementPlot type={MeasurementTypes.TRANSFER}>
         <TableQuery

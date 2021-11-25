@@ -1,3 +1,4 @@
+import { produce } from 'immer';
 import React, {
   Reducer,
   useEffect,
@@ -5,27 +6,25 @@ import React, {
   useReducer,
   useState,
 } from 'react';
-import { produce } from 'immer';
 
-import { Pagination, Spinner } from '@/components/tailwind-ui';
 
+import ActionsColumn from './components/ActionsColumn';
+import DateColumn from './components/DateColumn';
+import MultiSelectColumn from './components/MultiSelectColumn';
+import NumberColumn from './components/NumberColumn';
+import RowRender from './components/RowRender';
+import TextColumn from './components/TextColumn';
+import { TableQueryContext } from './hooks/useTableQueryContext';
+import { reducer } from './reducer';
 import type {
   QueryType,
   ReducerActions,
   TableQueryProps,
   TableState,
 } from './types';
-
-import { reducer } from './reducer';
 import { splitChildren } from './utils';
 
-import { TableQueryContext } from './hooks/useTableQueryContext';
-import NumberColumn from './components/NumberColumn';
-import RowRender from './components/RowRender';
-import TextColumn from './components/TextColumn';
-import DateColumn from './components/DateColumn';
-import ActionsColumn from './components/ActionsColumn';
-import MultiSelectColumn from './components/MultiSelectColumn';
+import { Pagination, Spinner } from '@/components/tailwind-ui';
 
 const reducerCurr: Reducer<TableState, ReducerActions> = produce(reducer);
 

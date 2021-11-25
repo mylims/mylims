@@ -1,13 +1,15 @@
-import React, { useEffect, useMemo } from 'react';
 import objectPath from 'object-path';
+import React, { useEffect, useMemo } from 'react';
+
+import { useTableQueryContext } from '../hooks/useTableQueryContext';
+import { SelectColumnProps, ColumnKind, SelectionValue } from '../types';
+
+import HeaderRender from './HeaderRender';
 
 import {
   MultiSearchSelect,
   useMultiSearchSelect,
 } from '@/components/tailwind-ui';
-import { SelectColumnProps, ColumnKind, SelectionValue } from '../types';
-import { useTableQueryContext } from '../hooks/useTableQueryContext';
-import HeaderRender from './HeaderRender';
 
 function parseOptions(options: SelectColumnProps['options']): SelectionValue[] {
   return options.map((value) => {
@@ -39,18 +41,19 @@ export default function MultiSelectColumn({
     [query, path],
   );
 
-  const render =
-    children ??
-    ((row) => {
-      const model = objectPath(row);
-      if (!model.has(dataPath)) return '-';
-      return model.get(dataPath).join(', ');
-    });
-
   useEffect(() => {
     if (index === undefined) {
       throw new Error(`Index is not defined by the context for ${dataPath}`);
     }
+
+    const render =
+      children ??
+      ((row) => {
+        const model = objectPath(row);
+        if (!model.has(dataPath)) return '-';
+        return model.get(dataPath).join(', ');
+      });
+
     dispatch({
       type: 'ADD_COLUMN',
       payload: {
@@ -68,7 +71,16 @@ export default function MultiSelectColumn({
     });
 
     return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
-  }, [dataPath, path, disableSearch, disableSort, nullable, index]);
+  }, [
+    dataPath,
+    path,
+    disableSearch,
+    disableSort,
+    nullable,
+    index,
+    dispatch,
+    children,
+  ]);
 
   if (disableSearch) return <HeaderRender title={title} path={path} />;
   return (

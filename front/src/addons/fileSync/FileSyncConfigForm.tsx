@@ -116,7 +116,6 @@ export default function FileSyncConfigForm({
                       <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
                         {values.patterns.map((_, index) => (
                           <PatternEdit
-                            // eslint-disable-next-line react/no-array-index-key
                             key={index}
                             remove={remove}
                             index={index}

@@ -2,9 +2,19 @@ import { createContext, useContext } from 'react';
 
 import { TableQueryContextType } from '../types';
 
+import { SortDirection } from '@/generated/graphql';
+
 export const TableQueryContext = createContext<TableQueryContextType>({
-  query: {},
-  dispatch: () => {},
+  query: { page: '1', sortDirection: SortDirection.DESC, sortField: 'id' },
+  dispatch: () => {
+    // empty
+  },
+  submitQuery: () => {
+    // empty
+  },
+  setQuery: () => {
+    // empty
+  },
 });
 
 export function useTableQueryContext() {

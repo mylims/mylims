@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
-import objectPath from 'object-path';
 import { format as dateFormat } from 'date-fns';
+import objectPath from 'object-path';
+import React, { useEffect } from 'react';
+
+import { useTableQueryContext } from '../hooks/useTableQueryContext';
+import { ColumnKind, DateColumnProps } from '../types';
+
+import HeaderRender from './HeaderRender';
 
 import { Input } from '@/components/tailwind-ui';
-import { ColumnKind, DateColumnProps } from '../types';
-import { useTableQueryContext } from '../hooks/useTableQueryContext';
-import HeaderRender from './HeaderRender';
 
 export default function DateColumn({
   title,
@@ -21,19 +23,21 @@ export default function DateColumn({
   const { query, setQuery, submitQuery, dispatch } = useTableQueryContext();
   const path = queryPath ?? dataPath;
   const value = objectPath(query).get(path, '');
-  const render =
-    children ??
-    ((row) => {
-      const model = objectPath(row);
-      if (!model.has(dataPath)) return '-';
-      const date = model.get(dataPath);
-      return dateFormat(new Date(date), format);
-    });
 
   useEffect(() => {
     if (index === undefined) {
       throw new Error(`Index is not defined by the context for ${dataPath}`);
     }
+
+    const render =
+      children ??
+      ((row) => {
+        const model = objectPath(row);
+        if (!model.has(dataPath)) return '-';
+        const date = model.get(dataPath);
+        return dateFormat(new Date(date), format);
+      });
+
     dispatch({
       type: 'ADD_COLUMN',
       payload: {
@@ -51,7 +55,17 @@ export default function DateColumn({
     });
 
     return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
-  }, [dataPath, path, disableSearch, disableSort, nullable, index]);
+  }, [
+    dataPath,
+    path,
+    disableSearch,
+    disableSort,
+    nullable,
+    index,
+    format,
+    dispatch,
+    children,
+  ]);
 
   if (disableSearch) return <HeaderRender title={title} path={path} />;
   return (

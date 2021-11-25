@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect } from 'react';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind } from '../types';
+
 import HeaderRender from './HeaderRender';
 
 interface ActionsColumnProps {
@@ -25,7 +26,7 @@ export default function ActionsColumn({ index, children }: ActionsColumnProps) {
     });
 
     return () => dispatch({ type: 'REMOVE_COLUMN', payload: { index } });
-  }, [index]);
+  }, [index, children, dispatch]);
 
   return <HeaderRender title="Actions" path="" />;
 }

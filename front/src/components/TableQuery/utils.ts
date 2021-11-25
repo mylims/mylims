@@ -1,10 +1,10 @@
 import { Children, cloneElement, isValidElement, ReactNode } from 'react';
 
+import ActionsColumn from './components/ActionsColumn';
 import DateColumn from './components/DateColumn';
+import MultiSelectColumn from './components/MultiSelectColumn';
 import NumberColumn from './components/NumberColumn';
 import TextColumn from './components/TextColumn';
-import ActionsColumn from './components/ActionsColumn';
-import MultiSelectColumn from './components/MultiSelectColumn';
 
 const invalidError = 'Invalid column child';
 export function splitChildren(children: ReactNode) {
