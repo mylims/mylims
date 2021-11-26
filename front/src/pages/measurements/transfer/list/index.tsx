@@ -14,7 +14,7 @@ import {
   SortDirection,
   useMeasurementsFilteredQuery,
 } from '@/generated/graphql';
-import MeasurementActions from '@/pages/measurements/MeasurementsList/MeasurementActions';
+import MeasurementActions from './MeasurementActions';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['list'][number];
