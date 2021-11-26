@@ -14,8 +14,8 @@ import App from './pages/App';
 import Users from './pages/eln/users';
 import Login from './pages/login';
 // Measurements
-import MeasurementDetail from './pages/measurements/MeasurementDetail';
-import MeasurementsList from './pages/measurements/MeasurementsList';
+import MeasurementDetail from './pages/measurements/transfer/detail';
+import MeasurementsList from './pages/measurements/transfer/list';
 
 // Events
 import EventDetail from '@/addons/events/pages/EventDetail';
