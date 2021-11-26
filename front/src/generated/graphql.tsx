@@ -27,6 +27,23 @@ export type Scalars = {
   JSONObject: any;
 };
 
+export type Activity = ActivityFile | ActivityMeasurement;
+
+export type ActivityFile = {
+  date: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  fileId: Scalars['ID'];
+  type: Scalars['String'];
+};
+
+export type ActivityMeasurement = {
+  date: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  measurementId: Scalars['ID'];
+  measurementType: MeasurementTypes;
+  type: Scalars['String'];
+};
+
 export type DeleteFileSyncOptionInput = {
   id: Scalars['ID'];
 };
@@ -255,7 +272,7 @@ export type Pagination = {
   totalCount: Scalars['Int'];
 };
 
-export type PaginationNode = Event | Measurement | SyncFileRevision;
+export type PaginationNode = Event | Measurement | Sample | SyncFileRevision;
 
 export type Pattern = {
   pattern: Scalars['String'];
@@ -279,6 +296,8 @@ export type Query = {
   measurement: Measurement;
   measurements: MeasurementPage;
   readyChecks: Array<ReadyCheckDescriptor>;
+  sample: Sample;
+  samples: SamplePage;
   users: Array<User>;
 };
 
@@ -332,6 +351,17 @@ export type QueryMeasurementsArgs = {
   type: MeasurementTypes;
 };
 
+export type QuerySampleArgs = {
+  id: Scalars['ID'];
+};
+
+export type QuerySamplesArgs = {
+  filterBy?: Maybe<SampleFilterInput>;
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<SampleSortInput>;
+};
+
 export type ReadyCheck = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
@@ -345,6 +375,43 @@ export type ReadyCheckDescriptor = {
 export type ReadyCheckInput = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type Sample = {
+  activities: Array<Activity>;
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  measurements: Array<Measurement>;
+  sampleCode: Array<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  userId: Scalars['ID'];
+};
+
+export type SampleFilterInput = {
+  description?: Maybe<Scalars['String']>;
+  measurement?: Maybe<Scalars['ID']>;
+  sampleCode?: Maybe<Array<Scalars['String']>>;
+  title?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type SamplePage = Pagination & {
+  list: Array<Sample>;
+  totalCount: Scalars['Int'];
+};
+
+export enum SampleSortField {
+  CREATEDAT = 'createdAt',
+  DESCRIPTION = 'description',
+  SAMPLECODE = 'sampleCode',
+  TITLE = 'title',
+  USERID = 'userId',
+}
+
+export type SampleSortInput = {
+  direction: SortDirection;
+  field: SampleSortField;
 };
 
 export enum SortDirection {
@@ -715,6 +782,78 @@ export type MeasurementQuery = {
   };
 };
 
+export type SampleFieldsFragment = {
+  id: string;
+  sampleCode: Array<string>;
+  title?: string | null | undefined;
+  createdAt: any;
+};
+
+export type SamplesFilteredQueryVariables = Exact<{
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  filterBy?: Maybe<SampleFilterInput>;
+  sortBy?: Maybe<SampleSortInput>;
+}>;
+
+export type SamplesFilteredQuery = {
+  samples: {
+    totalCount: number;
+    list: Array<{
+      id: string;
+      sampleCode: Array<string>;
+      title?: string | null | undefined;
+      createdAt: any;
+    }>;
+  };
+};
+
+export type SampleQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type SampleQuery = {
+  sample: {
+    userId: string;
+    description?: string | null | undefined;
+    id: string;
+    sampleCode: Array<string>;
+    title?: string | null | undefined;
+    createdAt: any;
+    activities: Array<
+      | {
+          type: string;
+          date: any;
+          description?: string | null | undefined;
+          fileId: string;
+        }
+      | {
+          type: string;
+          date: any;
+          description?: string | null | undefined;
+          measurementId: string;
+          measurementType: MeasurementTypes;
+        }
+    >;
+    measurements: Array<{
+      id: string;
+      eventId: string;
+      username: string;
+      sampleCode: Array<string>;
+      createdBy: string;
+      fileId?: string | null | undefined;
+      description?: string | null | undefined;
+      createdAt: any;
+      derived?: any | null | undefined;
+      type: MeasurementTypes;
+      file?:
+        | { filename: string; size: number; downloadUrl: string }
+        | null
+        | undefined;
+    }>;
+  };
+};
+
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UsersQuery = {
@@ -771,6 +910,14 @@ export const MeasurementFieldsFragmentDoc = gql`
     createdAt
     derived
     type
+  }
+`;
+export const SampleFieldsFragmentDoc = gql`
+  fragment SampleFields on Sample {
+    id
+    sampleCode
+    title
+    createdAt
   }
 `;
 export const EventDocument = gql`
@@ -1719,6 +1866,160 @@ export type MeasurementQueryResult = Apollo.QueryResult<
 >;
 export function refetchMeasurementQuery(variables?: MeasurementQueryVariables) {
   return { query: MeasurementDocument, variables: variables };
+}
+export const SamplesFilteredDocument = gql`
+  query SamplesFiltered(
+    $limit: Int
+    $skip: Int
+    $filterBy: SampleFilterInput
+    $sortBy: SampleSortInput
+  ) {
+    samples(limit: $limit, skip: $skip, filterBy: $filterBy, sortBy: $sortBy) {
+      totalCount
+      list {
+        ...SampleFields
+      }
+    }
+  }
+  ${SampleFieldsFragmentDoc}
+`;
+
+/**
+ * __useSamplesFilteredQuery__
+ *
+ * To run a query within a React component, call `useSamplesFilteredQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSamplesFilteredQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSamplesFilteredQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      skip: // value for 'skip'
+ *      filterBy: // value for 'filterBy'
+ *      sortBy: // value for 'sortBy'
+ *   },
+ * });
+ */
+export function useSamplesFilteredQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    SamplesFilteredQuery,
+    SamplesFilteredQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    SamplesFilteredQuery,
+    SamplesFilteredQueryVariables
+  >(SamplesFilteredDocument, options);
+}
+export function useSamplesFilteredLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    SamplesFilteredQuery,
+    SamplesFilteredQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    SamplesFilteredQuery,
+    SamplesFilteredQueryVariables
+  >(SamplesFilteredDocument, options);
+}
+export type SamplesFilteredQueryHookResult = ReturnType<
+  typeof useSamplesFilteredQuery
+>;
+export type SamplesFilteredLazyQueryHookResult = ReturnType<
+  typeof useSamplesFilteredLazyQuery
+>;
+export type SamplesFilteredQueryResult = Apollo.QueryResult<
+  SamplesFilteredQuery,
+  SamplesFilteredQueryVariables
+>;
+export function refetchSamplesFilteredQuery(
+  variables?: SamplesFilteredQueryVariables,
+) {
+  return { query: SamplesFilteredDocument, variables: variables };
+}
+export const SampleDocument = gql`
+  query Sample($id: ID!) {
+    sample(id: $id) {
+      ...SampleFields
+      userId
+      description
+      activities {
+        ... on ActivityFile {
+          type
+          date
+          description
+          fileId
+        }
+        ... on ActivityMeasurement {
+          type
+          date
+          description
+          measurementId
+          measurementType
+        }
+      }
+      measurements {
+        ...MeasurementFields
+      }
+    }
+  }
+  ${SampleFieldsFragmentDoc}
+  ${MeasurementFieldsFragmentDoc}
+`;
+
+/**
+ * __useSampleQuery__
+ *
+ * To run a query within a React component, call `useSampleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSampleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSampleQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSampleQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    SampleQuery,
+    SampleQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<SampleQuery, SampleQueryVariables>(
+    SampleDocument,
+    options,
+  );
+}
+export function useSampleLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    SampleQuery,
+    SampleQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<SampleQuery, SampleQueryVariables>(
+    SampleDocument,
+    options,
+  );
+}
+export type SampleQueryHookResult = ReturnType<typeof useSampleQuery>;
+export type SampleLazyQueryHookResult = ReturnType<typeof useSampleLazyQuery>;
+export type SampleQueryResult = Apollo.QueryResult<
+  SampleQuery,
+  SampleQueryVariables
+>;
+export function refetchSampleQuery(variables?: SampleQueryVariables) {
+  return { query: SampleDocument, variables: variables };
 }
 export const UsersDocument = gql`
   query Users {

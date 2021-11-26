@@ -1,0 +1,46 @@
+fragment SampleFields on Sample {
+  id
+  sampleCode
+  title
+  createdAt
+}
+
+query SamplesFiltered(
+  $limit: Int
+  $skip: Int
+  $filterBy: SampleFilterInput
+  $sortBy: SampleSortInput
+) {
+  samples(limit: $limit, skip: $skip, filterBy: $filterBy, sortBy: $sortBy) {
+    totalCount
+    list {
+      ...SampleFields
+    }
+  }
+}
+
+query Sample($id: ID!) {
+  sample(id: $id) {
+    ...SampleFields
+    userId
+    description
+    activities {
+      ... on ActivityFile {
+        type
+        date
+        description
+        fileId
+      }
+      ... on ActivityMeasurement {
+        type
+        date
+        description
+        measurementId
+        measurementType
+      }
+    }
+    measurements {
+      ...MeasurementFields
+    }
+  }
+}

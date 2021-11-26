@@ -15,7 +15,7 @@ function isSample(
 }
 const resolvers: GqlResolvers = {
   PaginationNode: {
-    __resolveType: (obj) => {
+    __resolveType(obj) {
       if (isEvent(obj)) return 'Event';
       if (isSample(obj)) return 'Sample';
       const { __typename: type } = obj;
