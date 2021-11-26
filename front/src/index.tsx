@@ -16,6 +16,8 @@ import Login from './pages/login';
 // Measurements
 import MeasurementDetail from './pages/measurements/transfer/detail';
 import MeasurementsList from './pages/measurements/transfer/list';
+import SamplesList from './pages/samples/list';
+import SamplesDetail from './pages/samples/detail';
 
 // Events
 import EventDetail from '@/addons/events/pages/EventDetail';
@@ -35,6 +37,8 @@ const routes: RouteType[] = [
   { Component: EventDetail, path: '/event/detail/:id' },
   { Component: MeasurementsList, path: '/measurement/list' },
   { Component: MeasurementDetail, path: '/measurement/detail/:type/:id' },
+  { Component: SamplesList, path: '/sample/list' },
+  { Component: SamplesDetail, path: '/sample/detail/:id' },
   { Component: Login, path: '/login' },
   { Component: NoMatch, path: '*' },
 ];

@@ -68,7 +68,10 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
                 <img src={LOGO} alt="Logo" className="w-24" />
               </div>
               <div className="hidden md:flex md:flex-row md:w-full">
-                <div className="flex items-baseline ml-10 space-x-4">
+                <div
+                  className="flex items-baseline pr-2 ml-10 space-x-4"
+                  style={{ borderRight: '2px solid #4B5563' }}
+                >
                   {MEMBER_ROUTES.map((route) => (
                     <RouteLink
                       key={route.pathname}
@@ -77,7 +80,7 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
                     />
                   ))}
                 </div>
-                <div className="flex items-baseline space-x-4 ml-52">
+                <div className="flex items-baseline ml-4 space-x-4">
                   {ADMIN_ROUTES.map((route) => (
                     <RouteLink
                       key={route.pathname}

@@ -46,11 +46,13 @@ type Sample {
 
 union Activity = ActivityFile | ActivityMeasurement
 type ActivityFile {
+  type: String!
   date: DateTime!
   description: String
   fileId: ID!
 }
 type ActivityMeasurement {
+  type: String!
   date: DateTime!
   description: String
   measurementId: ID!

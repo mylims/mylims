@@ -46,6 +46,7 @@ export type GqlActivityFile = {
   date: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   fileId: Scalars['ID'];
+  type: Scalars['String'];
 };
 
 export type GqlActivityMeasurement = {
@@ -54,6 +55,7 @@ export type GqlActivityMeasurement = {
   description?: Maybe<Scalars['String']>;
   measurementId: Scalars['ID'];
   measurementType: GqlMeasurementTypes;
+  type: Scalars['String'];
 };
 
 export type GqlDeleteFileSyncOptionInput = {
@@ -876,6 +878,7 @@ export type GqlActivityFileResolvers<
     ContextType
   >;
   fileId?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
+  type?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -895,6 +898,7 @@ export type GqlActivityMeasurementResolvers<
     ParentType,
     ContextType
   >;
+  type?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
