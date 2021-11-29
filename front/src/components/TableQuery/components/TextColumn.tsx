@@ -77,7 +77,7 @@ export default function TextColumn({
           setQuery({ ...query, [path]: value });
         }}
         onKeyDown={(e) => {
-          if (e.key === 'Enter') submitQuery(query);
+          if (e.key === 'Enter') submitQuery({...query, page: '1'});
         }}
       />
     </HeaderRender>

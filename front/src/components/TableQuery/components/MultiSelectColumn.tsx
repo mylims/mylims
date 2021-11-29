@@ -95,6 +95,7 @@ export default function MultiSelectColumn({
           submitQuery({
             ...query,
             [path]: value.map((v) => v.value).join(','),
+            page: '1',
           });
         }}
         selected={parseOptions(value)}

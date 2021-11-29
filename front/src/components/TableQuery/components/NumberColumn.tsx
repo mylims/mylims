@@ -77,7 +77,7 @@ export default function NumberColumn({
         hiddenLabel
         type="number"
         onChange={({ currentTarget: { value } }) => {
-          setQuery({ ...query, [path]: value });
+          setQuery({ ...query, [path]: value, page: '1' });
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') submitQuery(query);
