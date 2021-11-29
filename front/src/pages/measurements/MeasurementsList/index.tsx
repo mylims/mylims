@@ -15,11 +15,10 @@ import {
   useMeasurementsFilteredQuery,
 } from '@/generated/graphql';
 import MeasurementActions from '@/pages/measurements/MeasurementsList/MeasurementActions';
+import { boundariesFromPage } from '@/components/TableQuery/utils';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['list'][number];
-
-const PAGE_SIZE = 10;
 
 export default function MeasurementsList() {
   const { query, setQuery } = useTableQuery({
@@ -30,12 +29,12 @@ export default function MeasurementsList() {
   const { page, type, sortField, sortDirection, ...filter } = query;
   const measurementType = (query.type ??
     MeasurementTypes.TRANSFER) as MeasurementTypes;
-  const pageNum = query.page !== null ? parseInt(query.page, 10) : 1;
+  const { skip, limit } = boundariesFromPage(page);
   const { loading, error, data } = useMeasurementsFilteredQuery({
     variables: {
       type: measurementType,
-      skip: (pageNum - 1) * PAGE_SIZE,
-      limit: PAGE_SIZE,
+      skip,
+      limit,
       filterBy: filter,
       sortBy: {
         direction: sortDirection as SortDirection,
@@ -76,7 +75,6 @@ export default function MeasurementsList() {
           data={data?.measurements}
           loading={loading}
           error={error}
-          itemsPerPage={PAGE_SIZE}
           query={query}
           onQueryChange={(query) => setQuery(query)}
         >

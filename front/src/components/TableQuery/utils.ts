@@ -32,3 +32,12 @@ export function splitChildren(children: ReactNode) {
   }
   return { columns };
 }
+
+export const PAGE_SIZE = 10;
+export function boundariesFromPage(page: string) {
+  const pageNumber = parseInt(page, 10);
+  return {
+    skip: (pageNumber - 1) * PAGE_SIZE,
+    limit: PAGE_SIZE,
+  };
+}
