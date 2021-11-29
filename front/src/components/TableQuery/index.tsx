@@ -1,3 +1,5 @@
+import { ApolloError } from '@apollo/client';
+import { InboxIcon } from '@heroicons/react/solid';
 import { produce } from 'immer';
 import React, {
   Reducer,
@@ -29,8 +31,6 @@ import {
   Pagination,
   Spinner,
 } from '@/components/tailwind-ui';
-import { ApolloError } from '@apollo/client';
-import { InboxIcon } from '@heroicons/react/solid';
 
 interface TableBodyProps<T> {
   list: Array<T>;
