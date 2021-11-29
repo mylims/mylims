@@ -2,13 +2,14 @@ import React, { createContext, useEffect, useState } from 'react';
 
 import MeasurementTypeRender from './MeasurementTypeRender';
 
+import type { QueryType } from '@/components/TableQuery/types';
 import { Card } from '@/components/tailwind-ui';
 import { MeasurementTypes } from '@/generated/graphql';
 import { useFetchFileDict } from '@/hooks/useFetchFile';
 
 interface MeasurementPlotProps {
   type: MeasurementTypes;
-  query: any;
+  query: QueryType;
   children: JSX.Element;
 }
 type MeasurementState = Record<string, string>;

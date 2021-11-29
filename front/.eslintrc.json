@@ -13,7 +13,6 @@
   "plugins": ["@typescript-eslint", "import"],
   "extends": "@zakodium/eslint-config/typescript-react",
   "rules": {
-    "import/no-unresolved": 0,
-    "react/no-array-index-key": 0
+    "import/no-unresolved": 0
   }
 }
