@@ -27,7 +27,7 @@ const defaultConfig: ConfigFile = {
     },
     session: { sessionAge: '2h' },
     fileSync: { root: '' },
-    enabledAddons: ['events'],
+    enabledAddons: ['events', 'file-sync'],
   },
   history: [],
 };
