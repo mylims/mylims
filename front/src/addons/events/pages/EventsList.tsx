@@ -14,8 +14,7 @@ import {
   SortDirection,
   useEventsFilteredQuery,
 } from '@/generated/graphql';
-
-const PAGE_SIZE = 10;
+import { boundariesFromPage } from '@/components/TableQuery/utils';
 
 export default function EventsList() {
   const { query, setQuery } = useTableQuery({
@@ -24,11 +23,11 @@ export default function EventsList() {
     sortDirection: SortDirection.DESC,
   });
   const { page, status, sortField, sortDirection, ...filter } = query;
-  const pageNum = page !== null ? parseInt(page, 10) : 1;
+  const { skip, limit } = boundariesFromPage(page);
   const { loading, error, data } = useEventsFilteredQuery({
     variables: {
-      skip: (pageNum - 1) * PAGE_SIZE,
-      limit: PAGE_SIZE,
+      skip,
+      limit,
       filterBy: {
         ...filter,
         status:
@@ -59,7 +58,6 @@ export default function EventsList() {
         data={data?.events}
         loading={loading}
         error={error}
-        itemsPerPage={PAGE_SIZE}
         query={query}
         onQueryChange={(query) => setQuery(query)}
       >

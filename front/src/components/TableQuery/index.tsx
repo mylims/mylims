@@ -23,7 +23,7 @@ import type {
   TableQueryProps,
   TableState,
 } from './types';
-import { splitChildren } from './utils';
+import { PAGE_SIZE, splitChildren } from './utils';
 
 import {
   Alert,
@@ -46,7 +46,7 @@ export function Table<T extends Record<string, unknown>>({
   loading,
   error,
   query: originalQuery,
-  itemsPerPage = 10,
+  itemsPerPage = PAGE_SIZE,
   onQueryChange: submitQuery,
   children,
 }: TableQueryProps<T>) {
