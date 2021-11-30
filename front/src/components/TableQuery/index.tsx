@@ -68,7 +68,7 @@ export function Table<T extends Record<string, unknown>>({
     <TableQueryContext.Provider
       value={{ query, setQuery, submitQuery, dispatch }}
     >
-      <div className="inline-block overflow-hidden align-middle border-b shadow border-neutral-200 sm:rounded-lg">
+      <div className="inline-block align-middle border-b shadow border-neutral-200 sm:rounded-lg">
         <table className="divide-y divide-neutral-200">
           <thead className="bg-neutral-50">
             <tr className={`grid grid-cols-${columns.length} gap-4`}>

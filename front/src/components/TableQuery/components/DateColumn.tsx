@@ -1,13 +1,12 @@
 import { format as dateFormat } from 'date-fns';
 import objectPath from 'object-path';
 import React, { useEffect } from 'react';
+import DatePicker from 'react-datepicker';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, DateColumnProps } from '../types';
 
 import HeaderRender from './HeaderRender';
-
-import { Input } from '@/components/tailwind-ui';
 
 export default function DateColumn({
   title,
@@ -20,7 +19,7 @@ export default function DateColumn({
   format = 'dd.MM.yyyy HH:mm',
   children,
 }: DateColumnProps) {
-  const { query, setQuery, submitQuery, dispatch } = useTableQueryContext();
+  const { query, submitQuery, dispatch } = useTableQueryContext();
   const path = queryPath ?? dataPath;
   const value = objectPath(query).get(path, '');
 
@@ -70,20 +69,20 @@ export default function DateColumn({
   if (disableSearch) return <HeaderRender title={title} path={path} />;
   return (
     <HeaderRender title={title} path={path}>
-      {(ref) => (
-        <Input
-          name={path}
-          label={path}
-          value={value}
-          ref={ref}
-          hiddenLabel
-          onChange={({ currentTarget: { value } }) => {
-            setQuery({ ...query, [path]: value });
+      {() => (
+        <DatePicker
+          selectsRange={false}
+          showPopperArrow={false}
+          selected={value ? new Date(value) : null}
+          inline
+          className="max-w-10"
+          onChange={(value: Date | null) => {
+            submitQuery({
+              ...query,
+              [path]: value?.toISOString() ?? '',
+              page: '1',
+            });
           }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') submitQuery({ ...query, page: '1' });
-          }}
-          type="date"
         />
       )}
     </HeaderRender>
