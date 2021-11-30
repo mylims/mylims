@@ -28,7 +28,7 @@ export default function Queries() {
         variant={Variant.secondary}
         color={Color.danger}
         onClick={() => {
-          const { page, sortField, sortDirection } = query;
+          const { sortField, sortDirection } = query;
           submitQuery({ page: '1', sortField, sortDirection });
         }}
       >

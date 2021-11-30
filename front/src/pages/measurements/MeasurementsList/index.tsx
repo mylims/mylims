@@ -45,31 +45,25 @@ export default function MeasurementsList() {
 
   return (
     <div>
-      <div className="grid grid-cols-4 gap-2 mb-3">
-        <Select
-          options={[
-            {
-              value: MeasurementTypes.TRANSFER,
-              label: MeasurementTypes.TRANSFER,
-            },
-          ]}
-          selected={{ value: measurementType, label: measurementType }}
-          onSelect={(
-            selected: Record<'value' | 'label', MeasurementTypes> | undefined,
-          ) => {
-            setQuery({
-              ...query,
-              type: selected?.value ?? MeasurementTypes.TRANSFER,
-            });
-          }}
-          label="Measurement type"
-        />
-        <Link to="/measurement/list" className="mt-auto">
-          <Button variant={Variant.secondary} color={Color.danger}>
-            Remove filters
-          </Button>
-        </Link>
-      </div>
+      <Select
+        className="mb-4 w-60"
+        options={[
+          {
+            value: MeasurementTypes.TRANSFER,
+            label: MeasurementTypes.TRANSFER,
+          },
+        ]}
+        selected={{ value: measurementType, label: measurementType }}
+        onSelect={(
+          selected: Record<'value' | 'label', MeasurementTypes> | undefined,
+        ) => {
+          setQuery({
+            ...query,
+            type: selected?.value ?? MeasurementTypes.TRANSFER,
+          });
+        }}
+        label="Measurement type"
+      />
       <MeasurementPlot query={query} type={measurementType}>
         <TableQuery
           data={data?.measurements}
@@ -78,6 +72,7 @@ export default function MeasurementsList() {
           query={query}
           onQueryChange={(query) => setQuery(query)}
         >
+          <TableQuery.Queries />
           <TableQuery.TextColumn
             title="Sample"
             dataPath="sampleCode"
