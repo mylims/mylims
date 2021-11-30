@@ -85,21 +85,24 @@ export default function MultiSelectColumn({
   if (disableSearch) return <HeaderRender title={title} path={path} />;
   return (
     <HeaderRender title={title} path={path}>
-      <MultiSearchSelect
-        {...selectTags}
-        name={path}
-        label={path}
-        clearable
-        hiddenLabel
-        onSelect={(value: SelectionValue[]) => {
-          submitQuery({
-            ...query,
-            [path]: value.map((v) => v.value).join(','),
-            page: '1',
-          });
-        }}
-        selected={parseOptions(value)}
-      />
+      {(ref) => (
+        <MultiSearchSelect
+          {...selectTags}
+          ref={ref}
+          name={path}
+          label={path}
+          clearable
+          hiddenLabel
+          onSelect={(value: SelectionValue[]) => {
+            submitQuery({
+              ...query,
+              [path]: value.map((v) => v.value).join(','),
+              page: '1',
+            });
+          }}
+          selected={parseOptions(value)}
+        />
+      )}
     </HeaderRender>
   );
 }

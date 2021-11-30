@@ -70,19 +70,22 @@ export default function NumberColumn({
   const value = objectPath(query).get(path, '');
   return (
     <HeaderRender title={title} path={path}>
-      <Input
-        name={path}
-        label={path}
-        value={value}
-        hiddenLabel
-        type="number"
-        onChange={({ currentTarget: { value } }) => {
-          setQuery({ ...query, [path]: value, page: '1' });
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') submitQuery(query);
-        }}
-      />
+      {(ref) => (
+        <Input
+          name={path}
+          label={path}
+          value={value}
+          ref={ref}
+          hiddenLabel
+          type="number"
+          onChange={({ currentTarget: { value } }) => {
+            setQuery({ ...query, [path]: value, page: '1' });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') submitQuery(query);
+          }}
+        />
+      )}
     </HeaderRender>
   );
 }

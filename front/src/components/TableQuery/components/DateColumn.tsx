@@ -70,19 +70,22 @@ export default function DateColumn({
   if (disableSearch) return <HeaderRender title={title} path={path} />;
   return (
     <HeaderRender title={title} path={path}>
-      <Input
-        name={path}
-        label={path}
-        value={value}
-        hiddenLabel
-        onChange={({ currentTarget: { value } }) => {
-          setQuery({ ...query, [path]: value });
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') submitQuery({ ...query, page: '1' });
-        }}
-        type="date"
-      />
+      {(ref) => (
+        <Input
+          name={path}
+          label={path}
+          value={value}
+          ref={ref}
+          hiddenLabel
+          onChange={({ currentTarget: { value } }) => {
+            setQuery({ ...query, [path]: value });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') submitQuery({ ...query, page: '1' });
+          }}
+          type="date"
+        />
+      )}
     </HeaderRender>
   );
 }
