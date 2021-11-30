@@ -5,10 +5,12 @@ import DateColumn from './components/DateColumn';
 import MultiSelectColumn from './components/MultiSelectColumn';
 import NumberColumn from './components/NumberColumn';
 import TextColumn from './components/TextColumn';
+import Queries from './components/QueryPreview';
 
 const invalidError = 'Invalid column child';
 export function splitChildren(children: ReactNode) {
   let columns = [];
+  let queries = null;
   const childrenArray = Children.toArray(children);
   for (let index = 0; index < childrenArray.length; index++) {
     let child = childrenArray[index];
@@ -24,13 +26,15 @@ export function splitChildren(children: ReactNode) {
       child.type === ActionsColumn
     ) {
       columns.push(cloneElement(child, { ...child.props, index }));
+    } else if (child.type === Queries) {
+      queries = child;
     } else {
       // eslint-disable-next-line no-console
       console.error(invalidError, child);
       throw new Error(invalidError);
     }
   }
-  return { columns };
+  return { columns, queries };
 }
 
 export const PAGE_SIZE = 10;
