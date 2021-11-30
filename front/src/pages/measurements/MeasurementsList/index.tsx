@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { MeasurementPlot } from './MeasurementPlot';
 
 import ElnLayout from '@/components/ElnLayout';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { Table as TableQuery } from '@/components/TableQuery/table';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Button, Color, Select, Variant } from '@/components/tailwind-ui';
 import {
