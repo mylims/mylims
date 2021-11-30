@@ -9,6 +9,7 @@ import React, {
   useState,
 } from 'react';
 
+import Queries from './components/QueryPreview';
 import ActionsColumn from './components/ActionsColumn';
 import DateColumn from './components/DateColumn';
 import MultiSelectColumn from './components/MultiSelectColumn';
@@ -56,7 +57,10 @@ export function Table<T extends Record<string, unknown>>({
     setQuery(originalQuery);
   }, [originalQuery]);
 
-  const { columns } = useMemo(() => splitChildren(children), [children]);
+  const { columns, queries } = useMemo(
+    () => splitChildren(children),
+    [children],
+  );
   const orderedColumns = useMemo(() => {
     return produce(state, (copy) => copy.sort((a, b) => a.index - b.index));
   }, [state]);
@@ -68,6 +72,7 @@ export function Table<T extends Record<string, unknown>>({
     <TableQueryContext.Provider
       value={{ query, setQuery, submitQuery, dispatch }}
     >
+      {queries}
       <div className="inline-block align-middle border-b shadow border-neutral-200 sm:rounded-lg">
         <table className="divide-y divide-neutral-200">
           <thead className="bg-neutral-50">
@@ -140,6 +145,7 @@ function TableBody<T extends Record<string, unknown>>({
   );
 }
 
+Table.Queries = Queries;
 Table.DateColumn = DateColumn;
 Table.NumberColumn = NumberColumn;
 Table.TextColumn = TextColumn;
