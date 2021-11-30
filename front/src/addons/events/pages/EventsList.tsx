@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
 import { EventStatusLabel } from '@/components/EventStatusLabel';
-import { Table as TableQuery } from '@/components/TableQuery/table';
+import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 import {
@@ -45,15 +45,6 @@ export default function EventsList() {
 
   return (
     <div>
-      <Link to="/event/list">
-        <Button
-          className="mb-4"
-          variant={Variant.secondary}
-          color={Color.danger}
-        >
-          Remove filters
-        </Button>
-      </Link>
       <TableQuery
         data={data?.events}
         loading={loading}
@@ -61,6 +52,7 @@ export default function EventsList() {
         query={query}
         onQueryChange={(query) => setQuery(query)}
       >
+        <TableQuery.Queries />
         <TableQuery.TextColumn
           title="Original file"
           dataPath="data.file.name"
