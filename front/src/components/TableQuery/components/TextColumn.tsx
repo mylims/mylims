@@ -68,18 +68,21 @@ export default function TextColumn({
   }
   return (
     <HeaderRender title={title} path={path} disableSort={disableSort}>
-      <Input
-        name={path}
-        label={path}
-        value={value}
-        hiddenLabel
-        onChange={({ currentTarget: { value } }) => {
-          setQuery({ ...query, [path]: value });
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') submitQuery({...query, page: '1'});
-        }}
-      />
+      {(ref) => (
+        <Input
+          name={path}
+          label={path}
+          value={value}
+          ref={ref}
+          hiddenLabel
+          onChange={({ currentTarget: { value } }) => {
+            setQuery({ ...query, [path]: value });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') submitQuery({ ...query, page: '1' });
+          }}
+        />
+      )}
     </HeaderRender>
   );
 }
