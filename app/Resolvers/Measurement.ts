@@ -4,7 +4,6 @@ import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import File from 'App/Models/File';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
-import { removeNullable } from 'App/Resolvers/utils';
 import {
   GqlMeasurement,
   GqlMeasurementSortField,
@@ -12,6 +11,7 @@ import {
   GqlResolvers,
   GqlSortDirection,
 } from 'App/graphql';
+import { removeNullable } from 'App/utils';
 
 const measurements = {
   [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,

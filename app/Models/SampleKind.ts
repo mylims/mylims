@@ -2,8 +2,8 @@ import { JSONSchema7 } from 'json-schema';
 
 import { BaseModel, field } from '@ioc:Zakodium/Mongodb/Odm';
 
-import { removeNullable } from 'App/Resolvers/utils';
 import { GqlSampleKindInput } from 'App/graphql';
+import { removeNullable } from 'App/utils';
 
 export class SampleKind extends BaseModel {
   @field()
