@@ -66,6 +66,7 @@ input SampleInput {
   parent: String
 }
 input SampleKindInput {
+  id: ID!
   name: String
   description: String
   color: String
@@ -76,6 +77,7 @@ input SampleKindInput {
 type Sample {
   id: ID!
   sampleCode: [String!]!
+  uuid10: String!
   user: User
   kind: SampleKind!
   labels: [String!]!

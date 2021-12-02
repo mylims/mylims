@@ -11,7 +11,6 @@ import User from 'App/Models/User';
 import {
   GqlResolvers,
   GqlSampleFilterInput,
-  GqlSampleKind,
   GqlSampleSortField,
   GqlSortDirection,
   Maybe,
@@ -70,8 +69,11 @@ const resolvers: GqlResolvers = {
       return parent;
     },
     async children(sample: Sample) {
-      return Sample.query({ 'parents.0': sample._id }).all();
+      return Sample.query({ 'parents.0': sample._id.toHexString() }).all();
     },
+  },
+  SampleKind: {
+    id: (sample: SampleKind): string => sample._id,
   },
   Query: {
     async sample(_, { id }) {
@@ -102,7 +104,7 @@ const resolvers: GqlResolvers = {
     },
     async sampleKind(_, { id }) {
       const ans = await SampleKind.find(id);
-      if (ans) return ans.toJSON() as GqlSampleKind;
+      if (ans) return ans.toJSON() as SampleKind;
 
       throw new UserInputError('Id not found', { argumentName: 'id' });
     },
