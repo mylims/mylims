@@ -18,12 +18,11 @@ export class SampleKind extends BaseModel {
     input: GqlSampleKindInput,
   ): Promise<SampleKind> {
     const sampleInput = removeNullable(input);
-    if (sampleInput.color) sampleKind.color = sampleInput.color;
-    if (sampleInput.description) {
-      sampleKind.description = sampleInput.description;
-    }
-    if (sampleInput.name) sampleKind.name = sampleInput.name;
-    if (sampleInput.schema) sampleKind.schema = sampleInput.schema;
+    sampleKind.color = sampleInput.color;
+    sampleKind.description = sampleInput.description;
+    sampleKind.name = sampleInput.name;
+    sampleKind.schema = sampleInput.schema;
+
     await sampleKind.save();
     return sampleKind;
   }
