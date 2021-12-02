@@ -3,7 +3,7 @@ enum SortDirection {
   DESC
 }
 
-union PaginationNode = Event | SyncFileRevision | Measurement
+union PaginationNode = Event | SyncFileRevision | Measurement | Sample
 interface Pagination {
   totalCount: Int!
   list: [PaginationNode!]!

@@ -8,7 +8,7 @@ import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 import File from 'App/Models/File';
 import { MeasurementParams } from 'App/Models/Measurement/Base';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
-import { Sample, ActivityType } from 'App/Models/Sample';
+import { Sample } from 'App/Models/Sample';
 import User from 'App/Models/User';
 import MeasurementValidator from 'App/Validators/MeasurementValidator';
 
@@ -70,20 +70,13 @@ export default class MeasurementController {
 
       // Add activity to the sample
       if (fileId) {
-        sample.activities.push({
-          type: ActivityType.FILE,
-          fileId,
-          date: new Date(),
-        });
+        sample.attachments.push({ id: fileId, date: new Date() });
       }
-      const measurementId = measurement._id.toHexString();
-      sample.activities.push({
-        type: ActivityType.MEASUREMENT,
-        measurementId: measurementId,
-        measurementType: collection,
+      sample.measurements.push({
+        id: measurement._id.toHexString(),
+        type: collection,
         date: new Date(),
       });
-      sample.measurements.push({ id: measurementId, type: collection });
       await sample.save();
 
       return response.ok(measurement);
@@ -130,8 +123,8 @@ export default class MeasurementController {
       return Sample.create({
         userId,
         sampleCode,
-        activities: [],
         measurements: [],
+        parents: [],
       });
     } else if (length === 1) {
       return cursor.firstOrFail();

@@ -1,0 +1,100 @@
+type Query {
+  samples(
+    limit: Int
+    skip: Int
+    filterBy: SampleFilterInput
+    sortBy: SampleSortInput
+  ): SamplePage!
+  sample(id: ID!): Sample!
+  sampleKind(id: ID!): SampleKind!
+}
+
+type Mutation {
+  createSample(input: SampleInput!): Sample!
+  updateSample(id: ID!, input: SampleInput!): Sample!
+  createSampleKind(input: SampleKindInput!): SampleKind!
+  updateSampleKind(id: ID!, input: SampleKindInput!): SampleKind!
+}
+
+# Paginated list of samples
+enum SampleSortField {
+  username
+  createdBy
+  createdAt
+}
+input SampleFilterInput {
+  sampleCode: [String!]
+  username: String
+  kind: String
+  labels: [String!]
+  project: String
+  title: String
+  description: String
+  parent: ID
+}
+input SampleSortInput {
+  direction: SortDirection!
+  field: SampleSortField!
+}
+type SamplePage implements Pagination {
+  list: [Sample!]!
+  totalCount: Int!
+}
+type SampleFile {
+  id: ID!
+  date: DateTime!
+  downloadUrl: String!
+  filename: String!
+  size: Int!
+}
+type SampleMeasurement {
+  id: ID!
+  type: String!
+  date: DateTime!
+}
+
+# Inputs
+input SampleInput {
+  sampleCode: [String!]!
+  userId: String!
+  kind: String!
+  labels: [String!]!
+  project: String
+  meta: JSON!
+  title: String
+  description: String
+  parent: String
+}
+input SampleKindInput {
+  name: String
+  description: String
+  color: String
+  schema: JSON!
+}
+
+# Sample specific data
+type Sample {
+  id: ID!
+  sampleCode: [String!]!
+  user: User
+  kind: SampleKind!
+  labels: [String!]!
+  project: String
+  meta: JSON!
+  title: String
+  description: String
+  measurements: [SampleMeasurement!]!
+  attachments: [SampleFile!]!
+  parent: Sample
+  children: [Sample!]
+  createdAt: DateTime!
+}
+
+# Sample kind
+type SampleKind {
+  id: ID!
+  name: String
+  description: String
+  color: String
+  schema: JSON!
+}

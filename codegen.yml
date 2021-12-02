@@ -21,3 +21,4 @@ config:
     FileSyncOption: ../addons/file-sync/Models/FileSyncOption#FileSyncOption
     SyncFile: ../addons/file-sync/Models/SyncFile#SyncFile
     Event: ../addons/events/Models/Event#Event
+    Sample: ./Models/Sample#Sample
