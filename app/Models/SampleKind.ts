@@ -18,6 +18,7 @@ export class SampleKind extends BaseModel {
     input: GqlSampleKindInput,
   ): Promise<SampleKind> {
     const sampleInput = removeNullable(input);
+    if (!sampleKind._id) sampleKind._id = sampleInput.id;
     sampleKind.color = sampleInput.color;
     sampleKind.description = sampleInput.description;
     sampleKind.name = sampleInput.name;

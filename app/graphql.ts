@@ -8,6 +8,7 @@ import { FileSyncOption } from '../addons/file-sync/Models/FileSyncOption';
 import { SyncFile } from '../addons/file-sync/Models/SyncFile';
 import { Event } from '../addons/events/Models/Event';
 import { Sample } from './Models/Sample';
+import { SampleKind } from './Models/SampleKind';
 import { ApolloBaseContext } from '@ioc:Zakodium/Apollo/Server';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -436,6 +437,7 @@ export type GqlSample = {
   sampleCode: Array<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   user?: Maybe<GqlUser>;
+  uuid10: Scalars['String'];
 };
 
 export type GqlSampleFile = {
@@ -482,6 +484,7 @@ export type GqlSampleKind = {
 export type GqlSampleKindInput = {
   color?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   schema: Scalars['JSON'];
 };
@@ -734,7 +737,7 @@ export type GqlResolversTypes = ResolversObject<{
   SampleFile: ResolverTypeWrapper<GqlSampleFile>;
   SampleFilterInput: GqlSampleFilterInput;
   SampleInput: GqlSampleInput;
-  SampleKind: ResolverTypeWrapper<GqlSampleKind>;
+  SampleKind: ResolverTypeWrapper<SampleKind>;
   SampleKindInput: GqlSampleKindInput;
   SampleMeasurement: ResolverTypeWrapper<GqlSampleMeasurement>;
   SamplePage: ResolverTypeWrapper<
@@ -807,7 +810,7 @@ export type GqlResolversParentTypes = ResolversObject<{
   SampleFile: GqlSampleFile;
   SampleFilterInput: GqlSampleFilterInput;
   SampleInput: GqlSampleInput;
-  SampleKind: GqlSampleKind;
+  SampleKind: SampleKind;
   SampleKindInput: GqlSampleKindInput;
   SampleMeasurement: GqlSampleMeasurement;
   SamplePage: Omit<GqlSamplePage, 'list'> & {
@@ -1284,6 +1287,7 @@ export type GqlSampleResolvers<
   >;
   title?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<GqlResolversTypes['User']>, ParentType, ContextType>;
+  uuid10?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

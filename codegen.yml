@@ -22,3 +22,4 @@ config:
     SyncFile: ../addons/file-sync/Models/SyncFile#SyncFile
     Event: ../addons/events/Models/Event#Event
     Sample: ./Models/Sample#Sample
+    SampleKind: ./Models/SampleKind#SampleKind
