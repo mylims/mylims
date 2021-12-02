@@ -7,6 +7,7 @@ import User from './Models/User';
 import { FileSyncOption } from '../addons/file-sync/Models/FileSyncOption';
 import { SyncFile } from '../addons/file-sync/Models/SyncFile';
 import { Event } from '../addons/events/Models/Event';
+import { Sample } from './Models/Sample';
 import { ApolloBaseContext } from '@ioc:Zakodium/Apollo/Server';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -249,12 +250,24 @@ export enum GqlMeasurementTypes {
 export type GqlMutation = {
   __typename?: 'Mutation';
   createFileSyncOption: GqlFileSyncOption;
+  createSample: GqlSample;
+  createSampleKind: GqlSampleKind;
   deleteFileSyncOption: Array<GqlFileSyncOption>;
   editFileSyncOption: GqlFileSyncOption;
+  updateSample: GqlSample;
+  updateSampleKind: GqlSampleKind;
 };
 
 export type GqlMutationCreateFileSyncOptionArgs = {
   input: GqlNewFileSyncOptionInput;
+};
+
+export type GqlMutationCreateSampleArgs = {
+  input: GqlSampleInput;
+};
+
+export type GqlMutationCreateSampleKindArgs = {
+  input: GqlSampleKindInput;
 };
 
 export type GqlMutationDeleteFileSyncOptionArgs = {
@@ -263,6 +276,16 @@ export type GqlMutationDeleteFileSyncOptionArgs = {
 
 export type GqlMutationEditFileSyncOptionArgs = {
   input: GqlEditFileSyncOptionInput;
+};
+
+export type GqlMutationUpdateSampleArgs = {
+  id: Scalars['ID'];
+  input: GqlSampleInput;
+};
+
+export type GqlMutationUpdateSampleKindArgs = {
+  id: Scalars['ID'];
+  input: GqlSampleKindInput;
 };
 
 export type GqlNewFileSyncOptionInput = {
@@ -279,7 +302,11 @@ export type GqlPagination = {
   totalCount: Scalars['Int'];
 };
 
-export type GqlPaginationNode = GqlEvent | GqlMeasurement | GqlSyncFileRevision;
+export type GqlPaginationNode =
+  | GqlEvent
+  | GqlMeasurement
+  | GqlSample
+  | GqlSyncFileRevision;
 
 export type GqlPattern = {
   __typename?: 'Pattern';
@@ -305,6 +332,9 @@ export type GqlQuery = {
   measurement: GqlMeasurement;
   measurements: GqlMeasurementPage;
   readyChecks: Array<GqlReadyCheckDescriptor>;
+  sample: GqlSample;
+  sampleKind: GqlSampleKind;
+  samples: GqlSamplePage;
   users: Array<GqlUser>;
 };
 
@@ -358,6 +388,21 @@ export type GqlQueryMeasurementsArgs = {
   type: GqlMeasurementTypes;
 };
 
+export type GqlQuerySampleArgs = {
+  id: Scalars['ID'];
+};
+
+export type GqlQuerySampleKindArgs = {
+  id: Scalars['ID'];
+};
+
+export type GqlQuerySamplesArgs = {
+  filterBy?: Maybe<GqlSampleFilterInput>;
+  limit?: Maybe<Scalars['Int']>;
+  skip?: Maybe<Scalars['Int']>;
+  sortBy?: Maybe<GqlSampleSortInput>;
+};
+
 export type GqlReadyCheck = {
   __typename?: 'ReadyCheck';
   name: Scalars['String'];
@@ -373,6 +418,96 @@ export type GqlReadyCheckDescriptor = {
 export type GqlReadyCheckInput = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type GqlSample = {
+  __typename?: 'Sample';
+  attachments: Array<GqlSampleFile>;
+  children?: Maybe<Array<GqlSample>>;
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  kind: GqlSampleKind;
+  labels: Array<Scalars['String']>;
+  measurements: Array<GqlSampleMeasurement>;
+  meta: Scalars['JSON'];
+  parent?: Maybe<GqlSample>;
+  project?: Maybe<Scalars['String']>;
+  sampleCode: Array<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  user?: Maybe<GqlUser>;
+};
+
+export type GqlSampleFile = {
+  __typename?: 'SampleFile';
+  date: Scalars['DateTime'];
+  downloadUrl: Scalars['String'];
+  filename: Scalars['String'];
+  id: Scalars['ID'];
+  size: Scalars['Int'];
+};
+
+export type GqlSampleFilterInput = {
+  description?: Maybe<Scalars['String']>;
+  kind?: Maybe<Scalars['String']>;
+  labels?: Maybe<Array<Scalars['String']>>;
+  parent?: Maybe<Scalars['ID']>;
+  project?: Maybe<Scalars['String']>;
+  sampleCode?: Maybe<Array<Scalars['String']>>;
+  title?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type GqlSampleInput = {
+  description?: Maybe<Scalars['String']>;
+  kind: Scalars['String'];
+  labels: Array<Scalars['String']>;
+  meta: Scalars['JSON'];
+  parent?: Maybe<Scalars['String']>;
+  project?: Maybe<Scalars['String']>;
+  sampleCode: Array<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  userId: Scalars['String'];
+};
+
+export type GqlSampleKind = {
+  __typename?: 'SampleKind';
+  color?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  schema: Scalars['JSON'];
+};
+
+export type GqlSampleKindInput = {
+  color?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  schema: Scalars['JSON'];
+};
+
+export type GqlSampleMeasurement = {
+  __typename?: 'SampleMeasurement';
+  date: Scalars['DateTime'];
+  id: Scalars['ID'];
+  type: Scalars['String'];
+};
+
+export type GqlSamplePage = GqlPagination & {
+  __typename?: 'SamplePage';
+  list: Array<GqlSample>;
+  totalCount: Scalars['Int'];
+};
+
+export enum GqlSampleSortField {
+  CREATEDAT = 'createdAt',
+  CREATEDBY = 'createdBy',
+  USERNAME = 'username',
+}
+
+export type GqlSampleSortInput = {
+  direction: GqlSortDirection;
+  field: GqlSampleSortField;
 };
 
 export enum GqlSortDirection {
@@ -582,10 +717,12 @@ export type GqlResolversTypes = ResolversObject<{
   Pagination:
     | GqlResolversTypes['EventPage']
     | GqlResolversTypes['FilesFlatPage']
-    | GqlResolversTypes['MeasurementPage'];
+    | GqlResolversTypes['MeasurementPage']
+    | GqlResolversTypes['SamplePage'];
   PaginationNode:
     | GqlResolversTypes['Event']
     | GqlResolversTypes['Measurement']
+    | GqlResolversTypes['Sample']
     | GqlResolversTypes['SyncFileRevision'];
   Pattern: ResolverTypeWrapper<GqlPattern>;
   PatternType: GqlPatternType;
@@ -593,6 +730,18 @@ export type GqlResolversTypes = ResolversObject<{
   ReadyCheck: ResolverTypeWrapper<GqlReadyCheck>;
   ReadyCheckDescriptor: ResolverTypeWrapper<GqlReadyCheckDescriptor>;
   ReadyCheckInput: GqlReadyCheckInput;
+  Sample: ResolverTypeWrapper<Sample>;
+  SampleFile: ResolverTypeWrapper<GqlSampleFile>;
+  SampleFilterInput: GqlSampleFilterInput;
+  SampleInput: GqlSampleInput;
+  SampleKind: ResolverTypeWrapper<GqlSampleKind>;
+  SampleKindInput: GqlSampleKindInput;
+  SampleMeasurement: ResolverTypeWrapper<GqlSampleMeasurement>;
+  SamplePage: ResolverTypeWrapper<
+    Omit<GqlSamplePage, 'list'> & { list: Array<GqlResolversTypes['Sample']> }
+  >;
+  SampleSortField: GqlSampleSortField;
+  SampleSortInput: GqlSampleSortInput;
   SortDirection: GqlSortDirection;
   String: ResolverTypeWrapper<Scalars['String']>;
   SyncDirRevision: ResolverTypeWrapper<GqlSyncDirRevision>;
@@ -642,16 +791,29 @@ export type GqlResolversParentTypes = ResolversObject<{
   Pagination:
     | GqlResolversParentTypes['EventPage']
     | GqlResolversParentTypes['FilesFlatPage']
-    | GqlResolversParentTypes['MeasurementPage'];
+    | GqlResolversParentTypes['MeasurementPage']
+    | GqlResolversParentTypes['SamplePage'];
   PaginationNode:
     | GqlResolversParentTypes['Event']
     | GqlResolversParentTypes['Measurement']
+    | GqlResolversParentTypes['Sample']
     | GqlResolversParentTypes['SyncFileRevision'];
   Pattern: GqlPattern;
   Query: {};
   ReadyCheck: GqlReadyCheck;
   ReadyCheckDescriptor: GqlReadyCheckDescriptor;
   ReadyCheckInput: GqlReadyCheckInput;
+  Sample: Sample;
+  SampleFile: GqlSampleFile;
+  SampleFilterInput: GqlSampleFilterInput;
+  SampleInput: GqlSampleInput;
+  SampleKind: GqlSampleKind;
+  SampleKindInput: GqlSampleKindInput;
+  SampleMeasurement: GqlSampleMeasurement;
+  SamplePage: Omit<GqlSamplePage, 'list'> & {
+    list: Array<GqlResolversParentTypes['Sample']>;
+  };
+  SampleSortInput: GqlSampleSortInput;
   String: Scalars['String'];
   SyncDirRevision: GqlSyncDirRevision;
   SyncElementRevision:
@@ -890,6 +1052,18 @@ export type GqlMutationResolvers<
     ContextType,
     RequireFields<GqlMutationCreateFileSyncOptionArgs, 'input'>
   >;
+  createSample?: Resolver<
+    GqlResolversTypes['Sample'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationCreateSampleArgs, 'input'>
+  >;
+  createSampleKind?: Resolver<
+    GqlResolversTypes['SampleKind'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationCreateSampleKindArgs, 'input'>
+  >;
   deleteFileSyncOption?: Resolver<
     Array<GqlResolversTypes['FileSyncOption']>,
     ParentType,
@@ -902,6 +1076,18 @@ export type GqlMutationResolvers<
     ContextType,
     RequireFields<GqlMutationEditFileSyncOptionArgs, 'input'>
   >;
+  updateSample?: Resolver<
+    GqlResolversTypes['Sample'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationUpdateSampleArgs, 'id' | 'input'>
+  >;
+  updateSampleKind?: Resolver<
+    GqlResolversTypes['SampleKind'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationUpdateSampleKindArgs, 'id' | 'input'>
+  >;
 }>;
 
 export type GqlPaginationResolvers<
@@ -909,7 +1095,7 @@ export type GqlPaginationResolvers<
   ParentType extends GqlResolversParentTypes['Pagination'] = GqlResolversParentTypes['Pagination'],
 > = ResolversObject<{
   __resolveType: TypeResolveFn<
-    'EventPage' | 'FilesFlatPage' | 'MeasurementPage',
+    'EventPage' | 'FilesFlatPage' | 'MeasurementPage' | 'SamplePage',
     ParentType,
     ContextType
   >;
@@ -926,7 +1112,7 @@ export type GqlPaginationNodeResolvers<
   ParentType extends GqlResolversParentTypes['PaginationNode'] = GqlResolversParentTypes['PaginationNode'],
 > = ResolversObject<{
   __resolveType: TypeResolveFn<
-    'Event' | 'Measurement' | 'SyncFileRevision',
+    'Event' | 'Measurement' | 'Sample' | 'SyncFileRevision',
     ParentType,
     ContextType
   >;
@@ -1009,6 +1195,24 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType
   >;
+  sample?: Resolver<
+    GqlResolversTypes['Sample'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQuerySampleArgs, 'id'>
+  >;
+  sampleKind?: Resolver<
+    GqlResolversTypes['SampleKind'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQuerySampleKindArgs, 'id'>
+  >;
+  samples?: Resolver<
+    GqlResolversTypes['SamplePage'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQuerySamplesArgs, never>
+  >;
   users?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
 }>;
 
@@ -1027,6 +1231,106 @@ export type GqlReadyCheckDescriptorResolvers<
 > = ResolversObject<{
   hasArg?: Resolver<GqlResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlSampleResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['Sample'] = GqlResolversParentTypes['Sample'],
+> = ResolversObject<{
+  attachments?: Resolver<
+    Array<GqlResolversTypes['SampleFile']>,
+    ParentType,
+    ContextType
+  >;
+  children?: Resolver<
+    Maybe<Array<GqlResolversTypes['Sample']>>,
+    ParentType,
+    ContextType
+  >;
+  createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
+  kind?: Resolver<GqlResolversTypes['SampleKind'], ParentType, ContextType>;
+  labels?: Resolver<
+    Array<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  measurements?: Resolver<
+    Array<GqlResolversTypes['SampleMeasurement']>,
+    ParentType,
+    ContextType
+  >;
+  meta?: Resolver<GqlResolversTypes['JSON'], ParentType, ContextType>;
+  parent?: Resolver<
+    Maybe<GqlResolversTypes['Sample']>,
+    ParentType,
+    ContextType
+  >;
+  project?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  sampleCode?: Resolver<
+    Array<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  title?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<GqlResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlSampleFileResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['SampleFile'] = GqlResolversParentTypes['SampleFile'],
+> = ResolversObject<{
+  date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  downloadUrl?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  filename?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
+  size?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlSampleKindResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['SampleKind'] = GqlResolversParentTypes['SampleKind'],
+> = ResolversObject<{
+  color?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
+  schema?: Resolver<GqlResolversTypes['JSON'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlSampleMeasurementResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['SampleMeasurement'] = GqlResolversParentTypes['SampleMeasurement'],
+> = ResolversObject<{
+  date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
+  type?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlSamplePageResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['SamplePage'] = GqlResolversParentTypes['SamplePage'],
+> = ResolversObject<{
+  list?: Resolver<Array<GqlResolversTypes['Sample']>, ParentType, ContextType>;
+  totalCount?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1147,6 +1451,11 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   Query?: GqlQueryResolvers<ContextType>;
   ReadyCheck?: GqlReadyCheckResolvers<ContextType>;
   ReadyCheckDescriptor?: GqlReadyCheckDescriptorResolvers<ContextType>;
+  Sample?: GqlSampleResolvers<ContextType>;
+  SampleFile?: GqlSampleFileResolvers<ContextType>;
+  SampleKind?: GqlSampleKindResolvers<ContextType>;
+  SampleMeasurement?: GqlSampleMeasurementResolvers<ContextType>;
+  SamplePage?: GqlSamplePageResolvers<ContextType>;
   SyncDirRevision?: GqlSyncDirRevisionResolvers<ContextType>;
   SyncElementRevision?: GqlSyncElementRevisionResolvers<ContextType>;
   SyncFileRevision?: GqlSyncFileRevisionResolvers<ContextType>;
