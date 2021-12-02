@@ -8,7 +8,6 @@ import File from 'App/Models/File';
 import { Sample } from 'App/Models/Sample';
 import { SampleKind } from 'App/Models/SampleKind';
 import User from 'App/Models/User';
-import { removeNullable } from 'App/Resolvers/utils';
 import {
   GqlResolvers,
   GqlSampleFilterInput,
@@ -17,6 +16,7 @@ import {
   GqlSortDirection,
   Maybe,
 } from 'App/graphql';
+import { removeNullable } from 'App/utils';
 
 const resolvers: GqlResolvers = {
   Sample: {

@@ -1,6 +1,6 @@
 import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
-import { removeNullable } from 'App/Resolvers/utils';
+import { removeNullable } from 'App/utils';
 import { GqlSampleInput } from 'App/graphql';
 
 interface SampleMeasurement {
