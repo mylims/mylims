@@ -36,7 +36,14 @@ export default class MeasurementController {
   public async create({ request, response }: HttpContextContract) {
     try {
       const params = await request.validate(MeasurementValidator);
-      const { eventId, file, collection, sampleCode, ...restParams } = params;
+      const {
+        eventId,
+        file,
+        collection,
+        sampleCode,
+        sampleKind,
+        ...restParams
+      } = params;
       const sampleCodeList = sampleCode.split(',');
 
       // Create the file
@@ -57,7 +64,11 @@ export default class MeasurementController {
       // Create user relationship
       const user = await this._getOrCreateUser(restParams.username);
       const userId = user._id.toHexString();
-      const sample = await this._getOrCreateSample(userId, sampleCodeList);
+      const sample = await this._getOrCreateSample(
+        userId,
+        sampleCodeList,
+        sampleKind,
+      );
 
       // Create the measurement
       const measurement = await this._createMeasurement(collection, {
@@ -116,15 +127,17 @@ export default class MeasurementController {
   private async _getOrCreateSample(
     userId: string,
     sampleCode: string[],
+    kind: string,
   ): Promise<Sample> {
     const cursor = Sample.query({ userId, sampleCode });
     const length = await cursor.count();
     if (length === 0) {
-      return Sample.create({
+      return Sample.fromInput(new Sample(), {
         userId,
         sampleCode,
-        measurements: [],
-        parents: [],
+        kind,
+        labels: [],
+        meta: {},
       });
     } else if (length === 1) {
       return cursor.firstOrFail();
