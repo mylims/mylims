@@ -1,7 +1,7 @@
 import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
-import { removeNullable } from 'App/utils';
 import { GqlSampleInput } from 'App/graphql';
+import { removeNullable } from 'App/utils';
 
 interface SampleMeasurement {
   id: string;
@@ -34,16 +34,16 @@ export class Sample extends BaseModel {
     input: GqlSampleInput,
   ): Promise<Sample> {
     const sampleInput = removeNullable(input);
-    if (sampleInput.sampleCode) sample.sampleCode = sampleInput.sampleCode;
-    if (sampleInput.description) sample.description = sampleInput.description;
-    if (sampleInput.kind) sample.kind = sampleInput.kind;
-    if (sampleInput.labels) sample.labels = sampleInput.labels;
-    if (sampleInput.meta) sample.meta = sampleInput.meta;
-    if (sampleInput.project) sample.project = sampleInput.project;
-    if (sampleInput.sampleCode) sample.sampleCode = sampleInput.sampleCode;
-    if (sampleInput.title) sample.title = sampleInput.title;
-    if (sampleInput.userId) sample.userId = sampleInput.userId;
-    if (sampleInput.parent) sample.parents = [sampleInput.parent];
+    sample.sampleCode = sampleInput.sampleCode;
+    sample.description = sampleInput.description;
+    sample.kind = sampleInput.kind;
+    sample.labels = sampleInput.labels;
+    sample.meta = sampleInput.meta;
+    sample.project = sampleInput.project;
+    sample.sampleCode = sampleInput.sampleCode;
+    sample.title = sampleInput.title;
+    sample.userId = sampleInput.userId;
+    sample.parents = sampleInput.parent ? [sampleInput.parent] : [];
 
     await sample.save();
     return sample;
