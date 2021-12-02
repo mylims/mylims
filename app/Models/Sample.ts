@@ -1,3 +1,5 @@
+import cryptoRandomString from 'crypto-random-string';
+
 import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import { GqlSampleInput } from 'App/graphql';
@@ -18,6 +20,7 @@ export class Sample extends BaseModel {
   @field()
   public _id: ObjectId;
   public sampleCode: string[];
+  public uuid10: string;
   public userId: string;
   public kind: string;
   public labels: string[];
@@ -34,6 +37,9 @@ export class Sample extends BaseModel {
     input: GqlSampleInput,
   ): Promise<Sample> {
     const sampleInput = removeNullable(input);
+    if (!sample.uuid10) {
+      sample.uuid10 = cryptoRandomString({ length: 10, type: 'alphanumeric' });
+    }
     sample.sampleCode = sampleInput.sampleCode;
     sample.description = sampleInput.description;
     sample.kind = sampleInput.kind;
