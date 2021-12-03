@@ -69,7 +69,7 @@ const resolvers: GqlResolvers = {
       return parent;
     },
     async children(sample: Sample) {
-      return Sample.query({ 'parents.0': sample._id.toHexString() }).all();
+      return Sample.query({ 'parents.0': sample._id }).all();
     },
   },
   SampleKind: {
@@ -153,7 +153,7 @@ async function createFilter(
         argumentName: 'username',
       });
     }
-    filter.userId = user._id.toHexString();
+    filter.userId = user._id;
   }
   if (filterBy.parent) {
     const parent = await Sample.find(new ObjectId(filterBy.parent));
@@ -162,7 +162,7 @@ async function createFilter(
         argumentName: 'parent',
       });
     }
-    filter['parents.0'] = parent._id.toHexString();
+    filter['parents.0'] = parent._id;
   }
   return filter;
 }
