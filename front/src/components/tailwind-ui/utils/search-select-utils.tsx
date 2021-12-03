@@ -370,6 +370,7 @@ interface InternalSearchSelectProps<OptionType>
   clearable?: boolean;
   disabled?: boolean;
   loading?: boolean;
+  autoFocus?: boolean;
   noResultsHint?: ReactNode;
   error?: string;
   help?: string;
@@ -520,6 +521,7 @@ export function InternalMultiSearchSelect<OptionType>(
     disabled = false,
     required = false,
     loading = false,
+    autoFocus = false,
     noResultsHint,
     error,
     help,
@@ -569,6 +571,7 @@ export function InternalMultiSearchSelect<OptionType>(
             id={id}
             ref={inputRef}
             type="text"
+            autoFocus={autoFocus}
             name={name || label}
             value={searchValue}
             size={Math.max(5, placeholder?.length || 0, searchValue.length)}
