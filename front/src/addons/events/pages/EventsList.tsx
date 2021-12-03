@@ -7,6 +7,7 @@ import ElnLayout from '@/components/ElnLayout';
 import { EventStatusLabel } from '@/components/EventStatusLabel';
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
+import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 import {
   EventSortField,
@@ -14,7 +15,6 @@ import {
   SortDirection,
   useEventsFilteredQuery,
 } from '@/generated/graphql';
-import { boundariesFromPage } from '@/components/TableQuery/utils';
 
 export default function EventsList() {
   const { query, setQuery } = useTableQuery({

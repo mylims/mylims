@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { MeasurementPlot } from './MeasurementPlot';
 
 import ElnLayout from '@/components/ElnLayout';
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
-import { Button, Color, Select, Variant } from '@/components/tailwind-ui';
+import { boundariesFromPage } from '@/components/TableQuery/utils';
+import { Select } from '@/components/tailwind-ui';
 import {
   MeasurementsFilteredQuery,
   MeasurementSortField,
@@ -15,7 +15,6 @@ import {
   useMeasurementsFilteredQuery,
 } from '@/generated/graphql';
 import MeasurementActions from '@/pages/measurements/MeasurementsList/MeasurementActions';
-import { boundariesFromPage } from '@/components/TableQuery/utils';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['list'][number];

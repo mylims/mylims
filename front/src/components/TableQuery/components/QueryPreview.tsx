@@ -1,5 +1,7 @@
-import React, { useMemo } from 'react';
 import { produce } from 'immer';
+import React, { useMemo } from 'react';
+
+import { useTableQueryContext } from '../hooks/useTableQueryContext';
 
 import {
   Button,
@@ -8,7 +10,6 @@ import {
   Badge,
   BadgeVariant,
 } from '@/components/tailwind-ui';
-import { useTableQueryContext } from '../hooks/useTableQueryContext';
 
 export default function Queries() {
   const { query, submitQuery } = useTableQueryContext();
@@ -48,6 +49,7 @@ export default function Queries() {
               dot={false}
               onDismiss={() => {
                 const newQuery = produce(query, (draft) => {
+                  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                   delete draft[key];
                 });
                 submitQuery(newQuery);

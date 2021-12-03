@@ -4,8 +4,8 @@ import ActionsColumn from './components/ActionsColumn';
 import DateColumn from './components/DateColumn';
 import MultiSelectColumn from './components/MultiSelectColumn';
 import NumberColumn from './components/NumberColumn';
-import TextColumn from './components/TextColumn';
 import Queries from './components/QueryPreview';
+import TextColumn from './components/TextColumn';
 
 const invalidError = 'Invalid column child';
 export function splitChildren(children: ReactNode) {
