@@ -6,22 +6,31 @@ type Query {
     sortBy: SampleSortInput
   ): SamplePage!
   sample(id: ID!): Sample!
+  sampleKind(id: ID!): SampleKind!
+}
+
+type Mutation {
+  createSample(input: SampleInput!): Sample!
+  updateSample(id: ID!, input: SampleInput!): Sample!
+  createSampleKind(input: SampleKindInput!): SampleKind!
+  updateSampleKind(id: ID!, input: SampleKindInput!): SampleKind!
 }
 
 # Paginated list of samples
 enum SampleSortField {
-  sampleCode
-  userId
-  title
-  description
+  username
+  createdBy
   createdAt
 }
 input SampleFilterInput {
   sampleCode: [String!]
-  userId: String
+  username: String
+  kind: String
+  labels: [String!]
+  project: String
   title: String
   description: String
-  measurement: ID
+  parent: ID
 }
 input SampleSortInput {
   direction: SortDirection!
@@ -31,30 +40,63 @@ type SamplePage implements Pagination {
   list: [Sample!]!
   totalCount: Int!
 }
+type SampleFile {
+  id: ID!
+  date: DateTime!
+  downloadUrl: String!
+  filename: String!
+  size: Int!
+}
+type SampleMeasurement {
+  id: ID!
+  type: String!
+  date: DateTime!
+}
+
+# Inputs
+input SampleInput {
+  sampleCode: [String!]!
+  userId: String!
+  kind: String!
+  labels: [String!]!
+  project: String
+  meta: JSON!
+  title: String
+  description: String
+  parent: String
+}
+input SampleKindInput {
+  id: ID!
+  name: String
+  description: String
+  color: String
+  schema: JSON!
+}
 
 # Sample specific data
 type Sample {
   id: ID!
   sampleCode: [String!]!
-  userId: ID!
+  uuid10: String!
+  user: User
+  kind: SampleKind!
+  labels: [String!]!
+  project: String
+  meta: JSON!
   title: String
   description: String
-  activities: [Activity!]!
-  measurements: [Measurement!]!
+  measurements: [SampleMeasurement!]!
+  attachments: [SampleFile!]!
+  parent: Sample
+  children: [Sample!]
   createdAt: DateTime!
 }
 
-union Activity = ActivityFile | ActivityMeasurement
-type ActivityFile {
-  type: String!
-  date: DateTime!
+# Sample kind
+type SampleKind {
+  id: ID!
+  name: String
   description: String
-  fileId: ID!
-}
-type ActivityMeasurement {
-  type: String!
-  date: DateTime!
-  description: String
-  measurementId: ID!
-  measurementType: MeasurementTypes!
+  color: String
+  schema: JSON!
 }
