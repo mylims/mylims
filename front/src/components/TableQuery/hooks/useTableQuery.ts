@@ -14,9 +14,7 @@ export function useTableQuery(defaultQuery: QueryType): TableQueryHook {
     setQuery: (newQuery) => {
       const search = new URLSearchParams();
       for (const [key, value] of Object.entries(newQuery)) {
-        if (value !== null && value !== '') {
-          search.set(key, value as string);
-        }
+        if (value !== null && value !== '') search.set(key, value);
       }
       router.replace(`?${search.toString()}`);
     },
