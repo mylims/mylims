@@ -9,11 +9,11 @@ import React, {
   useState,
 } from 'react';
 
-import Queries from './components/QueryPreview';
 import ActionsColumn from './components/ActionsColumn';
 import DateColumn from './components/DateColumn';
 import MultiSelectColumn from './components/MultiSelectColumn';
 import NumberColumn from './components/NumberColumn';
+import Queries from './components/QueryPreview';
 import RowRender from './components/RowRender';
 import TextColumn from './components/TextColumn';
 import { TableQueryContext } from './hooks/useTableQueryContext';

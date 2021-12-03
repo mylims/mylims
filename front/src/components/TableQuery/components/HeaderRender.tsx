@@ -21,7 +21,7 @@ interface HeaderRenderProps {
   disableSort?: boolean;
   children?: (
     ref: ForwardedRef<HTMLInputElement>,
-  ) => ReactElement<any, string | JSXElementConstructor<any>>;
+  ) => ReactElement<void, string | JSXElementConstructor<void>>;
 }
 
 const titleClassName =
@@ -35,12 +35,14 @@ export default function HeaderRender({
   const { query } = useTableQueryContext();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  if (!children) return <th className={titleClassName}>{title}</th>;
 
   useEffect(() => {
     if (isOpen) inputRef.current?.focus();
   }, [isOpen, query]);
+
+  if (!children) return <th className={titleClassName}>{title}</th>;
   const Child = forwardRef<HTMLInputElement>((_, ref) => children(ref));
+
   return (
     <th>
       <div className={titleClassName}>
