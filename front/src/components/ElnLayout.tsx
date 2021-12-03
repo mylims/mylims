@@ -30,8 +30,8 @@ const ADMIN_ROUTES: RouteType[] = [
 ];
 const MEMBER_ROUTES: RouteType[] = [
   {
-    label: 'Content',
-    pathname: '/sample/list',
+    label: 'Wafers',
+    pathname: '/sample/list/wafer',
     pathmatch: '/sample/**',
   },
   {
