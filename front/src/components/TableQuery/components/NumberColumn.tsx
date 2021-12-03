@@ -67,25 +67,23 @@ export default function NumberColumn({
   ]);
 
   if (disableSearch) return <HeaderRender title={title} path={path} />;
-  const value = objectPath(query).get(path, '');
+  const value = query[path] ?? '';
   return (
     <HeaderRender title={title} path={path}>
-      {(ref) => (
-        <Input
-          name={path}
-          label={path}
-          value={value}
-          ref={ref}
-          hiddenLabel
-          type="number"
-          onChange={({ currentTarget: { value } }) => {
-            setQuery({ ...query, [path]: value, page: '1' });
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') submitQuery(query);
-          }}
-        />
-      )}
+      <Input
+        name={path}
+        label={path}
+        value={value}
+        autoFocus
+        hiddenLabel
+        type="number"
+        onChange={({ currentTarget: { value } }) => {
+          setQuery({ ...query, [path]: value, page: '1' });
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') submitQuery(query);
+        }}
+      />
     </HeaderRender>
   );
 }

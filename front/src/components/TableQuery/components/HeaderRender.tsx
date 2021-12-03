@@ -1,15 +1,7 @@
 import { Popover } from '@headlessui/react';
 import { DocumentSearchIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import React, {
-  ForwardedRef,
-  forwardRef,
-  JSXElementConstructor,
-  ReactElement,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { JSXElementConstructor, ReactElement } from 'react';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 
@@ -19,9 +11,7 @@ interface HeaderRenderProps {
   title: string;
   path: string;
   disableSort?: boolean;
-  children?: (
-    ref: ForwardedRef<HTMLInputElement>,
-  ) => ReactElement<void, string | JSXElementConstructor<void>>;
+  children?: ReactElement<void, string | JSXElementConstructor<void>>;
 }
 
 const titleClassName =
@@ -33,15 +23,8 @@ export default function HeaderRender({
   children,
 }: HeaderRenderProps) {
   const { query } = useTableQueryContext();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (isOpen) inputRef.current?.focus();
-  }, [isOpen, query]);
 
   if (!children) return <th className={titleClassName}>{title}</th>;
-  const Child = forwardRef<HTMLInputElement>((_, ref) => children(ref));
 
   return (
     <th>
@@ -54,12 +37,11 @@ export default function HeaderRender({
                 'w-5 h-5 flex-none',
                 query[path] ? 'text-primary-600' : 'text-neutral-400',
               )}
-              onClick={() => setIsOpen(!isOpen)}
             />
           </Popover.Button>
 
           <Popover.Panel className="absolute z-10 p-2 bg-white rounded-lg shadow">
-            <Child ref={inputRef} />
+            {children}
           </Popover.Panel>
         </Popover>
         <SortIcon disableSort={!!disableSort} path={path} />
