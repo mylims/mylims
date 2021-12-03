@@ -6,7 +6,7 @@ import { GqlSampleInput } from 'App/graphql';
 import { removeNullable } from 'App/utils';
 
 interface SampleMeasurement {
-  id: string;
+  id: ObjectId;
   type: string;
   date: Date;
 }
@@ -21,7 +21,7 @@ export class Sample extends BaseModel {
   public _id: ObjectId;
   public sampleCode: string[];
   public uuid10: string;
-  public userId: string;
+  public userId: ObjectId;
   public kind: string;
   public labels: string[];
   public project?: string;
@@ -30,7 +30,7 @@ export class Sample extends BaseModel {
   public description?: string;
   public measurements: SampleMeasurement[];
   public attachments: SampleAttachment[];
-  public parents: string[];
+  public parents: ObjectId[];
 
   public static async fromInput(
     sample: Sample,
@@ -48,8 +48,10 @@ export class Sample extends BaseModel {
     sample.project = sampleInput.project;
     sample.sampleCode = sampleInput.sampleCode;
     sample.title = sampleInput.title;
-    sample.userId = sampleInput.userId;
-    sample.parents = sampleInput.parent ? [sampleInput.parent] : [];
+    sample.userId = new ObjectId(sampleInput.userId);
+    sample.parents = sampleInput.parent
+      ? [new ObjectId(sampleInput.parent)]
+      : [];
 
     await sample.save();
     return sample;

@@ -84,7 +84,7 @@ export default class MeasurementController {
         sample.attachments.push({ id: fileId, date: new Date() });
       }
       sample.measurements.push({
-        id: measurement._id.toHexString(),
+        id: measurement._id,
         type: collection,
         date: new Date(),
       });
@@ -129,7 +129,7 @@ export default class MeasurementController {
     sampleCode: string[],
     kind: string,
   ): Promise<Sample> {
-    const cursor = Sample.query({ userId, sampleCode });
+    const cursor = Sample.query({ userId: new ObjectId(userId), sampleCode });
     const length = await cursor.count();
     if (length === 0) {
       return Sample.fromInput(new Sample(), {
