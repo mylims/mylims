@@ -77,8 +77,8 @@ const resolvers: GqlResolvers = {
   },
   Query: {
     async sample(_, { id }) {
-      const ans = await Sample.find(new ObjectId(id));
-      if (ans) return ans.toJSON() as Sample;
+      const sample = await Sample.find(new ObjectId(id));
+      if (sample) return sample;
 
       throw new UserInputError('Id not found', { argumentName: 'id' });
     },
@@ -97,44 +97,38 @@ const resolvers: GqlResolvers = {
       if (skip) sampleCursor = sampleCursor.skip(skip);
       if (limit) sampleCursor = sampleCursor.limit(limit);
 
-      const list = (await sampleCursor.all()).map((sample) => {
-        return sample.toJSON() as Sample;
-      });
+      const list = await sampleCursor.all();
       return { list, totalCount };
     },
     async sampleKind(_, { id }) {
-      const ans = await SampleKind.find(id);
-      if (ans) return ans.toJSON() as SampleKind;
+      const sampleKind = await SampleKind.find(id);
+      if (sampleKind) return sampleKind;
 
       throw new UserInputError('Id not found', { argumentName: 'id' });
     },
   },
   Mutation: {
     async createSample(_, { input }) {
-      const sample = await Sample.fromInput(new Sample(), input);
-      return sample.toJSON() as Sample;
+      return Sample.fromInput(new Sample(), input);
     },
     async updateSample(_, { id, input }) {
-      let sample = await Sample.find(new ObjectId(id));
+      const sample = await Sample.find(new ObjectId(id));
       if (!sample) {
         throw new UserInputError('Id not found', { argumentName: 'id' });
       }
 
-      sample = await Sample.fromInput(sample, input);
-      return sample.toJSON() as Sample;
+      return Sample.fromInput(sample, input);
     },
     async createSampleKind(_, { input }) {
-      const sample = await SampleKind.fromInput(new SampleKind(), input);
-      return sample.toJSON() as SampleKind;
+      return SampleKind.fromInput(new SampleKind(), input);
     },
     async updateSampleKind(_, { id, input }) {
-      let sample = await SampleKind.find(id);
+      const sample = await SampleKind.find(id);
       if (!sample) {
         throw new UserInputError('Id not found', { argumentName: 'id' });
       }
 
-      sample = await SampleKind.fromInput(sample, input);
-      return sample.toJSON() as SampleKind;
+      return SampleKind.fromInput(sample, input);
     },
   },
 };
