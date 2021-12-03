@@ -31,8 +31,7 @@ export default function TextColumn({
       children ??
       ((row) => {
         const model = objectPath(row);
-        if (!model.has(dataPath)) return '-';
-        return model.get(dataPath);
+        return model.get(dataPath, '-') ?? '-';
       });
 
     dispatch({
