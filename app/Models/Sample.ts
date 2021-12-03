@@ -40,6 +40,8 @@ export class Sample extends BaseModel {
     if (!sample.uuid10) {
       sample.uuid10 = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     }
+    if (!sample.measurements) sample.measurements = [];
+    if (!sample.attachments) sample.attachments = [];
     sample.sampleCode = sampleInput.sampleCode;
     sample.description = sampleInput.description;
     sample.kind = sampleInput.kind;

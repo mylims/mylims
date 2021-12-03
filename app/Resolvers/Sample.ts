@@ -82,13 +82,20 @@ const resolvers: GqlResolvers = {
 
       throw new UserInputError('Id not found', { argumentName: 'id' });
     },
-    async samples(_, { limit, skip, filterBy, sortBy }) {
+    async samples(_, { kind, limit, skip, filterBy, sortBy }) {
+      const sampleKind = await SampleKind.find(kind);
+      if (!sampleKind) {
+        throw new UserInputError('Sample kind not found', {
+          argumentName: 'kind',
+        });
+      }
+
       const {
         field = GqlSampleSortField.CREATEDAT,
         direction = GqlSortDirection.DESC,
       } = sortBy || {};
 
-      const filter = await createFilter(filterBy);
+      const filter = await createFilter(kind, filterBy);
       let sampleCursor = Sample.query(filter).sortBy(
         field,
         direction === GqlSortDirection.DESC ? -1 : 1,
@@ -98,7 +105,7 @@ const resolvers: GqlResolvers = {
       if (limit) sampleCursor = sampleCursor.limit(limit);
 
       const list = await sampleCursor.all();
-      return { list, totalCount };
+      return { list, totalCount, kind: sampleKind };
     },
     async sampleKind(_, { id }) {
       const sampleKind = await SampleKind.find(id);
@@ -134,11 +141,13 @@ const resolvers: GqlResolvers = {
 };
 
 async function createFilter(
+  kind: string,
   filterBy: Maybe<GqlSampleFilterInput> | undefined,
 ): Promise<Filter<ModelAttributes<Sample>>> {
   if (!filterBy) return {};
 
   let filter: Filter<ModelAttributes<Sample>> = removeNullable(filterBy);
+  filter.kind = kind;
 
   if (filterBy.username) {
     const user = await User.findBy('username', filterBy.username);
