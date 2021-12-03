@@ -21,7 +21,7 @@ export default function DateColumn({
 }: DateColumnProps) {
   const { query, submitQuery, dispatch } = useTableQueryContext();
   const path = queryPath ?? dataPath;
-  const value = objectPath(query).get(path, '');
+  const value = query[path] ?? '';
 
   useEffect(() => {
     if (index === undefined) {
@@ -69,22 +69,20 @@ export default function DateColumn({
   if (disableSearch) return <HeaderRender title={title} path={path} />;
   return (
     <HeaderRender title={title} path={path}>
-      {() => (
-        <DatePicker
-          selectsRange={false}
-          showPopperArrow={false}
-          selected={value ? new Date(value) : null}
-          inline
-          className="max-w-10"
-          onChange={(value: Date | null) => {
-            submitQuery({
-              ...query,
-              [path]: value?.toISOString() ?? '',
-              page: '1',
-            });
-          }}
-        />
-      )}
+      <DatePicker
+        selectsRange={false}
+        showPopperArrow={false}
+        selected={value ? new Date(value) : null}
+        inline
+        className="max-w-10"
+        onChange={(value: Date | null) => {
+          submitQuery({
+            ...query,
+            [path]: value?.toISOString() ?? '',
+            page: '1',
+          });
+        }}
+      />
     </HeaderRender>
   );
 }

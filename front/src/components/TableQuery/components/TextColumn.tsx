@@ -20,7 +20,7 @@ export default function TextColumn({
 }: BaseColumnProps) {
   const { query, setQuery, submitQuery, dispatch } = useTableQueryContext();
   const path = queryPath ?? dataPath;
-  const value = objectPath(query).get(path, '');
+  const value = query[path] ?? '';
 
   useEffect(() => {
     if (index === undefined) {
@@ -68,21 +68,19 @@ export default function TextColumn({
   }
   return (
     <HeaderRender title={title} path={path} disableSort={disableSort}>
-      {(ref) => (
-        <Input
-          name={path}
-          label={path}
-          value={value}
-          ref={ref}
-          hiddenLabel
-          onChange={({ currentTarget: { value } }) => {
-            setQuery({ ...query, [path]: value });
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') submitQuery({ ...query, page: '1' });
-          }}
-        />
-      )}
+      <Input
+        name={path}
+        label={path}
+        value={value}
+        autoFocus
+        hiddenLabel
+        onChange={({ currentTarget: { value } }) => {
+          setQuery({ ...query, [path]: value });
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') submitQuery({ ...query, page: '1' });
+        }}
+      />
     </HeaderRender>
   );
 }
