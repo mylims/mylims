@@ -5,7 +5,6 @@ export interface PossibleTypesResultData {
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
-    Activity: ['ActivityFile', 'ActivityMeasurement'],
     EventData: ['EventDataFile'],
     Pagination: ['EventPage', 'FilesFlatPage', 'MeasurementPage', 'SamplePage'],
     PaginationNode: ['Event', 'Measurement', 'Sample', 'SyncFileRevision'],

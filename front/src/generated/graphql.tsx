@@ -27,23 +27,6 @@ export type Scalars = {
   JSONObject: any;
 };
 
-export type Activity = ActivityFile | ActivityMeasurement;
-
-export type ActivityFile = {
-  date: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
-  fileId: Scalars['ID'];
-  type: Scalars['String'];
-};
-
-export type ActivityMeasurement = {
-  date: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
-  measurementId: Scalars['ID'];
-  measurementType: MeasurementTypes;
-  type: Scalars['String'];
-};
-
 export type DeleteFileSyncOptionInput = {
   id: Scalars['ID'];
 };
@@ -242,12 +225,24 @@ export enum MeasurementTypes {
 
 export type Mutation = {
   createFileSyncOption: FileSyncOption;
+  createSample: Sample;
+  createSampleKind: SampleKind;
   deleteFileSyncOption: Array<FileSyncOption>;
   editFileSyncOption: FileSyncOption;
+  updateSample: Sample;
+  updateSampleKind: SampleKind;
 };
 
 export type MutationCreateFileSyncOptionArgs = {
   input: NewFileSyncOptionInput;
+};
+
+export type MutationCreateSampleArgs = {
+  input: SampleInput;
+};
+
+export type MutationCreateSampleKindArgs = {
+  input: SampleKindInput;
 };
 
 export type MutationDeleteFileSyncOptionArgs = {
@@ -256,6 +251,16 @@ export type MutationDeleteFileSyncOptionArgs = {
 
 export type MutationEditFileSyncOptionArgs = {
   input: EditFileSyncOptionInput;
+};
+
+export type MutationUpdateSampleArgs = {
+  id: Scalars['ID'];
+  input: SampleInput;
+};
+
+export type MutationUpdateSampleKindArgs = {
+  id: Scalars['ID'];
+  input: SampleKindInput;
 };
 
 export type NewFileSyncOptionInput = {
@@ -297,6 +302,7 @@ export type Query = {
   measurements: MeasurementPage;
   readyChecks: Array<ReadyCheckDescriptor>;
   sample: Sample;
+  sampleKind: SampleKind;
   samples: SamplePage;
   users: Array<User>;
 };
@@ -355,8 +361,13 @@ export type QuerySampleArgs = {
   id: Scalars['ID'];
 };
 
+export type QuerySampleKindArgs = {
+  id: Scalars['ID'];
+};
+
 export type QuerySamplesArgs = {
   filterBy?: Maybe<SampleFilterInput>;
+  kind: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
   sortBy?: Maybe<SampleSortInput>;
@@ -378,35 +389,85 @@ export type ReadyCheckInput = {
 };
 
 export type Sample = {
-  activities: Array<Activity>;
+  attachments: Array<SampleFile>;
+  children?: Maybe<Array<Sample>>;
   createdAt: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  measurements: Array<Measurement>;
+  kind: SampleKind;
+  labels: Array<Scalars['String']>;
+  measurements: Array<SampleMeasurement>;
+  meta: Scalars['JSON'];
+  parent?: Maybe<Sample>;
+  project?: Maybe<Scalars['String']>;
   sampleCode: Array<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
-  userId: Scalars['ID'];
+  user?: Maybe<User>;
+  uuid10: Scalars['String'];
+};
+
+export type SampleFile = {
+  date: Scalars['DateTime'];
+  downloadUrl: Scalars['String'];
+  filename: Scalars['String'];
+  id: Scalars['ID'];
+  size: Scalars['Int'];
 };
 
 export type SampleFilterInput = {
   description?: Maybe<Scalars['String']>;
-  measurement?: Maybe<Scalars['ID']>;
+  labels?: Maybe<Array<Scalars['String']>>;
+  parent?: Maybe<Scalars['ID']>;
+  project?: Maybe<Scalars['String']>;
   sampleCode?: Maybe<Array<Scalars['String']>>;
   title?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type SampleInput = {
+  description?: Maybe<Scalars['String']>;
+  kind: Scalars['String'];
+  labels: Array<Scalars['String']>;
+  meta: Scalars['JSON'];
+  parent?: Maybe<Scalars['String']>;
+  project?: Maybe<Scalars['String']>;
+  sampleCode: Array<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  userId: Scalars['String'];
+};
+
+export type SampleKind = {
+  color?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  schema: Scalars['JSON'];
+};
+
+export type SampleKindInput = {
+  color?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  schema: Scalars['JSON'];
+};
+
+export type SampleMeasurement = {
+  date: Scalars['DateTime'];
+  id: Scalars['ID'];
+  type: Scalars['String'];
 };
 
 export type SamplePage = Pagination & {
+  kind: SampleKind;
   list: Array<Sample>;
   totalCount: Scalars['Int'];
 };
 
 export enum SampleSortField {
   CREATEDAT = 'createdAt',
-  DESCRIPTION = 'description',
-  SAMPLECODE = 'sampleCode',
-  TITLE = 'title',
-  USERID = 'userId',
+  CREATEDBY = 'createdBy',
+  USERNAME = 'username',
 }
 
 export type SampleSortInput = {
@@ -461,6 +522,7 @@ export type User = {
   id: Scalars['ID'];
   lastName?: Maybe<Scalars['String']>;
   role: Scalars['String'];
+  usernames: Array<Scalars['String']>;
 };
 
 export type EventQueryVariables = Exact<{
@@ -785,11 +847,26 @@ export type MeasurementQuery = {
 export type SampleFieldsFragment = {
   id: string;
   sampleCode: Array<string>;
+  uuid10: string;
+  labels: Array<string>;
+  project?: string | null | undefined;
   title?: string | null | undefined;
+  description?: string | null | undefined;
+  meta: any;
   createdAt: any;
+  user?: { id: string; usernames: Array<string> } | null | undefined;
+};
+
+export type SampleKindFieldsFragment = {
+  id: string;
+  name?: string | null | undefined;
+  description?: string | null | undefined;
+  color?: string | null | undefined;
+  schema: any;
 };
 
 export type SamplesFilteredQueryVariables = Exact<{
+  kind: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
   filterBy?: Maybe<SampleFilterInput>;
@@ -799,11 +876,39 @@ export type SamplesFilteredQueryVariables = Exact<{
 export type SamplesFilteredQuery = {
   samples: {
     totalCount: number;
+    kind: {
+      id: string;
+      name?: string | null | undefined;
+      description?: string | null | undefined;
+      color?: string | null | undefined;
+      schema: any;
+    };
     list: Array<{
       id: string;
       sampleCode: Array<string>;
+      uuid10: string;
+      labels: Array<string>;
+      project?: string | null | undefined;
       title?: string | null | undefined;
+      description?: string | null | undefined;
+      meta: any;
       createdAt: any;
+      children?:
+        | Array<{
+            id: string;
+            sampleCode: Array<string>;
+            uuid10: string;
+            labels: Array<string>;
+            project?: string | null | undefined;
+            title?: string | null | undefined;
+            description?: string | null | undefined;
+            meta: any;
+            createdAt: any;
+            user?: { id: string; usernames: Array<string> } | null | undefined;
+          }>
+        | null
+        | undefined;
+      user?: { id: string; usernames: Array<string> } | null | undefined;
     }>;
   };
 };
@@ -814,43 +919,46 @@ export type SampleQueryVariables = Exact<{
 
 export type SampleQuery = {
   sample: {
-    userId: string;
-    description?: string | null | undefined;
     id: string;
     sampleCode: Array<string>;
+    uuid10: string;
+    labels: Array<string>;
+    project?: string | null | undefined;
     title?: string | null | undefined;
+    description?: string | null | undefined;
+    meta: any;
     createdAt: any;
-    activities: Array<
-      | {
-          type: string;
-          date: any;
-          description?: string | null | undefined;
-          fileId: string;
-        }
-      | {
-          type: string;
-          date: any;
-          description?: string | null | undefined;
-          measurementId: string;
-          measurementType: MeasurementTypes;
-        }
-    >;
-    measurements: Array<{
+    kind: {
       id: string;
-      eventId: string;
-      username: string;
-      sampleCode: Array<string>;
-      createdBy: string;
-      fileId?: string | null | undefined;
+      name?: string | null | undefined;
       description?: string | null | undefined;
-      createdAt: any;
-      derived?: any | null | undefined;
-      type: MeasurementTypes;
-      file?:
-        | { filename: string; size: number; downloadUrl: string }
-        | null
-        | undefined;
+      color?: string | null | undefined;
+      schema: any;
+    };
+    attachments: Array<{
+      id: string;
+      date: any;
+      downloadUrl: string;
+      filename: string;
+      size: number;
     }>;
+    measurements: Array<{ id: string; type: string; date: any }>;
+    children?:
+      | Array<{
+          id: string;
+          sampleCode: Array<string>;
+          uuid10: string;
+          labels: Array<string>;
+          project?: string | null | undefined;
+          title?: string | null | undefined;
+          description?: string | null | undefined;
+          meta: any;
+          createdAt: any;
+          user?: { id: string; usernames: Array<string> } | null | undefined;
+        }>
+      | null
+      | undefined;
+    user?: { id: string; usernames: Array<string> } | null | undefined;
   };
 };
 
@@ -916,8 +1024,26 @@ export const SampleFieldsFragmentDoc = gql`
   fragment SampleFields on Sample {
     id
     sampleCode
+    uuid10
+    labels
+    project
     title
+    description
+    meta
     createdAt
+    user {
+      id
+      usernames
+    }
+  }
+`;
+export const SampleKindFieldsFragmentDoc = gql`
+  fragment SampleKindFields on SampleKind {
+    id
+    name
+    description
+    color
+    schema
   }
 `;
 export const EventDocument = gql`
@@ -1869,18 +1995,32 @@ export function refetchMeasurementQuery(variables?: MeasurementQueryVariables) {
 }
 export const SamplesFilteredDocument = gql`
   query SamplesFiltered(
+    $kind: String!
     $limit: Int
     $skip: Int
     $filterBy: SampleFilterInput
     $sortBy: SampleSortInput
   ) {
-    samples(limit: $limit, skip: $skip, filterBy: $filterBy, sortBy: $sortBy) {
+    samples(
+      kind: $kind
+      limit: $limit
+      skip: $skip
+      filterBy: $filterBy
+      sortBy: $sortBy
+    ) {
       totalCount
+      kind {
+        ...SampleKindFields
+      }
       list {
         ...SampleFields
+        children {
+          ...SampleFields
+        }
       }
     }
   }
+  ${SampleKindFieldsFragmentDoc}
   ${SampleFieldsFragmentDoc}
 `;
 
@@ -1896,6 +2036,7 @@ export const SamplesFilteredDocument = gql`
  * @example
  * const { data, loading, error } = useSamplesFilteredQuery({
  *   variables: {
+ *      kind: // value for 'kind'
  *      limit: // value for 'limit'
  *      skip: // value for 'skip'
  *      filterBy: // value for 'filterBy'
@@ -1904,7 +2045,7 @@ export const SamplesFilteredDocument = gql`
  * });
  */
 export function useSamplesFilteredQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
+  baseOptions: ApolloReactHooks.QueryHookOptions<
     SamplesFilteredQuery,
     SamplesFilteredQueryVariables
   >,
@@ -1946,30 +2087,28 @@ export const SampleDocument = gql`
   query Sample($id: ID!) {
     sample(id: $id) {
       ...SampleFields
-      userId
-      description
-      activities {
-        ... on ActivityFile {
-          type
-          date
-          description
-          fileId
-        }
-        ... on ActivityMeasurement {
-          type
-          date
-          description
-          measurementId
-          measurementType
-        }
+      kind {
+        ...SampleKindFields
+      }
+      attachments {
+        id
+        date
+        downloadUrl
+        filename
+        size
       }
       measurements {
-        ...MeasurementFields
+        id
+        type
+        date
+      }
+      children {
+        ...SampleFields
       }
     }
   }
   ${SampleFieldsFragmentDoc}
-  ${MeasurementFieldsFragmentDoc}
+  ${SampleKindFieldsFragmentDoc}
 `;
 
 /**

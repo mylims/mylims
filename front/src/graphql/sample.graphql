@@ -1,20 +1,50 @@
 fragment SampleFields on Sample {
   id
   sampleCode
+  uuid10
+  labels
+  project
   title
+  description
+  meta
   createdAt
+  user {
+    id
+    usernames
+  }
+}
+
+fragment SampleKindFields on SampleKind {
+  id
+  name
+  description
+  color
+  schema
 }
 
 query SamplesFiltered(
+  $kind: String!
   $limit: Int
   $skip: Int
   $filterBy: SampleFilterInput
   $sortBy: SampleSortInput
 ) {
-  samples(limit: $limit, skip: $skip, filterBy: $filterBy, sortBy: $sortBy) {
+  samples(
+    kind: $kind
+    limit: $limit
+    skip: $skip
+    filterBy: $filterBy
+    sortBy: $sortBy
+  ) {
     totalCount
+    kind {
+      ...SampleKindFields
+    }
     list {
       ...SampleFields
+      children {
+        ...SampleFields
+      }
     }
   }
 }
@@ -22,25 +52,23 @@ query SamplesFiltered(
 query Sample($id: ID!) {
   sample(id: $id) {
     ...SampleFields
-    userId
-    description
-    activities {
-      ... on ActivityFile {
-        type
-        date
-        description
-        fileId
-      }
-      ... on ActivityMeasurement {
-        type
-        date
-        description
-        measurementId
-        measurementType
-      }
+    kind {
+      ...SampleKindFields
+    }
+    attachments {
+      id
+      date
+      downloadUrl
+      filename
+      size
     }
     measurements {
-      ...MeasurementFields
+      id
+      type
+      date
+    }
+    children {
+      ...SampleFields
     }
   }
 }
