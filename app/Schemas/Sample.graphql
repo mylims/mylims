@@ -1,5 +1,6 @@
 type Query {
   samples(
+    kind: String!
     limit: Int
     skip: Int
     filterBy: SampleFilterInput
@@ -25,7 +26,6 @@ enum SampleSortField {
 input SampleFilterInput {
   sampleCode: [String!]
   username: String
-  kind: String
   labels: [String!]
   project: String
   title: String
@@ -39,6 +39,7 @@ input SampleSortInput {
 type SamplePage implements Pagination {
   list: [Sample!]!
   totalCount: Int!
+  kind: SampleKind!
 }
 type SampleFile {
   id: ID!
