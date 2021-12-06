@@ -4,6 +4,7 @@ import { Table as TableQuery } from '@/components/TableQuery';
 import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import {
+  Sample,
   SampleSortField,
   SortDirection,
   useSamplesFilteredQuery,
@@ -49,15 +50,26 @@ export default function SamplesList({ kind, children }: SamplesListProps) {
       <TableQuery.Queries />
       <TableQuery.TextColumn title="name" dataPath="sampleCode" disableSort>
         {(row) => {
-          const sampleCode = row.sampleCode as string[];
+          const sampleCode = (row as Sample).sampleCode;
           if (!sampleCode || sampleCode.length === 0) return '-';
 
           return sampleCode.join('_');
         }}
       </TableQuery.TextColumn>
+      <TableQuery.TextColumn
+        title="username"
+        dataPath="user.usernames"
+        disableSort
+      >
+        {(row) => {
+          const usernames = (row as Sample).user?.usernames;
+          if (!usernames || usernames.length === 0) return '-';
+          return usernames[0];
+        }}
+      </TableQuery.TextColumn>
       <TableQuery.TextColumn title="Labels" dataPath="labels">
         {(row) => {
-          const labels = row.labels as string[];
+          const labels = (row as Sample).labels;
           if (!labels || labels.length === 0) return '-';
 
           return labels.map((label) => (
