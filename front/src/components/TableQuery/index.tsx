@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
   useState,
 } from 'react';
 
@@ -18,7 +19,8 @@ import RowRender from './components/RowRender';
 import TextColumn from './components/TextColumn';
 import { TableQueryContext } from './hooks/useTableQueryContext';
 import { reducer } from './reducer';
-import type {
+import {
+  ColumnKind,
   QueryType,
   ReducerActions,
   TableQueryProps,
@@ -36,6 +38,7 @@ import {
 interface TableBodyProps<T> {
   list: Array<T>;
   columns: TableState;
+  columnsTemplate: string;
   loading?: boolean;
   error?: ApolloError;
 }
@@ -65,6 +68,23 @@ export function Table<T extends Record<string, unknown>>({
     return produce(state, (copy) => copy.sort((a, b) => a.index - b.index));
   }, [state]);
 
+  // Calculates the grid sizes for the child columns
+  const headerRef = useRef<HTMLTableRowElement>(null);
+  const columnsTemplate = useMemo(() => {
+    const widths = Array.from(headerRef.current?.children ?? []).map(
+      (el) => (el as HTMLElement).offsetWidth,
+    );
+    let columnsTemplate = '';
+    for (let i = 0; i < orderedColumns.length; i++) {
+      if (orderedColumns[i].kind !== ColumnKind.ACTIONS) {
+        columnsTemplate += `${widths[i]}px `;
+      } else {
+        columnsTemplate += '1fr ';
+      }
+    }
+    return columnsTemplate;
+  }, [headerRef.current, orderedColumns]);
+
   const { list = [], totalCount = 0 } = data ?? {};
   const page = parseInt(query.page, 10) ?? 1;
 
@@ -73,10 +93,13 @@ export function Table<T extends Record<string, unknown>>({
       value={{ query, setQuery, submitQuery, dispatch }}
     >
       {queries}
-      <div className="inline-block align-middle border-b shadow border-neutral-200 sm:rounded-lg">
+      <div className="overflow-x-scroll align-middle border-b shadow border-neutral-200 sm:rounded-lg">
         <table className="divide-y divide-neutral-200">
           <thead className="bg-neutral-50">
-            <tr className={`grid grid-cols-${columns.length} gap-4`}>
+            <tr
+              className="grid grid-flow-col gap-4 auto-cols-max"
+              ref={headerRef}
+            >
               {columns}
             </tr>
           </thead>
@@ -84,6 +107,7 @@ export function Table<T extends Record<string, unknown>>({
             <TableBody
               list={list}
               columns={orderedColumns}
+              columnsTemplate={columnsTemplate}
               loading={loading}
               error={error}
             />
@@ -105,6 +129,7 @@ function TableBody<T extends Record<string, unknown>>({
   loading,
   list,
   columns,
+  columnsTemplate,
 }: TableBodyProps<T>) {
   if (error) {
     return (
@@ -139,7 +164,12 @@ function TableBody<T extends Record<string, unknown>>({
   return (
     <>
       {list.map((row, index) => (
-        <RowRender key={`table-row-${index}`} row={row} columns={columns} />
+        <RowRender
+          key={`table-row-${index}`}
+          row={row}
+          columns={columns}
+          columnsTemplate={columnsTemplate}
+        />
       ))}
     </>
   );

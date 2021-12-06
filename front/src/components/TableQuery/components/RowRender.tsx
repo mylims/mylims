@@ -1,18 +1,21 @@
+import clsx from 'clsx';
 import React from 'react';
 
-import { TableState } from '../types';
+import { ColumnKind, TableState } from '../types';
 
 interface RowRenderProps<T> {
   row: T;
   columns: TableState;
+  columnsTemplate: string;
 }
 
 export default function RowRender<T extends Record<string, unknown>>({
   row,
   columns,
+  columnsTemplate,
 }: RowRenderProps<T>) {
   return (
-    <tr className={`grid grid-cols-${columns.length} gap-4`}>
+    <tr className="grid gap-4" style={{ gridTemplateColumns: columnsTemplate }}>
       {columns.map((column, index) => {
         let content = column.value.render(row);
         let title: string | undefined;
@@ -21,7 +24,10 @@ export default function RowRender<T extends Record<string, unknown>>({
         return (
           <td
             key={`${column.value.dataPath}-${index}`}
-            className="px-4 py-3 my-auto text-sm font-semibold truncate whitespace-nowrap text-neutral-900"
+            className={clsx(
+              'self-center px-4 py-3 text-sm font-semibold whitespace-nowrap text-neutral-900',
+              column.kind === ColumnKind.ACTIONS ? 'w-min' : 'truncate',
+            )}
             title={title}
           >
             {content}

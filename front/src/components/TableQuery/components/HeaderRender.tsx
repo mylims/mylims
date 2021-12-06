@@ -14,7 +14,7 @@ interface HeaderRenderProps {
   children?: ReactElement<void, string | JSXElementConstructor<void>>;
 }
 
-const titleClassName =
+const TITLE_CLASS =
   'px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase rounded-t-lg text-neutral-500 flex';
 export default function HeaderRender({
   title,
@@ -24,11 +24,11 @@ export default function HeaderRender({
 }: HeaderRenderProps) {
   const { query } = useTableQueryContext();
 
-  if (!children) return <th className={titleClassName}>{title}</th>;
+  if (!children) return <th className={TITLE_CLASS}>{title}</th>;
 
   return (
     <th>
-      <div className={titleClassName}>
+      <div className={TITLE_CLASS}>
         <span>{title}</span>
         <Popover className="relative">
           <Popover.Button aria-label={`Filter by ${title}`}>
