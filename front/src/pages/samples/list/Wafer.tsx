@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EyeIcon, InformationCircleIcon } from '@heroicons/react/outline';
 
@@ -13,8 +13,11 @@ import { Table as TableQuery } from '@/components/TableQuery';
 import ElnLayout from '@/components/ElnLayout';
 
 import SamplesList from './Default';
+import FieldDescription from '@/components/FieldDescription';
+import { Sample } from '@/generated/graphql';
 
 export default function WaferList() {
+  const [state, setState] = useState<Sample | null>(null);
   return (
     <div className="grid grid-cols-4 gap-4">
       <div className="col-span-3">
@@ -56,8 +59,11 @@ export default function WaferList() {
                   title="preview"
                   color={Color.success}
                   roundness={Roundness.circular}
-                  variant={Variant.secondary}
+                  variant={
+                    row.id === state?.id ? Variant.primary : Variant.secondary
+                  }
                   className="ml-2"
+                  onClick={() => setState(row as Sample)}
                 >
                   <EyeIcon className="w-5 h-5" />
                 </Button>
@@ -66,16 +72,46 @@ export default function WaferList() {
           </TableQuery.ActionsColumn>
         </SamplesList>
       </div>
-      <div className="mt-14">
+      <div>
+        <Button
+          className="mb-4"
+          variant={Variant.secondary}
+          color={Color.success}
+        >
+          + New wafer
+        </Button>
+
         <Card>
           <Card.Header className="text-xs font-semibold tracking-wider text-left uppercase bg-neutral-50 text-neutral-500">
             Preview
           </Card.Header>
           <Card.Body>
-            <p>
-              Wafer is a sample that is used to test the performance of a
-              process.
-            </p>
+            {!state ? (
+              <p className="text-center text-neutral-500">
+                Select a wafer to preview
+              </p>
+            ) : (
+              <div>
+                <div>Preview wafer derivations</div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FieldDescription title="Name">
+                    {state.sampleCode.join('_')}
+                  </FieldDescription>
+                  <FieldDescription title="Project">
+                    {state.project ?? '-'}
+                  </FieldDescription>
+                  <FieldDescription title="Title">
+                    {state.title ?? '-'}
+                  </FieldDescription>
+                  <FieldDescription title="Description">
+                    {state.title ?? '-'}
+                  </FieldDescription>
+                  <FieldDescription title="Derivations">
+                    {state.children?.length ?? 0}
+                  </FieldDescription>
+                </div>
+              </div>
+            )}
           </Card.Body>
         </Card>
       </div>
