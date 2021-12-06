@@ -4,6 +4,7 @@ import { Annotation } from 'react-plot';
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
 import { Alert, AlertType, Card } from '@/components/tailwind-ui';
 import { useFetchFile } from '@/hooks/useFetchFile';
+import FieldDescription from '@/components/FieldDescription';
 
 interface B1505TransferProps {
   file: null | { filename: string; downloadUrl: string; size: number };
@@ -113,22 +114,18 @@ export default function B1505Transfer({
           </PlotJcampSingle>
         </div>
         <div>
-          <div>
-            <div className="font-medium" style={underline('green')}>
-              Threshold Voltage
-            </div>
-            <div className="text-neutral-500">
-              {derived.thresholdVoltage.value.toFixed(4)} V
-            </div>
-          </div>
-          <div>
-            <div className="font-medium" style={underline('blue')}>
-              Subthreshold slope
-            </div>
-            <div className="text-neutral-500">
-              {(derived.subthresholdSlope.medianSlope * 1000).toFixed(4)} mV/dec
-            </div>
-          </div>
+          <FieldDescription
+            title="Threshold voltage"
+            titleStyle={underline('green')}
+          >
+            {derived.thresholdVoltage.value.toFixed(4)} V
+          </FieldDescription>
+          <FieldDescription
+            title="Subthreshold slope"
+            titleStyle={underline('blue')}
+          >
+            {(derived.subthresholdSlope.medianSlope * 1000).toFixed(4)} mV/dec
+          </FieldDescription>
         </div>
       </div>
     </Card.Body>
