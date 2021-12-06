@@ -36,7 +36,6 @@ export default function SamplesList({ kind, children }: SamplesListProps) {
       },
     },
   });
-  console.log(data);
 
   return (
     <TableQuery
@@ -71,7 +70,6 @@ export default function SamplesList({ kind, children }: SamplesListProps) {
         }}
       </TableQuery.TextColumn>
       <TableQuery.TextColumn title="Project" dataPath="project" />
-      <TableQuery.TextColumn title="Title" dataPath="title" />
       <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
       {children}
     </TableQuery>
