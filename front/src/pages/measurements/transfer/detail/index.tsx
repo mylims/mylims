@@ -14,6 +14,7 @@ import {
 } from '@/components/tailwind-ui';
 import { MeasurementTypes, useMeasurementQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
+import FieldDescription from '@/components/FieldDescription';
 
 export default function MeasurementDetail() {
   const { id, type } = useParams<{ id: string; type: MeasurementTypes }>();
@@ -72,46 +73,26 @@ export default function MeasurementDetail() {
       {measurementBody}
       <Card.Footer>
         <div className="grid grid-cols-3 gap-4 mb-4">
-          <MeasurementField
-            title="Sample code"
-            description={measurement.sampleCode.join(',')}
-          />
-          <MeasurementField
-            title="Owner's username"
-            description={measurement.username}
-          />
-          <MeasurementField
-            title="Creation date"
-            description={formatDate(measurement.createdAt)}
-          />
-          <MeasurementField
-            title="Created by"
-            description={measurement.createdBy}
-          />
+          <FieldDescription title="Sample code">
+            {measurement.sampleCode.join(',')}
+          </FieldDescription>
+          <FieldDescription title="Owner's username">
+            {measurement.username}
+          </FieldDescription>
+          <FieldDescription title="Creation date">
+            {formatDate(measurement.createdAt)}
+          </FieldDescription>
+          <FieldDescription title="Created by">
+            {measurement.createdBy}
+          </FieldDescription>
           {measurement.file && (
-            <MeasurementField
-              title="File"
-              description={measurement.file.filename}
-            />
+            <FieldDescription title="File">
+              {measurement.file.filename}
+            </FieldDescription>
           )}
         </div>
       </Card.Footer>
     </Card>
-  );
-}
-
-function MeasurementField({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
-  return (
-    <div>
-      <div className="font-medium">{title}</div>
-      <div className="text-neutral-500">{description}</div>
-    </div>
   );
 }
 
