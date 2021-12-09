@@ -45,6 +45,9 @@ query SamplesFiltered(
       children {
         ...SampleFields
       }
+      parent {
+        id
+      }
     }
   }
 }
