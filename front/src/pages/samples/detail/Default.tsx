@@ -26,9 +26,8 @@ export default function SampleDetail({ children }: SampleDetailProps) {
         <div className="flex justify-between">
           <div>
             <div className="text-xl font-semibold">
-              Wafer {sample.sampleCode.join('_')}
+              Code: {sample.sampleCode.join('_')}
             </div>
-            <div className="text-neutral-500">{id}</div>
             <div className="text-neutral-500">
               Created at {formatDate(sample.createdAt)}
             </div>

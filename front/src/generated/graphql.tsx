@@ -908,6 +908,7 @@ export type SamplesFilteredQuery = {
           }>
         | null
         | undefined;
+      parent?: { id: string } | null | undefined;
       user?: { id: string; usernames: Array<string> } | null | undefined;
     }>;
   };
@@ -2016,6 +2017,9 @@ export const SamplesFilteredDocument = gql`
         ...SampleFields
         children {
           ...SampleFields
+        }
+        parent {
+          id
         }
       }
     }

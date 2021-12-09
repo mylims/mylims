@@ -32,7 +32,10 @@ const MEMBER_ROUTES: RouteType[] = [
   {
     label: 'Wafers',
     pathname: '/sample/list/wafer',
-    pathmatch: '/sample/**',
+  },
+  {
+    label: 'Samples',
+    pathname: '/sample/list/sample',
   },
   {
     label: 'Measurements',

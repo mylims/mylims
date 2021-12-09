@@ -20,6 +20,8 @@ import MeasurementsList from './pages/measurements/transfer/list';
 // Samples
 import WaferList from '@/pages/samples/list/Wafer';
 import WaferDetail from '@/pages/samples/detail/Wafer';
+import SampleList from '@/pages/samples/list/Sample';
+import SampleDetail from '@/pages/samples/detail/Sample';
 
 // Events
 import EventDetail from '@/addons/events/pages/EventDetail';
@@ -41,6 +43,8 @@ const routes: RouteType[] = [
   { Component: MeasurementDetail, path: '/measurement/detail/:type/:id' },
   { Component: WaferList, path: '/sample/list/wafer' },
   { Component: WaferDetail, path: '/sample/detail/wafer/:id' },
+  { Component: SampleList, path: '/sample/list/sample' },
+  { Component: SampleDetail, path: '/sample/detail/sample/:id' },
   { Component: Login, path: '/login' },
   { Component: NoMatch, path: '*' },
 ];
