@@ -8,6 +8,7 @@ import {
   Card,
   Color,
   Roundness,
+  Size,
   Variant,
 } from '@/components/tailwind-ui';
 import { Table as TableQuery } from '@/components/TableQuery';
@@ -72,8 +73,23 @@ export default function WaferList() {
         </Button>
 
         <Card>
-          <Card.Header className="text-xs font-semibold tracking-wider text-left uppercase bg-neutral-50 text-neutral-500">
-            Preview
+          <Card.Header className="flex flex-row justify-between bg-neutral-50 text-neutral-500">
+            <span className="text-xs font-semibold tracking-wider text-left uppercase">
+              Preview
+            </span>
+            {state && (
+              <Link title="detail" to={`/sample/detail/wafer/${state.id}`}>
+                <Button
+                  className="flex space-x-2"
+                  size={Size.xSmall}
+                  color={Color.primary}
+                  variant={Variant.secondary}
+                >
+                  <InformationCircleIcon className="w-4 h-4" />
+                  <span>Detail</span>
+                </Button>
+              </Link>
+            )}
           </Card.Header>
           <Card.Body>
             {!state ? (
@@ -84,7 +100,7 @@ export default function WaferList() {
               <div>
                 <div>
                   <Wafer
-                    size={250}
+                    size={230}
                     diameter={{ value: 300 }}
                     chipHeight={{ value: 50 }}
                     chipWidth={{ value: 30 }}
@@ -115,16 +131,6 @@ export default function WaferList() {
                     {state.meta.substrate ?? '-'}
                   </FieldDescription>
                 </div>
-                <Link title="detail" to={`/sample/detail/wafer/${state.id}`}>
-                  <Button
-                    color={Color.primary}
-                    variant={Variant.secondary}
-                    className="flex mt-2 space-x-2"
-                  >
-                    <InformationCircleIcon className="w-5 h-5" />
-                    <span>Detail</span>
-                  </Button>
-                </Link>
               </div>
             )}
           </Card.Body>

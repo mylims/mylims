@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useSampleQuery } from '@/generated/graphql';
+import { SampleQuery, useSampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
 import { Alert, AlertType, Card, Spinner } from '@/components/tailwind-ui';
 
-export default function SampleDetail() {
+interface SampleDetailProps {
+  children(sample: SampleQuery['sample']): ReactNode;
+}
+export default function SampleDetail({ children }: SampleDetailProps) {
   const { id } = useParams<{ id: string }>();
   const { data, loading, error } = useSampleQuery({ variables: { id } });
   if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
@@ -23,7 +26,7 @@ export default function SampleDetail() {
         <div className="flex justify-between">
           <div>
             <div className="text-xl font-semibold">
-              {sample.sampleCode.join('_')}
+              Wafer {sample.sampleCode.join('_')}
             </div>
             <div className="text-neutral-500">{id}</div>
             <div className="text-neutral-500">
@@ -32,6 +35,7 @@ export default function SampleDetail() {
           </div>
         </div>
       </Card.Header>
+      <Card.Body>{children(sample)}</Card.Body>
     </Card>
   );
 }
