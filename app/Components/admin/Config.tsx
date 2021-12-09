@@ -11,15 +11,20 @@ import { Card, Input, Button } from '../tailwind-ui';
 const SubmitButton = () => <Button type="submit">Update and reboot</Button>;
 
 export default function Config(props: { config: ConfigProps }) {
-  const { makeUrl } = useAdonisContext();
+  const {
+    makeUrl,
+    ctx: { session },
+  } = useAdonisContext();
   const backendUrl = useBackendUrl();
 
   const changeConfAction = makeUrl('AdminsController.changeConf', undefined, {
     prefixUrl: backendUrl,
   });
+  const error = session.flashMessages.get('error');
 
   return (
     <Admin>
+      {error && <div className="p-2 text-white bg-red-500">{error}</div>}
       <div className="grid gap-10 mx-6 mt-12 lg:grid-cols-3 lg:max-w-none">
         {/* Session configuration */}
         <Card>

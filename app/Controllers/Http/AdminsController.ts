@@ -51,8 +51,9 @@ export default class AdminsController {
   }
 
   // Modifies the config file
-  public async changeConf({ request, response }: HttpContextContract) {
+  public async changeConf({ request, response, session }: HttpContextContract) {
     const { confkey: confKey, ...currConf } = request.all();
+    let error: string | null = null;
     switch (confKey) {
       case undefined:
       case null: {
@@ -62,14 +63,22 @@ export default class AdminsController {
       case 'mongodb': {
         const { url } = currConf;
         const { status } = await this.testMongoConnection(url);
-        if (status) setConfig(confKey, currConf);
+        if (status) {
+          setConfig(confKey, currConf);
+        } else {
+          error = 'Invalid mongoDB url';
+        }
         break;
       }
 
       case 'session': {
         const { sessionAge } = currConf;
         const { status } = this.testSessionAge(sessionAge);
-        if (status) setConfig(confKey, currConf);
+        if (status) {
+          setConfig(confKey, currConf);
+        } else {
+          error = 'Invalid session age';
+        }
         break;
       }
 
@@ -89,8 +98,13 @@ export default class AdminsController {
       }
     }
 
-    Event.emit('mylims:restart', 'config update');
-    response.redirect(`${backendUrl}/admin/config`);
+    if (error) {
+      session.flash('error', error);
+      response.internalServerError(error);
+    } else {
+      Event.emit('mylims:restart', 'config update');
+      response.redirect(`${backendUrl}/admin/config`);
+    }
   }
 
   public async addons({ request, response }: HttpContextContract) {
