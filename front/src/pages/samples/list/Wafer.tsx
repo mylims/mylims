@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Wafer } from 'react-wafer';
 import { EyeIcon, InformationCircleIcon } from '@heroicons/react/outline';
 
 import {
@@ -18,6 +19,7 @@ import { Sample } from '@/generated/graphql';
 
 export default function WaferList() {
   const [state, setState] = useState<Sample | null>(null);
+
   return (
     <div className="grid grid-cols-4 gap-4">
       <div className="col-span-3">
@@ -44,30 +46,18 @@ export default function WaferList() {
           />
           <TableQuery.ActionsColumn>
             {(row) => (
-              <>
-                <Link title="detail" to={`/sample/detail/wafer/${row.id}`}>
-                  <Button
-                    color={Color.primary}
-                    roundness={Roundness.circular}
-                    variant={Variant.secondary}
-                    className="ml-2"
-                  >
-                    <InformationCircleIcon className="w-5 h-5" />
-                  </Button>
-                </Link>
-                <Button
-                  title="preview"
-                  color={Color.success}
-                  roundness={Roundness.circular}
-                  variant={
-                    row.id === state?.id ? Variant.primary : Variant.secondary
-                  }
-                  className="ml-2"
-                  onClick={() => setState(row as Sample)}
-                >
-                  <EyeIcon className="w-5 h-5" />
-                </Button>
-              </>
+              <Button
+                title="preview"
+                color={Color.success}
+                roundness={Roundness.circular}
+                variant={
+                  row.id === state?.id ? Variant.primary : Variant.secondary
+                }
+                className="ml-2"
+                onClick={() => setState(row as Sample)}
+              >
+                <EyeIcon className="w-5 h-5" />
+              </Button>
             )}
           </TableQuery.ActionsColumn>
         </SamplesList>
@@ -92,7 +82,19 @@ export default function WaferList() {
               </p>
             ) : (
               <div>
-                <div>Preview wafer derivations</div>
+                <div>
+                  <Wafer
+                    size={250}
+                    diameter={{ value: 300 }}
+                    chipHeight={{ value: 50 }}
+                    chipWidth={{ value: 30 }}
+                    pickedItems={
+                      state.children?.map((_, i) => ({
+                        index: String(i + 1),
+                      })) ?? []
+                    }
+                  />
+                </div>
                 <div className="grid grid-cols-2 gap-4">
                   <FieldDescription title="Name">
                     {state.sampleCode.join('_')}
@@ -100,16 +102,29 @@ export default function WaferList() {
                   <FieldDescription title="Project">
                     {state.project ?? '-'}
                   </FieldDescription>
-                  <FieldDescription title="Title">
-                    {state.title ?? '-'}
+                  <FieldDescription title="Purpose">
+                    {state.meta.purpose ?? '-'}
                   </FieldDescription>
                   <FieldDescription title="Description">
-                    {state.title ?? '-'}
+                    {state.description ?? '-'}
                   </FieldDescription>
-                  <FieldDescription title="Derivations">
-                    {state.children?.length ?? 0}
+                  <FieldDescription title="Heterostructure">
+                    {state.meta.heterostructure ?? '-'}
+                  </FieldDescription>
+                  <FieldDescription title="Substrate">
+                    {state.meta.substrate ?? '-'}
                   </FieldDescription>
                 </div>
+                <Link title="detail" to={`/sample/detail/wafer/${state.id}`}>
+                  <Button
+                    color={Color.primary}
+                    variant={Variant.secondary}
+                    className="flex mt-2 space-x-2"
+                  >
+                    <InformationCircleIcon className="w-5 h-5" />
+                    <span>Detail</span>
+                  </Button>
+                </Link>
               </div>
             )}
           </Card.Body>
