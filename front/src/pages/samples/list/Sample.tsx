@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { EyeIcon, InformationCircleIcon } from '@heroicons/react/outline';
+import {
+  ChipIcon,
+  EyeIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/outline';
 
 import {
   Button,
   Card,
   Color,
   Roundness,
-  Size,
   Variant,
 } from '@/components/tailwind-ui';
 import { Table as TableQuery } from '@/components/TableQuery';
@@ -89,8 +92,8 @@ export default function SampleList() {
                       color={Color.primary}
                       variant={Variant.secondary}
                     >
-                      <InformationCircleIcon className="w-5 h-5" />
-                      <span>Parent</span>
+                      <ChipIcon className="w-5 h-5" />
+                      <span>Wafer</span>
                     </Button>
                   </Link>
                 )}
