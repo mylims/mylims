@@ -60,6 +60,7 @@ export default function SamplesList({ kind, children }: SamplesListProps) {
         title="username"
         dataPath="user.usernames"
         disableSort
+        disableSearch
       >
         {(row) => {
           const usernames = (row as Sample).user?.usernames;
@@ -67,7 +68,7 @@ export default function SamplesList({ kind, children }: SamplesListProps) {
           return usernames[0];
         }}
       </TableQuery.TextColumn>
-      <TableQuery.TextColumn title="Labels" dataPath="labels">
+      <TableQuery.TextColumn title="Labels" dataPath="labels" disableSort>
         {(row) => {
           const labels = (row as Sample).labels;
           if (!labels || labels.length === 0) return '-';
@@ -81,7 +82,7 @@ export default function SamplesList({ kind, children }: SamplesListProps) {
           ));
         }}
       </TableQuery.TextColumn>
-      <TableQuery.TextColumn title="Project" dataPath="project" />
+      <TableQuery.TextColumn title="Project" dataPath="project" disableSort />
       <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
       {children}
     </TableQuery>
