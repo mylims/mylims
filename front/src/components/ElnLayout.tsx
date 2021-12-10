@@ -57,9 +57,7 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
   }
 
   const currentTitle =
-    pageTitle ||
-    ROUTES.find((route) => pathname === route.pathname)?.label ||
-    'Unknown page title';
+    pageTitle || ROUTES.find((route) => pathname === route.pathname)?.label;
 
   return (
     <div>
@@ -165,16 +163,18 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
         </div>
       </nav>
 
-      <header className="shadow bg-neutral-100">
-        <div className="flex items-center px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold leading-tight text-neutral-900">
-            {currentTitle}
-          </h1>
-        </div>
-      </header>
+      {currentTitle && (
+        <header className="shadow bg-neutral-100">
+          <div className="flex items-center px-3 py-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <h1 className="text-2xl font-bold leading-tight text-neutral-900">
+              {currentTitle}
+            </h1>
+          </div>
+        </header>
+      )}
       <main>
-        <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="px-4 py-6 sm:px-0">{children}</div>
+        <div className="py-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="px-4 py-3 sm:px-0">{children}</div>
         </div>
       </main>
     </div>
