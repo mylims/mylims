@@ -1,8 +1,10 @@
+import React from 'react';
+
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import SampleDetail from '@/pages/samples/detail/Default';
-import React from 'react';
-import { Wafer } from 'react-wafer';
+import WaferDicing from '@/components/WaferDicing';
+import { Sample } from '@/generated/graphql';
 
 export default function WaferDetail() {
   return (
@@ -13,17 +15,7 @@ export default function WaferDetail() {
           style={{ gridTemplateColumns: '300px 1fr' }}
         >
           <div>
-            <Wafer
-              size={300}
-              diameter={{ value: 300 }}
-              chipHeight={{ value: 50 }}
-              chipWidth={{ value: 30 }}
-              pickedItems={
-                sample.children?.map((_, i) => ({
-                  index: String(i + 1),
-                })) ?? []
-              }
-            />
+            <WaferDicing size={300} wafer={sample as Sample} />
           </div>
           <div className="grid grid-cols-3 gap-4">
             <FieldDescription title="Name">

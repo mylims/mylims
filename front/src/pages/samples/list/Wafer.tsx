@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Wafer } from 'react-wafer';
 import { EyeIcon, InformationCircleIcon } from '@heroicons/react/outline';
 
 import {
@@ -17,6 +16,7 @@ import ElnLayout from '@/components/ElnLayout';
 import SamplesList from './Default';
 import FieldDescription from '@/components/FieldDescription';
 import { Sample } from '@/generated/graphql';
+import WaferDicing from '@/components/WaferDicing';
 
 export default function WaferList() {
   const [state, setState] = useState<Sample | null>(null);
@@ -99,17 +99,7 @@ export default function WaferList() {
             ) : (
               <div>
                 <div>
-                  <Wafer
-                    size={230}
-                    diameter={{ value: 300 }}
-                    chipHeight={{ value: 50 }}
-                    chipWidth={{ value: 30 }}
-                    pickedItems={
-                      state.children?.map((_, i) => ({
-                        index: String(i + 1),
-                      })) ?? []
-                    }
-                  />
+                  <WaferDicing size={230} wafer={state} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <FieldDescription title="Name">
