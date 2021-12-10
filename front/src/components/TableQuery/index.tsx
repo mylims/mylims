@@ -93,7 +93,7 @@ export function Table<T extends Record<string, unknown>>({
       value={{ query, setQuery, submitQuery, dispatch }}
     >
       {queries}
-      <div className="overflow-x-scroll align-middle border-b shadow border-neutral-200 sm:rounded-lg">
+      <div className="overflow-x-auto overflow-y-visible align-middle border-b shadow border-neutral-200 sm:rounded-lg">
         <table className="divide-y divide-neutral-200">
           <thead className="bg-neutral-50">
             <tr
