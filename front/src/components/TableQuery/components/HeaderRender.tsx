@@ -1,7 +1,8 @@
 import { Popover } from '@headlessui/react';
 import { DocumentSearchIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import React, { JSXElementConstructor, ReactElement } from 'react';
+import React, { JSXElementConstructor, ReactElement, useState } from 'react';
+import { usePopper } from 'react-popper';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 
@@ -23,6 +24,15 @@ export default function HeaderRender({
   children,
 }: HeaderRenderProps) {
   const { query } = useTableQueryContext();
+  const [referenceElement, setReferenceElement] =
+    useState<HTMLButtonElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
+    null,
+  );
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: 'bottom-start',
+    strategy: 'fixed',
+  });
 
   if (!children) return <th className={TITLE_CLASS}>{title}</th>;
 
@@ -31,7 +41,10 @@ export default function HeaderRender({
       <div className={TITLE_CLASS}>
         <span>{title}</span>
         <Popover className="relative">
-          <Popover.Button aria-label={`Filter by ${title}`}>
+          <Popover.Button
+            aria-label={`Filter by ${title}`}
+            ref={setReferenceElement}
+          >
             <DocumentSearchIcon
               className={clsx(
                 'w-5 h-5 flex-none',
@@ -40,7 +53,12 @@ export default function HeaderRender({
             />
           </Popover.Button>
 
-          <Popover.Panel className="absolute z-10 p-2 bg-white rounded-lg shadow">
+          <Popover.Panel
+            className="absolute z-10 p-2 bg-white rounded-lg shadow"
+            ref={setPopperElement}
+            style={styles.popper}
+            {...attributes.popper}
+          >
             {children}
           </Popover.Panel>
         </Popover>
