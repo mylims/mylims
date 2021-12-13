@@ -22,13 +22,14 @@ export default function ActionsColumn({ index, children }: ActionsColumnProps) {
         index,
         value: { render: children, dataPath: ColumnKind.ACTIONS },
         kind: ColumnKind.ACTIONS,
+        title: ColumnKind.ACTIONS,
       },
     });
 
     return () =>
       dispatch({
         type: 'REMOVE_COLUMN',
-        payload: { dataPath: ColumnKind.ACTIONS },
+        payload: { title: ColumnKind.ACTIONS },
       });
   }, [index, children, dispatch]);
 

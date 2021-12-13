@@ -47,13 +47,19 @@ export default function TextColumn({
           render,
         },
         kind: ColumnKind.TEXT,
+        title: title.toLowerCase(),
       },
     });
 
-    return () => dispatch({ type: 'REMOVE_COLUMN', payload: { dataPath } });
+    return () =>
+      dispatch({
+        type: 'REMOVE_COLUMN',
+        payload: { title: title.toLowerCase() },
+      });
   }, [
     dataPath,
     path,
+    title,
     disableSearch,
     disableSort,
     nullable,

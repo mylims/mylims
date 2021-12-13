@@ -50,10 +50,15 @@ export default function NumberColumn({
           render,
         },
         kind: ColumnKind.NUMBER,
+        title: title.toLowerCase(),
       },
     });
 
-    return () => dispatch({ type: 'REMOVE_COLUMN', payload: { dataPath } });
+    return () =>
+      dispatch({
+        type: 'REMOVE_COLUMN',
+        payload: { title: title.toLowerCase() },
+      });
   }, [
     dataPath,
     path,
