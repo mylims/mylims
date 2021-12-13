@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import minimatch from 'minimatch';
 import React, { useState, useMemo } from 'react';
-import { useHistory, useLocation, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 import useAuth from '../hooks/useAuth';
 
@@ -20,7 +20,7 @@ interface RouteType {
   pathmatch?: string;
 }
 const ADMIN_ROUTES: RouteType[] = [
-  { label: 'Users', pathname: '/eln/users' },
+  { label: 'Users', pathname: '/users' },
   {
     label: 'File synchronization',
     pathname: '/fileSync/list',
@@ -46,13 +46,13 @@ const MEMBER_ROUTES: RouteType[] = [
 const ROUTES = [...MEMBER_ROUTES, ...ADMIN_ROUTES];
 
 export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
-  const router = useHistory();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { isAuth } = useAuth();
 
   if (!isAuth) {
-    router.push('/login');
+    navigate('/login');
     return null;
   }
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import useAuth from '../hooks/useAuth';
 import { useElnMutation } from '../hooks/useElnQuery';
@@ -12,7 +12,7 @@ interface DropdownCustoms {
 
 export default function MenuDropDown(): JSX.Element {
   const auth = useAuth();
-  const router = useHistory();
+  const navigate = useNavigate();
 
   const logoutQuery = useElnMutation('/auth/logout');
 
@@ -37,13 +37,13 @@ export default function MenuDropDown(): JSX.Element {
             onClick: () =>
               logoutQuery.mutateAsync({}).then(() => {
                 auth.isAuth = false;
-                router.push('/login');
+                navigate('/login');
               }),
           },
         },
       ],
     ],
-    [auth, logoutQuery, router],
+    [auth, logoutQuery, navigate],
   );
 
   function handleClick(selected: DropdownOption<DropdownCustoms>) {

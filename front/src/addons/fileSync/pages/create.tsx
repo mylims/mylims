@@ -1,6 +1,6 @@
 import { FormikHelpers } from 'formik';
 import React, { useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import FileSyncConfigForm from '../FileSyncConfigForm';
 
@@ -14,7 +14,7 @@ import {
 export default function CreateConfig() {
   const [createFileSyncOption, { loading, error }] =
     useCreateFileSyncOptionMutation();
-  const router = useHistory();
+  const navigate = useNavigate();
 
   const onSubmit = useMemo(
     () =>
@@ -24,9 +24,9 @@ export default function CreateConfig() {
       ) => {
         await createFileSyncOption({ variables: { input: values } });
         resetForm();
-        router.push('list');
+        navigate('../list');
       },
-    [createFileSyncOption, router],
+    [createFileSyncOption, navigate],
   );
 
   return (

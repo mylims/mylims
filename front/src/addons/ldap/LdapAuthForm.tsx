@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Form,
@@ -23,7 +23,7 @@ interface ILogin {
 
 export default function LdapAuthForm() {
   const authMutation = useElnMutation('/addons/ldap/login');
-  const router = useHistory();
+  const navigate = useNavigate();
   const auth = useAuth();
 
   const handleSubmit = useCallback(
@@ -33,10 +33,10 @@ export default function LdapAuthForm() {
         auth.email = result.email;
         auth.role = result.role;
         auth.isAuth = true;
-        return router.push('/eln');
+        return navigate('/measurement/list');
       }
     },
-    [auth, router, authMutation],
+    [auth, navigate, authMutation],
   );
 
   return (

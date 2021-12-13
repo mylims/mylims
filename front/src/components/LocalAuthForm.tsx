@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import useAuth from '../hooks/useAuth';
 import { useElnMutation } from '../hooks/useElnQuery';
@@ -18,7 +18,7 @@ interface ILogin {
 
 export default function LocalAuthForm() {
   const authMutation = useElnMutation('/auth/local');
-  const router = useHistory();
+  const navigate = useNavigate();
   const auth = useAuth();
 
   const handleSubmit = useCallback(
@@ -28,17 +28,17 @@ export default function LocalAuthForm() {
         auth.email = result.email;
         auth.role = result.role;
         auth.isAuth = true;
-        return router.push('/eln');
+        return navigate('/measurement/list');
       }
     },
-    [auth, router, authMutation],
+    [auth, navigate, authMutation],
   );
 
   return (
     <div className="m-4 min-w-1/4">
       <Card>
         <Card.Header>
-          <h3 className="text-lg leading-6 font-medium text-cool-gray-900">
+          <h3 className="text-lg font-medium leading-6 text-cool-gray-900">
             Local provider
           </h3>
         </Card.Header>

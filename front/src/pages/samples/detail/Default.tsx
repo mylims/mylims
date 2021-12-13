@@ -9,7 +9,7 @@ interface SampleDetailProps {
   children(sample: SampleQuery['sample']): ReactNode;
 }
 export default function SampleDetail({ children }: SampleDetailProps) {
-  const { id } = useParams<{ id: string }>();
+  const { id = '' } = useParams<{ id: string }>();
   const { data, loading, error } = useSampleQuery({ variables: { id } });
   if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
   if (error || !data) {

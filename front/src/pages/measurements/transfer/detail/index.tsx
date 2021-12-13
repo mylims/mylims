@@ -17,7 +17,8 @@ import { formatDate } from '@/utils/formatFields';
 import FieldDescription from '@/components/FieldDescription';
 
 export default function MeasurementDetail() {
-  const { id, type } = useParams<{ id: string; type: MeasurementTypes }>();
+  const { id = '', type = MeasurementTypes.TRANSFER } =
+    useParams<{ id: string; type: MeasurementTypes }>();
   const { data, loading, error } = useMeasurementQuery({
     variables: { id, type },
   });

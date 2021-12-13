@@ -1,9 +1,9 @@
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import type { QueryType, TableQueryHook } from '../types';
 
 export function useTableQuery(defaultQuery: QueryType): TableQueryHook {
-  const router = useHistory();
+  const navigate = useNavigate();
 
   let query: QueryType = defaultQuery;
   for (const [key, value] of new URLSearchParams(useLocation().search)) {
@@ -16,7 +16,7 @@ export function useTableQuery(defaultQuery: QueryType): TableQueryHook {
       for (const [key, value] of Object.entries(newQuery)) {
         if (value !== null && value !== '') search.set(key, value);
       }
-      router.replace(`?${search.toString()}`);
+      navigate(`?${search.toString()}`, { replace: true });
     },
   };
 }
