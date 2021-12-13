@@ -48,7 +48,7 @@
     "react-popper": "^2.2.5",
     "react-query": "^3.34.2",
     "react-router-dom": "^6.1.1",
-    "react-wafer": "^2.1.0",
+    "react-wafer": "^2.2.0",
     "tailwindcss": "^2.2.19",
     "yup": "^0.32.11"
   },

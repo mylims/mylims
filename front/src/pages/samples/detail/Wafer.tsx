@@ -12,10 +12,10 @@ export default function WaferDetail() {
       {(sample) => (
         <div
           className="grid gap-4"
-          style={{ gridTemplateColumns: '300px 1fr' }}
+          style={{ gridTemplateColumns: '350px 1fr' }}
         >
           <div>
-            <WaferDicing size={300} wafer={sample as Sample} />
+            <WaferDicing size={350} wafer={sample as Sample} />
           </div>
           <div className="grid grid-cols-3 gap-4">
             <FieldDescription title="Name">
