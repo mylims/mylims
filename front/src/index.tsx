@@ -7,11 +7,14 @@ import Create from './addons/fileSync/pages/create';
 import Edit from './addons/fileSync/pages/edit';
 import Files from './addons/fileSync/pages/files';
 import List from './addons/fileSync/pages/list';
+
 // Base
 import NoMatch from './pages/404';
 import App from './pages/App';
+
 // Eln
 import Login from './pages/login';
+
 // Measurements
 import MeasurementDetail from './pages/measurements/transfer/detail';
 import MeasurementsList from './pages/measurements/transfer/list';
@@ -34,7 +37,6 @@ function AppRoutes() {
     { path: '*', element: <App Component={NoMatch} /> },
     {
       path: 'fileSync',
-      element: <App Component={Users} />,
       children: [
         { path: 'list', element: <App Component={List} /> },
         { path: 'create', element: <App Component={Create} /> },

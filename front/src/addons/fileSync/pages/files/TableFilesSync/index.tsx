@@ -59,7 +59,7 @@ export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
 
   return (
     <div>
-      <Link to={`${id}?page=1`}>
+      <Link to="?page=1">
         <Button className="mb-2" variant={Variant.secondary}>
           Filters
         </Button>

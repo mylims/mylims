@@ -90,7 +90,7 @@ export default function EventsList() {
         />
         <TableQuery.ActionsColumn>
           {({ id }) => (
-            <Link title="detail" to={`/event/detail/${id as string}`}>
+            <Link title="detail" to={`../detail/${id as string}`}>
               <Button
                 color={Color.primary}
                 roundness={Roundness.circular}

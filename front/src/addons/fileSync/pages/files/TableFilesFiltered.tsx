@@ -156,7 +156,7 @@ export default function TableFilesFiltered({
     ],
   });
 
-  const [query, setQuery] = useFilterFilesQuery(id);
+  const [query, setQuery] = useFilterFilesQuery();
   const pagination = {
     page,
     itemsPerPage: pageSize,
@@ -172,7 +172,7 @@ export default function TableFilesFiltered({
       onSubmit={(values) => setQuery(values)}
     >
       <div>
-        <Link to={id}>
+        <Link to={'.'}>
           <Button variant={Variant.secondary} color={Color.danger}>
             Remove filters
           </Button>

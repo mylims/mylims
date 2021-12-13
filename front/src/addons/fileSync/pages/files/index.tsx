@@ -35,7 +35,7 @@ const PAGE_SIZE = 10;
 export default function ListFiles() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [{ page, ...filters }] = useFilterFilesQuery('');
+  const [{ page, ...filters }] = useFilterFilesQuery();
 
   if (id === undefined) {
     void navigate('../../list');
