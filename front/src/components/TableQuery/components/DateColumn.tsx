@@ -41,6 +41,7 @@ export default function DateColumn({
       type: 'ADD_COLUMN',
       payload: {
         index,
+        title: title.toLowerCase(),
         value: {
           dataPath,
           queryPath: path,
@@ -53,9 +54,14 @@ export default function DateColumn({
       },
     });
 
-    return () => dispatch({ type: 'REMOVE_COLUMN', payload: { dataPath } });
+    return () =>
+      dispatch({
+        type: 'REMOVE_COLUMN',
+        payload: { title: title.toLowerCase() },
+      });
   }, [
     dataPath,
+    title,
     path,
     disableSearch,
     disableSort,

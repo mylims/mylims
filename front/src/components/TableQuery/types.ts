@@ -64,11 +64,12 @@ export enum ColumnKind {
 
 export type ReducerActions =
   | { type: 'ADD_COLUMN'; payload: RowState }
-  | { type: 'REMOVE_COLUMN'; payload: { dataPath: string } };
+  | { type: 'REMOVE_COLUMN'; payload: { title: string } };
 
 interface RowStateGeneric<K, V> {
   index: number;
   kind: K;
+  title: string;
   value: Omit<Required<V>, 'index' | 'title' | 'children'> & {
     render: ActionsColumnProps['render'];
   };
@@ -81,6 +82,7 @@ export type RowState =
   | {
       index: number;
       kind: ColumnKind.ACTIONS;
+      title: ColumnKind.ACTIONS;
       value: Omit<ActionsColumnProps, 'index'>;
     };
 export type TableState = RowState[];

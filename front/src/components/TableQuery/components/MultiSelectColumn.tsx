@@ -63,12 +63,18 @@ export default function MultiSelectColumn({
           render,
         },
         kind: ColumnKind.MULTI_SELECT,
+        title: title.toLowerCase(),
       },
     });
 
-    return () => dispatch({ type: 'REMOVE_COLUMN', payload: { dataPath } });
+    return () =>
+      dispatch({
+        type: 'REMOVE_COLUMN',
+        payload: { title: title.toLowerCase() },
+      });
   }, [
     dataPath,
+    title,
     path,
     disableSearch,
     disableSort,
