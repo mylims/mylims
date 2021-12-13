@@ -62,7 +62,7 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
   return (
     <div>
       <nav className="bg-neutral-800">
-        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -165,7 +165,7 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
 
       {currentTitle && (
         <header className="shadow bg-neutral-100">
-          <div className="flex items-center px-3 py-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex items-center px-3 py-3 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
             <h1 className="text-2xl font-bold leading-tight text-neutral-900">
               {currentTitle}
             </h1>
@@ -173,7 +173,7 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
         </header>
       )}
       <main>
-        <div className="py-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="py-3 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
           <div className="px-4 py-3 sm:px-0">{children}</div>
         </div>
       </main>
