@@ -9,6 +9,7 @@ import {
   Color,
   Badge,
   BadgeVariant,
+  Size,
 } from '@/components/tailwind-ui';
 
 export default function Queries() {
@@ -28,6 +29,8 @@ export default function Queries() {
       <Button
         variant={Variant.secondary}
         color={Color.danger}
+        disabled={queries.length === 0}
+        size={Size.xSmall}
         onClick={() => {
           const { sortField, sortDirection } = query;
           submitQuery({ page: '1', sortField, sortDirection });

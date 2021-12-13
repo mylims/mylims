@@ -94,7 +94,7 @@ export function Table<T extends Record<string, unknown>>({
     >
       {queries}
       <div className="overflow-x-auto overflow-y-visible align-middle border-b shadow border-neutral-200 sm:rounded-lg">
-        <table className="divide-y divide-neutral-200">
+        <table className="w-full divide-y divide-neutral-200">
           <thead className="bg-neutral-50">
             <tr
               className="grid grid-flow-col gap-4 auto-cols-max"
