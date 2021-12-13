@@ -70,12 +70,12 @@ export default function SamplesList({ kind, children }: SamplesListProps) {
       </TableQuery.TextColumn>
       <TableQuery.TextColumn title="Labels" dataPath="labels" disableSort>
         {(row) => {
-          const labels = (row as Sample).labels;
+          const { labels, id } = row as Sample;
           if (!labels || labels.length === 0) return '-';
 
           return labels.map((label) => (
             <Badge
-              key={`${row.id}-${label}`}
+              key={`${id}-${label}`}
               variant={BadgeVariant.COLORED_BACKGROUND}
               label={label}
               color={Color.primary}

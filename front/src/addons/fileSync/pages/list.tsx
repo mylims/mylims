@@ -56,7 +56,7 @@ export default function ConfigList() {
         </Alert>
       )}
 
-      <Link to="create">
+      <Link to="../create">
         <Button className="mb-4">Create</Button>
       </Link>
       {loading ? (
@@ -107,7 +107,7 @@ function Row(
         <Td>{value.patterns.length}</Td>
         <Td>{value.readyChecks.length}</Td>
         <Td>
-          <Link to={`files/${value.id}`}>
+          <Link to={`../files/${value.id}`}>
             <Button
               roundness={Roundness.circular}
               color={Color.success}
@@ -116,7 +116,7 @@ function Row(
               <TableIcon className="w-5 h-5" />
             </Button>
           </Link>
-          <Link to={`edit/${value.id}`}>
+          <Link to={`../edit/${value.id}`}>
             <Button
               roundness={Roundness.circular}
               className="ml-2"

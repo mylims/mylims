@@ -30,7 +30,7 @@ export const selectField = {
   [FilesSortField.MODIFICATIONDATE]: 'Modification date',
   [FilesSortField.SIZE]: 'Size',
 };
-export function useSetFilesQuery(base: string) {
+export function useSetFilesQuery() {
   const navigate = useNavigate();
   const search = new URLSearchParams();
   return (newQuery: Nullable<FilterQuery>) => {
@@ -80,14 +80,15 @@ export function useSetFilesQuery(base: string) {
         }
       }
     }
-    navigate(`${base}?${search.toString()}`, { replace: true });
+    navigate(`?${search.toString()}`, { replace: true });
   };
 }
 
-export function useFilterFilesQuery(
-  base: string,
-): [Nullable<FilterQuery>, (newQuery: Nullable<FilterQuery>) => void] {
-  const setQuery = useSetFilesQuery(base);
+export function useFilterFilesQuery(): [
+  Nullable<FilterQuery>,
+  (newQuery: Nullable<FilterQuery>) => void,
+] {
+  const setQuery = useSetFilesQuery();
   const query = useQuery();
   const statusList =
     query.status

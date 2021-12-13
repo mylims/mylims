@@ -20,7 +20,7 @@ export default function MeasurementActions({
   const { state, setState } = useContext(MeasurementPlotContext);
   return (
     <div className="flex">
-      <Link title="detail" to={`/measurement/detail/${type}/${id}`}>
+      <Link title="detail" to={`../detail/${type}/${id}`}>
         <Button
           color={Color.primary}
           roundness={Roundness.circular}

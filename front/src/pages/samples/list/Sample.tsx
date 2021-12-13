@@ -75,7 +75,7 @@ export default function SampleList() {
               </p>
             ) : (
               <div className="grid grid-cols-2 gap-4">
-                <Link title="detail" to={`/sample/detail/sample/${state.id}`}>
+                <Link title="detail" to={`../detail/sample/${state.id}`}>
                   <Button
                     className="flex space-x-2"
                     color={Color.primary}
@@ -88,7 +88,7 @@ export default function SampleList() {
                 {state.parent && (
                   <Link
                     title="detail"
-                    to={`/sample/detail/wafer/${state.parent.id}`}
+                    to={`../detail/wafer/${state.parent.id}`}
                   >
                     <Button
                       className="flex space-x-2"
