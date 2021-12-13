@@ -83,7 +83,7 @@ export function Table<T extends Record<string, unknown>>({
       }
     }
     return columnsTemplate;
-  }, [headerRef.current, orderedColumns]);
+  }, [headerRef, orderedColumns]);
 
   const { list = [], totalCount = 0 } = data ?? {};
   const page = parseInt(query.page, 10) ?? 1;

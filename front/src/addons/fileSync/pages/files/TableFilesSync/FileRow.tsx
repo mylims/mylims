@@ -87,7 +87,8 @@ export default function FileRow({ value }: { value: FileSync }) {
                   return node;
                 }),
               );
-              if (!called) fetchChild();
+              // eslint-disable-next-line no-console
+              if (!called) fetchChild().catch(console.error);
             }}
             expanded={value.expanded}
           />

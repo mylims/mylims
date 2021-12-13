@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
   ChipIcon,
   EyeIcon,
   InformationCircleIcon,
 } from '@heroicons/react/outline';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
+import SamplesList from './Default';
+
+import ElnLayout from '@/components/ElnLayout';
+import FieldDescription from '@/components/FieldDescription';
+import { Table as TableQuery } from '@/components/TableQuery';
 import {
   Button,
   Card,
@@ -14,11 +19,6 @@ import {
   Size,
   Variant,
 } from '@/components/tailwind-ui';
-import { Table as TableQuery } from '@/components/TableQuery';
-import ElnLayout from '@/components/ElnLayout';
-
-import SamplesList from './Default';
-import FieldDescription from '@/components/FieldDescription';
 import { Sample } from '@/generated/graphql';
 
 export default function SampleList() {

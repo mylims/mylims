@@ -11,21 +11,21 @@ import List from './addons/fileSync/pages/list';
 import NoMatch from './pages/404';
 import App from './pages/App';
 // Eln
-import Users from './pages/users';
 import Login from './pages/login';
 // Measurements
 import MeasurementDetail from './pages/measurements/transfer/detail';
 import MeasurementsList from './pages/measurements/transfer/list';
+import Users from './pages/users';
 
 // Samples
-import WaferList from '@/pages/samples/list/Wafer';
-import WaferDetail from '@/pages/samples/detail/Wafer';
-import SampleList from '@/pages/samples/list/Sample';
-import SampleDetail from '@/pages/samples/detail/Sample';
-
-// Events
 import EventDetail from '@/addons/events/pages/EventDetail';
 import EventsList from '@/addons/events/pages/EventsList';
+import SampleDetail from '@/pages/samples/detail/Sample';
+import WaferDetail from '@/pages/samples/detail/Wafer';
+import SampleList from '@/pages/samples/list/Sample';
+
+// Events
+import WaferList from '@/pages/samples/list/Wafer';
 
 function AppRoutes() {
   const routes = useRoutes([

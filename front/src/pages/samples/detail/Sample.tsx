@@ -1,7 +1,8 @@
+import React from 'react';
+
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import BaseDetail from '@/pages/samples/detail/Default';
-import React from 'react';
 
 export default function SampleDetail() {
   return (

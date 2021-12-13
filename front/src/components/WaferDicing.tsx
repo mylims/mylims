@@ -1,6 +1,6 @@
 import React from 'react';
-import { Wafer } from 'react-wafer';
 import { useNavigate } from 'react-router-dom';
+import { Wafer } from 'react-wafer';
 
 import { Sample } from '@/generated/graphql';
 

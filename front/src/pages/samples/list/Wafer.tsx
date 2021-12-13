@@ -1,7 +1,13 @@
+import { EyeIcon, InformationCircleIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { EyeIcon, InformationCircleIcon } from '@heroicons/react/outline';
 
+import SamplesList from './Default';
+
+import ElnLayout from '@/components/ElnLayout';
+import FieldDescription from '@/components/FieldDescription';
+import { Table as TableQuery } from '@/components/TableQuery';
+import WaferDicing from '@/components/WaferDicing';
 import {
   Button,
   Card,
@@ -10,13 +16,7 @@ import {
   Size,
   Variant,
 } from '@/components/tailwind-ui';
-import { Table as TableQuery } from '@/components/TableQuery';
-import ElnLayout from '@/components/ElnLayout';
-
-import SamplesList from './Default';
-import FieldDescription from '@/components/FieldDescription';
 import { Sample } from '@/generated/graphql';
-import WaferDicing from '@/components/WaferDicing';
 
 export default function WaferList() {
   const [state, setState] = useState<Sample | null>(null);
