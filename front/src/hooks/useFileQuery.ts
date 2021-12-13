@@ -1,5 +1,5 @@
 import bytes from 'byte-size';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useQuery } from './useQuery';
 
@@ -31,7 +31,7 @@ export const selectField = {
   [FilesSortField.SIZE]: 'Size',
 };
 export function useSetFilesQuery(base: string) {
-  const router = useHistory();
+  const navigate = useNavigate();
   const search = new URLSearchParams();
   return (newQuery: Nullable<FilterQuery>) => {
     // set keys to url search params
@@ -80,7 +80,7 @@ export function useSetFilesQuery(base: string) {
         }
       }
     }
-    router.replace(`${base}?${search.toString()}`);
+    navigate(`${base}?${search.toString()}`, { replace: true });
   };
 }
 

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import AddonsContext from '../contexts/AddonsContext';
 import useAuth from '../hooks/useAuth';
@@ -18,13 +18,11 @@ export default function Login() {
   const addons = useContext(AddonsContext);
   const [addonsList, setAddonsList] = useState<React.ReactNode[]>([]);
   const auth = useAuth();
-  const router = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (auth.isAuth) {
-      void router.push('/measurement/list');
-    }
-  }, [auth.isAuth, router]);
+    if (auth.isAuth) void navigate('/measurement/list');
+  }, [auth.isAuth, navigate]);
 
   useEffect(() => {
     const definedAddons = addons.filter(

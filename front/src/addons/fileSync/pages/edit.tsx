@@ -1,6 +1,6 @@
 import { FormikHelpers } from 'formik';
 import React, { useMemo } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import FileSyncConfigForm from '../FileSyncConfigForm';
 
@@ -16,8 +16,8 @@ import {
 export default function EditConfig() {
   const [editFileSyncOption, { loading: mutationLoading }] =
     useEditFileSyncOptionMutation();
-  const router = useHistory();
-  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { id = '' } = useParams<{ id: string }>();
   const {
     data,
     loading: queryLoading,
@@ -38,13 +38,13 @@ export default function EditConfig() {
           variables: { input: { ...values, id } },
         });
         resetForm();
-        router.push('../list');
+        navigate('../../list');
       },
-    [editFileSyncOption, router, id],
+    [editFileSyncOption, navigate, id],
   );
 
   if (id === undefined) {
-    void router.push('list');
+    void navigate('../../list');
     return null;
   }
 

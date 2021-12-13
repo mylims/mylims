@@ -1,6 +1,6 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import TableFilesFiltered from './TableFilesFiltered';
 import TableFilesSync from './TableFilesSync';
@@ -33,12 +33,12 @@ interface RouterQuery {
 const PAGE_SIZE = 10;
 
 export default function ListFiles() {
-  const router = useHistory();
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [{ page, ...filters }] = useFilterFilesQuery('');
 
   if (id === undefined) {
-    void router.push('list');
+    void navigate('../../list');
     return null;
   }
 

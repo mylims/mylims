@@ -1,6 +1,6 @@
 import React from 'react';
 import { Wafer } from 'react-wafer';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Sample } from '@/generated/graphql';
 
@@ -11,7 +11,7 @@ interface WaferDicingProps {
 
 const getNumber = (str?: string) => str?.replace(/\D/g, '') ?? '';
 export default function WaferDicing({ wafer, size }: WaferDicingProps) {
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <Wafer
       size={size}
@@ -29,7 +29,7 @@ export default function WaferDicing({ wafer, size }: WaferDicingProps) {
             ({ sampleCode }) => getNumber(sampleCode[1]) === label,
           );
           if (child) {
-            history.push(`/sample/detail/sample/${child.id}`);
+            navigate(`/sample/detail/sample/${child.id}`);
           }
         }
       }}

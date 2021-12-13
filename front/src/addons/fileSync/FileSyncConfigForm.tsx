@@ -1,6 +1,6 @@
 import { Field, FieldArray, FormikConfig } from 'formik';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import PatternEdit from './PatternEdit';
 import ReadyCheckEdit from './ReadyCheckEdit';
@@ -56,7 +56,7 @@ export default function FileSyncConfigForm({
   initialValues,
   children,
 }: FileSyncConfigFormProps) {
-  const router = useHistory();
+  const navigate = useNavigate();
 
   const { data, error, loading: readyCheckLoading } = useReadyChecksQuery();
 
@@ -193,7 +193,7 @@ export default function FileSyncConfigForm({
                     <Button
                       className="flex"
                       color={Color.danger}
-                      onClick={() => router.goBack()}
+                      onClick={() => navigate(-1)}
                     >
                       Cancel
                     </Button>

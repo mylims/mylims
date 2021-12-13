@@ -14,7 +14,7 @@ import { useEventQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
 
 export default function EventDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { id = '' } = useParams<{ id: string }>();
   const { data, loading, error } = useEventQuery({ variables: { id } });
   const processors = useMemo(() => {
     const processors = data?.event?.processors ?? [];
