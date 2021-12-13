@@ -11,6 +11,7 @@ import {
   Card,
   Color,
   Roundness,
+  Size,
   Variant,
 } from '@/components/tailwind-ui';
 import { Table as TableQuery } from '@/components/TableQuery';
@@ -38,6 +39,7 @@ export default function SampleList() {
                 title="preview"
                 color={Color.success}
                 roundness={Roundness.circular}
+                size={Size.xSmall}
                 variant={
                   row.id === state?.id ? Variant.primary : Variant.secondary
                 }
@@ -55,6 +57,7 @@ export default function SampleList() {
           className="mb-4"
           variant={Variant.secondary}
           color={Color.success}
+          size={Size.small}
         >
           + New sample
         </Button>

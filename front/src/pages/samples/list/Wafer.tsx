@@ -51,6 +51,7 @@ export default function WaferList() {
                 title="preview"
                 color={Color.success}
                 roundness={Roundness.circular}
+                size={Size.small}
                 variant={
                   row.id === state?.id ? Variant.primary : Variant.secondary
                 }
@@ -68,6 +69,7 @@ export default function WaferList() {
           className="mb-4"
           variant={Variant.secondary}
           color={Color.success}
+          size={Size.small}
         >
           + New wafer
         </Button>
