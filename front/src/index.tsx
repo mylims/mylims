@@ -75,7 +75,7 @@ function AppRoutes() {
           path: 'detail',
           children: [
             { path: 'wafer/:id', element: <App Component={WaferDetail} /> },
-            { path: 'wafer/:id', element: <App Component={SampleDetail} /> },
+            { path: 'sample/:id', element: <App Component={SampleDetail} /> },
           ],
         },
       ],

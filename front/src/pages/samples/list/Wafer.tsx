@@ -24,7 +24,7 @@ export default function WaferList() {
   return (
     <div className="grid grid-cols-4 gap-4">
       <div className="col-span-3">
-        <SamplesList kind="wafer">
+        <SamplesList kind="wafer" levels={['wafer']}>
           <TableQuery.TextColumn
             title="heterostructure"
             dataPath="meta.heterostructure"
@@ -101,7 +101,7 @@ export default function WaferList() {
             ) : (
               <div>
                 <div>
-                  <WaferDicing size={230} wafer={state} />
+                  <WaferDicing size={300} wafer={state} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <FieldDescription title="Name">

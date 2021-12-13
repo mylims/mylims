@@ -15,9 +15,14 @@ const PAGE_SIZE = 10;
 
 interface SamplesListProps {
   kind: string;
+  levels: string[];
   children: ReactNode;
 }
-export default function SamplesList({ kind, children }: SamplesListProps) {
+export default function SamplesList({
+  kind,
+  levels,
+  children,
+}: SamplesListProps) {
   const { query, setQuery } = useTableQuery({
     page: '1',
     sortField: SampleSortField.CREATEDAT,
@@ -48,14 +53,19 @@ export default function SamplesList({ kind, children }: SamplesListProps) {
       onQueryChange={(query) => setQuery(query)}
     >
       <TableQuery.Queries />
-      <TableQuery.TextColumn title="name" dataPath="sampleCode" disableSort>
-        {(row) => {
-          const sampleCode = (row as Sample).sampleCode;
-          if (!sampleCode || sampleCode.length === 0) return '-';
-
-          return sampleCode.join('_');
-        }}
-      </TableQuery.TextColumn>
+      {levels.map((level, index) => (
+        <TableQuery.TextColumn
+          title={`${level} name`}
+          dataPath="sampleCode"
+          queryPath={`sampleCode.${index}`}
+          disableSort
+        >
+          {(row) => {
+            const { sampleCode } = row as Sample;
+            return sampleCode[index] ?? '-';
+          }}
+        </TableQuery.TextColumn>
+      ))}
       <TableQuery.TextColumn
         title="username"
         dataPath="user.usernames"

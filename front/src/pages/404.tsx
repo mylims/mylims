@@ -9,6 +9,4 @@ export default function Custom404() {
   return <PageNotFoundErrorPage url={pathname} />;
 }
 
-Custom404.getLayout = (page: React.ReactNode) => (
-  <ElnLayout pageTitle="Path not found">{page}</ElnLayout>
-);
+Custom404.getLayout = (page: React.ReactNode) => <ElnLayout>{page}</ElnLayout>;

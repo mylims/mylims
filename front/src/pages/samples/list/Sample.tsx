@@ -27,7 +27,7 @@ export default function SampleList() {
   return (
     <div className="grid grid-cols-4 gap-4">
       <div className="col-span-3">
-        <SamplesList kind="sample">
+        <SamplesList kind="sample" levels={['wafer', 'sample']}>
           <TableQuery.TextColumn
             title="heterostructure"
             dataPath="meta.heterostructure"
@@ -75,7 +75,7 @@ export default function SampleList() {
               </p>
             ) : (
               <div className="grid grid-cols-2 gap-4">
-                <Link title="detail" to={`../detail/sample/${state.id}`}>
+                <Link title="detail" to={`../../detail/sample/${state.id}`}>
                   <Button
                     className="flex space-x-2"
                     color={Color.primary}
@@ -101,8 +101,11 @@ export default function SampleList() {
                   </Link>
                 )}
 
-                <FieldDescription title="Name">
-                  {state.sampleCode.join('_')}
+                <FieldDescription title="Wafer name">
+                  {state.sampleCode[0]}
+                </FieldDescription>
+                <FieldDescription title="Sample name">
+                  {state.sampleCode[1]}
                 </FieldDescription>
                 <FieldDescription title="Project">
                   {state.project ?? '-'}
@@ -125,6 +128,4 @@ export default function SampleList() {
   );
 }
 
-SampleList.getLayout = (page: React.ReactNode) => (
-  <ElnLayout pageTitle="Samples">{page}</ElnLayout>
-);
+SampleList.getLayout = (page: React.ReactNode) => <ElnLayout>{page}</ElnLayout>;
