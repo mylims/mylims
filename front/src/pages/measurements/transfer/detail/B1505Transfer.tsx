@@ -1,10 +1,10 @@
 import React from 'react';
 import { Annotation } from 'react-plot';
 
+import FieldDescription from '@/components/FieldDescription';
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
 import { Alert, AlertType, Card } from '@/components/tailwind-ui';
 import { useFetchFile } from '@/hooks/useFetchFile';
-import FieldDescription from '@/components/FieldDescription';
 
 interface B1505TransferProps {
   file: null | { filename: string; downloadUrl: string; size: number };

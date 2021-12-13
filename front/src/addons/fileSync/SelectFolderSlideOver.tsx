@@ -56,7 +56,10 @@ export default function SelectFolderSlideOver({
   }, [data]);
 
   useEffect(() => {
-    getDirectoryTree({ variables: { root: selectedPath } });
+    getDirectoryTree({ variables: { root: selectedPath } }).catch(
+      // eslint-disable-next-line no-console
+      console.error,
+    );
   }, [getDirectoryTree, selectedPath]);
 
   return (

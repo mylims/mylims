@@ -74,7 +74,8 @@ export default function DirRow({ value }: { value: DirSync }) {
                   return node;
                 }),
               );
-              if (!called && !value.children) fetchChild();
+              // eslint-disable-next-line no-console
+              if (!called && !value.children) fetchChild().catch(console.error);
             }}
             expanded={value.expanded}
           />

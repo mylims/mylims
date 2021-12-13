@@ -2,9 +2,9 @@ import React from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
-import SampleDetail from '@/pages/samples/detail/Default';
 import WaferDicing from '@/components/WaferDicing';
 import { Sample } from '@/generated/graphql';
+import SampleDetail from '@/pages/samples/detail/Default';
 
 export default function WaferDetail() {
   return (

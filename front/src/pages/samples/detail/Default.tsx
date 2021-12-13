@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { Alert, AlertType, Card, Spinner } from '@/components/tailwind-ui';
 import { SampleQuery, useSampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
-import { Alert, AlertType, Card, Spinner } from '@/components/tailwind-ui';
 
 interface SampleDetailProps {
   children(sample: SampleQuery['sample']): ReactNode;

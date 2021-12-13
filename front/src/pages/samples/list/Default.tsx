@@ -1,15 +1,15 @@
 import React, { ReactNode } from 'react';
 
 import { Table as TableQuery } from '@/components/TableQuery';
-import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
+import { boundariesFromPage } from '@/components/TableQuery/utils';
+import { Badge, BadgeVariant, Color } from '@/components/tailwind-ui';
 import {
   Sample,
   SampleSortField,
   SortDirection,
   useSamplesFilteredQuery,
 } from '@/generated/graphql';
-import { Badge, BadgeVariant, Color } from '@/components/tailwind-ui';
 
 const PAGE_SIZE = 10;
 
@@ -75,6 +75,7 @@ export default function SamplesList({ kind, children }: SamplesListProps) {
 
           return labels.map((label) => (
             <Badge
+              key={`${row.id}-${label}`}
               variant={BadgeVariant.COLORED_BACKGROUND}
               label={label}
               color={Color.primary}
