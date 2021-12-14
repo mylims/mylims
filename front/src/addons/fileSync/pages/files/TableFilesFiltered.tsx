@@ -49,7 +49,6 @@ function isByteSize(value: string | null | undefined): boolean {
 }
 
 interface TableFilesFilteredProps {
-  id: string;
   data?: FilesByConfigFlatQuery;
   page: number;
   pageSize: number;
@@ -139,7 +138,6 @@ const titles = [
 ];
 
 export default function TableFilesFiltered({
-  id,
   data,
   page,
   pageSize,

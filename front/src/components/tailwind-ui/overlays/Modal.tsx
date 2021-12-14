@@ -106,7 +106,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
   }, [isOpen]);
 
   let modalContents = (
-    <div className="flex flex-1">
+    <div className="flex flex-col max-h-full">
       {onRequestClose && hasCloseButton ? (
         <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
           <button
@@ -218,7 +218,7 @@ Modal.Body = function ModalBody(props: {
   return (
     <div
       className={clsx(
-        'px-2 pb-2 flex flex-col max-w-full min-h-0 overflow-auto',
+        'px-2 pt-1 pb-2 flex flex-col max-w-full min-h-0 overflow-auto',
         props.className,
       )}
     >
@@ -247,7 +247,7 @@ Modal.Footer = function ModalFooter(props: {
   return (
     <div
       className={clsx(
-        'px-2 flex gap-2 sm:gap-3 flex-col-reverse sm:flex-row',
+        'px-2 flex gap-1 sm:gap-2 flex-col-reverse sm:flex-row',
         {
           'sm:justify-end': align === 'right',
           'sm:justify-center': align === 'center',

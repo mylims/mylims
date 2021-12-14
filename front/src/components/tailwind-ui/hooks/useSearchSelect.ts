@@ -31,6 +31,7 @@ export interface SearchSelectFieldHookResult<OptionType>
 export interface SimpleSearchSelectHookConfig<OptionType> {
   options: OptionType[];
   filterOptions?: OptionsFilter<OptionType>;
+  initialSelected?: OptionType;
 }
 
 export interface SimpleSearchSelectFieldHookConfig<OptionType>
@@ -99,13 +100,19 @@ export function useSearchSelect<OptionType>(
     ? SimpleSearchSelectHookConfig<OptionType>
     : SearchSelectHookConfig<OptionType>,
 ): SearchSelectHookResult<OptionType> {
-  const { options, filterOptions = defaultOptionsFilter } = config;
+  const {
+    options,
+    filterOptions = defaultOptionsFilter,
+    initialSelected,
+  } = config;
   const [searchValue, setSearchValue] = useState('');
   const newOptions = useMemo(
     () => filterOptions(searchValue, options),
     [options, filterOptions, searchValue],
   );
-  const [selected, onSelect] = useState<OptionType>();
+  const [selected, onSelect] = useState<OptionType | undefined>(
+    initialSelected,
+  );
 
   return {
     searchValue,

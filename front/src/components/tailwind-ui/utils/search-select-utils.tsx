@@ -571,11 +571,11 @@ export function InternalMultiSearchSelect<OptionType>(
             id={id}
             ref={inputRef}
             type="text"
-            autoFocus={autoFocus}
             name={name || label}
             value={searchValue}
             size={Math.max(5, placeholder?.length || 0, searchValue.length)}
             disabled={disabled}
+            autoFocus={autoFocus}
             onBlur={(event) => {
               onBlur?.(event);
               closeList();

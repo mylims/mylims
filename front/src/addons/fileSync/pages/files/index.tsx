@@ -111,7 +111,6 @@ function FilterTable({
 
   return (
     <TableFilesFiltered
-      id={id}
       loading={loading}
       data={data}
       page={pageNum}

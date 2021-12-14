@@ -99,7 +99,10 @@ export function FormRHF<TValues extends FieldValues>(
     <formStatusContext.Provider value={contextValue}>
       <FormProvider {...methods}>
         <form
-          className={clsx({ 'space-y-4': !noDefaultStyle }, className)}
+          className={clsx(
+            { 'flex flex-1 flex-col gap-y-4': !noDefaultStyle },
+            className,
+          )}
           onSubmit={async (event) => {
             const submit = methods.handleSubmit(onSubmit, onInvalidSubmit);
             try {

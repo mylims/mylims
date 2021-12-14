@@ -62,10 +62,17 @@ export function ConfirmModal(props: ConfirmModalProps) {
     onCancel,
     renderCancel = defaultRenderCancel,
     onRequestClose = onCancel,
+    fluid = false,
     ...modalProps
   } = props;
+
   return (
-    <Modal iconColor={color} onRequestClose={onRequestClose} {...modalProps}>
+    <Modal
+      fluid={fluid}
+      iconColor={color}
+      onRequestClose={onRequestClose}
+      {...modalProps}
+    >
       <Modal.Header>{title}</Modal.Header>
       <Modal.Body>
         <Modal.Description>{body}</Modal.Description>

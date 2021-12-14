@@ -55,6 +55,7 @@ export default function SamplesList({
       <TableQuery.Queries />
       {levels.map((level, index) => (
         <TableQuery.TextColumn
+          key={level}
           title={`${level} name`}
           dataPath="sampleCode"
           queryPath={`sampleCode.${index}`}
