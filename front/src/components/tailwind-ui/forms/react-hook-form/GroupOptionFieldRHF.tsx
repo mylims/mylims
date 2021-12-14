@@ -4,10 +4,7 @@ import { get } from 'react-hook-form';
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { GroupOptionProps, OptionProps } from '../basic/GroupOption';
 import { Help } from '../basic/common';
-import {
-  GroupOption as GroupOptionInternal,
-  Option,
-} from '../basic/internal/GroupOption';
+import { GroupOptionInternal, Option } from '../basic/internal/GroupOption';
 import { defaultErrorSerializer, FieldProps, RHFRegisterProps } from '../util';
 
 export type GroupOptionFieldRHFProps = GroupOptionProps &

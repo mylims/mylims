@@ -34,12 +34,36 @@ export function useNotificationCenter(): NotificationContext {
   return context;
 }
 
-export function NotificationProvider(props: { children: ReactNode }) {
+type TimeoutConfig = Record<Color, number>;
+
+export function NotificationProvider(props: {
+  defaultTimeouts?: Partial<TimeoutConfig>;
+  children: ReactNode;
+}) {
+  const {
+    // Extract all properties so that we can useMemo() without requiring the
+    // input object to be stable.
+    defaultTimeouts: {
+      primary = 7000,
+      alternative = 7000,
+      neutral = 7000,
+      danger = 0,
+      success = 3000,
+      warning = 10000,
+    } = {},
+    children,
+  } = props;
+
+  const timeouts = useMemo(
+    () => ({ primary, alternative, neutral, danger, success, warning }),
+    [alternative, danger, neutral, primary, success, warning],
+  );
+
   const [state, dispatch] = useReducer(notificationsReducer, {
     notifications: [],
   });
 
-  const utils: NotificationContext = useMemo(() => {
+  const utils: Omit<NotificationContext, 'notifications'> = useMemo(() => {
     function dismiss(payload: string) {
       dispatch({ type: 'DISAPPEAR', payload });
       setTimeout(() => {
@@ -48,12 +72,16 @@ export function NotificationProvider(props: { children: ReactNode }) {
     }
 
     return {
-      notifications: state.notifications,
       addNotification(notification, timeout) {
         const id = uuid();
+        const type = notification.type || Color.neutral;
+
+        if (timeout === undefined) {
+          timeout = timeouts[type];
+        }
 
         if (timeout !== 0) {
-          setTimeout(() => dismiss(id), timeout || 10000);
+          setTimeout(() => dismiss(id), timeout);
         }
 
         dispatch({
@@ -62,18 +90,18 @@ export function NotificationProvider(props: { children: ReactNode }) {
             ...notification,
             id,
             state: 'SHOWING',
-            type: notification.type || Color.neutral,
+            type,
             isToast: false,
           },
         });
 
         return id;
       },
-      addToastNotification(notification, timeout) {
+      addToastNotification(notification, timeout = timeouts.neutral) {
         const id = uuid();
 
         if (timeout !== 0) {
-          setTimeout(() => dismiss(id), timeout || 10000);
+          setTimeout(() => dismiss(id), timeout);
         }
 
         dispatch({
@@ -90,11 +118,13 @@ export function NotificationProvider(props: { children: ReactNode }) {
       },
       deleteNotification: dismiss,
     };
-  }, [state.notifications]);
+  }, [timeouts]);
 
   return (
-    <notificationContext.Provider value={utils}>
-      {props.children}
+    <notificationContext.Provider
+      value={{ ...utils, notifications: state.notifications }}
+    >
+      {children}
     </notificationContext.Provider>
   );
 }

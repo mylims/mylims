@@ -7,9 +7,27 @@ import { InputProps, Input } from '../basic/Input';
 import { AsyncInputFieldProps } from '../formik/InputField';
 import { defaultErrorSerializer, FieldProps, RHFRegisterProps } from '../util';
 
+type EmptyValue = string | number | null;
+interface InputFieldRHFCustomProps {
+  /**
+   * State value when user enters an empty value in the input
+   * This option is ignored if setValueAs is set in rhfOptions
+   */
+  emptyValue?: EmptyValue;
+}
+
+function getSetValueAs(emptyValue: EmptyValue, type: InputProps['type']) {
+  if (type === 'number') {
+    return getSetValueAsNumber(emptyValue);
+  } else {
+    return getSetValueAsString(emptyValue);
+  }
+}
+
 export type AsyncInputFieldRHFProps = AsyncInputFieldProps &
   FieldProps &
-  RHFRegisterProps;
+  RHFRegisterProps &
+  InputFieldRHFCustomProps;
 
 export function AsyncInputFieldRHF(
   props: AsyncInputFieldRHFProps,
@@ -19,6 +37,7 @@ export function AsyncInputFieldRHF(
     debounceDelay = 500,
     serializeError = defaultErrorSerializer,
     rhfOptions,
+    emptyValue = null,
     ...inputProps
   } = props;
   const {
@@ -47,7 +66,10 @@ export function AsyncInputFieldRHF(
   return (
     <Input
       {...inputProps}
-      {...register(props.name, rhfOptions)}
+      {...register(props.name, {
+        setValueAs: getSetValueAs(emptyValue, props.type),
+        ...rhfOptions,
+      })}
       error={errorMessage}
       valid={error ? undefined : inputValidationProps.valid}
       loading={inputValidationProps.loading || inputProps.loading}
@@ -55,7 +77,10 @@ export function AsyncInputFieldRHF(
   );
 }
 
-export type InputFieldRHFProps = InputProps & FieldProps & RHFRegisterProps;
+export type InputFieldRHFProps = InputProps &
+  FieldProps &
+  RHFRegisterProps &
+  InputFieldRHFCustomProps;
 
 export function InputFieldRHF(props: InputFieldRHFProps) {
   const {
@@ -63,6 +88,7 @@ export function InputFieldRHF(props: InputFieldRHFProps) {
     onChange: inputOnChange,
     serializeError = defaultErrorSerializer,
     rhfOptions,
+    emptyValue = null,
     ...otherInputProps
   } = props;
   const {
@@ -71,18 +97,7 @@ export function InputFieldRHF(props: InputFieldRHFProps) {
   } = useCheckedFormRHFContext();
   const error = get(errors, props.name);
   const rhfProps = register(props.name, {
-    setValueAs:
-      props.type === 'number'
-        ? (value: string | number) => {
-            // setValueAs also receives the default value, which should normally be a number
-            if (typeof value === 'number') {
-              return value;
-            }
-
-            if (!value) return undefined;
-            return Number(value);
-          }
-        : undefined,
+    setValueAs: getSetValueAs(emptyValue, props.type),
     ...rhfOptions,
   });
 
@@ -103,4 +118,24 @@ export function InputFieldRHF(props: InputFieldRHFProps) {
       error={serializeError(error)}
     />
   );
+}
+
+function getSetValueAsNumber(emptyValue: EmptyValue) {
+  return function setValueAsNumber(value: string | number) {
+    // setValueAs also receives the default value, which should normally be a number
+    if (typeof value === 'number') {
+      return value;
+    }
+
+    if (!value) return emptyValue;
+    return Number(value);
+  };
+}
+
+function getSetValueAsString(emptyValue: EmptyValue) {
+  if (emptyValue === undefined) return undefined;
+  return function setValueAsString(value: string) {
+    if (!value) return emptyValue;
+    return value;
+  };
 }

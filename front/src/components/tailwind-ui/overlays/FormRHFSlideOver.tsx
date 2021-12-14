@@ -15,10 +15,12 @@ export type FormRHFSlideOverProps<TValues extends FieldValues> = Omit<
 export function FormRHFSlideOver<TValues extends FieldValues>(
   props: FormRHFSlideOverProps<TValues>,
 ) {
-  const { children, ...otherProps } = props;
+  const { children, requestCloseOnClickOutside = false, ...otherProps } = props;
   return (
     <SlideOver<ComponentType<FormRHFProps<TValues>>>
       {...otherProps}
+      requestCloseOnClickOutside={requestCloseOnClickOutside}
+      // @ts-expect-error Weird error.
       wrapperComponent={FormRHF}
       wrapperProps={otherProps}
     >

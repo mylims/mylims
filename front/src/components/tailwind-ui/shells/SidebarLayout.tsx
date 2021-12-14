@@ -76,7 +76,7 @@ export function SidebarLayout(props: SidebarLayoutProps) {
                 <XIcon className="w-6 h-6 text-white" />
               </button>
             </div>
-            <div className="h-full">{sidebar}</div>
+            <div className="h-full overflow-auto">{sidebar}</div>
           </Transition.Child>
           <div className="flex-shrink-0 w-14" />
         </div>
@@ -87,7 +87,7 @@ export function SidebarLayout(props: SidebarLayoutProps) {
           'lg:flex lg:flex-shrink-0': revealOnLargeViewport,
         })}
       >
-        <div className="flex flex-col w-64 bg-white border-r border-neutral-200">
+        <div className="flex flex-col w-64 overflow-auto bg-white border-r border-neutral-200">
           {sidebar}
         </div>
       </div>

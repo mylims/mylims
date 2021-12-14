@@ -38,6 +38,7 @@ export interface VerticalNavigationProps<T> {
   onSelect?: SelectOptionCallback<T>;
   size?: VerticalNavigationSize;
   autoCollapse?: boolean;
+  startUncollapsed?: boolean;
 }
 
 type SelectOptionCallback<T> = (selected: VerticalNavigationOption<T>) => void;
@@ -55,7 +56,14 @@ const iconStyles = {
 export function VerticalNavigation<T>(
   props: VerticalNavigationProps<T>,
 ): JSX.Element {
-  const { onSelect, selected, options, size, autoCollapse = false } = props;
+  const {
+    onSelect,
+    selected,
+    options,
+    size,
+    autoCollapse = false,
+    startUncollapsed = false,
+  } = props;
 
   const opts = useMemo(() => {
     return options.map((element) => {
@@ -72,6 +80,7 @@ export function VerticalNavigation<T>(
   const navigation = useVerticalNavigationCollapse(opts, {
     autoCollapse,
     selected,
+    startUncollapsed,
   });
 
   let chosenSize = size ? size : 'small';

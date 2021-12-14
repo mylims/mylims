@@ -1,14 +1,22 @@
 import clsx from 'clsx';
 import React, { Children, forwardRef, Ref } from 'react';
 
-import type { GroupOptionProps, OptionProps } from '../GroupOption';
+import type { GroupOptionProps } from '../GroupOption';
 import { Label } from '../common';
+
+export interface OptionProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  name: string;
+  label: string;
+  id: string;
+  description?: string;
+}
 
 export const Option = forwardRef(function OptionForwardRef(
   props: OptionProps,
   ref: Ref<HTMLInputElement>,
 ) {
-  const { label, description, name, id, value, checked, ...otherProps } = props;
+  const { name, label, id, description, value, checked, ...otherProps } = props;
   return (
     <label htmlFor={id}>
       <div
@@ -38,21 +46,23 @@ export const Option = forwardRef(function OptionForwardRef(
           >
             {label}
           </span>
-          <span
-            className={clsx('block text-sm', {
-              'text-neutral-500': !checked,
-              'text-primary-700': checked,
-            })}
-          >
-            {description}
-          </span>
+          {description && (
+            <span
+              className={clsx('block text-sm', {
+                'text-neutral-500': !checked,
+                'text-primary-700': checked,
+              })}
+            >
+              {description}
+            </span>
+          )}
         </label>
       </div>
     </label>
   );
 });
 
-export function GroupOption(props: GroupOptionProps): JSX.Element {
+export function GroupOptionInternal(props: GroupOptionProps): JSX.Element {
   const lastChildIndex = Children.count(props.children) - 1;
 
   return (

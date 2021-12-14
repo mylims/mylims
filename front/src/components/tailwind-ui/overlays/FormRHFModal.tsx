@@ -15,10 +15,22 @@ export type FormRHFModalProps<TValues extends FieldValues> = Omit<
 export function FormRHFModal<TValues extends FieldValues>(
   props: FormRHFModalProps<TValues>,
 ) {
-  const { children, ...otherProps } = props;
+  const {
+    children,
+    requestCloseOnBackdrop = false,
+    requestCloseOnEsc = false,
+    ...otherProps
+  } = props;
   return (
-    <Modal<ComponentType<FormRHFProps<TValues>>> {...otherProps}>
-      <FormRHF<TValues> {...otherProps}>{children}</FormRHF>
+    <Modal<ComponentType<FormRHFProps<TValues>>>
+      {...otherProps}
+      requestCloseOnBackdrop={requestCloseOnBackdrop}
+      requestCloseOnEsc={requestCloseOnEsc}
+      // @ts-expect-error Weird error.
+      wrapperComponent={FormRHF}
+      wrapperProps={otherProps}
+    >
+      {children}
     </Modal>
   );
 }

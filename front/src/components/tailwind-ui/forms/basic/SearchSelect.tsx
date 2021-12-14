@@ -122,7 +122,9 @@ export interface SimpleSearchSelectProps<OptionType> {
    * Size for Input
    */
   size?: number;
-  /** Autofocus on mount */
+  /**
+   * Focus on mount input
+   */
   autoFocus?: boolean;
 }
 

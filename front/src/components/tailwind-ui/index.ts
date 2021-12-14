@@ -108,4 +108,6 @@ export * from './types';
 
 export * from './util';
 
+export * from './validation/yup';
+
 export { customOptionsFilter } from './utils/search-select-utils';
