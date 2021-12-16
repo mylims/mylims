@@ -17,7 +17,7 @@ enum EventSortField {
   createdAt
 }
 input EventFilterInput {
-  topic: String
+  topic: FilterText
   processorId: String
   status: [EventStatus!]
   fileId: String

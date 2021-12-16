@@ -15,7 +15,13 @@ import {
   GqlSortDirection,
   Maybe,
 } from 'App/graphql';
-import { removeNullable } from 'App/utils';
+import {
+  filterDate,
+  filterText,
+  filterTextArray,
+  NotReadOnly,
+  removeNullable,
+} from 'App/utils';
 
 const resolvers: GqlResolvers = {
   Sample: {
@@ -146,28 +152,18 @@ async function createFilter(
 ): Promise<Filter<ModelAttributes<Sample>>> {
   if (!filterBy) return {};
 
-  let filter: Filter<ModelAttributes<Sample>> = removeNullable(filterBy);
+  let filter: Filter<NotReadOnly<ModelAttributes<Sample>>> = filterTextArray(
+    'sampleCode',
+    filterBy.sampleCode,
+  );
   filter.kind = kind;
+  filter.labels = filterText(filterBy.labels);
+  filter.project = filterText(filterBy.project);
+  filter.title = filterText(filterBy.title);
+  filter.description = filterText(filterBy.description);
+  filter.createdAt = filterDate(filterBy.createdAt);
 
-  if (filterBy.username) {
-    const user = await User.findBy('username', filterBy.username);
-    if (!user) {
-      throw new UserInputError('Username not found', {
-        argumentName: 'username',
-      });
-    }
-    filter.userId = user._id;
-  }
-  if (filterBy.parent) {
-    const parent = await Sample.find(new ObjectId(filterBy.parent));
-    if (!parent) {
-      throw new UserInputError('Parent not found', {
-        argumentName: 'parent',
-      });
-    }
-    filter['parents.0'] = parent._id;
-  }
-  return filter;
+  return removeNullable(filter);
 }
 
 export default resolvers;

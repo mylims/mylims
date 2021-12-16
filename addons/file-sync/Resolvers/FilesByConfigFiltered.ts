@@ -1,4 +1,3 @@
-import escapeStringRegexp from 'escape-string-regexp';
 import type { Filter } from 'mongodb';
 
 import Env from '@ioc:Adonis/Core/Env';
@@ -10,41 +9,37 @@ import {
   GqlFilesSortField,
   GqlSortDirection,
 } from 'App/graphql';
+import {
+  filterDate,
+  filterNumber,
+  filterText,
+  removeNullable,
+} from 'App/utils';
 
 import { SyncFile } from '../Models/SyncFile';
 
 const resolvers: GqlResolvers = {
   Query: {
     async filesByConfigFlat(_, { id, limit, skip, filterBy, sortBy }) {
-      const {
-        filename,
-        minSize = 0,
-        maxSize = Infinity,
-        minDate = new Date(0),
-        maxDate = new Date(Date.now()),
-        status = [],
-      } = filterBy || {};
+      const { filename, size, date, status = [] } = filterBy || {};
       const {
         field = GqlFilesSortField.DATE,
         direction = GqlSortDirection.DESC,
-      } = sortBy || {};
+      } = sortBy ?? {};
       const sortField = field === 'filename' ? field : `revisions.0.${field}`;
 
       let query: Filter<ModelAttributes<SyncFile>> = {
         '_id.configId': new ObjectId(id),
-        'revisions.0.size': { $gte: minSize, $lte: maxSize },
-        'revisions.0.date': { $gte: minDate, $lte: maxDate },
+        'revisions.0.size': filterNumber(size),
+        'revisions.0.date': filterDate(date),
       };
       if (status && status.length !== 0) {
         query['revisions.0.status'] = { $in: status };
       }
       if (filename) {
-        query['_id.relativePath'] = {
-          $regex: escapeStringRegexp(filename),
-          $options: 'i',
-        };
+        query['_id.relativePath'] = filterText(filename);
       }
-      let fileCursor = SyncFile.query(query).sortBy(
+      let fileCursor = SyncFile.query(removeNullable(query)).sortBy(
         sortField,
         direction === GqlSortDirection.DESC ? -1 : 1,
       );

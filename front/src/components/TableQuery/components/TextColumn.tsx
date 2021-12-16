@@ -1,12 +1,23 @@
 import objectPath from 'object-path';
 import React, { useEffect } from 'react';
+import {
+  ArrowCircleDownIcon,
+  ArrowCircleRightIcon,
+  CheckCircleIcon,
+} from '@heroicons/react/outline';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { BaseColumnProps, ColumnKind } from '../types';
 
 import HeaderRender from './HeaderRender';
 
-import { Input } from '@/components/tailwind-ui';
+import { Dropdown, Input } from '@/components/tailwind-ui';
+
+export enum TextFilter {
+  EQUALS = 'equals',
+  CONTAINS = 'contains',
+  STARTS_WITH = 'startsWith',
+}
 
 export default function TextColumn({
   title,
@@ -85,6 +96,35 @@ export default function TextColumn({
         onKeyDown={(e) => {
           if (e.key === 'Enter') submitQuery({ ...query, page: '1' });
         }}
+        trailingAddon={
+          <Dropdown
+            onSelect={({ data }) => console.log(data)}
+            options={[
+              [
+                {
+                  label: 'Exact search',
+                  type: 'option',
+                  icon: <CheckCircleIcon />,
+                  data: TextFilter.EQUALS,
+                },
+                {
+                  label: 'Contains',
+                  type: 'option',
+                  icon: <ArrowCircleDownIcon />,
+                  data: TextFilter.CONTAINS,
+                },
+                {
+                  label: 'Starts with',
+                  type: 'option',
+                  icon: <ArrowCircleRightIcon />,
+                  data: TextFilter.STARTS_WITH,
+                },
+              ],
+            ]}
+          >
+            <CheckCircleIcon className="w-5 h-5 mx-2 text-neutral-400" />
+          </Dropdown>
+        }
       />
     </HeaderRender>
   );

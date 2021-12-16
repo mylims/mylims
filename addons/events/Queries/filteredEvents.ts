@@ -7,6 +7,7 @@ import {
   GqlEventStatus,
   GqlEventDataType,
 } from 'App/graphql';
+import { filterText } from 'App/utils';
 
 import { Event } from '../Models/Event';
 
@@ -17,9 +18,8 @@ export default function filteredEvents(
 
   let query: Filter<ModelAttributes<Event>> = {};
 
-  if (processorId) {
-    query.processors = { $elemMatch: { processorId } };
-  }
+  if (processorId) query.processors = { $elemMatch: { processorId } };
+
   if (status && status.length !== 0) {
     query.$or = [
       { processors: { $elemMatch: { 'history.0.status': { $in: status } } } },
@@ -31,7 +31,7 @@ export default function filteredEvents(
     }
   }
 
-  if (topic) query.topic = topic;
+  if (topic) query.topic = filterText(topic);
   if (fileId) {
     query['data.fileId'] = fileId;
     query['data.type'] = GqlEventDataType.FILE;
