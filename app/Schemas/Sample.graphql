@@ -24,13 +24,12 @@ enum SampleSortField {
   createdAt
 }
 input SampleFilterInput {
-  sampleCode: [String!]
-  username: String
-  labels: [String!]
-  project: String
-  title: String
-  description: String
-  parent: ID
+  sampleCode: [FilterList!]
+  labels: FilterText
+  project: FilterText
+  title: FilterText
+  description: FilterText
+  createdAt: FilterDate
 }
 input SampleSortInput {
   direction: SortDirection!

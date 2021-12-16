@@ -8,3 +8,29 @@ interface Pagination {
   totalCount: Int!
   list: [PaginationNode!]!
 }
+
+# Filtering utils
+enum FilterTextOperator {
+  contains
+  equals
+  startsWith
+}
+input FilterText {
+  operator: FilterTextOperator!
+  value: String!
+}
+
+input FilterDate {
+  from: DateTime
+  to: DateTime
+}
+
+input FilterNumber {
+  min: Int
+  max: Int
+}
+
+input FilterList {
+  index: Int
+  value: FilterText!
+}

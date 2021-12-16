@@ -1,17 +1,26 @@
+import type { Filter } from 'mongodb';
+
 import Env from '@ioc:Adonis/Core/Env';
 import { UserInputError } from '@ioc:Zakodium/Apollo/Errors';
-import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
+import { ModelAttributes, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import File from 'App/Models/File';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
 import {
   GqlMeasurement,
+  GqlMeasurementFilterInput,
   GqlMeasurementSortField,
   GqlMeasurementTypes,
   GqlResolvers,
   GqlSortDirection,
+  Maybe,
 } from 'App/graphql';
-import { removeNullable } from 'App/utils';
+import {
+  filterDate,
+  filterTextArray,
+  NotReadOnly,
+  removeNullable,
+} from 'App/utils';
 
 const measurements = {
   [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
@@ -56,7 +65,7 @@ const resolvers: GqlResolvers = {
       } = sortBy || {};
 
       let measurementCursor = measurements[type]
-        .query(removeNullable(filterBy ?? {}))
+        .query(createFilter(filterBy))
         .sortBy(field, direction === GqlSortDirection.DESC ? -1 : 1);
       const totalCount = await measurementCursor.count();
       if (skip) measurementCursor = measurementCursor.skip(skip);
@@ -70,5 +79,17 @@ const resolvers: GqlResolvers = {
     },
   },
 };
+
+async function createFilter(
+  filterBy: Maybe<GqlMeasurementFilterInput> | undefined,
+): Promise<Filter<ModelAttributes<MeasurementType>>> {
+  if (!filterBy) return {};
+
+  let filter: Filter<NotReadOnly<ModelAttributes<MeasurementType>>> =
+    filterTextArray('sampleCode', filterBy.sampleCode);
+  filter.createdAt = filterDate(filterBy.createdAt);
+
+  return removeNullable(filter);
+}
 
 export default resolvers;

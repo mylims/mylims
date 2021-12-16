@@ -98,7 +98,7 @@ export type GqlEventFilterInput = {
   fileId?: Maybe<Scalars['String']>;
   processorId?: Maybe<Scalars['String']>;
   status?: Maybe<Array<GqlEventStatus>>;
-  topic?: Maybe<Scalars['String']>;
+  topic?: Maybe<GqlFilterText>;
 };
 
 export type GqlEventHistory = {
@@ -172,11 +172,9 @@ export type GqlFileSyncOptionPatternInput = {
 };
 
 export type GqlFilesFilterInput = {
-  filename?: Maybe<Scalars['String']>;
-  maxDate?: Maybe<Scalars['DateTime']>;
-  maxSize?: Maybe<Scalars['Int']>;
-  minDate?: Maybe<Scalars['DateTime']>;
-  minSize?: Maybe<Scalars['Int']>;
+  date?: Maybe<GqlFilterDate>;
+  filename?: Maybe<GqlFilterText>;
+  size?: Maybe<GqlFilterNumber>;
   status?: Maybe<Array<GqlFileStatus>>;
 };
 
@@ -198,6 +196,32 @@ export type GqlFilesSortInput = {
   direction: GqlSortDirection;
   field: GqlFilesSortField;
 };
+
+export type GqlFilterDate = {
+  from?: Maybe<Scalars['DateTime']>;
+  to?: Maybe<Scalars['DateTime']>;
+};
+
+export type GqlFilterList = {
+  index?: Maybe<Scalars['Int']>;
+  value: GqlFilterText;
+};
+
+export type GqlFilterNumber = {
+  max?: Maybe<Scalars['Int']>;
+  min?: Maybe<Scalars['Int']>;
+};
+
+export type GqlFilterText = {
+  operator: GqlFilterTextOperator;
+  value: Scalars['String'];
+};
+
+export enum GqlFilterTextOperator {
+  CONTAINS = 'contains',
+  EQUALS = 'equals',
+  STARTSWITH = 'startsWith',
+}
 
 export type GqlMeasurement = {
   __typename?: 'Measurement';
@@ -222,9 +246,8 @@ export type GqlMeasurementFile = {
 };
 
 export type GqlMeasurementFilterInput = {
-  createdBy?: Maybe<Scalars['String']>;
-  sampleCode?: Maybe<Array<Scalars['String']>>;
-  username?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<GqlFilterDate>;
+  sampleCode?: Maybe<Array<GqlFilterList>>;
 };
 
 export type GqlMeasurementPage = GqlPagination & {
@@ -451,13 +474,12 @@ export type GqlSampleFile = {
 };
 
 export type GqlSampleFilterInput = {
-  description?: Maybe<Scalars['String']>;
-  labels?: Maybe<Array<Scalars['String']>>;
-  parent?: Maybe<Scalars['ID']>;
-  project?: Maybe<Scalars['String']>;
-  sampleCode?: Maybe<Array<Scalars['String']>>;
-  title?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<GqlFilterDate>;
+  description?: Maybe<GqlFilterText>;
+  labels?: Maybe<GqlFilterText>;
+  project?: Maybe<GqlFilterText>;
+  sampleCode?: Maybe<Array<GqlFilterList>>;
+  title?: Maybe<GqlFilterText>;
 };
 
 export type GqlSampleInput = {
@@ -706,6 +728,11 @@ export type GqlResolversTypes = ResolversObject<{
   FilesFlatPage: ResolverTypeWrapper<GqlFilesFlatPage>;
   FilesSortField: GqlFilesSortField;
   FilesSortInput: GqlFilesSortInput;
+  FilterDate: GqlFilterDate;
+  FilterList: GqlFilterList;
+  FilterNumber: GqlFilterNumber;
+  FilterText: GqlFilterText;
+  FilterTextOperator: GqlFilterTextOperator;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
@@ -785,6 +812,10 @@ export type GqlResolversParentTypes = ResolversObject<{
   FilesFilterInput: GqlFilesFilterInput;
   FilesFlatPage: GqlFilesFlatPage;
   FilesSortInput: GqlFilesSortInput;
+  FilterDate: GqlFilterDate;
+  FilterList: GqlFilterList;
+  FilterNumber: GqlFilterNumber;
+  FilterText: GqlFilterText;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   JSON: Scalars['JSON'];
