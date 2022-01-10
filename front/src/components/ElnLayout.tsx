@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import minimatch from 'minimatch';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 import useAuth from '../hooks/useAuth';
@@ -51,10 +51,11 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { isAuth } = useAuth();
 
-  if (!isAuth) {
-    navigate('/login');
-    return null;
-  }
+  useEffect(() => {
+    if (!isAuth) {
+      navigate('/login');
+    }
+  }, [isAuth, navigate]);
 
   const currentTitle =
     pageTitle || ROUTES.find((route) => pathname === route.pathname)?.label;
@@ -65,7 +66,7 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
         <div className="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <img src={LOGO} alt="Logo" className="w-24" />
               </div>
               <div className="hidden md:flex md:flex-row md:w-full">

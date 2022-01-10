@@ -1,15 +1,21 @@
 import React, { ReactNode } from 'react';
+import { unflatten } from 'flat';
 
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { Badge, BadgeVariant, Color } from '@/components/tailwind-ui';
 import {
+  FilterList,
+  InputMaybe,
   Sample,
+  SampleFilterInput,
   SampleSortField,
+  SampleSortInput,
   SortDirection,
   useSamplesFilteredQuery,
 } from '@/generated/graphql';
+import { QueryType, Unflatten } from '@/components/TableQuery/types';
 
 const PAGE_SIZE = 10;
 
@@ -25,21 +31,31 @@ export default function SamplesList({
 }: SamplesListProps) {
   const { query, setQuery } = useTableQuery({
     page: '1',
-    sortField: SampleSortField.CREATEDAT,
-    sortDirection: SortDirection.DESC,
+    'sortBy.field': SampleSortField.CREATEDAT,
+    'sortBy.direction': SortDirection.DESC,
   });
-  const { page, sortField, sortDirection, ...filter } = query;
+  const { page, sortBy, sampleCode, ...filter } = unflatten<
+    QueryType,
+    Unflatten<SampleFilterInput, SampleSortInput>
+  >(query);
   const { skip, limit } = boundariesFromPage(page);
   const { loading, error, data } = useSamplesFilteredQuery({
     variables: {
       kind,
       skip,
       limit,
-      filterBy: filter,
-      sortBy: {
-        direction: sortDirection as SortDirection,
-        field: sortField as SampleSortField,
+      filterBy: {
+        ...filter,
+        sampleCode: (sampleCode &&
+          sampleCode
+            .filter((val) => !!val)
+            .map((val) => ({
+              ...val,
+              // @ts-expect-error The type of the value is string
+              index: val.index ? parseInt(val.index as string, 2) : null,
+            }))) as InputMaybe<FilterList[]> | undefined,
       },
+      sortBy,
     },
   });
 
@@ -54,18 +70,18 @@ export default function SamplesList({
     >
       <TableQuery.Queries />
       {levels.map((level, index) => (
-        <TableQuery.TextColumn
+        <TableQuery.TextListColumn
           key={level}
           title={`${level} name`}
           dataPath="sampleCode"
-          queryPath={`sampleCode.${index}`}
+          queryIndex={index}
           disableSort
         >
           {(row) => {
             const { sampleCode } = row as Sample;
             return sampleCode[index] ?? '-';
           }}
-        </TableQuery.TextColumn>
+        </TableQuery.TextListColumn>
       ))}
       <TableQuery.TextColumn
         title="username"

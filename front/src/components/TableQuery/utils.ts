@@ -6,6 +6,7 @@ import MultiSelectColumn from './components/MultiSelectColumn';
 import NumberColumn from './components/NumberColumn';
 import Queries from './components/QueryPreview';
 import TextColumn from './components/TextColumn';
+import TextListColumn from './components/TextListColumn';
 
 const invalidError = 'Invalid column child';
 export function splitChildren(children: ReactNode) {
@@ -21,6 +22,7 @@ export function splitChildren(children: ReactNode) {
     } else if (
       child.type === NumberColumn ||
       child.type === TextColumn ||
+      child.type === TextListColumn ||
       child.type === DateColumn ||
       child.type === MultiSelectColumn ||
       child.type === ActionsColumn

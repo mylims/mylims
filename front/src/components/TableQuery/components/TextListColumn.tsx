@@ -7,7 +7,7 @@ import {
 } from '@heroicons/react/outline';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
-import { BaseColumnProps, ColumnKind } from '../types';
+import { ColumnKind, TextListColumnProps } from '../types';
 
 import HeaderRender from './HeaderRender';
 
@@ -33,7 +33,7 @@ export function IconFilterText({ operator, className }: IconFilterProps) {
   }
 }
 
-export default function TextColumn({
+export default function TextListColumn({
   title,
   dataPath,
   queryPath,
@@ -41,11 +41,12 @@ export default function TextColumn({
   disableSort = false,
   nullable = false,
   index,
+  queryIndex,
   children,
-}: BaseColumnProps) {
+}: TextListColumnProps) {
   const { query, setQuery, submitQuery, dispatch } = useTableQueryContext();
   const path = queryPath ?? dataPath;
-  const value = query[`${path}.value`] ?? '';
+  const value = query[`${path}.${queryIndex}.value.value`] ?? '';
   const operator =
     (query[`${path}.operator`] as FilterTextOperator) ??
     FilterTextOperator.EQUALS;
@@ -70,7 +71,7 @@ export default function TextColumn({
           nullable,
           render,
         },
-        kind: ColumnKind.TEXT,
+        kind: ColumnKind.TEXT_LIST,
         title: title.toLowerCase(),
       },
     });
@@ -107,8 +108,9 @@ export default function TextColumn({
         onChange={({ currentTarget: { value } }) => {
           setQuery({
             ...query,
-            [`${path}.value`]: value,
-            [`${path}.operator`]: operator,
+            [`${path}.${queryIndex}.index`]: `${queryIndex}`,
+            [`${path}.${queryIndex}.value.value`]: value,
+            [`${path}.${queryIndex}.value.operator`]: operator,
           });
         }}
         onKeyDown={(e) => {
@@ -122,8 +124,9 @@ export default function TextColumn({
               if (data)
                 submitQuery({
                   ...query,
-                  [`${path}.value`]: value,
-                  [`${path}.operator`]: data,
+                  [`${path}.${queryIndex}.index`]: `${queryIndex}`,
+                  [`${path}.${queryIndex}.value.value`]: value,
+                  [`${path}.${queryIndex}.value.operator`]: data,
                 });
             }}
             options={[

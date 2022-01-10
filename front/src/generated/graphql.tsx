@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
@@ -79,10 +80,11 @@ export type EventFile = {
 };
 
 export type EventFilterInput = {
-  fileId?: Maybe<Scalars['String']>;
-  processorId?: Maybe<Scalars['String']>;
-  status?: Maybe<Array<EventStatus>>;
-  topic?: Maybe<Scalars['String']>;
+  createdAt?: InputMaybe<FilterDate>;
+  fileId?: InputMaybe<Scalars['String']>;
+  processorId?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Array<EventStatus>>;
+  topic?: InputMaybe<FilterText>;
 };
 
 export type EventHistory = {
@@ -151,12 +153,10 @@ export type FileSyncOptionPatternInput = {
 };
 
 export type FilesFilterInput = {
-  filename?: Maybe<Scalars['String']>;
-  maxDate?: Maybe<Scalars['DateTime']>;
-  maxSize?: Maybe<Scalars['Int']>;
-  minDate?: Maybe<Scalars['DateTime']>;
-  minSize?: Maybe<Scalars['Int']>;
-  status?: Maybe<Array<FileStatus>>;
+  date?: InputMaybe<FilterDate>;
+  filename?: InputMaybe<FilterText>;
+  size?: InputMaybe<FilterNumber>;
+  status?: InputMaybe<Array<FileStatus>>;
 };
 
 export type FilesFlatPage = Pagination & {
@@ -176,6 +176,32 @@ export type FilesSortInput = {
   direction: SortDirection;
   field: FilesSortField;
 };
+
+export type FilterDate = {
+  from?: InputMaybe<Scalars['DateTime']>;
+  to?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type FilterList = {
+  index?: InputMaybe<Scalars['Int']>;
+  value: FilterText;
+};
+
+export type FilterNumber = {
+  max?: InputMaybe<Scalars['Int']>;
+  min?: InputMaybe<Scalars['Int']>;
+};
+
+export type FilterText = {
+  operator: FilterTextOperator;
+  value: Scalars['String'];
+};
+
+export enum FilterTextOperator {
+  CONTAINS = 'contains',
+  EQUALS = 'equals',
+  STARTSWITH = 'startsWith',
+}
 
 export type Measurement = {
   createdAt: Scalars['DateTime'];
@@ -198,9 +224,8 @@ export type MeasurementFile = {
 };
 
 export type MeasurementFilterInput = {
-  createdBy?: Maybe<Scalars['String']>;
-  sampleCode?: Maybe<Array<Scalars['String']>>;
-  username?: Maybe<Scalars['String']>;
+  createdAt?: InputMaybe<FilterDate>;
+  sampleCode?: InputMaybe<Array<FilterList>>;
 };
 
 export type MeasurementPage = Pagination & {
@@ -316,10 +341,10 @@ export type QueryEventArgs = {
 };
 
 export type QueryEventsArgs = {
-  filterBy?: Maybe<EventFilterInput>;
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<EventSortInput>;
+  filterBy?: InputMaybe<EventFilterInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<EventSortInput>;
 };
 
 export type QueryFileByPathArgs = {
@@ -332,16 +357,16 @@ export type QueryFileSyncOptionArgs = {
 
 export type QueryFilesByConfigArgs = {
   configId: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
   path: Array<Scalars['String']>;
 };
 
 export type QueryFilesByConfigFlatArgs = {
-  filterBy?: Maybe<FilesFilterInput>;
+  filterBy?: InputMaybe<FilesFilterInput>;
   id: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<FilesSortInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<FilesSortInput>;
 };
 
 export type QueryMeasurementArgs = {
@@ -350,10 +375,10 @@ export type QueryMeasurementArgs = {
 };
 
 export type QueryMeasurementsArgs = {
-  filterBy?: Maybe<MeasurementFilterInput>;
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<MeasurementSortInput>;
+  filterBy?: InputMaybe<MeasurementFilterInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<MeasurementSortInput>;
   type: MeasurementTypes;
 };
 
@@ -366,11 +391,11 @@ export type QuerySampleKindArgs = {
 };
 
 export type QuerySamplesArgs = {
-  filterBy?: Maybe<SampleFilterInput>;
+  filterBy?: InputMaybe<SampleFilterInput>;
   kind: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<SampleSortInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<SampleSortInput>;
 };
 
 export type ReadyCheck = {
@@ -385,7 +410,7 @@ export type ReadyCheckDescriptor = {
 
 export type ReadyCheckInput = {
   name: Scalars['String'];
-  value?: Maybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['String']>;
 };
 
 export type Sample = {
@@ -415,24 +440,23 @@ export type SampleFile = {
 };
 
 export type SampleFilterInput = {
-  description?: Maybe<Scalars['String']>;
-  labels?: Maybe<Array<Scalars['String']>>;
-  parent?: Maybe<Scalars['ID']>;
-  project?: Maybe<Scalars['String']>;
-  sampleCode?: Maybe<Array<Scalars['String']>>;
-  title?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  createdAt?: InputMaybe<FilterDate>;
+  description?: InputMaybe<FilterText>;
+  labels?: InputMaybe<FilterText>;
+  project?: InputMaybe<FilterText>;
+  sampleCode?: InputMaybe<Array<FilterList>>;
+  title?: InputMaybe<FilterText>;
 };
 
 export type SampleInput = {
-  description?: Maybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   kind: Scalars['String'];
   labels: Array<Scalars['String']>;
   meta: Scalars['JSON'];
-  parent?: Maybe<Scalars['String']>;
-  project?: Maybe<Scalars['String']>;
+  parent?: InputMaybe<Scalars['String']>;
+  project?: InputMaybe<Scalars['String']>;
   sampleCode: Array<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
   userId: Scalars['String'];
 };
 
@@ -445,10 +469,10 @@ export type SampleKind = {
 };
 
 export type SampleKindInput = {
-  color?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  color?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
   schema: Scalars['JSON'];
 };
 
@@ -548,10 +572,10 @@ export type EventQuery = {
 };
 
 export type EventsFilteredQueryVariables = Exact<{
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  filterBy?: Maybe<EventFilterInput>;
-  sortBy?: Maybe<EventSortInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  filterBy?: InputMaybe<EventFilterInput>;
+  sortBy?: InputMaybe<EventSortInput>;
 }>;
 
 export type EventsFilteredQuery = {
@@ -745,10 +769,10 @@ export type EventsByFileIdQuery = {
 
 export type FilesByConfigFlatQueryVariables = Exact<{
   id: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  filterBy?: Maybe<FilesFilterInput>;
-  sortBy?: Maybe<FilesSortInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  filterBy?: InputMaybe<FilesFilterInput>;
+  sortBy?: InputMaybe<FilesSortInput>;
 }>;
 
 export type FilesByConfigFlatQuery = {
@@ -792,10 +816,10 @@ export type MeasurementFieldsFragment = {
 
 export type MeasurementsFilteredQueryVariables = Exact<{
   type: MeasurementTypes;
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  filterBy?: Maybe<MeasurementFilterInput>;
-  sortBy?: Maybe<MeasurementSortInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  filterBy?: InputMaybe<MeasurementFilterInput>;
+  sortBy?: InputMaybe<MeasurementSortInput>;
 }>;
 
 export type MeasurementsFilteredQuery = {
@@ -867,10 +891,10 @@ export type SampleKindFieldsFragment = {
 
 export type SamplesFilteredQueryVariables = Exact<{
   kind: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  filterBy?: Maybe<SampleFilterInput>;
-  sortBy?: Maybe<SampleSortInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  filterBy?: InputMaybe<SampleFilterInput>;
+  sortBy?: InputMaybe<SampleSortInput>;
 }>;
 
 export type SamplesFilteredQuery = {
@@ -1120,7 +1144,7 @@ export type EventQueryResult = Apollo.QueryResult<
   EventQuery,
   EventQueryVariables
 >;
-export function refetchEventQuery(variables?: EventQueryVariables) {
+export function refetchEventQuery(variables: EventQueryVariables) {
   return { query: EventDocument, variables: variables };
 }
 export const EventsFilteredDocument = gql`
@@ -1275,7 +1299,7 @@ export type DirectoryTreeQueryResult = Apollo.QueryResult<
   DirectoryTreeQueryVariables
 >;
 export function refetchDirectoryTreeQuery(
-  variables?: DirectoryTreeQueryVariables,
+  variables: DirectoryTreeQueryVariables,
 ) {
   return { query: DirectoryTreeDocument, variables: variables };
 }
@@ -1402,7 +1426,7 @@ export type FileSyncOptionQueryResult = Apollo.QueryResult<
   FileSyncOptionQueryVariables
 >;
 export function refetchFileSyncOptionQuery(
-  variables?: FileSyncOptionQueryVariables,
+  variables: FileSyncOptionQueryVariables,
 ) {
   return { query: FileSyncOptionDocument, variables: variables };
 }
@@ -1623,7 +1647,7 @@ export type FilesByConfigQueryResult = Apollo.QueryResult<
   FilesByConfigQueryVariables
 >;
 export function refetchFilesByConfigQuery(
-  variables?: FilesByConfigQueryVariables,
+  variables: FilesByConfigQueryVariables,
 ) {
   return { query: FilesByConfigDocument, variables: variables };
 }
@@ -1698,7 +1722,7 @@ export type EventsByFileIdQueryResult = Apollo.QueryResult<
   EventsByFileIdQueryVariables
 >;
 export function refetchEventsByFileIdQuery(
-  variables?: EventsByFileIdQueryVariables,
+  variables: EventsByFileIdQueryVariables,
 ) {
   return { query: EventsByFileIdDocument, variables: variables };
 }
@@ -1787,7 +1811,7 @@ export type FilesByConfigFlatQueryResult = Apollo.QueryResult<
   FilesByConfigFlatQueryVariables
 >;
 export function refetchFilesByConfigFlatQuery(
-  variables?: FilesByConfigFlatQueryVariables,
+  variables: FilesByConfigFlatQueryVariables,
 ) {
   return { query: FilesByConfigFlatDocument, variables: variables };
 }
@@ -1929,7 +1953,7 @@ export type MeasurementsFilteredQueryResult = Apollo.QueryResult<
   MeasurementsFilteredQueryVariables
 >;
 export function refetchMeasurementsFilteredQuery(
-  variables?: MeasurementsFilteredQueryVariables,
+  variables: MeasurementsFilteredQueryVariables,
 ) {
   return { query: MeasurementsFilteredDocument, variables: variables };
 }
@@ -1991,7 +2015,7 @@ export type MeasurementQueryResult = Apollo.QueryResult<
   MeasurementQuery,
   MeasurementQueryVariables
 >;
-export function refetchMeasurementQuery(variables?: MeasurementQueryVariables) {
+export function refetchMeasurementQuery(variables: MeasurementQueryVariables) {
   return { query: MeasurementDocument, variables: variables };
 }
 export const SamplesFilteredDocument = gql`
@@ -2083,7 +2107,7 @@ export type SamplesFilteredQueryResult = Apollo.QueryResult<
   SamplesFilteredQueryVariables
 >;
 export function refetchSamplesFilteredQuery(
-  variables?: SamplesFilteredQueryVariables,
+  variables: SamplesFilteredQueryVariables,
 ) {
   return { query: SamplesFilteredDocument, variables: variables };
 }
@@ -2161,7 +2185,7 @@ export type SampleQueryResult = Apollo.QueryResult<
   SampleQuery,
   SampleQueryVariables
 >;
-export function refetchSampleQuery(variables?: SampleQueryVariables) {
+export function refetchSampleQuery(variables: SampleQueryVariables) {
   return { query: SampleDocument, variables: variables };
 }
 export const UsersDocument = gql`

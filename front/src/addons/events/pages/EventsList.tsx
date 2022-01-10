@@ -2,6 +2,7 @@ import { InformationCircleIcon } from '@heroicons/react/outline';
 import objectPath from 'object-path';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { unflatten } from 'flat';
 
 import ElnLayout from '@/components/ElnLayout';
 import { EventStatusLabel } from '@/components/EventStatusLabel';
@@ -10,19 +11,28 @@ import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 import {
+  EventFilterInput,
   EventSortField,
+  EventSortInput,
   EventStatus,
   SortDirection,
   useEventsFilteredQuery,
 } from '@/generated/graphql';
+import { QueryType, Unflatten } from '@/components/TableQuery/types';
 
+type EventFilter = Exclude<EventFilterInput, 'status'> & {
+  status: string | null;
+};
 export default function EventsList() {
   const { query, setQuery } = useTableQuery({
     page: '1',
-    sortField: EventSortField.CREATEDAT,
-    sortDirection: SortDirection.DESC,
+    'sortBy.direction': SortDirection.DESC,
+    'sortBy.field': EventSortField.CREATEDAT,
   });
-  const { page, status, sortField, sortDirection, ...filter } = query;
+  const { page, status, sortBy, ...filter } = unflatten<
+    QueryType,
+    Unflatten<EventFilter, EventSortInput>
+  >(query);
   const { skip, limit } = boundariesFromPage(page);
   const { loading, error, data } = useEventsFilteredQuery({
     variables: {
@@ -36,10 +46,7 @@ export default function EventsList() {
             .filter<EventStatus>((value): value is EventStatus => !!value) ??
           null,
       },
-      sortBy: {
-        direction: sortDirection as SortDirection,
-        field: sortField as EventSortField,
-      },
+      sortBy,
     },
   });
 
@@ -87,6 +94,7 @@ export default function EventsList() {
         <TableQuery.DateColumn
           title="Process date"
           dataPath="processors.0.history.0.date"
+          disableSort
         />
         <TableQuery.ActionsColumn>
           {({ id }) => (

@@ -71,10 +71,12 @@ export default function NumberColumn({
     children,
   ]);
 
-  if (disableSearch) return <HeaderRender title={title} path={path} />;
+  if (disableSearch) {
+    return <HeaderRender title={title} path={path} disableSort={disableSort} />;
+  }
   const value = query[path] ?? '';
   return (
-    <HeaderRender title={title} path={path}>
+    <HeaderRender title={title} path={path} disableSort={disableSort}>
       <Input
         name={path}
         label={path}

@@ -95,6 +95,7 @@ export type GqlEventFile = {
 };
 
 export type GqlEventFilterInput = {
+  createdAt?: Maybe<GqlFilterDate>;
   fileId?: Maybe<Scalars['String']>;
   processorId?: Maybe<Scalars['String']>;
   status?: Maybe<Array<GqlEventStatus>>;

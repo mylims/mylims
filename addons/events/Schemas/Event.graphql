@@ -21,6 +21,7 @@ input EventFilterInput {
   processorId: String
   status: [EventStatus!]
   fileId: String
+  createdAt: FilterDate
 }
 input EventSortInput {
   direction: SortDirection!

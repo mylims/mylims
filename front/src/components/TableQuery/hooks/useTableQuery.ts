@@ -1,22 +1,23 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import type { QueryType, TableQueryHook } from '../types';
 
 export function useTableQuery(defaultQuery: QueryType): TableQueryHook {
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   let query: QueryType = defaultQuery;
-  for (const [key, value] of new URLSearchParams(useLocation().search)) {
+  for (const [key, value] of searchParams) {
     query[key] = value;
   }
+
   return {
     query,
-    setQuery: (newQuery) => {
+    setQuery(newQuery) {
       const search = new URLSearchParams();
       for (const [key, value] of Object.entries(newQuery)) {
         if (value !== null && value !== '') search.set(key, value);
       }
-      navigate(`?${search.toString()}`, { replace: true });
+      setSearchParams(search, { replace: true });
     },
   };
 }

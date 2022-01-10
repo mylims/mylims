@@ -3,10 +3,11 @@ import { ReactNode } from 'react';
 
 export interface QueryType {
   page: string;
-  sortField: string;
-  sortDirection: string;
+  'sortBy.field': string;
+  'sortBy.direction': string;
   [key: string]: string | null;
 }
+export type Unflatten<Q, S> = Q & { page: string; sortBy: S };
 export interface TableQueryContextType {
   query: QueryType;
   setQuery(this: void, query: QueryType): void;
@@ -36,6 +37,9 @@ export interface BaseColumnProps {
 export interface NumberColumnProps extends BaseColumnProps {
   format?: string;
 }
+export interface TextListColumnProps extends BaseColumnProps {
+  queryIndex: number;
+}
 export interface DateColumnProps extends BaseColumnProps {
   format?: string;
 }
@@ -56,6 +60,7 @@ export interface TableQueryHook {
 
 export enum ColumnKind {
   TEXT = 'text',
+  TEXT_LIST = 'textList',
   NUMBER = 'number',
   DATE = 'date',
   MULTI_SELECT = 'multiSelect',
@@ -76,6 +81,7 @@ interface RowStateGeneric<K, V> {
 }
 export type RowState =
   | RowStateGeneric<ColumnKind.TEXT, BaseColumnProps>
+  | RowStateGeneric<ColumnKind.TEXT_LIST, BaseColumnProps>
   | RowStateGeneric<ColumnKind.NUMBER, BaseColumnProps>
   | RowStateGeneric<ColumnKind.DATE, BaseColumnProps>
   | RowStateGeneric<ColumnKind.MULTI_SELECT, BaseColumnProps>
