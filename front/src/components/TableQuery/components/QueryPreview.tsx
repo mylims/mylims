@@ -32,8 +32,15 @@ export default function Queries() {
         disabled={queries.length === 0}
         size={Size.xSmall}
         onClick={() => {
-          const { sortField, sortDirection } = query;
-          submitQuery({ page: '1', sortField, sortDirection });
+          const {
+            'sortBy.direction': sortDirection,
+            'sortBy.field': sortField,
+          } = query;
+          submitQuery({
+            page: '1',
+            'sortBy.direction': sortDirection,
+            'sortBy.field': sortField,
+          });
         }}
       >
         Remove filters

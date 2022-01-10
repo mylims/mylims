@@ -7,16 +7,16 @@ import {
   GqlEventStatus,
   GqlEventDataType,
 } from 'App/graphql';
-import { filterText } from 'App/utils';
+import { filterDate, filterText, NotReadOnly } from 'App/utils';
 
 import { Event } from '../Models/Event';
 
 export default function filteredEvents(
   filterBy: GqlQueryEventsArgs['filterBy'],
 ) {
-  const { topic, processorId, status = [], fileId } = filterBy || {};
+  const { topic, processorId, status = [], fileId, createdAt } = filterBy || {};
 
-  let query: Filter<ModelAttributes<Event>> = {};
+  let query: Filter<NotReadOnly<ModelAttributes<Event>>> = {};
 
   if (processorId) query.processors = { $elemMatch: { processorId } };
 
@@ -32,6 +32,7 @@ export default function filteredEvents(
   }
 
   if (topic) query.topic = filterText(topic);
+  if (createdAt) query.createdAt = filterDate(createdAt);
   if (fileId) {
     query['data.fileId'] = fileId;
     query['data.type'] = GqlEventDataType.FILE;

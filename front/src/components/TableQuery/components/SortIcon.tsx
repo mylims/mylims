@@ -14,7 +14,8 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
   const { query, submitQuery } = useTableQueryContext();
   if (disableSort) return null;
 
-  const { sortField, sortDirection } = query;
+  const { 'sortBy.field': sortField, 'sortBy.direction': sortDirection } =
+    query;
   if (sortField !== path) {
     return (
       <SortDescendingIcon
@@ -22,8 +23,8 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
         onClick={() => {
           submitQuery({
             ...query,
-            sortField: path,
-            sortDirection: SortDirection.DESC,
+            'sortBy.field': path,
+            'sortBy.direction': SortDirection.DESC,
           });
         }}
       />
@@ -37,8 +38,8 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
         onClick={() => {
           submitQuery({
             ...query,
-            sortField,
-            sortDirection: SortDirection.ASC,
+            'sortBy.field': sortField,
+            'sortBy.direction': SortDirection.ASC,
           });
         }}
       />
@@ -49,7 +50,11 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
     <SortAscendingIcon
       className="flex-none w-5 h-5 text-primary-600"
       onClick={() => {
-        submitQuery({ ...query, sortField, sortDirection: SortDirection.DESC });
+        submitQuery({
+          ...query,
+          'sortBy.field': sortField,
+          'sortBy.direction': SortDirection.DESC,
+        });
       }}
     />
   );

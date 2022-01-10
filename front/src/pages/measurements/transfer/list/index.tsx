@@ -1,4 +1,5 @@
 import React from 'react';
+import { unflatten } from 'flat';
 
 import MeasurementActions from './MeasurementActions';
 import { MeasurementPlot } from './MeasurementPlot';
@@ -9,23 +10,34 @@ import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { Select } from '@/components/tailwind-ui';
 import {
+  MeasurementFilterInput,
   MeasurementsFilteredQuery,
   MeasurementSortField,
+  MeasurementSortInput,
   MeasurementTypes,
   SortDirection,
   useMeasurementsFilteredQuery,
 } from '@/generated/graphql';
+import { QueryType, Unflatten } from '@/components/TableQuery/types';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['list'][number];
-
+type DestructuredQuery = Unflatten<
+  MeasurementFilterInput,
+  MeasurementSortInput
+> & {
+  type: MeasurementTypes;
+};
 export default function MeasurementsList() {
   const { query, setQuery } = useTableQuery({
     page: '1',
-    sortField: MeasurementSortField.CREATEDAT,
-    sortDirection: SortDirection.DESC,
+    'sortBy.field': MeasurementSortField.CREATEDAT,
+    'sortBy.direction': SortDirection.DESC,
   });
-  const { page, type, sortField, sortDirection, ...filter } = query;
+  const { page, type, sortBy, ...filter } = unflatten<
+    QueryType,
+    DestructuredQuery
+  >(query);
   const measurementType = (query.type ??
     MeasurementTypes.TRANSFER) as MeasurementTypes;
   const { skip, limit } = boundariesFromPage(page);
@@ -35,10 +47,7 @@ export default function MeasurementsList() {
       skip,
       limit,
       filterBy: filter,
-      sortBy: {
-        direction: sortDirection as SortDirection,
-        field: sortField as MeasurementSortField,
-      },
+      sortBy,
     },
   });
 

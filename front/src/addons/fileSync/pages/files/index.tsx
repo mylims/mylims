@@ -87,8 +87,7 @@ function FilterTable({
       limit: PAGE_SIZE,
       filterBy: {
         ...filters,
-        minSize,
-        maxSize,
+        size: { min: minSize, max: maxSize },
         status: status?.map(({ value }) => value),
       },
       sortBy: {

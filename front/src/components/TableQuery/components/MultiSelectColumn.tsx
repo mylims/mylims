@@ -84,9 +84,11 @@ export default function MultiSelectColumn({
     children,
   ]);
 
-  if (disableSearch) return <HeaderRender title={title} path={path} />;
+  if (disableSearch) {
+    return <HeaderRender title={title} path={path} disableSort={disableSort} />;
+  }
   return (
-    <HeaderRender title={title} path={path}>
+    <HeaderRender title={title} path={path} disableSort={disableSort}>
       <MultiSearchSelect
         {...selectTags}
         name={path}
