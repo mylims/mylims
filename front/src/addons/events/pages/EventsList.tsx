@@ -1,13 +1,14 @@
 import { InformationCircleIcon } from '@heroicons/react/outline';
+import { unflatten } from 'flat';
 import objectPath from 'object-path';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { unflatten } from 'flat';
 
 import ElnLayout from '@/components/ElnLayout';
 import { EventStatusLabel } from '@/components/EventStatusLabel';
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
+import { QueryType, Unflatten } from '@/components/TableQuery/types';
 import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 import {
@@ -18,7 +19,6 @@ import {
   SortDirection,
   useEventsFilteredQuery,
 } from '@/generated/graphql';
-import { QueryType, Unflatten } from '@/components/TableQuery/types';
 
 type EventFilter = Exclude<EventFilterInput, 'status'> & {
   status: string | null;

@@ -91,7 +91,7 @@ export function Table<T extends Record<string, unknown>>({
 
   return (
     <TableQueryContext.Provider
-      value={{ query, setQuery, submitQuery, dispatch }}
+      value={{ columns: state, query, setQuery, submitQuery, dispatch }}
     >
       {queries}
       <div className="overflow-x-auto overflow-y-visible align-middle border-b shadow border-neutral-200 sm:rounded-lg">

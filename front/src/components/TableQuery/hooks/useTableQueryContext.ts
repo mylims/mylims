@@ -5,6 +5,7 @@ import { TableQueryContextType } from '../types';
 import { SortDirection } from '@/generated/graphql';
 
 export const TableQueryContext = createContext<TableQueryContextType>({
+  columns: [],
   query: {
     page: '1',
     'sortBy.direction': SortDirection.DESC,

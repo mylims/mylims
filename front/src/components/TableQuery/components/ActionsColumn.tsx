@@ -31,7 +31,7 @@ export default function ActionsColumn({ index, children }: ActionsColumnProps) {
         type: 'REMOVE_COLUMN',
         payload: { title: ColumnKind.ACTIONS },
       });
-  }, [index, children, dispatch]);
+  }, [index, dispatch]);
 
   return <HeaderRender title="Actions" path="" />;
 }

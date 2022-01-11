@@ -10,6 +10,7 @@ export interface QueryType {
 export type Unflatten<Q, S> = Q & { page: string; sortBy: S };
 export interface TableQueryContextType {
   query: QueryType;
+  columns: TableState;
   setQuery(this: void, query: QueryType): void;
   submitQuery(this: void, query: QueryType): void;
   dispatch(this: void, action: ReducerActions): void;
@@ -81,7 +82,7 @@ interface RowStateGeneric<K, V> {
 }
 export type RowState =
   | RowStateGeneric<ColumnKind.TEXT, BaseColumnProps>
-  | RowStateGeneric<ColumnKind.TEXT_LIST, BaseColumnProps>
+  | RowStateGeneric<ColumnKind.TEXT_LIST, TextListColumnProps>
   | RowStateGeneric<ColumnKind.NUMBER, BaseColumnProps>
   | RowStateGeneric<ColumnKind.DATE, BaseColumnProps>
   | RowStateGeneric<ColumnKind.MULTI_SELECT, BaseColumnProps>

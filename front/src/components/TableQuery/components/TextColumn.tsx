@@ -1,10 +1,10 @@
-import objectPath from 'object-path';
-import React, { useEffect } from 'react';
 import {
   ArrowCircleDownIcon,
   ArrowCircleRightIcon,
   CheckCircleIcon,
 } from '@heroicons/react/outline';
+import objectPath from 'object-path';
+import React, { useEffect } from 'react';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { BaseColumnProps, ColumnKind } from '../types';
@@ -89,7 +89,6 @@ export default function TextColumn({
     nullable,
     index,
     dispatch,
-    children,
   ]);
 
   if (disableSearch) {
@@ -119,12 +118,13 @@ export default function TextColumn({
             noDefaultButtonStyle
             buttonClassName="rounded-full flex items-center text-neutral-400 hover:text-neutral-600 focus:outline-none "
             onSelect={({ data }) => {
-              if (data)
+              if (data) {
                 submitQuery({
                   ...query,
                   [`${path}.value`]: value,
                   [`${path}.operator`]: data,
                 });
+              }
             }}
             options={[
               [
