@@ -48,7 +48,7 @@ export default function TextListColumn({
   const path = queryPath ?? dataPath;
   const value = query[`${path}.${queryIndex}.value.value`] ?? '';
   const operator =
-    (query[`${path}.operator`] as FilterTextOperator) ??
+    (query[`${path}.${queryIndex}.value.operator`] as FilterTextOperator) ??
     FilterTextOperator.EQUALS;
 
   useEffect(() => {
@@ -99,7 +99,12 @@ export default function TextListColumn({
   }
 
   return (
-    <HeaderRender title={title} path={path} disableSort={disableSort}>
+    <HeaderRender
+      title={title}
+      path={path}
+      disableSort={disableSort}
+      queryIndex={queryIndex}
+    >
       <Input
         name={path}
         label={path}

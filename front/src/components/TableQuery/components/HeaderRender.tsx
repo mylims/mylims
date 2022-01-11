@@ -1,6 +1,7 @@
 import { Popover } from '@headlessui/react';
 import { DocumentSearchIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
+import { fil } from 'date-fns/locale';
 import React, { JSXElementConstructor, ReactElement, useState } from 'react';
 import { usePopper } from 'react-popper';
 
@@ -11,6 +12,7 @@ import SortIcon from './SortIcon';
 interface HeaderRenderProps {
   title: string;
   path: string;
+  queryIndex?: number;
   disableSort?: boolean;
   children?: ReactElement<void, string | JSXElementConstructor<void>>;
 }
@@ -20,6 +22,7 @@ const TITLE_CLASS =
 export default function HeaderRender({
   title,
   path,
+  queryIndex,
   disableSort,
   children,
 }: HeaderRenderProps) {
@@ -35,6 +38,9 @@ export default function HeaderRender({
   });
 
   if (!children) return <th className={TITLE_CLASS}>{title}</th>;
+  const filtered = Object.keys(query).some((key) =>
+    key.startsWith(queryIndex === undefined ? path : `${path}.${queryIndex}`),
+  );
 
   return (
     <th>
@@ -48,7 +54,7 @@ export default function HeaderRender({
             <DocumentSearchIcon
               className={clsx(
                 'w-5 h-5 flex-none',
-                query[path] ? 'text-primary-600' : 'text-neutral-400',
+                filtered ? 'text-primary-600' : 'text-neutral-400',
               )}
             />
           </Popover.Button>
