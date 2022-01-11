@@ -61,6 +61,10 @@ export default function Queries() {
               .join(' - ');
             break;
           }
+          case ColumnKind.MULTI_SELECT: {
+            content = JSON.stringify(value);
+            break;
+          }
           default: {
             content = value.value as string;
             break;
