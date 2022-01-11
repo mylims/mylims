@@ -62,13 +62,13 @@ export default function NumberColumn({
   }, [
     dataPath,
     path,
+    title,
     disableSearch,
     disableSort,
     nullable,
     index,
     format,
     dispatch,
-    children,
   ]);
 
   if (disableSearch) {

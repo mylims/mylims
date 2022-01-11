@@ -1,5 +1,5 @@
-import React from 'react';
 import { unflatten } from 'flat';
+import React from 'react';
 
 import MeasurementActions from './MeasurementActions';
 import { MeasurementPlot } from './MeasurementPlot';
@@ -7,6 +7,7 @@ import { MeasurementPlot } from './MeasurementPlot';
 import ElnLayout from '@/components/ElnLayout';
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
+import { QueryType, Unflatten } from '@/components/TableQuery/types';
 import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { Select } from '@/components/tailwind-ui';
 import {
@@ -18,7 +19,6 @@ import {
   SortDirection,
   useMeasurementsFilteredQuery,
 } from '@/generated/graphql';
-import { QueryType, Unflatten } from '@/components/TableQuery/types';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['list'][number];

@@ -1,10 +1,10 @@
-import objectPath from 'object-path';
-import React, { useEffect } from 'react';
 import {
   ArrowCircleDownIcon,
   ArrowCircleRightIcon,
   CheckCircleIcon,
 } from '@heroicons/react/outline';
+import objectPath from 'object-path';
+import React, { useEffect } from 'react';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, TextListColumnProps } from '../types';
@@ -66,6 +66,7 @@ export default function TextListColumn({
         value: {
           dataPath,
           queryPath: path,
+          queryIndex,
           disableSearch,
           disableSort,
           nullable,
@@ -84,13 +85,13 @@ export default function TextListColumn({
   }, [
     dataPath,
     path,
+    queryIndex,
     title,
     disableSearch,
     disableSort,
     nullable,
     index,
     dispatch,
-    children,
   ]);
 
   if (disableSearch) {
@@ -121,13 +122,14 @@ export default function TextListColumn({
             noDefaultButtonStyle
             buttonClassName="rounded-full flex items-center text-neutral-400 hover:text-neutral-600 focus:outline-none "
             onSelect={({ data }) => {
-              if (data)
+              if (data) {
                 submitQuery({
                   ...query,
                   [`${path}.${queryIndex}.index`]: `${queryIndex}`,
                   [`${path}.${queryIndex}.value.value`]: value,
                   [`${path}.${queryIndex}.value.operator`]: data,
                 });
+              }
             }}
             options={[
               [

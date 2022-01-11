@@ -1,4 +1,3 @@
-import { Select } from '@/components/tailwind-ui';
 import { format as dateFormat, startOfDay, endOfDay } from 'date-fns';
 import objectPath from 'object-path';
 import React, { useEffect, useState } from 'react';
@@ -8,6 +7,8 @@ import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, DateColumnProps } from '../types';
 
 import HeaderRender from './HeaderRender';
+
+import { Select } from '@/components/tailwind-ui';
 
 function limitDate(date: Date | null, limiter: (date: Date) => Date) {
   return date ? limiter(date).toISOString() : null;
@@ -124,7 +125,6 @@ export default function DateColumn({
     index,
     format,
     dispatch,
-    children,
   ]);
 
   if (disableSearch) {

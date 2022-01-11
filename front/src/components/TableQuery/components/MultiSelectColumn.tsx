@@ -81,7 +81,6 @@ export default function MultiSelectColumn({
     nullable,
     index,
     dispatch,
-    children,
   ]);
 
   if (disableSearch) {

@@ -1,8 +1,9 @@
-import React, { ReactNode } from 'react';
 import { unflatten } from 'flat';
+import React, { ReactNode } from 'react';
 
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
+import { QueryType, Unflatten } from '@/components/TableQuery/types';
 import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { Badge, BadgeVariant, Color } from '@/components/tailwind-ui';
 import {
@@ -15,7 +16,6 @@ import {
   SortDirection,
   useSamplesFilteredQuery,
 } from '@/generated/graphql';
-import { QueryType, Unflatten } from '@/components/TableQuery/types';
 
 const PAGE_SIZE = 10;
 
@@ -46,14 +46,13 @@ export default function SamplesList({
       limit,
       filterBy: {
         ...filter,
-        sampleCode: (sampleCode &&
-          sampleCode
-            .filter((val) => !!val)
-            .map((val) => ({
-              ...val,
-              // @ts-expect-error The type of the value is string
-              index: val.index ? parseInt(val.index as string, 2) : null,
-            }))) as InputMaybe<FilterList[]> | undefined,
+        sampleCode: sampleCode
+          ?.filter((val) => !!val)
+          .map((val) => ({
+            ...val,
+            // @ts-expect-error The type of the value is string
+            index: val.index ? parseInt(val.index as string, 10) : null,
+          })) as InputMaybe<FilterList[]> | undefined,
       },
       sortBy,
     },
