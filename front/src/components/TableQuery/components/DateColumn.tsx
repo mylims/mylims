@@ -1,6 +1,6 @@
 import { format as dateFormat, startOfDay, endOfDay } from 'date-fns';
 import objectPath from 'object-path';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import DatePicker from 'react-datepicker';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
@@ -40,12 +40,12 @@ export default function DateColumn({
   const fromValue = query[`${path}.from`];
   const toValue = query[`${path}.to`];
 
-  const [operator, setOperator] = useState(() => {
+  const operator = useMemo(() => {
     if (!fromValue && !toValue) return DateOperators.BETWEEN;
     if (!fromValue && toValue) return DateOperators.LESS;
     if (fromValue && !toValue) return DateOperators.GREATER;
     return DateOperators.BETWEEN;
-  });
+  }, [fromValue, toValue]);
   const value = fromValue
     ? new Date(fromValue)
     : toValue
@@ -75,9 +75,6 @@ export default function DateColumn({
 
     submitQuery({ ...query, ...newQuery, page: '1' });
   };
-  useEffect(() => {
-    handleChange(value, operator);
-  }, [operator]);
 
   useEffect(() => {
     if (index === undefined) {
@@ -152,7 +149,7 @@ export default function DateColumn({
           ]}
           selected={{ value: operator, label: OPERATOR_LABEL[operator] }}
           onSelect={(selected?: { label: string; value: DateOperators }) => {
-            setOperator(selected?.value ?? DateOperators.BETWEEN);
+            handleChange(value, selected?.value ?? DateOperators.BETWEEN);
           }}
         />
         <DatePicker
