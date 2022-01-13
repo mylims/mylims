@@ -18,7 +18,7 @@ export default function WaferDicing({ wafer, size }: WaferDicingProps) {
       diameter={{ value, units: units || 'inch' }}
       chipHeight={{ value: 2, units: 'cm' }}
       chipWidth={{ value: 1.8, units: 'cm' }}
-      textStyle={{ fontSize: '13px' }}
+      textStyle={{ fontSize: '0.7em' }}
       prepend="A"
       pickedItems={
         wafer.children?.map(({ sampleCode }) => ({

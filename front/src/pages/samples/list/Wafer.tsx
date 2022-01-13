@@ -4,6 +4,7 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/outline';
 import React, { useState } from 'react';
+import { ResponsiveChart } from 'react-d3-utils';
 import { Link } from 'react-router-dom';
 
 import SamplesList from './Default';
@@ -91,10 +92,12 @@ export default function WaferList() {
               </p>
             ) : (
               <div>
-                <div>
-                  <WaferDicing size={300} wafer={state} />
+                <div className="w-full mb-2">
+                  <ResponsiveChart minHeight={30}>
+                    {({ width }) => <WaferDicing size={width} wafer={state} />}
+                  </ResponsiveChart>
                 </div>
-                <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="grid grid-cols-2 gap-4 ">
                   <Link title="detail" to={`/sample/detail/wafer/${state.id}`}>
                     <Button
                       className="flex space-x-2"
