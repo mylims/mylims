@@ -88,7 +88,7 @@ export default function SampleList() {
                 {state.parent && (
                   <Link
                     title="detail"
-                    to={`../detail/wafer/${state.parent.id}`}
+                    to={`../../detail/wafer/${state.parent.id}`}
                   >
                     <Button
                       className="flex space-x-2"
