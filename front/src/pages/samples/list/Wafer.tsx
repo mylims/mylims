@@ -1,4 +1,8 @@
-import { EyeIcon, InformationCircleIcon } from '@heroicons/react/outline';
+import {
+  EyeIcon,
+  FolderOpenIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -79,19 +83,6 @@ export default function WaferList() {
             <span className="text-xs font-semibold tracking-wider text-left uppercase">
               Preview
             </span>
-            {state && (
-              <Link title="detail" to={`/sample/detail/wafer/${state.id}`}>
-                <Button
-                  className="flex space-x-2"
-                  size={Size.xSmall}
-                  color={Color.primary}
-                  variant={Variant.secondary}
-                >
-                  <InformationCircleIcon className="w-4 h-4" />
-                  <span>Detail</span>
-                </Button>
-              </Link>
-            )}
           </Card.Header>
           <Card.Body>
             {!state ? (
@@ -103,7 +94,39 @@ export default function WaferList() {
                 <div>
                   <WaferDicing size={300} wafer={state} />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 mt-2">
+                  <Link title="detail" to={`/sample/detail/wafer/${state.id}`}>
+                    <Button
+                      className="flex space-x-2"
+                      color={Color.primary}
+                      variant={Variant.secondary}
+                    >
+                      <InformationCircleIcon className="w-5 h-5" />
+                      <span>Detail</span>
+                    </Button>
+                  </Link>
+                  {state.children && (
+                    <Link
+                      title="detail"
+                      to={{
+                        pathname: '/sample/list/sample',
+                        search: new URLSearchParams({
+                          'sampleCode.0.index': '0',
+                          'sampleCode.0.value.value': state.sampleCode[0],
+                          'sampleCode.0.value.operator': 'equals',
+                        }).toString(),
+                      }}
+                    >
+                      <Button
+                        className="flex space-x-2"
+                        color={Color.primary}
+                        variant={Variant.secondary}
+                      >
+                        <FolderOpenIcon className="w-5 h-5" />
+                        <span>Samples</span>
+                      </Button>
+                    </Link>
+                  )}
                   <FieldDescription title="Name">
                     {state.sampleCode.join('_')}
                   </FieldDescription>
