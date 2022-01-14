@@ -3,7 +3,6 @@ import { unflatten } from 'flat';
 import { produce } from 'immer';
 import React, { useMemo } from 'react';
 
-
 import { ColumnKind, QueryType } from '@/components/TableQuery/types';
 import {
   Button,

@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import {

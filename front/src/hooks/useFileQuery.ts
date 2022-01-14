@@ -1,7 +1,6 @@
 import bytes from 'byte-size';
 import { useNavigate } from 'react-router-dom';
 
-
 import { FilesSortField, FileStatus, SortDirection } from '@/generated/graphql';
 import filesizeParser from '@/utils/filesize-parser';
 

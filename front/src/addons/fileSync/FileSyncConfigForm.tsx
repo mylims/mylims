@@ -28,7 +28,6 @@ import ReadyCheckEdit from './ReadyCheckEdit';
 import SelectFolderSlideOver from './SelectFolderSlideOver';
 import TopicsEdit from './TopicsEdit';
 
-
 const defaultInitialValues: NewFileSyncOptionInput = {
   enabled: true,
   root: '',

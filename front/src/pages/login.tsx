@@ -6,7 +6,6 @@ import LocalAuthForm from '@/components/LocalAuthForm';
 import AddonsContext from '../contexts/AddonsContext';
 import useAuth from '../hooks/useAuth';
 
-
 const loginAddons = {
   ldap: () => import('../addons/ldap/LdapAuthForm'),
   oidc: () => import('../addons/oidc/OidcAuthForm'),

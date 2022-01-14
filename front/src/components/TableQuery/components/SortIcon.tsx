@@ -5,7 +5,6 @@ import { SortDirection } from '@/generated/graphql';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 
-
 interface SortIconProps {
   disableSort: boolean;
   path: string;

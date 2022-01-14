@@ -6,7 +6,6 @@ import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 
 import { MeasurementPlotContext } from './MeasurementPlot';
 
-
 interface MeasurementActionsProps {
   type: string;
   id: string;

@@ -4,7 +4,6 @@ import { SortDirection } from '@/generated/graphql';
 
 import { TableQueryContextType } from '../types';
 
-
 export const TableQueryContext = createContext<TableQueryContextType>({
   columns: [],
   query: {

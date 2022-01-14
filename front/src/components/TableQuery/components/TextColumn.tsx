@@ -14,7 +14,6 @@ import { BaseColumnProps, ColumnKind } from '../types';
 
 import HeaderRender from './HeaderRender';
 
-
 interface IconFilterProps {
   operator: FilterTextOperator;
   className?: string;

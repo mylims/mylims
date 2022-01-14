@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
 
-
 import type { QueryType } from '@/components/TableQuery/types';
 import { Card } from '@/components/tailwind-ui';
 import { MeasurementTypes } from '@/generated/graphql';

@@ -11,7 +11,6 @@ import { SelectColumnProps, ColumnKind, SelectionValue } from '../types';
 
 import HeaderRender from './HeaderRender';
 
-
 function parseOptions(options: SelectColumnProps['options']): SelectionValue[] {
   return options.map((value) => {
     if (typeof value === 'string') return { value, label: value };
