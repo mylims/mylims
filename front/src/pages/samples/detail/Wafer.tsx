@@ -44,5 +44,9 @@ export default function WaferDetail() {
 }
 
 WaferDetail.getLayout = (page: React.ReactNode) => {
-  return <ElnLayout pageTitle="Wafer detail">{page}</ElnLayout>;
+  return (
+    <ElnLayout pageTitle="Wafer detail" maxWidth="max-w-screen-2xl">
+      {page}
+    </ElnLayout>
+  );
 };

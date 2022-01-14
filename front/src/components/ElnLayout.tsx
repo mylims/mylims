@@ -4,19 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import Nav from '@/components/Nav';
 
 import useAuth from '../hooks/useAuth';
+import clsx from 'clsx';
 
 interface ElnLayoutProps {
   pageTitle?: string;
+  maxWidth?: string;
   children: React.ReactNode;
 }
 
-export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
+export default function ElnLayout({
+  pageTitle,
+  children,
+  maxWidth = 'max-w-max',
+}: ElnLayoutProps) {
   const navigate = useNavigate();
   const { isAuth } = useAuth();
   useEffect(() => {
-    if (!isAuth) {
-      navigate('/login');
-    }
+    if (!isAuth) navigate('/login');
   }, [isAuth, navigate]);
 
   return (
@@ -33,7 +37,7 @@ export default function ElnLayout({ pageTitle, children }: ElnLayoutProps) {
         </header>
       )}
       <main>
-        <div className="py-3 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
+        <div className={clsx('py-3 mx-auto sm:px-6 lg:px-8', maxWidth)}>
           <div className="px-4 py-3 sm:px-0">{children}</div>
         </div>
       </main>

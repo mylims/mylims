@@ -22,5 +22,9 @@ export default function DyeDetail() {
 }
 
 DyeDetail.getLayout = (page: React.ReactNode) => {
-  return <ElnLayout pageTitle="Dye detail">{page}</ElnLayout>;
+  return (
+    <ElnLayout pageTitle="Dye detail" maxWidth="max-w-screen-2xl">
+      {page}
+    </ElnLayout>
+  );
 };
