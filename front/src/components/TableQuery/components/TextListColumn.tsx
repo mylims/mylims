@@ -6,13 +6,14 @@ import {
 import objectPath from 'object-path';
 import React, { useEffect } from 'react';
 
+import { Dropdown, Input } from '@/components/tailwind-ui';
+import { FilterTextOperator } from '@/generated/graphql';
+
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, TextListColumnProps } from '../types';
 
 import HeaderRender from './HeaderRender';
 
-import { Dropdown, Input } from '@/components/tailwind-ui';
-import { FilterTextOperator } from '@/generated/graphql';
 
 interface IconFilterProps {
   operator: FilterTextOperator;

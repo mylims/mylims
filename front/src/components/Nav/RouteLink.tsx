@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import minimatch from 'minimatch';
-import { Link, useLocation } from 'react-router-dom';
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 import { RouteType } from './types';
 

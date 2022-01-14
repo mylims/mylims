@@ -2,12 +2,13 @@ import numeral from 'numeral';
 import objectPath from 'object-path';
 import React, { useEffect } from 'react';
 
+import { Input } from '@/components/tailwind-ui';
+
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, NumberColumnProps } from '../types';
 
 import HeaderRender from './HeaderRender';
 
-import { Input } from '@/components/tailwind-ui';
 
 export default function NumberColumn({
   title,

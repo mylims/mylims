@@ -1,11 +1,11 @@
-import React, { Fragment, useState } from 'react';
 import { Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
-
-import MenuDropDown from '../MenuDropDown';
+import React, { Fragment, useState } from 'react';
 
 import { LOGO } from '@/../env';
 import { RouteMenu } from '@/components/Nav/RouteMenu';
+
+import MenuDropDown from '../MenuDropDown';
 
 export default function TestHeader() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -26,6 +26,7 @@ export default function TestHeader() {
               <button
                 className="bg-neutral-800 rounded-md p-2 inline-flex items-center justify-center text-neutral-400 hover:text-neutral-500 hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-alternative-500"
                 onClick={() => setMobileNavOpen(!mobileNavOpen)}
+                type="button"
               >
                 {!mobileNavOpen ? (
                   <>

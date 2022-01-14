@@ -2,8 +2,6 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import TableFilesFiltered from './TableFilesFiltered';
-import TableFilesSync from './TableFilesSync';
 
 import ElnLayout from '@/components/ElnLayout';
 import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
@@ -17,6 +15,9 @@ import {
 } from '@/generated/graphql';
 import { useFilterFilesQuery } from '@/hooks/useFileQuery';
 import filesizeParser from '@/utils/filesize-parser';
+
+import TableFilesFiltered from './TableFilesFiltered';
+import TableFilesSync from './TableFilesSync';
 
 interface RouterQuery {
   id: string;

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Nav from '@/components/Nav';
+
 import useAuth from '../hooks/useAuth';
 
-import Nav from '@/components/Nav';
 
 interface ElnLayoutProps {
   pageTitle?: string;

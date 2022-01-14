@@ -1,8 +1,6 @@
 import { unflatten } from 'flat';
 import React from 'react';
 
-import MeasurementActions from './MeasurementActions';
-import { MeasurementPlot } from './MeasurementPlot';
 
 import ElnLayout from '@/components/ElnLayout';
 import { Table as TableQuery } from '@/components/TableQuery';
@@ -19,6 +17,9 @@ import {
   SortDirection,
   useMeasurementsFilteredQuery,
 } from '@/generated/graphql';
+
+import MeasurementActions from './MeasurementActions';
+import { MeasurementPlot } from './MeasurementPlot';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['list'][number];

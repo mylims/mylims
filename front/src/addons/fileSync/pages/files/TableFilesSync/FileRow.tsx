@@ -2,8 +2,6 @@ import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/solid';
 import React, { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
-import { changeNodeValue, TreeContext } from './TreeContext';
-import { EventsProcessors, FileSync, TreeType } from './types';
 
 import ExpandButton from '@/components/ExpandButton';
 import { FileStatusLabel } from '@/components/FileStatusLabel';
@@ -21,6 +19,9 @@ import {
   useEventsByFileIdLazyQuery,
 } from '@/generated/graphql';
 import { formatBytes, formatDate } from '@/utils/formatFields';
+
+import { changeNodeValue, TreeContext } from './TreeContext';
+import { EventsProcessors, FileSync, TreeType } from './types';
 
 function getTagColor(status: EventStatus) {
   switch (status) {

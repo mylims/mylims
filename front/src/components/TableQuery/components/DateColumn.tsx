@@ -3,12 +3,13 @@ import objectPath from 'object-path';
 import React, { useEffect, useMemo } from 'react';
 import DatePicker from 'react-datepicker';
 
+import { Select } from '@/components/tailwind-ui';
+
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, DateColumnProps } from '../types';
 
 import HeaderRender from './HeaderRender';
 
-import { Select } from '@/components/tailwind-ui';
 
 function limitDate(date: Date | null, limiter: (date: Date) => Date) {
   return date ? limiter(date).toISOString() : null;

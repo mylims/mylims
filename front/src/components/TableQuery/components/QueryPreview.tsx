@@ -3,7 +3,6 @@ import { unflatten } from 'flat';
 import { produce } from 'immer';
 import React, { useMemo } from 'react';
 
-import { useTableQueryContext } from '../hooks/useTableQueryContext';
 
 import { ColumnKind, QueryType } from '@/components/TableQuery/types';
 import {
@@ -14,6 +13,8 @@ import {
   BadgeVariant,
   Size,
 } from '@/components/tailwind-ui';
+
+import { useTableQueryContext } from '../hooks/useTableQueryContext';
 
 export default function Queries() {
   const { columns, query, submitQuery } = useTableQueryContext();

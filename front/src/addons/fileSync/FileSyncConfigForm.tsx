@@ -2,11 +2,6 @@ import { Field, FieldArray, FormikConfig } from 'formik';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import PatternEdit from './PatternEdit';
-import ReadyCheckEdit from './ReadyCheckEdit';
-import SelectFolderSlideOver from './SelectFolderSlideOver';
-import TopicsEdit from './TopicsEdit';
-
 import {
   Alert,
   AlertType,
@@ -27,6 +22,12 @@ import {
   useReadyChecksQuery,
 } from '@/generated/graphql';
 import { omitDeep } from '@/utils/omit-deep';
+
+import PatternEdit from './PatternEdit';
+import ReadyCheckEdit from './ReadyCheckEdit';
+import SelectFolderSlideOver from './SelectFolderSlideOver';
+import TopicsEdit from './TopicsEdit';
+
 
 const defaultInitialValues: NewFileSyncOptionInput = {
   enabled: true,

@@ -1,9 +1,10 @@
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid';
 import React from 'react';
 
+import { SortDirection } from '@/generated/graphql';
+
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 
-import { SortDirection } from '@/generated/graphql';
 
 interface SortIconProps {
   disableSort: boolean;

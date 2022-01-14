@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import B1505Transfer from './B1505Transfer';
 
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
@@ -15,6 +14,8 @@ import {
 } from '@/components/tailwind-ui';
 import { MeasurementTypes, useMeasurementQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
+
+import B1505Transfer from './B1505Transfer';
 
 export default function MeasurementDetail() {
   const { id = '', type = MeasurementTypes.TRANSFER } =

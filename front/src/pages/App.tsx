@@ -8,10 +8,6 @@ import {
 import React, { useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import AddonsContext from '../contexts/AddonsContext';
-import AuthContext from '../contexts/AuthContext';
-import { client } from '../graphql/apollo';
-
 import {
   ErrorPage,
   NotificationCenter,
@@ -20,6 +16,11 @@ import {
   ToastNotificationCenter,
 } from '@/components/tailwind-ui';
 import { useElnQuery } from '@/hooks/useElnQuery';
+
+import AddonsContext from '../contexts/AddonsContext';
+import AuthContext from '../contexts/AuthContext';
+import { client } from '../graphql/apollo';
+
 
 const queryClient = new QueryClient();
 

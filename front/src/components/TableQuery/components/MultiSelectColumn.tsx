@@ -1,15 +1,16 @@
 import objectPath from 'object-path';
 import React, { useEffect, useMemo } from 'react';
 
+import {
+  MultiSearchSelect,
+  useMultiSearchSelect,
+} from '@/components/tailwind-ui';
+
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { SelectColumnProps, ColumnKind, SelectionValue } from '../types';
 
 import HeaderRender from './HeaderRender';
 
-import {
-  MultiSearchSelect,
-  useMultiSearchSelect,
-} from '@/components/tailwind-ui';
 
 function parseOptions(options: SelectColumnProps['options']): SelectionValue[] {
   return options.map((value) => {
