@@ -22,5 +22,9 @@ export default function DeviceDetail() {
 }
 
 DeviceDetail.getLayout = (page: React.ReactNode) => {
-  return <ElnLayout pageTitle="Device detail">{page}</ElnLayout>;
+  return (
+    <ElnLayout pageTitle="Device detail" maxWidth="max-w-screen-2xl">
+      {page}
+    </ElnLayout>
+  );
 };

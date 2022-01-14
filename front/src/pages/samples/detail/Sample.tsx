@@ -31,5 +31,9 @@ export default function SampleDetail() {
 }
 
 SampleDetail.getLayout = (page: React.ReactNode) => {
-  return <ElnLayout pageTitle="Sample detail">{page}</ElnLayout>;
+  return (
+    <ElnLayout pageTitle="Sample detail" maxWidth="max-w-screen-2xl">
+      {page}
+    </ElnLayout>
+  );
 };
