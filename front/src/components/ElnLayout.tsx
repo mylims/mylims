@@ -5,7 +5,6 @@ import Nav from '@/components/Nav';
 
 import useAuth from '../hooks/useAuth';
 
-
 interface ElnLayoutProps {
   pageTitle?: string;
   children: React.ReactNode;
