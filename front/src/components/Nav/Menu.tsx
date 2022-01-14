@@ -2,7 +2,9 @@ import RouteLink from '@/components/Nav/RouteLink';
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
+import minimatch from 'minimatch';
 import React, { Fragment } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { RouteType } from './types';
 
@@ -12,6 +14,12 @@ interface MenuProps {
 }
 
 export function Menu({ title, routes }: MenuProps) {
+  const { pathname } = useLocation();
+  const isMatch = routes.reduce(
+    (acc, route) =>
+      acc || minimatch(pathname, route.pathmatch || route.pathname),
+    false,
+  );
   return (
     <Popover className="relative">
       {({ open }) => (
@@ -19,6 +27,7 @@ export function Menu({ title, routes }: MenuProps) {
           <Popover.Button
             className={clsx(
               open ? 'text-neutral-100' : 'text-neutral-300',
+              isMatch ? 'text-neutral-100 bg-neutral-900' : 'text-neutral-300',
               'group p-2 text-sm rounded-md inline-flex items-center font-medium hover:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-alternative-500',
             )}
           >
