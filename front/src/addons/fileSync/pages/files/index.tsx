@@ -2,7 +2,6 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-
 import ElnLayout from '@/components/ElnLayout';
 import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
 import {

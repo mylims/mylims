@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
 import { Link } from 'react-router-dom';
 
-
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import { Table as TableQuery } from '@/components/TableQuery';

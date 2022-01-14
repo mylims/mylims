@@ -10,7 +10,6 @@ import FileRow from './FileRow';
 import { TreeContext } from './TreeContext';
 import { TableFilesSyncProps, TreeType, TreeSync } from './types';
 
-
 const titles = [
   { className: 'w-1/12', name: 'Relative path' },
   { className: 'w-1/12', name: 'Size' },

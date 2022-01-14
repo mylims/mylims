@@ -9,7 +9,6 @@ import { ColumnKind, NumberColumnProps } from '../types';
 
 import HeaderRender from './HeaderRender';
 
-
 export default function NumberColumn({
   title,
   dataPath,

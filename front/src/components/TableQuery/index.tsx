@@ -36,7 +36,6 @@ import {
 } from './types';
 import { PAGE_SIZE, splitChildren } from './utils';
 
-
 interface TableBodyProps<T> {
   list: Array<T>;
   columns: TableState;

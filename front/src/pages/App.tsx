@@ -21,7 +21,6 @@ import AddonsContext from '../contexts/AddonsContext';
 import AuthContext from '../contexts/AuthContext';
 import { client } from '../graphql/apollo';
 
-
 const queryClient = new QueryClient();
 
 interface SetupElnProps {

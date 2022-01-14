@@ -6,7 +6,6 @@ import {
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import { Table as TableQuery } from '@/components/TableQuery';

@@ -1,8 +1,6 @@
 import { FolderOpenIcon } from '@heroicons/react/solid';
 import React, { useContext, useEffect } from 'react';
 
-
-
 import ExpandButton from '@/components/ExpandButton';
 import { Td } from '@/components/tailwind-ui';
 import { useFilesByConfigLazyQuery } from '@/generated/graphql';

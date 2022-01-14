@@ -1,7 +1,6 @@
 import { unflatten } from 'flat';
 import React from 'react';
 
-
 import ElnLayout from '@/components/ElnLayout';
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
