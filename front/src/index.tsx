@@ -2,26 +2,24 @@ import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 
-// File sync
 import EventDetail from '@/addons/events/pages/EventDetail';
 import EventsList from '@/addons/events/pages/EventsList';
 import Create from '@/addons/fileSync/pages/create';
 import Edit from '@/addons/fileSync/pages/edit';
 import Files from '@/addons/fileSync/pages/files';
 import List from '@/addons/fileSync/pages/list';
-// Base
 import NoMatch from '@/pages/404';
 import App from '@/pages/App';
-// Eln
 import Login from '@/pages/login';
-// Measurements
 import MeasurementDetail from '@/pages/measurements/transfer/detail';
 import MeasurementsList from '@/pages/measurements/transfer/list';
-// Samples
+import DeviceDetail from '@/pages/samples/detail/Device';
+import DyeDetail from '@/pages/samples/detail/Dye';
 import SampleDetail from '@/pages/samples/detail/Sample';
 import WaferDetail from '@/pages/samples/detail/Wafer';
+import DeviceList from '@/pages/samples/list/Device';
+import DyeList from '@/pages/samples/list/Dye';
 import SampleList from '@/pages/samples/list/Sample';
-// Events
 import WaferList from '@/pages/samples/list/Wafer';
 import Users from '@/pages/users';
 
@@ -64,6 +62,8 @@ function AppRoutes() {
           children: [
             { path: 'wafer', element: <App Component={WaferList} /> },
             { path: 'sample', element: <App Component={SampleList} /> },
+            { path: 'dye', element: <App Component={DyeList} /> },
+            { path: 'device', element: <App Component={DeviceList} /> },
           ],
         },
         {
@@ -71,6 +71,8 @@ function AppRoutes() {
           children: [
             { path: 'wafer/:id', element: <App Component={WaferDetail} /> },
             { path: 'sample/:id', element: <App Component={SampleDetail} /> },
+            { path: 'dye/:id', element: <App Component={DyeDetail} /> },
+            { path: 'device/:id', element: <App Component={DeviceDetail} /> },
           ],
         },
       ],
