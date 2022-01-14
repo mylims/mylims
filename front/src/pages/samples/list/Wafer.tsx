@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
 import { Link } from 'react-router-dom';
 
-import SamplesList from './Default';
 
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
@@ -22,6 +21,8 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import { Sample } from '@/generated/graphql';
+
+import SamplesList from './Default';
 
 export default function WaferList() {
   const [state, setState] = useState<Sample | null>(null);

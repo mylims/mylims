@@ -1,15 +1,17 @@
 import { FolderOpenIcon } from '@heroicons/react/solid';
 import React, { useContext, useEffect } from 'react';
 
-import { TreeContext, changeNodeValue } from './TreeContext';
-import { DirSync, TreeType } from './types';
 
-import { Row } from './index';
 
 import ExpandButton from '@/components/ExpandButton';
 import { Td } from '@/components/tailwind-ui';
 import { useFilesByConfigLazyQuery } from '@/generated/graphql';
 import { formatBytes, formatDate } from '@/utils/formatFields';
+
+import { TreeContext, changeNodeValue } from './TreeContext';
+import { DirSync, TreeType } from './types';
+
+import { Row } from './index';
 
 export default function DirRow({ value }: { value: DirSync }) {
   const context = useContext(TreeContext);

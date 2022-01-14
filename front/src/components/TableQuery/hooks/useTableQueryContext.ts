@@ -1,8 +1,9 @@
 import { createContext, useContext } from 'react';
 
+import { SortDirection } from '@/generated/graphql';
+
 import { TableQueryContextType } from '../types';
 
-import { SortDirection } from '@/generated/graphql';
 
 export const TableQueryContext = createContext<TableQueryContextType>({
   columns: [],

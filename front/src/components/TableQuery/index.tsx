@@ -10,6 +10,13 @@ import React, {
   useState,
 } from 'react';
 
+import {
+  Alert,
+  AlertType,
+  Pagination,
+  Spinner,
+} from '@/components/tailwind-ui';
+
 import ActionsColumn from './components/ActionsColumn';
 import DateColumn from './components/DateColumn';
 import MultiSelectColumn from './components/MultiSelectColumn';
@@ -29,12 +36,6 @@ import {
 } from './types';
 import { PAGE_SIZE, splitChildren } from './utils';
 
-import {
-  Alert,
-  AlertType,
-  Pagination,
-  Spinner,
-} from '@/components/tailwind-ui';
 
 interface TableBodyProps<T> {
   list: Array<T>;

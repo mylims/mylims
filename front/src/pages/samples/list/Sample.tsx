@@ -6,7 +6,6 @@ import {
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import SamplesList from './Default';
 
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
@@ -20,6 +19,8 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import { Sample } from '@/generated/graphql';
+
+import SamplesList from './Default';
 
 export default function SampleList() {
   const [state, setState] = useState<Sample | null>(null);

@@ -1,11 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react';
 
-import MeasurementTypeRender from './MeasurementTypeRender';
 
 import type { QueryType } from '@/components/TableQuery/types';
 import { Card } from '@/components/tailwind-ui';
 import { MeasurementTypes } from '@/generated/graphql';
 import { useFetchFileDict } from '@/hooks/useFetchFile';
+
+import MeasurementTypeRender from './MeasurementTypeRender';
 
 interface MeasurementPlotProps {
   type: MeasurementTypes;

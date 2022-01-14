@@ -1,10 +1,11 @@
-import RouteLink from '@/components/Nav/RouteLink';
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import minimatch from 'minimatch';
 import React, { Fragment } from 'react';
 import { useLocation } from 'react-router-dom';
+
+import RouteLink from '@/components/Nav/RouteLink';
 
 import { RouteType } from './types';
 

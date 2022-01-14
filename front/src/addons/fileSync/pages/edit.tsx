@@ -2,7 +2,6 @@ import { FormikHelpers } from 'formik';
 import React, { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import FileSyncConfigForm from '../FileSyncConfigForm';
 
 import ElnLayout from '@/components/ElnLayout';
 import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
@@ -12,6 +11,8 @@ import {
   useEditFileSyncOptionMutation,
   useFileSyncOptionQuery,
 } from '@/generated/graphql';
+
+import FileSyncConfigForm from '../FileSyncConfigForm';
 
 export default function EditConfig() {
   const [editFileSyncOption, { loading: mutationLoading }] =

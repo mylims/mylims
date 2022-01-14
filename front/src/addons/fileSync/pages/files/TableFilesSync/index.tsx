@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import TableEmpty from '@/components/TableEmpty';
+import TableHeader from '@/components/TableHeader';
+import { Button, Table, Td, Variant } from '@/components/tailwind-ui';
+
 import DirRow from './DirRow';
 import FileRow from './FileRow';
 import { TreeContext } from './TreeContext';
 import { TableFilesSyncProps, TreeType, TreeSync } from './types';
 
-import TableEmpty from '@/components/TableEmpty';
-import TableHeader from '@/components/TableHeader';
-import { Button, Table, Td, Variant } from '@/components/tailwind-ui';
 
 const titles = [
   { className: 'w-1/12', name: 'Relative path' },
