@@ -1,7 +1,6 @@
 import clsx from 'clsx';
-import minimatch from 'minimatch';
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useMatch } from 'react-router-dom';
 
 import { RouteType } from './types';
 
@@ -10,8 +9,7 @@ interface RouteLinkProps {
 }
 
 export default function RouteLink({ route }: RouteLinkProps) {
-  const { pathname } = useLocation();
-  const isMatch = minimatch(pathname, route.pathmatch || route.pathname);
+  const isMatch = useMatch(route.pathmatch || route.pathname);
   return (
     <Link
       to={route.pathname}

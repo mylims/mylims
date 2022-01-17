@@ -1,9 +1,8 @@
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import minimatch from 'minimatch';
 import React, { Fragment } from 'react';
-import { useLocation } from 'react-router-dom';
+import { matchPath, useLocation } from 'react-router-dom';
 
 import RouteLink from '@/components/Nav/RouteLink';
 
@@ -18,7 +17,7 @@ export function Menu({ title, routes }: MenuProps) {
   const { pathname } = useLocation();
   const isMatch = routes.reduce(
     (acc, route) =>
-      acc || minimatch(pathname, route.pathmatch || route.pathname),
+      acc || !!matchPath(pathname, route.pathmatch || route.pathname),
     false,
   );
   return (
@@ -51,9 +50,9 @@ export function Menu({ title, routes }: MenuProps) {
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Popover.Panel className="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-xs sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
-              <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                <div className="relative grid gap-6 bg-neutral-600 px-5 py-6 sm:gap-8 sm:p-8">
+            <Popover.Panel className="absolute z-10 w-screen max-w-xs px-2 mt-3 -ml-4 transform sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
+              <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="relative grid gap-6 px-5 py-6 bg-neutral-600 sm:gap-8 sm:p-8">
                   {routes.map((route) => (
                     <RouteLink key={route.pathname} route={route} />
                   ))}
