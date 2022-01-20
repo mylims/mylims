@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   MultiSearchSelectFieldRHF,
-  useMultiSearchSelect,
+  useMultiSearchSelectFieldRHF,
 } from '@/components/tailwind-ui';
 
 interface MultiSelectProps {
@@ -15,15 +15,25 @@ export default function MultiSelect({
   name,
   label,
   required,
-  options,
+  options: initialOptions,
 }: MultiSelectProps) {
-  const multiSearchSelectSimple = useMultiSearchSelect({ options });
+  const [options, setOptions] = useState(initialOptions);
+  const multiSearchSelect = useMultiSearchSelectFieldRHF({ name, options });
+
   return (
     <MultiSearchSelectFieldRHF
-      name={name}
       label={label}
       required={required}
-      {...multiSearchSelectSimple}
+      canCreate={(val) => {
+        return options.find(({ value }) => value === val) === undefined;
+      }}
+      onCreate={(value) => {
+        const newOption = { label: value, value };
+        setOptions([...options, newOption]);
+        multiSearchSelect.onSelect([...multiSearchSelect.selected, newOption]);
+      }}
+      clearable
+      {...multiSearchSelect}
     />
   );
 }
