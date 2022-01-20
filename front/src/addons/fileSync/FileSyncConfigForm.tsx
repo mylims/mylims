@@ -2,6 +2,7 @@ import { Field, FieldArray, FormikConfig } from 'formik';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import HelpButton from '@/components/HelpButton';
 import {
   Alert,
   AlertType,
@@ -22,7 +23,6 @@ import {
   useReadyChecksQuery,
 } from '@/generated/graphql';
 import { omitDeep } from '@/utils/omit-deep';
-import HelpButton from '@/components/HelpButton';
 
 import PatternEdit from './PatternEdit';
 import ReadyCheckEdit from './ReadyCheckEdit';
