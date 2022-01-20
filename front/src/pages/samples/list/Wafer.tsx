@@ -70,14 +70,16 @@ export default function WaferList() {
         </SamplesList>
       </div>
       <div>
-        <Button
-          className="mb-4"
-          variant={Variant.secondary}
-          color={Color.success}
-          size={Size.small}
-        >
-          + New wafer
-        </Button>
+        <Link to="/sample/form/wafer">
+          <Button
+            className="mb-4"
+            variant={Variant.secondary}
+            color={Color.success}
+            size={Size.small}
+          >
+            + New wafer
+          </Button>
+        </Link>
 
         <Card>
           <Card.Header className="flex flex-row justify-between bg-neutral-50 text-neutral-500">

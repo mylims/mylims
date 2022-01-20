@@ -75,3 +75,15 @@ query Sample($id: ID!) {
     }
   }
 }
+
+query SampleKind($id: ID!) {
+  sampleKind(id: $id) {
+    ...SampleKindFields
+  }
+}
+
+mutation CreateSample($input: SampleInput!) {
+  createSample(input: $input) {
+    ...SampleFields
+  }
+}

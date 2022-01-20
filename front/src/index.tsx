@@ -17,6 +17,7 @@ import DeviceDetail from '@/pages/samples/detail/Device';
 import DyeDetail from '@/pages/samples/detail/Dye';
 import SampleDetail from '@/pages/samples/detail/Sample';
 import WaferDetail from '@/pages/samples/detail/Wafer';
+import WaferCreate from '@/pages/samples/form/Wafer';
 import DeviceList from '@/pages/samples/list/Device';
 import DyeList from '@/pages/samples/list/Dye';
 import SampleList from '@/pages/samples/list/Sample';
@@ -73,6 +74,12 @@ function AppRoutes() {
             { path: 'sample/:id', element: <App Component={SampleDetail} /> },
             { path: 'dye/:id', element: <App Component={DyeDetail} /> },
             { path: 'device/:id', element: <App Component={DeviceDetail} /> },
+          ],
+        },
+        {
+          path: 'form',
+          children: [
+            { path: 'wafer', element: <App Component={WaferCreate} /> },
           ],
         },
       ],
