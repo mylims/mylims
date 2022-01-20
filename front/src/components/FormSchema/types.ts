@@ -5,7 +5,6 @@ export interface FormSchemaProps {
   schema: JSONSchema7;
   data: FormData;
   onSubmit: (values: FormData) => void;
-  columns?: number;
 }
 
 export interface ParserProps {
