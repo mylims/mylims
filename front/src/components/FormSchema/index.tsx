@@ -11,12 +11,7 @@ import { parseSchema } from './parseSchema';
 import type { FormSchemaProps } from './types';
 import { useParseSchema } from './useParseSchema';
 
-export function FormSchema({
-  schema,
-  data,
-  columns = 4,
-  onSubmit,
-}: FormSchemaProps) {
+export function FormSchema({ schema, data, onSubmit }: FormSchemaProps) {
   const plainForm = useMemo(() => {
     if (!schema.properties || typeof schema.properties !== 'object') {
       return [];
@@ -33,7 +28,12 @@ export function FormSchema({
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
-      <div className={`grid grid-cols-${columns} gap-4`}>{formFields}</div>
+      <div
+        className="grid max-w-screen-xl gap-4"
+        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}
+      >
+        {formFields}
+      </div>
       <FormErrorRHF />
       <SubmitButtonRHF>Submit</SubmitButtonRHF>
     </FormRHF>
