@@ -56,14 +56,16 @@ export default function DeviceList() {
         </SamplesList>
       </div>
       <div>
-        <Button
-          className="mb-4"
-          variant={Variant.secondary}
-          color={Color.success}
-          size={Size.small}
-        >
-          + New device
-        </Button>
+        <Link to="/sample/form/device">
+          <Button
+            className="mb-4"
+            variant={Variant.secondary}
+            color={Color.success}
+            size={Size.small}
+          >
+            + New device
+          </Button>
+        </Link>
 
         <Card>
           <Card.Header className="flex flex-row justify-between bg-neutral-50 text-neutral-500">

@@ -1,6 +1,6 @@
 import type { JSONSchema7 } from 'json-schema';
 
-type FormData = Record<string, undefined>;
+type FormData = Record<string, any>;
 export interface FormSchemaProps {
   schema: JSONSchema7;
   data: FormData;

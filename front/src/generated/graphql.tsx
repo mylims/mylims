@@ -987,6 +987,39 @@ export type SampleQuery = {
   };
 };
 
+export type SampleKindQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type SampleKindQuery = {
+  sampleKind: {
+    id: string;
+    name?: string | null | undefined;
+    description?: string | null | undefined;
+    color?: string | null | undefined;
+    schema: any;
+  };
+};
+
+export type CreateSampleMutationVariables = Exact<{
+  input: SampleInput;
+}>;
+
+export type CreateSampleMutation = {
+  createSample: {
+    id: string;
+    sampleCode: Array<string>;
+    uuid10: string;
+    labels: Array<string>;
+    project?: string | null | undefined;
+    title?: string | null | undefined;
+    description?: string | null | undefined;
+    meta: any;
+    createdAt: any;
+    user?: { id: string; usernames: Array<string> } | null | undefined;
+  };
+};
+
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UsersQuery = {
@@ -2188,6 +2221,113 @@ export type SampleQueryResult = Apollo.QueryResult<
 export function refetchSampleQuery(variables: SampleQueryVariables) {
   return { query: SampleDocument, variables: variables };
 }
+export const SampleKindDocument = gql`
+  query SampleKind($id: ID!) {
+    sampleKind(id: $id) {
+      ...SampleKindFields
+    }
+  }
+  ${SampleKindFieldsFragmentDoc}
+`;
+
+/**
+ * __useSampleKindQuery__
+ *
+ * To run a query within a React component, call `useSampleKindQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSampleKindQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSampleKindQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSampleKindQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    SampleKindQuery,
+    SampleKindQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<SampleKindQuery, SampleKindQueryVariables>(
+    SampleKindDocument,
+    options,
+  );
+}
+export function useSampleKindLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    SampleKindQuery,
+    SampleKindQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    SampleKindQuery,
+    SampleKindQueryVariables
+  >(SampleKindDocument, options);
+}
+export type SampleKindQueryHookResult = ReturnType<typeof useSampleKindQuery>;
+export type SampleKindLazyQueryHookResult = ReturnType<
+  typeof useSampleKindLazyQuery
+>;
+export type SampleKindQueryResult = Apollo.QueryResult<
+  SampleKindQuery,
+  SampleKindQueryVariables
+>;
+export function refetchSampleKindQuery(variables: SampleKindQueryVariables) {
+  return { query: SampleKindDocument, variables: variables };
+}
+export const CreateSampleDocument = gql`
+  mutation CreateSample($input: SampleInput!) {
+    createSample(input: $input) {
+      ...SampleFields
+    }
+  }
+  ${SampleFieldsFragmentDoc}
+`;
+
+/**
+ * __useCreateSampleMutation__
+ *
+ * To run a mutation, you first call `useCreateSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSampleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSampleMutation, { data, loading, error }] = useCreateSampleMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateSampleMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateSampleMutation,
+    CreateSampleMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useMutation<
+    CreateSampleMutation,
+    CreateSampleMutationVariables
+  >(CreateSampleDocument, options);
+}
+export type CreateSampleMutationHookResult = ReturnType<
+  typeof useCreateSampleMutation
+>;
+export type CreateSampleMutationResult =
+  Apollo.MutationResult<CreateSampleMutation>;
+export type CreateSampleMutationOptions = Apollo.BaseMutationOptions<
+  CreateSampleMutation,
+  CreateSampleMutationVariables
+>;
 export const UsersDocument = gql`
   query Users {
     users {
