@@ -31,7 +31,12 @@ export default class AuthController {
 
     await auth.login(user);
     session.put('mylims.auth.method', 'local');
-    return response.ok({ email, role: auth.user?.role });
+    return response.ok({
+      email,
+      role: auth.user?.role,
+      id: auth.user?._id.toHexString(),
+      username: auth.user?.usernames[0],
+    });
   }
 
   public async myself({ response, auth, session }: HttpContextContract) {
@@ -41,6 +46,8 @@ export default class AuthController {
         isAuth: true,
         email: user.emails[0],
         role: user.role,
+        id: auth.user?._id.toHexString(),
+        username: auth.user?.usernames[0],
         method: session.get('mylims.auth.method'),
       });
     } else {

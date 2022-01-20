@@ -32,6 +32,8 @@ export default function LdapAuthForm() {
       if (result.email && result.role) {
         auth.email = result.email;
         auth.role = result.role;
+        auth.username = result.username;
+        auth.id = result.id;
         auth.isAuth = true;
         return navigate('/measurement/list');
       }
