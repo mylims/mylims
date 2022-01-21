@@ -41,7 +41,10 @@ export class Sample extends BaseModel {
       sample.uuid10 = cryptoRandomString({ length: 10, type: 'alphanumeric' });
     }
     if (!sample.measurements) sample.measurements = [];
-    if (!sample.attachments) sample.attachments = [];
+    sample.attachments = sampleInput.attachments.map((id) => ({
+      id,
+      date: new Date(),
+    }));
     sample.sampleCode = sampleInput.sampleCode;
     sample.description = sampleInput.description;
     sample.kind = sampleInput.kind;

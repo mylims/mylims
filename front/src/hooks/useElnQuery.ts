@@ -33,3 +33,20 @@ export function useElnMutation(path: string) {
       }),
   );
 }
+
+export function useElnMultipartMutation(path: string) {
+  return useMutation(path, async (data: Record<string, string | Blob>) => {
+    let body = new FormData();
+    for (const key in data) {
+      body.append(key, data[key]);
+    }
+    const res = await fetch(`${API_URL}${path}`, {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      body,
+    });
+    const [ok, result] = [res.ok, await res.json()];
+    if (ok) return result;
+    else throw new Error(result.errors[0].message);
+  });
+}

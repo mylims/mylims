@@ -449,6 +449,7 @@ export type SampleFilterInput = {
 };
 
 export type SampleInput = {
+  attachments: Array<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   kind: Scalars['String'];
   labels: Array<Scalars['String']>;

@@ -64,6 +64,7 @@ input SampleInput {
   title: String
   description: String
   parent: String
+  attachments: [String!]!
 }
 input SampleKindInput {
   id: ID!
