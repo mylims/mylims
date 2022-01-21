@@ -9,9 +9,11 @@ import {
   SampleInput,
 } from '@/generated/graphql';
 import useAuth from '@/hooks/useAuth';
+import { useElnMultipartMutation } from '@/hooks/useElnQuery';
 
 export default function WaferCreate() {
   const { id } = useAuth();
+  const authMutation = useElnMultipartMutation('/files/create');
   const [authError, setError] = useState<Error | null>(null);
   const { data, loading, error } = useSampleKindQuery({
     variables: { id: 'wafer' },
@@ -37,13 +39,30 @@ export default function WaferCreate() {
       <FormSchema
         schema={data.sampleKind.schema}
         data={{ attachments: [], labels: [] }}
-        onSubmit={({ attachments, ...input }) => {
+        onSubmit={async ({ attachments, ...input }) => {
           if (id) {
-            return createSample({
-              variables: {
-                input: { ...input, userId: id, kind: 'wafer' } as SampleInput,
-              },
-            });
+            try {
+              let files: string[] = [];
+              for (const file of attachments) {
+                const res = await authMutation.mutateAsync({
+                  file,
+                  collection: 'samples',
+                });
+                if (res._id) {
+                  files.push(res._id);
+                } else {
+                  throw new Error('Failed to upload file');
+                }
+              }
+              console.log(input, attachments, files);
+              // await createSample({
+              //   variables: {
+              //     input: { ...input, userId: id, kind: 'wafer', attachments: files } as SampleInput,
+              //   },
+              // });
+            } catch (error) {
+              setError(error as Error);
+            }
           } else {
             setError(new Error('Not authenticated'));
           }
