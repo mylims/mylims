@@ -22,12 +22,9 @@ export function FormSchema({ schema, data, onSubmit }: FormSchemaProps) {
     });
   }, [schema]);
   const { formFields, validationSchema } = useParseSchema(plainForm);
+
   return (
-    <FormRHF
-      defaultValues={data}
-      onSubmit={onSubmit}
-      validationSchema={validationSchema}
-    >
+    <FormRHF defaultValues={data} onSubmit={onSubmit}>
       <div
         className="grid max-w-screen-xl gap-4"
         style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}
