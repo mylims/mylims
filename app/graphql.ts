@@ -484,6 +484,7 @@ export type GqlSampleFilterInput = {
 };
 
 export type GqlSampleInput = {
+  attachments: Array<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   kind: Scalars['String'];
   labels: Array<Scalars['String']>;

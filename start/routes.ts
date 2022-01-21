@@ -59,6 +59,11 @@ Route.group(() => {
   Route.post('/create', 'MeasurementController.create').middleware('auth');
 }).prefix('/measurements');
 
+Route.group(() => {
+  Route.get('/fetch/:id', 'FileController.fetch');
+  Route.post('/create', 'FileController.create');
+}).prefix('/files');
+
 // Require routes from addons
 AddonsManager.registerRoutes(Route);
 
