@@ -9,7 +9,7 @@ interface MultiSelectProps {
   name: string;
   label: string;
   required?: boolean;
-  options: Record<'value' | 'label', string>[];
+  options?: Record<'value' | 'label', string>[];
 }
 export default function MultiSelect({
   name,
@@ -17,7 +17,7 @@ export default function MultiSelect({
   required,
   options: initialOptions,
 }: MultiSelectProps) {
-  const [options, setOptions] = useState(initialOptions);
+  const [options, setOptions] = useState(initialOptions ?? []);
   const multiSearchSelect = useMultiSearchSelectFieldRHF({ name, options });
 
   return (
