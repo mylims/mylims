@@ -34,14 +34,15 @@ export default function WaferCreate() {
             <InputFieldRHF name="sampleCode.0" label="Wafer name" required />
             <InputFieldRHF name="project" label="Project" />
             <InputFieldRHF name="title" label="Title" />
-            <InputFieldRHF name="description" label="Description" />
+            <InputFieldRHF name="description" label="Commentary" />
             <MultiSelect name="labels" label="Labels" />
             <InputFieldRHF name="meta.purpose" label="Purpose" />
-            <InputFieldRHF name="meta.size" label="Dimension" type="number" />
             <InputFieldRHF
-              name="meta.heterostructure"
-              label="Heterostructure"
+              name="meta.size"
+              label="Diameter (inch)"
+              type="number"
             />
+            <InputFieldRHF name="meta.heterostructure" label="EPI structure" />
             <InputFieldRHF name="meta.substrate" label="Substrate" />
             <InputFieldRHF name="meta.supplier" label="Supplier" />
             <InputFieldRHF
@@ -56,7 +57,7 @@ export default function WaferCreate() {
         </div>
         <div className="row-span-3">
           <TextAreaFieldRHF
-            label="EPI structure"
+            label="Description"
             name="meta.epiStructure"
             rows={20}
           />
