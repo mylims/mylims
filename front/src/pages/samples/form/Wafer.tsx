@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Descendant } from 'slate';
 
 import ElnLayout from '@/components/ElnLayout';
 import {
   DropzoneFieldRHF,
   InputFieldRHF,
   optionalString,
-  TextAreaFieldRHF,
 } from '@/components/tailwind-ui';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import DefaultCreate from '@/pages/samples/form/Default';
+import { RichTextEditor } from '@/components/RichTextEditor';
 
 const waferCreateSchema = {
   size: optionalString(),
@@ -20,7 +21,27 @@ const waferCreateSchema = {
   location: optionalString(),
 };
 
+const initialValue: Descendant[] = [
+  {
+    type: 'paragraph',
+    children: [
+      { text: 'This is editable ' },
+      { text: 'rich', bold: true },
+      { text: ' text, ' },
+      { text: 'much', italic: true },
+      { text: ' better than a ' },
+      { text: '<textarea>' },
+      { text: '!' },
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: 'Try it out for yourself!' }],
+  },
+];
+
 export default function WaferCreate() {
+  const [value, setValue] = useState<Descendant[]>(initialValue);
   return (
     <DefaultCreate codeLength={1} kind="wafer" metaSchema={waferCreateSchema}>
       <div className="flex flex-col md:grid md:grid-flow-col md:grid-rows-3 md:gap-4">
@@ -56,11 +77,7 @@ export default function WaferCreate() {
           <DropzoneFieldRHF label="Attachments" name="attachments" showList />
         </div>
         <div className="row-span-3">
-          <TextAreaFieldRHF
-            label="Description"
-            name="meta.epiStructure"
-            rows={20}
-          />
+          <RichTextEditor value={value} onChange={(val) => setValue(val)} />
         </div>
       </div>
     </DefaultCreate>
