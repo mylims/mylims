@@ -160,7 +160,7 @@ async function createFilter(
   filter.labels = filterText(filterBy.labels);
   filter.project = filterText(filterBy.project);
   filter.title = filterText(filterBy.title);
-  filter.description = filterText(filterBy.description);
+  filter.comment = filterText(filterBy.comment);
   filter.createdAt = filterDate(filterBy.createdAt);
 
   return removeNullable(filter);

@@ -138,6 +138,7 @@ export default class MeasurementController {
         kind,
         labels: [],
         meta: {},
+        attachments: [],
       });
     } else if (length === 1) {
       return cursor.firstOrFail();
