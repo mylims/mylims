@@ -47,7 +47,8 @@ export default function DefaultCreate({
       .min(codeLength, 'Required at least one sample code'),
     project: optionalString(),
     title: optionalString(),
-    description: optionalString(),
+    comment: optionalString(),
+    description: array(),
     labels: array().of(requiredString()),
     meta: requiredObject(metaSchema),
   });

@@ -29,10 +29,32 @@ export default function WaferList() {
   return (
     <div className="grid grid-cols-4 gap-4">
       <div className="col-span-3">
-        <SamplesList kind="wafer" levels={['wafer']}>
+        <SamplesList
+          kind="wafer"
+          levels={['wafer']}
+          action={
+            <TableQuery.ActionsColumn>
+              {(row) => (
+                <Button
+                  title="preview"
+                  color={Color.success}
+                  roundness={Roundness.circular}
+                  size={Size.small}
+                  variant={
+                    row.id === state?.id ? Variant.primary : Variant.secondary
+                  }
+                  className="ml-2"
+                  onClick={() => setState(row as Sample)}
+                >
+                  <EyeIcon className="w-5 h-5" />
+                </Button>
+              )}
+            </TableQuery.ActionsColumn>
+          }
+        >
           <TableQuery.TextColumn
-            title="heterostructure"
-            dataPath="meta.heterostructure"
+            title="EPI structure"
+            dataPath="meta.epiStructure"
             disableSearch
           />
           <TableQuery.TextColumn
@@ -46,27 +68,10 @@ export default function WaferList() {
             disableSearch
           />
           <TableQuery.TextColumn
-            title="ICMP"
-            dataPath="meta.ICMP"
+            title="location"
+            dataPath="meta.location"
             disableSearch
           />
-          <TableQuery.ActionsColumn>
-            {(row) => (
-              <Button
-                title="preview"
-                color={Color.success}
-                roundness={Roundness.circular}
-                size={Size.small}
-                variant={
-                  row.id === state?.id ? Variant.primary : Variant.secondary
-                }
-                className="ml-2"
-                onClick={() => setState(row as Sample)}
-              >
-                <EyeIcon className="w-5 h-5" />
-              </Button>
-            )}
-          </TableQuery.ActionsColumn>
         </SamplesList>
       </div>
       <div>
@@ -141,11 +146,11 @@ export default function WaferList() {
                   <FieldDescription title="Purpose">
                     {state.meta.purpose ?? '-'}
                   </FieldDescription>
-                  <FieldDescription title="Description">
-                    {state.description ?? '-'}
+                  <FieldDescription title="Comment">
+                    {state.comment ?? '-'}
                   </FieldDescription>
-                  <FieldDescription title="Heterostructure">
-                    {state.meta.heterostructure ?? '-'}
+                  <FieldDescription title="EPI structure">
+                    {state.meta.epiStructure ?? '-'}
                   </FieldDescription>
                   <FieldDescription title="Substrate">
                     {state.meta.substrate ?? '-'}
