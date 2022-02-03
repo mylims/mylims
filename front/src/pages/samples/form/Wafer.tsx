@@ -22,24 +22,41 @@ const waferCreateSchema = {
 };
 
 const initialValue: Descendant[] = [
+  { type: 'heading-one', children: [{ text: 'Title 1' }] },
   {
-    type: 'paragraph',
+    type: 'numbered-list',
     children: [
-      { text: 'This is editable ' },
-      { text: 'rich', bold: true },
-      { text: ' text, ' },
-      { text: 'much', italic: true },
-      { text: ' better than a ' },
-      { text: '<textarea>' },
-      { text: '!' },
+      { type: 'list-item', children: [{ text: 'ordered list' }] },
+      { type: 'list-item', children: [{ text: 'item' }] },
     ],
   },
   {
+    type: 'bulleted-list',
+    children: [
+      { type: 'list-item', children: [{ text: 'unordered list' }] },
+      { type: 'list-item', children: [{ text: 'item' }] },
+    ],
+  },
+  { type: 'heading-two', children: [{ text: 'Title 2' }] },
+  {
     type: 'paragraph',
-    children: [{ text: 'Try it out for yourself!' }],
+    children: [
+      { text: 'you can have ' },
+      { text: 'bold', bold: true },
+      { text: ', ' },
+      { text: 'italic', italic: true },
+      { text: ', ' },
+      { text: 'underline', underline: true },
+      { text: ', or ' },
+      {
+        text: 'all at the same time',
+        bold: true,
+        italic: true,
+        underline: true,
+      },
+    ],
   },
 ];
-
 export default function WaferCreate() {
   const [value, setValue] = useState<Descendant[]>(initialValue);
   return (
@@ -77,7 +94,13 @@ export default function WaferCreate() {
           <DropzoneFieldRHF label="Attachments" name="attachments" showList />
         </div>
         <div className="row-span-3">
-          <RichTextEditor value={value} onChange={(val) => setValue(val)} />
+          <RichTextEditor
+            className="max-w-7xl"
+            name="meta.description"
+            label="Description"
+            value={value}
+            onChange={(val) => setValue(val)}
+          />
         </div>
       </div>
     </DefaultCreate>
