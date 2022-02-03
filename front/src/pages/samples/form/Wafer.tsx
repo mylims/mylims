@@ -34,7 +34,7 @@ export default function WaferCreate() {
             <InputFieldRHF name="sampleCode.0" label="Wafer name" required />
             <InputFieldRHF name="project" label="Project" />
             <InputFieldRHF name="title" label="Title" />
-            <InputFieldRHF name="description" label="Commentary" />
+            <InputFieldRHF name="comment" label="Comment" />
             <MultiSelect name="labels" label="Labels" />
             <InputFieldRHF name="meta.purpose" label="Purpose" />
             <InputFieldRHF
@@ -58,7 +58,7 @@ export default function WaferCreate() {
         <div className="row-span-3">
           <RichTextFieldRHF
             className="max-w-7xl"
-            name="meta.description"
+            name="description"
             label="Description"
           />
         </div>
