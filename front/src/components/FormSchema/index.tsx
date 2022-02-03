@@ -21,7 +21,7 @@ export function FormSchema({ schema, data, onSubmit }: FormSchemaProps) {
       required: schema.required || [],
     });
   }, [schema]);
-  const { formFields, validationSchema } = useParseSchema(plainForm);
+  const { formFields } = useParseSchema(plainForm);
 
   return (
     <FormRHF defaultValues={data} onSubmit={onSubmit}>

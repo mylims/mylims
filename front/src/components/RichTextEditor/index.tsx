@@ -1,6 +1,8 @@
-import React, { CSSProperties, useCallback, useMemo } from 'react';
 import clsx from 'clsx';
-import isHotkey from 'is-hotkey';
+import { isHotkey } from 'is-hotkey';
+import React, { CSSProperties, useCallback, useMemo } from 'react';
+import { createEditor, Descendant } from 'slate';
+import { withHistory } from 'slate-history';
 import {
   Editable,
   withReact,
@@ -8,8 +10,6 @@ import {
   RenderElementProps,
   RenderLeafProps,
 } from 'slate-react';
-import { createEditor, Descendant } from 'slate';
-import { withHistory } from 'slate-history';
 
 import {
   Help,
@@ -85,13 +85,13 @@ export function RichTextEditor({
           onChange={(value) => onChange(value)}
         >
           <div className="grid grid-cols-8 gap-2 py-2 mb-2 border-b-2 border-neutral-300">
-            <MarkButton format="bold" icon="format_bold" />
-            <MarkButton format="italic" icon="format_italic" />
-            <MarkButton format="underline" icon="format_underlined" />
-            <BlockButton format="heading-one" icon="looks_one" />
-            <BlockButton format="heading-two" icon="looks_two" />
-            <BlockButton format="numbered-list" icon="format_list_numbered" />
-            <BlockButton format="bulleted-list" icon="format_list_bulleted" />
+            <MarkButton format="bold" icon="formatBold" />
+            <MarkButton format="italic" icon="formatItalic" />
+            <MarkButton format="underline" icon="formatUnderlined" />
+            <BlockButton format="heading-one" icon="looksOne" />
+            <BlockButton format="heading-two" icon="looksTwo" />
+            <BlockButton format="numbered-list" icon="formatListNumbered" />
+            <BlockButton format="bulleted-list" icon="formatListBulleted" />
           </div>
           <Editable
             renderElement={renderElement}

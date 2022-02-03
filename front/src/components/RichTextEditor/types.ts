@@ -1,22 +1,25 @@
 // This example is for an Editor with `ReactEditor` and `HistoryEditor`
 import { BaseEditor } from 'slate';
-import { ReactEditor } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
+import { ReactEditor } from 'slate-react';
 
 export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
 
-type BaseElement<T> = { type: T; children: CustomText[] };
+interface BaseElement<T> {
+  type: T;
+  children: CustomText[];
+}
 export type ParagraphElement = BaseElement<'paragraph'>;
 export type HeadingElement = BaseElement<'heading-one' | 'heading-two'>;
 export type ListItemElement = BaseElement<'list-item'>;
-export type BulletedListElement = {
+export interface BulletedListElement {
   type: 'bulleted-list';
   children: ListItemElement[];
-};
-export type NumberedListElement = {
+}
+export interface NumberedListElement {
   type: 'numbered-list';
   children: ListItemElement[];
-};
+}
 
 export type CustomElement =
   | ParagraphElement
@@ -26,12 +29,12 @@ export type CustomElement =
   | ListItemElement;
 export type CustomFormat = CustomElement['type'];
 
-export type FormattedText = {
+export interface FormattedText {
   text: string;
   bold?: true;
   italic?: true;
   underline?: true;
-};
+}
 
 export type CustomText = FormattedText;
 
