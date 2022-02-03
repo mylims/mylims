@@ -22,11 +22,13 @@ const PAGE_SIZE = 10;
 interface SamplesListProps {
   kind: string;
   levels: string[];
+  action: ReactNode;
   children: ReactNode;
 }
 export default function SamplesList({
   kind,
   levels,
+  action,
   children,
 }: SamplesListProps) {
   const { query, setQuery } = useTableQuery({
@@ -68,6 +70,7 @@ export default function SamplesList({
       onQueryChange={(query) => setQuery(query)}
     >
       <TableQuery.Queries />
+      {action}
       {levels.map((level, index) => (
         <TableQuery.TextListColumn
           key={level}
@@ -110,6 +113,7 @@ export default function SamplesList({
         }}
       </TableQuery.TextColumn>
       <TableQuery.TextColumn title="Project" dataPath="project" disableSort />
+      <TableQuery.TextColumn title="Comment" dataPath="comment" disableSort />
       <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
       {children}
     </TableQuery>

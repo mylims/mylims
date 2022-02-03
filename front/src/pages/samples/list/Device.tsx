@@ -30,29 +30,31 @@ export default function DeviceList() {
         <SamplesList
           kind="device"
           levels={['wafer', 'sample', 'dye', 'device']}
+          action={
+            <TableQuery.ActionsColumn>
+              {(row) => (
+                <Button
+                  title="preview"
+                  color={Color.success}
+                  roundness={Roundness.circular}
+                  size={Size.xSmall}
+                  variant={
+                    row.id === state?.id ? Variant.primary : Variant.secondary
+                  }
+                  className="ml-2"
+                  onClick={() => setState(row as Sample)}
+                >
+                  <EyeIcon className="w-5 h-5" />
+                </Button>
+              )}
+            </TableQuery.ActionsColumn>
+          }
         >
           <TableQuery.TextColumn
             title="heterostructure"
             dataPath="meta.heterostructure"
             disableSearch
           />
-          <TableQuery.ActionsColumn>
-            {(row) => (
-              <Button
-                title="preview"
-                color={Color.success}
-                roundness={Roundness.circular}
-                size={Size.xSmall}
-                variant={
-                  row.id === state?.id ? Variant.primary : Variant.secondary
-                }
-                className="ml-2"
-                onClick={() => setState(row as Sample)}
-              >
-                <EyeIcon className="w-5 h-5" />
-              </Button>
-            )}
-          </TableQuery.ActionsColumn>
         </SamplesList>
       </div>
       <div>
