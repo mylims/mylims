@@ -43,7 +43,7 @@ export interface RichTextEditorProps {
   valid?: boolean | string;
 }
 export function RichTextEditor({
-  value,
+  value: initialValue,
   onChange,
   className,
   style,
@@ -59,6 +59,10 @@ export function RichTextEditor({
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const value: Descendant[] =
+    initialValue && initialValue.length > 0
+      ? initialValue
+      : [{ type: 'paragraph', children: [{ text: '' }] }];
 
   return (
     <div className={className} style={style}>

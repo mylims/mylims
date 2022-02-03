@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Descendant } from 'slate';
+import React from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
 import {
@@ -9,7 +8,7 @@ import {
 } from '@/components/tailwind-ui';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import DefaultCreate from '@/pages/samples/form/Default';
-import { RichTextEditor } from '@/components/RichTextEditor';
+import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
 
 const waferCreateSchema = {
   size: optionalString(),
@@ -21,44 +20,7 @@ const waferCreateSchema = {
   location: optionalString(),
 };
 
-const initialValue: Descendant[] = [
-  { type: 'heading-one', children: [{ text: 'Title 1' }] },
-  {
-    type: 'numbered-list',
-    children: [
-      { type: 'list-item', children: [{ text: 'ordered list' }] },
-      { type: 'list-item', children: [{ text: 'item' }] },
-    ],
-  },
-  {
-    type: 'bulleted-list',
-    children: [
-      { type: 'list-item', children: [{ text: 'unordered list' }] },
-      { type: 'list-item', children: [{ text: 'item' }] },
-    ],
-  },
-  { type: 'heading-two', children: [{ text: 'Title 2' }] },
-  {
-    type: 'paragraph',
-    children: [
-      { text: 'you can have ' },
-      { text: 'bold', bold: true },
-      { text: ', ' },
-      { text: 'italic', italic: true },
-      { text: ', ' },
-      { text: 'underline', underline: true },
-      { text: ', or ' },
-      {
-        text: 'all at the same time',
-        bold: true,
-        italic: true,
-        underline: true,
-      },
-    ],
-  },
-];
 export default function WaferCreate() {
-  const [value, setValue] = useState<Descendant[]>(initialValue);
   return (
     <DefaultCreate codeLength={1} kind="wafer" metaSchema={waferCreateSchema}>
       <div className="flex flex-col md:grid md:grid-flow-col md:grid-rows-3 md:gap-4">
@@ -94,12 +56,10 @@ export default function WaferCreate() {
           <DropzoneFieldRHF label="Attachments" name="attachments" showList />
         </div>
         <div className="row-span-3">
-          <RichTextEditor
+          <RichTextFieldRHF
             className="max-w-7xl"
             name="meta.description"
             label="Description"
-            value={value}
-            onChange={(val) => setValue(val)}
           />
         </div>
       </div>
