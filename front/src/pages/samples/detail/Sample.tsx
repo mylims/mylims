@@ -18,8 +18,8 @@ export default function SampleDetail() {
           <FieldDescription title="Purpose">
             {sample.meta.purpose ?? '-'}
           </FieldDescription>
-          <FieldDescription title="Description">
-            {sample.description ?? '-'}
+          <FieldDescription title="Comment">
+            {sample.comment ?? '-'}
           </FieldDescription>
           <FieldDescription title="Heterostructure">
             {sample.meta.heterostructure ?? '-'}
