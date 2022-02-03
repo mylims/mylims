@@ -450,8 +450,9 @@ export type GqlSample = {
   __typename?: 'Sample';
   attachments: Array<GqlSampleFile>;
   children?: Maybe<Array<GqlSample>>;
+  comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
   kind: GqlSampleKind;
   labels: Array<Scalars['String']>;
@@ -485,7 +486,8 @@ export type GqlSampleFilterInput = {
 
 export type GqlSampleInput = {
   attachments: Array<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['JSON']>;
   kind: Scalars['String'];
   labels: Array<Scalars['String']>;
   meta: Scalars['JSON'];
@@ -1290,9 +1292,14 @@ export type GqlSampleResolvers<
     ParentType,
     ContextType
   >;
+  comment?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<
-    Maybe<GqlResolversTypes['String']>,
+    Maybe<GqlResolversTypes['JSON']>,
     ParentType,
     ContextType
   >;

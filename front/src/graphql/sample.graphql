@@ -6,6 +6,7 @@ fragment SampleFields on Sample {
   project
   title
   description
+  comment
   meta
   createdAt
   user {
@@ -37,9 +38,6 @@ query SamplesFiltered(
     sortBy: $sortBy
   ) {
     totalCount
-    kind {
-      ...SampleKindFields
-    }
     list {
       ...SampleFields
       children {
@@ -55,9 +53,6 @@ query SamplesFiltered(
 query Sample($id: ID!) {
   sample(id: $id) {
     ...SampleFields
-    kind {
-      ...SampleKindFields
-    }
     attachments {
       id
       date

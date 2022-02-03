@@ -416,8 +416,9 @@ export type ReadyCheckInput = {
 export type Sample = {
   attachments: Array<SampleFile>;
   children?: Maybe<Array<Sample>>;
+  comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
   kind: SampleKind;
   labels: Array<Scalars['String']>;
@@ -450,7 +451,8 @@ export type SampleFilterInput = {
 
 export type SampleInput = {
   attachments: Array<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
+  comment?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['JSON']>;
   kind: Scalars['String'];
   labels: Array<Scalars['String']>;
   meta: Scalars['JSON'];
@@ -876,7 +878,8 @@ export type SampleFieldsFragment = {
   labels: Array<string>;
   project?: string | null | undefined;
   title?: string | null | undefined;
-  description?: string | null | undefined;
+  description?: any | null | undefined;
+  comment?: string | null | undefined;
   meta: any;
   createdAt: any;
   user?: { id: string; usernames: Array<string> } | null | undefined;
@@ -901,13 +904,6 @@ export type SamplesFilteredQueryVariables = Exact<{
 export type SamplesFilteredQuery = {
   samples: {
     totalCount: number;
-    kind: {
-      id: string;
-      name?: string | null | undefined;
-      description?: string | null | undefined;
-      color?: string | null | undefined;
-      schema: any;
-    };
     list: Array<{
       id: string;
       sampleCode: Array<string>;
@@ -915,7 +911,8 @@ export type SamplesFilteredQuery = {
       labels: Array<string>;
       project?: string | null | undefined;
       title?: string | null | undefined;
-      description?: string | null | undefined;
+      description?: any | null | undefined;
+      comment?: string | null | undefined;
       meta: any;
       createdAt: any;
       children?:
@@ -926,7 +923,8 @@ export type SamplesFilteredQuery = {
             labels: Array<string>;
             project?: string | null | undefined;
             title?: string | null | undefined;
-            description?: string | null | undefined;
+            description?: any | null | undefined;
+            comment?: string | null | undefined;
             meta: any;
             createdAt: any;
             user?: { id: string; usernames: Array<string> } | null | undefined;
@@ -951,16 +949,10 @@ export type SampleQuery = {
     labels: Array<string>;
     project?: string | null | undefined;
     title?: string | null | undefined;
-    description?: string | null | undefined;
+    description?: any | null | undefined;
+    comment?: string | null | undefined;
     meta: any;
     createdAt: any;
-    kind: {
-      id: string;
-      name?: string | null | undefined;
-      description?: string | null | undefined;
-      color?: string | null | undefined;
-      schema: any;
-    };
     attachments: Array<{
       id: string;
       date: any;
@@ -977,7 +969,8 @@ export type SampleQuery = {
           labels: Array<string>;
           project?: string | null | undefined;
           title?: string | null | undefined;
-          description?: string | null | undefined;
+          description?: any | null | undefined;
+          comment?: string | null | undefined;
           meta: any;
           createdAt: any;
           user?: { id: string; usernames: Array<string> } | null | undefined;
@@ -1014,7 +1007,8 @@ export type CreateSampleMutation = {
     labels: Array<string>;
     project?: string | null | undefined;
     title?: string | null | undefined;
-    description?: string | null | undefined;
+    description?: any | null | undefined;
+    comment?: string | null | undefined;
     meta: any;
     createdAt: any;
     user?: { id: string; usernames: Array<string> } | null | undefined;
@@ -1088,6 +1082,7 @@ export const SampleFieldsFragmentDoc = gql`
     project
     title
     description
+    comment
     meta
     createdAt
     user {
@@ -2068,9 +2063,6 @@ export const SamplesFilteredDocument = gql`
       sortBy: $sortBy
     ) {
       totalCount
-      kind {
-        ...SampleKindFields
-      }
       list {
         ...SampleFields
         children {
@@ -2082,7 +2074,6 @@ export const SamplesFilteredDocument = gql`
       }
     }
   }
-  ${SampleKindFieldsFragmentDoc}
   ${SampleFieldsFragmentDoc}
 `;
 
@@ -2149,9 +2140,6 @@ export const SampleDocument = gql`
   query Sample($id: ID!) {
     sample(id: $id) {
       ...SampleFields
-      kind {
-        ...SampleKindFields
-      }
       attachments {
         id
         date
@@ -2170,7 +2158,6 @@ export const SampleDocument = gql`
     }
   }
   ${SampleFieldsFragmentDoc}
-  ${SampleKindFieldsFragmentDoc}
 `;
 
 /**
