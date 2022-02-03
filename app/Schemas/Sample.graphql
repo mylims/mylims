@@ -62,7 +62,8 @@ input SampleInput {
   project: String
   meta: JSON!
   title: String
-  description: String
+  comment: String
+  description: JSON
   parent: String
   attachments: [String!]!
 }
@@ -85,7 +86,8 @@ type Sample {
   project: String
   meta: JSON!
   title: String
-  description: String
+  comment: String
+  description: JSON
   measurements: [SampleMeasurement!]!
   attachments: [SampleFile!]!
   parent: Sample
