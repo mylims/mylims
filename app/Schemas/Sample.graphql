@@ -28,7 +28,7 @@ input SampleFilterInput {
   labels: FilterText
   project: FilterText
   title: FilterText
-  description: FilterText
+  comment: FilterText
   createdAt: FilterDate
 }
 input SampleSortInput {

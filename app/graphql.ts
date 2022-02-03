@@ -476,8 +476,8 @@ export type GqlSampleFile = {
 };
 
 export type GqlSampleFilterInput = {
+  comment?: Maybe<GqlFilterText>;
   createdAt?: Maybe<GqlFilterDate>;
-  description?: Maybe<GqlFilterText>;
   labels?: Maybe<GqlFilterText>;
   project?: Maybe<GqlFilterText>;
   sampleCode?: Maybe<Array<GqlFilterList>>;
