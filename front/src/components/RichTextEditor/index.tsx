@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { CSSProperties, useCallback, useMemo } from 'react';
 import clsx from 'clsx';
 import isHotkey from 'is-hotkey';
 import {
@@ -11,7 +11,13 @@ import {
 import { createEditor, Descendant } from 'slate';
 import { withHistory } from 'slate-history';
 
-import { inputColor } from '@/components/tailwind-ui/forms/basic/common';
+import {
+  Help,
+  inputColor,
+  inputError,
+  inputValid,
+  Label,
+} from '@/components/tailwind-ui/forms/basic/common';
 
 import { BlockButton } from './header/BlockButton';
 import { MarkButton, MarkFormat, toggleMark } from './header/MarkButton';
@@ -22,53 +28,85 @@ const HOTKEYS: Record<string, MarkFormat> = {
   'mod+u': 'underline',
 };
 
-interface RichTextEditorProps {
+export interface RichTextEditorProps {
   value: Descendant[];
   onChange(value: Descendant[]): void;
+  className?: string;
+  style?: CSSProperties;
+  id?: string;
+  name: string;
+  label: string;
+  hiddenLabel?: boolean;
+  required?: boolean;
+  error?: string;
+  help?: string;
+  valid?: boolean | string;
 }
-export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
+export function RichTextEditor({
+  value,
+  onChange,
+  className,
+  style,
+  name,
+  id = name,
+  hiddenLabel,
+  label,
+  required,
+  error,
+  valid,
+  help,
+}: RichTextEditorProps) {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
   return (
-    <div
-      className={clsx(
-        'px-3 py-2 border rounded-md shadow-sm focus-within:ring-1',
-        inputColor,
-      )}
-    >
-      <Slate
-        editor={editor}
-        value={value}
-        onChange={(value) => onChange(value)}
+    <div className={className} style={style}>
+      <div className="flex items-baseline justify-between gap-2">
+        <Label id={id} text={label} hidden={hiddenLabel} required={required} />
+      </div>
+      <div
+        className={clsx(
+          'px-3 py-2 border rounded-md shadow-sm focus-within:ring-1',
+          {
+            [inputColor]: !error,
+            [inputError]: error,
+            [inputValid]: valid,
+          },
+        )}
       >
-        <div className="grid grid-cols-8 gap-2 py-2 mb-2 border-b-2 border-neutral-300">
-          <MarkButton format="bold" icon="format_bold" />
-          <MarkButton format="italic" icon="format_italic" />
-          <MarkButton format="underline" icon="format_underlined" />
-          <BlockButton format="heading-one" icon="looks_one" />
-          <BlockButton format="heading-two" icon="looks_two" />
-          <BlockButton format="numbered-list" icon="format_list_numbered" />
-          <BlockButton format="bulleted-list" icon="format_list_bulleted" />
-        </div>
-        <Editable
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          placeholder="Enter some text…"
-          spellCheck
-          autoFocus
-          onKeyDown={(event) => {
-            for (const hotkey in HOTKEYS) {
-              if (isHotkey(hotkey, event as any)) {
-                event.preventDefault();
-                const mark = HOTKEYS[hotkey];
-                toggleMark(editor, mark);
+        <Slate
+          editor={editor}
+          value={value}
+          onChange={(value) => onChange(value)}
+        >
+          <div className="grid grid-cols-8 gap-2 py-2 mb-2 border-b-2 border-neutral-300">
+            <MarkButton format="bold" icon="format_bold" />
+            <MarkButton format="italic" icon="format_italic" />
+            <MarkButton format="underline" icon="format_underlined" />
+            <BlockButton format="heading-one" icon="looks_one" />
+            <BlockButton format="heading-two" icon="looks_two" />
+            <BlockButton format="numbered-list" icon="format_list_numbered" />
+            <BlockButton format="bulleted-list" icon="format_list_bulleted" />
+          </div>
+          <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            placeholder="Enter some text…"
+            spellCheck
+            onKeyDown={(event) => {
+              for (const hotkey in HOTKEYS) {
+                if (isHotkey(hotkey, event as any)) {
+                  event.preventDefault();
+                  const mark = HOTKEYS[hotkey];
+                  toggleMark(editor, mark);
+                }
               }
-            }
-          }}
-        />
-      </Slate>
+            }}
+          />
+        </Slate>
+      </div>
+      <Help error={error} valid={valid} help={help} />
     </div>
   );
 }
@@ -125,5 +163,9 @@ function Leaf({ attributes, children, leaf }: RenderLeafProps) {
     children = <u>{children}</u>;
   }
 
-  return <span {...attributes}>{children}</span>;
+  return (
+    <span className="text-ellipsis" {...attributes}>
+      {children}
+    </span>
+  );
 }
