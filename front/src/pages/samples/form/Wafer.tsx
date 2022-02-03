@@ -1,14 +1,14 @@
 import React from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
+import MultiSelect from '@/components/FormSchema/MultiSelect';
+import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
 import {
   DropzoneFieldRHF,
   InputFieldRHF,
   optionalString,
 } from '@/components/tailwind-ui';
-import MultiSelect from '@/components/FormSchema/MultiSelect';
 import DefaultCreate from '@/pages/samples/form/Default';
-import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
 
 const waferCreateSchema = {
   size: optionalString(),

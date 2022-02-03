@@ -1,17 +1,17 @@
 import React, { useCallback } from 'react';
 import { useController } from 'react-hook-form';
+import { Descendant } from 'slate';
 
+import {
+  RichTextEditorProps,
+  RichTextEditor,
+} from '@/components/RichTextEditor';
 import {
   defaultErrorSerializer,
   FieldProps,
   RHFRegisterProps,
   useCheckedFormRHFContext,
 } from '@/components/tailwind-ui';
-import {
-  RichTextEditorProps,
-  RichTextEditor,
-} from '@/components/RichTextEditor';
-import { Descendant } from 'slate';
 
 export type RichTextFieldRHFProps = Omit<
   RichTextEditorProps,
@@ -33,7 +33,6 @@ export function RichTextFieldRHF(props: RichTextFieldRHFProps) {
     fieldState: { error },
     formState: { isSubmitted: shouldValidate },
   } = useController({ name });
-  console.log(field.value);
 
   const handleChange = useCallback(
     (value: Descendant[]) => {

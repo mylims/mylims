@@ -1,5 +1,6 @@
-import { Button, Color, Size, Variant } from '@/components/tailwind-ui';
 import React from 'react';
+
+import { Button, Color, Size, Variant } from '@/components/tailwind-ui';
 
 export interface IconButtonProps {
   onClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;

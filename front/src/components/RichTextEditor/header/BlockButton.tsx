@@ -8,14 +8,15 @@ import React from 'react';
 import { Transforms, Editor, Element as SlateElement } from 'slate';
 import { useSlate } from 'slate-react';
 
-import { IconButton } from './IconButton';
 import { CustomEditor, CustomFormat as BlockFormat } from '../types';
 
+import { IconButton } from './IconButton';
+
 const ICONS = {
-  looks_one: <TextHeader120Regular />,
-  looks_two: <TextHeader220Regular />,
-  format_list_numbered: <TextNumberListLtr20Regular />,
-  format_list_bulleted: <TextBulletListLtr20Regular />,
+  looksOne: <TextHeader120Regular />,
+  looksTwo: <TextHeader220Regular />,
+  formatListNumbered: <TextNumberListLtr20Regular />,
+  formatListBulleted: <TextBulletListLtr20Regular />,
 };
 
 const LIST_TYPES = ['numbered-list', 'bulleted-list'];

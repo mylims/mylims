@@ -8,12 +8,13 @@ import { Editor } from 'slate';
 import { useSlate } from 'slate-react';
 
 import { CustomEditor } from '../types';
+
 import { IconButton } from './IconButton';
 
 const ICONS = {
-  format_bold: <TextBold20Regular />,
-  format_italic: <TextItalic20Regular />,
-  format_underlined: <TextUnderline20Regular />,
+  formatBold: <TextBold20Regular />,
+  formatItalic: <TextItalic20Regular />,
+  formatUnderlined: <TextUnderline20Regular />,
 };
 
 export type MarkFormat = 'bold' | 'italic' | 'underline';
