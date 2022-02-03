@@ -42,7 +42,7 @@ export default function WaferCreate() {
               label="Diameter (inch)"
               type="number"
             />
-            <InputFieldRHF name="meta.heterostructure" label="EPI structure" />
+            <InputFieldRHF name="meta.epiStructure" label="EPI structure" />
             <InputFieldRHF name="meta.substrate" label="Substrate" />
             <InputFieldRHF name="meta.supplier" label="Supplier" />
             <InputFieldRHF

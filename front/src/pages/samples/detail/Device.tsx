@@ -12,8 +12,8 @@ export default function DeviceDetail() {
           <FieldDescription title="Name">
             {sample.sampleCode.join('_')}
           </FieldDescription>
-          <FieldDescription title="Description">
-            {sample.description ?? '-'}
+          <FieldDescription title="Comment">
+            {sample.comment ?? '-'}
           </FieldDescription>
         </div>
       )}

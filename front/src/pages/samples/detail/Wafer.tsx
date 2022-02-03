@@ -27,11 +27,11 @@ export default function WaferDetail() {
             <FieldDescription title="Purpose">
               {sample.meta.purpose ?? '-'}
             </FieldDescription>
-            <FieldDescription title="Description">
-              {sample.description ?? '-'}
+            <FieldDescription title="Comment">
+              {sample.comment ?? '-'}
             </FieldDescription>
-            <FieldDescription title="Heterostructure">
-              {sample.meta.heterostructure ?? '-'}
+            <FieldDescription title="EPI structure">
+              {sample.meta.epiStructure ?? '-'}
             </FieldDescription>
             <FieldDescription title="Substrate">
               {sample.meta.substrate ?? '-'}
