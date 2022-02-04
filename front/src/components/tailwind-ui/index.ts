@@ -64,6 +64,7 @@ export * from './forms/react-hook-form/SubmitButtonRHF';
 export * from './forms/react-hook-form/TextAreaFieldRHF';
 export * from './forms/react-hook-form/ToggleFieldRHF';
 
+export * from './hooks/popper';
 export * from './hooks/useCheckedFormRHF';
 export * from './hooks/useDebounce';
 export * from './hooks/useDropzone';

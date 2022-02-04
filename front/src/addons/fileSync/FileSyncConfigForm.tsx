@@ -62,7 +62,7 @@ export default function FileSyncConfigForm({
   const { data, error, loading: readyCheckLoading } = useReadyChecksQuery();
 
   return (
-    <div className="m-4 min-w-1/4">
+    <div className="min-w-1/4 m-4">
       {error && (
         <Alert
           title={'Error while loading available ready checks'}
@@ -83,11 +83,11 @@ export default function FileSyncConfigForm({
           {({ values, setFieldValue }) => (
             <>
               <Card.Header>
-                <h3 className="text-lg font-medium leading-6 text-cool-gray-900">
+                <h3 className="text-cool-gray-900 text-lg font-medium leading-6">
                   {title}
                 </h3>
               </Card.Header>
-              <div className="p-4 space-y-4">
+              <div className="space-y-4 p-4">
                 {children}
                 <FormError />
                 {initialValues && <Field name="id" label="id" type="hidden" />}
@@ -103,7 +103,7 @@ export default function FileSyncConfigForm({
                 <FieldArray name="patterns">
                   {({ push, remove }) => (
                     <>
-                      <h3 className="font-medium leading-6 text-md text-cool-gray-900">
+                      <h3 className="text-md text-cool-gray-900 font-medium leading-6">
                         File filtering patterns
                         <HelpButton
                           description="Add a pattern (like *.csv) for including or excluding this kind of files"
@@ -117,7 +117,7 @@ export default function FileSyncConfigForm({
                           + add
                         </Button>
                       </h3>
-                      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+                      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                         {values.patterns.map((_, index) => (
                           <PatternEdit
                             key={index}
@@ -133,7 +133,7 @@ export default function FileSyncConfigForm({
                   <FieldArray name="readyChecks">
                     {({ push, remove }) => (
                       <>
-                        <h3 className="font-medium leading-6 text-md text-cool-gray-900">
+                        <h3 className="text-md text-cool-gray-900 font-medium leading-6">
                           Ready checks
                           <HelpButton
                             description="How to know if a file isn't changing and is ready to be imported"
@@ -147,7 +147,7 @@ export default function FileSyncConfigForm({
                             + add
                           </Button>
                         </h3>
-                        <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
+                        <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                           {values.readyChecks.map((readyCheck, index) => (
                             <ReadyCheckEdit
                               key={readyCheck.name + readyCheck.value}
@@ -165,7 +165,7 @@ export default function FileSyncConfigForm({
                 <FieldArray name="topics">
                   {({ push, remove }) => (
                     <>
-                      <h3 className="font-medium leading-6 text-md text-cool-gray-900">
+                      <h3 className="text-md text-cool-gray-900 font-medium leading-6">
                         Topics
                         <HelpButton
                           description="Topics that a different processor will handle"
@@ -179,7 +179,7 @@ export default function FileSyncConfigForm({
                           + add
                         </Button>
                       </h3>
-                      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+                      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                         {values.topics.map((_, index) => (
                           <TopicsEdit
                             key={`topic-${index}`}

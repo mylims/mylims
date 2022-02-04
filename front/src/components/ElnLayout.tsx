@@ -28,8 +28,8 @@ export default function ElnLayout({
       <Nav />
 
       {pageTitle && (
-        <header className="shadow bg-neutral-100">
-          <div className="flex items-center px-3 py-3 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
+        <header className="bg-neutral-100 shadow">
+          <div className="mx-auto flex max-w-screen-2xl items-center px-3 py-3 sm:px-6 lg:px-8">
             <h1 className="text-2xl font-bold leading-tight text-neutral-900">
               {pageTitle}
             </h1>
@@ -37,7 +37,7 @@ export default function ElnLayout({
         </header>
       )}
       <main>
-        <div className={clsx('py-3 mx-auto sm:px-6 lg:px-8', maxWidth)}>
+        <div className={clsx('mx-auto py-3 sm:px-6 lg:px-8', maxWidth)}>
           <div className="px-4 py-3 sm:px-0">{children}</div>
         </div>
       </main>

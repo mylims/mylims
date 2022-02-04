@@ -80,7 +80,7 @@ export default function DirRow({ value }: { value: DirSync }) {
             expanded={value.expanded}
           />
 
-          <FolderOpenIcon className="w-5 h-5 mr-1" />
+          <FolderOpenIcon className="mr-1 h-5 w-5" />
           {value.name}
         </Td>
         <Td>{formatBytes(value.size)}</Td>

@@ -36,7 +36,7 @@ export const TextArea = forwardRef(function TextAreaForwardRef(
   } = props;
   return (
     <div className={className}>
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-baseline justify-between gap-2">
         <Label
           id={id}
           text={label}
@@ -56,7 +56,7 @@ export const TextArea = forwardRef(function TextAreaForwardRef(
           id={id}
           name={name}
           className={clsx(
-            'form-textarea shadow-sm block w-full sm:text-sm border-neutral-300 rounded-md',
+            'form-textarea block w-full rounded-md border-neutral-300 shadow-sm sm:text-sm',
             {
               [inputColor]: !error,
               [inputError]: error,

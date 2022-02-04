@@ -71,7 +71,7 @@ function LargeToggle(props: TogglePropsWithRef): JSX.Element {
         checked={activated}
         onChange={props.disabled ? noop : onToggle}
         className={clsx(
-          'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full transition-colors ease-in-out duration-200  disabled:bg-neutral-100',
+          'relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out  disabled:bg-neutral-100',
           switchFocus,
           disabled ? 'cursor-default' : 'cursor-pointer',
           activated && !error ? 'bg-primary-600' : 'bg-neutral-200',
@@ -90,7 +90,7 @@ function LargeToggle(props: TogglePropsWithRef): JSX.Element {
             )}
             <span
               className={clsx(
-                'translate-x-0 inline-block h-5 w-5 rounded-full shadow transform ring-0 transition ease-in-out duration-200',
+                'inline-block h-5 w-5 translate-x-0 rounded-full shadow ring-0 transition duration-200 ease-in-out',
                 checked ? 'translate-x-5' : 'translate-x-0',
                 {
                   'bg-danger-600': error,
@@ -127,7 +127,7 @@ function SmallToggle(props: TogglePropsWithRef) {
         checked={activated}
         onChange={props.disabled ? noop : onToggle}
         className={clsx(
-          'flex-shrink-0 group relative rounded-full inline-flex items-center justify-center h-5 w-10',
+          'group relative inline-flex h-5 w-10 shrink-0 items-center justify-center rounded-full',
           switchFocus,
           disabled ? 'cursor-default' : 'cursor-pointer',
         )}
@@ -145,7 +145,7 @@ function SmallToggle(props: TogglePropsWithRef) {
             )}
             <span
               className={clsx(
-                'absolute h-4 w-9 mx-auto rounded-full transition-colors ease-in-out duration-200',
+                'absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out',
                 {
                   'bg-neutral-200': !disabled && !activated && !error,
                   'bg-primary-600': !disabled && activated && !error,
@@ -156,7 +156,7 @@ function SmallToggle(props: TogglePropsWithRef) {
             />
             <span
               className={clsx(
-                'absolute left-0 inline-block h-5 w-5 border border-neutral-200 rounded-full bg-white shadow transform ring-0 transition-transform ease-in-out duration-200',
+                'absolute left-0 inline-block h-5 w-5 rounded-full border border-neutral-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out',
                 checked ? 'translate-x-5' : 'translate-x-0',
               )}
             />

@@ -71,7 +71,7 @@ export function RichTextEditor({
       </div>
       <div
         className={clsx(
-          'px-3 py-2 border rounded-md shadow-sm focus-within:ring-1',
+          'rounded-md border px-3 py-2 shadow-sm focus-within:ring-1',
           {
             [inputColor]: !error,
             [inputError]: error,
@@ -84,7 +84,7 @@ export function RichTextEditor({
           value={value}
           onChange={(value) => onChange(value)}
         >
-          <div className="grid grid-cols-8 gap-2 py-2 mb-2 border-b-2 border-neutral-300">
+          <div className="mb-2 grid grid-cols-8 gap-2 border-b-2 border-neutral-300 py-2">
             <MarkButton format="bold" icon="formatBold" />
             <MarkButton format="italic" icon="formatItalic" />
             <MarkButton format="underline" icon="formatUnderlined" />
@@ -119,13 +119,13 @@ function Element({ attributes, children, element }: RenderElementProps) {
   switch (element.type) {
     case 'bulleted-list':
       return (
-        <ul className="list-disc list-inside" {...attributes}>
+        <ul className="list-inside list-disc" {...attributes}>
           {children}
         </ul>
       );
     case 'numbered-list':
       return (
-        <ol className="list-decimal list-inside" {...attributes}>
+        <ol className="list-inside list-decimal" {...attributes}>
           {children}
         </ol>
       );

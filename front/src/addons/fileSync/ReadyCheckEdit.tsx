@@ -34,7 +34,7 @@ export default function ReadyCheckEdit({
   }, [checks]);
 
   return (
-    <div className="grid grid-cols-3 p-2 m-1 space-x-4 rounded-lg shadow">
+    <div className="m-1 grid grid-cols-3 space-x-4 rounded-lg p-2 shadow">
       <div className="col-span-2">
         <SelectField
           name={`readyChecks.${index}.name`}
@@ -55,7 +55,7 @@ export default function ReadyCheckEdit({
           variant={Variant.secondary}
           onClick={() => remove(index)}
         >
-          <TrashIcon className="w-5 h-5" />
+          <TrashIcon className="h-5 w-5" />
         </Button>
       </div>
     </div>

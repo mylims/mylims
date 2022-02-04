@@ -16,10 +16,10 @@ export default function Admin(props: { children: ReactNode }) {
   return (
     <Base>
       <nav className="bg-neutral-800">
-        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
-              <div className="sm:block sm:ml-6">
+              <div className="sm:ml-6 sm:block">
                 <div className="flex">
                   <NavLink
                     href={`${backendUrl}/admin/config`}
@@ -47,10 +47,10 @@ function NavLink(props: { href: string; label: string; currentUrl: string }) {
     <a
       href={props.href}
       className={clsx(
-        'ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5',
+        'ml-4 rounded-md px-3 py-2 text-sm font-medium leading-5',
         props.currentUrl === props.href
-          ? 'text-white bg-neutral-900 focus:outline-none focus:text-white focus:bg-neutral-700 transition duration-150 ease-in-out'
-          : 'text-neutral-300 hover:text-white hover:bg-neutral-700 focus:outline-none focus:text-white focus:bg-neutral-700 transition duration-150 ease-in-out',
+          ? 'bg-neutral-900 text-white transition duration-150 ease-in-out focus:bg-neutral-700 focus:text-white focus:outline-none'
+          : 'text-neutral-300 transition duration-150 ease-in-out hover:bg-neutral-700 hover:text-white focus:bg-neutral-700 focus:text-white focus:outline-none',
       )}
     >
       {props.label}

@@ -11,13 +11,13 @@ import { Button, Checkbox, Table } from '../tailwind-ui';
 function Header() {
   return (
     <tr>
-      <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left uppercase bg-neutral-50 text-neutral-500">
+      <th className="bg-neutral-50 px-6 py-3 text-left text-xs font-medium uppercase leading-4 tracking-wider text-neutral-500">
         Name
       </th>
-      <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left uppercase bg-neutral-50 text-neutral-500">
+      <th className="bg-neutral-50 px-6 py-3 text-left text-xs font-medium uppercase leading-4 tracking-wider text-neutral-500">
         Description
       </th>
-      <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left uppercase bg-neutral-50 text-neutral-500">
+      <th className="bg-neutral-50 px-6 py-3 text-left text-xs font-medium uppercase leading-4 tracking-wider text-neutral-500">
         Enabled
       </th>
     </tr>
@@ -27,13 +27,13 @@ function Header() {
 function Row({ value: addon, index }: { value: Addon; index: number }) {
   return (
     <tr key={index} className={index % 2 === 1 ? 'bg-neutral-50' : 'bg-white'}>
-      <td className="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap text-neutral-900">
+      <td className="whitespace-no-wrap px-6 py-4 text-sm font-medium leading-5 text-neutral-900">
         {addon.getDisplayName()}
       </td>
-      <td className="px-6 py-4 text-sm leading-5 whitespace-no-wrap text-neutral-500">
+      <td className="whitespace-no-wrap px-6 py-4 text-sm leading-5 text-neutral-500">
         {addon.getDescription()}
       </td>
-      <td className="px-6 py-4 text-sm leading-5 whitespace-no-wrap text-neutral-500">
+      <td className="whitespace-no-wrap px-6 py-4 text-sm leading-5 text-neutral-500">
         <Checkbox
           id={addon.getName()}
           name={addon.getName()}
@@ -50,7 +50,7 @@ export default function AddonPage(props: { availableAddons: Addon[] }) {
 
   return (
     <Admin>
-      <div className="flex flex-col mx-8 mt-2">
+      <div className="mx-8 mt-2 flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <form

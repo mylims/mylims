@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { SearchSelect } from '../basic/SearchSelect';
 import {
   SimpleStringSelectOption,
@@ -10,28 +11,36 @@ import {
   SearchSelectFieldProps,
   SimpleSearchSelectFieldProps,
 } from '../formik/SearchSelectField';
-import { defaultErrorSerializer } from '../util';
+import {
+  defaultErrorSerializer,
+  RHFControllerProps,
+  RHFValidationProps,
+} from '../util';
 
 export function SearchSelectFieldRHF<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleSearchSelectFieldProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
-    ? SimpleSearchSelectFieldProps<OptionType>
-    : SearchSelectFieldProps<OptionType>,
+  props: RHFControllerProps &
+    RHFValidationProps &
+    (OptionType extends SimpleStringSelectOption
+      ? SimpleSearchSelectFieldProps<OptionType>
+      : OptionType extends SimpleNumberSelectOption
+      ? SimpleSearchSelectFieldProps<OptionType>
+      : SearchSelectFieldProps<OptionType>),
 ): JSX.Element {
   const {
     name,
     serializeError = defaultErrorSerializer,
     deps,
+    rhfOptions,
     ...searchSelectProps
   } = props;
-  const { setValue, trigger } = useFormContext();
+  const { setValue, trigger } = useCheckedFormRHFContext();
   const {
     field,
     fieldState: { error },
     formState: { isSubmitted },
   } = useController({
     name: props.name,
+    ...rhfOptions,
   });
 
   const handleSelect = useCallback(

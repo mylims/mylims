@@ -66,10 +66,10 @@ function SetupEln({ children }: SetupElnProps) {
 
   if (addonsLoading || authLoading) {
     return (
-      <div className="flex items-center justify-center w-full h-full">
+      <div className="flex h-full w-full items-center justify-center">
         <div className="flex flex-col items-center">
           <div>
-            <Spinner className="w-10 h-10 text-danger-500" />
+            <Spinner className="h-10 w-10 text-danger-500" />
           </div>
           <div>Loading new eln...</div>
         </div>

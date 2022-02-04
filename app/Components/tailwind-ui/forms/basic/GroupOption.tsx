@@ -1,17 +1,12 @@
 import React, { Children, ReactElement } from 'react';
 
 import {
-  GroupOption as GroupOptionInternal,
+  GroupOptionInternal,
   Option,
+  OptionProps,
 } from './internal/GroupOption';
 
-export interface OptionProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  label: string;
-  id: string;
-  name: string;
-  description: string;
-}
+export type { OptionProps };
 
 export interface GroupOptionProps {
   label?: string;

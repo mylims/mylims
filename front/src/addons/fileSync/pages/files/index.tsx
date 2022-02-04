@@ -65,7 +65,7 @@ function NestedTable({ id }: Pick<RouterQuery, 'id'>) {
     );
   }
 
-  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
+  if (loading) return <Spinner className="h-10 w-10 text-danger-500" />;
   return <TableFilesSync data={data} id={id} />;
 }
 

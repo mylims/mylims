@@ -13,6 +13,7 @@ interface StateElement<T> {
 
 function createState<T>(
   elements: VerticalNavigationOptions<T>[],
+  startUncollapsed: boolean,
   selected?: VerticalNavigationOption<T>,
 ) {
   const result: Array<StateElement<T>> = [];
@@ -21,7 +22,9 @@ function createState<T>(
     if (element.type === 'group') {
       result.push({
         element,
-        isOpen: element.options.some((e) => e.id === selected?.id),
+        isOpen: startUncollapsed
+          ? true
+          : element.options.some((e) => e.id === selected?.id),
       });
     }
   }
@@ -70,12 +73,16 @@ function updateToggleState<T>(
 
 export function useVerticalNavigationCollapse<T>(
   elements: Array<VerticalNavigationOptions<T>>,
-  options: { autoCollapse: boolean; selected?: VerticalNavigationOption<T> },
+  options: {
+    autoCollapse: boolean;
+    selected?: VerticalNavigationOption<T>;
+    startUncollapsed: boolean;
+  },
 ) {
   const selectedOption = options.selected;
   const [state, setState] = useState<
     Array<{ element: VerticalNavigationGroupOption<T>; isOpen: boolean }>
-  >(() => createState(elements, selectedOption));
+  >(() => createState(elements, options.startUncollapsed, selectedOption));
 
   useEffect(() => {
     if (selectedOption) {

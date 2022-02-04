@@ -65,15 +65,15 @@ Feed.Item = function FeedItem(props: FeedItemProps) {
       <div>
         <span
           className={clsx(
-            'flex items-center justify-center w-8 h-8 text-white rounded-full ring-8 ring-white',
+            'flex h-8 w-8 items-center justify-center rounded-full text-white ring-8 ring-white',
             colors[iconBackgroundColor],
           )}
         >
-          <span className="w-5 h-5">{icon}</span>
+          <span className="h-5 w-5">{icon}</span>
         </span>
       </div>
-      <div className="flex justify-between flex-1 min-w-0 space-x-4">
-        <div className="flex-1 min-w-0 py-1">
+      <div className="flex min-w-0 flex-1 justify-between space-x-4">
+        <div className="min-w-0 flex-1 py-1">
           <div>{title}</div>
 
           <div className="mt-2 text-sm text-neutral-700">{description}</div>

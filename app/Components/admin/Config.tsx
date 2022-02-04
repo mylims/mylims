@@ -24,8 +24,8 @@ export default function Config(props: { config: ConfigProps }) {
 
   return (
     <Admin>
-      {error && <div className="p-2 text-white bg-red-500">{error}</div>}
-      <div className="grid gap-10 mx-6 mt-12 lg:grid-cols-3 lg:max-w-none">
+      {error && <div className="bg-red-500 p-2 text-white">{error}</div>}
+      <div className="mx-6 mt-12 grid gap-10 lg:max-w-none lg:grid-cols-3">
         {/* Session configuration */}
         <Card>
           <Card.Header>

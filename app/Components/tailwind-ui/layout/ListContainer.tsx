@@ -38,7 +38,7 @@ export function FlatCardListContainer(props: ListContainerProps) {
   return (
     <div
       className={clsx(
-        'overflow-hidden bg-white border  border-neutral-300',
+        'overflow-hidden border border-neutral-300  bg-white',
         mobileEdgeToEdge ? 'sm:rounded-md' : 'rounded-md',
       )}
     >

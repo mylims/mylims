@@ -46,7 +46,7 @@ export const Dropzone = forwardRef<HTMLInputElement, DropzoneProps>(
       <div
         {...getRootProps()}
         className={clsx(
-          'border-2 border-dashed rounded-md focus:outline-none focus:ring focus:border-transparent focus-within:ring-primary-500 focus-within:ring focus-within:border-transparent',
+          'rounded-md border-2 border-dashed focus-within:border-transparent focus-within:ring focus-within:ring-primary-500 focus:border-transparent focus:outline-none focus:ring',
           {
             'border-primary-500 focus:ring-primary-500': isDragAccept,
             'border-neutral-300 focus:ring-primary-500': !isDragActive,
@@ -55,7 +55,7 @@ export const Dropzone = forwardRef<HTMLInputElement, DropzoneProps>(
         )}
       >
         <input {...inputProps} className="sr-only" ref={dropzoneRef} />
-        <div className="mt-2 sm:mt-0 sm:col-span-2">
+        <div className="mt-2 sm:col-span-2 sm:mt-0">
           <div
             className={clsx(
               'flex justify-center px-6 pt-5 pb-6',
@@ -66,7 +66,7 @@ export const Dropzone = forwardRef<HTMLInputElement, DropzoneProps>(
               {header !== undefined ? (
                 header
               ) : (
-                <UploadIcon className="w-12 h-12 mx-auto text-neutral-300" />
+                <UploadIcon className="mx-auto h-12 w-12 text-neutral-300" />
               )}
               <div className="mt-1 text-sm text-neutral-600">
                 {message ? (

@@ -40,10 +40,10 @@ export function MeasurementPlot({
 
   return (
     <MeasurementPlotContext.Provider value={{ state, setState }}>
-      <div className="flex flex-col md:justify-between md:flex-row-reverse">
+      <div className="flex flex-col md:flex-row-reverse md:justify-between">
         <div className="md:ml-3">
           <Card>
-            <Card.Header className="px-6 py-3 text-xs font-semibold tracking-wider text-left uppercase text-neutral-500 bg-neutral-50">
+            <Card.Header className="bg-neutral-50 px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-500">
               Preview
             </Card.Header>
             <Card.Body className="w-3xl">

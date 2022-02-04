@@ -14,6 +14,7 @@ interface ButtonGroupContext {
   group: 'left' | 'right' | 'middle';
   size: Size;
   roundness: Roundness.full | Roundness.light;
+  disabled: boolean;
 }
 
 const context = createContext<ButtonGroupContext | null>(null);
@@ -24,6 +25,7 @@ export interface ButtonGroupProps {
   children: ReactNode;
   size?: Size;
   roundness?: Roundness.full | Roundness.light;
+  disabled?: boolean;
 }
 
 export function ButtonGroup(props: ButtonGroupProps): JSX.Element {
@@ -33,6 +35,7 @@ export function ButtonGroup(props: ButtonGroupProps): JSX.Element {
     color = Color.primary,
     size = Size.medium,
     roundness = Roundness.light,
+    disabled = false,
   } = props;
 
   const definedChildren = Children.toArray(children).filter(
@@ -44,7 +47,9 @@ export function ButtonGroup(props: ButtonGroupProps): JSX.Element {
       index === 0 ? 'left' : index === childrenCount - 1 ? 'right' : 'middle';
 
     return (
-      <context.Provider value={{ color, variant, group, size, roundness }}>
+      <context.Provider
+        value={{ color, variant, group, size, roundness, disabled }}
+      >
         {child}
       </context.Provider>
     );
@@ -76,6 +81,7 @@ ButtonGroup.Button = function ButtonGroupButton(
     color = ctx.color,
     size = ctx.size,
     roundness = ctx.roundness,
+    disabled = ctx.disabled,
   } = props;
 
   return (
@@ -86,6 +92,7 @@ ButtonGroup.Button = function ButtonGroupButton(
       color={color}
       size={size}
       roundness={roundness}
+      disabled={disabled}
     />
   );
 };

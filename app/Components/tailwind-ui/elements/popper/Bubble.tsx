@@ -71,7 +71,7 @@ export function Bubble(props: BubbleProps) {
             >
               <div ref={popperRef}>
                 <div
-                  className="bg-white border-2 rounded-lg border-neutral-200"
+                  className="rounded-lg border-2 border-neutral-200 bg-white"
                   style={{
                     margin: '0.9em',
                   }}

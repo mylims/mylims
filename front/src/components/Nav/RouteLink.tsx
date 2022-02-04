@@ -14,8 +14,8 @@ export default function RouteLink({ route }: RouteLinkProps) {
     <Link
       to={route.pathname}
       className={clsx(
-        'px-3 py-2 rounded-md text-sm font-medium focus:outline-none',
-        isMatch ? 'text-neutral-100 bg-neutral-900' : 'text-neutral-300',
+        'rounded-md px-3 py-2 text-sm font-medium focus:outline-none',
+        isMatch ? 'bg-neutral-900 text-neutral-100' : 'text-neutral-300',
       )}
     >
       {route.label}

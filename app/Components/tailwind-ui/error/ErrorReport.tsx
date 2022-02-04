@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 
 import { Button } from '../elements/buttons/Button';
 import { Alert, AlertType } from '../feedback/Alert';
-import { NotificationContext } from '../overlays/NotificationContext';
+import { notificationContext } from '../overlays/NotificationContext';
 import { Color } from '../types';
 
 export function ErrorReport({
@@ -17,7 +17,7 @@ export function ErrorReport({
   const details = `${
     componentStack ? `<br>Error details:\n\n${componentStack}\n\n\n` : ''
   }${error.stack || ''}`;
-  const context = useContext(NotificationContext);
+  const context = useContext(notificationContext);
 
   return (
     <div className="text-justify">
@@ -35,6 +35,7 @@ export function ErrorReport({
                   {
                     title: 'Successfully copied error report',
                     content: '',
+                    type: Color.success,
                     icon: <CheckIcon className="text-success-600" />,
                   },
                   3000,
@@ -47,6 +48,15 @@ export function ErrorReport({
           Copy report
         </Button>
       </Alert>
+      {process.env.NODE_ENV === 'development' && (
+        <Alert
+          type={AlertType.ERROR}
+          title="Debug stack trace"
+          className="mt-2"
+        >
+          <code className="block whitespace-pre">{details}</code>
+        </Alert>
+      )}
     </div>
   );
 }

@@ -3,55 +3,51 @@ import clsx from 'clsx';
 import React from 'react';
 
 export interface Step {
+  /**
+   * If defined will be used as the React key for the step elements
+   * Otherwise the step index will be used
+   */
+  id?: string;
   label: string;
   description?: string;
 }
 
-export interface StepperProps {
-  steps: Array<Step>;
+export interface StepperProps<T extends Step> {
+  steps: Array<T>;
   current: number;
-}
-
-type StepWithId = Step & { id: number };
-
-interface Utils {
-  done: Array<StepWithId>;
-  actual: StepWithId | undefined;
-  going: Array<StepWithId>;
-  all: Array<StepWithId>;
-}
-
-function getSteps(steps: Array<Step>, current: number): Utils {
-  const array = steps.map((step, index) => ({ ...step, id: index }));
-
-  return {
-    done: array.slice(0, current),
-    actual: array[current],
-    going: array.slice(current + 1, array.length),
-    all: array,
-  };
+  /**
+   * Called when the user clicks on a previous step
+   */
+  onSelectStep?: (index: number, step: T) => void;
 }
 
 function getLabelSteps(index: number): string {
   return String(index + 1).padStart(2, '0');
 }
 
-function getStepComponent(step: StepWithId, utils: Utils): JSX.Element {
-  if (utils.actual === step) return <StepCurrent step={step} />;
-  if (utils.done.includes(step)) return <StepDone step={step} />;
-  return <StepToDoComponent step={step} />;
-}
-
-export function Stepper(props: StepperProps) {
-  const steps = getSteps(props.steps, props.current);
+export function Stepper<T extends Step>(props: StepperProps<T>) {
+  const { steps, current, onSelectStep } = props;
 
   return (
     <nav>
-      <ol className="border divide-y rounded-md border-neutral-300 divide-neutral-300 md:flex md:divide-y-0">
-        {steps.all.map((step, index) => (
-          <li key={step.id} className="relative md:flex-1 md:flex">
-            {getStepComponent(step, steps)}
-            {index + 1 !== steps.all.length && <Separator />}
+      <ol className="divide-y divide-neutral-300 rounded-md border border-neutral-300 md:flex md:divide-y-0">
+        {steps.map((step, index) => (
+          <li
+            key={step.id || index}
+            className={clsx('relative md:flex md:flex-1', {
+              'cursor-pointer': onSelectStep && index < current,
+            })}
+            onClick={() => {
+              // We only allow to navigate back in the steps
+              if (onSelectStep && index < current) {
+                onSelectStep(index, step);
+              }
+            }}
+          >
+            {index < current && <StepDone step={step} />}
+            {index === current && <StepCurrent step={step} index={index} />}
+            {index > current && <StepToDoComponent step={step} index={index} />}
+            {index + 1 !== steps.length && <Separator />}
           </li>
         ))}
       </ol>
@@ -59,9 +55,7 @@ export function Stepper(props: StepperProps) {
   );
 }
 
-function StepCurrent(props: {
-  step: StepWithId | undefined;
-}): JSX.Element | null {
+function StepCurrent(props: { step: Step; index: number }): JSX.Element | null {
   if (props.step === undefined) return null;
 
   return (
@@ -72,15 +66,13 @@ function StepCurrent(props: {
       )}
       aria-current="step"
     >
-      <span className="flex-shrink-0">
-        <span className="flex items-center justify-center w-10 h-10 border-2 rounded-full border-primary-600">
-          <span className="text-primary-600">
-            {getLabelSteps(props.step.id)}
-          </span>
+      <span className="shrink-0">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary-600">
+          <span className="text-primary-600">{getLabelSteps(props.index)}</span>
         </span>
       </span>
-      <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
-        <span className="text-xs font-semibold tracking-wide uppercase text-primary-600">
+      <span className="mt-0.5 ml-4 flex min-w-0 flex-col">
+        <span className="text-xs font-semibold uppercase tracking-wide text-primary-600">
           {props.step.label}
         </span>
         {props.step.description && (
@@ -93,7 +85,7 @@ function StepCurrent(props: {
   );
 }
 
-function StepToDoComponent(props: { step: StepWithId }): JSX.Element {
+function StepToDoComponent(props: { step: Step; index: number }): JSX.Element {
   return (
     <span
       className={clsx(
@@ -101,15 +93,13 @@ function StepToDoComponent(props: { step: StepWithId }): JSX.Element {
         !props.step.description ? 'items-center' : 'items-start',
       )}
     >
-      <span className="flex-shrink-0">
-        <span className="flex items-center justify-center w-10 h-10 border-2 rounded-full border-neutral-300">
-          <span className="text-neutral-500">
-            {getLabelSteps(props.step.id)}
-          </span>
+      <span className="shrink-0">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-neutral-300">
+          <span className="text-neutral-500">{getLabelSteps(props.index)}</span>
         </span>
       </span>
-      <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
-        <span className="text-xs font-semibold tracking-wide uppercase text-neutral-500">
+      <span className="mt-0.5 ml-4 flex min-w-0 flex-col">
+        <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
           {props.step.label}
         </span>
         <span className="text-sm font-semibold text-neutral-500">
@@ -120,7 +110,7 @@ function StepToDoComponent(props: { step: StepWithId }): JSX.Element {
   );
 }
 
-function StepDone(props: { step: StepWithId }): JSX.Element {
+function StepDone(props: { step: Step }): JSX.Element {
   return (
     <span
       className={clsx(
@@ -128,13 +118,13 @@ function StepDone(props: { step: StepWithId }): JSX.Element {
         !props.step.description ? 'items-center' : 'items-start',
       )}
     >
-      <span className="flex-shrink-0">
-        <span className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-600">
-          <CheckIcon className="w-6 h-6 text-white" />
+      <span className="shrink-0">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600">
+          <CheckIcon className="h-6 w-6 text-white" />
         </span>
       </span>
-      <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
-        <span className="text-xs font-semibold tracking-wide uppercase">
+      <span className="mt-0.5 ml-4 flex min-w-0 flex-col">
+        <span className="text-xs font-semibold uppercase tracking-wide">
           {props.step.label}
         </span>
         <span className="text-sm font-semibold text-neutral-500">
@@ -147,9 +137,9 @@ function StepDone(props: { step: StepWithId }): JSX.Element {
 
 function Separator(): JSX.Element {
   return (
-    <div className="absolute top-0 right-0 hidden w-5 h-full md:block">
+    <div className="absolute top-0 right-0 hidden h-full w-5 md:block">
       <svg
-        className="w-full h-full text-neutral-300"
+        className="h-full w-full text-neutral-300"
         viewBox="0 0 22 80"
         fill="none"
         preserveAspectRatio="none"

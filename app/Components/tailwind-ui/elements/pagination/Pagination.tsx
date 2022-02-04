@@ -1,20 +1,24 @@
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 
-import { Variant } from '../../types';
-import { Button } from '../buttons/Button';
+import { Size, Variant } from '../../types';
 import { ButtonGroup } from '../buttons/ButtonGroup';
 
 import { paginate, ELLIPSIS } from './paginate';
+
+export type PaginationPosition = 'center' | 'start' | 'end';
 
 export interface PaginationProps {
   totalCount: number;
   page: number;
   itemsPerPage: number;
   onPageChange: (newPage: number, previousPage: number) => void;
-  maxVisiblePages?: number;
-  pagesPerSide?: number;
+  centerPagesPerSide?: number;
+  boundaryPagesPerSide?: number;
   withText?: boolean;
+  position?: PaginationPosition;
+  className?: string;
+  buttonSize?: Size;
 }
 
 export function Pagination(props: PaginationProps) {
@@ -23,84 +27,94 @@ export function Pagination(props: PaginationProps) {
     page,
     itemsPerPage,
     onPageChange,
-    maxVisiblePages = 3,
-    pagesPerSide = 1,
+    centerPagesPerSide = 1,
+    boundaryPagesPerSide = 1,
     withText = false,
+    position = 'center',
+    buttonSize = Size.medium,
+    className,
   } = props;
 
   const totalPages = Math.ceil(totalCount / itemsPerPage);
-  const { goPrevious, goNext, pages, goTo } = useMemo(() => {
+  const { goPrevious, goNext, pages, goTo, canNavigate } = useMemo(() => {
     const goPrevious = () => onPageChange(page - 1, page);
     const goNext = () => onPageChange(page + 1, page);
     const goTo = (num: number) => onPageChange(num, page);
 
-    const pagination = paginate(
+    const { pages, canNavigate } = paginate(
       page,
       totalPages,
-      maxVisiblePages,
-      pagesPerSide,
+      centerPagesPerSide,
+      boundaryPagesPerSide,
     );
-
-    const pages = pagination;
 
     return {
       goPrevious,
       goNext,
       goTo,
       pages,
+      canNavigate,
     };
-  }, [page, totalPages, onPageChange, maxVisiblePages, pagesPerSide]);
+  }, [
+    page,
+    totalPages,
+    onPageChange,
+    centerPagesPerSide,
+    boundaryPagesPerSide,
+  ]);
 
   const prevDisabled = page === 1;
   const nextDisabled = page === totalPages;
 
-  if (pages.length < 2) {
+  if (!canNavigate && !withText) {
     return null;
   }
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-neutral-200 sm:px-6">
-      <div
-        className={clsx('flex items-center flex-1', {
+    <div
+      className={clsx(
+        'flex flex-1 items-center',
+        {
           'justify-between': withText === true,
-          'justify-center': withText === false,
-        })}
-      >
-        {withText && <Text page={page} total={totalPages} />}
-        <div>
-          <nav className="relative z-0 inline-flex shadow-sm">
-            <ButtonGroup variant={Variant.white} size={pages.length + 2}>
-              <Button disabled={prevDisabled} onClick={goPrevious}>
-                Previous
-              </Button>
+          'justify-center': withText === false && position === 'center',
+          'justify-start': withText === false && position === 'start',
+          'justify-end': withText === false && position === 'end',
+        },
+        className,
+      )}
+    >
+      {withText && <Text page={page} total={totalPages} />}
+      {canNavigate && (
+        <nav className="inline-flex shadow-sm">
+          <ButtonGroup size={buttonSize} variant={Variant.white}>
+            <ButtonGroup.Button disabled={prevDisabled} onClick={goPrevious}>
+              Previous
+            </ButtonGroup.Button>
 
-              {pages.map((element, index) => {
-                return (
-                  <Button
-                    noBorder
-                    className="border border-neutral-300"
-                    style={{ minWidth: '3rem' }}
-                    variant={
-                      element === page ? Variant.secondary : Variant.white
-                    }
-                    key={element === ELLIPSIS ? `${ELLIPSIS}${index}` : element}
-                    disabled={element === ELLIPSIS}
-                    onClick={
-                      element === ELLIPSIS ? undefined : () => goTo(element)
-                    }
-                  >
-                    {element}
-                  </Button>
-                );
-              })}
+            {pages.map((element, index) => {
+              return (
+                <ButtonGroup.Button
+                  noBorder
+                  className="border border-neutral-300"
+                  style={{ minWidth: '3rem' }}
+                  variant={element === page ? Variant.secondary : Variant.white}
+                  key={element === ELLIPSIS ? `${ELLIPSIS}${index}` : element}
+                  disabled={element === ELLIPSIS}
+                  onClick={
+                    element === ELLIPSIS ? undefined : () => goTo(element)
+                  }
+                >
+                  {element}
+                </ButtonGroup.Button>
+              );
+            })}
 
-              <Button disabled={nextDisabled} onClick={goNext}>
-                Next
-              </Button>
-            </ButtonGroup>
-          </nav>
-        </div>
-      </div>
+            <ButtonGroup.Button disabled={nextDisabled} onClick={goNext}>
+              Next
+            </ButtonGroup.Button>
+          </ButtonGroup>
+        </nav>
+      )}
     </div>
   );
 }

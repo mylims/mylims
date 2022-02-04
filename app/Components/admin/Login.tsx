@@ -15,8 +15,8 @@ export default function Login() {
 
   return (
     <Admin>
-      <div className="px-4 mx-auto mt-8 max-w-7xl sm:px-6 lg:px-12">
-        <div className="max-w-xl mx-auto">
+      <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-6 lg:px-12">
+        <div className="mx-auto max-w-xl">
           <Card>
             <Card.Header>
               <h3 className="text-lg font-medium leading-6 text-neutral-900">

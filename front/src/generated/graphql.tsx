@@ -441,8 +441,8 @@ export type SampleFile = {
 };
 
 export type SampleFilterInput = {
+  comment?: InputMaybe<FilterText>;
   createdAt?: InputMaybe<FilterDate>;
-  description?: InputMaybe<FilterText>;
   labels?: InputMaybe<FilterText>;
   project?: InputMaybe<FilterText>;
   sampleCode?: InputMaybe<Array<FilterList>>;

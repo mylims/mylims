@@ -3,10 +3,7 @@ import React, { Children, cloneElement } from 'react';
 
 import { GroupOptionProps, OptionProps } from '../basic/GroupOption';
 import { Help } from '../basic/common';
-import {
-  GroupOption as GroupOptionInternal,
-  Option,
-} from '../basic/internal/GroupOption';
+import { GroupOptionInternal, Option } from '../basic/internal/GroupOption';
 
 export function GroupOptionField(
   props: GroupOptionProps & {

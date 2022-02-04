@@ -81,7 +81,7 @@ export interface SimpleSelectProps<OptionType> {
   /**
    * Do not display the label.
    */
-  hiddenLabel?: string;
+  hiddenLabel?: boolean;
   /**
    * Explanation or precisions about what the field is for.
    */
@@ -151,7 +151,7 @@ export function Select<OptionType>(
   const selectedValue = selected ? getValue(selected) : undefined;
 
   const { setReferenceElement, setPopperElement, popperProps } =
-    useSameWidthPopper({ placement: 'bottom', distance: 5 });
+    useSameWidthPopper<HTMLSpanElement>({ placement: 'bottom', distance: 5 });
 
   if (
     selected &&
@@ -187,30 +187,35 @@ export function Select<OptionType>(
       >
         {({ open }) => (
           <>
-            <div
-              className={clsx(
-                'flex items-baseline justify-between',
-                // Cancel the margin from "space-y-1"
-                hiddenLabel && !corner && '-mb-1',
-              )}
-            >
-              <Listbox.Label
+            {(label || corner) && (
+              <div
                 className={clsx(
-                  'block text-sm font-semibold',
-                  disabled ? labelDisabledColor : labelColor,
-                  hiddenLabel && 'sr-only',
+                  'flex items-baseline justify-between gap-2',
+                  // Cancel the margin from "space-y-1"
+                  hiddenLabel && !corner && '-mb-1',
                 )}
               >
-                {label}
-                {required && <span className="text-warning-600"> *</span>}
-              </Listbox.Label>
-              <InputCorner>{corner}</InputCorner>
-            </div>
-            <div ref={setReferenceElement} className="relative">
-              <span className="inline-block w-full rounded-md shadow-sm">
+                <Listbox.Label
+                  className={clsx(
+                    'block text-sm font-semibold',
+                    disabled ? labelDisabledColor : labelColor,
+                    hiddenLabel && 'sr-only',
+                  )}
+                >
+                  {label}
+                  {required && <span className="text-warning-600"> *</span>}
+                </Listbox.Label>
+                <InputCorner>{corner}</InputCorner>
+              </div>
+            )}
+            <div className="relative">
+              <span
+                ref={setReferenceElement}
+                className="inline-block w-full rounded-md shadow-sm"
+              >
                 <Listbox.Button
                   className={clsx(
-                    'bg-white relative w-full border rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 sm:text-sm',
+                    'relative w-full cursor-default rounded-md border bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:ring-1 sm:text-sm',
                     error ? inputError : inputColor,
                   )}
                 >
@@ -230,19 +235,19 @@ export function Select<OptionType>(
 
                   {!disabled && clearable && selected && (
                     <div
-                      className="absolute inset-y-0 flex items-center mr-2 cursor-pointer right-6"
+                      className="absolute inset-y-0 right-6 mr-2 flex cursor-pointer items-center"
                       onPointerUp={(event) => {
                         event.stopPropagation();
                         onSelect?.(undefined);
                       }}
                     >
-                      <XIcon className="w-4 h-4 hover:text-neutral-500 text-neutral-400" />
+                      <XIcon className="h-4 w-4 text-neutral-400 hover:text-neutral-500" />
                     </div>
                   )}
 
-                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <svg
-                      className="w-5 h-5 text-neutral-400"
+                      className="h-5 w-5 text-neutral-400"
                       viewBox="0 0 20 20"
                       fill="none"
                       stroke="currentColor"
@@ -269,7 +274,7 @@ export function Select<OptionType>(
                   <div ref={setPopperElement} {...popperProps}>
                     <Listbox.Options
                       static
-                      className="py-1 overflow-auto text-base bg-white rounded-md ring-1 ring-black ring-opacity-5 max-h-60 focus:outline-none sm:text-sm"
+                      className="max-h-60 overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     >
                       {options.map((option) => {
                         const value = getValue(option);
@@ -281,7 +286,7 @@ export function Select<OptionType>(
                                   active
                                     ? highlightClassName
                                     : 'text-neutral-900',
-                                  'cursor-default select-none relative py-2 pl-8 pr-4',
+                                  'relative cursor-default select-none py-2 pl-8 pr-4',
                                 )}
                               >
                                 <span
@@ -303,7 +308,7 @@ export function Select<OptionType>(
                                       'absolute inset-y-0 left-0 flex items-center pl-1.5',
                                     )}
                                   >
-                                    <CheckIcon className="w-5 h-5" />
+                                    <CheckIcon className="h-5 w-5" />
                                   </span>
                                 )}
                               </div>
@@ -315,8 +320,8 @@ export function Select<OptionType>(
                   </div>
                 </Transition>
               )}
-              <Help error={error} help={help} />
             </div>
+            <Help error={error} help={help} />
           </>
         )}
       </Listbox>

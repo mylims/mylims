@@ -39,12 +39,12 @@ const Question = (props: QuestionProps) => {
         <button
           onClick={onToggle}
           type="button"
-          className="flex items-start justify-between w-full text-left text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2"
+          className="flex w-full items-start justify-between text-left text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2"
         >
           <span className="font-semibold text-neutral-900">{question}</span>
-          <span className="flex items-center ml-6 h-7">
+          <span className="ml-6 flex h-7 items-center">
             <ChevronDownIcon
-              className={clsx('w-6 h-6 transform', {
+              className={clsx('h-6 w-6', {
                 '-rotate-180': selectedQuestionId === id,
               })}
             />
@@ -56,7 +56,7 @@ const Question = (props: QuestionProps) => {
           hidden: selectedQuestionId !== id,
         })}
       >
-        <div className="text-base text-justify text-neutral-500">{answer}</div>
+        <div className="text-justify text-base text-neutral-500">{answer}</div>
       </dd>
     </div>
   );
@@ -67,7 +67,7 @@ export function Faq(props: FaqProps) {
 
   return (
     <div className="max-w-3xl divide-y-2 divide-neutral-200">
-      <h2 className="text-3xl font-extrabold text-center text-neutral-900 sm:text-4xl">
+      <h2 className="text-center text-3xl font-extrabold text-neutral-900 sm:text-4xl">
         {title}
       </h2>
       <dl className="mt-6 space-y-6 divide-y divide-neutral-200">

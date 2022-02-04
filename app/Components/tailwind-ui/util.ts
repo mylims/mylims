@@ -9,8 +9,25 @@ export function forwardRefWithGeneric<T, P = unknown>(
   return forwardRef(render);
 }
 
-const _userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
 export const commandKeyExists =
-  _userAgent.includes('Macintosh') ||
-  _userAgent.includes('iPad') ||
-  _userAgent.includes('iPhone');
+  userAgent.includes('Macintosh') ||
+  userAgent.includes('iPad') ||
+  userAgent.includes('iPhone');
+
+export function assertUnreachable(x: never): never {
+  throw new Error(`unreachable: ${String(x)}`);
+}
+
+export function delve(
+  object: object,
+  key: string | Array<string | number>,
+  defaultValue?: unknown,
+): unknown {
+  key = typeof key === 'string' ? key.split('.') : key;
+  for (const k of key) {
+    // @ts-expect-error
+    object = object ? object[k] : undefined;
+  }
+  return object === undefined ? defaultValue : object;
+}

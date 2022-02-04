@@ -60,7 +60,7 @@ export default function ConfigList() {
         <Button className="mb-4">Create</Button>
       </Link>
       {loading ? (
-        <Spinner className="w-10 h-10 text-danger-500" />
+        <Spinner className="h-10 w-10 text-danger-500" />
       ) : (
         <Table
           tableClassName="table-fixed"
@@ -86,9 +86,9 @@ function Row(
       <tr>
         <Td>
           {value.enabled ? (
-            <CheckIcon className="w-5 h-5" />
+            <CheckIcon className="h-5 w-5" />
           ) : (
-            <XIcon className="w-5 h-5" />
+            <XIcon className="h-5 w-5" />
           )}
         </Td>
         <Td title={value.root} className="truncate">
@@ -113,7 +113,7 @@ function Row(
               color={Color.success}
               title="List of files"
             >
-              <TableIcon className="w-5 h-5" />
+              <TableIcon className="h-5 w-5" />
             </Button>
           </Link>
           <Link to={`../edit/${value.id}`}>
@@ -122,7 +122,7 @@ function Row(
               className="ml-2"
               title="Configuration"
             >
-              <CogIcon className="w-5 h-5" />
+              <CogIcon className="h-5 w-5" />
             </Button>
           </Link>
           <Button
@@ -134,7 +134,7 @@ function Row(
             }
             title="Delete configuration"
           >
-            <TrashIcon className="w-5 h-5" />
+            <TrashIcon className="h-5 w-5" />
           </Button>
         </Td>
       </tr>

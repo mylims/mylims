@@ -142,12 +142,12 @@ export function Badge(props: VariantBadgeProps | ColoredBadgeProps) {
           type="button"
           onClick={props.onDismiss}
           className={clsx(
-            'flex-shrink-0 ml-0.5 h-4 w-4 rounded-full inline-flex items-center justify-center focus:outline-none focus:text-white',
+            'ml-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full focus:text-white focus:outline-none',
             removeColors['color' in props ? props.color : Color.neutral],
           )}
         >
           <svg
-            className="w-2 h-2"
+            className="h-2 w-2"
             stroke="currentColor"
             fill="none"
             viewBox="0 0 8 8"

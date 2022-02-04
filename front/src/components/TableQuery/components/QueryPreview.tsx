@@ -80,7 +80,7 @@ export default function Queries() {
   if (Object.keys(queries).length === 0) return <div className="h-12" />;
 
   return (
-    <div className="flex mb-4">
+    <div className="mb-4 flex">
       <Button
         variant={Variant.secondary}
         color={Color.danger}
@@ -99,7 +99,7 @@ export default function Queries() {
       >
         Remove filters
       </Button>
-      <div className="flex p-2 ml-3 space-x-3 bg-white rounded-lg shadow">
+      <div className="ml-3 flex space-x-3 rounded-lg bg-white p-2 shadow">
         {Object.keys(queries).map((key) => (
           <span key={key}>
             <span className="text-xs font-semibold uppercase text-neutral-500">

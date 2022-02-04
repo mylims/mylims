@@ -19,8 +19,25 @@ import {
 } from 'react-hook-form';
 import type { AnyObjectSchema } from 'yup';
 
+import { EmptyValue, getEmptyValueProp } from '../util';
+
 interface FormStatus {
   error?: Error;
+}
+
+interface RHFConfig {
+  emptyValue: EmptyValue;
+}
+
+const configContext = createContext<RHFConfig | null>(null);
+export function useRHFConfig() {
+  const value = useContext(configContext);
+  if (value === null) {
+    throw new Error(
+      'missing RHF config value, make sure to call useRHFConfig in a descendant of FormRHF',
+    );
+  }
+  return value;
 }
 
 const formStatusContext = createContext<
@@ -70,6 +87,7 @@ export type FormRHFProps<TValues extends FieldValues> = Omit<
   noDefaultStyle?: boolean;
   className?: string;
   defaultValues: TValues;
+  emptyValue?: EmptyValue;
 };
 
 export function FormRHF<TValues extends FieldValues>(
@@ -82,6 +100,7 @@ export function FormRHF<TValues extends FieldValues>(
     className,
     validationSchema,
     children,
+    emptyValue,
     ...formHookProps
   } = props;
   const methods = useForm<TValues>({
@@ -90,41 +109,52 @@ export function FormRHF<TValues extends FieldValues>(
     resolver: validationSchema ? multiYupResolver(validationSchema) : undefined,
   });
 
+  const finalEmptyValue = getEmptyValueProp(props);
+  const configValue = useMemo(() => {
+    return {
+      emptyValue: finalEmptyValue,
+    };
+  }, [finalEmptyValue]);
   const [status, setStatus] = useState<FormStatus | null>(null);
   const contextValue = useMemo(() => {
     return [status, setStatus] as const;
   }, [status, setStatus]);
 
   return (
-    <formStatusContext.Provider value={contextValue}>
-      <FormProvider {...methods}>
-        <form
-          className={clsx({ 'space-y-4': !noDefaultStyle }, className)}
-          onSubmit={async (event) => {
-            const submit = methods.handleSubmit(onSubmit, onInvalidSubmit);
-            try {
-              await submit(event);
-            } catch (err) {
-              if (!(err instanceof Error)) {
-                // eslint-disable-next-line no-console
-                console.error(
-                  err,
-                  'FormRHF submit resulted in a non-error exception',
-                );
+    <configContext.Provider value={configValue}>
+      <formStatusContext.Provider value={contextValue}>
+        <FormProvider {...methods}>
+          <form
+            className={clsx(
+              { 'flex flex-1 flex-col gap-y-4': !noDefaultStyle },
+              className,
+            )}
+            onSubmit={async (event) => {
+              const submit = methods.handleSubmit(onSubmit, onInvalidSubmit);
+              try {
+                await submit(event);
+              } catch (err) {
+                if (!(err instanceof Error)) {
+                  // eslint-disable-next-line no-console
+                  console.error(
+                    err,
+                    'FormRHF submit resulted in a non-error exception',
+                  );
+                }
+                setStatus({
+                  error: err as Error,
+                });
+                // Make sure RHF counts this submit as unsuccessful
+                throw err;
               }
-              setStatus({
-                error: err as Error,
-              });
-              // Make sure RHF counts this submit as unsuccessful
-              throw err;
-            }
-          }}
-          noValidate
-        >
-          {children}
-        </form>
-      </FormProvider>
-    </formStatusContext.Provider>
+            }}
+            noValidate
+          >
+            {children}
+          </form>
+        </FormProvider>
+      </formStatusContext.Provider>
+    </configContext.Provider>
   );
 }
 

@@ -11,19 +11,26 @@ import {
   SelectFieldProps,
   SimpleSelectFieldProps,
 } from '../formik/SelectField';
-import { defaultErrorSerializer } from '../util';
+import {
+  defaultErrorSerializer,
+  RHFControllerProps,
+  RHFValidationProps,
+} from '../util';
 
 export function SelectFieldRHF<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleSelectFieldProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
-    ? SimpleSelectFieldProps<OptionType>
-    : SelectFieldProps<OptionType>,
+  props: RHFControllerProps &
+    RHFValidationProps &
+    (OptionType extends SimpleStringSelectOption
+      ? SimpleSelectFieldProps<OptionType>
+      : OptionType extends SimpleNumberSelectOption
+      ? SimpleSelectFieldProps<OptionType>
+      : SelectFieldProps<OptionType>),
 ): JSX.Element {
   const {
     name,
     serializeError = defaultErrorSerializer,
     deps,
+    rhfOptions,
     ...selectProps
   } = props;
   const { setValue, trigger } = useCheckedFormRHFContext();
@@ -33,6 +40,7 @@ export function SelectFieldRHF<OptionType>(
     formState: { isSubmitted },
   } = useController({
     name: props.name,
+    ...rhfOptions,
   });
 
   return (

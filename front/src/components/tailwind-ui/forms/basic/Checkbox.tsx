@@ -27,7 +27,7 @@ export const Checkbox = forwardRef(function CheckboxForwardRef(
   } = props;
   return (
     <div className={clsx('flex items-start', className)}>
-      <div className="flex items-center h-5">
+      <div className="flex h-5 items-center">
         <input
           {...otherProps}
           id={id}
@@ -36,7 +36,7 @@ export const Checkbox = forwardRef(function CheckboxForwardRef(
           type="checkbox"
           ref={ref}
           className={clsx(
-            'w-4 h-4 rounded form-checkbox text-primary-600 disabled:text-neutral-300',
+            'form-checkbox h-4 w-4 rounded text-primary-600 disabled:text-neutral-300',
             error
               ? 'border-danger-300 focus:ring-danger-500'
               : 'border-neutral-300 focus:ring-primary-500',

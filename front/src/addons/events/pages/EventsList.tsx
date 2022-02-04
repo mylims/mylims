@@ -104,7 +104,7 @@ export default function EventsList() {
                 roundness={Roundness.circular}
                 variant={Variant.secondary}
               >
-                <InformationCircleIcon className="w-5 h-5" />
+                <InformationCircleIcon className="h-5 w-5" />
               </Button>
             </Link>
           )}

@@ -25,7 +25,7 @@ export default function RowRender<T extends Record<string, unknown>>({
           <td
             key={`${column.value.dataPath}-${index}`}
             className={clsx(
-              'self-center px-4 py-3 text-sm font-semibold whitespace-nowrap text-neutral-900',
+              'self-center whitespace-nowrap px-4 py-3 text-sm font-semibold text-neutral-900',
               column.kind === ColumnKind.ACTIONS ? 'w-min' : 'truncate',
             )}
             title={title}

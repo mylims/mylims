@@ -2,24 +2,24 @@
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
 
-export type HorizontalNavigationRenderOptionCallback = (
+export type HorizontalNavigationRenderOptionCallback<T extends string> = (
   children: ReactNode,
-  option: Omit<HorizontalNavigationOption, 'renderOption'> & {
+  option: Omit<HorizontalNavigationOption<T>, 'renderOption'> & {
     isSelected: boolean;
   },
 ) => JSX.Element;
-export interface HorizontalNavigationOption {
-  value: string;
-  label?: ReactNode;
-  renderOption?: HorizontalNavigationRenderOptionCallback;
+export interface HorizontalNavigationOption<T extends string> {
+  value: T;
+  label: ReactNode;
+  renderOption?: HorizontalNavigationRenderOptionCallback<T>;
 }
 
-export interface HorizontalNavigationProps {
-  options: Array<HorizontalNavigationOption>;
-  selected: HorizontalNavigationOption | undefined;
+export interface HorizontalNavigationProps<T extends string> {
+  options: Array<HorizontalNavigationOption<T>>;
+  selected: HorizontalNavigationOption<T> | undefined;
   onSelect?: (
-    clicked: HorizontalNavigationOption,
-    options: Array<HorizontalNavigationOption>,
+    clicked: HorizontalNavigationOption<T>,
+    options: Array<HorizontalNavigationOption<T>>,
   ) => void;
 }
 
@@ -27,11 +27,11 @@ const activated = 'border-primary-500 text-primary-600';
 const notActivated =
   'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300';
 
-export function HorizontalNavigation({
+export function HorizontalNavigation<T extends string>({
   options,
   selected,
   onSelect,
-}: HorizontalNavigationProps): JSX.Element {
+}: HorizontalNavigationProps<T>): JSX.Element {
   const opts = options.map((element) => {
     return {
       ...element,
@@ -49,7 +49,7 @@ export function HorizontalNavigation({
           onChange={(event) =>
             onSelect?.(opts[event.target.selectedIndex], opts)
           }
-          className="block w-full py-2 pl-3 pr-10 text-base rounded-md border-neutral-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+          className="block w-full rounded-md border-neutral-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
         >
           {opts.map((element, index) => (
             <option key={index} value={element.value}>
@@ -60,7 +60,7 @@ export function HorizontalNavigation({
       </div>
       <div className="hidden sm:block">
         <div className="border-b border-neutral-200">
-          <nav className="flex -mb-px space-x-8">
+          <nav className="-mb-px flex space-x-8">
             {opts.map((element, index) => (
               <Navigation
                 key={index}
@@ -77,20 +77,20 @@ export function HorizontalNavigation({
   );
 }
 
-interface NavigationProps {
-  element: HorizontalNavigationOption;
-  selected: HorizontalNavigationOption | undefined;
+interface NavigationProps<T extends string> {
+  element: HorizontalNavigationOption<T>;
+  selected: HorizontalNavigationOption<T> | undefined;
   onSelect: () => void;
-  renderOption?: HorizontalNavigationRenderOptionCallback;
+  renderOption?: HorizontalNavigationRenderOptionCallback<T>;
 }
 
-function Navigation(props: NavigationProps): JSX.Element {
+function Navigation<T extends string>(props: NavigationProps<T>): JSX.Element {
   const isSelected = props.element.value === props.selected?.value;
   const option = (
     <div
       onClick={props.onSelect}
       className={clsx(
-        'inline-block cursor-pointer whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-sm',
+        'inline-block cursor-pointer whitespace-nowrap border-b-2 py-4 px-1 text-sm font-semibold',
         isSelected ? activated : notActivated,
       )}
     >

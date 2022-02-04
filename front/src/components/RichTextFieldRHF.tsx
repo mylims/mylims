@@ -9,7 +9,8 @@ import {
 import {
   defaultErrorSerializer,
   FieldProps,
-  RHFRegisterProps,
+  RHFControllerProps,
+  RHFValidationProps,
   useCheckedFormRHFContext,
 } from '@/components/tailwind-ui';
 
@@ -18,12 +19,14 @@ export type RichTextFieldRHFProps = Omit<
   'value' | 'onChange'
 > &
   FieldProps &
-  RHFRegisterProps;
+  RHFValidationProps &
+  RHFControllerProps;
 export function RichTextFieldRHF(props: RichTextFieldRHFProps) {
   const {
     name,
     serializeError = defaultErrorSerializer,
     deps,
+    rhfOptions,
     ...otherProps
   } = props;
 
@@ -32,7 +35,7 @@ export function RichTextFieldRHF(props: RichTextFieldRHFProps) {
     field,
     fieldState: { error },
     formState: { isSubmitted: shouldValidate },
-  } = useController({ name });
+  } = useController({ name, ...rhfOptions });
 
   const handleChange = useCallback(
     (value: Descendant[]) => {

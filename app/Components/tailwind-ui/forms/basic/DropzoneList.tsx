@@ -1,18 +1,12 @@
 import { XIcon } from '@heroicons/react/outline';
 import bytesize from 'byte-size';
 import clsx from 'clsx';
-import React from 'react';
-
-import { Table, TdProps } from '../../lists/Table';
+import React, { ReactNode } from 'react';
 
 interface DropzoneListFile {
   id: string;
   file: File;
   delete: () => void;
-}
-
-interface DropzoneListRowProps {
-  value: DropzoneListFile;
 }
 
 export interface DropzoneListProps {
@@ -37,43 +31,74 @@ export function DropzoneList({
   });
 
   return (
-    <div className="w-full mt-1">
-      <Table data={data} Tr={DropzonListRow} />
+    <div
+      className="mt-1 grid rounded-md border-b border-neutral-300 shadow"
+      style={{ gridTemplateColumns: 'minmax(0, 1fr) auto auto' }}
+    >
+      {data.map((row, index) => (
+        <DropzoneListRow
+          key={row.id}
+          value={row}
+          isLast={index === data.length - 1}
+        />
+      ))}
     </div>
   );
 }
 
-function DropzonListRow({ value: props }: DropzoneListRowProps) {
+interface DropzoneListRowProps {
+  value: DropzoneListFile;
+  isLast: boolean;
+}
+
+function DropzoneListRow({ value, isLast }: DropzoneListRowProps) {
   return (
-    <tr
-      className={clsx(
-        'w-full min-w-full bg-transparent shadow-none border-neutral-300 border-dashed rounded-md',
-      )}
-    >
-      <DropzoneTd style={{ maxWidth: 300 }} className="px-2 truncate">
-        {props.file.name}
-      </DropzoneTd>
+    <>
+      <DropzoneListCell className="px-2" isLast={isLast}>
+        <span className="truncate">{value.file.name}</span>
+      </DropzoneListCell>
 
-      <DropzoneTd>{String(bytesize(props.file.size))}</DropzoneTd>
+      <DropzoneListCell
+        className="truncate px-6 text-sm font-semibold text-neutral-900"
+        isLast={isLast}
+      >
+        {String(bytesize(value.file.size))}
+      </DropzoneListCell>
 
-      <DropzoneTd className="px-2 my-2 text-sm font-semibold text-right whitespace-nowrap text-neutral-900">
+      <DropzoneListCell
+        className="px-2 text-right text-sm font-semibold text-neutral-900"
+        isLast={isLast}
+      >
         <button
           type="button"
-          onClick={props.delete}
-          className="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 text-primary-500 hover:bg-primary-100 active:bg-primary-200 focus:ring-primary-600"
+          onClick={value.delete}
+          className="inline-flex rounded-md p-1.5 text-primary-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-600 active:bg-primary-200"
         >
-          <XIcon className="w-5 h-5" />
+          <XIcon className="h-5 w-5" />
         </button>
-      </DropzoneTd>
-    </tr>
+      </DropzoneListCell>
+    </>
   );
 }
 
-function DropzoneTd(props: TdProps) {
+function DropzoneListCell({
+  className,
+  children,
+  isLast,
+}: {
+  className: string;
+  children: ReactNode;
+  isLast: boolean;
+}) {
   return (
-    <td
-      className="px-6 text-sm font-semibold whitespace-nowrap text-neutral-900"
-      {...props}
-    />
+    <div
+      className={clsx(
+        !isLast && 'border-b border-dashed border-neutral-300',
+        'flex items-center',
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 }

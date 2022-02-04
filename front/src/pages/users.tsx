@@ -22,7 +22,7 @@ export default function Users() {
         </Alert>
       )}
       {loading ? (
-        <Spinner className="w-10 h-10 text-danger-500" />
+        <Spinner className="h-10 w-10 text-danger-500" />
       ) : (
         <Table
           data={data?.users ?? []}

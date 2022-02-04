@@ -1,142 +1,31 @@
 import { v4 as uuid } from '@lukeed/uuid';
 import clsx from 'clsx';
-import React, { ReactNode, useCallback, useContext, useReducer } from 'react';
+import React, { ReactNode, useContext, useMemo, useReducer } from 'react';
+
+import { Color } from '..';
 
 import { Notification } from './Notification';
 import {
+  notificationContext,
   NotificationContext,
-  NotificationActions,
-  NotificationConfig,
+  notificationsReducer,
+  NotificationState,
+  ToastNotificationState,
 } from './NotificationContext';
 import { ToastNotification } from './ToastNotification';
 
-export interface NotificationCenterProps {
-  position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
-  className?: string;
-}
+export type {
+  AddNotification,
+  AddToastNotification,
+  DeleteNotification,
+  NotificationContext,
+  NotificationConfig,
+  ToastNotificationAction,
+  ToastNotificationConfig,
+} from './NotificationContext';
 
-export interface ToastNotificationCenterProps {
-  position: 'top' | 'bottom';
-  className?: string;
-}
-
-type ShowingOrRemoving = 'SHOWING' | 'REMOVING';
-
-export interface NotificationState extends NotificationConfig {
-  id: string;
-  state: ShowingOrRemoving;
-}
-
-export interface NotificationToastState {
-  id: string;
-  state: ShowingOrRemoving;
-
-  label: string;
-  action?: {
-    label: string;
-    handle: () => void;
-  };
-
-  isToast: true;
-}
-
-interface NotificationsState {
-  notifications: Array<NotificationState | NotificationToastState>;
-}
-
-function reducer(
-  previous: NotificationsState,
-  action: NotificationActions,
-): NotificationsState {
-  switch (action.type) {
-    case 'ADD_NOTIFICATION': {
-      const copy = previous.notifications.slice();
-      copy.push({ ...action.payload });
-      return { notifications: copy };
-    }
-    case 'DEL_NOTIFICATION': {
-      const array = previous.notifications.filter(
-        (element) => element.id !== action.payload,
-      );
-      return { notifications: array };
-    }
-    case 'DISAPPEAR': {
-      const notifications = previous.notifications.map((element) => {
-        if (element.id === action.payload) {
-          return { ...element, state: 'REMOVING' as ShowingOrRemoving };
-        }
-        return element;
-      });
-
-      return { notifications };
-    }
-    default:
-      throw new Error('NOPE');
-  }
-}
-
-export function NotificationProvider(props: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, { notifications: [] });
-
-  const dismiss = useCallback(
-    function dismiss(payload: string) {
-      dispatch({ type: 'DISAPPEAR', payload });
-      setTimeout(() => {
-        dispatch({ type: 'DEL_NOTIFICATION', payload });
-      }, 200);
-    },
-    [dispatch],
-  );
-
-  const utils = {
-    notifications: state.notifications,
-    addNotification: useCallback(
-      (notification, timeout) => {
-        const id = uuid();
-
-        if (timeout !== 0) {
-          setTimeout(() => dismiss(id), timeout || 10000);
-        }
-
-        dispatch({
-          type: 'ADD_NOTIFICATION',
-          payload: { ...notification, id, state: 'SHOWING' },
-        });
-
-        return id;
-      },
-
-      [dismiss, dispatch],
-    ),
-    addToastNotification: useCallback(
-      (notification, timeout) => {
-        const id = uuid();
-
-        if (timeout !== 0) {
-          setTimeout(() => dismiss(id), timeout || 10000);
-        }
-
-        dispatch({
-          type: 'ADD_NOTIFICATION',
-          payload: { ...notification, id, state: 'SHOWING', isToast: true },
-        });
-
-        return id;
-      },
-      [dismiss, dispatch],
-    ),
-    deleteNotification: dismiss,
-  };
-
-  return (
-    <NotificationContext.Provider value={utils}>
-      {props.children}
-    </NotificationContext.Provider>
-  );
-}
-
-export function useNotificationCenter() {
-  const context = useContext(NotificationContext);
+export function useNotificationCenter(): NotificationContext {
+  const context = useContext(notificationContext);
 
   if (context === null) {
     throw new Error('No context was provided');
@@ -145,13 +34,113 @@ export function useNotificationCenter() {
   return context;
 }
 
+type TimeoutConfig = Record<Color, number>;
+
+export function NotificationProvider(props: {
+  defaultTimeouts?: Partial<TimeoutConfig>;
+  children: ReactNode;
+}) {
+  const {
+    // Extract all properties so that we can useMemo() without requiring the
+    // input object to be stable.
+    defaultTimeouts: {
+      primary = 7000,
+      alternative = 7000,
+      neutral = 7000,
+      danger = 0,
+      success = 3000,
+      warning = 10000,
+    } = {},
+    children,
+  } = props;
+
+  const timeouts = useMemo(
+    () => ({ primary, alternative, neutral, danger, success, warning }),
+    [alternative, danger, neutral, primary, success, warning],
+  );
+
+  const [state, dispatch] = useReducer(notificationsReducer, {
+    notifications: [],
+  });
+
+  const utils: Omit<NotificationContext, 'notifications'> = useMemo(() => {
+    function dismiss(payload: string) {
+      dispatch({ type: 'DISAPPEAR', payload });
+      setTimeout(() => {
+        dispatch({ type: 'DEL_NOTIFICATION', payload });
+      }, 200);
+    }
+
+    return {
+      addNotification(notification, timeout) {
+        const id = uuid();
+        const type = notification.type || Color.neutral;
+
+        if (timeout === undefined) {
+          timeout = timeouts[type];
+        }
+
+        if (timeout !== 0) {
+          setTimeout(() => dismiss(id), timeout);
+        }
+
+        dispatch({
+          type: 'ADD_NOTIFICATION',
+          payload: {
+            ...notification,
+            id,
+            state: 'SHOWING',
+            type,
+            isToast: false,
+          },
+        });
+
+        return id;
+      },
+      addToastNotification(notification, timeout = timeouts.neutral) {
+        const id = uuid();
+
+        if (timeout !== 0) {
+          setTimeout(() => dismiss(id), timeout);
+        }
+
+        dispatch({
+          type: 'ADD_NOTIFICATION',
+          payload: {
+            ...notification,
+            id,
+            state: 'SHOWING',
+            isToast: true,
+          },
+        });
+
+        return id;
+      },
+      deleteNotification: dismiss,
+    };
+  }, [timeouts]);
+
+  return (
+    <notificationContext.Provider
+      value={{ ...utils, notifications: state.notifications }}
+    >
+      {children}
+    </notificationContext.Provider>
+  );
+}
+
+export interface ToastNotificationCenterProps {
+  position: 'top' | 'bottom';
+  className?: string;
+}
+
 export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
   const { deleteNotification, notifications } = useNotificationCenter();
 
   return (
     <div
       className={clsx(
-        'fixed justify-center inset-x-0 flex pointer-events-none z-40',
+        'pointer-events-none fixed inset-x-0 z-40 flex justify-center',
         {
           'top-0': props.position === 'top',
           'bottom-0': props.position === 'bottom',
@@ -167,8 +156,8 @@ export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
           })}
         >
           {notifications
-            .filter(
-              (element): element is NotificationToastState => !!element.isToast,
+            .filter((element): element is ToastNotificationState =>
+              Boolean(element.isToast),
             )
             .map((notification) => {
               return (
@@ -192,15 +181,20 @@ export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
   );
 }
 
+export interface NotificationCenterProps {
+  position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+  className?: string;
+}
+
 export function NotificationCenter(props: NotificationCenterProps) {
   const { deleteNotification, notifications } = useNotificationCenter();
 
   return (
     <div
       className={clsx(
-        'fixed flex pointer-events-none m-5 z-40',
+        'pointer-events-none fixed z-40 m-5 flex',
         {
-          'sm:items-start sm:justify-end items-end justify-center':
+          'items-end justify-center sm:items-start sm:justify-end':
             props.position.endsWith('right'),
           'top-0': props.position.startsWith('top'),
           'bottom-0': props.position.startsWith('bottom'),
@@ -226,6 +220,7 @@ export function NotificationCenter(props: NotificationCenterProps) {
                   {...notification}
                   onDismiss={() => deleteNotification(notification.id)}
                   className="mb-5"
+                  type={notification.type}
                   title={notification.title}
                 >
                   {notification.content}

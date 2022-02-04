@@ -47,7 +47,7 @@ const theme = {
       title: 'text-primary-800',
       text: 'text-primary-700',
     },
-    icon: <InformationCircleIcon className="w-5 h-5 text-primary-400" />,
+    icon: <InformationCircleIcon className="h-5 w-5 text-primary-400" />,
   },
   [AlertType.WARNING]: {
     theme: {
@@ -55,7 +55,7 @@ const theme = {
       title: 'text-warning-800',
       text: 'text-warning-700',
     },
-    icon: <ExclamationIcon className="w-5 h-5 text-warning-400" />,
+    icon: <ExclamationIcon className="h-5 w-5 text-warning-400" />,
   },
   [AlertType.ERROR]: {
     theme: {
@@ -63,7 +63,7 @@ const theme = {
       title: 'text-danger-800',
       text: 'text-danger-700',
     },
-    icon: <XCircleIcon className="w-5 h-5 text-danger-400" />,
+    icon: <XCircleIcon className="h-5 w-5 text-danger-400" />,
   },
   [AlertType.SUCCESS]: {
     theme: {
@@ -71,7 +71,7 @@ const theme = {
       title: 'text-success-800',
       text: 'text-success-700',
     },
-    icon: <CheckCircleIcon className="w-5 h-5 text-success-400" />,
+    icon: <CheckCircleIcon className="h-5 w-5 text-success-400" />,
   },
 };
 
@@ -95,10 +95,10 @@ export function Alert(props: AlertProps): JSX.Element {
 
   return (
     <div
-      className={clsx('p-4 rounded-md', type.theme.background, props.className)}
+      className={clsx('rounded-md p-4', type.theme.background, props.className)}
     >
       <div className="flex">
-        <div className="flex-shrink-0 text-xl">{type.icon}</div>
+        <div className="shrink-0 text-xl">{type.icon}</div>
         <div className="ml-3">
           {props.title && (
             <div className={clsx('text-sm font-semibold', type.theme.title)}>
@@ -119,7 +119,7 @@ export function Alert(props: AlertProps): JSX.Element {
         </div>
 
         {props.onDismiss && (
-          <div className="pl-3 ml-auto">
+          <div className="ml-auto pl-3">
             <div className="-mx-1.5 -my-1.5">
               <button
                 type="button"
@@ -129,7 +129,7 @@ export function Alert(props: AlertProps): JSX.Element {
                   'rounded-full p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2',
                 )}
               >
-                <XIcon className="w-5 h-5" />
+                <XIcon className="h-5 w-5" />
               </button>
             </div>
           </div>

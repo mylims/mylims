@@ -1,6 +1,7 @@
 import React from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
+import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import {
   Select,
   SimpleStringSelectOption,
@@ -10,28 +11,36 @@ import {
   SelectFieldProps,
   SimpleSelectFieldProps,
 } from '../formik/SelectField';
-import { defaultErrorSerializer } from '../util';
+import {
+  defaultErrorSerializer,
+  RHFControllerProps,
+  RHFValidationProps,
+} from '../util';
 
 export function SelectFieldRHF<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleSelectFieldProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
-    ? SimpleSelectFieldProps<OptionType>
-    : SelectFieldProps<OptionType>,
+  props: RHFControllerProps &
+    RHFValidationProps &
+    (OptionType extends SimpleStringSelectOption
+      ? SimpleSelectFieldProps<OptionType>
+      : OptionType extends SimpleNumberSelectOption
+      ? SimpleSelectFieldProps<OptionType>
+      : SelectFieldProps<OptionType>),
 ): JSX.Element {
   const {
     name,
     serializeError = defaultErrorSerializer,
     deps,
+    rhfOptions,
     ...selectProps
   } = props;
-  const { setValue, trigger } = useFormContext();
+  const { setValue, trigger } = useCheckedFormRHFContext();
   const {
     field,
     fieldState: { error },
     formState: { isSubmitted },
   } = useController({
     name: props.name,
+    ...rhfOptions,
   });
 
   return (

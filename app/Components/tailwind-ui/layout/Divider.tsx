@@ -65,11 +65,11 @@ Divider.Content = function DividerContent(props: DividerContent) {
 export function DividerCenter(props: { children: ReactNode }) {
   return (
     <div className="flex">
-      <div className="flex items-center flex-1">
+      <div className="flex flex-1 items-center">
         <div className="w-full border-t border-neutral-300" />
       </div>
       <div className="flex">{props.children}</div>
-      <div className="flex items-center flex-1">
+      <div className="flex flex-1 items-center">
         <div className="w-full border-t border-neutral-300" />
       </div>
     </div>
@@ -86,7 +86,7 @@ export function DividerSide(props: {
     return (
       <div className="flex items-center">
         <div className="flex">{children[0]}</div>
-        <div className="flex items-center flex-1">
+        <div className="flex flex-1 items-center">
           <div className="w-full border-t border-neutral-300" />
         </div>
         <div className="flex">{children[1]}</div>
@@ -97,7 +97,7 @@ export function DividerSide(props: {
   return (
     <div className={clsx('flex', side === 'end' ? 'flex-row-reverse' : '')}>
       <div className="flex">{children}</div>
-      <div className="flex items-center flex-1">
+      <div className="flex flex-1 items-center">
         <div className="w-full border-t border-neutral-300" />
       </div>
     </div>

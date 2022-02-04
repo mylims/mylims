@@ -1,45 +1,70 @@
 export const ELLIPSIS = '…';
 
+type PaginationArray = Array<number | typeof ELLIPSIS>;
+
+interface PaginateResult {
+  pages: PaginationArray;
+  canNavigate: boolean;
+}
+
 export function paginate(
   currentPage: number,
   totalPages: number,
-  maxVisiblePages: number,
-  pagesPerSide: number,
-) {
-  const maxPagesWithoutEllipsis = pagesPerSide * 2 + 2 + maxVisiblePages;
+  centerPagesPerSide: number,
+  boundaryPagesPerSide: number,
+): PaginateResult {
+  const maxPagesWithoutEllipsis =
+    boundaryPagesPerSide * 2 +
+    centerPagesPerSide * 2 +
+    // current page
+    1 +
+    // account for ellipses
+    (boundaryPagesPerSide ? 2 : 0);
+
   if (totalPages <= maxPagesWithoutEllipsis) {
-    return range(1, totalPages);
+    return createPagination(range(1, totalPages));
   }
 
   const half = Math.ceil(maxPagesWithoutEllipsis / 2);
-  const aroundMiddle = Math.floor(maxVisiblePages / 2);
+  const aroundMiddle = centerPagesPerSide;
 
-  const pagination: Array<number | typeof ELLIPSIS> = [];
+  const pages: PaginationArray = [];
 
   if (currentPage <= half) {
-    pagination.push(...range(1, half));
+    pages.push(...range(1, half));
   } else {
-    pagination.push(...range(1, pagesPerSide));
-    pagination.push(ELLIPSIS);
+    pages.push(...range(1, boundaryPagesPerSide));
+    if (boundaryPagesPerSide) {
+      pages.push(ELLIPSIS);
+    }
     if (currentPage > totalPages - half) {
-      pagination.push(
-        ...range(totalPages - half - aroundMiddle + 1, totalPages),
-      );
-      return pagination;
+      pages.push(...range(totalPages - half - aroundMiddle + 1, totalPages));
+      return createPagination(pages);
     } else {
-      pagination.push(...range(currentPage - aroundMiddle, currentPage));
+      pages.push(...range(currentPage - aroundMiddle, currentPage));
     }
   }
 
   if (currentPage > totalPages - half) {
-    pagination.push(...range(currentPage + 1, totalPages));
+    pages.push(...range(currentPage + 1, totalPages));
   } else {
     const middle = Math.max(currentPage, half);
-    pagination.push(...range(middle + 1, middle + aroundMiddle));
-    pagination.push(ELLIPSIS);
-    pagination.push(...range(totalPages - pagesPerSide + 1, totalPages));
+    pages.push(...range(middle + 1, middle + aroundMiddle));
+    if (boundaryPagesPerSide) {
+      pages.push(ELLIPSIS);
+    }
+    pages.push(...range(totalPages - boundaryPagesPerSide + 1, totalPages));
   }
-  return pagination;
+
+  return createPagination(pages);
+}
+
+function createPagination(pages: PaginationArray): PaginateResult {
+  const realPages = pages.filter((page) => typeof page === 'number');
+  return {
+    pages,
+    canNavigate: realPages.length > 0,
+  };
 }
 
 function range(from: number, to: number) {

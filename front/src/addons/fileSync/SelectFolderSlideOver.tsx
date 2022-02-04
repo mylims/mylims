@@ -74,7 +74,7 @@ export default function SelectFolderSlideOver({
         <div>{selectedPath}</div>
         <SlideOver.Content>
           {loading || data === undefined ? (
-            <Spinner className="w-10 h-10 text-danger-500" />
+            <Spinner className="h-10 w-10 text-danger-500" />
           ) : (
             <Table
               Header={Header(selectedPath)}
@@ -125,9 +125,9 @@ function Row(selectPath: (newPath: string) => void) {
     >
       <Td compact>
         {value.type === 'directory' ? (
-          <FolderOpenIcon className="w-5 h-5" />
+          <FolderOpenIcon className="h-5 w-5" />
         ) : (
-          <DocumentIcon className="w-5 h-5" />
+          <DocumentIcon className="h-5 w-5" />
         )}
       </Td>
       <Td compact>{value.path}</Td>
