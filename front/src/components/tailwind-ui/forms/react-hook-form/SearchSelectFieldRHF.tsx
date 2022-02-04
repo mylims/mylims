@@ -11,19 +11,26 @@ import {
   SearchSelectFieldProps,
   SimpleSearchSelectFieldProps,
 } from '../formik/SearchSelectField';
-import { defaultErrorSerializer } from '../util';
+import {
+  defaultErrorSerializer,
+  RHFControllerProps,
+  RHFValidationProps,
+} from '../util';
 
 export function SearchSelectFieldRHF<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleSearchSelectFieldProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
-    ? SimpleSearchSelectFieldProps<OptionType>
-    : SearchSelectFieldProps<OptionType>,
+  props: RHFControllerProps &
+    RHFValidationProps &
+    (OptionType extends SimpleStringSelectOption
+      ? SimpleSearchSelectFieldProps<OptionType>
+      : OptionType extends SimpleNumberSelectOption
+      ? SimpleSearchSelectFieldProps<OptionType>
+      : SearchSelectFieldProps<OptionType>),
 ): JSX.Element {
   const {
     name,
     serializeError = defaultErrorSerializer,
     deps,
+    rhfOptions,
     ...searchSelectProps
   } = props;
   const { setValue, trigger } = useCheckedFormRHFContext();
@@ -33,6 +40,7 @@ export function SearchSelectFieldRHF<OptionType>(
     formState: { isSubmitted },
   } = useController({
     name: props.name,
+    ...rhfOptions,
   });
 
   const handleSelect = useCallback(

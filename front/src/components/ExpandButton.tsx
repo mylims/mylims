@@ -22,9 +22,9 @@ export default function ExpandButton({
       onClick={onExpand}
     >
       {expanded ? (
-        <ChevronUpIcon className="w-3 h-3" />
+        <ChevronUpIcon className="h-3 w-3" />
       ) : (
-        <ChevronDownIcon className="w-3 h-3" />
+        <ChevronDownIcon className="h-3 w-3" />
       )}
     </Button>
   );

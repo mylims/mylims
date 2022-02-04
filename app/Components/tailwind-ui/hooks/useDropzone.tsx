@@ -1,30 +1,37 @@
 import { FieldHookConfig, useField } from 'formik';
 import { useCallback, useState } from 'react';
 import { DropzoneProps } from 'react-dropzone';
-import { useController, useFormContext, useWatch } from 'react-hook-form';
+import { useController, useWatch } from 'react-hook-form';
 
-import { RHFControlledProps } from '..';
+import { RHFControllerProps, RHFValidationProps } from '..';
+
+import { useCheckedFormRHFContext } from './useCheckedFormRHF';
 
 export interface DropzoneHookOptions extends Omit<DropzoneProps, 'onDrop'> {
   replace?: boolean;
 }
 
 export function useDropzoneFieldRHF(
-  dropzoneOptions: DropzoneHookOptions & RHFControlledProps,
+  dropzoneOptions: DropzoneHookOptions &
+    RHFControllerProps &
+    RHFValidationProps,
   name: string,
 ) {
-  const { replace, deps, ...dropzoneProps } = dropzoneOptions;
-  const { setValue, trigger } = useFormContext();
+  const { replace, deps, rhfOptions, ...dropzoneProps } = dropzoneOptions;
+  const { setValue, trigger } = useCheckedFormRHFContext();
   const {
     field,
     fieldState: { error },
     formState: { isSubmitted },
-  } = useController({ name });
+  } = useController({ name, ...rhfOptions });
   const files: File[] = useWatch({ name });
   const onDrop = useCallback(
     (newFiles: File[]) => {
       if (replace) {
-        setValue(name, newFiles);
+        setValue(name, newFiles, {
+          shouldTouch: true,
+          shouldValidate: isSubmitted,
+        });
       } else {
         const doesNotAlreadyExist = (newFile: File) => {
           return (

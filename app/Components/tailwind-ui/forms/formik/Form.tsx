@@ -44,7 +44,10 @@ export function Form<T>(props: FormProps<T>): JSX.Element {
       {(formik) => {
         return (
           <FormikForm
-            className={clsx({ 'space-y-4': !noDefaultStyle }, className)}
+            className={clsx(
+              { 'flex flex-1 flex-col gap-y-4': !noDefaultStyle },
+              className,
+            )}
             style={style}
             noValidate={noValidate}
             {...otherFormProps}

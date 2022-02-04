@@ -39,7 +39,7 @@ export default function MeasurementDetail() {
     }
   }, [data?.measurement]);
 
-  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
+  if (loading) return <Spinner className="h-10 w-10 text-danger-500" />;
   if (error || !data) {
     return (
       <Alert title="Error while fetching measurement" type={AlertType.ERROR}>
@@ -73,7 +73,7 @@ export default function MeasurementDetail() {
       </Card.Header>
       {measurementBody}
       <Card.Footer>
-        <div className="grid grid-cols-3 gap-4 mb-4">
+        <div className="mb-4 grid grid-cols-3 gap-4">
           <FieldDescription title="Sample code">
             {measurement.sampleCode.join(',')}
           </FieldDescription>

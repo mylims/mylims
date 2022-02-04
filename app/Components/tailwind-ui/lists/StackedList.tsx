@@ -26,16 +26,16 @@ StackedList.Row = function StackedListRow<
   const { as: Element = React.Fragment, children, ...otherProps } = props;
 
   return (
-    <li className="block transition duration-150 ease-in-out hover:bg-neutral-50 focus:outline-none focus:bg-neutral-50">
+    <li className="block transition duration-150 ease-in-out hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none">
       <Element {...otherProps}>
         <div className="flex items-center px-4 py-4 sm:px-6">
-          <div className="flex items-center flex-1 min-w-0">
-            <div className="flex-1 min-w-0 px-4 md:grid md:grid-cols-2 md:gap-4">
+          <div className="flex min-w-0 flex-1 items-center">
+            <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
               {children}
             </div>
           </div>
           <div>
-            <ChevronRightIcon className="w-5 h-5 text-neutral-400" />
+            <ChevronRightIcon className="h-5 w-5 text-neutral-400" />
           </div>
         </div>
       </Element>

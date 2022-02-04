@@ -1,12 +1,9 @@
 'use strict';
 
 module.exports = {
+  content: ['./index.html', './src/**/*.{ts,tsx}'],
   presets: [
-    require('@zakodium/tailwind-config')({
-      colors: {
-        neutral: 'cool-gray',
-      },
-    }),
+    require('@zakodium/tailwind-config')({ colors: { neutral: 'slate' } }),
   ],
   theme: {
     minWidth: {

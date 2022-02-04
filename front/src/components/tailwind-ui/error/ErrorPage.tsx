@@ -11,7 +11,7 @@ export const ErrorPage: React.FC<ErrorPageProps> = (props) => {
   const { title, subtitle, code, children } = props;
 
   return (
-    <div className="h-full px-4 py-16 bg-white sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+    <div className="h-full bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
       <div className="mx-auto max-w-max">
         <main className="sm:flex">
           {code && (
@@ -32,7 +32,7 @@ export const ErrorPage: React.FC<ErrorPageProps> = (props) => {
                 <p className="mt-1 text-base text-neutral-500">{subtitle}</p>
               )}
             </div>
-            <div className="flex mt-10 space-x-3 sm:border-l sm:border-transparent sm:pl-6">
+            <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
               {children}
             </div>
           </div>

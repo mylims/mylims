@@ -17,7 +17,7 @@ interface TopicsEditProps {
 
 export default function TopicsEdit({ remove, index }: TopicsEditProps) {
   return (
-    <div className="grid grid-cols-3 p-2 m-1 rounded-lg shadow">
+    <div className="m-1 grid grid-cols-3 rounded-lg p-2 shadow">
       <div className="col-span-2">
         <InputField name={`topics.${index}`} label="Topic" hiddenLabel />
       </div>
@@ -28,7 +28,7 @@ export default function TopicsEdit({ remove, index }: TopicsEditProps) {
         variant={Variant.secondary}
         onClick={() => remove(index)}
       >
-        <TrashIcon className="w-5 h-5" />
+        <TrashIcon className="h-5 w-5" />
       </Button>
     </div>
   );

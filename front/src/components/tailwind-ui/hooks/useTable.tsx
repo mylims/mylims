@@ -122,8 +122,8 @@ export function useTable<T extends object>(
   return {
     data: finalData,
     pagination: {
-      maxVisiblePages,
-      pagesPerSide,
+      centerPagesPerSide: maxVisiblePages,
+      boundaryPagesPerSide: pagesPerSide,
       withText,
       page,
       itemsPerPage,

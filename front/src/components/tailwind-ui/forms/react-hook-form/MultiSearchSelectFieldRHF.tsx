@@ -11,19 +11,26 @@ import {
   MultiSearchSelectFieldProps,
   SimpleMultiSearchSelectFieldProps,
 } from '../formik/MultiSearchSelectField';
-import { defaultErrorSerializer } from '../util';
+import {
+  defaultErrorSerializer,
+  RHFControllerProps,
+  RHFValidationProps,
+} from '../util';
 
 export function MultiSearchSelectFieldRHF<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleMultiSearchSelectFieldProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
-    ? SimpleMultiSearchSelectFieldProps<OptionType>
-    : MultiSearchSelectFieldProps<OptionType>,
+  props: RHFControllerProps &
+    RHFValidationProps &
+    (OptionType extends SimpleStringSelectOption
+      ? SimpleMultiSearchSelectFieldProps<OptionType>
+      : OptionType extends SimpleNumberSelectOption
+      ? SimpleMultiSearchSelectFieldProps<OptionType>
+      : MultiSearchSelectFieldProps<OptionType>),
 ): JSX.Element {
   const {
     name,
     serializeError = defaultErrorSerializer,
     deps,
+    rhfOptions,
     ...otherProps
   } = props;
 
@@ -34,6 +41,7 @@ export function MultiSearchSelectFieldRHF<OptionType>(
     formState: { isSubmitted },
   } = useController({
     name: props.name,
+    ...rhfOptions,
   });
 
   const handleSelect = useCallback(

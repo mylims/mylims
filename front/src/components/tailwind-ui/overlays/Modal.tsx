@@ -1,4 +1,3 @@
-import { Transition } from '@headlessui/react';
 import { XIcon, AnnotationIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import polyfill from 'dialog-polyfill-universal';
@@ -45,6 +44,8 @@ export interface ModalProps<T extends ElementType> {
   requestCloseOnBackdrop?: boolean;
   requestCloseOnEsc?: boolean;
   wrapperComponent?: T;
+  // This prop isn't used anymore but kept for backwards-compatibility in case
+  // we re-add the functionality in the future.
   animated?: boolean;
   fluid?: boolean;
   wrapperProps?: Omit<PropsOf<T>, 'children'>;
@@ -63,7 +64,6 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
     hasCloseButton = true,
     requestCloseOnBackdrop = true,
     requestCloseOnEsc = true,
-    animated = true,
     fluid = true,
     dialogStyle,
     wrapperComponent,
@@ -106,33 +106,32 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
   }, [isOpen]);
 
   let modalContents = (
-    <div className="flex flex-col max-h-full">
+    <div className="flex max-h-full flex-1 flex-col">
+      <div className="flex max-h-full w-full flex-col sm:flex-row sm:items-start">
+        <div
+          className={clsx(
+            'mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10',
+            bgColors[iconColor],
+          )}
+        >
+          <span className={clsx(textColors[iconColor], 'h-6 w-6')}>{icon}</span>
+        </div>
+        <div className="flex min-h-0 min-w-0 grow flex-col gap-2 text-center sm:mt-0 sm:ml-4 sm:max-h-full sm:gap-3 sm:text-left">
+          {children}
+        </div>
+      </div>
       {onRequestClose && hasCloseButton ? (
         <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
           <button
             type="button"
             onClick={onRequestClose}
-            className="bg-white rounded-full text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500"
+            className="rounded-full bg-white text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2"
             aria-label="Close"
           >
-            <XIcon className="w-6 h-6" />
+            <XIcon className="h-6 w-6" />
           </button>
         </div>
       ) : null}
-
-      <div className="flex flex-col w-full max-h-full sm:flex-row sm:items-start">
-        <div
-          className={clsx(
-            'flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto rounded-full sm:mx-0 sm:h-10 sm:w-10',
-            bgColors[iconColor],
-          )}
-        >
-          <span className={clsx(textColors[iconColor], 'w-6 h-6')}>{icon}</span>
-        </div>
-        <div className="flex flex-col flex-grow min-w-0 min-h-0 gap-2 text-center sm:gap-3 sm:max-h-full sm:mt-0 sm:ml-4 sm:text-left">
-          {children}
-        </div>
-      </div>
     </div>
   );
 
@@ -170,26 +169,16 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
             : {},
         )}
         className={clsx(
-          'fixed text-left flex align-bottom bg-white rounded-lg shadow-xl',
+          'fixed flex rounded-lg bg-white text-left align-bottom shadow-xl',
           {
-            'sm:max-w-lg sm:w-full': !fluid,
+            'sm:w-full sm:max-w-lg': !fluid,
+            hidden: !isOpen,
           },
         )}
       >
-        <Transition
-          show={isOpen}
-          enter={clsx('ease-out', { 'duration-300': animated })}
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave={clsx('ease-in', {
-            'duration-200': animated,
-          })}
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-          className="flex flex-1 px-2 pt-5 pb-4 sm:pl-6 sm:pr-4 sm:py-6"
-        >
-          {modalContents}
-        </Transition>
+        <div className="flex flex-1 px-2 pt-5 pb-4 sm:py-6 sm:pl-6 sm:pr-4">
+          {isOpen ? modalContents : null}
+        </div>
       </dialog>
     </Portal>
   );
@@ -202,7 +191,7 @@ Modal.Header = function ModalHeader(props: {
   return (
     <h3
       className={clsx(
-        'pl-2 text-lg font-semibold sm:mr-8 text-neutral-900',
+        'pl-2 text-lg font-semibold text-neutral-900 sm:mr-8',
         props.className,
       )}
     >
@@ -218,7 +207,7 @@ Modal.Body = function ModalBody(props: {
   return (
     <div
       className={clsx(
-        'px-2 pt-1 pb-2 flex flex-col max-w-full min-h-0 overflow-auto',
+        'flex min-h-0 max-w-full flex-col overflow-auto px-2 pt-1 pb-2',
         props.className,
       )}
     >
@@ -247,7 +236,7 @@ Modal.Footer = function ModalFooter(props: {
   return (
     <div
       className={clsx(
-        'px-2 flex gap-1 sm:gap-2 flex-col-reverse sm:flex-row',
+        'flex flex-col-reverse gap-1 px-2 sm:flex-row sm:gap-2',
         {
           'sm:justify-end': align === 'right',
           'sm:justify-center': align === 'center',

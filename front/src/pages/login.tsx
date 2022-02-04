@@ -45,7 +45,7 @@ export default function Login() {
 
   return (
     <>
-      <h2 className="mt-6 text-3xl font-extrabold leading-9 text-center text-gray-900">
+      <h2 className="text-gray-900 mt-6 text-center text-3xl font-extrabold leading-9">
         New-eln login
       </h2>
       <div className="flex flex-wrap justify-around">

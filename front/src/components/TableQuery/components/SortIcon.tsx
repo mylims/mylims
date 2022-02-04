@@ -19,7 +19,7 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
   if (sortField !== path) {
     return (
       <SortDescendingIcon
-        className="flex-none w-5 h-5 text-neutral-400"
+        className="h-5 w-5 flex-none text-neutral-400"
         onClick={() => {
           submitQuery({
             ...query,
@@ -34,7 +34,7 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
   if (sortDirection === SortDirection.DESC) {
     return (
       <SortDescendingIcon
-        className="flex-none w-5 h-5 text-primary-600"
+        className="h-5 w-5 flex-none text-primary-600"
         onClick={() => {
           submitQuery({
             ...query,
@@ -48,7 +48,7 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
 
   return (
     <SortAscendingIcon
-      className="flex-none w-5 h-5 text-primary-600"
+      className="h-5 w-5 flex-none text-primary-600"
       onClick={() => {
         submitQuery({
           ...query,

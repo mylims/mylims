@@ -176,7 +176,7 @@ export default function TableFilesFiltered({
           </Button>
         </Link>
 
-        <div className="grid grid-cols-4 gap-4 my-4">
+        <div className="my-4 grid grid-cols-4 gap-4">
           <InputField
             className="col-span-2"
             name="filename"
@@ -208,7 +208,7 @@ export default function TableFilesFiltered({
           <AutoSubmitForm />
         </div>
 
-        {loading && <Spinner className="w-10 h-10 text-danger-500" />}
+        {loading && <Spinner className="h-10 w-10 text-danger-500" />}
         <Table
           tableClassName="table-fixed"
           Header={() => <TableHeader titles={titles} />}
@@ -226,7 +226,7 @@ function Row({ value }: { value: File }) {
   return (
     <tr>
       <Td title={value.relativePath} className="flex items-center truncate">
-        <DocumentTextIcon className="w-5 h-5 mr-1" />
+        <DocumentTextIcon className="mr-1 h-5 w-5" />
         {value.relativePath}
       </Td>
       <Td>{formatBytes(value.size)}</Td>
@@ -243,7 +243,7 @@ function Row({ value }: { value: File }) {
             className="ml-2"
             title="Download"
           >
-            <DownloadIcon className="w-3 h-3" />
+            <DownloadIcon className="h-3 w-3" />
           </Button>
         </a>
       </Td>

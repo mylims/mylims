@@ -12,19 +12,19 @@ export default function TestHeader() {
 
   return (
     <nav className="bg-neutral-800">
-      <div className="px-4 mx-auto max-w-screen-2xl sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
+      <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
           <div className="shrink-0">
             <img src={LOGO} alt="Logo" className="w-24" />
           </div>
 
-          <div className="hidden md:flex space-x-10">
+          <div className="hidden space-x-10 md:flex">
             <RouteMenu />
           </div>
           <div className="flex">
-            <div className="-mr-2 -my-2 md:hidden">
+            <div className="-my-2 -mr-2 md:hidden">
               <button
-                className="bg-neutral-800 rounded-md p-2 inline-flex items-center justify-center text-neutral-400 hover:text-neutral-500 hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-alternative-500"
+                className="inline-flex items-center justify-center rounded-md bg-neutral-800 p-2 text-neutral-400 hover:bg-neutral-900 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-alternative-500"
                 onClick={() => setMobileNavOpen(!mobileNavOpen)}
                 type="button"
               >

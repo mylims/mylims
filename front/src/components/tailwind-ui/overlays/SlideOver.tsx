@@ -63,13 +63,13 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
   });
 
   let slideOverContents = (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <section className="absolute inset-y-0 right-0 flex max-w-full pl-10 pointer-events-auto">
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <section className="pointer-events-auto absolute inset-y-0 right-0 flex max-w-full pl-10">
         <Transition.Child
-          enter="transform transition ease-out duration-400 sm:duration-500"
+          enter="transition ease-out duration-400 sm:duration-500"
           enterFrom="translate-x-full"
           enterTo="translate-x-0"
-          leave="transform transition ease-out duration-500 sm:duration-600"
+          leave="transition ease-out duration-500 sm:duration-600"
           leaveFrom="translate-x-0"
           leaveTo="translate-x-full"
           className={clsx('w-screen', getSizeClassname(maxWidthSlideOver))}
@@ -84,16 +84,16 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
               gridTemplateAreas:
                 "'header close' 'content content' 'footer footer'",
             }}
-            className="grid h-full pt-6 bg-white shadow gap-y-6"
+            className="grid h-full gap-y-6 bg-white pt-6 shadow"
           >
             {onClose && hasCloseButton && (
-              <div style={{ gridArea: 'close' }} className="pr-4 h-7 sm:pr-6">
+              <div style={{ gridArea: 'close' }} className="h-7 pr-4 sm:pr-6">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="bg-white rounded-full text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
+                  className="rounded-full bg-white text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 >
-                  <XIcon className="w-6 h-6" />
+                  <XIcon className="h-6 w-6" />
                 </button>
               </div>
             )}
@@ -149,7 +149,7 @@ SlideOver.Content = function SlideOverContent(props: {
     <main
       style={{ gridArea: 'content' }}
       className={clsx(
-        'px-4 sm:px-6 relative flex-1 overflow-y-auto',
+        'relative flex-1 overflow-y-auto px-4 sm:px-6',
         props.className,
       )}
     >
@@ -166,7 +166,7 @@ SlideOver.Footer = function SlideOverFooter(props: {
     <footer
       style={{ gridArea: 'footer' }}
       className={clsx(
-        'px-4 sm:px-6 flex justify-end flex-shrink-0 py-4 space-x-3 border-t border-neutral-200',
+        'flex shrink-0 justify-end space-x-3 border-t border-neutral-200 px-4 py-4 sm:px-6',
         props.className,
       )}
     >

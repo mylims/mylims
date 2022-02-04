@@ -20,23 +20,23 @@ export const Option = forwardRef(function OptionForwardRef(
   return (
     <label htmlFor={id}>
       <div
-        className={clsx('p-4 flex', {
-          'bg-primary-50 border-primary-200 z-10': checked,
+        className={clsx('flex p-4', {
+          'z-10 border-primary-200 bg-primary-50': checked,
         })}
       >
-        <div className="flex items-center h-5">
+        <div className="flex h-5 items-center">
           <input
             type="radio"
             ref={ref}
             name={name}
             value={value}
             id={id}
-            className="w-4 h-4 cursor-pointer border-neutral-300 focus:ring-primary-500 text-primary-600"
+            className="h-4 w-4 cursor-pointer border-neutral-300 text-primary-600 focus:ring-primary-500"
             checked={checked}
             {...otherProps}
           />
         </div>
-        <label htmlFor={id} className="flex flex-col ml-3 cursor-pointer">
+        <label htmlFor={id} className="ml-3 flex cursor-pointer flex-col">
           <span
             className={clsx('block text-sm font-semibold', {
               'text-neutral-900': !checked && !props.disabled,

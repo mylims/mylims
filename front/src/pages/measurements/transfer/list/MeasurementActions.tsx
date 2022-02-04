@@ -27,7 +27,7 @@ export default function MeasurementActions({
           variant={Variant.secondary}
           className="ml-2"
         >
-          <InformationCircleIcon className="w-5 h-5" />
+          <InformationCircleIcon className="h-5 w-5" />
         </Button>
       </Link>
       {fileUrl && (
@@ -38,7 +38,7 @@ export default function MeasurementActions({
             variant={Variant.secondary}
             className="ml-2"
           >
-            <DownloadIcon className="w-5 h-5" />
+            <DownloadIcon className="h-5 w-5" />
           </Button>
         </a>
       )}

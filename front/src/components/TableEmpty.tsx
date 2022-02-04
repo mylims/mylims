@@ -18,7 +18,7 @@ export default function TableEmpty({ titles }: TableEmptyProps) {
         <tr>
           <Td colSpan={4} align="center">
             <div className="flex flex-row justify-center text-neutral-500">
-              <InboxIcon className="w-5 h-5 mr-2" />
+              <InboxIcon className="mr-2 h-5 w-5" />
               <span>Empty</span>
             </div>
           </Td>

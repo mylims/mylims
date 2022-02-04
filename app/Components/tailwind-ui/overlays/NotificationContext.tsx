@@ -1,37 +1,107 @@
 import { createContext, ReactNode } from 'react';
 
+import { Color } from '..';
 import { ActionType } from '../types';
 
-import {
-  NotificationState,
-  NotificationToastState,
-} from './NotificationCenter';
-
 export interface NotificationConfig {
-  title?: string;
-  content: ReactNode;
+  title: string;
+  content?: ReactNode;
   icon?: ReactNode;
-
-  isToast?: false;
+  type?: Color;
 }
 
-export interface NotificationContextHook {
-  notifications: Array<NotificationState | NotificationToastState>;
-  addNotification: (
-    notification: Omit<NotificationConfig, 'isToast'>,
-    timeout?: number,
-  ) => string;
-  addToastNotification: (
-    notification: Omit<NotificationToastState, 'id' | 'state' | 'isToast'>,
-    timeout?: number,
-  ) => string;
-  deleteNotification: (id: string) => void;
+export interface ToastNotificationAction {
+  label: string;
+  handle: () => void;
+}
+
+export interface ToastNotificationConfig {
+  label: string;
+  action?: ToastNotificationAction;
+}
+
+export type AddNotification = (
+  notification: NotificationConfig,
+  timeout?: number,
+) => string;
+
+export type AddToastNotification = (
+  notification: ToastNotificationConfig,
+  timeout?: number,
+) => string;
+
+export type DeleteNotification = (id: string) => void;
+
+export interface NotificationContext {
+  notifications: Array<NotificationState | ToastNotificationState>;
+  addNotification: AddNotification;
+  addToastNotification: AddToastNotification;
+  deleteNotification: DeleteNotification;
 }
 
 export type NotificationActions =
-  | ActionType<'ADD_NOTIFICATION', NotificationState | NotificationToastState>
+  | ActionType<'ADD_NOTIFICATION', NotificationState | ToastNotificationState>
   | ActionType<'DEL_NOTIFICATION', string>
   | ActionType<'DISAPPEAR', string>;
 
-export const NotificationContext =
-  createContext<NotificationContextHook | null>(null);
+export const notificationContext = createContext<NotificationContext | null>(
+  null,
+);
+
+interface NotificationsState {
+  notifications: Array<NotificationState | ToastNotificationState>;
+}
+
+type ShowingOrRemoving = 'SHOWING' | 'REMOVING';
+
+export interface NotificationState extends NotificationConfig {
+  id: string;
+  state: ShowingOrRemoving;
+  type: Color;
+  isToast: false;
+}
+
+export interface ToastNotificationState extends ToastNotificationConfig {
+  id: string;
+  state: ShowingOrRemoving;
+  isToast: true;
+}
+
+export function notificationsReducer(
+  previous: NotificationsState,
+  action: NotificationActions,
+): NotificationsState {
+  switch (action.type) {
+    case 'ADD_NOTIFICATION': {
+      const copy = previous.notifications.slice();
+
+      if (!action.payload.isToast) {
+        copy.push({ ...action.payload, type: action.payload.type });
+      } else {
+        copy.push({ ...action.payload });
+      }
+
+      return { notifications: copy };
+    }
+    case 'DEL_NOTIFICATION': {
+      const array = previous.notifications.filter(
+        (element) => element.id !== action.payload,
+      );
+      return { notifications: array };
+    }
+    case 'DISAPPEAR': {
+      const notifications = previous.notifications.map(
+        (element): NotificationState | ToastNotificationState => {
+          if (element.id === action.payload) {
+            return { ...element, state: 'REMOVING' };
+          }
+          return element;
+        },
+      );
+
+      return { notifications };
+    }
+    default:
+      throw new Error('unreachable');
+  }
+}

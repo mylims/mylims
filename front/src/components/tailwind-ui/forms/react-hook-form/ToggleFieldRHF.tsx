@@ -4,10 +4,16 @@ import { get, useWatch } from 'react-hook-form';
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { Toggle } from '../basic/Toggle';
 import { ToggleFieldProps } from '../formik/ToggleField';
-import { defaultErrorSerializer, FieldProps, RHFRegisterProps } from '../util';
+import {
+  defaultErrorSerializer,
+  FieldProps,
+  RHFRegisterProps,
+  RHFValidationProps,
+} from '../util';
 
 export type ToggleFieldRHFProps = ToggleFieldProps &
   FieldProps &
+  RHFValidationProps &
   RHFRegisterProps;
 
 export function ToggleFieldRHF(props: ToggleFieldRHFProps): JSX.Element {
@@ -15,10 +21,12 @@ export function ToggleFieldRHF(props: ToggleFieldRHFProps): JSX.Element {
     name,
     serializeError = defaultErrorSerializer,
     rhfOptions,
+    deps,
     ...otherProps
   } = props;
   const {
     setValue,
+    trigger,
     register,
     formState: { errors, isSubmitted },
   } = useCheckedFormRHFContext();
@@ -30,12 +38,15 @@ export function ToggleFieldRHF(props: ToggleFieldRHFProps): JSX.Element {
 
   const handleToggle = useCallback(
     (value: boolean) => {
-      return setValue(name, value, {
+      setValue(name, value, {
         shouldTouch: true,
         shouldValidate: isSubmitted,
       });
+      if (deps && isSubmitted) {
+        void trigger(deps);
+      }
     },
-    [setValue, name, isSubmitted],
+    [setValue, name, isSubmitted, deps, trigger],
   );
 
   return (

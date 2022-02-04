@@ -1,6 +1,6 @@
 import { useField } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
 import {
   SimpleStringSelectOption,
@@ -10,6 +10,8 @@ import {
   OptionsFilter,
   defaultOptionsFilter,
 } from '../utils/search-select-utils';
+
+import { useCheckedFormRHFContext } from './useCheckedFormRHF';
 
 export type { OptionsFilter };
 
@@ -29,6 +31,7 @@ export interface SearchSelectFieldHookResult<OptionType>
 export interface SimpleSearchSelectHookConfig<OptionType> {
   options: OptionType[];
   filterOptions?: OptionsFilter<OptionType>;
+  initialSelected?: OptionType;
 }
 
 export interface SimpleSearchSelectFieldHookConfig<OptionType>
@@ -71,7 +74,7 @@ export function useSearchSelectFieldRHF<OptionType>(
     : SearchSelectFieldHookConfig<OptionType>,
 ): SearchSelectFieldHookResult<OptionType> {
   const searchSelect = useSearchSelect<OptionType>(config);
-  const { setValue } = useFormContext();
+  const { setValue } = useCheckedFormRHFContext();
   const fieldValue = useWatch({
     name: config.name,
   });
@@ -97,13 +100,19 @@ export function useSearchSelect<OptionType>(
     ? SimpleSearchSelectHookConfig<OptionType>
     : SearchSelectHookConfig<OptionType>,
 ): SearchSelectHookResult<OptionType> {
-  const { options, filterOptions = defaultOptionsFilter } = config;
+  const {
+    options,
+    filterOptions = defaultOptionsFilter,
+    initialSelected,
+  } = config;
   const [searchValue, setSearchValue] = useState('');
   const newOptions = useMemo(
     () => filterOptions(searchValue, options),
     [options, filterOptions, searchValue],
   );
-  const [selected, onSelect] = useState<OptionType>();
+  const [selected, onSelect] = useState<OptionType | undefined>(
+    initialSelected,
+  );
 
   return {
     searchValue,

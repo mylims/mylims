@@ -155,7 +155,7 @@ export default function TextColumn({
           >
             <IconFilterText
               operator={operator}
-              className="w-5 h-5 mx-2 text-neutral-400"
+              className="mx-2 h-5 w-5 text-neutral-400"
             />
           </Dropdown>
         }

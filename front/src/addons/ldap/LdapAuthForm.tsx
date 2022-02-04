@@ -42,10 +42,10 @@ export default function LdapAuthForm() {
   );
 
   return (
-    <div className="m-4 min-w-1/4">
+    <div className="min-w-1/4 m-4">
       <Card>
         <Card.Header>
-          <h3 className="text-lg font-medium leading-6 text-cool-gray-900">
+          <h3 className="text-cool-gray-900 text-lg font-medium leading-6">
             LDAP provider
           </h3>
         </Card.Header>

@@ -92,7 +92,7 @@ export default function FileRow({ value }: { value: FileSync }) {
             }}
             expanded={value.expanded}
           />
-          <DocumentTextIcon className="w-5 h-5 mr-1" />
+          <DocumentTextIcon className="mr-1 h-5 w-5" />
           {value.name}
         </Td>
         <Td>{formatBytes(value.size)}</Td>
@@ -111,7 +111,7 @@ export default function FileRow({ value }: { value: FileSync }) {
                 className="ml-2"
                 title="Download"
               >
-                <DownloadIcon className="w-3 h-3" />
+                <DownloadIcon className="h-3 w-3" />
               </Button>
             </a>
           )}

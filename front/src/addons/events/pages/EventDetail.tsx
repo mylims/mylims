@@ -42,7 +42,7 @@ export default function EventDetail() {
       </Card>
     ));
   }, [data?.event?.processors]);
-  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
+  if (loading) return <Spinner className="h-10 w-10 text-danger-500" />;
   if (error || !data) {
     return (
       <Alert title={'Error while fetching user'} type={AlertType.ERROR}>
@@ -59,7 +59,7 @@ export default function EventDetail() {
         <div className="text-neutral-500">{id}</div>
       </Card.Header>
       <Card.Body>
-        <div className="grid grid-cols-3 gap-4 mb-4">
+        <div className="mb-4 grid grid-cols-3 gap-4">
           <EventField title="Topic" description={event.topic} />
           <EventField
             title="Creation date"

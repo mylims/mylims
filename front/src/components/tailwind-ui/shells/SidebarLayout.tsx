@@ -50,22 +50,22 @@ export function SidebarLayout(props: SidebarLayoutProps) {
             className="fixed inset-0"
             onClick={close}
           >
-            <div className="absolute inset-0 opacity-75 bg-neutral-600" />
+            <div className="absolute inset-0 bg-neutral-600 opacity-75" />
           </Transition.Child>
           <Transition.Child
-            enter="transition ease-in-out duration-300 transform"
+            enter="transition ease-in-out duration-300"
             enterFrom="-translate-x-full"
             enterTo="translate-x-0"
-            leave="transition ease-in-out duration-300 transform"
+            leave="transition ease-in-out duration-300"
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
-            className="relative flex flex-col flex-1 w-full h-full max-w-xs bg-white"
+            className="relative flex h-full w-full max-w-xs flex-1 flex-col bg-white"
           >
-            <div className="absolute top-0 right-0 p-1 -mr-14">
+            <div className="absolute top-0 right-0 -mr-14 p-1">
               <button
                 type="button"
                 className={clsx(
-                  'flex items-center justify-center w-12 h-12 rounded-full focus:outline-none focus:bg-neutral-600',
+                  'flex h-12 w-12 items-center justify-center rounded-full focus:bg-neutral-600 focus:outline-none',
                   {
                     hidden: !isOpen,
                   },
@@ -73,40 +73,40 @@ export function SidebarLayout(props: SidebarLayoutProps) {
                 aria-label="Close sidebar"
                 onClick={close}
               >
-                <XIcon className="w-6 h-6 text-white" />
+                <XIcon className="h-6 w-6 text-white" />
               </button>
             </div>
             <div className="h-full overflow-auto">{sidebar}</div>
           </Transition.Child>
-          <div className="flex-shrink-0 w-14" />
+          <div className="w-14 shrink-0" />
         </div>
       </Transition>
 
       <div
         className={clsx('hidden', {
-          'lg:flex lg:flex-shrink-0': revealOnLargeViewport,
+          'lg:flex lg:shrink-0': revealOnLargeViewport,
         })}
       >
-        <div className="flex flex-col w-64 overflow-auto bg-white border-r border-neutral-200">
+        <div className="flex w-64 flex-col overflow-auto border-r border-neutral-200 bg-white">
           {sidebar}
         </div>
       </div>
-      <div className="flex flex-col flex-1 overflow-auto focus:outline-none">
-        <div className="relative z-10 flex flex-shrink-0 bg-white border-b border-neutral-200">
+      <div className="flex flex-1 flex-col overflow-auto focus:outline-none">
+        <div className="relative z-10 flex shrink-0 border-b border-neutral-200 bg-white">
           <button
             type="button"
             className={clsx(
-              'px-4 border-r text-neutral-400 border-neutral-200 focus:outline-none focus:bg-neutral-100 focus:text-neutral-600',
+              'border-r border-neutral-200 px-4 text-neutral-400 focus:bg-neutral-100 focus:text-neutral-600 focus:outline-none',
               { 'lg:hidden': revealOnLargeViewport },
             )}
             aria-label="Open sidebar"
             onClick={open}
           >
-            <MenuAlt1Icon className="w-6 h-6 transition duration-150 ease-in-out" />
+            <MenuAlt1Icon className="h-6 w-6 transition duration-150 ease-in-out" />
           </button>
-          <div className="flex justify-between flex-1">{header}</div>
+          <div className="flex flex-1 justify-between">{header}</div>
         </div>
-        <main className="relative z-0 flex flex-col flex-1 pb-8 overflow-y-auto">
+        <main className="relative z-0 flex flex-1 flex-col overflow-y-auto pb-8">
           {children}
         </main>
       </div>

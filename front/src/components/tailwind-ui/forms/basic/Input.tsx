@@ -95,8 +95,8 @@ export const Input = forwardRef(function InputForwardRef(
         <label
           htmlFor={id}
           className={clsx(
-            'bg-white border py-2 px-3 focus-within:ring-1',
-            'flex-1 flex flex-row items-center relative text-base sm:text-sm shadow-sm',
+            'border bg-white py-2 px-3 focus-within:ring-1',
+            'relative flex flex-1 flex-row items-center text-base shadow-sm sm:text-sm',
             {
               [inputColor]: !error,
               [inputError]: error,
@@ -113,7 +113,7 @@ export const Input = forwardRef(function InputForwardRef(
             <LeadingInlineAddon value={leadingInlineAddon} />
           )}
           {inlinePlaceholder && (
-            <div className="absolute pointer-events-none">
+            <div className="pointer-events-none absolute">
               {inlinePlaceholder}
             </div>
           )}
@@ -126,7 +126,7 @@ export const Input = forwardRef(function InputForwardRef(
             }
             className={clsx(
               {
-                'flex-1 focus:outline-none focus:ring-0 sm:text-sm border-none p-0':
+                'flex-1 border-none p-0 focus:outline-none focus:ring-0 sm:text-sm':
                   true,
                 'bg-neutral-50 text-neutral-500': props.disabled,
               },
@@ -140,8 +140,8 @@ export const Input = forwardRef(function InputForwardRef(
             type={type}
             {...otherProps}
           />
-          <div className="inline-flex flex-row items-center space-x-1 cursor-default">
-            {loading && <Spinner className="w-5 h-5 text-neutral-400" />}
+          <div className="inline-flex cursor-default flex-row items-center space-x-1">
+            {loading && <Spinner className="h-5 w-5 text-neutral-400" />}
             {trailingInlineAddon && (
               <TrailingInlineAddon value={trailingInlineAddon} />
             )}
@@ -176,7 +176,7 @@ function LeadingAddon(props: { value: ReactNode }) {
   return (
     <div
       className={clsx(
-        'inline-flex items-center text-neutral-500 border border-r-0 border-neutral-300 rounded-l-md bg-neutral-50 sm:text-sm',
+        'inline-flex items-center rounded-l-md border border-r-0 border-neutral-300 bg-neutral-50 text-neutral-500 sm:text-sm',
         typeof props.value === 'string' && 'px-3',
       )}
     >
@@ -189,7 +189,7 @@ function TrailingAddon(props: { value: ReactNode }) {
   return (
     <div
       className={clsx(
-        'inline-flex items-center text-neutral-500 border border-l-0 border-neutral-300 rounded-r-md bg-neutral-50 sm:text-sm',
+        'inline-flex items-center rounded-r-md border border-l-0 border-neutral-300 bg-neutral-50 text-neutral-500 sm:text-sm',
         typeof props.value === 'string' && 'px-3',
       )}
     >

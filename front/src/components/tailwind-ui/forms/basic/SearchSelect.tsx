@@ -55,6 +55,16 @@ export interface SimpleSearchSelectProps<OptionType> {
   renderOption?: RenderOption<OptionType>;
 
   /**
+   * Whether the list should be closed when an element is selected.
+   */
+  closeListOnSelect?: boolean;
+  /**
+   * Whether the search value should be cleared (by calling `onSearchChange`
+   * with an empty string) when an element is selected.
+   */
+  clearSearchOnSelect?: boolean;
+
+  /**
    * Value to control the input field.
    */
   searchValue: string;
@@ -119,11 +129,11 @@ export interface SimpleSearchSelectProps<OptionType> {
    */
   highlightClassName?: string;
   /**
-   * Size for Input
+   * Size for input.
    */
   size?: number;
   /**
-   * Focus on mount input
+   * Focus input on mount.
    */
   autoFocus?: boolean;
 }
@@ -151,6 +161,8 @@ function SearchSelectForwardRef<OptionType>(
     selected,
     getValue = defaultGetValue,
     renderOption = defaultRenderOption,
+    closeListOnSelect = true,
+    clearSearchOnSelect = true,
     onCreate,
     canCreate = defaultCanCreate,
     renderCreate = defaultRenderCreate,
@@ -173,6 +185,8 @@ function SearchSelectForwardRef<OptionType>(
     onSelect,
     getValue,
     renderOption,
+    closeListOnSelect,
+    clearSearchOnSelect,
     onCreate,
     canCreate,
     renderCreate,

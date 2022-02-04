@@ -52,14 +52,14 @@ export default function HeaderRender({
           >
             <DocumentSearchIcon
               className={clsx(
-                'w-5 h-5 flex-none',
+                'h-5 w-5 flex-none',
                 filtered ? 'text-primary-600' : 'text-neutral-400',
               )}
             />
           </Popover.Button>
 
           <Popover.Panel
-            className="absolute z-10 p-2 bg-white rounded-lg shadow"
+            className="absolute z-10 rounded-lg bg-white p-2 shadow"
             ref={setPopperElement}
             style={styles.popper}
             {...attributes.popper}

@@ -140,7 +140,7 @@ export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
   return (
     <div
       className={clsx(
-        'fixed justify-center inset-x-0 flex pointer-events-none z-40',
+        'pointer-events-none fixed inset-x-0 z-40 flex justify-center',
         {
           'top-0': props.position === 'top',
           'bottom-0': props.position === 'bottom',
@@ -192,9 +192,9 @@ export function NotificationCenter(props: NotificationCenterProps) {
   return (
     <div
       className={clsx(
-        'fixed flex pointer-events-none m-5 z-40',
+        'pointer-events-none fixed z-40 m-5 flex',
         {
-          'sm:items-start sm:justify-end items-end justify-center':
+          'items-end justify-center sm:items-start sm:justify-end':
             props.position.endsWith('right'),
           'top-0': props.position.startsWith('top'),
           'bottom-0': props.position.startsWith('bottom'),

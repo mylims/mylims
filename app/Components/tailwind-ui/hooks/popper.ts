@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { HTMLAttributes, useState } from 'react';
 import { Modifier, usePopper } from 'react-popper';
 
 const sameWidth: Modifier<'sameWidth'> = {
@@ -16,15 +16,24 @@ const sameWidth: Modifier<'sameWidth'> = {
   },
 };
 
-export function useSameWidthPopper(options: {
+export interface UseSameWidthPopperReturn<
+  R extends Element = HTMLDivElement,
+  P extends HTMLElement = HTMLDivElement,
+> {
+  setReferenceElement: (ref: R | null) => void;
+  setPopperElement: (popper: P | null) => void;
+  popperProps: HTMLAttributes<P>;
+}
+
+export function useSameWidthPopper<
+  R extends Element = HTMLDivElement,
+  P extends HTMLElement = HTMLDivElement,
+>(options: {
   placement: 'top' | 'bottom';
   distance?: number;
-}) {
-  const [referenceElement, setReferenceElement] =
-    useState<HTMLDivElement | null>(null);
-  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
-    null,
-  );
+}): UseSameWidthPopperReturn<R, P> {
+  const [referenceElement, setReferenceElement] = useState<R | null>(null);
+  const [popperElement, setPopperElement] = useState<P | null>(null);
 
   const modifiers: Modifier<'sameWidth' | 'offset'>[] = [sameWidth];
   if (options.distance) {

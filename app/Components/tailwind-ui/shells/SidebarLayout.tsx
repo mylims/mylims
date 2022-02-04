@@ -1,17 +1,28 @@
 import { Transition } from '@headlessui/react';
 import { MenuAlt1Icon, XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import React, { ReactNode, useEffect, ReactElement } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
-interface SidebarLayoutProps {
-  children: ReactElement[];
+export interface SidebarLayoutProps {
+  header: ReactNode;
+  sidebar: ReactNode;
+  children: ReactNode;
+  revealOnLargeViewport?: boolean;
   open: () => void;
   close: () => void;
   isOpen: boolean;
 }
 
 export function SidebarLayout(props: SidebarLayoutProps) {
-  const { open, close, isOpen, children } = props;
+  const {
+    open,
+    close,
+    isOpen,
+    header,
+    sidebar,
+    children,
+    revealOnLargeViewport = true,
+  } = props;
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -22,15 +33,12 @@ export function SidebarLayout(props: SidebarLayoutProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [close]);
 
-  const sidebar = children.find(
-    (child) => child.type === SidebarLayout.Sidebar,
-  );
-  const header = children.find((child) => child.type === SidebarLayout.Header);
-  const body = children.find((child) => child.type === SidebarLayout.Body);
-
   return (
     <div className="flex h-screen overflow-hidden">
-      <Transition show={isOpen} className="lg:hidden">
+      <Transition
+        show={isOpen}
+        className={revealOnLargeViewport ? 'lg:hidden' : undefined}
+      >
         <div className="fixed inset-0 z-40 flex">
           <Transition.Child
             enter="transition-opacity ease-linear duration-300"
@@ -42,22 +50,22 @@ export function SidebarLayout(props: SidebarLayoutProps) {
             className="fixed inset-0"
             onClick={close}
           >
-            <div className="absolute inset-0 opacity-75 bg-neutral-600" />
+            <div className="absolute inset-0 bg-neutral-600 opacity-75" />
           </Transition.Child>
           <Transition.Child
-            enter="transition ease-in-out duration-300 transform"
+            enter="transition ease-in-out duration-300"
             enterFrom="-translate-x-full"
             enterTo="translate-x-0"
-            leave="transition ease-in-out duration-300 transform"
+            leave="transition ease-in-out duration-300"
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
-            className="relative flex flex-col flex-1 w-full h-full max-w-xs pt-5 pb-4 bg-white"
+            className="relative flex h-full w-full max-w-xs flex-1 flex-col bg-white"
           >
-            <div className="absolute top-0 right-0 p-1 -mr-14">
+            <div className="absolute top-0 right-0 -mr-14 p-1">
               <button
                 type="button"
                 className={clsx(
-                  'flex items-center justify-center w-12 h-12 rounded-full focus:outline-none focus:bg-neutral-600',
+                  'flex h-12 w-12 items-center justify-center rounded-full focus:bg-neutral-600 focus:outline-none',
                   {
                     hidden: !isOpen,
                   },
@@ -65,58 +73,43 @@ export function SidebarLayout(props: SidebarLayoutProps) {
                 aria-label="Close sidebar"
                 onClick={close}
               >
-                <XIcon className="w-6 h-6 text-white" />
+                <XIcon className="h-6 w-6 text-white" />
               </button>
             </div>
-            <div>{sidebar}</div>
+            <div className="h-full overflow-auto">{sidebar}</div>
           </Transition.Child>
-          <div className="flex-shrink-0 w-14" />
+          <div className="w-14 shrink-0" />
         </div>
       </Transition>
 
-      <div className="hidden lg:flex lg:flex-shrink-0">
-        <div className="flex flex-col w-64 bg-white border-r border-neutral-200">
+      <div
+        className={clsx('hidden', {
+          'lg:flex lg:shrink-0': revealOnLargeViewport,
+        })}
+      >
+        <div className="flex w-64 flex-col overflow-auto border-r border-neutral-200 bg-white">
           {sidebar}
         </div>
       </div>
-      <div className="flex flex-col flex-1 overflow-auto focus:outline-none">
-        <div className="relative z-10 flex flex-shrink-0 h-16 bg-white border-b border-neutral-200">
+      <div className="flex flex-1 flex-col overflow-auto focus:outline-none">
+        <div className="relative z-10 flex shrink-0 border-b border-neutral-200 bg-white">
           <button
             type="button"
-            className="px-4 border-r text-neutral-400 border-neutral-200 focus:outline-none focus:bg-neutral-100 focus:text-neutral-600 lg:hidden"
+            className={clsx(
+              'border-r border-neutral-200 px-4 text-neutral-400 focus:bg-neutral-100 focus:text-neutral-600 focus:outline-none',
+              { 'lg:hidden': revealOnLargeViewport },
+            )}
             aria-label="Open sidebar"
             onClick={open}
           >
-            <MenuAlt1Icon className="w-6 h-6 transition duration-150 ease-in-out" />
+            <MenuAlt1Icon className="h-6 w-6 transition duration-150 ease-in-out" />
           </button>
-          <div className="flex justify-between flex-1">{header}</div>
+          <div className="flex flex-1 justify-between">{header}</div>
         </div>
-        <main className="relative z-0 flex flex-col flex-1 pb-8 overflow-y-auto">
-          {body}
+        <main className="relative z-0 flex flex-1 flex-col overflow-y-auto pb-8">
+          {children}
         </main>
       </div>
     </div>
   );
 }
-
-interface SidebarLayoutChildProps {
-  children: ReactNode;
-}
-
-SidebarLayout.Sidebar = function SidebarLayoutSidebar(
-  props: SidebarLayoutChildProps,
-) {
-  return <>{props.children}</>;
-};
-
-SidebarLayout.Header = function SidebarLayoutHeader(
-  props: SidebarLayoutChildProps,
-) {
-  return <>{props.children}</>;
-};
-
-SidebarLayout.Body = function SidebarLayoutBody(
-  props: SidebarLayoutChildProps,
-) {
-  return <>{props.children}</>;
-};

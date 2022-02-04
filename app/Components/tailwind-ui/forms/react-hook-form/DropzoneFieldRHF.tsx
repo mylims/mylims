@@ -8,14 +8,16 @@ import { DropzoneFieldProps } from '../formik/DropzoneField';
 import {
   defaultErrorSerializer,
   FieldProps,
-  RHFControlledProps,
+  RHFControllerProps,
+  RHFValidationProps,
 } from '../util';
 
-export type DropzoneFieldRHFProps = DropzoneFieldProps & FieldProps;
+export type DropzoneFieldRHFProps = DropzoneFieldProps &
+  FieldProps &
+  RHFValidationProps &
+  RHFControllerProps;
 
-export function DropzoneFieldRHF(
-  props: DropzoneFieldRHFProps & RHFControlledProps,
-) {
+export function DropzoneFieldRHF(props: DropzoneFieldRHFProps) {
   const {
     message,
     header,

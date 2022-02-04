@@ -147,14 +147,14 @@ export interface FormattedOptionProps<OptionType> {
   option: InternalOption<OptionType>;
   focused: number;
   setFocused: (index: number) => void;
-  select: (option: InternalOption<OptionType>) => void;
+  onSelect: (option: InternalOption<OptionType>) => void;
   highlightClassName: string;
 }
 
 export function FormattedOption<OptionType>(
   props: FormattedOptionProps<OptionType>,
 ) {
-  const { index, option, focused, setFocused, select } = props;
+  const { index, option, focused, setFocused, onSelect } = props;
   const isFocused = focused === index;
   const ref = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -170,7 +170,7 @@ export function FormattedOption<OptionType>(
         'py-2 px-4',
       )}
       onMouseMove={() => setFocused(index)}
-      onClick={() => select(option)}
+      onClick={() => onSelect(option)}
     >
       {option.label}
     </div>
@@ -184,6 +184,8 @@ interface UseSearchSelectInternalsConfig<OptionType> {
   onSelect: (option: OptionType | undefined) => void;
   getValue: GetValue<OptionType>;
   renderOption: RenderOption<OptionType>;
+  closeListOnSelect: boolean;
+  clearSearchOnSelect: boolean;
   onCreate?: (value: string) => void;
   canCreate: (value: string) => boolean;
   onBackspace?: () => void;
@@ -201,6 +203,8 @@ export function useSearchSelectInternals<OptionType>(
     onSelect,
     getValue,
     renderOption,
+    closeListOnSelect,
+    clearSearchOnSelect,
     onCreate,
     canCreate,
     formattedSelected,
@@ -252,14 +256,18 @@ export function useSearchSelectInternals<OptionType>(
     onSearchChange(event.target.value);
   }
 
-  function select(option: InternalOption<OptionType>): void {
+  function selectOption(option: InternalOption<OptionType>): void {
     if (option.type === 'option') {
       onSelect(option.originalValue);
     } else {
       onCreate?.(option.originalValue);
     }
-    closeList();
-    onSearchChange('');
+    if (closeListOnSelect) {
+      closeList();
+    }
+    if (clearSearchOnSelect) {
+      onSearchChange('');
+    }
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
@@ -291,7 +299,7 @@ export function useSearchSelectInternals<OptionType>(
         break;
       case 'Enter':
         if (isListOpen && formattedOptions[focused]) {
-          select(formattedOptions[focused]);
+          selectOption(formattedOptions[focused]);
         }
         // Prevent submitting the form.
         event.preventDefault();
@@ -338,7 +346,7 @@ export function useSearchSelectInternals<OptionType>(
     formattedOptions,
     focused,
     setFocused,
-    select,
+    onSelect: selectOption,
     setReferenceElement,
     setPopperElement,
     popperProps,
@@ -358,7 +366,7 @@ interface UseSearchSelectInternalsReturn<OptionType>
   formattedOptions: InternalOption<OptionType>[];
   focused: number;
   setFocused: (newFocus: number) => void;
-  select: (option: InternalOption<OptionType>) => void;
+  onSelect: (option: InternalOption<OptionType>) => void;
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
   handleChevronDownClick: (event: MouseEvent) => void;
@@ -402,7 +410,7 @@ export function InternalSearchSelect<OptionType>(
     formattedOptions,
     focused,
     setFocused,
-    select,
+    onSelect,
     setReferenceElement,
     setPopperElement,
     popperProps,
@@ -483,7 +491,7 @@ export function InternalSearchSelect<OptionType>(
             noResultsHint,
             focused,
             setFocused,
-            select,
+            onSelect,
             highlightClassName,
           }}
         />
@@ -508,7 +516,7 @@ export function InternalMultiSearchSelect<OptionType>(
     formattedOptions,
     focused,
     setFocused,
-    select,
+    onSelect,
     setReferenceElement,
     setPopperElement,
     popperProps,
@@ -554,8 +562,8 @@ export function InternalMultiSearchSelect<OptionType>(
         ref={setReferenceElement}
         htmlFor={id}
         className={clsx(
-          'bg-white border py-2 px-3 focus-within:ring-1',
-          'flex flex-row relative text-base sm:text-sm shadow-sm flex-1',
+          'border bg-white py-2 px-3 focus-within:ring-1',
+          'relative flex flex-1 flex-row text-base shadow-sm sm:text-sm',
           'rounded-md',
           {
             'mt-1': !hiddenLabel || corner,
@@ -565,7 +573,7 @@ export function InternalMultiSearchSelect<OptionType>(
           },
         )}
       >
-        <div className="flex flex-row flex-wrap flex-1 gap-1.5">
+        <div className="flex flex-1 flex-row flex-wrap gap-1.5">
           {selectedBadges}
           <input
             id={id}
@@ -586,7 +594,7 @@ export function InternalMultiSearchSelect<OptionType>(
             placeholder={placeholder}
             className={clsx(
               {
-                'flex-1 focus:outline-none focus:ring-0 sm:text-sm border-none p-0':
+                'flex-1 border-none p-0 focus:outline-none focus:ring-0 sm:text-sm':
                   true,
                 'bg-neutral-50 text-neutral-500': disabled,
               },
@@ -616,7 +624,7 @@ export function InternalMultiSearchSelect<OptionType>(
             noResultsHint,
             focused,
             setFocused,
-            select,
+            onSelect,
             highlightClassName,
           }}
         />
@@ -632,7 +640,7 @@ type OptionsListProps<OptionType> = Pick<
   | 'formattedOptions'
   | 'focused'
   | 'setFocused'
-  | 'select'
+  | 'onSelect'
 > &
   Pick<
     InternalSearchSelectProps<OptionType>,
@@ -647,14 +655,14 @@ function OptionsList<OptionType>(props: OptionsListProps<OptionType>) {
     noResultsHint = defaultNoResultsHint,
     focused,
     setFocused,
-    select,
+    onSelect,
     highlightClassName = 'text-white bg-primary-600',
   } = props;
   return (
     <div
       ref={setPopperElement}
       {...popperProps}
-      className="z-20 w-full py-1 overflow-auto text-base bg-white rounded-md shadow-lg cursor-default max-h-60 sm:text-sm"
+      className="z-20 max-h-60 w-full cursor-default overflow-auto rounded-md bg-white py-1 text-base shadow-lg sm:text-sm"
       // Prevent click in the options list from blurring the input,
       // because that would close the list.
       onMouseDown={preventDefault}
@@ -669,7 +677,7 @@ function OptionsList<OptionType>(props: OptionsListProps<OptionType>) {
             option={option}
             focused={focused}
             setFocused={setFocused}
-            select={select}
+            onSelect={onSelect}
             highlightClassName={highlightClassName}
           />
         ))
@@ -699,11 +707,11 @@ function TrailingTools(props: TrailingToolsProps) {
     handleChevronDownClick,
   } = props;
   return (
-    <div className="inline-flex flex-row items-center cursor-default text-neutral-400">
-      {loading && <Spinner className="w-5 h-5 mr-1 text-neutral-400" />}
+    <div className="inline-flex cursor-default flex-row items-center text-neutral-400">
+      {loading && <Spinner className="mr-1 h-5 w-5 text-neutral-400" />}
       {clearable && hasValue && !disabled && (
         <XIcon
-          className="w-4 h-4 hover:text-neutral-500"
+          className="h-4 w-4 hover:text-neutral-500"
           onClick={handleXClick}
         />
       )}
@@ -711,7 +719,7 @@ function TrailingTools(props: TrailingToolsProps) {
       <span className="mx-1 font-mono font-light">{` | `}</span>
       <ChevronDownIcon
         className={clsx({
-          'w-5 h-5': true,
+          'h-5 w-5': true,
           'hover:text-neutral-500': !disabled,
         })}
         onMouseDown={preventDefault}

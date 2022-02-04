@@ -60,7 +60,7 @@ export function Help(props: {
   return (
     <p
       className={clsx(
-        'text-sm whitespace-pre-line',
+        'whitespace-pre-line text-sm',
         helpColorMap[toDisplay.type],
         !noMargin && 'mt-2',
       )}
@@ -75,9 +75,9 @@ export function InputCorner(props: { children: ReactNode }) {
 }
 
 export function InputErrorIcon() {
-  return <ExclamationCircleIcon className="w-5 h-5 ml-2 text-danger-500" />;
+  return <ExclamationCircleIcon className="ml-2 h-5 w-5 text-danger-500" />;
 }
 
 export function InputValidIcon() {
-  return <CheckIcon className="w-5 h-5 ml-2 text-success-600" />;
+  return <CheckIcon className="ml-2 h-5 w-5 text-success-600" />;
 }

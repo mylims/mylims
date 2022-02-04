@@ -64,7 +64,7 @@ export function Table<T extends { id: number | string }>(props: TableProps<T>) {
     <tableContext.Provider value={contextValue}>
       <div className="flex flex-col">
         <div>
-          <div className="inline-block min-w-full align-middle border-b shadow border-neutral-200 sm:rounded-lg">
+          <div className="inline-block min-w-full border-b border-neutral-200 align-middle shadow sm:rounded-lg">
             <table
               style={tableStyle}
               className={clsx(
@@ -77,17 +77,19 @@ export function Table<T extends { id: number | string }>(props: TableProps<T>) {
                   <Header />
                 </thead>
               )}
-              <tbody className="bg-white divide-y divide-neutral-200">
+              <tbody className="divide-y divide-neutral-200 bg-white">
                 {data.map((value, index) => (
                   <Tr key={value.id} index={index} value={value} />
                 ))}
               </tbody>
             </table>
-            {pagination && (
-              <div>
-                <Pagination {...pagination} />
-              </div>
-            )}
+            {pagination &&
+              (pagination.itemsPerPage <= pagination.totalCount ||
+                pagination.withText) && (
+                <div className="border-t border-neutral-200 px-4 py-3 sm:px-6">
+                  <Pagination {...pagination} />
+                </div>
+              )}
           </div>
         </div>
       </div>
@@ -109,7 +111,7 @@ export function Td(props: TdProps) {
   return (
     <td
       className={clsx(
-        'text-sm font-semibold whitespace-nowrap text-neutral-900',
+        'whitespace-nowrap text-sm font-semibold text-neutral-900',
         { 'px-6 py-4': !compact },
         props.className,
       )}
@@ -129,19 +131,19 @@ export function Th(props: ThProps) {
     if (sortField === sort.field) {
       sortElement =
         sort.direction === TableSortDirection.ASCENDING ? (
-          <SortAscendingIcon className="w-4 h-4" />
+          <SortAscendingIcon className="h-4 w-4" />
         ) : (
-          <SortDescendingIcon className="w-4 h-4" />
+          <SortDescendingIcon className="h-4 w-4" />
         );
     } else {
-      sortElement = <MenuAlt4Icon className="w-4 h-4" />;
+      sortElement = <MenuAlt4Icon className="h-4 w-4" />;
     }
   }
 
   return (
     <th
       className={clsx(
-        'text-xs font-semibold tracking-wider text-left uppercase text-neutral-500 bg-neutral-50',
+        'bg-neutral-50 text-left text-xs font-semibold uppercase tracking-wider text-neutral-500',
         {
           'px-6 py-3': !compact,
         },

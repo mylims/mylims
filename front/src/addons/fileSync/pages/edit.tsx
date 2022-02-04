@@ -51,7 +51,7 @@ export default function EditConfig() {
   return (
     <div>
       {queryLoading ? (
-        <Spinner className="w-10 h-10 text-danger-500" />
+        <Spinner className="h-10 w-10 text-danger-500" />
       ) : error ? (
         <Alert
           title={'Error while fetching file sync option'}

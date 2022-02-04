@@ -53,7 +53,7 @@ Breadcrumb.Group = function BreadcrumbGroup(props: BreadcrumbProps) {
 Breadcrumb.Item = function BreadcrumbItem(props: BreadcrumbContentProps) {
   return (
     <BreadcrumbContentWrapper>
-      <div className="text-sm font-semibold transition duration-150 ease-in-out text-neutral-500 hover:text-neutral-700">
+      <div className="text-sm font-semibold text-neutral-500 transition duration-150 ease-in-out hover:text-neutral-700">
         {props.children}
       </div>
     </BreadcrumbContentWrapper>
@@ -63,7 +63,7 @@ Breadcrumb.Item = function BreadcrumbItem(props: BreadcrumbContentProps) {
 Breadcrumb.Icon = function BreadcrumbIcon(props: BreadcrumbContentProps) {
   return (
     <BreadcrumbContentWrapper>
-      <div className="w-5 h-5 text-neutral-400 hover:text-neutral-500">
+      <div className="h-5 w-5 text-neutral-400 hover:text-neutral-500">
         {props.children}
       </div>
     </BreadcrumbContentWrapper>
@@ -80,7 +80,7 @@ function BreadcrumbContentWrapper(props: BreadcrumbContentProps) {
   return (
     <>
       {context === false && (
-        <ChevronRightIcon className="flex-shrink-0 w-5 h-5 text-neutral-400" />
+        <ChevronRightIcon className="h-5 w-5 shrink-0 text-neutral-400" />
       )}
       {props.children}
     </>

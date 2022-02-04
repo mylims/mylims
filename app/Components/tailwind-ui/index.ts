@@ -1,6 +1,7 @@
 export * from './elements/badge/Badge';
 export * from './elements/buttons/Button';
 export * from './elements/buttons/ButtonGroup';
+export * from './elements/buttons/ClipboardButton';
 export * from './elements/dropdown/Dropdown';
 export * from './elements/pagination/Pagination';
 export * from './elements/popper/Bubble';
@@ -21,6 +22,7 @@ export type { LabelProps as FieldLabelProps } from './forms/basic/common';
 
 export * from './forms/util';
 export * from './forms/basic/Checkbox';
+export * from './forms/basic/DatePicker';
 export * from './forms/basic/Dropzone';
 export * from './forms/basic/DropzoneList';
 export * from './forms/basic/Input';
@@ -62,6 +64,8 @@ export * from './forms/react-hook-form/SubmitButtonRHF';
 export * from './forms/react-hook-form/TextAreaFieldRHF';
 export * from './forms/react-hook-form/ToggleFieldRHF';
 
+export * from './hooks/popper';
+export * from './hooks/useCheckedFormRHF';
 export * from './hooks/useDebounce';
 export * from './hooks/useDropzone';
 export * from './hooks/useDurationFromNow';
@@ -89,6 +93,9 @@ export * from './navigation/HorizontalNavigation';
 export * from './navigation/Stepper';
 export * from './navigation/VerticalNavigation';
 
+export * from './overlays/ConfirmModal';
+export * from './overlays/FormRHFModal';
+export * from './overlays/FormRHFSlideOver';
 export * from './overlays/Modal';
 export * from './overlays/NotificationCenter';
 export * from './overlays/Portal';
@@ -99,5 +106,9 @@ export * from './shells/SidebarLayout';
 export * from './shortcuts/KeyboardActionHelp';
 
 export * from './types';
+
+export * from './util';
+
+export * from './validation/yup';
 
 export { customOptionsFilter } from './utils/search-select-utils';

@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React, { MouseEvent, Ref, useCallback, useMemo } from 'react';
 
 import { Badge, BadgeVariant } from '../../elements/badge/Badge';
@@ -9,8 +8,10 @@ import {
   defaultGetValue,
   defaultRenderOption,
   defaultGetBadgeColor,
-  InternalSearchSelect,
+  defaultIsOptionRemovable,
   useSearchSelectInternals,
+  InternalMultiSearchSelect,
+  defaultRenderCreate,
 } from '../../utils/search-select-utils';
 
 import { SearchSelectProps, SimpleSearchSelectProps } from './SearchSelect';
@@ -21,13 +22,16 @@ export interface SimpleMultiSearchSelectProps<OptionType>
   selected: OptionType[];
   onSelect: (newSelected: OptionType[]) => void;
   getBadgeColor?: (option: OptionType) => Color;
+  isOptionRemovable?: (option: OptionType) => boolean;
 }
 
 export interface MultiSearchSelectProps<OptionType>
   extends Omit<SearchSelectProps<OptionType>, 'selected' | 'onSelect'> {
+  name: string;
   selected: OptionType[];
   onSelect: (newSelected: OptionType[]) => void;
   getBadgeColor?: (option: OptionType) => Color;
+  isOptionRemovable?: (option: OptionType) => boolean;
 }
 
 export const MultiSearchSelect = forwardRefWithGeneric(
@@ -47,11 +51,15 @@ function MultiSearchSelectForwardRef<OptionType>(
     options,
     onSelect,
     getBadgeColor = defaultGetBadgeColor,
+    isOptionRemovable = defaultIsOptionRemovable,
     selected,
     getValue = defaultGetValue,
     renderOption = defaultRenderOption,
+    closeListOnSelect = false,
+    clearSearchOnSelect = true,
     onCreate,
     canCreate = defaultCanCreate,
+    renderCreate = defaultRenderCreate,
     clearable = true,
     disabled = false,
     ...otherProps
@@ -79,12 +87,21 @@ function MultiSearchSelectForwardRef<OptionType>(
           label={rendered}
           color={getBadgeColor(option)}
           rounded
-          className="mt-1 mr-1"
-          onDismiss={disabled ? undefined : handleDismiss}
+          onDismiss={
+            disabled || !isOptionRemovable(option) ? undefined : handleDismiss
+          }
         />
       );
     });
-  }, [selected, getValue, renderOption, onSelect, getBadgeColor, disabled]);
+  }, [
+    selected,
+    getValue,
+    renderOption,
+    onSelect,
+    getBadgeColor,
+    disabled,
+    isOptionRemovable,
+  ]);
 
   const handleSelect = useCallback(
     (value: OptionType | undefined) => {
@@ -97,6 +114,15 @@ function MultiSearchSelectForwardRef<OptionType>(
     [selected, onSelect],
   );
 
+  const handleBackspace = useCallback(() => {
+    if (
+      selected.length > 0 &&
+      isOptionRemovable(selected[selected.length - 1])
+    ) {
+      onSelect(selected.slice(0, selected.length - 1));
+    }
+  }, [isOptionRemovable, onSelect, selected]);
+
   const internalProps = useSearchSelectInternals({
     searchValue: props.searchValue,
     onSearchChange,
@@ -104,27 +130,23 @@ function MultiSearchSelectForwardRef<OptionType>(
     onSelect: handleSelect,
     getValue,
     renderOption,
+    closeListOnSelect,
+    clearSearchOnSelect,
     onCreate,
     canCreate,
+    renderCreate,
+    onBackspace: handleBackspace,
   });
 
   return (
-    <InternalSearchSelect
+    <InternalMultiSearchSelect
       {...internalProps}
       {...otherProps}
       inputRef={ref}
       clearable={clearable}
       disabled={disabled}
       hasValue={selected.length !== 0}
-      leadingInlineAddon={
-        <div
-          className={clsx('inline-flex flex-row flex-wrap -mt-1', {
-            'opacity-75': disabled,
-          })}
-        >
-          {renderedSelected}
-        </div>
-      }
+      selectedBadges={renderedSelected}
     />
   );
 }
