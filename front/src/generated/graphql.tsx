@@ -568,7 +568,7 @@ export type EventQuery = {
         processId: string;
         status: EventStatus;
         date: any;
-        message?: string | null | undefined;
+        message?: string | null;
       }>;
     }>;
   };
@@ -594,7 +594,7 @@ export type EventsFilteredQuery = {
         history: Array<{
           status: EventStatus;
           date: any;
-          message?: string | null | undefined;
+          message?: string | null;
         }>;
       }>;
     }>;
@@ -616,7 +616,7 @@ export type FileSyncOptionFieldsFragment = {
   maxDepth: number;
   topics: Array<string>;
   patterns: Array<{ type: PatternType; pattern: string }>;
-  readyChecks: Array<{ name: string; value?: string | null | undefined }>;
+  readyChecks: Array<{ name: string; value?: string | null }>;
 };
 
 export type FileSyncOptionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -629,7 +629,7 @@ export type FileSyncOptionsQuery = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
+    readyChecks: Array<{ name: string; value?: string | null }>;
   }>;
 };
 
@@ -645,7 +645,7 @@ export type FileSyncOptionQuery = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
+    readyChecks: Array<{ name: string; value?: string | null }>;
   };
 };
 
@@ -661,7 +661,7 @@ export type CreateFileSyncOptionMutation = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
+    readyChecks: Array<{ name: string; value?: string | null }>;
   };
 };
 
@@ -677,7 +677,7 @@ export type EditFileSyncOptionMutation = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
+    readyChecks: Array<{ name: string; value?: string | null }>;
   };
 };
 
@@ -693,7 +693,7 @@ export type DeleteFileSyncOptionMutation = {
     maxDepth: number;
     topics: Array<string>;
     patterns: Array<{ type: PatternType; pattern: string }>;
-    readyChecks: Array<{ name: string; value?: string | null | undefined }>;
+    readyChecks: Array<{ name: string; value?: string | null }>;
   }>;
 };
 
@@ -763,7 +763,7 @@ export type EventsByFileIdQuery = {
         history: Array<{
           status: EventStatus;
           date: any;
-          message?: string | null | undefined;
+          message?: string | null;
         }>;
       }>;
     }>;
@@ -806,15 +806,12 @@ export type MeasurementFieldsFragment = {
   username: string;
   sampleCode: Array<string>;
   createdBy: string;
-  fileId?: string | null | undefined;
-  description?: string | null | undefined;
+  fileId?: string | null;
+  description?: string | null;
   createdAt: any;
-  derived?: any | null | undefined;
+  derived?: any | null;
   type: MeasurementTypes;
-  file?:
-    | { filename: string; size: number; downloadUrl: string }
-    | null
-    | undefined;
+  file?: { filename: string; size: number; downloadUrl: string } | null;
 };
 
 export type MeasurementsFilteredQueryVariables = Exact<{
@@ -834,15 +831,12 @@ export type MeasurementsFilteredQuery = {
       username: string;
       sampleCode: Array<string>;
       createdBy: string;
-      fileId?: string | null | undefined;
-      description?: string | null | undefined;
+      fileId?: string | null;
+      description?: string | null;
       createdAt: any;
-      derived?: any | null | undefined;
+      derived?: any | null;
       type: MeasurementTypes;
-      file?:
-        | { filename: string; size: number; downloadUrl: string }
-        | null
-        | undefined;
+      file?: { filename: string; size: number; downloadUrl: string } | null;
     }>;
   };
 };
@@ -859,15 +853,12 @@ export type MeasurementQuery = {
     username: string;
     sampleCode: Array<string>;
     createdBy: string;
-    fileId?: string | null | undefined;
-    description?: string | null | undefined;
+    fileId?: string | null;
+    description?: string | null;
     createdAt: any;
-    derived?: any | null | undefined;
+    derived?: any | null;
     type: MeasurementTypes;
-    file?:
-      | { filename: string; size: number; downloadUrl: string }
-      | null
-      | undefined;
+    file?: { filename: string; size: number; downloadUrl: string } | null;
   };
 };
 
@@ -876,20 +867,20 @@ export type SampleFieldsFragment = {
   sampleCode: Array<string>;
   uuid10: string;
   labels: Array<string>;
-  project?: string | null | undefined;
-  title?: string | null | undefined;
-  description?: any | null | undefined;
-  comment?: string | null | undefined;
+  project?: string | null;
+  title?: string | null;
+  description?: any | null;
+  comment?: string | null;
   meta: any;
   createdAt: any;
-  user?: { id: string; usernames: Array<string> } | null | undefined;
+  user?: { id: string; usernames: Array<string> } | null;
 };
 
 export type SampleKindFieldsFragment = {
   id: string;
-  name?: string | null | undefined;
-  description?: string | null | undefined;
-  color?: string | null | undefined;
+  name?: string | null;
+  description?: string | null;
+  color?: string | null;
   schema: any;
 };
 
@@ -909,30 +900,27 @@ export type SamplesFilteredQuery = {
       sampleCode: Array<string>;
       uuid10: string;
       labels: Array<string>;
-      project?: string | null | undefined;
-      title?: string | null | undefined;
-      description?: any | null | undefined;
-      comment?: string | null | undefined;
+      project?: string | null;
+      title?: string | null;
+      description?: any | null;
+      comment?: string | null;
       meta: any;
       createdAt: any;
-      children?:
-        | Array<{
-            id: string;
-            sampleCode: Array<string>;
-            uuid10: string;
-            labels: Array<string>;
-            project?: string | null | undefined;
-            title?: string | null | undefined;
-            description?: any | null | undefined;
-            comment?: string | null | undefined;
-            meta: any;
-            createdAt: any;
-            user?: { id: string; usernames: Array<string> } | null | undefined;
-          }>
-        | null
-        | undefined;
-      parent?: { id: string } | null | undefined;
-      user?: { id: string; usernames: Array<string> } | null | undefined;
+      children?: Array<{
+        id: string;
+        sampleCode: Array<string>;
+        uuid10: string;
+        labels: Array<string>;
+        project?: string | null;
+        title?: string | null;
+        description?: any | null;
+        comment?: string | null;
+        meta: any;
+        createdAt: any;
+        user?: { id: string; usernames: Array<string> } | null;
+      }> | null;
+      parent?: { id: string } | null;
+      user?: { id: string; usernames: Array<string> } | null;
     }>;
   };
 };
@@ -947,10 +935,10 @@ export type SampleQuery = {
     sampleCode: Array<string>;
     uuid10: string;
     labels: Array<string>;
-    project?: string | null | undefined;
-    title?: string | null | undefined;
-    description?: any | null | undefined;
-    comment?: string | null | undefined;
+    project?: string | null;
+    title?: string | null;
+    description?: any | null;
+    comment?: string | null;
     meta: any;
     createdAt: any;
     attachments: Array<{
@@ -961,23 +949,20 @@ export type SampleQuery = {
       size: number;
     }>;
     measurements: Array<{ id: string; type: string; date: any }>;
-    children?:
-      | Array<{
-          id: string;
-          sampleCode: Array<string>;
-          uuid10: string;
-          labels: Array<string>;
-          project?: string | null | undefined;
-          title?: string | null | undefined;
-          description?: any | null | undefined;
-          comment?: string | null | undefined;
-          meta: any;
-          createdAt: any;
-          user?: { id: string; usernames: Array<string> } | null | undefined;
-        }>
-      | null
-      | undefined;
-    user?: { id: string; usernames: Array<string> } | null | undefined;
+    children?: Array<{
+      id: string;
+      sampleCode: Array<string>;
+      uuid10: string;
+      labels: Array<string>;
+      project?: string | null;
+      title?: string | null;
+      description?: any | null;
+      comment?: string | null;
+      meta: any;
+      createdAt: any;
+      user?: { id: string; usernames: Array<string> } | null;
+    }> | null;
+    user?: { id: string; usernames: Array<string> } | null;
   };
 };
 
@@ -988,9 +973,9 @@ export type SampleKindQueryVariables = Exact<{
 export type SampleKindQuery = {
   sampleKind: {
     id: string;
-    name?: string | null | undefined;
-    description?: string | null | undefined;
-    color?: string | null | undefined;
+    name?: string | null;
+    description?: string | null;
+    color?: string | null;
     schema: any;
   };
 };
@@ -1005,13 +990,13 @@ export type CreateSampleMutation = {
     sampleCode: Array<string>;
     uuid10: string;
     labels: Array<string>;
-    project?: string | null | undefined;
-    title?: string | null | undefined;
-    description?: any | null | undefined;
-    comment?: string | null | undefined;
+    project?: string | null;
+    title?: string | null;
+    description?: any | null;
+    comment?: string | null;
     meta: any;
     createdAt: any;
-    user?: { id: string; usernames: Array<string> } | null | undefined;
+    user?: { id: string; usernames: Array<string> } | null;
   };
 };
 
@@ -1020,8 +1005,8 @@ export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 export type UsersQuery = {
   users: Array<{
     id: string;
-    lastName?: string | null | undefined;
-    firstName?: string | null | undefined;
+    lastName?: string | null;
+    firstName?: string | null;
     emails: Array<string>;
     role: string;
     authMethods: any;

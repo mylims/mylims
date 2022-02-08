@@ -19,6 +19,7 @@
   "dependencies": {
     "@apollo/client": "^3.5.8",
     "@fluentui/react-icons": "^2.0.160-beta.11",
+    "@griffel/react": "^1.0.0",
     "@headlessui/react": "^1.4.3",
     "@heroicons/react": "^1.0.5",
     "@hookform/resolvers": "^2.8.8",
