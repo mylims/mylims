@@ -12,9 +12,23 @@ interface WaferDicingProps {
 export default function WaferDicing({ wafer, size }: WaferDicingProps) {
   const navigate = useNavigate();
   const { value, units } = fromTextToValue(wafer.meta.size ?? '2 inch');
+  let rows: number | undefined = undefined;
+  let columns: number | undefined = undefined;
+  let borderError: number | undefined = undefined;
+  if (value === 2) {
+    rows = 4;
+    columns = 4;
+    borderError = 0.1;
+  }
+  if (value === 4) {
+    rows = 7;
+  }
   return (
     <Wafer
       size={size}
+      rows={rows}
+      columns={columns}
+      borderError={borderError}
       diameter={{ value, units: units || 'inch' }}
       chipHeight={{ value: 2, units: 'cm' }}
       chipWidth={{ value: 1.8, units: 'cm' }}
