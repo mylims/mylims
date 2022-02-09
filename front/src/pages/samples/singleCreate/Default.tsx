@@ -20,6 +20,7 @@ interface DefaultCreationProps {
   codeLength: number;
   kind: string;
   metaSchema: Record<string, BaseSchema>;
+  defaultCreation: boolean;
   children: ReactNode;
 }
 
@@ -27,6 +28,7 @@ export default function DefaultCreate({
   codeLength,
   kind,
   metaSchema,
+  defaultCreation,
   children,
 }: DefaultCreationProps) {
   const { id } = useAuth();
@@ -77,7 +79,13 @@ export default function DefaultCreate({
         } else if (!res) {
           setError(new Error('Error during sample creation'));
         } else {
-          navigate(`/sample/detail/${kind}/${res.createSample.id}`);
+          if (defaultCreation) {
+            navigate(
+              `/sample/multiCreate/sample?parent=${res.createSample.id}`,
+            );
+          } else {
+            navigate(`/sample/detail/${kind}/${res.createSample.id}`);
+          }
         }
       } catch (error) {
         setError(error as Error);
@@ -106,7 +114,7 @@ export default function DefaultCreate({
           <SubmitButtonRHF disabled={loading}>Submit</SubmitButtonRHF>
         </div>
         {children}
-        <div className="mt-2 flex flex-row justify-end md:hidden">
+        <div className="flex flex-row justify-end mt-2 md:hidden">
           <SubmitButtonRHF disabled={loading}>Submit</SubmitButtonRHF>
         </div>
       </div>
