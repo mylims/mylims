@@ -21,7 +21,7 @@ export default function WaferDicing({ wafer, size }: WaferDicingProps) {
     borderError = 0.1;
   }
   if (value === 4) {
-    rows = 7;
+    columns = 7;
   }
   return (
     <Wafer
