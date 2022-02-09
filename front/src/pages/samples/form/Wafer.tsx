@@ -1,17 +1,20 @@
 import React from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
+import EditableSelect from '@/components/FormSchema/EditableSelect';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
 import {
   DropzoneFieldRHF,
   InputFieldRHF,
+  optionalObject,
   optionalString,
+  requiredString,
 } from '@/components/tailwind-ui';
 import DefaultCreate from '@/pages/samples/form/Default';
 
 const waferCreateSchema = {
-  size: optionalString(),
+  size: optionalObject({ value: requiredString(), label: requiredString() }),
   purpose: optionalString(),
   heterostructure: optionalString(),
   substrate: optionalString(),
@@ -37,10 +40,13 @@ export default function WaferCreate() {
             <InputFieldRHF name="comment" label="Comment" />
             <MultiSelect name="labels" label="Labels" />
             <InputFieldRHF name="meta.purpose" label="Purpose" />
-            <InputFieldRHF
+            <EditableSelect
               name="meta.size"
               label="Diameter (inch)"
-              type="number"
+              options={['2 inch', '4 inch', '6 inch'].map((value) => ({
+                value,
+                label: value,
+              }))}
             />
             <InputFieldRHF name="meta.epiStructure" label="EPI structure" />
             <InputFieldRHF name="meta.substrate" label="Substrate" />
