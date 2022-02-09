@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Wafer, fromTextToValue } from 'react-wafer';
+import { Wafer, fromTextToValue, WaferProps } from 'react-wafer';
 
 import { Sample } from '@/generated/graphql';
 
@@ -8,10 +8,22 @@ interface WaferDicingProps {
   wafer: Sample;
   size: number;
 }
+interface SimpleWaferDicingProps {
+  diameter: string;
+  size: number;
+  pickedItems?: WaferProps['pickedItems'];
+  onSelect?: WaferProps['onSelect'];
+}
 
-export default function WaferDicing({ wafer, size }: WaferDicingProps) {
-  const navigate = useNavigate();
-  const { value, units } = fromTextToValue(wafer.meta.size ?? '2 inch');
+export function SimpleWaferDicing({
+  diameter,
+  size,
+  pickedItems = [],
+  onSelect = () => {
+    // do nothing
+  },
+}: SimpleWaferDicingProps) {
+  const { value, units } = fromTextToValue(diameter);
   let rows: number | undefined = undefined;
   let columns: number | undefined = undefined;
   let borderError: number | undefined = undefined;
@@ -34,6 +46,17 @@ export default function WaferDicing({ wafer, size }: WaferDicingProps) {
       chipWidth={{ value: 1.8, units: 'cm' }}
       textStyle={{ fontSize: '0.7em' }}
       prepend="A"
+      pickedItems={pickedItems}
+      onSelect={onSelect}
+    />
+  );
+}
+export default function WaferDicing({ wafer, size }: WaferDicingProps) {
+  const navigate = useNavigate();
+  return (
+    <SimpleWaferDicing
+      size={size}
+      diameter={wafer.meta.size ?? '2 inch'}
       pickedItems={
         wafer.children?.map(({ sampleCode }) => ({
           index: sampleCode[1],
@@ -47,6 +70,10 @@ export default function WaferDicing({ wafer, size }: WaferDicingProps) {
           if (child) {
             navigate(`/sample/detail/sample/${child.id}`);
           }
+        } else if (label) {
+          navigate(
+            `/sample/singleCreate/sample?parent=${wafer.id}&code=${label}`,
+          );
         }
       }}
     />

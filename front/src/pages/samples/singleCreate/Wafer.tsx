@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
 import EditableSelect from '@/components/FormSchema/EditableSelect';
@@ -7,15 +7,17 @@ import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
 import {
   DropzoneFieldRHF,
   InputFieldRHF,
-  optionalObject,
   optionalString,
+  requiredObject,
   requiredString,
+  Toggle,
 } from '@/components/tailwind-ui';
 
 import DefaultCreate from './Default';
+import WaferDiameterField from '@/components/WaferDiameterField';
 
 const waferCreateSchema = {
-  size: optionalObject({ value: requiredString(), label: requiredString() }),
+  size: requiredObject({ value: requiredString(), label: requiredString() }),
   purpose: optionalString(),
   heterostructure: optionalString(),
   substrate: optionalString(),
@@ -25,10 +27,16 @@ const waferCreateSchema = {
 };
 
 export default function WaferCreate() {
+  const [defaultCreation, setDefaultCreation] = useState(true);
   return (
-    <DefaultCreate codeLength={1} kind="wafer" metaSchema={waferCreateSchema}>
-      <div className="flex flex-col md:grid md:grid-flow-col md:grid-rows-3 md:gap-4">
-        <div className="col-span-2 row-span-2">
+    <DefaultCreate
+      codeLength={1}
+      kind="wafer"
+      metaSchema={waferCreateSchema}
+      defaultCreation={defaultCreation}
+    >
+      <div className="flex flex-col my-2 md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
+        <div className="col-span-2">
           <div
             className="grid gap-4"
             style={{
@@ -41,14 +49,6 @@ export default function WaferCreate() {
             <InputFieldRHF name="comment" label="Comment" />
             <MultiSelect name="labels" label="Labels" />
             <InputFieldRHF name="meta.purpose" label="Purpose" />
-            <EditableSelect
-              name="meta.size"
-              label="Diameter (inch)"
-              options={['2 inch', '4 inch', '6 inch'].map((value) => ({
-                value,
-                label: value,
-              }))}
-            />
             <InputFieldRHF name="meta.epiStructure" label="EPI structure" />
             <InputFieldRHF name="meta.substrate" label="Substrate" />
             <InputFieldRHF name="meta.supplier" label="Supplier" />
@@ -63,6 +63,17 @@ export default function WaferCreate() {
           <DropzoneFieldRHF label="Attachments" name="attachments" showList />
         </div>
         <div className="row-span-3">
+          <WaferDiameterField
+            name="meta.size"
+            label="Diameter"
+            defaultCreation={defaultCreation}
+            setDefaultCreation={setDefaultCreation}
+            options={['2 inch', '4 inch', '6 inch'].map((value) => ({
+              value,
+              label: value,
+            }))}
+            required
+          />
           <RichTextFieldRHF
             className="max-w-7xl"
             name="description"
