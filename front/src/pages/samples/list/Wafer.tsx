@@ -46,12 +46,30 @@ export default function WaferList() {
                   className="ml-2"
                   onClick={() => setState(row as Sample)}
                 >
-                  <EyeIcon className="h-5 w-5" />
+                  <EyeIcon className="w-5 h-5" />
                 </Button>
               )}
             </TableQuery.ActionsColumn>
           }
         >
+          <TableQuery.TextColumn
+            title="Taken samples"
+            dataPath="children"
+            disableSearch
+          >
+            {(row) => {
+              const { children, meta } = row as Sample;
+              let size = '?';
+              if (meta?.size === '2' || meta?.size === '2 inch') {
+                size = '4';
+              } else if (meta?.size === '4' || meta?.size === '4 inch') {
+                size = '16';
+              } else if (meta?.size === '6' || meta?.size === '6 inch') {
+                size = '38';
+              }
+              return `${children?.length ?? 0} / ${size}`;
+            }}
+          </TableQuery.TextColumn>
           <TableQuery.TextColumn
             title="EPI structure"
             dataPath="meta.epiStructure"
@@ -75,7 +93,7 @@ export default function WaferList() {
         </SamplesList>
       </div>
       <div>
-        <Link to="/sample/form/wafer">
+        <Link to="/sample/singleCreate/wafer">
           <Button
             className="mb-4"
             variant={Variant.secondary}
@@ -88,7 +106,7 @@ export default function WaferList() {
 
         <Card>
           <Card.Header className="flex flex-row justify-between bg-neutral-50 text-neutral-500">
-            <span className="text-left text-xs font-semibold uppercase tracking-wider">
+            <span className="text-xs font-semibold tracking-wider text-left uppercase">
               Preview
             </span>
           </Card.Header>
@@ -99,7 +117,7 @@ export default function WaferList() {
               </p>
             ) : (
               <div>
-                <div className="mb-2 w-full">
+                <div className="w-full mb-2">
                   <ResponsiveChart minHeight={30}>
                     {({ width }) => <WaferDicing size={width} wafer={state} />}
                   </ResponsiveChart>
@@ -111,7 +129,7 @@ export default function WaferList() {
                       color={Color.primary}
                       variant={Variant.secondary}
                     >
-                      <InformationCircleIcon className="h-5 w-5" />
+                      <InformationCircleIcon className="w-5 h-5" />
                       <span>Detail</span>
                     </Button>
                   </Link>
@@ -132,7 +150,7 @@ export default function WaferList() {
                         color={Color.primary}
                         variant={Variant.secondary}
                       >
-                        <FolderOpenIcon className="h-5 w-5" />
+                        <FolderOpenIcon className="w-5 h-5" />
                         <span>Samples</span>
                       </Button>
                     </Link>
