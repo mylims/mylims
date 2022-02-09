@@ -62,12 +62,13 @@ export default function DefaultCreate({
           if (res._id) throw new Error('Failed to upload file');
           files.push(res._id);
         }
-        const input = {
+        let input = {
           ...data,
           userId: id,
           kind,
           attachments: files,
         };
+        input.meta.size = input.meta?.size.value;
         const { errors, data: res } = await createSample({
           variables: { input },
         });
