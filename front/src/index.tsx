@@ -17,11 +17,11 @@ import DeviceDetail from '@/pages/samples/detail/Device';
 import DyeDetail from '@/pages/samples/detail/Dye';
 import SampleDetail from '@/pages/samples/detail/Sample';
 import WaferDetail from '@/pages/samples/detail/Wafer';
-import WaferCreate from '@/pages/samples/form/Wafer';
 import DeviceList from '@/pages/samples/list/Device';
 import DyeList from '@/pages/samples/list/Dye';
 import SampleList from '@/pages/samples/list/Sample';
 import WaferList from '@/pages/samples/list/Wafer';
+import WaferCreate from '@/pages/samples/singleCreate/Wafer';
 import Users from '@/pages/users';
 
 function AppRoutes() {
@@ -77,7 +77,7 @@ function AppRoutes() {
           ],
         },
         {
-          path: 'form',
+          path: 'singleCreate',
           children: [
             { path: 'wafer', element: <App Component={WaferCreate} /> },
           ],

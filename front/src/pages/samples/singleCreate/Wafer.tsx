@@ -11,7 +11,8 @@ import {
   optionalString,
   requiredString,
 } from '@/components/tailwind-ui';
-import DefaultCreate from '@/pages/samples/form/Default';
+
+import DefaultCreate from './Default';
 
 const waferCreateSchema = {
   size: optionalObject({ value: requiredString(), label: requiredString() }),
