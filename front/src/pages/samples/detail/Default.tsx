@@ -14,7 +14,7 @@ export default function SampleDetail({ children }: SampleDetailProps) {
   if (loading) return <Spinner className="h-10 w-10 text-danger-500" />;
   if (error || !data) {
     return (
-      <Alert title="Error while fetching measurement" type={AlertType.ERROR}>
+      <Alert title="Error while fetching sample" type={AlertType.ERROR}>
         Unexpected error: {error?.message}
       </Alert>
     );
