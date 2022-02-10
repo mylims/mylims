@@ -94,18 +94,18 @@ export function Table<T extends Record<string, unknown>>({
       value={{ columns: state, query, setQuery, submitQuery, dispatch }}
     >
       {queries}
-      <div className="border-b shadow border-neutral-200 sm:rounded-lg">
+      <div className="border-b border-neutral-200 shadow sm:rounded-lg">
         <div className="overflow-x-auto overflow-y-visible align-middle ">
           <table className="w-full divide-y divide-neutral-200">
             <thead className="bg-neutral-50">
               <tr
-                className="grid grid-flow-col gap-4 auto-cols-max"
+                className="grid auto-cols-max grid-flow-col gap-4"
                 ref={headerRef}
               >
                 {columns}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-neutral-200">
+            <tbody className="divide-y divide-neutral-200 bg-white">
               <TableBody
                 list={list}
                 columns={orderedColumns}
@@ -147,7 +147,7 @@ function TableBody<T extends Record<string, unknown>>({
       <tr>
         <td>
           <div className="flex flex-row justify-center py-4">
-            <Spinner className="w-10 h-10 text-danger-500" />
+            <Spinner className="h-10 w-10 text-danger-500" />
           </div>
         </td>
       </tr>
@@ -158,7 +158,7 @@ function TableBody<T extends Record<string, unknown>>({
       <tr>
         <td>
           <div className="flex flex-row justify-center py-4 text-neutral-500">
-            <InboxIcon className="w-5 h-5 mr-2" />
+            <InboxIcon className="mr-2 h-5 w-5" />
             <span>Empty</span>
           </div>
         </td>

@@ -114,7 +114,7 @@ export default function DefaultCreate({
           <SubmitButtonRHF disabled={loading}>Submit</SubmitButtonRHF>
         </div>
         {children}
-        <div className="flex flex-row justify-end mt-2 md:hidden">
+        <div className="mt-2 flex flex-row justify-end md:hidden">
           <SubmitButtonRHF disabled={loading}>Submit</SubmitButtonRHF>
         </div>
       </div>
