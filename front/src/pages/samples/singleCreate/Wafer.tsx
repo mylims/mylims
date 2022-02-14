@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
-import EditableSelect from '@/components/FormSchema/EditableSelect';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
 import {

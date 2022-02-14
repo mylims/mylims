@@ -252,6 +252,7 @@ export type Mutation = {
   createFileSyncOption: FileSyncOption;
   createSample: Sample;
   createSampleKind: SampleKind;
+  createSamples: Array<Sample>;
   deleteFileSyncOption: Array<FileSyncOption>;
   editFileSyncOption: FileSyncOption;
   updateSample: Sample;
@@ -268,6 +269,10 @@ export type MutationCreateSampleArgs = {
 
 export type MutationCreateSampleKindArgs = {
   input: SampleKindInput;
+};
+
+export type MutationCreateSamplesArgs = {
+  samples: Array<SampleInput>;
 };
 
 export type MutationDeleteFileSyncOptionArgs = {
@@ -998,6 +1003,26 @@ export type CreateSampleMutation = {
     createdAt: any;
     user?: { id: string; usernames: Array<string> } | null;
   };
+};
+
+export type CreateMultipleSamplesMutationVariables = Exact<{
+  samples: Array<SampleInput> | SampleInput;
+}>;
+
+export type CreateMultipleSamplesMutation = {
+  createSamples: Array<{
+    id: string;
+    sampleCode: Array<string>;
+    uuid10: string;
+    labels: Array<string>;
+    project?: string | null;
+    title?: string | null;
+    description?: any | null;
+    comment?: string | null;
+    meta: any;
+    createdAt: any;
+    user?: { id: string; usernames: Array<string> } | null;
+  }>;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
@@ -2300,6 +2325,53 @@ export type CreateSampleMutationResult =
 export type CreateSampleMutationOptions = Apollo.BaseMutationOptions<
   CreateSampleMutation,
   CreateSampleMutationVariables
+>;
+export const CreateMultipleSamplesDocument = gql`
+  mutation CreateMultipleSamples($samples: [SampleInput!]!) {
+    createSamples(samples: $samples) {
+      ...SampleFields
+    }
+  }
+  ${SampleFieldsFragmentDoc}
+`;
+
+/**
+ * __useCreateMultipleSamplesMutation__
+ *
+ * To run a mutation, you first call `useCreateMultipleSamplesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMultipleSamplesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMultipleSamplesMutation, { data, loading, error }] = useCreateMultipleSamplesMutation({
+ *   variables: {
+ *      samples: // value for 'samples'
+ *   },
+ * });
+ */
+export function useCreateMultipleSamplesMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateMultipleSamplesMutation,
+    CreateMultipleSamplesMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useMutation<
+    CreateMultipleSamplesMutation,
+    CreateMultipleSamplesMutationVariables
+  >(CreateMultipleSamplesDocument, options);
+}
+export type CreateMultipleSamplesMutationHookResult = ReturnType<
+  typeof useCreateMultipleSamplesMutation
+>;
+export type CreateMultipleSamplesMutationResult =
+  Apollo.MutationResult<CreateMultipleSamplesMutation>;
+export type CreateMultipleSamplesMutationOptions = Apollo.BaseMutationOptions<
+  CreateMultipleSamplesMutation,
+  CreateMultipleSamplesMutationVariables
 >;
 export const UsersDocument = gql`
   query Users {
