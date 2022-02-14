@@ -11,6 +11,7 @@ import { Sample } from './Models/Sample';
 import { SampleKind } from './Models/SampleKind';
 import { ApolloBaseContext } from '@ioc:Zakodium/Apollo/Server';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
@@ -21,9 +22,9 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-export type RequireFields<T, K extends keyof T> = {
-  [X in Exclude<keyof T, K>]?: T[X];
-} & { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -95,11 +96,11 @@ export type GqlEventFile = {
 };
 
 export type GqlEventFilterInput = {
-  createdAt?: Maybe<GqlFilterDate>;
-  fileId?: Maybe<Scalars['String']>;
-  processorId?: Maybe<Scalars['String']>;
-  status?: Maybe<Array<GqlEventStatus>>;
-  topic?: Maybe<GqlFilterText>;
+  createdAt?: InputMaybe<GqlFilterDate>;
+  fileId?: InputMaybe<Scalars['String']>;
+  processorId?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Array<GqlEventStatus>>;
+  topic?: InputMaybe<GqlFilterText>;
 };
 
 export type GqlEventHistory = {
@@ -173,10 +174,10 @@ export type GqlFileSyncOptionPatternInput = {
 };
 
 export type GqlFilesFilterInput = {
-  date?: Maybe<GqlFilterDate>;
-  filename?: Maybe<GqlFilterText>;
-  size?: Maybe<GqlFilterNumber>;
-  status?: Maybe<Array<GqlFileStatus>>;
+  date?: InputMaybe<GqlFilterDate>;
+  filename?: InputMaybe<GqlFilterText>;
+  size?: InputMaybe<GqlFilterNumber>;
+  status?: InputMaybe<Array<GqlFileStatus>>;
 };
 
 export type GqlFilesFlatPage = GqlPagination & {
@@ -199,18 +200,18 @@ export type GqlFilesSortInput = {
 };
 
 export type GqlFilterDate = {
-  from?: Maybe<Scalars['DateTime']>;
-  to?: Maybe<Scalars['DateTime']>;
+  from?: InputMaybe<Scalars['DateTime']>;
+  to?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type GqlFilterList = {
-  index?: Maybe<Scalars['Int']>;
+  index?: InputMaybe<Scalars['Int']>;
   value: GqlFilterText;
 };
 
 export type GqlFilterNumber = {
-  max?: Maybe<Scalars['Int']>;
-  min?: Maybe<Scalars['Int']>;
+  max?: InputMaybe<Scalars['Int']>;
+  min?: InputMaybe<Scalars['Int']>;
 };
 
 export type GqlFilterText = {
@@ -247,8 +248,8 @@ export type GqlMeasurementFile = {
 };
 
 export type GqlMeasurementFilterInput = {
-  createdAt?: Maybe<GqlFilterDate>;
-  sampleCode?: Maybe<Array<GqlFilterList>>;
+  createdAt?: InputMaybe<GqlFilterDate>;
+  sampleCode?: InputMaybe<Array<GqlFilterList>>;
 };
 
 export type GqlMeasurementPage = GqlPagination & {
@@ -277,6 +278,7 @@ export type GqlMutation = {
   createFileSyncOption: GqlFileSyncOption;
   createSample: GqlSample;
   createSampleKind: GqlSampleKind;
+  createSamples: Array<GqlSample>;
   deleteFileSyncOption: Array<GqlFileSyncOption>;
   editFileSyncOption: GqlFileSyncOption;
   updateSample: GqlSample;
@@ -293,6 +295,10 @@ export type GqlMutationCreateSampleArgs = {
 
 export type GqlMutationCreateSampleKindArgs = {
   input: GqlSampleKindInput;
+};
+
+export type GqlMutationCreateSamplesArgs = {
+  samples: Array<GqlSampleInput>;
 };
 
 export type GqlMutationDeleteFileSyncOptionArgs = {
@@ -372,10 +378,10 @@ export type GqlQueryEventArgs = {
 };
 
 export type GqlQueryEventsArgs = {
-  filterBy?: Maybe<GqlEventFilterInput>;
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<GqlEventSortInput>;
+  filterBy?: InputMaybe<GqlEventFilterInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<GqlEventSortInput>;
 };
 
 export type GqlQueryFileByPathArgs = {
@@ -388,16 +394,16 @@ export type GqlQueryFileSyncOptionArgs = {
 
 export type GqlQueryFilesByConfigArgs = {
   configId: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
   path: Array<Scalars['String']>;
 };
 
 export type GqlQueryFilesByConfigFlatArgs = {
-  filterBy?: Maybe<GqlFilesFilterInput>;
+  filterBy?: InputMaybe<GqlFilesFilterInput>;
   id: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<GqlFilesSortInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<GqlFilesSortInput>;
 };
 
 export type GqlQueryMeasurementArgs = {
@@ -406,10 +412,10 @@ export type GqlQueryMeasurementArgs = {
 };
 
 export type GqlQueryMeasurementsArgs = {
-  filterBy?: Maybe<GqlMeasurementFilterInput>;
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<GqlMeasurementSortInput>;
+  filterBy?: InputMaybe<GqlMeasurementFilterInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<GqlMeasurementSortInput>;
   type: GqlMeasurementTypes;
 };
 
@@ -422,11 +428,11 @@ export type GqlQuerySampleKindArgs = {
 };
 
 export type GqlQuerySamplesArgs = {
-  filterBy?: Maybe<GqlSampleFilterInput>;
+  filterBy?: InputMaybe<GqlSampleFilterInput>;
   kind: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  sortBy?: Maybe<GqlSampleSortInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<GqlSampleSortInput>;
 };
 
 export type GqlReadyCheck = {
@@ -443,7 +449,7 @@ export type GqlReadyCheckDescriptor = {
 
 export type GqlReadyCheckInput = {
   name: Scalars['String'];
-  value?: Maybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['String']>;
 };
 
 export type GqlSample = {
@@ -476,25 +482,25 @@ export type GqlSampleFile = {
 };
 
 export type GqlSampleFilterInput = {
-  comment?: Maybe<GqlFilterText>;
-  createdAt?: Maybe<GqlFilterDate>;
-  labels?: Maybe<GqlFilterText>;
-  project?: Maybe<GqlFilterText>;
-  sampleCode?: Maybe<Array<GqlFilterList>>;
-  title?: Maybe<GqlFilterText>;
+  comment?: InputMaybe<GqlFilterText>;
+  createdAt?: InputMaybe<GqlFilterDate>;
+  labels?: InputMaybe<GqlFilterText>;
+  project?: InputMaybe<GqlFilterText>;
+  sampleCode?: InputMaybe<Array<GqlFilterList>>;
+  title?: InputMaybe<GqlFilterText>;
 };
 
 export type GqlSampleInput = {
   attachments: Array<Scalars['String']>;
-  comment?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['JSON']>;
+  comment?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['JSON']>;
   kind: Scalars['String'];
   labels: Array<Scalars['String']>;
   meta: Scalars['JSON'];
-  parent?: Maybe<Scalars['String']>;
-  project?: Maybe<Scalars['String']>;
+  parent?: InputMaybe<Scalars['String']>;
+  project?: InputMaybe<Scalars['String']>;
   sampleCode: Array<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
   userId: Scalars['String'];
 };
 
@@ -508,10 +514,10 @@ export type GqlSampleKind = {
 };
 
 export type GqlSampleKindInput = {
-  color?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  color?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
   schema: Scalars['JSON'];
 };
 
@@ -618,7 +624,7 @@ export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo,
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -1108,6 +1114,12 @@ export type GqlMutationResolvers<
     ContextType,
     RequireFields<GqlMutationCreateSampleKindArgs, 'input'>
   >;
+  createSamples?: Resolver<
+    Array<GqlResolversTypes['Sample']>,
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationCreateSamplesArgs, 'samples'>
+  >;
   deleteFileSyncOption?: Resolver<
     Array<GqlResolversTypes['FileSyncOption']>,
     ParentType,
@@ -1191,7 +1203,7 @@ export type GqlQueryResolvers<
     GqlResolversTypes['EventPage'],
     ParentType,
     ContextType,
-    RequireFields<GqlQueryEventsArgs, never>
+    Partial<GqlQueryEventsArgs>
   >;
   fileByPath?: Resolver<
     GqlResolversTypes['FileContent'],

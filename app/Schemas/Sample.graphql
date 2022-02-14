@@ -12,6 +12,7 @@ type Query {
 
 type Mutation {
   createSample(input: SampleInput!): Sample!
+  createSamples(samples: [SampleInput!]!): [Sample!]!
   updateSample(id: ID!, input: SampleInput!): Sample!
   createSampleKind(input: SampleKindInput!): SampleKind!
   updateSampleKind(id: ID!, input: SampleKindInput!): SampleKind!

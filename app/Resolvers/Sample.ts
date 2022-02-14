@@ -124,6 +124,11 @@ const resolvers: GqlResolvers = {
     async createSample(_, { input }) {
       return Sample.fromInput(new Sample(), input);
     },
+    async createSamples(_, { samples }) {
+      return Promise.all(
+        samples.map((input) => Sample.fromInput(new Sample(), input)),
+      );
+    },
     async updateSample(_, { id, input }) {
       const sample = await Sample.find(new ObjectId(id));
       if (!sample) {

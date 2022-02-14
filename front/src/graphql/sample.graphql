@@ -82,3 +82,9 @@ mutation CreateSample($input: SampleInput!) {
     ...SampleFields
   }
 }
+
+mutation CreateMultipleSamples($samples: [SampleInput!]!) {
+  createSamples(samples: $samples) {
+    ...SampleFields
+  }
+}
