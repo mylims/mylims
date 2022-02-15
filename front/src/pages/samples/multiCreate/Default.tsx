@@ -1,17 +1,10 @@
 import { unflatten } from 'flat';
 import React, { useState } from 'react';
-import {
-  createSearchParams,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import { EditableTable } from '@/components/EditableTable';
 import ElnLayout from '@/components/ElnLayout';
-import {
-  SampleInput,
-  useCreateMultipleSamplesMutation,
-  useSampleQuery,
-} from '@/generated/graphql';
+import FieldDescription from '@/components/FieldDescription';
 import {
   Alert,
   AlertType,
@@ -20,8 +13,11 @@ import {
   Size,
   Spinner,
 } from '@/components/tailwind-ui';
-import { EditableTable } from '@/components/EditableTable';
-import FieldDescription from '@/components/FieldDescription';
+import {
+  SampleInput,
+  useCreateMultipleSamplesMutation,
+  useSampleQuery,
+} from '@/generated/graphql';
 import useAuth from '@/hooks/useAuth';
 
 type Value = Record<string, string | undefined>;
@@ -33,8 +29,7 @@ const DIAMETERS: Record<string, number | undefined> = {
   '6': 38,
   '6 inch': 38,
 };
-interface MultiCreateProps {}
-export function MultiCreate({}: MultiCreateProps) {
+export function MultiCreate() {
   const [localError, setError] = useState<Error | null>(null);
   const [rows, setRows] = useState(4);
   const [table, setTable] = useState<Value[]>([]);
@@ -132,7 +127,7 @@ export function MultiCreate({}: MultiCreateProps) {
         </Button>
       </div>
       <EditableTable
-        prepend={sampleCode.join('_') + '_'}
+        prepend={`${sampleCode.join('_')}_`}
         rows={diameterRows ?? rows}
         columns={[
           { name: 'project', label: 'Project' },

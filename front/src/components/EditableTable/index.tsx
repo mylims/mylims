@@ -47,7 +47,7 @@ export function EditableTable({
       code: `${prepend}${index + 1}`,
     }));
     onChange(newData);
-  }, [data, prepend]);
+  }, [data, prepend, onChange]);
 
   const onColumnModifierChange = (value: string, name: string) => {
     setColumnModifiers({ ...columnModifiers, [name]: value || undefined });

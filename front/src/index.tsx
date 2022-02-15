@@ -21,9 +21,9 @@ import DeviceList from '@/pages/samples/list/Device';
 import DyeList from '@/pages/samples/list/Dye';
 import SampleList from '@/pages/samples/list/Sample';
 import WaferList from '@/pages/samples/list/Wafer';
+import { MultiCreate } from '@/pages/samples/multiCreate/Default';
 import WaferCreate from '@/pages/samples/singleCreate/Wafer';
 import Users from '@/pages/users';
-import { MultiCreate } from '@/pages/samples/multiCreate/Default';
 
 function AppRoutes() {
   const routes = useRoutes([

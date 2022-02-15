@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
+import { SimpleWaferDicing } from '@/components/WaferDicing';
 import {
   SearchSelectFieldRHF,
   Toggle,
   useSearchSelectFieldRHF,
 } from '@/components/tailwind-ui';
-import { SimpleWaferDicing } from '@/components/WaferDicing';
 
 interface WaferDiameterFieldProps {
   name: string;

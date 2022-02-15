@@ -3,17 +3,16 @@ import React, { useState } from 'react';
 import ElnLayout from '@/components/ElnLayout';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
+import WaferDiameterField from '@/components/WaferDiameterField';
 import {
   DropzoneFieldRHF,
   InputFieldRHF,
   optionalString,
   requiredObject,
   requiredString,
-  Toggle,
 } from '@/components/tailwind-ui';
 
 import DefaultCreate from './Default';
-import WaferDiameterField from '@/components/WaferDiameterField';
 
 const waferCreateSchema = {
   size: requiredObject({ value: requiredString(), label: requiredString() }),
