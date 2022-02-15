@@ -24,9 +24,9 @@ export function SimpleWaferDicing({
   },
 }: SimpleWaferDicingProps) {
   const { value, units } = fromTextToValue(diameter);
-  let rows: number | undefined = undefined;
-  let columns: number | undefined = undefined;
-  let borderError: number | undefined = undefined;
+  let rows: number | undefined;
+  let columns: number | undefined;
+  let borderError: number | undefined;
   if (value === 2) {
     rows = 4;
     columns = 4;

@@ -78,8 +78,8 @@ export default function B1505Transfer({
                       style={{ stroke: 'green', ...dashedLine }}
                     />
                     <Annotation.Circle
-                      cx={derived.thresholdVoltage.value}
-                      cy={1e-6}
+                      x={derived.thresholdVoltage.value}
+                      y={1e-6}
                       r="4"
                       style={{ fill: 'green' }}
                     />
@@ -93,14 +93,14 @@ export default function B1505Transfer({
                           style={{ stroke: 'blue', ...dashedLine }}
                         />
                         <Annotation.Circle
-                          cx={x.data[derived.subthresholdSlope.fromIndex]}
-                          cy={y.data[derived.subthresholdSlope.fromIndex]}
+                          x={x.data[derived.subthresholdSlope.fromIndex]}
+                          y={y.data[derived.subthresholdSlope.fromIndex]}
                           r="4"
                           style={{ fill: 'blue' }}
                         />
                         <Annotation.Circle
-                          cx={x.data[derived.subthresholdSlope.toIndex]}
-                          cy={y.data[derived.subthresholdSlope.toIndex]}
+                          x={x.data[derived.subthresholdSlope.toIndex]}
+                          y={y.data[derived.subthresholdSlope.toIndex]}
                           r="4"
                           style={{ fill: 'blue' }}
                         />
