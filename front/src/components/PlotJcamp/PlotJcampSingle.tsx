@@ -1,4 +1,4 @@
-import { Analysis, fromJcamp } from 'common-spectrum';
+import { Analysis, fromJcamp } from 'base-analysis';
 import React, { ReactNode, useMemo, useState } from 'react';
 import { PlotObject } from 'react-plot';
 

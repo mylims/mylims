@@ -1,4 +1,4 @@
-import { fromJcamp } from 'common-spectrum';
+import { fromJcamp } from 'base-analysis';
 import React, { useMemo } from 'react';
 import { PlotObject } from 'react-plot';
 

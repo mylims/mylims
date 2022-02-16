@@ -66,7 +66,7 @@ export default function B1505Transfer({
           >
             {(analysis, query) => {
               if (query.xLabel === 'Vg' && query.yLabel === 'Id_dens') {
-                const spectrum = analysis.getXYSpectrum(query);
+                const spectrum = analysis.getMeasurementXY(query);
                 const { x, y } = spectrum?.variables || {};
                 return (
                   <>
