@@ -7,7 +7,7 @@ export interface MeasurementParams {
   createdBy: string;
   fileId?: string;
   derived?: string;
-  description?: string;
+  description?: string | null;
 }
 
 export class BaseMeasurement extends BaseModel {
@@ -18,5 +18,5 @@ export class BaseMeasurement extends BaseModel {
   public sampleCode: string[];
   public createdBy: string;
   public fileId?: string;
-  public description?: string;
+  public description?: string | null;
 }

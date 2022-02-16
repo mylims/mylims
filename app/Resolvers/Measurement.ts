@@ -25,7 +25,7 @@ import {
 const measurements = {
   [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
 };
-type MeasurementType = Omit<GqlMeasurement, 'id' | 'file'> & {
+type MeasurementType = Omit<GqlMeasurement, 'id' | 'file' | 'type'> & {
   _id: ObjectId;
   fileId?: string;
 };
@@ -64,8 +64,9 @@ const resolvers: GqlResolvers = {
         direction = GqlSortDirection.DESC,
       } = sortBy || {};
 
+      const query = await createFilter(filterBy);
       let measurementCursor = measurements[type]
-        .query(createFilter(filterBy))
+        .query(query)
         .sortBy(field, direction === GqlSortDirection.DESC ? -1 : 1);
       const totalCount = await measurementCursor.count();
       if (skip) measurementCursor = measurementCursor.skip(skip);
