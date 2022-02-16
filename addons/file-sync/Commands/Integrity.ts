@@ -5,9 +5,7 @@ import { BaseCommand, flags } from '@adonisjs/core/build/standalone';
 import type { LocalFileSystemStorage } from '@slynova/flydrive';
 
 import type Drive from '@ioc:Adonis/Addons/Drive';
-// eslint-disable-next-line import/no-duplicates
 import type { DataDriveContract } from '@ioc:Zakodium/DataDrive';
-// eslint-disable-next-line import/no-duplicates
 import type DataDriveManager from '@ioc:Zakodium/DataDrive';
 
 import type { File } from '../Models/File';
