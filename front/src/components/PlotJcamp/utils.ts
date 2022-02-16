@@ -1,4 +1,4 @@
-import { Analysis, getReactPlotJSON } from 'common-spectrum';
+import { Analysis, getReactPlotJSON } from 'base-analysis';
 import { PlotProps } from 'react-plot';
 
 import type { PlotQuery } from './types';
@@ -11,12 +11,8 @@ export function getPlotJcamp(
   const { scale, logFilter, ...restQuery } = query;
 
   let data = getReactPlotJSON(analyses, restQuery, {
-    xAxis: { labelSpace: 30, label: `${query.xLabel} [${query.xUnits}]` },
-    yAxis: {
-      labelSpace: 60,
-      label: `${query.yLabel} [${query.yUnits}]`,
-      scale,
-    },
+    xAxis: { label: `${query.xLabel} [${query.xUnits}]` },
+    yAxis: { label: `${query.yLabel} [${query.yUnits}]`, scale },
     seriesViewportStyle: { stroke: 'black', strokeWidth: '2px' },
     enforceGrowing: true,
     content: { displayMarker: false },
