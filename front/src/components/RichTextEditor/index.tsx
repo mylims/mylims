@@ -115,7 +115,7 @@ export function RichTextEditor({
   );
 }
 
-function Element({ attributes, children, element }: RenderElementProps) {
+export function Element({ attributes, children, element }: RenderElementProps) {
   switch (element.type) {
     case 'bulleted-list':
       return (
@@ -154,7 +154,7 @@ function Element({ attributes, children, element }: RenderElementProps) {
   }
 }
 
-function Leaf({ attributes, children, leaf }: RenderLeafProps) {
+export function Leaf({ attributes, children, leaf }: RenderLeafProps) {
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }
