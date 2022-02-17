@@ -54,9 +54,9 @@ export default function WaferDetail() {
               </FieldDescription>
             </div>
           </div>
-          {/* <div className="col-span-2">TODO: attachments</div> */}
           <div className="row-span-2">
             <div className="text-xl font-semibold">Samples</div>
+            <div className="text-neutral-500">{sample.meta.size} diameter</div>
             <WaferDicing size={350} wafer={sample as Sample} />
             <div className="mt-2">
               <div className="text-xl font-semibold">Description</div>
