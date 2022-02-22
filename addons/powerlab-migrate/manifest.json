@@ -1,0 +1,5 @@
+{
+  "displayName": "POWERLAB migrate",
+  "description": "Commands for migrating PowerLab data",
+  "commands": "./Commands"
+}

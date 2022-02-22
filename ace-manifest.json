@@ -124,12 +124,6 @@
           "propertyName": "fileSyncOptionId",
           "type": "string",
           "description": "File sync option to use"
-        },
-        {
-          "name": "interval",
-          "propertyName": "interval",
-          "type": "number",
-          "description": "Interval, import runs one time execution if it is not provided."
         }
       ]
     },
@@ -174,14 +168,19 @@
           "propertyName": "fileSyncOptionId",
           "type": "string",
           "description": "File sync option to use"
-        },
-        {
-          "name": "interval",
-          "propertyName": "interval",
-          "type": "number",
-          "description": "Interval, sync runs one time execution if it is not provided."
         }
       ]
+    },
+    "powerlab:migrate": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "./addons/powerlab-migrate/Commands/Migrate",
+      "commandName": "powerlab:migrate",
+      "description": "Migrate from slims the samples",
+      "args": [],
+      "aliases": [],
+      "flags": []
     }
   },
   "aliases": {}
