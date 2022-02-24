@@ -13,6 +13,7 @@ import { GqlSampleInput } from 'App/graphql';
 
 import type FileModel from '../../../app/Models/File';
 import { Sample as SampleModel } from '../../../app/Models/Sample';
+import UserModel from '../../../app/Models/User';
 
 type SlimsForeignKey = Record<
   'displayValue' | 'value' | 'foreignTable',
@@ -60,15 +61,17 @@ export default class Migrate extends BaseCommand {
   private deps: {
     Sample: typeof SampleModel;
     File: typeof FileModel;
+    User: typeof UserModel;
     DataDrive: typeof DataDrive;
   };
 
   public async run() {
     const { Sample } = await import('../../../app/Models/Sample');
     const { default: File } = await import('../../../app/Models/File');
+    const { default: User } = await import('../../../app/Models/User');
     const { default: DataDrive } = await import('@ioc:Zakodium/DataDrive');
 
-    this.deps = { Sample, File, DataDrive };
+    this.deps = { Sample, File, User, DataDrive };
 
     await this.executeImporter();
   }
@@ -215,7 +218,7 @@ export default class Migrate extends BaseCommand {
       waferName,
       sampleName,
       subSampleName,
-      user,
+      createdBy,
       comment,
       type,
       id,
@@ -248,8 +251,8 @@ export default class Migrate extends BaseCommand {
           const fileName = headers['content-disposition']
             ?.split(';')[1]
             .split('=')[1]
-            .trim()
-            .replace(/"/g, '');
+            .replace(/"/g, '')
+            .trim();
           if (fileName) {
             return { fileName, buffer };
           } else {
@@ -272,13 +275,25 @@ export default class Migrate extends BaseCommand {
           }),
       );
 
+      // Searches user or creates it
+      let localUser = await this.deps.User.findBy(
+        'usernames',
+        createdBy as string,
+      );
+      if (!localUser) {
+        localUser = await this.deps.User.create({
+          usernames: [createdBy as string],
+          emails: [`${createdBy as string}@epfl.ch`],
+          role: 'MEMBER',
+        });
+      }
+
       // Format the sample
       const kind = (type as SlimsForeignKey).displayValue;
       const sampleInput: Omit<GqlSampleInput, 'kind' | 'sampleCode'> = {
-        userId: '60e4109845369858e8c84855',
-        project: 'migration',
-        labels: [],
-        meta: { ...meta, slimsId: id, legacyContent: epiStructure },
+        userId: localUser.id.toHexString(),
+        labels: ['migrated'],
+        meta: { ...meta, slimsId: id, legacyContent: epiStructure, createdBy },
         comment: comment as string,
         attachments,
       };
