@@ -54,15 +54,13 @@ export function EditableTable({
     setData(data.map((row) => ({ ...row, [name]: value || undefined })));
   };
 
-  const gridTemplate = `grid grid-cols-${columns.length + 1} gap-4`;
-
   return (
-    <div className="border-b border-neutral-200 shadow sm:rounded-lg">
+    <div className="border-b shadow border-neutral-200 sm:rounded-lg">
       <div className="overflow-x-auto overflow-y-visible align-middle ">
-        <table className="w-full divide-y divide-neutral-200">
+        <table className="w-full divide-y table-auto divide-neutral-200">
           <thead className="bg-neutral-50">
-            <tr className={gridTemplate}>
-              <th className="px-4 py-2 ">
+            <tr>
+              <th className="px-4 py-2 max-w-max">
                 <Input
                   label="Code"
                   name="prepend"
@@ -71,7 +69,7 @@ export function EditableTable({
                 />
               </th>
               {columns.map((column) => (
-                <th key={column.name} className="px-4 py-2">
+                <th key={column.name} className="px-4 py-2 max-w-max">
                   <Input
                     label={column.label}
                     name={column.name}
@@ -84,14 +82,14 @@ export function EditableTable({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-200 bg-white">
+          <tbody className="bg-white divide-y divide-neutral-200">
             {data.map((row, rowIndex) => (
-              <tr key={rowIndex} className={gridTemplate}>
-                <td className="px-4 py-2">{`${generalPrepend}${prepend}${
+              <tr key={rowIndex}>
+                <td className="px-4 py-2 max-w-max">{`${generalPrepend}${prepend}${
                   rowIndex + 1
                 }`}</td>
                 {columns.map((column) => (
-                  <td key={column.name} className="px-4 py-2">
+                  <td key={column.name} className="px-4 py-2 max-w-max">
                     <Input
                       label={column.label}
                       name={column.name}

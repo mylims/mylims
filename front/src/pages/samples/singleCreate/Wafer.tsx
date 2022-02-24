@@ -7,6 +7,7 @@ import WaferDiameterField from '@/components/WaferDiameterField';
 import {
   DropzoneFieldRHF,
   InputFieldRHF,
+  optionalNumber,
   optionalString,
   requiredObject,
   requiredString,
@@ -20,8 +21,13 @@ const waferCreateSchema = {
   heterostructure: optionalString(),
   substrate: optionalString(),
   supplier: optionalString(),
-  supplierNumber: optionalString(),
+  supplierWaferNumber: optionalString(),
+  placeOfGrowth: optionalString(),
   location: optionalString(),
+  locationComment: optionalString(),
+  rs: optionalNumber(),
+  ns: optionalNumber(),
+  mobility: optionalNumber(),
 };
 
 export default function WaferCreate() {
@@ -33,7 +39,7 @@ export default function WaferCreate() {
       metaSchema={waferCreateSchema}
       defaultCreation={defaultCreation}
     >
-      <div className="my-2 flex flex-col md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
+      <div className="flex flex-col my-2 md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
         <div className="col-span-2">
           <div
             className="grid gap-4"
@@ -43,18 +49,29 @@ export default function WaferCreate() {
           >
             <InputFieldRHF name="sampleCode.0" label="Wafer name" required />
             <InputFieldRHF name="project" label="Project" />
-            <InputFieldRHF name="title" label="Title" />
             <InputFieldRHF name="comment" label="Comment" />
             <MultiSelect name="labels" label="Labels" />
             <InputFieldRHF name="meta.purpose" label="Purpose" />
-            <InputFieldRHF name="meta.epiStructure" label="EPI structure" />
+            <InputFieldRHF name="meta.heterostructure" label="EPI structure" />
             <InputFieldRHF name="meta.substrate" label="Substrate" />
             <InputFieldRHF name="meta.supplier" label="Supplier" />
             <InputFieldRHF
-              name="meta.supplierNumber"
+              name="meta.supplierWaferNumber"
               label="Supplier wafer number"
             />
+            <InputFieldRHF name="meta.placeOfGrowth" label="Place of growth" />
             <InputFieldRHF name="meta.location" label="Location" />
+            <InputFieldRHF
+              name="meta.locationComment"
+              label="Location comment"
+            />
+            <InputFieldRHF name="meta.rs" label="Rs (Ohm/sq)" type="number" />
+            <InputFieldRHF name="meta.ns" label="Ns (e13/cm^2)" type="number" />
+            <InputFieldRHF
+              name="meta.mobility"
+              label="Mobility (cm^2/Vs)"
+              type="number"
+            />
           </div>
         </div>
         <div className="col-span-2">

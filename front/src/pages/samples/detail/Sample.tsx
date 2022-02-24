@@ -4,12 +4,19 @@ import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import BaseDetail from '@/pages/samples/detail/Default';
 import { Badge, Color, BadgeVariant } from '@/components/tailwind-ui';
+import { formatDate } from '@/utils/formatFields';
 
 export default function SampleDetail() {
   return (
     <BaseDetail>
       {(sample) => (
         <div className="grid grid-cols-3 gap-4">
+          <FieldDescription title="Sample name">
+            {sample.sampleCode.join('_')}
+          </FieldDescription>
+          <FieldDescription title="Creation date">
+            {formatDate(sample.createdAt)}
+          </FieldDescription>
           {sample.meta.reserved ? (
             <Badge
               label="Reserved"
