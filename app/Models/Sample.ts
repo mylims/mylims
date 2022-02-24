@@ -47,6 +47,7 @@ export class Sample extends BaseModel {
       date: new Date(),
     }));
     sample.sampleCode = sampleInput.sampleCode;
+    sample.comment = sampleInput.comment;
     sample.description = sampleInput.description;
     sample.kind = sampleInput.kind;
     sample.labels = sampleInput.labels;
