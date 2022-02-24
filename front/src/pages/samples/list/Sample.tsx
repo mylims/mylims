@@ -10,6 +10,8 @@ import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import { Table as TableQuery } from '@/components/TableQuery';
 import {
+  Badge,
+  BadgeVariant,
   Button,
   Card,
   Color,
@@ -51,10 +53,22 @@ export default function SampleList() {
           }
         >
           <TableQuery.TextColumn
-            title="heterostructure"
+            title="EPI structure"
             dataPath="meta.heterostructure"
             disableSearch
           />
+          <TableQuery.TextColumn
+            title="Status"
+            dataPath="meta.sampleStatus"
+            disableSearch
+          >
+            {(row) => {
+              const {
+                meta: { sampleStatus },
+              } = row as Sample;
+              return sampleStatus ?? 'Unprocessed';
+            }}
+          </TableQuery.TextColumn>
         </SamplesList>
       </div>
       <Card>
@@ -95,7 +109,21 @@ export default function SampleList() {
                   </Button>
                 </Link>
               )}
-
+              {state.meta.reserved ? (
+                <Badge
+                  label="Reserved"
+                  color={Color.success}
+                  variant={BadgeVariant.COLORED_BACKGROUND}
+                  dot
+                />
+              ) : (
+                <Badge
+                  label="Not reserved"
+                  color={Color.danger}
+                  variant={BadgeVariant.COLORED_BACKGROUND}
+                  dot
+                />
+              )}
               <FieldDescription title="Wafer name">
                 {state.sampleCode[0]}
               </FieldDescription>
@@ -108,11 +136,19 @@ export default function SampleList() {
               <FieldDescription title="Purpose">
                 {state.meta.purpose ?? '-'}
               </FieldDescription>
+              {state.meta.labelPurpose ? (
+                <FieldDescription title="Label purpose">
+                  {state.meta.labelPurpose}
+                </FieldDescription>
+              ) : null}
               <FieldDescription title="Description">
                 {state.description ?? '-'}
               </FieldDescription>
-              <FieldDescription title="Heterostructure">
+              <FieldDescription title="EPI structure">
                 {state.meta.heterostructure ?? '-'}
+              </FieldDescription>
+              <FieldDescription title="Status">
+                {state.meta.sampleStatus ?? 'Unprocessed'}
               </FieldDescription>
             </div>
           )}

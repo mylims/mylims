@@ -23,33 +23,42 @@ export function SimpleWaferDicing({
     // do nothing
   },
 }: SimpleWaferDicingProps) {
-  const { value, units } = fromTextToValue(diameter);
-  let rows: number | undefined;
-  let columns: number | undefined;
-  let borderError: number | undefined;
-  if (value === 2) {
-    rows = 4;
-    columns = 4;
-    borderError = 0.1;
+  try {
+    const { value, units } = fromTextToValue(diameter);
+    let rows: number | undefined;
+    let columns: number | undefined;
+    let borderError: number | undefined;
+    if (value === 2) {
+      rows = 4;
+      columns = 4;
+      borderError = 0.1;
+    }
+    if (value === 4) {
+      columns = 7;
+    }
+    return (
+      <Wafer
+        size={size}
+        rows={rows}
+        columns={columns}
+        borderError={borderError}
+        diameter={{ value, units: units || 'inch' }}
+        chipHeight={{ value: 2, units: 'cm' }}
+        chipWidth={{ value: 1.8, units: 'cm' }}
+        textStyle={{ fontSize: '0.7em' }}
+        prepend="A"
+        pickedItems={pickedItems}
+        onSelect={onSelect}
+      />
+    );
+  } catch (e) {
+    return (
+      <div className="p-3 rounded-md bg-danger-100 text-danger-400">
+        Unknown diameter template for{' '}
+        <span className="font-bold">{diameter}</span>
+      </div>
+    );
   }
-  if (value === 4) {
-    columns = 7;
-  }
-  return (
-    <Wafer
-      size={size}
-      rows={rows}
-      columns={columns}
-      borderError={borderError}
-      diameter={{ value, units: units || 'inch' }}
-      chipHeight={{ value: 2, units: 'cm' }}
-      chipWidth={{ value: 1.8, units: 'cm' }}
-      textStyle={{ fontSize: '0.7em' }}
-      prepend="A"
-      pickedItems={pickedItems}
-      onSelect={onSelect}
-    />
-  );
 }
 export default function WaferDicing({ wafer, size }: WaferDicingProps) {
   const navigate = useNavigate();
@@ -58,9 +67,11 @@ export default function WaferDicing({ wafer, size }: WaferDicingProps) {
       size={size}
       diameter={wafer.meta.size ?? '2 inch'}
       pickedItems={
-        wafer.children?.map(({ sampleCode }) => ({
-          index: sampleCode[1],
-        })) ?? []
+        wafer.children
+          ?.filter(({ meta: { reserved } }) => !!reserved)
+          .map(({ sampleCode }) => ({
+            index: sampleCode[1],
+          })) ?? []
       }
       onSelect={(_, label, picked) => {
         if (picked) {
@@ -70,10 +81,6 @@ export default function WaferDicing({ wafer, size }: WaferDicingProps) {
           if (child) {
             navigate(`/sample/detail/sample/${child.id}`);
           }
-        } else if (label) {
-          navigate(
-            `/sample/singleCreate/sample?parent=${wafer.id}&code=${label}`,
-          );
         }
       }}
     />
