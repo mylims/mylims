@@ -58,21 +58,18 @@ export default function WaferList() {
             disableSearch
           >
             {(row) => {
-              const { children, meta } = row as Sample;
-              let size = '?';
-              if (meta?.size === '2' || meta?.size === '2 inch') {
-                size = '4';
-              } else if (meta?.size === '4' || meta?.size === '4 inch') {
-                size = '16';
-              } else if (meta?.size === '6' || meta?.size === '6 inch') {
-                size = '38';
-              }
-              return `${children?.length ?? 0} / ${size}`;
+              const { children } = row as Sample;
+              if (!children) return '0 / ?';
+              const size = children.reduce(
+                (acc, { meta }) => (acc + meta.reserved ? 1 : 0),
+                0,
+              );
+              return `${size} / ${children.length}`;
             }}
           </TableQuery.TextColumn>
           <TableQuery.TextColumn
             title="EPI structure"
-            dataPath="meta.epiStructure"
+            dataPath="meta.heterostructure"
             disableSearch
           />
           <TableQuery.TextColumn
@@ -168,11 +165,26 @@ export default function WaferList() {
                     {state.comment ?? '-'}
                   </FieldDescription>
                   <FieldDescription title="EPI structure">
-                    {state.meta.epiStructure ?? '-'}
+                    {state.meta.heterostructure ?? '-'}
                   </FieldDescription>
                   <FieldDescription title="Substrate">
                     {state.meta.substrate ?? '-'}
                   </FieldDescription>
+                  {state.meta.rs ? (
+                    <FieldDescription title="Rs (Ohm/sq)">
+                      {state.meta.rs}
+                    </FieldDescription>
+                  ) : null}
+                  {state.meta.ns ? (
+                    <FieldDescription title="Ns (e13/cm^2)">
+                      {state.meta.ns.toFixed(4)}
+                    </FieldDescription>
+                  ) : null}
+                  {state.meta.mobility ? (
+                    <FieldDescription title="Mobility (cm^2/Vs)">
+                      {state.meta.mobility}
+                    </FieldDescription>
+                  ) : null}
                 </div>
               </div>
             )}
