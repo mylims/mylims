@@ -18,14 +18,8 @@ export default class CreateUser extends BaseCommand {
     const email = await this.prompt.ask('Enter email');
     const password = await this.prompt.secure('Choose account password');
     const userType = await this.prompt.choice('Select account type', [
-      {
-        name: 'ADMIN',
-        message: 'Admin (Complete access)',
-      },
-      {
-        name: 'MEMBER',
-        message: 'Member',
-      },
+      { name: 'ADMIN', message: 'Admin (Complete access)' },
+      { name: 'MEMBER', message: 'Member' },
     ]);
 
     const credential = new Credential();
@@ -43,9 +37,7 @@ export default class CreateUser extends BaseCommand {
     user.firstName = firstname;
     user.lastName = lastname;
     user.role = userType;
-    user.authMethods = {
-      local: credential.id.toHexString(),
-    };
+    user.authMethods = { local: credential.id.toHexString() };
     try {
       await user.save();
     } catch (err) {
