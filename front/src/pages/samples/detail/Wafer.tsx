@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
@@ -6,6 +7,8 @@ import WaferDicing from '@/components/WaferDicing';
 import { Sample } from '@/generated/graphql';
 import SampleDetail from '@/pages/samples/detail/Default';
 import { RichTextSerializer } from '@/components/RichTextSerializer';
+import { Button, Variant, Color, Size } from '@/components/tailwind-ui';
+import { formatDate } from '@/utils/formatFields';
 
 export default function WaferDetail() {
   return (
@@ -20,7 +23,10 @@ export default function WaferDetail() {
               }}
             >
               <FieldDescription title="Wafer name">
-                {sample.sampleCode.join('_')}
+                {sample.sampleCode[0]}
+              </FieldDescription>
+              <FieldDescription title="Creation date">
+                {formatDate(sample.createdAt)}
               </FieldDescription>
               <FieldDescription title="Project">
                 {sample.project ?? '-'}
@@ -76,7 +82,21 @@ export default function WaferDetail() {
             </div>
           </div>
           <div className="row-span-2">
-            <div className="text-xl font-semibold">Samples</div>
+            <div className="flex flex-row gap-4">
+              <div className="text-xl font-semibold">Samples</div>
+              {!sample.children || sample.children.length === 0 ? (
+                <Link to={`/sample/multiCreate/sample?parent=${sample.id}`}>
+                  <Button
+                    className="mb-4"
+                    variant={Variant.secondary}
+                    color={Color.success}
+                    size={Size.small}
+                  >
+                    + Add samples
+                  </Button>
+                </Link>
+              ) : null}
+            </div>
             <div className="text-neutral-500">{sample.meta.size} diameter</div>
             <WaferDicing size={350} wafer={sample as Sample} />
             {sample.description ? (

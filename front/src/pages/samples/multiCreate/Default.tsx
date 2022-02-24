@@ -49,7 +49,7 @@ export function MultiCreate() {
     useCreateMultipleSamplesMutation();
 
   if (queryLoading || creationLoading) {
-    return <Spinner className="h-10 w-10 text-danger-500" />;
+    return <Spinner className="w-10 h-10 text-danger-500" />;
   }
   if (queryError || !data || localError || creationError || !userId) {
     return (
@@ -70,7 +70,7 @@ export function MultiCreate() {
   const diameterRows: number | undefined = DIAMETERS[diameter];
   return (
     <div>
-      <div className="mb-2 flex flex-row justify-between">
+      <div className="flex flex-row justify-between mb-2">
         <div className="flex flex-row gap-4">
           <h2 className="text-xl font-bold leading-tight text-neutral-900">
             Create samples from wafer {sampleCode.join('_')}
@@ -132,7 +132,8 @@ export function MultiCreate() {
         columns={[
           { name: 'project', label: 'Project' },
           { name: 'comment', label: 'Comment' },
-          { name: 'meta.heterostructure', label: 'Heterostructure' },
+          { name: 'meta.purpose', label: 'Purpose' },
+          { name: 'meta.heterostructure', label: 'EPI structure' },
         ]}
         onChange={(data) => setTable(data)}
       />
