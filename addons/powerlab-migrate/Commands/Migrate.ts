@@ -274,7 +274,7 @@ export default class Migrate extends BaseCommand {
 
       // Format the sample
       const kind = (type as SlimsForeignKey).displayValue;
-      const sampleInput = {
+      const sampleInput: Omit<GqlSampleInput, 'kind' | 'sampleCode'> = {
         userId: '60e4109845369858e8c84855',
         project: 'migration',
         labels: [],
