@@ -218,6 +218,7 @@ export default class Migrate extends BaseCommand {
       waferName,
       sampleName,
       subSampleName,
+      completeName,
       createdBy,
       comment,
       type,
@@ -293,18 +294,27 @@ export default class Migrate extends BaseCommand {
       const sampleInput: Omit<GqlSampleInput, 'kind' | 'sampleCode'> = {
         userId: localUser.id.toHexString(),
         labels: ['migrated'],
-        meta: { ...meta, slimsId: id, legacyContent: epiStructure, createdBy },
+        meta: {
+          ...meta,
+          slimsId: id,
+          legacyContent: epiStructure,
+          createdBy,
+          completeName,
+        },
         comment: comment as string,
         attachments,
       };
 
       // Chooses the kind of sample
+      const possibleCodes = completeName
+        ? (completeName as string).split('_')
+        : [];
       switch (kind) {
         case 'Wafer': {
           wafers.push({
             ...sampleInput,
             kind: 'wafer',
-            sampleCode: [waferName as string],
+            sampleCode: [(waferName as string) ?? possibleCodes[0]],
           });
           break;
         }
@@ -312,7 +322,10 @@ export default class Migrate extends BaseCommand {
           samples.push({
             ...sampleInput,
             kind: 'sample',
-            sampleCode: [waferName as string, sampleName as string],
+            sampleCode: [
+              (waferName as string) ?? possibleCodes[0],
+              (sampleName as string) ?? possibleCodes[1],
+            ],
           });
           break;
         }
@@ -321,9 +334,9 @@ export default class Migrate extends BaseCommand {
             ...sampleInput,
             kind: 'device',
             sampleCode: [
-              waferName as string,
-              sampleName as string,
-              subSampleName as string,
+              (waferName as string) ?? possibleCodes[0],
+              (sampleName as string) ?? possibleCodes[1],
+              (subSampleName as string) ?? possibleCodes[2],
             ],
           });
           break;
