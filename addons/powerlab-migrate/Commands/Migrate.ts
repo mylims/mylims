@@ -13,6 +13,7 @@ import { GqlSampleInput } from 'App/graphql';
 
 import type FileModel from '../../../app/Models/File';
 import { Sample as SampleModel } from '../../../app/Models/Sample';
+import type SlateImageModel from '../../../app/Models/SlateImage';
 import UserModel from '../../../app/Models/User';
 
 type SlimsForeignKey = Record<
@@ -60,6 +61,7 @@ export default class Migrate extends BaseCommand {
 
   private deps: {
     Sample: typeof SampleModel;
+    SlateImage: typeof SlateImageModel;
     File: typeof FileModel;
     User: typeof UserModel;
     DataDrive: typeof DataDrive;
@@ -68,10 +70,13 @@ export default class Migrate extends BaseCommand {
   public async run() {
     const { Sample } = await import('../../../app/Models/Sample');
     const { default: File } = await import('../../../app/Models/File');
+    const { default: SlateImage } = await import(
+      '../../../app/Models/SlateImage'
+    );
     const { default: User } = await import('../../../app/Models/User');
     const { default: DataDrive } = await import('@ioc:Zakodium/DataDrive');
 
-    this.deps = { Sample, File, User, DataDrive };
+    this.deps = { Sample, File, User, SlateImage, DataDrive };
 
     await this.executeImporter();
   }
@@ -238,6 +243,9 @@ export default class Migrate extends BaseCommand {
         .get(`${this.baseUrl}/attachment/content/${id as string}`, options)
         .json<{ entities: SlimsEntity[] }>();
 
+      const hasEmbeddedImages =
+        /<img/.exec((epiStructure as string) ?? '') !== null;
+
       // Get the files from slims
       interface AttachmentItem {
         fileName: string;
@@ -267,7 +275,12 @@ export default class Migrate extends BaseCommand {
           .filter((id): id is AttachmentItem => id !== null)
           .map(async ({ fileName, buffer }) => {
             const driveFile = await drive.put(fileName, buffer);
-            const { id } = await this.deps.File.create({
+            const Collection =
+              hasEmbeddedImages &&
+              (fileName.endsWith('.png') || fileName.endsWith('.jpg'))
+                ? this.deps.SlateImage
+                : this.deps.File;
+            const { id } = await Collection.create({
               _id: driveFile.id,
               filename: driveFile.filename,
               size: driveFile.size,
