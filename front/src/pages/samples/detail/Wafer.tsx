@@ -10,11 +10,14 @@ import { RichTextSerializer } from '@/components/RichTextSerializer';
 import { Button, Variant, Color, Size } from '@/components/tailwind-ui';
 import { formatDate } from '@/utils/formatFields';
 
+import { API_URL } from '../../../../env';
+import AttachmentsTable from '@/components/AttachmentsTable';
+
 export default function WaferDetail() {
   return (
     <SampleDetail>
       {(sample) => (
-        <div className="flex flex-col my-2 md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
+        <div className="my-2 flex flex-col md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
           <div className="col-span-2">
             <div
               className="grid gap-4"
@@ -81,6 +84,12 @@ export default function WaferDetail() {
               ) : null}
             </div>
           </div>
+          <div className="col-span-2">
+            <div className="text-xl font-semibold">Attachments</div>
+            <div className="text-gray-900 mt-1 text-sm sm:col-span-2 sm:mt-0">
+              <AttachmentsTable attachments={sample.attachments} />
+            </div>
+          </div>
           <div className="row-span-2">
             <div className="flex flex-row gap-4">
               <div className="text-xl font-semibold">Samples</div>
@@ -103,7 +112,7 @@ export default function WaferDetail() {
               <div className="mt-2">
                 <div className="text-xl font-semibold">Description</div>
                 <RichTextSerializer
-                  className="max-w-full max-h-full px-3 py-2 overflow-auto border rounded-md shadow-sm border-neutral-300 ring-1 ring-neutral-300 md:max-w-xl"
+                  className="max-h-full max-w-full overflow-auto rounded-md border border-neutral-300 px-3 py-2 shadow-sm ring-1 ring-neutral-300 md:max-w-xl"
                   value={sample.description}
                   fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}
                 />
