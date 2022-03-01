@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "dotenv": "^16.0.0",
-    "got": "^11.8.3"
+    "got": "^11.8.3",
+    "node-html-parser": "^5.2.0"
+  },
+  "devDependencies": {
+    "slate": "^0.73.0"
   }
 }

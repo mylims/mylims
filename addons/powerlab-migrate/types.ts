@@ -1,9 +1,6 @@
-// This example is for an Editor with `ReactEditor` and `HistoryEditor`
 import { BaseEditor } from 'slate';
-import { HistoryEditor } from 'slate-history';
-import { ReactEditor } from 'slate-react';
 
-export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
+export type CustomEditor = BaseEditor;
 
 interface BaseElement<T> {
   type: T;
