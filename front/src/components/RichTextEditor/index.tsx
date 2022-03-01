@@ -21,6 +21,7 @@ import {
 
 import { BlockButton } from './header/BlockButton';
 import { MarkButton, MarkFormat, toggleMark } from './header/MarkButton';
+import { Image, ImageContext } from './Image';
 
 const HOTKEYS: Record<string, MarkFormat> = {
   'mod+b': 'bold',
@@ -41,6 +42,7 @@ export interface RichTextEditorProps {
   error?: string;
   help?: string;
   valid?: boolean | string;
+  fetchImage?: (uuid: string) => string;
 }
 export function RichTextEditor({
   value: initialValue,
@@ -55,6 +57,7 @@ export function RichTextEditor({
   error,
   valid,
   help,
+  fetchImage,
 }: RichTextEditorProps) {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
@@ -79,36 +82,38 @@ export function RichTextEditor({
           },
         )}
       >
-        <Slate
-          editor={editor}
-          value={value}
-          onChange={(value) => onChange(value)}
-        >
-          <div className="mb-2 grid grid-cols-8 gap-2 border-b-2 border-neutral-300 py-2">
-            <MarkButton format="bold" icon="formatBold" />
-            <MarkButton format="italic" icon="formatItalic" />
-            <MarkButton format="underline" icon="formatUnderlined" />
-            <BlockButton format="heading-one" icon="looksOne" />
-            <BlockButton format="heading-two" icon="looksTwo" />
-            <BlockButton format="numbered-list" icon="formatListNumbered" />
-            <BlockButton format="bulleted-list" icon="formatListBulleted" />
-          </div>
-          <Editable
-            renderElement={renderElement}
-            renderLeaf={renderLeaf}
-            placeholder="Enter some text…"
-            spellCheck
-            onKeyDown={(event) => {
-              for (const hotkey in HOTKEYS) {
-                if (isHotkey(hotkey, event as any)) {
-                  event.preventDefault();
-                  const mark = HOTKEYS[hotkey];
-                  toggleMark(editor, mark);
+        <ImageContext.Provider value={{ fetchImage }}>
+          <Slate
+            editor={editor}
+            value={value}
+            onChange={(value) => onChange(value)}
+          >
+            <div className="grid grid-cols-8 gap-2 py-2 mb-2 border-b-2 border-neutral-300">
+              <MarkButton format="bold" icon="formatBold" />
+              <MarkButton format="italic" icon="formatItalic" />
+              <MarkButton format="underline" icon="formatUnderlined" />
+              <BlockButton format="heading-one" icon="looksOne" />
+              <BlockButton format="heading-two" icon="looksTwo" />
+              <BlockButton format="numbered-list" icon="formatListNumbered" />
+              <BlockButton format="bulleted-list" icon="formatListBulleted" />
+            </div>
+            <Editable
+              renderElement={renderElement}
+              renderLeaf={renderLeaf}
+              placeholder="Enter some text…"
+              spellCheck
+              onKeyDown={(event) => {
+                for (const hotkey in HOTKEYS) {
+                  if (isHotkey(hotkey, event as any)) {
+                    event.preventDefault();
+                    const mark = HOTKEYS[hotkey];
+                    toggleMark(editor, mark);
+                  }
                 }
-              }
-            }}
-          />
-        </Slate>
+              }}
+            />
+          </Slate>
+        </ImageContext.Provider>
       </div>
       <Help error={error} valid={valid} help={help} />
     </div>
@@ -119,13 +124,13 @@ export function Element({ attributes, children, element }: RenderElementProps) {
   switch (element.type) {
     case 'bulleted-list':
       return (
-        <ul className="list-inside list-disc" {...attributes}>
+        <ul className="my-2 list-disc list-inside" {...attributes}>
           {children}
         </ul>
       );
     case 'numbered-list':
       return (
-        <ol className="list-inside list-decimal" {...attributes}>
+        <ol className="my-2 list-decimal list-inside" {...attributes}>
           {children}
         </ol>
       );
@@ -149,6 +154,8 @@ export function Element({ attributes, children, element }: RenderElementProps) {
       );
     case 'list-item':
       return <li {...attributes}>{children}</li>;
+    case 'image':
+      return <Image uuid={element.uuid} alt={element.alt} />;
     default:
       return <p {...attributes}>{children}</p>;
   }

@@ -61,6 +61,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/fetch/:id', 'FileController.fetch');
+  Route.get('/fetchImage/:uuid', 'FileController.fetchImage');
   Route.post('/create', 'FileController.create');
 }).prefix('/files');
 

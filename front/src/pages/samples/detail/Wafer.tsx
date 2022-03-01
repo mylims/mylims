@@ -99,23 +99,13 @@ export default function WaferDetail() {
             </div>
             <div className="text-neutral-500">{sample.meta.size} diameter</div>
             <WaferDicing size={350} wafer={sample as Sample} />
-            {sample.meta.legacyContent ? (
-              <div>
-                <div className="text-xl font-semibold">Migrated content</div>
-                <div
-                  className="max-w-full px-3 py-2 overflow-auto border rounded-md shadow-sm max-h-60 border-neutral-300 ring-1 ring-neutral-300 md:max-w-lg"
-                  dangerouslySetInnerHTML={{
-                    __html: sample.meta.legacyContent,
-                  }}
-                />
-              </div>
-            ) : null}
             {sample.description ? (
               <div className="mt-2">
                 <div className="text-xl font-semibold">Description</div>
                 <RichTextSerializer
-                  className="px-3 py-2 border rounded-md shadow-sm max-w-7xl border-neutral-300 ring-1 ring-neutral-300"
+                  className="max-w-full max-h-full px-3 py-2 overflow-auto border rounded-md shadow-sm border-neutral-300 ring-1 ring-neutral-300 md:max-w-xl"
                   value={sample.description}
+                  fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}
                 />
               </div>
             ) : null}
