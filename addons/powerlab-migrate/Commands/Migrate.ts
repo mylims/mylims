@@ -15,6 +15,7 @@ import type FileModel from '../../../app/Models/File';
 import { Sample as SampleModel } from '../../../app/Models/Sample';
 import type SlateImageModel from '../../../app/Models/SlateImage';
 import UserModel from '../../../app/Models/User';
+import { toSlate } from '../deserialize';
 
 type SlimsForeignKey = Record<
   'displayValue' | 'value' | 'foreignTable',
@@ -270,24 +271,33 @@ export default class Migrate extends BaseCommand {
         }),
       );
       // Store the attachments in the database
-      const attachments = await Promise.all(
-        attachmentIds
-          .filter((id): id is AttachmentItem => id !== null)
-          .map(async ({ fileName, buffer }) => {
-            const driveFile = await drive.put(fileName, buffer);
-            const Collection =
-              hasEmbeddedImages &&
-              (fileName.endsWith('.png') || fileName.endsWith('.jpg'))
+      let slateImage: undefined | string;
+      const attachments = (
+        await Promise.all(
+          attachmentIds
+            .filter((id): id is AttachmentItem => id !== null)
+            .map(async ({ fileName, buffer }) => {
+              const driveFile = await drive.put(fileName, buffer);
+              const isSlateImage =
+                hasEmbeddedImages &&
+                (fileName.endsWith('.png') || fileName.endsWith('.jpg'));
+              const Collection = isSlateImage
                 ? this.deps.SlateImage
                 : this.deps.File;
-            const { id } = await Collection.create({
-              _id: driveFile.id,
-              filename: driveFile.filename,
-              size: driveFile.size,
-            });
-            return id;
-          }),
-      );
+              const { id } = await Collection.create({
+                _id: driveFile.id,
+                filename: driveFile.filename,
+                size: driveFile.size,
+              });
+
+              if (isSlateImage) {
+                slateImage = id;
+                return null;
+              }
+              return id;
+            }),
+        )
+      ).filter((id): id is string => id !== null);
 
       // Searches user or creates it
       let localUser = await this.deps.User.findBy(
@@ -310,11 +320,14 @@ export default class Migrate extends BaseCommand {
         meta: {
           ...meta,
           slimsId: id,
-          legacyContent: epiStructure,
+          legacyContent: epiStructure ?? undefined,
           createdBy,
           completeName,
         },
         comment: comment as string,
+        description: epiStructure
+          ? toSlate(epiStructure as string, slateImage)
+          : undefined,
         attachments,
       };
 
