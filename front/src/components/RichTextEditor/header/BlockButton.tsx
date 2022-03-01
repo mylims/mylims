@@ -62,7 +62,7 @@ function toggleBlock(editor: CustomEditor, format: BlockFormat) {
   };
   Transforms.setNodes<SlateElement>(editor, newProperties);
 
-  if (!isActive && isList) {
+  if (!isActive && isList && format !== 'image') {
     const block = { type: format, children: [] };
     Transforms.wrapNodes(editor, block);
   }
