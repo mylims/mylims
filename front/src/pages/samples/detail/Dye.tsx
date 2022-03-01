@@ -3,18 +3,27 @@ import React from 'react';
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import BaseDetail from '@/pages/samples/detail/Default';
+import AttachmentsTable from '@/components/AttachmentsTable';
 
 export default function DyeDetail() {
   return (
     <BaseDetail>
       {(sample) => (
-        <div className="grid grid-cols-3 gap-4">
-          <FieldDescription title="Name">
-            {sample.sampleCode.join('_')}
-          </FieldDescription>
-          <FieldDescription title="Comment">
-            {sample.comment ?? '-'}
-          </FieldDescription>
+        <div>
+          <div className="grid grid-cols-3 gap-4">
+            <FieldDescription title="Name">
+              {sample.sampleCode.join('_')}
+            </FieldDescription>
+            <FieldDescription title="Comment">
+              {sample.comment ?? '-'}
+            </FieldDescription>
+          </div>
+          <div>
+            <div className="text-xl font-semibold">Attachments</div>
+            <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <AttachmentsTable attachments={sample.attachments} />
+            </div>
+          </div>
         </div>
       )}
     </BaseDetail>
