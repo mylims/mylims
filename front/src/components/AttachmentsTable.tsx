@@ -1,7 +1,8 @@
-import { SampleQuery } from '@/generated/graphql';
-import { formatDate } from '@/utils/formatFields';
 import { PaperClipIcon } from '@heroicons/react/outline';
 import React from 'react';
+
+import { SampleQuery } from '@/generated/graphql';
+import { formatDate } from '@/utils/formatFields';
 
 interface AttachmentsTableProps {
   attachments: SampleQuery['sample']['attachments'];

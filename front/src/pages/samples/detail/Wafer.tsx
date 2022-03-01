@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import AttachmentsTable from '@/components/AttachmentsTable';
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
+import { RichTextSerializer } from '@/components/RichTextSerializer';
 import WaferDicing from '@/components/WaferDicing';
+import { Button, Variant, Color, Size } from '@/components/tailwind-ui';
 import { Sample } from '@/generated/graphql';
 import SampleDetail from '@/pages/samples/detail/Default';
-import { RichTextSerializer } from '@/components/RichTextSerializer';
-import { Button, Variant, Color, Size } from '@/components/tailwind-ui';
 import { formatDate } from '@/utils/formatFields';
 
 import { API_URL } from '../../../../env';
-import AttachmentsTable from '@/components/AttachmentsTable';
 
 export default function WaferDetail() {
   return (
