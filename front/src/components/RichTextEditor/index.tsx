@@ -19,9 +19,9 @@ import {
   Label,
 } from '@/components/tailwind-ui/forms/basic/common';
 
+import { Image, ImageContext } from './Image';
 import { BlockButton } from './header/BlockButton';
 import { MarkButton, MarkFormat, toggleMark } from './header/MarkButton';
-import { Image, ImageContext } from './Image';
 
 const HOTKEYS: Record<string, MarkFormat> = {
   'mod+b': 'bold',

@@ -1,11 +1,11 @@
 import React from 'react';
 
+import AttachmentsTable from '@/components/AttachmentsTable';
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
-import BaseDetail from '@/pages/samples/detail/Default';
 import { Badge, Color, BadgeVariant } from '@/components/tailwind-ui';
+import BaseDetail from '@/pages/samples/detail/Default';
 import { formatDate } from '@/utils/formatFields';
-import AttachmentsTable from '@/components/AttachmentsTable';
 
 export default function SampleDetail() {
   return (
