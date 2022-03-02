@@ -13,7 +13,7 @@ export default function AttachmentsTable({
   return (
     <ul
       role="list"
-      className="border divide-y rounded-md divide-neutral-300 border-neutral-300"
+      className="divide-y divide-neutral-300 rounded-md border border-neutral-300"
     >
       {attachments.length === 0 && (
         <li className="flex items-center p-4 text-sm text-neutral-400">
@@ -25,15 +25,15 @@ export default function AttachmentsTable({
           key={id}
           className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
         >
-          <div className="flex items-center flex-1 w-0" title={filename}>
+          <div className="flex w-0 flex-1 items-center" title={filename}>
             <PaperClipIcon
-              className="flex-shrink-0 w-5 h-5 text-neutral-400"
+              className="h-5 w-5 flex-shrink-0 text-neutral-400"
               aria-hidden="true"
             />
-            <span className="flex-1 w-0 ml-2 truncate">{filename}</span>
+            <span className="ml-2 w-0 flex-1 truncate">{filename}</span>
           </div>
           <div>{formatDate(date)}</div>
-          <div className="flex-shrink-0 ml-4">
+          <div className="ml-4 flex-shrink-0">
             <a
               href={downloadUrl}
               className="font-medium text-primary-600 hover:text-primary-500"
