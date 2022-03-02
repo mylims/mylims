@@ -53,7 +53,7 @@ export function SimpleWaferDicing({
     );
   } catch (e) {
     return (
-      <div className="p-3 rounded-md bg-danger-100 text-danger-400">
+      <div className="rounded-md bg-danger-100 p-3 text-danger-400">
         Unknown diameter template for{' '}
         <span className="font-bold">{diameter}</span>
       </div>

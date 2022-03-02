@@ -24,7 +24,7 @@ export default function DeviceDetail() {
           </div>
           <div>
             <div className="text-xl font-semibold">Attachments</div>
-            <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <div className="text-gray-900 mt-1 text-sm sm:col-span-2 sm:mt-0">
               <AttachmentsTable attachments={sample.attachments} />
             </div>
           </div>

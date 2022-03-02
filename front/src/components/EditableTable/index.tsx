@@ -55,12 +55,12 @@ export function EditableTable({
   };
 
   return (
-    <div className="border-b shadow border-neutral-200 sm:rounded-lg">
+    <div className="border-b border-neutral-200 shadow sm:rounded-lg">
       <div className="overflow-x-auto overflow-y-visible align-middle ">
-        <table className="w-full divide-y table-auto divide-neutral-200">
+        <table className="w-full table-auto divide-y divide-neutral-200">
           <thead className="bg-neutral-50">
             <tr>
-              <th className="px-4 py-2 max-w-max">
+              <th className="max-w-max px-4 py-2">
                 <Input
                   label="Code"
                   name="prepend"
@@ -69,7 +69,7 @@ export function EditableTable({
                 />
               </th>
               {columns.map((column) => (
-                <th key={column.name} className="px-4 py-2 max-w-max">
+                <th key={column.name} className="max-w-max px-4 py-2">
                   <Input
                     label={column.label}
                     name={column.name}
@@ -82,14 +82,14 @@ export function EditableTable({
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200 bg-white">
             {data.map((row, rowIndex) => (
               <tr key={rowIndex}>
-                <td className="px-4 py-2 max-w-max">{`${generalPrepend}${prepend}${
+                <td className="max-w-max px-4 py-2">{`${generalPrepend}${prepend}${
                   rowIndex + 1
                 }`}</td>
                 {columns.map((column) => (
-                  <td key={column.name} className="px-4 py-2 max-w-max">
+                  <td key={column.name} className="max-w-max px-4 py-2">
                     <Input
                       label={column.label}
                       name={column.name}
