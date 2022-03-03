@@ -67,7 +67,7 @@ export function deserialize(
     }
     case 'img': {
       if (!imageUuid) return null;
-      return { type: 'image', uuid: imageUuid, children: [] };
+      return { type: 'image', uuid: imageUuid, children: [{ text: '' }] };
     }
     default: {
       // It's missing the anchor tag, so we'll just return the text.
