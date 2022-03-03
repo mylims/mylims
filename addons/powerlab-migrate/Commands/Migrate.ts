@@ -87,6 +87,7 @@ export default class Migrate extends BaseCommand {
    */
   private async executeImporter() {
     this.logger.info('Starting migration');
+    const startTime = process.hrtime.bigint();
 
     // Pull all samples from slims API
     const rawSamples: SlimsEntity[] = JSON.parse(
@@ -204,7 +205,9 @@ export default class Migrate extends BaseCommand {
     await this.saveSamples(devicesLinked, 'devices');
 
     // Pull attachments from slims API
-    this.logger.info('Finished migration');
+    const endTime = process.hrtime.bigint() - startTime;
+    const displayTime = (Number(endTime) / 1e9).toFixed(4);
+    this.logger.info(`Finished migration in ${displayTime}s`);
   }
 
   /**
@@ -321,6 +324,7 @@ export default class Migrate extends BaseCommand {
           ...meta,
           slimsId: id,
           legacyContent: epiStructure ?? undefined,
+          slimsImage: slateImage ?? undefined,
           createdBy,
           completeName,
         },

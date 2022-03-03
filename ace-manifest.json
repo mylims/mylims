@@ -171,6 +171,17 @@
         }
       ]
     },
+    "powerlab:deserialize": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "./addons/powerlab-migrate/Commands/Deserialize",
+      "commandName": "powerlab:deserialize",
+      "description": "Parse from HTML to Slate",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "powerlab:migrate": {
       "settings": {
         "loadApp": true
