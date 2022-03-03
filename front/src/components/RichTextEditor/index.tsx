@@ -11,6 +11,7 @@ import {
   RenderLeafProps,
 } from 'slate-react';
 
+import ImageButton from '@/components/RichTextEditor/header/ImageButton';
 import {
   Help,
   inputColor,
@@ -19,7 +20,7 @@ import {
   Label,
 } from '@/components/tailwind-ui/forms/basic/common';
 
-import { Image, ImageContext } from './Image';
+import { Image, ImageContext, withImages } from './Image';
 import { BlockButton } from './header/BlockButton';
 import { MarkButton, MarkFormat, toggleMark } from './header/MarkButton';
 
@@ -61,7 +62,10 @@ export function RichTextEditor({
 }: RichTextEditorProps) {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
-  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const editor = useMemo(
+    () => withImages(withHistory(withReact(createEditor()))),
+    [],
+  );
   const value: Descendant[] =
     initialValue && initialValue.length > 0
       ? initialValue
@@ -88,7 +92,7 @@ export function RichTextEditor({
             value={value}
             onChange={(value) => onChange(value)}
           >
-            <div className="mb-2 grid grid-cols-8 gap-2 border-b-2 border-neutral-300 py-2">
+            <div className="grid grid-cols-8 gap-2 py-2 mb-2 border-b-2 border-neutral-300">
               <MarkButton format="bold" icon="formatBold" />
               <MarkButton format="italic" icon="formatItalic" />
               <MarkButton format="underline" icon="formatUnderlined" />
@@ -96,6 +100,7 @@ export function RichTextEditor({
               <BlockButton format="heading-two" icon="looksTwo" />
               <BlockButton format="numbered-list" icon="formatListNumbered" />
               <BlockButton format="bulleted-list" icon="formatListBulleted" />
+              <ImageButton />
             </div>
             <Editable
               renderElement={renderElement}
@@ -124,13 +129,13 @@ export function Element({ attributes, children, element }: RenderElementProps) {
   switch (element.type) {
     case 'bulleted-list':
       return (
-        <ul className="my-2 list-inside list-disc" {...attributes}>
+        <ul className="my-2 list-disc list-inside" {...attributes}>
           {children}
         </ul>
       );
     case 'numbered-list':
       return (
-        <ol className="my-2 list-inside list-decimal" {...attributes}>
+        <ol className="my-2 list-decimal list-inside" {...attributes}>
           {children}
         </ol>
       );
@@ -155,7 +160,11 @@ export function Element({ attributes, children, element }: RenderElementProps) {
     case 'list-item':
       return <li {...attributes}>{children}</li>;
     case 'image':
-      return <Image uuid={element.uuid} alt={element.alt} />;
+      return (
+        <Image {...element} attributes={attributes}>
+          {children}
+        </Image>
+      );
     default:
       return <p {...attributes}>{children}</p>;
   }

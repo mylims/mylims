@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { API_URL } from '@/../env';
 import ElnLayout from '@/components/ElnLayout';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
@@ -39,7 +40,7 @@ export default function WaferCreate() {
       metaSchema={waferCreateSchema}
       defaultCreation={defaultCreation}
     >
-      <div className="my-2 flex flex-col md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
+      <div className="flex flex-col my-2 md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
         <div className="col-span-2">
           <div
             className="grid gap-4"
@@ -93,6 +94,7 @@ export default function WaferCreate() {
             className="max-w-7xl"
             name="description"
             label="Description"
+            fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}
           />
         </div>
       </div>
