@@ -1,5 +1,5 @@
 import { ImageAdd24Regular } from '@fluentui/react-icons';
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { Editor, Transforms, Element as SlateElement } from 'slate';
 import { useSlate } from 'slate-react';
 
@@ -7,21 +7,13 @@ import { CustomEditor, ImageElement } from '../types';
 
 import { IconButton } from './IconButton';
 
-export default function ImageButton() {
+interface ImageButtonProps {
+  onClick(): void;
+}
+export default function ImageButton({ onClick }: ImageButtonProps) {
   const editor = useSlate();
   return (
-    <IconButton
-      onClick={(event) => {
-        event.preventDefault();
-        const url = window.prompt('Enter the URL of the image:');
-        if (!url) {
-          alert('URL is not an image');
-          return;
-        }
-        insertImage(editor, url);
-      }}
-      active={isImageActive(editor)}
-    >
+    <IconButton onClick={onClick} active={isImageActive(editor)}>
       <ImageAdd24Regular />
     </IconButton>
   );

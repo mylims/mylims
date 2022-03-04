@@ -3,7 +3,8 @@ import DataDrive from '@ioc:Zakodium/DataDrive';
 
 import File from 'App/Models/File';
 import SlateImage from 'App/Models/SlateImage';
-import SampleValidator from 'App/Validators/FileValidator';
+import FileValidator from 'App/Validators/FileValidator';
+import SimpleFileValidator from 'App/Validators/SimpleFileValidator';
 
 export default class SampleController {
   private drive = DataDrive.use('files');
@@ -42,7 +43,7 @@ export default class SampleController {
 
   public async create({ request, response }: HttpContextContract) {
     try {
-      const { file, collection } = await request.validate(SampleValidator);
+      const { file, collection } = await request.validate(FileValidator);
 
       // Create the file
       const localFile = await this.drive.moveFromMultipart(
@@ -54,6 +55,27 @@ export default class SampleController {
         size: localFile.size,
         filename: localFile.filename,
         collection,
+      });
+
+      return response.ok(dbFile);
+    } catch (error) {
+      return response.badRequest({ errors: [error] });
+    }
+  }
+
+  public async createImage({ request, response }: HttpContextContract) {
+    try {
+      const { file } = await request.validate(SimpleFileValidator);
+
+      // Create the file
+      const localFile = await this.drive.moveFromMultipart(
+        file,
+        file.fileName || file.clientName,
+      );
+      const dbFile = await SlateImage.create({
+        _id: localFile.id,
+        size: localFile.size,
+        filename: localFile.filename,
       });
 
       return response.ok(dbFile);
