@@ -95,6 +95,18 @@ export default function WaferCreate() {
             name="description"
             label="Description"
             fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}
+            saveImage={async (file) => {
+              let body = new FormData();
+              body.append('file', file);
+              const res = await fetch(`${API_URL}/files/createImage`, {
+                method: 'POST',
+                headers: { Accept: 'application/json' },
+                body,
+              });
+              const [ok, result] = [res.ok, await res.json()];
+              if (ok) return result._id;
+              else throw new Error(result.errors[0].message);
+            }}
           />
         </div>
       </div>

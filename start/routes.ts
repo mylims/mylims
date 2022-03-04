@@ -63,6 +63,7 @@ Route.group(() => {
   Route.get('/fetch/:id', 'FileController.fetch');
   Route.get('/fetchImage/:uuid', 'FileController.fetchImage');
   Route.post('/create', 'FileController.create');
+  Route.post('/createImage', 'FileController.createImage');
 }).prefix('/files');
 
 // Require routes from addons

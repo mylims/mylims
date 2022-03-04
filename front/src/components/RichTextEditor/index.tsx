@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { isHotkey } from 'is-hotkey';
-import React, { CSSProperties, useCallback, useMemo } from 'react';
+import React, { CSSProperties, useCallback, useMemo, useState } from 'react';
 import { createEditor, Descendant } from 'slate';
 import { withHistory } from 'slate-history';
 import {
@@ -11,7 +11,9 @@ import {
   RenderLeafProps,
 } from 'slate-react';
 
-import ImageButton from '@/components/RichTextEditor/header/ImageButton';
+import ImageButton, {
+  insertImage,
+} from '@/components/RichTextEditor/header/ImageButton';
 import {
   Help,
   inputColor,
@@ -23,6 +25,7 @@ import {
 import { Image, ImageContext, withImages } from './Image';
 import { BlockButton } from './header/BlockButton';
 import { MarkButton, MarkFormat, toggleMark } from './header/MarkButton';
+import { useDropzone } from 'react-dropzone';
 
 const HOTKEYS: Record<string, MarkFormat> = {
   'mod+b': 'bold',
@@ -44,6 +47,7 @@ export interface RichTextEditorProps {
   help?: string;
   valid?: boolean | string;
   fetchImage?: (uuid: string) => string;
+  saveImage?: (file: File) => Promise<string>;
 }
 export function RichTextEditor({
   value: initialValue,
@@ -59,6 +63,7 @@ export function RichTextEditor({
   valid,
   help,
   fetchImage,
+  saveImage,
 }: RichTextEditorProps) {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
@@ -70,6 +75,27 @@ export function RichTextEditor({
     initialValue && initialValue.length > 0
       ? initialValue
       : [{ type: 'paragraph', children: [{ text: '' }] }];
+
+  const {
+    getRootProps,
+    getInputProps,
+    open,
+    isDragActive,
+    isDragReject,
+    isDragAccept,
+  } = useDropzone({
+    accept: 'image/jpeg,image/png',
+    noClick: true,
+    noKeyboard: true,
+    async onDrop(acceptedFiles) {
+      if (!saveImage) throw new Error("'saveImage' is not defined");
+      for (const file of acceptedFiles) {
+        const uuid = await saveImage(file);
+        insertImage(editor, uuid);
+      }
+    },
+  });
+  const { ref: dropRef, style: _ignored, ...inputProps } = getInputProps();
 
   return (
     <div className={className} style={style}>
@@ -100,23 +126,42 @@ export function RichTextEditor({
               <BlockButton format="heading-two" icon="looksTwo" />
               <BlockButton format="numbered-list" icon="formatListNumbered" />
               <BlockButton format="bulleted-list" icon="formatListBulleted" />
-              <ImageButton />
+              <ImageButton onClick={() => open()} />
             </div>
-            <Editable
-              renderElement={renderElement}
-              renderLeaf={renderLeaf}
-              placeholder="Enter some text…"
-              spellCheck
-              onKeyDown={(event) => {
-                for (const hotkey in HOTKEYS) {
-                  if (isHotkey(hotkey, event as any)) {
-                    event.preventDefault();
-                    const mark = HOTKEYS[hotkey];
-                    toggleMark(editor, mark);
-                  }
-                }
-              }}
-            />
+            <div
+              {...getRootProps()}
+              className={clsx({
+                'border-2 border-dashed p-3': isDragActive,
+                'border-danger-500 focus:ring-danger-500': isDragReject,
+                'border-primary-500 focus:ring-primary-500': isDragAccept,
+              })}
+              role="document"
+            >
+              <input {...inputProps} className="sr-only" ref={dropRef} />
+              {isDragActive ? (
+                isDragReject ? (
+                  <p className="text-danger-500">File not accepted</p>
+                ) : (
+                  <p>Drop the image here ...</p>
+                )
+              ) : (
+                <Editable
+                  renderElement={renderElement}
+                  renderLeaf={renderLeaf}
+                  placeholder="Enter some text…"
+                  spellCheck
+                  onKeyDown={(event) => {
+                    for (const hotkey in HOTKEYS) {
+                      if (isHotkey(hotkey, event as any)) {
+                        event.preventDefault();
+                        const mark = HOTKEYS[hotkey];
+                        toggleMark(editor, mark);
+                      }
+                    }
+                  }}
+                />
+              )}
+            </div>
           </Slate>
         </ImageContext.Provider>
       </div>
