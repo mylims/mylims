@@ -3,8 +3,6 @@ import { join } from 'path';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BaseCommand } from '@adonisjs/core/build/standalone';
-// eslint-disable-next-line import/no-unassigned-import
-import 'dotenv/config';
 import got from 'got';
 
 import type DataDrive from '@ioc:Zakodium/DataDrive';
@@ -223,6 +221,14 @@ export default class Migrate extends BaseCommand {
     let samples: GqlSampleInput[] = [];
     let devices: GqlSampleInput[] = [];
 
+    // Get fetch options from env
+    const { default: Env } = await import('@ioc:Adonis/Core/Env');
+    const fetchOptions = {
+      username: Env.get('SLIMS_USERNAME'),
+      password: Env.get('SLIMS_PASSWORD'),
+      https: { rejectUnauthorized: false },
+    };
+
     for (const {
       waferName,
       sampleName,
@@ -236,15 +242,10 @@ export default class Migrate extends BaseCommand {
       ...meta
     } of input) {
       const drive = this.deps.DataDrive.use('files');
-      const options = {
-        username: process.env.USERNAME,
-        password: process.env.PASSWORD,
-        https: { rejectUnauthorized: false },
-      };
 
       // Get the list of attachments from slims
       const { entities } = await got
-        .get(`${this.baseUrl}/attachment/content/${id as string}`, options)
+        .get(`${this.baseUrl}/attachment/content/${id as string}`, fetchOptions)
         .json<{ entities: SlimsEntity[] }>();
 
       const hasEmbeddedImages =
@@ -259,7 +260,7 @@ export default class Migrate extends BaseCommand {
         entities.map(async ({ pk }) => {
           const { headers, body: buffer } = await got.get(
             `${this.baseUrl}/repo/${pk}`,
-            { ...options, responseType: 'buffer' },
+            { ...fetchOptions, responseType: 'buffer' },
           );
           const fileName = headers['content-disposition']
             ?.split(';')[1]

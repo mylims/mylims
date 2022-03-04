@@ -7,4 +7,6 @@ export default Env.rules({
   ADMIN_PASSWORD: Env.schema.string(),
   BACKEND_URL: Env.schema.string(),
   FRONTEND_URL: Env.schema.string(),
+  SLIMS_USERNAME: Env.schema.string.optional(),
+  SLIMS_PASSWORD: Env.schema.string.optional(),
 });
