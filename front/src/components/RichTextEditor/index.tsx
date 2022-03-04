@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { isHotkey } from 'is-hotkey';
-import React, { CSSProperties, useCallback, useMemo, useState } from 'react';
+import React, { CSSProperties, useCallback, useMemo } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { createEditor, Descendant } from 'slate';
 import { withHistory } from 'slate-history';
 import {
@@ -25,7 +26,6 @@ import {
 import { Image, ImageContext, withImages } from './Image';
 import { BlockButton } from './header/BlockButton';
 import { MarkButton, MarkFormat, toggleMark } from './header/MarkButton';
-import { useDropzone } from 'react-dropzone';
 
 const HOTKEYS: Record<string, MarkFormat> = {
   'mod+b': 'bold',
