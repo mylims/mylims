@@ -6,3 +6,5 @@ public
 tailwind.out.css
 config.json
 /data
+/copyfiles
+/addons/powerlab-migrate/testFiles
