@@ -102,7 +102,7 @@ export default function DefaultUpdate({
     }
   }
 
-  if (queryLoading) return <Spinner className="w-10 h-10 text-danger-500" />;
+  if (queryLoading) return <Spinner className="h-10 w-10 text-danger-500" />;
 
   if (authError || updateError || queryError || !data) {
     return (
@@ -128,7 +128,7 @@ export default function DefaultUpdate({
           <SubmitButtonRHF disabled={updateLoading}>Submit</SubmitButtonRHF>
         </div>
         {children}
-        <div className="flex flex-row justify-end mt-2 md:hidden">
+        <div className="mt-2 flex flex-row justify-end md:hidden">
           <SubmitButtonRHF disabled={updateLoading}>Submit</SubmitButtonRHF>
         </div>
       </div>

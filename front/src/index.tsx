@@ -23,6 +23,9 @@ import SampleList from '@/pages/samples/list/Sample';
 import WaferList from '@/pages/samples/list/Wafer';
 import { MultiCreate } from '@/pages/samples/multiCreate/Default';
 import WaferCreate from '@/pages/samples/singleCreate/Wafer';
+import DeviceUpdate from '@/pages/samples/update/Device';
+import DyeUpdate from '@/pages/samples/update/Dye';
+import SampleUpdate from '@/pages/samples/update/Sample';
 import WaferUpdate from '@/pages/samples/update/Wafer';
 import Users from '@/pages/users';
 
@@ -94,6 +97,9 @@ function AppRoutes() {
           path: 'update',
           children: [
             { path: 'wafer/:id', element: <App Component={WaferUpdate} /> },
+            { path: 'sample/:id', element: <App Component={SampleUpdate} /> },
+            { path: 'dye/:id', element: <App Component={DyeUpdate} /> },
+            { path: 'device/:id', element: <App Component={DeviceUpdate} /> },
           ],
         },
       ],

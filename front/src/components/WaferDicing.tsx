@@ -2,10 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Wafer, fromTextToValue, WaferProps } from 'react-wafer';
 
-import { Sample } from '@/generated/graphql';
+import { SampleQuery } from '@/generated/graphql';
 
 interface WaferDicingProps {
-  wafer: Sample;
+  diameter: string;
+  sampleChildren: SampleQuery['sample']['children'];
   size: number;
 }
 interface SimpleWaferDicingProps {
@@ -60,14 +61,18 @@ export function SimpleWaferDicing({
     );
   }
 }
-export default function WaferDicing({ wafer, size }: WaferDicingProps) {
+export default function WaferDicing({
+  diameter,
+  sampleChildren,
+  size,
+}: WaferDicingProps) {
   const navigate = useNavigate();
   return (
     <SimpleWaferDicing
       size={size}
-      diameter={wafer.meta.size ?? '2 inch'}
+      diameter={diameter}
       pickedItems={
-        wafer.children
+        sampleChildren
           ?.filter(({ meta: { reserved } }) => !!reserved)
           .map(({ sampleCode }) => ({
             index: sampleCode[1],
@@ -75,7 +80,7 @@ export default function WaferDicing({ wafer, size }: WaferDicingProps) {
       }
       onSelect={(_, label, picked) => {
         if (picked) {
-          const child = wafer.children?.find(
+          const child = sampleChildren?.find(
             ({ sampleCode }) => sampleCode[1] === label,
           );
           if (child) {

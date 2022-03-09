@@ -2,6 +2,7 @@ import {
   ChipIcon,
   EyeIcon,
   InformationCircleIcon,
+  PencilIcon,
 } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -46,7 +47,7 @@ export default function SampleList() {
                   className="ml-2"
                   onClick={() => setState(row as Sample)}
                 >
-                  <EyeIcon className="h-5 w-5" />
+                  <EyeIcon className="w-5 h-5" />
                 </Button>
               )}
             </TableQuery.ActionsColumn>
@@ -73,7 +74,7 @@ export default function SampleList() {
       </div>
       <Card>
         <Card.Header className="flex flex-row justify-between bg-neutral-50 text-neutral-500">
-          <span className="text-left text-xs font-semibold uppercase tracking-wider">
+          <span className="text-xs font-semibold tracking-wider text-left uppercase">
             Preview
           </span>
         </Card.Header>
@@ -84,14 +85,24 @@ export default function SampleList() {
             </p>
           ) : (
             <div className="grid grid-cols-2 gap-4">
-              <Link title="detail" to={`../../detail/sample/${state.id}`}>
+              <Link title="detail" to={`/sample/detail/sample/${state.id}`}>
                 <Button
                   className="flex space-x-2"
                   color={Color.primary}
                   variant={Variant.secondary}
                 >
-                  <InformationCircleIcon className="h-5 w-5" />
+                  <InformationCircleIcon className="w-5 h-5" />
                   <span>Detail</span>
+                </Button>
+              </Link>
+              <Link title="update" to={`/sample/update/sample/${state.id}`}>
+                <Button
+                  className="flex space-x-2"
+                  color={Color.primary}
+                  variant={Variant.secondary}
+                >
+                  <PencilIcon className="w-5 h-5" />
+                  <span>Update</span>
                 </Button>
               </Link>
               {state.parent && (
@@ -104,7 +115,7 @@ export default function SampleList() {
                     color={Color.primary}
                     variant={Variant.secondary}
                   >
-                    <ChipIcon className="h-5 w-5" />
+                    <ChipIcon className="w-5 h-5" />
                     <span>Wafer</span>
                   </Button>
                 </Link>

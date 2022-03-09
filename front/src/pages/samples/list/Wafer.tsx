@@ -2,6 +2,7 @@ import {
   EyeIcon,
   FolderOpenIcon,
   InformationCircleIcon,
+  PencilIcon,
 } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
@@ -46,7 +47,7 @@ export default function WaferList() {
                   className="ml-2"
                   onClick={() => setState(row as Sample)}
                 >
-                  <EyeIcon className="h-5 w-5" />
+                  <EyeIcon className="w-5 h-5" />
                 </Button>
               )}
             </TableQuery.ActionsColumn>
@@ -103,7 +104,7 @@ export default function WaferList() {
 
         <Card>
           <Card.Header className="flex flex-row justify-between bg-neutral-50 text-neutral-500">
-            <span className="text-left text-xs font-semibold uppercase tracking-wider">
+            <span className="text-xs font-semibold tracking-wider text-left uppercase">
               Preview
             </span>
           </Card.Header>
@@ -114,9 +115,15 @@ export default function WaferList() {
               </p>
             ) : (
               <div>
-                <div className="mb-2 w-full">
+                <div className="w-full mb-2">
                   <ResponsiveChart minHeight={30}>
-                    {({ width }) => <WaferDicing size={width} wafer={state} />}
+                    {({ width }) => (
+                      <WaferDicing
+                        size={width}
+                        diameter={state.meta.size}
+                        sampleChildren={state.children}
+                      />
+                    )}
                   </ResponsiveChart>
                 </div>
                 <div className="grid grid-cols-2 gap-4 ">
@@ -126,8 +133,18 @@ export default function WaferList() {
                       color={Color.primary}
                       variant={Variant.secondary}
                     >
-                      <InformationCircleIcon className="h-5 w-5" />
+                      <InformationCircleIcon className="w-5 h-5" />
                       <span>Detail</span>
+                    </Button>
+                  </Link>
+                  <Link title="update" to={`/sample/update/wafer/${state.id}`}>
+                    <Button
+                      className="flex space-x-2"
+                      color={Color.primary}
+                      variant={Variant.secondary}
+                    >
+                      <PencilIcon className="w-5 h-5" />
+                      <span>Update</span>
                     </Button>
                   </Link>
                   {state.children && (
@@ -147,7 +164,7 @@ export default function WaferList() {
                         color={Color.primary}
                         variant={Variant.secondary}
                       >
-                        <FolderOpenIcon className="h-5 w-5" />
+                        <FolderOpenIcon className="w-5 h-5" />
                         <span>Samples</span>
                       </Button>
                     </Link>
