@@ -22,7 +22,7 @@ interface SampleDetailProps {
 export default function SampleDetail({ kind, children }: SampleDetailProps) {
   const { id = '' } = useParams<{ id: string }>();
   const { data, loading, error } = useSampleQuery({ variables: { id } });
-  if (loading) return <Spinner className="w-10 h-10 text-danger-500" />;
+  if (loading) return <Spinner className="h-10 w-10 text-danger-500" />;
   if (error || !data) {
     return (
       <Alert title="Error while fetching sample" type={AlertType.ERROR}>
@@ -51,7 +51,7 @@ export default function SampleDetail({ kind, children }: SampleDetailProps) {
                 color={Color.primary}
                 variant={Variant.secondary}
               >
-                <PencilIcon className="w-5 h-5" />
+                <PencilIcon className="h-5 w-5" />
                 <span>Update</span>
               </Button>
             </Link>

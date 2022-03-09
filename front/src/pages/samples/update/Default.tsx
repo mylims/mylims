@@ -75,7 +75,7 @@ export default function DefaultUpdate({
         let files: string[] = prevAttachments.map(({ id }) => id);
         for (const file of attachments) {
           const res = await mutateAsync({ file, collection: 'samples' });
-          if (res._id) throw new Error('Failed to upload file');
+          if (!res._id) throw new Error('Failed to upload file');
           files.push(res._id);
         }
         const input = {
