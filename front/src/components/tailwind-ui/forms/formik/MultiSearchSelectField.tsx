@@ -6,10 +6,7 @@ import {
   MultiSearchSelectProps,
   SimpleMultiSearchSelectProps,
 } from '../basic/MultiSearchSelect';
-import {
-  SimpleStringSelectOption,
-  SimpleNumberSelectOption,
-} from '../basic/Select';
+import { SimpleSelectOption } from '../basic/Select';
 import { FieldProps } from '../util';
 
 export type MultiSearchSelectFieldProps<OptionType> = Omit<
@@ -25,9 +22,7 @@ export type SimpleMultiSearchSelectFieldProps<OptionType> = Omit<
   FieldProps;
 
 export function MultiSearchSelectField<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleMultiSearchSelectFieldProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  props: OptionType extends SimpleSelectOption
     ? SimpleMultiSearchSelectFieldProps<OptionType>
     : MultiSearchSelectFieldProps<OptionType>,
 ): JSX.Element {

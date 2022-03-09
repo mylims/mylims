@@ -19,8 +19,7 @@ import { Input } from '../forms/basic/Input';
 import {
   GetValue,
   RenderOption,
-  SimpleStringSelectOption,
-  SimpleNumberSelectOption,
+  SimpleSelectOption,
 } from '../forms/basic/Select';
 import {
   Help,
@@ -40,12 +39,17 @@ export type OptionsFilter<OptionType> = (
   options: OptionType[],
 ) => OptionType[];
 
-export function defaultOptionsFilter<
-  OptionType extends SimpleStringSelectOption | SimpleNumberSelectOption,
->(query: string, options: OptionType[]): OptionType[] {
+export type IsOptionRemovableCallback<OptionType> = (
+  option: OptionType,
+) => boolean;
+
+export function defaultOptionsFilter<OptionType extends SimpleSelectOption>(
+  query: string,
+  options: OptionType[],
+): OptionType[] {
   const lowerQuery = query.toLowerCase();
   return options.filter((option) =>
-    String(option.label).toLowerCase().includes(lowerQuery),
+    String(defaultRenderOption(option)).toLowerCase().includes(lowerQuery),
   );
 }
 
@@ -66,18 +70,12 @@ function DefaultNoResultsHint() {
 
 export const defaultNoResultsHint = <DefaultNoResultsHint />;
 
-export function defaultRenderOption(
-  option: SimpleStringSelectOption | SimpleNumberSelectOption,
-) {
-  return option.label;
+export function defaultRenderOption(option: SimpleSelectOption): ReactNode {
+  return typeof option === 'object' ? option.label : option;
 }
 
-export function defaultGetValue(option: SimpleStringSelectOption): string;
-export function defaultGetValue(option: SimpleNumberSelectOption): number;
-export function defaultGetValue(
-  option: SimpleStringSelectOption | SimpleNumberSelectOption,
-) {
-  return option.value;
+export function defaultGetValue(option: SimpleSelectOption): string | number {
+  return typeof option === 'object' ? option.value : option;
 }
 
 export function defaultCanCreate() {
@@ -388,7 +386,7 @@ interface InternalSearchSelectProps<OptionType>
   placeholder?: string;
   searchValue: string;
   formattedSelected?: { value: string | number; label: ReactNode };
-  hasValue: boolean;
+  hasClearableValue: boolean;
   highlightClassName?: string;
   required?: boolean;
   inputRef?: Ref<HTMLInputElement>;
@@ -432,7 +430,7 @@ export function InternalSearchSelect<OptionType>(
     placeholder,
     searchValue,
     formattedSelected,
-    hasValue,
+    hasClearableValue,
     name,
     onBlur,
     highlightClassName = 'text-white bg-primary-600',
@@ -473,7 +471,7 @@ export function InternalSearchSelect<OptionType>(
             {...{
               loading,
               clearable,
-              hasValue,
+              hasClearableValue,
               disabled,
               handleXClick,
               handleChevronDownClick,
@@ -539,7 +537,7 @@ export function InternalMultiSearchSelect<OptionType>(
     placeholder,
     searchValue,
     selectedBadges,
-    hasValue,
+    hasClearableValue,
     name,
     id = name,
     onBlur,
@@ -606,7 +604,7 @@ export function InternalMultiSearchSelect<OptionType>(
           {...{
             loading,
             clearable,
-            hasValue,
+            hasClearableValue,
             hasError: Boolean(error),
             disabled,
             handleXClick,
@@ -689,7 +687,7 @@ function OptionsList<OptionType>(props: OptionsListProps<OptionType>) {
 interface TrailingToolsProps {
   loading?: boolean;
   clearable?: boolean;
-  hasValue: boolean;
+  hasClearableValue: boolean;
   hasError?: boolean;
   disabled?: boolean;
   handleXClick: (event: MouseEvent) => void;
@@ -700,7 +698,7 @@ function TrailingTools(props: TrailingToolsProps) {
   const {
     loading,
     clearable,
-    hasValue,
+    hasClearableValue,
     hasError,
     disabled,
     handleXClick,
@@ -709,7 +707,7 @@ function TrailingTools(props: TrailingToolsProps) {
   return (
     <div className="inline-flex cursor-default flex-row items-center text-neutral-400">
       {loading && <Spinner className="mr-1 h-5 w-5 text-neutral-400" />}
-      {clearable && hasValue && !disabled && (
+      {clearable && hasClearableValue && !disabled && (
         <XIcon
           className="h-4 w-4 hover:text-neutral-500"
           onClick={handleXClick}

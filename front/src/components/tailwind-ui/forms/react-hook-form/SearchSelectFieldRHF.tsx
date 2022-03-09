@@ -3,10 +3,7 @@ import { useController } from 'react-hook-form';
 
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { SearchSelect } from '../basic/SearchSelect';
-import {
-  SimpleStringSelectOption,
-  SimpleNumberSelectOption,
-} from '../basic/Select';
+import { SimpleSelectOption } from '../basic/Select';
 import {
   SearchSelectFieldProps,
   SimpleSearchSelectFieldProps,
@@ -20,9 +17,7 @@ import {
 export function SearchSelectFieldRHF<OptionType>(
   props: RHFControllerProps &
     RHFValidationProps &
-    (OptionType extends SimpleStringSelectOption
-      ? SimpleSearchSelectFieldProps<OptionType>
-      : OptionType extends SimpleNumberSelectOption
+    (OptionType extends SimpleSelectOption
       ? SimpleSearchSelectFieldProps<OptionType>
       : SearchSelectFieldProps<OptionType>),
 ): JSX.Element {

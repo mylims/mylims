@@ -5,6 +5,10 @@ import clsx from 'clsx';
 import React, { ReactNode } from 'react';
 
 import { useSameWidthPopper } from '../../hooks/popper';
+import {
+  defaultGetValue,
+  defaultRenderOption,
+} from '../../utils/search-select-utils';
 
 import {
   labelDisabledColor,
@@ -28,17 +32,11 @@ export interface SimpleNumberSelectOption {
 export type GetValue<OptionType> = (option: OptionType) => string | number;
 export type RenderOption<OptionType> = (option: OptionType) => ReactNode;
 
-function simpleGetValue(
-  option: SimpleStringSelectOption | SimpleNumberSelectOption,
-) {
-  return option.value;
-}
-
-function simpleRenderOption(
-  option: SimpleStringSelectOption | SimpleNumberSelectOption,
-) {
-  return option.label;
-}
+export type SimpleSelectOption =
+  | string
+  | number
+  | SimpleStringSelectOption
+  | SimpleNumberSelectOption;
 
 export interface SelectProps<OptionType> extends SimpleSelectProps<OptionType> {
   /**
@@ -123,9 +121,7 @@ export interface SimpleSelectProps<OptionType> {
 }
 
 export function Select<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleSelectProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  props: OptionType extends SimpleSelectOption
     ? SimpleSelectProps<OptionType>
     : SelectProps<OptionType>,
 ): JSX.Element {
@@ -143,8 +139,8 @@ export function Select<OptionType>(
     clearable = false,
     disabled = false,
     corner,
-    getValue = simpleGetValue,
-    renderOption = simpleRenderOption,
+    getValue = defaultGetValue,
+    renderOption = defaultRenderOption,
     highlightClassName = 'text-white bg-primary-600',
   } = props;
 

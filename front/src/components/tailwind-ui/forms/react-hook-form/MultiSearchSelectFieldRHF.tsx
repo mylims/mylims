@@ -3,10 +3,7 @@ import { useController } from 'react-hook-form';
 
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import { MultiSearchSelect } from '../basic/MultiSearchSelect';
-import {
-  SimpleStringSelectOption,
-  SimpleNumberSelectOption,
-} from '../basic/Select';
+import { SimpleSelectOption } from '../basic/Select';
 import {
   MultiSearchSelectFieldProps,
   SimpleMultiSearchSelectFieldProps,
@@ -20,9 +17,7 @@ import {
 export function MultiSearchSelectFieldRHF<OptionType>(
   props: RHFControllerProps &
     RHFValidationProps &
-    (OptionType extends SimpleStringSelectOption
-      ? SimpleMultiSearchSelectFieldProps<OptionType>
-      : OptionType extends SimpleNumberSelectOption
+    (OptionType extends SimpleSelectOption
       ? SimpleMultiSearchSelectFieldProps<OptionType>
       : MultiSearchSelectFieldProps<OptionType>),
 ): JSX.Element {

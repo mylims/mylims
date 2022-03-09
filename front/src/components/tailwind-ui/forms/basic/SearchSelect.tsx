@@ -10,12 +10,7 @@ import {
   useSearchSelectInternals,
 } from '../../utils/search-select-utils';
 
-import {
-  SimpleStringSelectOption,
-  SimpleNumberSelectOption,
-  GetValue,
-  RenderOption,
-} from './Select';
+import { GetValue, RenderOption, SimpleSelectOption } from './Select';
 
 export interface SimpleSearchSelectProps<OptionType> {
   /**
@@ -147,9 +142,7 @@ export interface SearchSelectProps<OptionType>
 export const SearchSelect = forwardRefWithGeneric(SearchSelectForwardRef);
 
 function SearchSelectForwardRef<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleSearchSelectProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  props: OptionType extends SimpleSelectOption
     ? SimpleSearchSelectProps<OptionType>
     : SearchSelectProps<OptionType>,
   ref: Ref<HTMLInputElement>,
@@ -199,7 +192,7 @@ function SearchSelectForwardRef<OptionType>(
       {...otherProps}
       inputRef={ref}
       formattedSelected={formattedSelected}
-      hasValue={formattedSelected !== undefined}
+      hasClearableValue={formattedSelected !== undefined}
     />
   );
 }
