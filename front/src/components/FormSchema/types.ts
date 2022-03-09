@@ -12,7 +12,6 @@ export interface ParserProps {
   required: string[];
 }
 
-type SelOptions = Record<'label' | 'value', string>;
 export type ParsedForm = {
   label: string;
   name: string;
@@ -23,8 +22,8 @@ export type ParsedForm = {
   | { type: FormType.DATE }
   | { type: FormType.BOOLEAN }
   | { type: FormType.ATTACHMENT }
-  | { type: FormType.SELECT; options: SelOptions[] }
-  | { type: FormType.MULTISELECT; options: SelOptions[] }
+  | { type: FormType.SELECT; options: string[] }
+  | { type: FormType.MULTISELECT; options: string[] }
 );
 
 export enum FormType {

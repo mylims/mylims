@@ -23,6 +23,7 @@ import SampleList from '@/pages/samples/list/Sample';
 import WaferList from '@/pages/samples/list/Wafer';
 import { MultiCreate } from '@/pages/samples/multiCreate/Default';
 import WaferCreate from '@/pages/samples/singleCreate/Wafer';
+import WaferUpdate from '@/pages/samples/update/Wafer';
 import Users from '@/pages/users';
 
 function AppRoutes() {
@@ -87,6 +88,12 @@ function AppRoutes() {
           path: 'multiCreate',
           children: [
             { path: 'sample', element: <App Component={MultiCreate} /> },
+          ],
+        },
+        {
+          path: 'update',
+          children: [
+            { path: 'wafer/:id', element: <App Component={WaferUpdate} /> },
           ],
         },
       ],

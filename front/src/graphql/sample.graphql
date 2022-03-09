@@ -52,6 +52,7 @@ query SamplesFiltered(
 
 query Sample($id: ID!) {
   sample(id: $id) {
+    __typename
     ...SampleFields
     attachments {
       id
@@ -85,6 +86,12 @@ mutation CreateSample($input: SampleInput!) {
 
 mutation CreateMultipleSamples($samples: [SampleInput!]!) {
   createSamples(samples: $samples) {
+    ...SampleFields
+  }
+}
+
+mutation updateSample($id: ID!, $input: SampleInput!) {
+  updateSample(id: $id, input: $input) {
     ...SampleFields
   }
 }
