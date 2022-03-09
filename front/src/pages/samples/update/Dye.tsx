@@ -19,7 +19,7 @@ const dyeUpdateSchema = {
 export default function DyeUpdate() {
   return (
     <DefaultUpdate codeLength={3} kind="dye" metaSchema={dyeUpdateSchema}>
-      <div className="flex flex-col my-2 md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
+      <div className="my-2 flex flex-col md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
         <div className="col-span-2">
           <div
             className="grid gap-4"
@@ -59,6 +59,6 @@ export default function DyeUpdate() {
   );
 }
 
-DyeUpdate.getLayout = (page: React.ReactNode) =>
+DyeUpdate.getLayout = (page: React.ReactNode) => (
   <ElnLayout pageTitle="Update dye">{page}</ElnLayout>
-;
+);

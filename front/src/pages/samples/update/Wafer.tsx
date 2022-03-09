@@ -33,7 +33,7 @@ const waferUpdateSchema = {
 export default function WaferUpdate() {
   return (
     <DefaultUpdate codeLength={1} kind="wafer" metaSchema={waferUpdateSchema}>
-      <div className="flex flex-col my-2 md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
+      <div className="my-2 flex flex-col md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
         <div className="col-span-2">
           <div
             className="grid gap-4"
