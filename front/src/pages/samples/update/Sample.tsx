@@ -1,38 +1,29 @@
 import React from 'react';
+import { boolean } from 'yup';
 
 import { API_URL } from '@/../env';
 import AttachmentsTableRHF from '@/components/AttachmentsTableRHF';
 import ElnLayout from '@/components/ElnLayout';
-import MultiSelect from '@/components/FormSchema/MultiSelect';
 import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
 import {
   DropzoneFieldRHF,
   InputFieldRHF,
-  optionalNumber,
   optionalString,
-  requiredString,
+  ToggleFieldRHF,
 } from '@/components/tailwind-ui';
 
 import DefaultUpdate from './Default';
 
-const waferUpdateSchema = {
-  size: requiredString(),
+const sampleUpdateSchema = {
   purpose: optionalString(),
+  labelPurpose: optionalString(),
+  reserved: boolean(),
   heterostructure: optionalString(),
-  substrate: optionalString(),
-  supplier: optionalString(),
-  supplierWaferNumber: optionalString(),
-  placeOfGrowth: optionalString(),
-  location: optionalString(),
-  locationComment: optionalString(),
-  rs: optionalNumber(),
-  ns: optionalNumber(),
-  mobility: optionalNumber(),
 };
 
-export default function WaferUpdate() {
+export default function SampleUpdate() {
   return (
-    <DefaultUpdate codeLength={1} kind="wafer" metaSchema={waferUpdateSchema}>
+    <DefaultUpdate codeLength={2} kind="sample" metaSchema={sampleUpdateSchema}>
       <div className="flex flex-col my-2 md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
         <div className="col-span-2">
           <div
@@ -41,32 +32,11 @@ export default function WaferUpdate() {
               gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
             }}
           >
-            <InputFieldRHF name="sampleCode.0" label="Wafer name" disabled />
-            <InputFieldRHF name="meta.size" label="Diameter" disabled />
             <InputFieldRHF name="project" label="Project" />
-            <InputFieldRHF name="comment" label="Comment" />
-            <MultiSelect name="labels" label="Labels" />
             <InputFieldRHF name="meta.purpose" label="Purpose" />
+            <ToggleFieldRHF name="meta.reserved" label="Reserved" />
+            <InputFieldRHF name="meta.labelPurpose" label="Label purpose" />
             <InputFieldRHF name="meta.heterostructure" label="EPI structure" />
-            <InputFieldRHF name="meta.substrate" label="Substrate" />
-            <InputFieldRHF name="meta.supplier" label="Supplier" />
-            <InputFieldRHF
-              name="meta.supplierWaferNumber"
-              label="Supplier wafer number"
-            />
-            <InputFieldRHF name="meta.placeOfGrowth" label="Place of growth" />
-            <InputFieldRHF name="meta.location" label="Location" />
-            <InputFieldRHF
-              name="meta.locationComment"
-              label="Location comment"
-            />
-            <InputFieldRHF name="meta.rs" label="Rs (Ohm/sq)" type="number" />
-            <InputFieldRHF name="meta.ns" label="Ns (e13/cm^2)" type="number" />
-            <InputFieldRHF
-              name="meta.mobility"
-              label="Mobility (cm^2/Vs)"
-              type="number"
-            />
           </div>
         </div>
         <div className="col-span-2">
@@ -98,6 +68,6 @@ export default function WaferUpdate() {
   );
 }
 
-WaferUpdate.getLayout = (page: React.ReactNode) => (
-  <ElnLayout pageTitle="Update wafer">{page}</ElnLayout>
+SampleUpdate.getLayout = (page: React.ReactNode) => (
+  <ElnLayout pageTitle="Update sample">{page}</ElnLayout>
 );

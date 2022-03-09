@@ -1,9 +1,9 @@
 import { PaperClipIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
 import React from 'react';
 
 import { SampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
-import clsx from 'clsx';
 
 interface AttachmentsTableProps {
   attachments: SampleQuery['sample']['attachments'];
