@@ -936,6 +936,7 @@ export type SampleQueryVariables = Exact<{
 
 export type SampleQuery = {
   sample: {
+    __typename: 'Sample';
     id: string;
     sampleCode: Array<string>;
     uuid10: string;
@@ -1023,6 +1024,27 @@ export type CreateMultipleSamplesMutation = {
     createdAt: any;
     user?: { id: string; usernames: Array<string> } | null;
   }>;
+};
+
+export type UpdateSampleMutationVariables = Exact<{
+  id: Scalars['ID'];
+  input: SampleInput;
+}>;
+
+export type UpdateSampleMutation = {
+  updateSample: {
+    id: string;
+    sampleCode: Array<string>;
+    uuid10: string;
+    labels: Array<string>;
+    project?: string | null;
+    title?: string | null;
+    description?: any | null;
+    comment?: string | null;
+    meta: any;
+    createdAt: any;
+    user?: { id: string; usernames: Array<string> } | null;
+  };
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
@@ -2149,6 +2171,7 @@ export function refetchSamplesFilteredQuery(
 export const SampleDocument = gql`
   query Sample($id: ID!) {
     sample(id: $id) {
+      __typename
       ...SampleFields
       attachments {
         id
@@ -2372,6 +2395,54 @@ export type CreateMultipleSamplesMutationResult =
 export type CreateMultipleSamplesMutationOptions = Apollo.BaseMutationOptions<
   CreateMultipleSamplesMutation,
   CreateMultipleSamplesMutationVariables
+>;
+export const UpdateSampleDocument = gql`
+  mutation updateSample($id: ID!, $input: SampleInput!) {
+    updateSample(id: $id, input: $input) {
+      ...SampleFields
+    }
+  }
+  ${SampleFieldsFragmentDoc}
+`;
+
+/**
+ * __useUpdateSampleMutation__
+ *
+ * To run a mutation, you first call `useUpdateSampleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSampleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSampleMutation, { data, loading, error }] = useUpdateSampleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateSampleMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    UpdateSampleMutation,
+    UpdateSampleMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useMutation<
+    UpdateSampleMutation,
+    UpdateSampleMutationVariables
+  >(UpdateSampleDocument, options);
+}
+export type UpdateSampleMutationHookResult = ReturnType<
+  typeof useUpdateSampleMutation
+>;
+export type UpdateSampleMutationResult =
+  Apollo.MutationResult<UpdateSampleMutation>;
+export type UpdateSampleMutationOptions = Apollo.BaseMutationOptions<
+  UpdateSampleMutation,
+  UpdateSampleMutationVariables
 >;
 export const UsersDocument = gql`
   query Users {

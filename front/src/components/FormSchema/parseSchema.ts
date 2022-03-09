@@ -17,10 +17,8 @@ export function parseSchema({
         }
         if (value.enum) {
           const options = value.enum
-            .map((label) =>
-              typeof label === 'string' ? { label, value: label } : null,
-            )
-            .filter((val): val is Record<'label' | 'value', string> => !!val);
+            .map((label) => (typeof label === 'string' ? label : null))
+            .filter((val): val is string => !!val);
           const type =
             value.const === 'multiple' ? FormType.MULTISELECT : FormType.SELECT;
           return { type, options, ...base };

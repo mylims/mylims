@@ -9,7 +9,7 @@ interface MultiSelectProps {
   name: string;
   label: string;
   required?: boolean;
-  options?: Record<'value' | 'label', string>[];
+  options?: string[];
 }
 export default function MultiSelect({
   name,
@@ -25,12 +25,11 @@ export default function MultiSelect({
       label={label}
       required={required}
       canCreate={(val) => {
-        return options.find(({ value }) => value === val) === undefined;
+        return options.find((value) => value === val) === undefined;
       }}
       onCreate={(value) => {
-        const newOption = { label: value, value };
-        setOptions([...options, newOption]);
-        multiSearchSelect.onSelect([...multiSearchSelect.selected, newOption]);
+        setOptions([...options, value]);
+        multiSearchSelect.onSelect([...multiSearchSelect.selected, value]);
       }}
       clearable
       {...multiSearchSelect}
