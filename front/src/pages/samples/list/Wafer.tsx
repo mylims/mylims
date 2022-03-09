@@ -61,7 +61,7 @@ export default function WaferList() {
               const { children } = row as Sample;
               if (!children) return '0 / ?';
               const size = children.reduce(
-                (acc, { meta }) => (acc + meta.reserved ? 1 : 0),
+                (acc, { meta }) => acc + (meta.reserved ? 1 : 0),
                 0,
               );
               return `${size} / ${children.length}`;
