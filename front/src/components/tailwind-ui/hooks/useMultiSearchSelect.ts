@@ -2,10 +2,7 @@ import { useField } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import {
-  SimpleStringSelectOption,
-  SimpleNumberSelectOption,
-} from '../forms/basic/Select';
+import { SimpleSelectOption } from '../forms/basic/Select';
 import { defaultOptionsFilter } from '../utils/search-select-utils';
 
 import { useCheckedFormRHFContext } from './useCheckedFormRHF';
@@ -49,9 +46,7 @@ export interface SimpleMultiSearchSelectFieldHookConfig<OptionType>
 }
 
 export function useMultiSearchSelectField<OptionType>(
-  config: OptionType extends SimpleStringSelectOption
-    ? SimpleMultiSearchSelectFieldHookConfig<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  config: OptionType extends SimpleSelectOption
     ? SimpleMultiSearchSelectFieldHookConfig<OptionType>
     : MultiSearchSelectFieldHookConfig<OptionType>,
 ): MultiSearchSelectFieldHookResult<OptionType> {
@@ -67,9 +62,7 @@ export function useMultiSearchSelectField<OptionType>(
 }
 
 export function useMultiSearchSelectFieldRHF<OptionType>(
-  config: OptionType extends SimpleStringSelectOption
-    ? SimpleMultiSearchSelectFieldHookConfig<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  config: OptionType extends SimpleSelectOption
     ? SimpleMultiSearchSelectFieldHookConfig<OptionType>
     : MultiSearchSelectFieldHookConfig<OptionType>,
 ): MultiSearchSelectFieldHookResult<OptionType> {
@@ -92,9 +85,7 @@ export function useMultiSearchSelectFieldRHF<OptionType>(
 }
 
 export function useMultiSearchSelect<OptionType>(
-  config: OptionType extends SimpleStringSelectOption
-    ? SimpleMultiSearchSelectHookConfig<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  config: OptionType extends SimpleSelectOption
     ? SimpleMultiSearchSelectHookConfig<OptionType>
     : MultiSearchSelectHookConfig<OptionType>,
 ): MultiSearchSelectHookResult<OptionType> {

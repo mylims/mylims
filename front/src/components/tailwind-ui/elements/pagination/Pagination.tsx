@@ -73,7 +73,7 @@ export function Pagination(props: PaginationProps) {
   return (
     <div
       className={clsx(
-        'flex flex-1 items-center',
+        'flex items-center',
         {
           'justify-between': withText === true,
           'justify-center': withText === false && position === 'center',

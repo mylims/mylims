@@ -5,8 +5,7 @@ import {
   SelectProps,
   Select,
   SimpleSelectProps,
-  SimpleStringSelectOption,
-  SimpleNumberSelectOption,
+  SimpleSelectOption,
 } from '../basic/Select';
 import { FieldProps } from '../util';
 
@@ -23,9 +22,7 @@ export type SimpleSelectFieldProps<OptionType> = Omit<
   FieldProps;
 
 export function SelectField<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleSelectFieldProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  props: OptionType extends SimpleSelectOption
     ? SimpleSelectFieldProps<OptionType>
     : SelectFieldProps<OptionType>,
 ): JSX.Element {

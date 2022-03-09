@@ -2,11 +2,7 @@ import React from 'react';
 import { useController } from 'react-hook-form';
 
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
-import {
-  Select,
-  SimpleStringSelectOption,
-  SimpleNumberSelectOption,
-} from '../basic/Select';
+import { Select, SimpleSelectOption } from '../basic/Select';
 import {
   SelectFieldProps,
   SimpleSelectFieldProps,
@@ -20,9 +16,7 @@ import {
 export function SelectFieldRHF<OptionType>(
   props: RHFControllerProps &
     RHFValidationProps &
-    (OptionType extends SimpleStringSelectOption
-      ? SimpleSelectFieldProps<OptionType>
-      : OptionType extends SimpleNumberSelectOption
+    (OptionType extends SimpleSelectOption
       ? SimpleSelectFieldProps<OptionType>
       : SelectFieldProps<OptionType>),
 ): JSX.Element {

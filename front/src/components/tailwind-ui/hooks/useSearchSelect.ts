@@ -2,10 +2,7 @@ import { useField } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import {
-  SimpleStringSelectOption,
-  SimpleNumberSelectOption,
-} from '../forms/basic/Select';
+import { SimpleSelectOption } from '../forms/basic/Select';
 import {
   OptionsFilter,
   defaultOptionsFilter,
@@ -49,9 +46,7 @@ export interface SearchSelectFieldHookConfig<OptionType>
 }
 
 export function useSearchSelectField<OptionType>(
-  config: OptionType extends SimpleStringSelectOption
-    ? SimpleSearchSelectFieldHookConfig<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  config: OptionType extends SimpleSelectOption
     ? SimpleSearchSelectFieldHookConfig<OptionType>
     : SearchSelectFieldHookConfig<OptionType>,
 ): SearchSelectFieldHookResult<OptionType> {
@@ -67,9 +62,7 @@ export function useSearchSelectField<OptionType>(
 }
 
 export function useSearchSelectFieldRHF<OptionType>(
-  config: OptionType extends SimpleStringSelectOption
-    ? SimpleSearchSelectFieldHookConfig<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  config: OptionType extends SimpleSelectOption
     ? SimpleSearchSelectFieldHookConfig<OptionType>
     : SearchSelectFieldHookConfig<OptionType>,
 ): SearchSelectFieldHookResult<OptionType> {
@@ -94,9 +87,7 @@ export function useSearchSelectFieldRHF<OptionType>(
 }
 
 export function useSearchSelect<OptionType>(
-  config: OptionType extends SimpleStringSelectOption
-    ? SimpleSearchSelectHookConfig<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  config: OptionType extends SimpleSelectOption
     ? SimpleSearchSelectHookConfig<OptionType>
     : SearchSelectHookConfig<OptionType>,
 ): SearchSelectHookResult<OptionType> {

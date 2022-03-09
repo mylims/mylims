@@ -9,7 +9,7 @@ import React, {
 const BreadcrumbContext = createContext<boolean | null>(null);
 
 export interface BreadcrumbProps {
-  children: Array<ReactElement>;
+  children: Array<ReactElement> | ReactElement;
 }
 
 interface BreadcrumbContentProps {

@@ -12,17 +12,18 @@ import {
   useSearchSelectInternals,
   InternalMultiSearchSelect,
   defaultRenderCreate,
+  IsOptionRemovableCallback,
 } from '../../utils/search-select-utils';
 
 import { SearchSelectProps, SimpleSearchSelectProps } from './SearchSelect';
-import { SimpleStringSelectOption, SimpleNumberSelectOption } from './Select';
+import { SimpleSelectOption } from './Select';
 
 export interface SimpleMultiSearchSelectProps<OptionType>
   extends Omit<SimpleSearchSelectProps<OptionType>, 'selected' | 'onSelect'> {
   selected: OptionType[];
   onSelect: (newSelected: OptionType[]) => void;
   getBadgeColor?: (option: OptionType) => Color;
-  isOptionRemovable?: (option: OptionType) => boolean;
+  isOptionRemovable?: IsOptionRemovableCallback<OptionType>;
 }
 
 export interface MultiSearchSelectProps<OptionType>
@@ -31,7 +32,7 @@ export interface MultiSearchSelectProps<OptionType>
   selected: OptionType[];
   onSelect: (newSelected: OptionType[]) => void;
   getBadgeColor?: (option: OptionType) => Color;
-  isOptionRemovable?: (option: OptionType) => boolean;
+  isOptionRemovable?: IsOptionRemovableCallback<OptionType>;
 }
 
 export const MultiSearchSelect = forwardRefWithGeneric(
@@ -39,9 +40,7 @@ export const MultiSearchSelect = forwardRefWithGeneric(
 );
 
 function MultiSearchSelectForwardRef<OptionType>(
-  props: OptionType extends SimpleStringSelectOption
-    ? SimpleMultiSearchSelectProps<OptionType>
-    : OptionType extends SimpleNumberSelectOption
+  props: OptionType extends SimpleSelectOption
     ? SimpleMultiSearchSelectProps<OptionType>
     : MultiSearchSelectProps<OptionType>,
   ref: Ref<HTMLInputElement>,
@@ -69,6 +68,11 @@ function MultiSearchSelectForwardRef<OptionType>(
     const selectedValues = new Set(selected.map(getValue));
     return options.filter((option) => !selectedValues.has(getValue(option)));
   }, [options, selected, getValue]);
+
+  const nonRemovableValues = useMemo(
+    () => selected.filter((value) => !isOptionRemovable(value)),
+    [selected, isOptionRemovable],
+  );
 
   const renderedSelected = useMemo(() => {
     return selected.map((option) => {
@@ -106,12 +110,12 @@ function MultiSearchSelectForwardRef<OptionType>(
   const handleSelect = useCallback(
     (value: OptionType | undefined) => {
       if (value === undefined) {
-        onSelect([]);
+        onSelect(nonRemovableValues);
       } else {
         onSelect([...selected, value]);
       }
     },
-    [selected, onSelect],
+    [selected, onSelect, nonRemovableValues],
   );
 
   const handleBackspace = useCallback(() => {
@@ -145,7 +149,7 @@ function MultiSearchSelectForwardRef<OptionType>(
       inputRef={ref}
       clearable={clearable}
       disabled={disabled}
-      hasValue={selected.length !== 0}
+      hasClearableValue={selected.length !== nonRemovableValues.length}
       selectedBadges={renderedSelected}
     />
   );
