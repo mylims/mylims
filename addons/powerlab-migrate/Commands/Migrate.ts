@@ -313,6 +313,7 @@ export default class Migrate extends BaseCommand {
           usernames: [createdBy as string],
           emails: [`${createdBy as string}@epfl.ch`],
           role: 'MEMBER',
+          authMethods: { tequila: createdBy as string },
         });
       }
 
