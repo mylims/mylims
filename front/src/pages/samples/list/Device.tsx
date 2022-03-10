@@ -52,7 +52,7 @@ export default function DeviceList() {
           }
         >
           <TableQuery.TextColumn
-            title="heterostructure"
+            title="EPI structure"
             dataPath="meta.heterostructure"
             disableSearch
           />

@@ -52,7 +52,7 @@ export default function DyeList() {
           }
         >
           <TableQuery.TextColumn
-            title="heterostructure"
+            title="EPI structure"
             dataPath="meta.heterostructure"
             disableSearch
           />
