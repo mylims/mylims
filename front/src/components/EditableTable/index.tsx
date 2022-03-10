@@ -12,6 +12,7 @@ interface EditableTableProps {
   rows: number;
   onChange(data: Value[]): void;
   prepend?: string;
+  initialValue?: Value;
 }
 
 export function EditableTable({
@@ -19,9 +20,12 @@ export function EditableTable({
   rows,
   onChange,
   prepend: generalPrepend = '',
+  initialValue,
 }: EditableTableProps) {
   const [data, setData] = useState<Value[]>([]);
-  const [columnModifiers, setColumnModifiers] = useState<Value>({});
+  const [columnModifiers, setColumnModifiers] = useState<Value>(
+    initialValue ?? {},
+  );
   const [prepend, setPrepend] = useState('');
 
   // When the rows change, create the new data from column modifiers

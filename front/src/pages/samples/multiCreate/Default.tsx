@@ -31,7 +31,7 @@ const DIAMETERS: Record<string, number | undefined> = {
 };
 export function MultiCreate() {
   const [localError, setError] = useState<Error | null>(null);
-  const [rows, setRows] = useState(4);
+  const [rows, setRows] = useState(1);
   const [table, setTable] = useState<Value[]>([]);
   const { id: userId } = useAuth();
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ export function MultiCreate() {
   }
 
   const {
-    sample: { sampleCode, meta },
+    sample: { sampleCode, meta, project },
   } = data;
   const diameter: string = meta?.size ?? '-';
   const diameterRows: number | undefined = DIAMETERS[diameter];
@@ -136,6 +136,10 @@ export function MultiCreate() {
           { name: 'meta.heterostructure', label: 'EPI structure' },
         ]}
         onChange={(data) => setTable(data)}
+        initialValue={{
+          'meta.heterostructure': meta.heterostructure,
+          project: project ?? '',
+        }}
       />
     </div>
   );

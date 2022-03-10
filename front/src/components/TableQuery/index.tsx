@@ -28,7 +28,6 @@ import TextListColumn from './components/TextListColumn';
 import { TableQueryContext } from './hooks/useTableQueryContext';
 import { reducer } from './reducer';
 import {
-  ColumnKind,
   QueryType,
   ReducerActions,
   TableQueryProps,
