@@ -92,7 +92,11 @@ export default function WaferDetail() {
                 </Link>
               ) : null}
             </div>
-            <div className="text-neutral-500">{sample.meta.size} diameter</div>
+            {sample.meta.size ? (
+              <div className="text-neutral-500">
+                {sample.meta.size} diameter
+              </div>
+            ) : null}
             <WaferDicing
               size={350}
               diameter={sample.meta.size}

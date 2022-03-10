@@ -10,13 +10,12 @@ import {
   InputFieldRHF,
   optionalNumber,
   optionalString,
-  requiredString,
 } from '@/components/tailwind-ui';
 
 import DefaultUpdate from './Default';
 
 const waferUpdateSchema = {
-  size: requiredString(),
+  size: optionalString(),
   purpose: optionalString(),
   heterostructure: optionalString(),
   substrate: optionalString(),

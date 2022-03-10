@@ -53,6 +53,13 @@ export function SimpleWaferDicing({
       />
     );
   } catch (e) {
+    if (!diameter) {
+      return (
+        <div className="rounded-md bg-danger-100 p-3 text-danger-400">
+          Missing diameter
+        </div>
+      );
+    }
     return (
       <div className="rounded-md bg-danger-100 p-3 text-danger-400">
         Unknown diameter template for{' '}
