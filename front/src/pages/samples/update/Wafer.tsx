@@ -35,12 +35,7 @@ export default function WaferUpdate() {
     <DefaultUpdate codeLength={1} kind="wafer" metaSchema={waferUpdateSchema}>
       <div className="my-2 flex flex-col md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
         <div className="col-span-2">
-          <div
-            className="grid gap-4"
-            style={{
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            }}
-          >
+          <div className="grid-cols-auto grid gap-4">
             <InputFieldRHF name="sampleCode.0" label="Wafer name" disabled />
             <InputFieldRHF name="meta.size" label="Diameter" disabled />
             <InputFieldRHF name="project" label="Project" />
