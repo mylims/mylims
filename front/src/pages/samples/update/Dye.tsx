@@ -21,12 +21,7 @@ export default function DyeUpdate() {
     <DefaultUpdate codeLength={3} kind="dye" metaSchema={dyeUpdateSchema}>
       <div className="my-2 flex flex-col md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
         <div className="col-span-2">
-          <div
-            className="grid gap-4"
-            style={{
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            }}
-          >
+          <div className="grid-cols-auto grid gap-4">
             <InputFieldRHF name="meta.comment" label="Comment" />
           </div>
         </div>

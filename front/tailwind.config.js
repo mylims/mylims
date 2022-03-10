@@ -14,5 +14,10 @@ module.exports = {
       '3/4': '75%',
       full: '100%',
     },
+    extend: {
+      gridTemplateColumns: {
+        auto: 'repeat(auto-fill, minmax(200px, 1fr))',
+      },
+    },
   },
 };

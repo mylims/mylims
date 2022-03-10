@@ -25,10 +25,7 @@ export function FormSchema({ schema, data, onSubmit }: FormSchemaProps) {
 
   return (
     <FormRHF defaultValues={data} onSubmit={onSubmit}>
-      <div
-        className="grid max-w-screen-xl gap-4"
-        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}
-      >
+      <div className="grid-cols-auto grid max-w-screen-xl gap-4">
         {formFields}
       </div>
       <FormErrorRHF />
