@@ -31,6 +31,7 @@ input SampleFilterInput {
   title: FilterText
   comment: FilterText
   createdAt: FilterDate
+  meta: [FilterMetaText!]
 }
 input SampleSortInput {
   direction: SortDirection!

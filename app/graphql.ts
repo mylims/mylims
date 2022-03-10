@@ -209,6 +209,12 @@ export type GqlFilterList = {
   value: GqlFilterText;
 };
 
+export type GqlFilterMetaText = {
+  key: Scalars['String'];
+  operator: GqlFilterTextOperator;
+  value: Scalars['String'];
+};
+
 export type GqlFilterNumber = {
   max?: InputMaybe<Scalars['Int']>;
   min?: InputMaybe<Scalars['Int']>;
@@ -485,6 +491,7 @@ export type GqlSampleFilterInput = {
   comment?: InputMaybe<GqlFilterText>;
   createdAt?: InputMaybe<GqlFilterDate>;
   labels?: InputMaybe<GqlFilterText>;
+  meta?: InputMaybe<Array<GqlFilterMetaText>>;
   project?: InputMaybe<GqlFilterText>;
   sampleCode?: InputMaybe<Array<GqlFilterList>>;
   title?: InputMaybe<GqlFilterText>;
@@ -740,6 +747,7 @@ export type GqlResolversTypes = ResolversObject<{
   FilesSortInput: GqlFilesSortInput;
   FilterDate: GqlFilterDate;
   FilterList: GqlFilterList;
+  FilterMetaText: GqlFilterMetaText;
   FilterNumber: GqlFilterNumber;
   FilterText: GqlFilterText;
   FilterTextOperator: GqlFilterTextOperator;
@@ -824,6 +832,7 @@ export type GqlResolversParentTypes = ResolversObject<{
   FilesSortInput: GqlFilesSortInput;
   FilterDate: GqlFilterDate;
   FilterList: GqlFilterList;
+  FilterMetaText: GqlFilterMetaText;
   FilterNumber: GqlFilterNumber;
   FilterText: GqlFilterText;
   ID: Scalars['ID'];

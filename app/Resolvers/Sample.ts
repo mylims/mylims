@@ -17,6 +17,7 @@ import {
 } from 'App/graphql';
 import {
   filterDate,
+  filterMetaText,
   filterText,
   filterTextArray,
   NotReadOnly,
@@ -168,7 +169,7 @@ async function createFilter(
   filter.comment = filterText(filterBy.comment);
   filter.createdAt = filterDate(filterBy.createdAt);
 
-  return removeNullable(filter);
+  return removeNullable({ ...filter, ...filterMetaText(filterBy.meta) });
 }
 
 export default resolvers;

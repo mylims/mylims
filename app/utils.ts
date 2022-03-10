@@ -3,6 +3,7 @@ import escapeStringRegexp from 'escape-string-regexp';
 import {
   GqlFilterDate,
   GqlFilterList,
+  GqlFilterMetaText,
   GqlFilterNumber,
   GqlFilterText,
   GqlFilterTextOperator,
@@ -59,6 +60,17 @@ export function filterText(text: Maybe<GqlFilterText> | undefined) {
     default:
       return undefined;
   }
+}
+
+export function filterMetaText(meta: Maybe<GqlFilterMetaText[]> | undefined) {
+  if (!meta) return {};
+  let filter: Record<string, string | Record<'$regex' | '$options', string>> =
+    {};
+  for (const { key, operator, value } of meta) {
+    const filterValue = filterText({ value, operator });
+    if (filterValue) filter[key] = filterValue;
+  }
+  return filter;
 }
 
 export function filterTextArray(
