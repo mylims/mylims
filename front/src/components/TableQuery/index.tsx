@@ -77,11 +77,7 @@ export function Table<T extends Record<string, unknown>>({
     );
     let columnsTemplate = '';
     for (let i = 0; i < orderedColumns.length; i++) {
-      if (orderedColumns[i].kind !== ColumnKind.ACTIONS) {
-        columnsTemplate += `${widths[i]}px `;
-      } else {
-        columnsTemplate += '1fr ';
-      }
+      columnsTemplate += `${widths[i]}px `;
     }
     return columnsTemplate;
   }, [headerRef, orderedColumns]);
