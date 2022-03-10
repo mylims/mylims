@@ -19,6 +19,11 @@ input FilterText {
   operator: FilterTextOperator!
   value: String!
 }
+input FilterMetaText {
+  key: String!
+  operator: FilterTextOperator!
+  value: String!
+}
 
 input FilterDate {
   from: DateTime
