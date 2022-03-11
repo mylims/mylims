@@ -1,8 +1,8 @@
 import {
-  ArrowCircleDownIcon,
-  ArrowCircleRightIcon,
-  CheckCircleIcon,
-} from '@heroicons/react/outline';
+  EqualCircle20Regular,
+  TextAddSpaceBefore20Regular,
+  TextDirectionHorizontalRight20Regular,
+} from '@fluentui/react-icons';
 import objectPath from 'object-path';
 import React, { useEffect } from 'react';
 
@@ -21,14 +21,14 @@ interface IconFilterProps {
 export function IconFilterText({ operator, className }: IconFilterProps) {
   switch (operator) {
     case FilterTextOperator.CONTAINS: {
-      return <ArrowCircleDownIcon className={className} />;
+      return <TextAddSpaceBefore20Regular className={className} />;
     }
     case FilterTextOperator.STARTSWITH: {
-      return <ArrowCircleRightIcon className={className} />;
+      return <TextDirectionHorizontalRight20Regular className={className} />;
     }
     case FilterTextOperator.EQUALS:
     default: {
-      return <CheckCircleIcon className={className} />;
+      return <EqualCircle20Regular className={className} />;
     }
   }
 }

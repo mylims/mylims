@@ -12,9 +12,16 @@ import {
   BadgeVariant,
   Size,
 } from '@/components/tailwind-ui';
+import { FilterTextOperator } from '@/generated/graphql';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
+import { IconFilterText } from '@/components/TableQuery/components/TextColumn';
 
+interface QueryColum {
+  title: string;
+  value: string;
+  operator?: FilterTextOperator;
+}
 type JsonObject = Record<string, unknown>;
 export default function Queries() {
   const { columns, query, submitQuery } = useTableQueryContext();
@@ -24,7 +31,7 @@ export default function Queries() {
       Record<string, JsonObject | JsonObject[]>
     >(query);
 
-    let queries: Record<string, Record<'title' | 'value', string>> = {};
+    let queries: Record<string, QueryColum> = {};
 
     const values = {
       ...otherValues,
@@ -58,6 +65,7 @@ export default function Queries() {
           return key === column.value.queryPath ?? column.value.dataPath;
         });
         let content;
+        let operator;
         switch (columnValue?.kind) {
           case ColumnKind.DATE: {
             content = [value.from, value.to]
@@ -72,10 +80,15 @@ export default function Queries() {
           }
           default: {
             content = value.value as string;
+            operator = value.operator as FilterTextOperator;
             break;
           }
         }
-        queries[key] = { title: columnValue?.title ?? key, value: content };
+        queries[key] = {
+          title: columnValue?.title ?? key,
+          value: content,
+          operator,
+        };
       }
     }
 
@@ -105,33 +118,48 @@ export default function Queries() {
         Remove filters
       </Button>
       <div className="ml-3 flex space-x-3 rounded-lg bg-white p-2 shadow">
-        {Object.keys(queries).map((key) => (
-          <span key={key}>
-            <span className="text-xs font-semibold uppercase text-neutral-500">
-              {`${queries[key].title}: `}
+        {Object.keys(queries).map((key) => {
+          const operator = queries[key].operator;
+          const label = (
+            <span>
+              {operator !== undefined ? (
+                <>
+                  <IconFilterText operator={operator} />{' '}
+                </>
+              ) : null}
+              {queries[key].value}
             </span>
-            <Badge
-              label={queries[key].value}
-              variant={BadgeVariant.COLORED_BACKGROUND}
-              color={Color.primary}
-              dot={false}
-              onDismiss={() => {
-                const newQuery = produce(query, (draft) => {
-                  for (const queryKey of Object.keys(draft)) {
-                    const path = queryKey.split('.');
-                    if (
-                      path[0] === 'meta' ? path[1] === key : path[0] === key
-                    ) {
-                      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-                      delete draft[queryKey];
-                    }
-                  }
-                });
-                submitQuery(newQuery);
-              }}
-            />
-          </span>
-        ))}
+          );
+          return (
+            <span key={key}>
+              <span className="text-xs font-semibold uppercase text-neutral-500">
+                {`${queries[key].title}: `}
+              </span>
+              <span title={operator}>
+                <Badge
+                  label={label}
+                  variant={BadgeVariant.COLORED_BACKGROUND}
+                  color={Color.primary}
+                  dot={false}
+                  onDismiss={() => {
+                    const newQuery = produce(query, (draft) => {
+                      for (const queryKey of Object.keys(draft)) {
+                        const path = queryKey.split('.');
+                        if (
+                          path[0] === 'meta' ? path[1] === key : path[0] === key
+                        ) {
+                          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+                          delete draft[queryKey];
+                        }
+                      }
+                    });
+                    submitQuery(newQuery);
+                  }}
+                />
+              </span>
+            </span>
+          );
+        })}
       </div>
     </div>
   );

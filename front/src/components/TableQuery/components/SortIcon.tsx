@@ -1,4 +1,8 @@
-import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid';
+import {
+  ArrowDown20Filled,
+  ArrowSort20Filled,
+  ArrowUp20Filled,
+} from '@fluentui/react-icons';
 import React from 'react';
 
 import { SortDirection } from '@/generated/graphql';
@@ -18,7 +22,7 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
     query;
   if (sortField !== path) {
     return (
-      <SortDescendingIcon
+      <ArrowSort20Filled
         className="h-5 w-5 flex-none text-neutral-400"
         onClick={() => {
           submitQuery({
@@ -33,7 +37,7 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
 
   if (sortDirection === SortDirection.DESC) {
     return (
-      <SortDescendingIcon
+      <ArrowDown20Filled
         className="h-5 w-5 flex-none text-primary-600"
         onClick={() => {
           submitQuery({
@@ -47,7 +51,7 @@ export default function SortIcon({ disableSort, path }: SortIconProps) {
   }
 
   return (
-    <SortAscendingIcon
+    <ArrowUp20Filled
       className="h-5 w-5 flex-none text-primary-600"
       onClick={() => {
         submitQuery({
