@@ -7,7 +7,11 @@ export interface QueryType {
   'sortBy.direction': string;
   [key: string]: string | null;
 }
-export type Unflatten<Q, S> = Q & { page: string; sortBy: S };
+export type Unflatten<Q, S, M = Record<string, string>> = Omit<Q, 'meta'> & {
+  page: string;
+  sortBy: S;
+  meta: { [key: string]: M };
+};
 export interface TableQueryContextType {
   query: QueryType;
   columns: TableState;
@@ -62,6 +66,7 @@ export interface TableQueryHook {
 export enum ColumnKind {
   TEXT = 'text',
   TEXT_LIST = 'textList',
+  TEXT_META = 'textMeta',
   NUMBER = 'number',
   DATE = 'date',
   MULTI_SELECT = 'multiSelect',
@@ -83,6 +88,7 @@ interface RowStateGeneric<K, V> {
 export type RowState =
   | RowStateGeneric<ColumnKind.TEXT, BaseColumnProps>
   | RowStateGeneric<ColumnKind.TEXT_LIST, TextListColumnProps>
+  | RowStateGeneric<ColumnKind.TEXT_META, BaseColumnProps>
   | RowStateGeneric<ColumnKind.NUMBER, BaseColumnProps>
   | RowStateGeneric<ColumnKind.DATE, BaseColumnProps>
   | RowStateGeneric<ColumnKind.MULTI_SELECT, BaseColumnProps>

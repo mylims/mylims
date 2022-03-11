@@ -68,10 +68,10 @@ export default function WaferList() {
               return `${size} / ${children.length}`;
             }}
           </TableQuery.TextColumn>
-          <TableQuery.TextColumn
+          <TableQuery.TextMetaColumn
             title="EPI structure"
-            dataPath="meta.heterostructure"
-            disableSearch
+            dataPath="heterostructure"
+            disableSort
           />
           <TableQuery.TextColumn
             title="substrate"
