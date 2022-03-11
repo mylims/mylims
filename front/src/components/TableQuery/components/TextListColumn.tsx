@@ -13,25 +13,7 @@ import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, TextListColumnProps } from '../types';
 
 import HeaderRender from './HeaderRender';
-
-interface IconFilterProps {
-  operator: FilterTextOperator;
-  className?: string;
-}
-export function IconFilterText({ operator, className }: IconFilterProps) {
-  switch (operator) {
-    case FilterTextOperator.CONTAINS: {
-      return <ArrowCircleDownIcon className={className} />;
-    }
-    case FilterTextOperator.STARTSWITH: {
-      return <ArrowCircleRightIcon className={className} />;
-    }
-    case FilterTextOperator.EQUALS:
-    default: {
-      return <CheckCircleIcon className={className} />;
-    }
-  }
-}
+import { IconFilterText } from './TextColumn';
 
 export default function TextListColumn({
   title,
