@@ -1,5 +1,4 @@
 import { InformationCircleIcon } from '@heroicons/react/outline';
-import { unflatten } from 'flat';
 import objectPath from 'object-path';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -8,8 +7,8 @@ import ElnLayout from '@/components/ElnLayout';
 import { EventStatusLabel } from '@/components/EventStatusLabel';
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
-import { QueryType, Unflatten } from '@/components/TableQuery/types';
-import { boundariesFromPage } from '@/components/TableQuery/utils';
+import { Unflatten } from '@/components/TableQuery/types';
+import { getVariablesFromQuery } from '@/components/TableQuery/utils';
 import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
 import {
   EventFilterInput,
@@ -29,15 +28,14 @@ export default function EventsList() {
     'sortBy.direction': SortDirection.DESC,
     'sortBy.field': EventSortField.CREATEDAT,
   });
-  const { page, status, sortBy, ...filter } = unflatten<
-    QueryType,
-    Unflatten<EventFilter, EventSortInput>
-  >(query);
-  const { skip, limit } = boundariesFromPage(page);
+
+  const {
+    filterBy: { status, ...filter },
+    ...variables
+  } = getVariablesFromQuery<Unflatten<EventFilter, EventSortInput>>(query);
   const { loading, error, data } = useEventsFilteredQuery({
     variables: {
-      skip,
-      limit,
+      ...variables,
       filterBy: {
         ...filter,
         status:
@@ -46,7 +44,6 @@ export default function EventsList() {
             .filter<EventStatus>((value): value is EventStatus => !!value) ??
           null,
       },
-      sortBy,
     },
   });
 

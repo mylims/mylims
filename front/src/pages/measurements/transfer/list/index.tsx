@@ -1,11 +1,10 @@
-import { unflatten } from 'flat';
 import React from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
-import { QueryType, Unflatten } from '@/components/TableQuery/types';
-import { boundariesFromPage } from '@/components/TableQuery/utils';
+import { Unflatten } from '@/components/TableQuery/types';
+import { getVariablesFromQuery } from '@/components/TableQuery/utils';
 import { Select } from '@/components/tailwind-ui';
 import {
   MeasurementFilterInput,
@@ -34,21 +33,11 @@ export default function MeasurementsList() {
     'sortBy.field': MeasurementSortField.CREATEDAT,
     'sortBy.direction': SortDirection.DESC,
   });
-  const { page, type, sortBy, ...filter } = unflatten<
-    QueryType,
-    DestructuredQuery
-  >(query);
+  const variables = getVariablesFromQuery<DestructuredQuery>(query);
   const measurementType = (query.type ??
     MeasurementTypes.TRANSFER) as MeasurementTypes;
-  const { skip, limit } = boundariesFromPage(page);
   const { loading, error, data } = useMeasurementsFilteredQuery({
-    variables: {
-      type: measurementType,
-      skip,
-      limit,
-      filterBy: filter,
-      sortBy,
-    },
+    variables: { ...variables, type: measurementType },
   });
 
   return (

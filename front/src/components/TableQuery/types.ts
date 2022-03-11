@@ -1,13 +1,18 @@
 import { ApolloError } from '@apollo/client';
 import { ReactNode } from 'react';
 
+import { FilterMetaText } from '@/generated/graphql';
+
 export interface QueryType {
   page: string;
   'sortBy.field': string;
   'sortBy.direction': string;
   [key: string]: string | null;
 }
-export type Unflatten<Q, S, M = Record<string, string>> = Omit<Q, 'meta'> & {
+export type Unflatten<Q, S, M = Omit<FilterMetaText, 'key'>> = Omit<
+  Q,
+  'meta'
+> & {
   page: string;
   sortBy: S;
   meta: { [key: string]: M };

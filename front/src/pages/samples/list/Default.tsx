@@ -1,10 +1,12 @@
-import { unflatten } from 'flat';
 import React, { ReactNode } from 'react';
 
 import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
-import { QueryType, Unflatten } from '@/components/TableQuery/types';
-import { boundariesFromPage } from '@/components/TableQuery/utils';
+import { Unflatten } from '@/components/TableQuery/types';
+import {
+  getVariablesFromQuery,
+  PAGE_SIZE,
+} from '@/components/TableQuery/utils';
 import { Badge, BadgeVariant, Color } from '@/components/tailwind-ui';
 import {
   FilterList,
@@ -17,8 +19,6 @@ import {
   SortDirection,
   useSamplesFilteredQuery,
 } from '@/generated/graphql';
-
-const PAGE_SIZE = 10;
 
 interface SamplesListProps {
   kind: string;
@@ -38,31 +38,18 @@ export default function SamplesList({
     'sortBy.direction': SortDirection.DESC,
   });
   const {
-    page,
-    sortBy,
-    sampleCode,
-    meta: rawMeta,
-    ...filter
-  } = unflatten<
-    QueryType,
-    Unflatten<SampleFilterInput, SampleSortInput, FilterMetaText>
-  >(query);
-  const meta = rawMeta
-    ? Object.entries(rawMeta).map(([key, { value, operator }]) => ({
-        key,
-        value,
-        operator,
-      }))
-    : null;
-  const { skip, limit } = boundariesFromPage(page);
+    filterBy: { sampleCode, ...filter },
+    ...variables
+  } =
+    getVariablesFromQuery<
+      Unflatten<SampleFilterInput, SampleSortInput, FilterMetaText>
+    >(query);
   const { loading, error, data } = useSamplesFilteredQuery({
     variables: {
       kind,
-      skip,
-      limit,
+      ...variables,
       filterBy: {
         ...filter,
-        meta,
         sampleCode: sampleCode
           ?.filter((val) => !!val)
           .map((val) => ({
@@ -71,7 +58,6 @@ export default function SamplesList({
             index: val.index ? parseInt(val.index as string, 10) : null,
           })) as InputMaybe<FilterList[]> | undefined,
       },
-      sortBy,
     },
   });
 

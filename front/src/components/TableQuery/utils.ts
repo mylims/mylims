@@ -1,4 +1,7 @@
+import { unflatten } from 'flat';
 import { Children, cloneElement, isValidElement, ReactNode } from 'react';
+
+import { FilterMetaText } from '@/generated/graphql';
 
 import ActionsColumn from './components/ActionsColumn';
 import DateColumn from './components/DateColumn';
@@ -8,6 +11,7 @@ import Queries from './components/QueryPreview';
 import TextColumn from './components/TextColumn';
 import TextListColumn from './components/TextListColumn';
 import TextMetaColumn from './components/TextMetaColumn';
+import { QueryType } from './types';
 
 const invalidError = 'Invalid column child';
 export function splitChildren(children: ReactNode) {
@@ -42,10 +46,30 @@ export function splitChildren(children: ReactNode) {
 }
 
 export const PAGE_SIZE = 10;
-export function boundariesFromPage(page: string) {
+interface BaseQuery {
+  page: string;
+  sortBy: Record<'direction' | 'field', any>;
+  meta?: Record<string, Omit<FilterMetaText, 'key'>>;
+}
+export function getVariablesFromQuery<T extends BaseQuery>(query: QueryType) {
+  const {
+    page,
+    sortBy,
+    meta: rawMeta,
+    ...filter
+  } = unflatten<QueryType, T>(query);
+  const meta = rawMeta
+    ? Object.entries(rawMeta).map(([key, { value, operator }]) => ({
+        key,
+        value,
+        operator,
+      }))
+    : null;
   const pageNumber = parseInt(page, 10);
   return {
     skip: (pageNumber - 1) * PAGE_SIZE,
     limit: PAGE_SIZE,
+    filterBy: { ...filter, meta },
+    sortBy,
   };
 }
