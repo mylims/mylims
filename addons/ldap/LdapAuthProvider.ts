@@ -29,11 +29,12 @@ export async function attempt(
   try {
     const ldapEntry = await searchUser(userClient, uid);
     if (ldapEntry !== null) {
+      const { mail } = ldapEntry;
       const id = ldapEntry[config.id];
       const internalUser = await UserManager.getUser(
         'ldap',
         Array.isArray(id) ? id[0] : id,
-        Array.isArray(ldapEntry.mail) ? ldapEntry.mail[0] : ldapEntry.mail,
+        { email: Array.isArray(mail) ? mail[0] : mail },
       );
       await reconciliate(internalUser, ldapEntry);
       return internalUser;

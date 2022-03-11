@@ -39,19 +39,24 @@ export function objectToUrl(
  */
 export function reconciliate(
   internalUser: User,
-  tequilaUser: Record<string, string>,
+  { email, name, firstname, user }: Record<string, string | undefined>,
 ) {
-  if (tequilaUser.email && !internalUser.emails.includes(tequilaUser.email)) {
-    internalUser.emails.push(tequilaUser.email);
+  // Update email
+  if (email && !internalUser.emails.includes(email)) {
+    internalUser.emails.push(email);
   }
-  if (tequilaUser.name && internalUser.lastName !== tequilaUser.name) {
-    internalUser.lastName = tequilaUser.name;
+
+  // Update name
+  if (name && internalUser.lastName !== name) {
+    internalUser.lastName = name;
   }
-  if (
-    tequilaUser.firstname &&
-    internalUser.firstName !== tequilaUser.firstname
-  ) {
-    internalUser.firstName = tequilaUser.firstname;
+  if (firstname && internalUser.firstName !== firstname) {
+    internalUser.firstName = firstname;
+  }
+
+  // Update usernames
+  if (user && !internalUser.usernames.includes(user)) {
+    internalUser.usernames.push(user);
   }
   return internalUser.save();
 }

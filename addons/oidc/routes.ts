@@ -34,11 +34,8 @@ Route.post(
 
     const methodKey = `oidc_${state.provider}`;
 
-    const internalUser = await UserManager.getUser(
-      methodKey,
-      content.sub,
-      content.email,
-    );
+    const { sub: id, email } = content;
+    const internalUser = await UserManager.getUser(methodKey, id, { email });
     if (!internalUser) {
       return response.internalServerError({ errors: ['Failed to get user'] });
     }
