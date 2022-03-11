@@ -1,5 +1,6 @@
 type Query {
   users: [User!]!
+  usersInput(input: String!, limit: Int, skip: Int): UserPage!
 }
 
 type User {
@@ -10,4 +11,9 @@ type User {
   usernames: [String!]!
   role: String!
   authMethods: JSONObject!
+}
+
+type UserPage implements Pagination {
+  totalCount: Int!
+  list: [User!]!
 }

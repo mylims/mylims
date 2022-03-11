@@ -343,7 +343,8 @@ export type GqlPaginationNode =
   | GqlEvent
   | GqlMeasurement
   | GqlSample
-  | GqlSyncFileRevision;
+  | GqlSyncFileRevision
+  | GqlUser;
 
 export type GqlPattern = {
   __typename?: 'Pattern';
@@ -373,6 +374,7 @@ export type GqlQuery = {
   sampleKind: GqlSampleKind;
   samples: GqlSamplePage;
   users: Array<GqlUser>;
+  usersInput: GqlUserPage;
 };
 
 export type GqlQueryDirectoryTreeArgs = {
@@ -439,6 +441,12 @@ export type GqlQuerySamplesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   sortBy?: InputMaybe<GqlSampleSortInput>;
+};
+
+export type GqlQueryUsersInputArgs = {
+  input: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
 };
 
 export type GqlReadyCheck = {
@@ -607,6 +615,12 @@ export type GqlUser = {
   usernames: Array<Scalars['String']>;
 };
 
+export type GqlUserPage = GqlPagination & {
+  __typename?: 'UserPage';
+  list: Array<GqlUser>;
+  totalCount: Scalars['Int'];
+};
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -768,12 +782,14 @@ export type GqlResolversTypes = ResolversObject<{
     | GqlResolversTypes['EventPage']
     | GqlResolversTypes['FilesFlatPage']
     | GqlResolversTypes['MeasurementPage']
-    | GqlResolversTypes['SamplePage'];
+    | GqlResolversTypes['SamplePage']
+    | GqlResolversTypes['UserPage'];
   PaginationNode:
     | GqlResolversTypes['Event']
     | GqlResolversTypes['Measurement']
     | GqlResolversTypes['Sample']
-    | GqlResolversTypes['SyncFileRevision'];
+    | GqlResolversTypes['SyncFileRevision']
+    | GqlResolversTypes['User'];
   Pattern: ResolverTypeWrapper<GqlPattern>;
   PatternType: GqlPatternType;
   Query: ResolverTypeWrapper<{}>;
@@ -804,6 +820,9 @@ export type GqlResolversTypes = ResolversObject<{
   SyncFileRevision: ResolverTypeWrapper<GqlSyncFileRevision>;
   SyncTreeRevision: ResolverTypeWrapper<GqlSyncTreeRevision>;
   User: ResolverTypeWrapper<User>;
+  UserPage: ResolverTypeWrapper<
+    Omit<GqlUserPage, 'list'> & { list: Array<GqlResolversTypes['User']> }
+  >;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -850,12 +869,14 @@ export type GqlResolversParentTypes = ResolversObject<{
     | GqlResolversParentTypes['EventPage']
     | GqlResolversParentTypes['FilesFlatPage']
     | GqlResolversParentTypes['MeasurementPage']
-    | GqlResolversParentTypes['SamplePage'];
+    | GqlResolversParentTypes['SamplePage']
+    | GqlResolversParentTypes['UserPage'];
   PaginationNode:
     | GqlResolversParentTypes['Event']
     | GqlResolversParentTypes['Measurement']
     | GqlResolversParentTypes['Sample']
-    | GqlResolversParentTypes['SyncFileRevision'];
+    | GqlResolversParentTypes['SyncFileRevision']
+    | GqlResolversParentTypes['User'];
   Pattern: GqlPattern;
   Query: {};
   ReadyCheck: GqlReadyCheck;
@@ -881,6 +902,9 @@ export type GqlResolversParentTypes = ResolversObject<{
   SyncFileRevision: GqlSyncFileRevision;
   SyncTreeRevision: GqlSyncTreeRevision;
   User: User;
+  UserPage: Omit<GqlUserPage, 'list'> & {
+    list: Array<GqlResolversParentTypes['User']>;
+  };
 }>;
 
 export interface GqlDateTimeScalarConfig
@@ -1160,7 +1184,11 @@ export type GqlPaginationResolvers<
   ParentType extends GqlResolversParentTypes['Pagination'] = GqlResolversParentTypes['Pagination'],
 > = ResolversObject<{
   __resolveType: TypeResolveFn<
-    'EventPage' | 'FilesFlatPage' | 'MeasurementPage' | 'SamplePage',
+    | 'EventPage'
+    | 'FilesFlatPage'
+    | 'MeasurementPage'
+    | 'SamplePage'
+    | 'UserPage',
     ParentType,
     ContextType
   >;
@@ -1177,7 +1205,7 @@ export type GqlPaginationNodeResolvers<
   ParentType extends GqlResolversParentTypes['PaginationNode'] = GqlResolversParentTypes['PaginationNode'],
 > = ResolversObject<{
   __resolveType: TypeResolveFn<
-    'Event' | 'Measurement' | 'Sample' | 'SyncFileRevision',
+    'Event' | 'Measurement' | 'Sample' | 'SyncFileRevision' | 'User',
     ParentType,
     ContextType
   >;
@@ -1279,6 +1307,12 @@ export type GqlQueryResolvers<
     RequireFields<GqlQuerySamplesArgs, 'kind'>
   >;
   users?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
+  usersInput?: Resolver<
+    GqlResolversTypes['UserPage'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryUsersInputArgs, 'input'>
+  >;
 }>;
 
 export type GqlReadyCheckResolvers<
@@ -1503,6 +1537,15 @@ export type GqlUserResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type GqlUserPageResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['UserPage'] = GqlResolversParentTypes['UserPage'],
+> = ResolversObject<{
+  list?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
+  totalCount?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   DirectoryEntry?: GqlDirectoryEntryResolvers<ContextType>;
@@ -1538,4 +1581,5 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   SyncFileRevision?: GqlSyncFileRevisionResolvers<ContextType>;
   SyncTreeRevision?: GqlSyncTreeRevisionResolvers<ContextType>;
   User?: GqlUserResolvers<ContextType>;
+  UserPage?: GqlUserPageResolvers<ContextType>;
 }>;
