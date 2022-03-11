@@ -1,8 +1,3 @@
-import {
-  ArrowCircleDownIcon,
-  ArrowCircleRightIcon,
-  CheckCircleIcon,
-} from '@heroicons/react/outline';
 import objectPath from 'object-path';
 import React, { useEffect } from 'react';
 

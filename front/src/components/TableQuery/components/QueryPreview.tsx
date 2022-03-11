@@ -3,6 +3,7 @@ import { unflatten } from 'flat';
 import { produce } from 'immer';
 import React, { useMemo } from 'react';
 
+import { IconFilterText } from '@/components/TableQuery/components/TextColumn';
 import { ColumnKind, QueryType } from '@/components/TableQuery/types';
 import {
   Button,
@@ -15,7 +16,6 @@ import {
 import { FilterTextOperator } from '@/generated/graphql';
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
-import { IconFilterText } from '@/components/TableQuery/components/TextColumn';
 
 interface QueryColum {
   title: string;
