@@ -56,12 +56,12 @@ export default function SampleList() {
           <TableQuery.TextColumn
             title="EPI structure"
             dataPath="meta.heterostructure"
-            disableSearch
+            disableSort
           />
           <TableQuery.TextColumn
             title="Status"
             dataPath="meta.sampleStatus"
-            disableSearch
+            disableSort
           >
             {(row) => {
               const {

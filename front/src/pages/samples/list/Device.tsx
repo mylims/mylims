@@ -54,7 +54,7 @@ export default function DeviceList() {
           <TableQuery.TextColumn
             title="heterostructure"
             dataPath="meta.heterostructure"
-            disableSearch
+            disableSort
           />
         </SamplesList>
       </div>
