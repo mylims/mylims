@@ -76,17 +76,17 @@ export default function WaferList() {
           <TableQuery.TextColumn
             title="substrate"
             dataPath="meta.substrate"
-            disableSearch
+            disableSort
           />
           <TableQuery.TextColumn
             title="size"
             dataPath="meta.size"
-            disableSearch
+            disableSort
           />
           <TableQuery.TextColumn
             title="location"
             dataPath="meta.location"
-            disableSearch
+            disableSort
           />
         </SamplesList>
       </div>
