@@ -59,12 +59,12 @@ Route.get(
 
       const tequilaResponse = await authUser.text();
       const tequilaUser = textToObject(tequilaResponse);
-      if (!tequilaUser.uniqueid) return response.ok(authUser);
+      if (!tequilaUser.user) return response.ok(authUser);
 
       const internalUser = await UserManager.getUser(
         'tequila',
-        tequilaUser.uniqueid,
-        tequilaUser.email,
+        tequilaUser.user,
+        { email: tequilaUser.email, username: tequilaUser.user },
       );
       if (!internalUser) {
         return response.internalServerError({ errors: ['Failed to get user'] });
