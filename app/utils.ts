@@ -68,7 +68,7 @@ export function filterMetaText(meta: Maybe<GqlFilterMetaText[]> | undefined) {
     {};
   for (const { key, operator, value } of meta) {
     const filterValue = filterText({ value, operator });
-    if (filterValue) filter[key] = filterValue;
+    if (filterValue) filter[`meta.${key}`] = filterValue;
   }
   return filter;
 }

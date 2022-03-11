@@ -25,6 +25,7 @@ import Queries from './components/QueryPreview';
 import RowRender from './components/RowRender';
 import TextColumn from './components/TextColumn';
 import TextListColumn from './components/TextListColumn';
+import TextMetaColumn from './components/TextMetaColumn';
 import { TableQueryContext } from './hooks/useTableQueryContext';
 import { reducer } from './reducer';
 import {
@@ -179,5 +180,6 @@ Table.DateColumn = DateColumn;
 Table.NumberColumn = NumberColumn;
 Table.TextColumn = TextColumn;
 Table.TextListColumn = TextListColumn;
+Table.TextMetaColumn = TextMetaColumn;
 Table.MultiSelectColumn = MultiSelectColumn;
 Table.ActionsColumn = ActionsColumn;

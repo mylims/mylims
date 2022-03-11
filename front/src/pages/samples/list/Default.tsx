@@ -8,6 +8,7 @@ import { boundariesFromPage } from '@/components/TableQuery/utils';
 import { Badge, BadgeVariant, Color } from '@/components/tailwind-ui';
 import {
   FilterList,
+  FilterMetaText,
   InputMaybe,
   Sample,
   SampleFilterInput,
@@ -36,10 +37,23 @@ export default function SamplesList({
     'sortBy.field': SampleSortField.CREATEDAT,
     'sortBy.direction': SortDirection.DESC,
   });
-  const { page, sortBy, sampleCode, ...filter } = unflatten<
+  const {
+    page,
+    sortBy,
+    sampleCode,
+    meta: rawMeta,
+    ...filter
+  } = unflatten<
     QueryType,
-    Unflatten<SampleFilterInput, SampleSortInput>
+    Unflatten<SampleFilterInput, SampleSortInput, FilterMetaText>
   >(query);
+  const meta = rawMeta
+    ? Object.entries(rawMeta).map(([key, { value, operator }]) => ({
+        key,
+        value,
+        operator,
+      }))
+    : null;
   const { skip, limit } = boundariesFromPage(page);
   const { loading, error, data } = useSamplesFilteredQuery({
     variables: {
@@ -48,6 +62,7 @@ export default function SamplesList({
       limit,
       filterBy: {
         ...filter,
+        meta,
         sampleCode: sampleCode
           ?.filter((val) => !!val)
           .map((val) => ({

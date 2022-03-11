@@ -187,6 +187,12 @@ export type FilterList = {
   value: FilterText;
 };
 
+export type FilterMetaText = {
+  key: Scalars['String'];
+  operator: FilterTextOperator;
+  value: Scalars['String'];
+};
+
 export type FilterNumber = {
   max?: InputMaybe<Scalars['Int']>;
   min?: InputMaybe<Scalars['Int']>;
@@ -449,6 +455,7 @@ export type SampleFilterInput = {
   comment?: InputMaybe<FilterText>;
   createdAt?: InputMaybe<FilterDate>;
   labels?: InputMaybe<FilterText>;
+  meta?: InputMaybe<Array<FilterMetaText>>;
   project?: InputMaybe<FilterText>;
   sampleCode?: InputMaybe<Array<FilterList>>;
   title?: InputMaybe<FilterText>;

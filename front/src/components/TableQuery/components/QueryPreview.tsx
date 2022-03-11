@@ -15,16 +15,21 @@ import {
 
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 
+type JsonObject = Record<string, unknown>;
 export default function Queries() {
   const { columns, query, submitQuery } = useTableQueryContext();
   const queries = useMemo(() => {
-    const { sortBy, page, ...values } = unflatten<
+    const { sortBy, page, meta, ...otherValues } = unflatten<
       QueryType,
-      Record<string, Record<string, unknown> | Record<string, unknown>[]>
+      Record<string, JsonObject | JsonObject[]>
     >(query);
 
     let queries: Record<string, Record<'title' | 'value', string>> = {};
 
+    const values = {
+      ...otherValues,
+      ...(meta as Record<string, JsonObject>),
+    };
     for (const key of Object.keys(values)) {
       const value = values[key];
 
@@ -113,7 +118,10 @@ export default function Queries() {
               onDismiss={() => {
                 const newQuery = produce(query, (draft) => {
                   for (const queryKey of Object.keys(draft)) {
-                    if (queryKey.startsWith(key)) {
+                    const path = queryKey.split('.');
+                    if (
+                      path[0] === 'meta' ? path[1] === key : path[0] === key
+                    ) {
                       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                       delete draft[queryKey];
                     }
