@@ -35,6 +35,7 @@ import {
   TableState,
 } from './types';
 import { PAGE_SIZE, splitChildren } from './utils';
+import UserColumn from '@/components/TableQuery/components/UserColumn';
 
 interface TableBodyProps<T> {
   list: Array<T>;
@@ -182,4 +183,5 @@ Table.TextColumn = TextColumn;
 Table.TextListColumn = TextListColumn;
 Table.TextMetaColumn = TextMetaColumn;
 Table.MultiSelectColumn = MultiSelectColumn;
+Table.UserColumn = UserColumn;
 Table.ActionsColumn = ActionsColumn;

@@ -11,6 +11,7 @@ import Queries from './components/QueryPreview';
 import TextColumn from './components/TextColumn';
 import TextListColumn from './components/TextListColumn';
 import TextMetaColumn from './components/TextMetaColumn';
+import UserColumn from './components/UserColumn';
 import { QueryType } from './types';
 
 const invalidError = 'Invalid column child';
@@ -31,6 +32,7 @@ export function splitChildren(children: ReactNode) {
       child.type === TextMetaColumn ||
       child.type === DateColumn ||
       child.type === MultiSelectColumn ||
+      child.type === UserColumn ||
       child.type === ActionsColumn
     ) {
       columns.push(cloneElement(child, { ...child.props, index }));
@@ -50,12 +52,14 @@ interface BaseQuery {
   page: string;
   sortBy: Record<'direction' | 'field', any>;
   meta?: Record<string, Omit<FilterMetaText, 'key'>>;
+  user?: Record<'label' | 'value', string>;
 }
 export function getVariablesFromQuery<T extends BaseQuery>(query: QueryType) {
   const {
     page,
     sortBy,
     meta: rawMeta,
+    user,
     ...filter
   } = unflatten<QueryType, T>(query);
   const meta = rawMeta
@@ -69,7 +73,7 @@ export function getVariablesFromQuery<T extends BaseQuery>(query: QueryType) {
   return {
     skip: (pageNumber - 1) * PAGE_SIZE,
     limit: PAGE_SIZE,
-    filterBy: { ...filter, meta },
+    filterBy: { ...filter, meta, userId: user?.value },
     sortBy,
   };
 }

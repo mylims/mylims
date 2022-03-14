@@ -1,10 +1,23 @@
+fragment UserFields on User {
+  id
+  lastName
+  firstName
+  emails
+  role
+  authMethods
+  usernames
+}
 query Users {
   users {
-    id
-    lastName
-    firstName
-    emails
-    role
-    authMethods
+    ...UserFields
+  }
+}
+
+query UsersInput($input: String!, $limit: Int) {
+  usersInput(input: $input, limit: $limit) {
+    totalCount
+    list {
+      ...UserFields
+    }
   }
 }

@@ -86,18 +86,7 @@ export default function SamplesList({
           }}
         </TableQuery.TextListColumn>
       ))}
-      <TableQuery.TextColumn
-        title="username"
-        dataPath="user.usernames"
-        disableSort
-        disableSearch
-      >
-        {(row) => {
-          const usernames = (row as Sample).user?.usernames;
-          if (!usernames || usernames.length === 0) return '-';
-          return usernames[0];
-        }}
-      </TableQuery.TextColumn>
+      <TableQuery.UserColumn title="user" dataPath="user" disableSort />
       <TableQuery.TextColumn title="Labels" dataPath="labels" disableSort>
         {(row) => {
           const { labels, id } = row as Sample;

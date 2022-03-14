@@ -78,6 +78,10 @@ export default function Queries() {
             content = JSON.stringify(value);
             break;
           }
+          case ColumnKind.USER: {
+            content = value.label as string;
+            break;
+          }
           default: {
             content = value.value as string;
             operator = value.operator as FilterTextOperator;
