@@ -24,6 +24,22 @@ export function SimpleWaferDicing({
     // do nothing
   },
 }: SimpleWaferDicingProps) {
+  if (/chip/i.test(diameter)) {
+    return (
+      <Wafer
+        size={size}
+        rows={3}
+        columns={3}
+        diameter={{ value: 3, units: 'cm' }}
+        chipHeight={{ value: 2, units: 'cm' }}
+        chipWidth={{ value: 1.8, units: 'cm' }}
+        textStyle={{ fontSize: '0.7em' }}
+        prepend="A"
+        pickedItems={pickedItems}
+        onSelect={onSelect}
+      />
+    );
+  }
   try {
     const { value, units } = fromTextToValue(diameter);
     let rows: number | undefined;
