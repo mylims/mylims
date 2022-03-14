@@ -10,6 +10,7 @@ import React, {
   useState,
 } from 'react';
 
+import UserColumn from '@/components/TableQuery/components/UserColumn';
 import {
   Alert,
   AlertType,
@@ -35,7 +36,6 @@ import {
   TableState,
 } from './types';
 import { PAGE_SIZE, splitChildren } from './utils';
-import UserColumn from '@/components/TableQuery/components/UserColumn';
 
 interface TableBodyProps<T> {
   list: Array<T>;
