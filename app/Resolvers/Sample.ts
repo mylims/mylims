@@ -20,6 +20,7 @@ import {
   filterMetaText,
   filterText,
   filterTextArray,
+  filterUser,
   NotReadOnly,
   removeNullable,
 } from 'App/utils';
@@ -168,6 +169,7 @@ async function createFilter(
   filter.title = filterText(filterBy.title);
   filter.comment = filterText(filterBy.comment);
   filter.createdAt = filterDate(filterBy.createdAt);
+  filter.userId = filterUser(filterBy.userId);
 
   return removeNullable({ ...filter, ...filterMetaText(filterBy.meta) });
 }

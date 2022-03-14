@@ -503,6 +503,7 @@ export type GqlSampleFilterInput = {
   project?: InputMaybe<GqlFilterText>;
   sampleCode?: InputMaybe<Array<GqlFilterList>>;
   title?: InputMaybe<GqlFilterText>;
+  userId?: InputMaybe<Scalars['String']>;
 };
 
 export type GqlSampleInput = {

@@ -1,5 +1,7 @@
 import escapeStringRegexp from 'escape-string-regexp';
 
+import { ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
+
 import {
   GqlFilterDate,
   GqlFilterList,
@@ -88,4 +90,9 @@ export function filterTextArray(
     if (filterValue) filter[key] = filterValue;
   }
   return filter;
+}
+
+export function filterUser(userId: Maybe<string> | undefined) {
+  if (!userId) return undefined;
+  return new ObjectId(userId);
 }
