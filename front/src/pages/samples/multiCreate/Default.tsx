@@ -67,7 +67,9 @@ export function MultiCreate() {
     sample: { sampleCode, meta, project },
   } = data;
   const diameter: string = meta?.size ?? '-';
-  const diameterRows: number | undefined = DIAMETERS[diameter];
+  const diameterRows: number | undefined = /chip/i.test(diameter)
+    ? 1
+    : DIAMETERS[diameter];
   return (
     <div>
       <div className="mb-2 flex flex-row justify-between">

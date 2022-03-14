@@ -79,7 +79,7 @@ export default function WaferCreate() {
             label="Diameter"
             defaultCreation={defaultCreation}
             setDefaultCreation={setDefaultCreation}
-            options={['2 inch', '4 inch', '6 inch'].map((value) => ({
+            options={['chip', '2 inch', '4 inch', '6 inch'].map((value) => ({
               value,
               label: value,
             }))}
