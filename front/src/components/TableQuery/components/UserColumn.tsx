@@ -138,9 +138,9 @@ export default function UserColumn({
 
 function UserDetail({ user }: { user: UserSelection }) {
   const name =
-    [user.firstName?.toUpperCase(), user.lastName?.toLowerCase()]
+    [user.lastName?.toUpperCase(), user.firstName?.toLowerCase()]
       .filter((v) => !!v)
-      .join(',') ?? null;
+      .join(', ') ?? null;
   return (
     <div title={user.username}>
       <div className="text-base font-bold normal-case">{user.username}</div>
