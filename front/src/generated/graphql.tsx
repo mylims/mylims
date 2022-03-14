@@ -313,7 +313,12 @@ export type Pagination = {
   totalCount: Scalars['Int'];
 };
 
-export type PaginationNode = Event | Measurement | Sample | SyncFileRevision;
+export type PaginationNode =
+  | Event
+  | Measurement
+  | Sample
+  | SyncFileRevision
+  | User;
 
 export type Pattern = {
   pattern: Scalars['String'];
@@ -341,6 +346,7 @@ export type Query = {
   sampleKind: SampleKind;
   samples: SamplePage;
   users: Array<User>;
+  usersInput: UserPage;
 };
 
 export type QueryDirectoryTreeArgs = {
@@ -409,6 +415,12 @@ export type QuerySamplesArgs = {
   sortBy?: InputMaybe<SampleSortInput>;
 };
 
+export type QueryUsersInputArgs = {
+  input: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+};
+
 export type ReadyCheck = {
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
@@ -459,6 +471,7 @@ export type SampleFilterInput = {
   project?: InputMaybe<FilterText>;
   sampleCode?: InputMaybe<Array<FilterList>>;
   title?: InputMaybe<FilterText>;
+  userId?: InputMaybe<Scalars['String']>;
 };
 
 export type SampleInput = {
@@ -562,6 +575,11 @@ export type User = {
   lastName?: Maybe<Scalars['String']>;
   role: Scalars['String'];
   usernames: Array<Scalars['String']>;
+};
+
+export type UserPage = Pagination & {
+  list: Array<User>;
+  totalCount: Scalars['Int'];
 };
 
 export type EventQueryVariables = Exact<{
@@ -885,7 +903,13 @@ export type SampleFieldsFragment = {
   comment?: string | null;
   meta: any;
   createdAt: any;
-  user?: { id: string; usernames: Array<string> } | null;
+  user?: {
+    id: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    emails: Array<string>;
+    usernames: Array<string>;
+  } | null;
 };
 
 export type SampleKindFieldsFragment = {
@@ -929,10 +953,22 @@ export type SamplesFilteredQuery = {
         comment?: string | null;
         meta: any;
         createdAt: any;
-        user?: { id: string; usernames: Array<string> } | null;
+        user?: {
+          id: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          emails: Array<string>;
+          usernames: Array<string>;
+        } | null;
       }> | null;
       parent?: { id: string } | null;
-      user?: { id: string; usernames: Array<string> } | null;
+      user?: {
+        id: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        emails: Array<string>;
+        usernames: Array<string>;
+      } | null;
     }>;
   };
 };
@@ -973,9 +1009,21 @@ export type SampleQuery = {
       comment?: string | null;
       meta: any;
       createdAt: any;
-      user?: { id: string; usernames: Array<string> } | null;
+      user?: {
+        id: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        emails: Array<string>;
+        usernames: Array<string>;
+      } | null;
     }> | null;
-    user?: { id: string; usernames: Array<string> } | null;
+    user?: {
+      id: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      emails: Array<string>;
+      usernames: Array<string>;
+    } | null;
   };
 };
 
@@ -1009,7 +1057,13 @@ export type CreateSampleMutation = {
     comment?: string | null;
     meta: any;
     createdAt: any;
-    user?: { id: string; usernames: Array<string> } | null;
+    user?: {
+      id: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      emails: Array<string>;
+      usernames: Array<string>;
+    } | null;
   };
 };
 
@@ -1029,7 +1083,13 @@ export type CreateMultipleSamplesMutation = {
     comment?: string | null;
     meta: any;
     createdAt: any;
-    user?: { id: string; usernames: Array<string> } | null;
+    user?: {
+      id: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      emails: Array<string>;
+      usernames: Array<string>;
+    } | null;
   }>;
 };
 
@@ -1050,8 +1110,24 @@ export type UpdateSampleMutation = {
     comment?: string | null;
     meta: any;
     createdAt: any;
-    user?: { id: string; usernames: Array<string> } | null;
+    user?: {
+      id: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      emails: Array<string>;
+      usernames: Array<string>;
+    } | null;
   };
+};
+
+export type UserFieldsFragment = {
+  id: string;
+  lastName?: string | null;
+  firstName?: string | null;
+  emails: Array<string>;
+  role: string;
+  authMethods: any;
+  usernames: Array<string>;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
@@ -1064,7 +1140,28 @@ export type UsersQuery = {
     emails: Array<string>;
     role: string;
     authMethods: any;
+    usernames: Array<string>;
   }>;
+};
+
+export type UsersInputQueryVariables = Exact<{
+  input: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type UsersInputQuery = {
+  usersInput: {
+    totalCount: number;
+    list: Array<{
+      id: string;
+      lastName?: string | null;
+      firstName?: string | null;
+      emails: Array<string>;
+      role: string;
+      authMethods: any;
+      usernames: Array<string>;
+    }>;
+  };
 };
 
 export const FileSyncOptionFieldsFragmentDoc = gql`
@@ -1126,6 +1223,9 @@ export const SampleFieldsFragmentDoc = gql`
     createdAt
     user {
       id
+      firstName
+      lastName
+      emails
       usernames
     }
   }
@@ -1137,6 +1237,17 @@ export const SampleKindFieldsFragmentDoc = gql`
     description
     color
     schema
+  }
+`;
+export const UserFieldsFragmentDoc = gql`
+  fragment UserFields on User {
+    id
+    lastName
+    firstName
+    emails
+    role
+    authMethods
+    usernames
   }
 `;
 export const EventDocument = gql`
@@ -2454,14 +2565,10 @@ export type UpdateSampleMutationOptions = Apollo.BaseMutationOptions<
 export const UsersDocument = gql`
   query Users {
     users {
-      id
-      lastName
-      firstName
-      emails
-      role
-      authMethods
+      ...UserFields
     }
   }
+  ${UserFieldsFragmentDoc}
 `;
 
 /**
@@ -2511,4 +2618,68 @@ export type UsersQueryResult = Apollo.QueryResult<
 >;
 export function refetchUsersQuery(variables?: UsersQueryVariables) {
   return { query: UsersDocument, variables: variables };
+}
+export const UsersInputDocument = gql`
+  query UsersInput($input: String!, $limit: Int) {
+    usersInput(input: $input, limit: $limit) {
+      totalCount
+      list {
+        ...UserFields
+      }
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+
+/**
+ * __useUsersInputQuery__
+ *
+ * To run a query within a React component, call `useUsersInputQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersInputQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersInputQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useUsersInputQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    UsersInputQuery,
+    UsersInputQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<UsersInputQuery, UsersInputQueryVariables>(
+    UsersInputDocument,
+    options,
+  );
+}
+export function useUsersInputLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    UsersInputQuery,
+    UsersInputQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    UsersInputQuery,
+    UsersInputQueryVariables
+  >(UsersInputDocument, options);
+}
+export type UsersInputQueryHookResult = ReturnType<typeof useUsersInputQuery>;
+export type UsersInputLazyQueryHookResult = ReturnType<
+  typeof useUsersInputLazyQuery
+>;
+export type UsersInputQueryResult = Apollo.QueryResult<
+  UsersInputQuery,
+  UsersInputQueryVariables
+>;
+export function refetchUsersInputQuery(variables: UsersInputQueryVariables) {
+  return { query: UsersInputDocument, variables: variables };
 }

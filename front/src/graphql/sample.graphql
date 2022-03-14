@@ -11,6 +11,9 @@ fragment SampleFields on Sample {
   createdAt
   user {
     id
+    firstName
+    lastName
+    emails
     usernames
   }
 }

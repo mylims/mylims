@@ -75,6 +75,7 @@ export enum ColumnKind {
   NUMBER = 'number',
   DATE = 'date',
   MULTI_SELECT = 'multiSelect',
+  USER = 'user',
   ACTIONS = 'actions',
 }
 
@@ -97,6 +98,7 @@ export type RowState =
   | RowStateGeneric<ColumnKind.NUMBER, BaseColumnProps>
   | RowStateGeneric<ColumnKind.DATE, BaseColumnProps>
   | RowStateGeneric<ColumnKind.MULTI_SELECT, BaseColumnProps>
+  | RowStateGeneric<ColumnKind.USER, BaseColumnProps>
   | {
       index: number;
       kind: ColumnKind.ACTIONS;
