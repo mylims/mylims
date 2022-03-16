@@ -68,7 +68,7 @@ export function getVariablesFromQuery<T extends BaseQuery>(query: QueryType) {
         value,
         operator,
       }))
-    : null;
+    : undefined;
   const pageNumber = parseInt(page, 10);
   return {
     skip: (pageNumber - 1) * PAGE_SIZE,
