@@ -20,8 +20,10 @@ interface DefaultCreationProps {
   codeLength: number;
   kind: string;
   metaSchema: Record<string, BaseSchema>;
-  defaultCreation: boolean;
+  defaultCreation?: boolean;
   children: ReactNode;
+  sampleCode: string[];
+  parent?: string;
 }
 
 export default function DefaultCreate({
@@ -29,6 +31,8 @@ export default function DefaultCreate({
   kind,
   metaSchema,
   defaultCreation,
+  sampleCode,
+  parent,
   children,
 }: DefaultCreationProps) {
   const { id } = useAuth();
@@ -37,10 +41,11 @@ export default function DefaultCreate({
   const [authError, setError] = useState<Error | null>(null);
   const [createSample, { loading, error }] = useCreateSampleMutation();
   const initialSample: SampleInputForm = {
+    sampleCode,
+    parent,
     attachments: [],
     labels: [],
     meta: { description: [] },
-    sampleCode: [],
   };
 
   const waferCreateSchema = requiredObject({

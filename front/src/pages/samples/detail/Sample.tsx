@@ -44,9 +44,6 @@ export default function SampleDetail() {
               <FieldDescription title="EPI structure">
                 {sample.meta.heterostructure ?? '-'}
               </FieldDescription>
-              <FieldDescription title="Status">
-                {sample.meta.sampleStatus ?? 'Unprocessed'}
-              </FieldDescription>
             </div>
           </div>
           <div className="col-span-2">

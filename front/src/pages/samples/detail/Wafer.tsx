@@ -87,10 +87,20 @@ export default function WaferDetail() {
                     color={Color.success}
                     size={Size.small}
                   >
-                    + Add samples
+                    + Add multiple samples
                   </Button>
                 </Link>
               ) : null}
+              <Link to={`/sample/singleCreate/sample/${sample.id}`}>
+                <Button
+                  className="mb-4"
+                  variant={Variant.secondary}
+                  color={Color.success}
+                  size={Size.small}
+                >
+                  + Add sample
+                </Button>
+              </Link>
             </div>
             {sample.meta.size ? (
               <div className="text-neutral-500">

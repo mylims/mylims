@@ -169,6 +169,16 @@ export default function WaferList() {
                       </Button>
                     </Link>
                   )}
+                  <Link to={`/sample/singleCreate/sample/${state.id}`}>
+                    <Button
+                      className="mb-4"
+                      variant={Variant.secondary}
+                      color={Color.success}
+                      size={Size.small}
+                    >
+                      + Add sample
+                    </Button>
+                  </Link>
                   <FieldDescription title="Name">
                     {state.sampleCode.join('_')}
                   </FieldDescription>
