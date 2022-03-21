@@ -17,9 +17,10 @@ config:
   contextType: '@ioc:Zakodium/Apollo/Server#ApolloBaseContext'
   useIndexSignature: true
   mappers:
-    User: ./Models/User#default
-    FileSyncOption: ../addons/file-sync/Models/FileSyncOption#FileSyncOption
-    SyncFile: ../addons/file-sync/Models/SyncFile#SyncFile
     Event: ../addons/events/Models/Event#Event
+    FileSyncOption: ../addons/file-sync/Models/FileSyncOption#FileSyncOption
+    Measurement: ./Models/Measurement/Base#BaseMeasurement
     Sample: ./Models/Sample#Sample
     SampleKind: ./Models/SampleKind#SampleKind
+    SyncFile: ../addons/file-sync/Models/SyncFile#SyncFile
+    User: ./Models/User#default
