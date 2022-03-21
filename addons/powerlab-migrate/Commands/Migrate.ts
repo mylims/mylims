@@ -147,7 +147,7 @@ export default class Migrate extends BaseCommand {
       (sample: GqlSampleInput): GqlSampleInput | null => {
         const {
           sampleCode,
-          meta: { originalContent, slimsId, status },
+          meta: { originalContent, slimsId },
         } = sample;
 
         // Search for the parent element
@@ -168,7 +168,7 @@ export default class Migrate extends BaseCommand {
         }
         return {
           ...sample,
-          meta: { ...sample.meta, reserved: status === 'Reserved' },
+          meta: { ...sample.meta, reserved: true },
           parent: wafer.id.toHexString(),
         };
       },

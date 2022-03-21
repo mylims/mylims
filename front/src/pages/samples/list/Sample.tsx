@@ -58,18 +58,6 @@ export default function SampleList() {
             dataPath="meta.heterostructure"
             disableSort
           />
-          <TableQuery.TextColumn
-            title="Status"
-            dataPath="meta.sampleStatus"
-            disableSort
-          >
-            {(row) => {
-              const {
-                meta: { sampleStatus },
-              } = row as Sample;
-              return sampleStatus ?? 'Unprocessed';
-            }}
-          </TableQuery.TextColumn>
         </SamplesList>
       </div>
       <Card>
