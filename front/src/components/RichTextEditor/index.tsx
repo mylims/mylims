@@ -32,6 +32,7 @@ const HOTKEYS: Record<string, MarkFormat> = {
   'mod+i': 'italic',
   'mod+u': 'underline',
 };
+const STYLE_DRAG = 'border-2 border-dashed p-3';
 
 export interface RichTextEditorProps {
   value: Descendant[];
@@ -76,25 +77,19 @@ export function RichTextEditor({
       ? initialValue
       : [{ type: 'paragraph', children: [{ text: '' }] }];
 
-  const {
-    getRootProps,
-    getInputProps,
-    open,
-    isDragActive,
-    isDragReject,
-    isDragAccept,
-  } = useDropzone({
-    accept: 'image/jpeg,image/png',
-    noClick: true,
-    noKeyboard: true,
-    async onDrop(acceptedFiles) {
-      if (!saveImage) throw new Error("'saveImage' is not defined");
-      for (const file of acceptedFiles) {
-        const uuid = await saveImage(file);
-        insertImage(editor, uuid);
-      }
-    },
-  });
+  const { getRootProps, getInputProps, open, isDragActive, isDragReject } =
+    useDropzone({
+      accept: 'image/jpeg,image/png',
+      noClick: true,
+      noKeyboard: true,
+      async onDrop(acceptedFiles, _fileRejections) {
+        if (!saveImage) throw new Error("'saveImage' is not defined");
+        for (const file of acceptedFiles) {
+          const uuid = await saveImage(file);
+          insertImage(editor, uuid);
+        }
+      },
+    });
   const { ref: dropRef, style: _ignored, ...inputProps } = getInputProps();
 
   return (
@@ -128,39 +123,43 @@ export function RichTextEditor({
               <BlockButton format="bulleted-list" icon="formatListBulleted" />
               <ImageButton onClick={() => open()} />
             </div>
-            <div
-              {...getRootProps()}
-              className={clsx({
-                'border-2 border-dashed p-3': isDragActive,
-                'border-danger-500 focus:ring-danger-500': isDragReject,
-                'border-primary-500 focus:ring-primary-500': isDragAccept,
-              })}
-              role="document"
-            >
+            <div {...getRootProps()} role="document">
               <input {...inputProps} className="sr-only" ref={dropRef} />
-              {isDragActive ? (
-                isDragReject ? (
-                  <p className="text-danger-500">File not accepted</p>
-                ) : (
-                  <p>Drop the image here ...</p>
-                )
-              ) : (
-                <Editable
-                  renderElement={renderElement}
-                  renderLeaf={renderLeaf}
-                  placeholder="Enter some text…"
-                  spellCheck
-                  onKeyDown={(event) => {
-                    for (const hotkey in HOTKEYS) {
-                      if (isHotkey(hotkey, event as any)) {
-                        event.preventDefault();
-                        const mark = HOTKEYS[hotkey];
-                        toggleMark(editor, mark);
-                      }
+              <Editable
+                renderElement={renderElement}
+                renderLeaf={renderLeaf}
+                placeholder="Enter some text…"
+                spellCheck
+                onKeyDown={(event) => {
+                  for (const hotkey in HOTKEYS) {
+                    if (isHotkey(hotkey, event as any)) {
+                      event.preventDefault();
+                      const mark = HOTKEYS[hotkey];
+                      toggleMark(editor, mark);
                     }
-                  }}
-                />
-              )}
+                  }
+                }}
+              />
+
+              {isDragReject ? (
+                <p
+                  className={clsx(
+                    STYLE_DRAG,
+                    'border-danger-500 focus:ring-danger-500',
+                  )}
+                >
+                  File not accepted
+                </p>
+              ) : isDragActive ? (
+                <p
+                  className={clsx(
+                    STYLE_DRAG,
+                    'border-primary-500 focus:ring-primary-500',
+                  )}
+                >
+                  Drop the image
+                </p>
+              ) : null}
             </div>
           </Slate>
         </ImageContext.Provider>

@@ -11,7 +11,8 @@
     "check-types": "tsc --noEmit",
     "tailwind:build": "tailwindcss build tailwind.css -o ./styles/tailwind.out.css",
     "components:update": "components-update -o src/components/tailwind-ui",
-    "codegen-watch": "graphql-codegen --config codegen.yml --watch"
+    "codegen-watch": "graphql-codegen --config codegen.yml --watch",
+    "jscpd": "jscpd -l 10 -i \"**/__tests__/**\" -t 1 src"
   },
   "volta": {
     "extends": "../package.json"
@@ -87,6 +88,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "jscpd": "^3.4.5",
     "postcss": "^8.4.6",
     "prettier": "2.5.1",
     "react-test-renderer": "^17.0.2",
