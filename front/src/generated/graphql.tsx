@@ -220,7 +220,7 @@ export type Measurement = {
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: MeasurementTypes;
-  username: Scalars['String'];
+  user?: Maybe<User>;
 };
 
 export type MeasurementFile = {
@@ -232,6 +232,7 @@ export type MeasurementFile = {
 export type MeasurementFilterInput = {
   createdAt?: InputMaybe<FilterDate>;
   sampleCode?: InputMaybe<Array<FilterList>>;
+  userId?: InputMaybe<Scalars['String']>;
 };
 
 export type MeasurementPage = Pagination & {
@@ -833,7 +834,6 @@ export type ReadyChecksQuery = {
 export type MeasurementFieldsFragment = {
   id: string;
   eventId: string;
-  username: string;
   sampleCode: Array<string>;
   createdBy: string;
   fileId?: string | null;
@@ -842,6 +842,13 @@ export type MeasurementFieldsFragment = {
   derived?: any | null;
   type: MeasurementTypes;
   file?: { filename: string; size: number; downloadUrl: string } | null;
+  user?: {
+    id: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    emails: Array<string>;
+    usernames: Array<string>;
+  } | null;
 };
 
 export type MeasurementsFilteredQueryVariables = Exact<{
@@ -858,7 +865,6 @@ export type MeasurementsFilteredQuery = {
     list: Array<{
       id: string;
       eventId: string;
-      username: string;
       sampleCode: Array<string>;
       createdBy: string;
       fileId?: string | null;
@@ -867,6 +873,13 @@ export type MeasurementsFilteredQuery = {
       derived?: any | null;
       type: MeasurementTypes;
       file?: { filename: string; size: number; downloadUrl: string } | null;
+      user?: {
+        id: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        emails: Array<string>;
+        usernames: Array<string>;
+      } | null;
     }>;
   };
 };
@@ -880,7 +893,6 @@ export type MeasurementQuery = {
   measurement: {
     id: string;
     eventId: string;
-    username: string;
     sampleCode: Array<string>;
     createdBy: string;
     fileId?: string | null;
@@ -889,6 +901,13 @@ export type MeasurementQuery = {
     derived?: any | null;
     type: MeasurementTypes;
     file?: { filename: string; size: number; downloadUrl: string } | null;
+    user?: {
+      id: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      emails: Array<string>;
+      usernames: Array<string>;
+    } | null;
   };
 };
 
@@ -1194,7 +1213,6 @@ export const MeasurementFieldsFragmentDoc = gql`
   fragment MeasurementFields on Measurement {
     id
     eventId
-    username
     sampleCode
     createdBy
     fileId
@@ -1207,6 +1225,13 @@ export const MeasurementFieldsFragmentDoc = gql`
     createdAt
     derived
     type
+    user {
+      id
+      firstName
+      lastName
+      emails
+      usernames
+    }
   }
 `;
 export const SampleFieldsFragmentDoc = gql`

@@ -78,7 +78,7 @@ export default function MeasurementDetail() {
             {measurement.sampleCode.join(',')}
           </FieldDescription>
           <FieldDescription title="Owner's username">
-            {measurement.username}
+            {measurement.user?.usernames[0]}
           </FieldDescription>
           <FieldDescription title="Creation date">
             {formatDate(measurement.createdAt)}
