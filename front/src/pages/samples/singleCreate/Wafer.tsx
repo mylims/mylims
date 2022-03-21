@@ -87,7 +87,7 @@ export default function WaferCreate() {
             required
           />
           <RichTextFieldRHF
-            className="max-w-7xl h-full"
+            className="h-full max-w-7xl"
             name="description"
             label="Description"
             fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}

@@ -82,6 +82,7 @@ export function RichTextEditor({
       accept: 'image/jpeg,image/png',
       noClick: true,
       noKeyboard: true,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async onDrop(acceptedFiles, _fileRejections) {
         if (!saveImage) throw new Error("'saveImage' is not defined");
         for (const file of acceptedFiles) {
