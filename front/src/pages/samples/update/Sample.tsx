@@ -26,7 +26,7 @@ export default function SampleUpdate() {
     <DefaultUpdate codeLength={2} kind="sample" metaSchema={sampleUpdateSchema}>
       <div className="my-2 flex flex-col md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
         <div className="col-span-2">
-          <div className="grid-cols-auto grid gap-4">
+          <div className="grid-cols-auto grid items-end gap-4">
             <InputFieldRHF name="project" label="Project" />
             <InputFieldRHF name="meta.purpose" label="Purpose" />
             <ToggleFieldRHF name="meta.reserved" label="Reserved" />
