@@ -37,7 +37,10 @@ export function Image({ uuid, alt, attributes, children }: ImageProps) {
   );
 }
 
-export function withImages(editor: CustomEditor) {
+export function withImages(
+  editor: CustomEditor,
+  saveImage?: (file: File) => Promise<string>,
+) {
   const { insertData, isVoid } = editor;
 
   editor.isVoid = (element) => {
@@ -45,10 +48,18 @@ export function withImages(editor: CustomEditor) {
   };
 
   editor.insertData = (data) => {
-    const text = data.getData('text/plain');
+    const { files } = data;
 
-    if (text) {
-      insertImage(editor, text);
+    if (files && files.length > 0) {
+      for (const file of files) {
+        if (saveImage) {
+          saveImage(file)
+            .then((url) => insertImage(editor, url))
+            .catch((error) => console.error(error));
+        } else {
+          console.error('saveImage is not defined');
+        }
+      }
     } else {
       insertData(data);
     }

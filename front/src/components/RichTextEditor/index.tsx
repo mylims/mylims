@@ -68,8 +68,8 @@ export function RichTextEditor({
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
   const editor = useMemo(
-    () => withImages(withHistory(withReact(createEditor()))),
-    [],
+    () => withImages(withHistory(withReact(createEditor())), saveImage),
+    [saveImage],
   );
   const value: Descendant[] =
     initialValue && initialValue.length > 0
