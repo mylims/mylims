@@ -43,9 +43,7 @@ export function withImages(
 ) {
   const { insertData, isVoid } = editor;
 
-  editor.isVoid = (element) => {
-    return element.type === 'image' ? true : isVoid(element);
-  };
+  editor.isVoid = (elm) => (elm.type === 'image' ? true : isVoid(elm));
 
   editor.insertData = (data) => {
     const { files } = data;
@@ -55,8 +53,10 @@ export function withImages(
         if (saveImage) {
           saveImage(file)
             .then((url) => insertImage(editor, url))
+            // eslint-disable-next-line no-console
             .catch((error) => console.error(error));
         } else {
+          // eslint-disable-next-line no-console
           console.error('saveImage is not defined');
         }
       }
