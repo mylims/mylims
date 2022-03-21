@@ -1,7 +1,6 @@
 fragment MeasurementFields on Measurement {
   id
   eventId
-  username
   sampleCode
   createdBy
   fileId
@@ -14,6 +13,13 @@ fragment MeasurementFields on Measurement {
   createdAt
   derived
   type
+  user {
+    id
+    firstName
+    lastName
+    emails
+    usernames
+  }
 }
 
 query MeasurementsFiltered(

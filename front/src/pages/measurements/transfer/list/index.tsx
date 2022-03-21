@@ -70,13 +70,6 @@ export default function MeasurementsList() {
           onQueryChange={(query) => setQuery(query)}
         >
           <TableQuery.Queries />
-          <TableQuery.TextColumn
-            title="Sample"
-            dataPath="sampleCode"
-            disableSort
-          />
-          <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
-          <TableQuery.TextColumn title="Username" dataPath="username" />
           <TableQuery.ActionsColumn>
             {(row) => {
               const { file, id, type } = row as MeasurementRowType;
@@ -86,6 +79,13 @@ export default function MeasurementsList() {
               );
             }}
           </TableQuery.ActionsColumn>
+          <TableQuery.TextColumn
+            title="Sample"
+            dataPath="sampleCode"
+            disableSort
+          />
+          <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
+          <TableQuery.UserColumn title="User" dataPath="user" />
         </TableQuery>
       </MeasurementPlot>
     </div>
