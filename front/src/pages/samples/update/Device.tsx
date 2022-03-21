@@ -29,9 +29,9 @@ export default function DeviceUpdate() {
           <DropzoneFieldRHF label="Attachments" name="attachments" showList />
           <AttachmentsTableRHF name="prevAttachments" className="mt-2" />
         </div>
-        <div className="row-span-3">
+        <div className="row-span-2">
           <RichTextFieldRHF
-            className="max-w-7xl"
+            className="h-full max-w-7xl"
             name="description"
             label="Description"
             fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}

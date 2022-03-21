@@ -74,7 +74,7 @@ export default function WaferCreate() {
         <div className="col-span-2">
           <DropzoneFieldRHF label="Attachments" name="attachments" showList />
         </div>
-        <div className="row-span-3">
+        <div className="row-span-2">
           <WaferDiameterField
             name="meta.size"
             label="Diameter"
@@ -87,7 +87,7 @@ export default function WaferCreate() {
             required
           />
           <RichTextFieldRHF
-            className="max-w-7xl"
+            className="max-w-7xl h-full"
             name="description"
             label="Description"
             fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}
