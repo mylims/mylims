@@ -99,7 +99,7 @@ export function RichTextEditor({
       </div>
       <div
         className={clsx(
-          'rounded-md border px-3 py-2 shadow-sm focus-within:ring-1',
+          'h-full rounded-md border px-3 py-2 shadow-sm focus-within:ring-1',
           {
             [inputColor]: !error,
             [inputError]: error,
@@ -123,7 +123,7 @@ export function RichTextEditor({
               <BlockButton format="bulleted-list" icon="formatListBulleted" />
               <ImageButton onClick={() => open()} />
             </div>
-            <div {...getRootProps()} role="document">
+            <div {...getRootProps()} role="document" className="h-full">
               <input {...inputProps} className="sr-only" ref={dropRef} />
               <Editable
                 renderElement={renderElement}
@@ -143,19 +143,13 @@ export function RichTextEditor({
 
               {isDragReject ? (
                 <p
-                  className={clsx(
-                    STYLE_DRAG,
-                    'border-danger-500 focus:ring-danger-500',
-                  )}
+                  className={`border-danger-500 focus:ring-danger-500 ${STYLE_DRAG}`}
                 >
                   File not accepted
                 </p>
               ) : isDragActive ? (
                 <p
-                  className={clsx(
-                    STYLE_DRAG,
-                    'border-primary-500 focus:ring-primary-500',
-                  )}
+                  className={`border-primary-500 focus:ring-primary-500 ${STYLE_DRAG}`}
                 >
                   Drop the image
                 </p>
