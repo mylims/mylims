@@ -18,13 +18,37 @@ const ADMIN_ROUTES: RouteType[] = [
 export function RouteMenu() {
   return (
     <>
-      <RouteLink route={{ label: 'Wafers', pathname: '/sample/list/wafer' }} />
       <RouteLink
-        route={{ label: 'Samples', pathname: '/sample/list/sample' }}
+        couldHaveId
+        route={{
+          label: 'Wafers',
+          pathname: '/sample/list/wafer',
+          pathmatch: '/sample/:action/wafer',
+        }}
       />
-      <RouteLink route={{ label: 'Dyes', pathname: '/sample/list/dye' }} />
       <RouteLink
-        route={{ label: 'Devices', pathname: '/sample/list/device' }}
+        couldHaveId
+        route={{
+          label: 'Samples',
+          pathname: '/sample/list/sample',
+          pathmatch: '/sample/:action/sample',
+        }}
+      />
+      <RouteLink
+        couldHaveId
+        route={{
+          label: 'Dyes',
+          pathname: '/sample/list/dye',
+          pathmatch: '/sample/:action/dye',
+        }}
+      />
+      <RouteLink
+        couldHaveId
+        route={{
+          label: 'Devices',
+          pathname: '/sample/list/device',
+          pathmatch: '/sample/:action/device',
+        }}
       />
       <RouteLink
         route={{
