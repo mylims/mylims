@@ -18,6 +18,7 @@ enum MeasurementSortField {
 input MeasurementFilterInput {
   sampleCode: [FilterList!]
   createdAt: FilterDate
+  userId: String
 }
 input MeasurementSortInput {
   direction: SortDirection!
@@ -42,7 +43,7 @@ type Measurement {
   id: ID!
   type: MeasurementTypes!
   eventId: String!
-  username: String!
+  user: User
   sampleCode: [String!]!
   createdBy: String!
   fileId: String

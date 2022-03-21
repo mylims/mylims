@@ -5,9 +5,10 @@ import { UserInputError } from '@ioc:Zakodium/Apollo/Errors';
 import { ModelAttributes, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import File from 'App/Models/File';
+import { BaseMeasurement } from 'App/Models/Measurement/Base';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
+import User from 'App/Models/User';
 import {
-  GqlMeasurement,
   GqlMeasurementFilterInput,
   GqlMeasurementSortField,
   GqlMeasurementTypes,
@@ -25,10 +26,6 @@ import {
 const measurements = {
   [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
 };
-type MeasurementType = Omit<GqlMeasurement, 'id' | 'file' | 'type'> & {
-  _id: ObjectId;
-  fileId?: string;
-};
 
 const resolvers: GqlResolvers = {
   Measurement: {
@@ -43,16 +40,22 @@ const resolvers: GqlResolvers = {
         size: file.size,
       };
     },
+    async user(measurement) {
+      const user = await User.find(new ObjectId(measurement.username));
+      if (!user) {
+        throw new UserInputError('User not found', { argumentName: 'userId' });
+      }
+      return user;
+    },
   },
   Query: {
     async measurement(_, { id, type }) {
       const Measurement = measurements[type];
       const ans = await Measurement.find(new ObjectId(id));
       if (ans) {
-        const { _id, ...rest } = ans.toJSON() as MeasurementType;
+        const rest = ans.toJSON() as BaseMeasurement;
         return {
           ...rest,
-          id: _id.toHexString(),
           type: type as GqlMeasurementTypes,
         };
       }
@@ -73,8 +76,8 @@ const resolvers: GqlResolvers = {
       if (limit) measurementCursor = measurementCursor.limit(limit);
 
       const list = (await measurementCursor.all()).map((measurement) => {
-        const { _id, ...rest } = measurement.toJSON() as MeasurementType;
-        return { ...rest, id: _id.toHexString(), type };
+        const rest = measurement.toJSON() as BaseMeasurement;
+        return { ...rest, type };
       });
       return { list, totalCount };
     },
@@ -83,10 +86,10 @@ const resolvers: GqlResolvers = {
 
 async function createFilter(
   filterBy: Maybe<GqlMeasurementFilterInput> | undefined,
-): Promise<Filter<ModelAttributes<MeasurementType>>> {
+): Promise<Filter<ModelAttributes<BaseMeasurement>>> {
   if (!filterBy) return {};
 
-  let filter: Filter<NotReadOnly<ModelAttributes<MeasurementType>>> =
+  let filter: Filter<NotReadOnly<ModelAttributes<BaseMeasurement>>> =
     filterTextArray('sampleCode', filterBy.sampleCode);
   filter.createdAt = filterDate(filterBy.createdAt);
 

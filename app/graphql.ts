@@ -3,12 +3,13 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from 'graphql';
-import User from './Models/User';
-import { FileSyncOption } from '../addons/file-sync/Models/FileSyncOption';
-import { SyncFile } from '../addons/file-sync/Models/SyncFile';
 import { Event } from '../addons/events/Models/Event';
+import { FileSyncOption } from '../addons/file-sync/Models/FileSyncOption';
+import { BaseMeasurement } from './Models/Measurement/Base';
 import { Sample } from './Models/Sample';
 import { SampleKind } from './Models/SampleKind';
+import { SyncFile } from '../addons/file-sync/Models/SyncFile';
+import User from './Models/User';
 import { ApolloBaseContext } from '@ioc:Zakodium/Apollo/Server';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -243,7 +244,7 @@ export type GqlMeasurement = {
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: GqlMeasurementTypes;
-  username: Scalars['String'];
+  user?: Maybe<GqlUser>;
 };
 
 export type GqlMeasurementFile = {
@@ -256,6 +257,7 @@ export type GqlMeasurementFile = {
 export type GqlMeasurementFilterInput = {
   createdAt?: InputMaybe<GqlFilterDate>;
   sampleCode?: InputMaybe<Array<GqlFilterList>>;
+  userId?: InputMaybe<Scalars['String']>;
 };
 
 export type GqlMeasurementPage = GqlPagination & {
@@ -770,10 +772,14 @@ export type GqlResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars['Int']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
-  Measurement: ResolverTypeWrapper<GqlMeasurement>;
+  Measurement: ResolverTypeWrapper<BaseMeasurement>;
   MeasurementFile: ResolverTypeWrapper<GqlMeasurementFile>;
   MeasurementFilterInput: GqlMeasurementFilterInput;
-  MeasurementPage: ResolverTypeWrapper<GqlMeasurementPage>;
+  MeasurementPage: ResolverTypeWrapper<
+    Omit<GqlMeasurementPage, 'list'> & {
+      list: Array<GqlResolversTypes['Measurement']>;
+    }
+  >;
   MeasurementSortField: GqlMeasurementSortField;
   MeasurementSortInput: GqlMeasurementSortInput;
   MeasurementTypes: GqlMeasurementTypes;
@@ -859,10 +865,12 @@ export type GqlResolversParentTypes = ResolversObject<{
   Int: Scalars['Int'];
   JSON: Scalars['JSON'];
   JSONObject: Scalars['JSONObject'];
-  Measurement: GqlMeasurement;
+  Measurement: BaseMeasurement;
   MeasurementFile: GqlMeasurementFile;
   MeasurementFilterInput: GqlMeasurementFilterInput;
-  MeasurementPage: GqlMeasurementPage;
+  MeasurementPage: Omit<GqlMeasurementPage, 'list'> & {
+    list: Array<GqlResolversParentTypes['Measurement']>;
+  };
   MeasurementSortInput: GqlMeasurementSortInput;
   Mutation: {};
   NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
@@ -1099,7 +1107,7 @@ export type GqlMeasurementResolvers<
     ParentType,
     ContextType
   >;
-  username?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<Maybe<GqlResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
