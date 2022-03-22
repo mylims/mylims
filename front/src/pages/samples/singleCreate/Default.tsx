@@ -2,9 +2,12 @@ import React, { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { array, BaseSchema } from 'yup';
 
+import { FormLayout } from '@/components/FormLayout';
+import { RichTextImageFieldRHF } from '@/components/RichTextImageFieldRHF';
 import {
   Alert,
   AlertType,
+  DropzoneFieldRHF,
   FormRHF,
   optionalString,
   requiredObject,
@@ -24,6 +27,7 @@ interface DefaultCreationProps {
   children: ReactNode;
   sampleCode: string[];
   parent?: string;
+  formEditor?: ReactNode;
 }
 
 export default function DefaultCreate({
@@ -33,6 +37,7 @@ export default function DefaultCreate({
   defaultCreation,
   sampleCode,
   parent,
+  formEditor,
   children,
 }: DefaultCreationProps) {
   const { id } = useAuth();
@@ -118,7 +123,18 @@ export default function DefaultCreate({
         <div className="hidden md:flex md:flex-row md:justify-end">
           <SubmitButtonRHF disabled={loading}>Submit</SubmitButtonRHF>
         </div>
-        {children}
+        <FormLayout
+          formGrid={children}
+          formAttachments={
+            <DropzoneFieldRHF label="Attachments" name="attachments" showList />
+          }
+          formEditor={
+            <>
+              {formEditor}
+              <RichTextImageFieldRHF name="description" label="Description" />
+            </>
+          }
+        />
         <div className="mt-2 flex flex-row justify-end md:hidden">
           <SubmitButtonRHF disabled={loading}>Submit</SubmitButtonRHF>
         </div>
