@@ -20,18 +20,40 @@ interface IconFilterProps {
 }
 export function IconFilterText({ operator, className }: IconFilterProps) {
   switch (operator) {
-    case FilterTextOperator.CONTAINS: {
-      return <TextAddSpaceBefore20Regular className={className} />;
-    }
     case FilterTextOperator.STARTSWITH: {
       return <TextDirectionHorizontalRight20Regular className={className} />;
     }
-    case FilterTextOperator.EQUALS:
-    default: {
+    case FilterTextOperator.EQUALS: {
       return <EqualCircle20Regular className={className} />;
+    }
+    case FilterTextOperator.CONTAINS:
+    default: {
+      return <TextAddSpaceBefore20Regular className={className} />;
     }
   }
 }
+export const textOperators = [
+  [
+    {
+      label: 'Contains',
+      type: 'option' as const,
+      icon: <IconFilterText operator={FilterTextOperator.CONTAINS} />,
+      data: FilterTextOperator.CONTAINS,
+    },
+    {
+      label: 'Exact search',
+      type: 'option' as const,
+      icon: <IconFilterText operator={FilterTextOperator.EQUALS} />,
+      data: FilterTextOperator.EQUALS,
+    },
+    {
+      label: 'Starts with',
+      type: 'option' as const,
+      icon: <IconFilterText operator={FilterTextOperator.STARTSWITH} />,
+      data: FilterTextOperator.STARTSWITH,
+    },
+  ],
+];
 
 export default function TextColumn({
   title,
@@ -48,7 +70,7 @@ export default function TextColumn({
   const value = query[`${path}.value`] ?? '';
   const operator =
     (query[`${path}.operator`] as FilterTextOperator) ??
-    FilterTextOperator.EQUALS;
+    FilterTextOperator.CONTAINS;
 
   useEffect(() => {
     if (index === undefined) {
@@ -126,32 +148,7 @@ export default function TextColumn({
                 });
               }
             }}
-            options={[
-              [
-                {
-                  label: 'Exact search',
-                  type: 'option',
-                  icon: <IconFilterText operator={FilterTextOperator.EQUALS} />,
-                  data: FilterTextOperator.EQUALS,
-                },
-                {
-                  label: 'Contains',
-                  type: 'option',
-                  icon: (
-                    <IconFilterText operator={FilterTextOperator.CONTAINS} />
-                  ),
-                  data: FilterTextOperator.CONTAINS,
-                },
-                {
-                  label: 'Starts with',
-                  type: 'option',
-                  icon: (
-                    <IconFilterText operator={FilterTextOperator.STARTSWITH} />
-                  ),
-                  data: FilterTextOperator.STARTSWITH,
-                },
-              ],
-            ]}
+            options={textOperators}
           >
             <IconFilterText
               operator={operator}

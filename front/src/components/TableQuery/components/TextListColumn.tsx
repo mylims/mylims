@@ -8,7 +8,7 @@ import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, TextListColumnProps } from '../types';
 
 import HeaderRender from './HeaderRender';
-import { IconFilterText } from './TextColumn';
+import { IconFilterText, textOperators } from './TextColumn';
 
 export default function TextListColumn({
   title,
@@ -26,7 +26,7 @@ export default function TextListColumn({
   const value = query[`${path}.${queryIndex}.value.value`] ?? '';
   const operator =
     (query[`${path}.${queryIndex}.value.operator`] as FilterTextOperator) ??
-    FilterTextOperator.EQUALS;
+    FilterTextOperator.CONTAINS;
 
   useEffect(() => {
     if (index === undefined) {
@@ -113,32 +113,7 @@ export default function TextListColumn({
                 });
               }
             }}
-            options={[
-              [
-                {
-                  label: 'Exact search',
-                  type: 'option',
-                  icon: <IconFilterText operator={FilterTextOperator.EQUALS} />,
-                  data: FilterTextOperator.EQUALS,
-                },
-                {
-                  label: 'Contains',
-                  type: 'option',
-                  icon: (
-                    <IconFilterText operator={FilterTextOperator.CONTAINS} />
-                  ),
-                  data: FilterTextOperator.CONTAINS,
-                },
-                {
-                  label: 'Starts with',
-                  type: 'option',
-                  icon: (
-                    <IconFilterText operator={FilterTextOperator.STARTSWITH} />
-                  ),
-                  data: FilterTextOperator.STARTSWITH,
-                },
-              ],
-            ]}
+            options={textOperators}
           >
             <IconFilterText
               operator={operator}
