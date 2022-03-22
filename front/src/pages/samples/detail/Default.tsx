@@ -2,7 +2,11 @@ import { PencilIcon } from '@heroicons/react/outline';
 import React, { ReactNode } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import { API_URL } from '@/../env';
+import AttachmentsTable from '@/components/AttachmentsTable';
 import FieldDescription from '@/components/FieldDescription';
+import { FormLayout } from '@/components/FormLayout';
+import { RichTextSerializer } from '@/components/RichTextSerializer';
 import {
   Alert,
   AlertType,
@@ -15,11 +19,17 @@ import {
 import { SampleQuery, useSampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
 
+type DisplaySample = (sample: SampleQuery['sample']) => ReactNode;
 interface SampleDetailProps {
   kind: string;
-  children(sample: SampleQuery['sample']): ReactNode;
+  metaGrid: DisplaySample;
+  formEditor?: DisplaySample;
 }
-export default function SampleDetail({ kind, children }: SampleDetailProps) {
+export default function SampleDetail({
+  kind,
+  metaGrid,
+  formEditor,
+}: SampleDetailProps) {
   const { id = '' } = useParams<{ id: string }>();
   const { data, loading, error } = useSampleQuery({ variables: { id } });
   if (loading) return <Spinner className="h-10 w-10 text-danger-500" />;
@@ -58,7 +68,34 @@ export default function SampleDetail({ kind, children }: SampleDetailProps) {
           </div>
         </div>
       </Card.Header>
-      <Card.Body>{children(sample)}</Card.Body>
+      <Card.Body>
+        <FormLayout
+          formGrid={metaGrid(sample)}
+          formAttachments={
+            <>
+              <div className="text-xl font-semibold">Attachments</div>
+              <div className="text-gray-900 mt-1 text-sm sm:col-span-2 sm:mt-0">
+                <AttachmentsTable attachments={sample.attachments} />
+              </div>
+            </>
+          }
+          formEditor={
+            <>
+              {formEditor?.(sample) ?? null}
+              {sample.description ? (
+                <div className="mt-2">
+                  <div className="text-xl font-semibold">Description</div>
+                  <RichTextSerializer
+                    className="max-h-full max-w-full overflow-auto rounded-md border border-neutral-300 px-3 py-2 shadow-sm ring-1 ring-neutral-300 md:max-w-xl"
+                    value={sample.description}
+                    fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}
+                  />
+                </div>
+              ) : null}
+            </>
+          }
+        />
+      </Card.Body>
     </Card>
   );
 }

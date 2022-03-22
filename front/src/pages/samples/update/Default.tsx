@@ -2,9 +2,13 @@ import React, { ReactNode, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { array, BaseSchema } from 'yup';
 
+import AttachmentsTableRHF from '@/components/AttachmentsTableRHF';
+import { FormLayout } from '@/components/FormLayout';
+import { RichTextImageFieldRHF } from '@/components/RichTextImageFieldRHF';
 import {
   Alert,
   AlertType,
+  DropzoneFieldRHF,
   FormRHF,
   optionalString,
   requiredObject,
@@ -127,7 +131,22 @@ export default function DefaultUpdate({
         <div className="hidden md:flex md:flex-row md:justify-end">
           <SubmitButtonRHF disabled={updateLoading}>Submit</SubmitButtonRHF>
         </div>
-        {children}
+        <FormLayout
+          formGrid={children}
+          formAttachments={
+            <>
+              <DropzoneFieldRHF
+                label="Attachments"
+                name="attachments"
+                showList
+              />
+              <AttachmentsTableRHF name="prevAttachments" className="mt-2" />
+            </>
+          }
+          formEditor={
+            <RichTextImageFieldRHF name="description" label="Description" />
+          }
+        />
         <div className="mt-2 flex flex-row justify-end md:hidden">
           <SubmitButtonRHF disabled={updateLoading}>Submit</SubmitButtonRHF>
         </div>
