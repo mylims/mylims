@@ -478,7 +478,7 @@ export type GqlSample = {
   id: Scalars['ID'];
   kind: GqlSampleKind;
   labels: Array<Scalars['String']>;
-  measurements: Array<GqlSampleMeasurement>;
+  measurements: Array<GqlMeasurement>;
   meta: Scalars['JSON'];
   parent?: Maybe<GqlSample>;
   project?: Maybe<Scalars['String']>;
@@ -537,13 +537,6 @@ export type GqlSampleKindInput = {
   id: Scalars['ID'];
   name?: InputMaybe<Scalars['String']>;
   schema: Scalars['JSON'];
-};
-
-export type GqlSampleMeasurement = {
-  __typename?: 'SampleMeasurement';
-  date: Scalars['DateTime'];
-  id: Scalars['ID'];
-  type: Scalars['String'];
 };
 
 export type GqlSamplePage = GqlPagination & {
@@ -809,7 +802,6 @@ export type GqlResolversTypes = ResolversObject<{
   SampleInput: GqlSampleInput;
   SampleKind: ResolverTypeWrapper<SampleKind>;
   SampleKindInput: GqlSampleKindInput;
-  SampleMeasurement: ResolverTypeWrapper<GqlSampleMeasurement>;
   SamplePage: ResolverTypeWrapper<
     Omit<GqlSamplePage, 'kind' | 'list'> & {
       kind: GqlResolversTypes['SampleKind'];
@@ -897,7 +889,6 @@ export type GqlResolversParentTypes = ResolversObject<{
   SampleInput: GqlSampleInput;
   SampleKind: SampleKind;
   SampleKindInput: GqlSampleKindInput;
-  SampleMeasurement: GqlSampleMeasurement;
   SamplePage: Omit<GqlSamplePage, 'kind' | 'list'> & {
     kind: GqlResolversParentTypes['SampleKind'];
     list: Array<GqlResolversParentTypes['Sample']>;
@@ -1375,7 +1366,7 @@ export type GqlSampleResolvers<
     ContextType
   >;
   measurements?: Resolver<
-    Array<GqlResolversTypes['SampleMeasurement']>,
+    Array<GqlResolversTypes['Measurement']>,
     ParentType,
     ContextType
   >;
@@ -1426,16 +1417,6 @@ export type GqlSampleKindResolvers<
   id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
   schema?: Resolver<GqlResolversTypes['JSON'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type GqlSampleMeasurementResolvers<
-  ContextType = ApolloBaseContext,
-  ParentType extends GqlResolversParentTypes['SampleMeasurement'] = GqlResolversParentTypes['SampleMeasurement'],
-> = ResolversObject<{
-  date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
-  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
-  type?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1583,7 +1564,6 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   Sample?: GqlSampleResolvers<ContextType>;
   SampleFile?: GqlSampleFileResolvers<ContextType>;
   SampleKind?: GqlSampleKindResolvers<ContextType>;
-  SampleMeasurement?: GqlSampleMeasurementResolvers<ContextType>;
   SamplePage?: GqlSamplePageResolvers<ContextType>;
   SyncDirRevision?: GqlSyncDirRevisionResolvers<ContextType>;
   SyncElementRevision?: GqlSyncElementRevisionResolvers<ContextType>;

@@ -50,11 +50,6 @@ type SampleFile {
   filename: String!
   size: Int!
 }
-type SampleMeasurement {
-  id: ID!
-  type: String!
-  date: DateTime!
-}
 
 # Inputs
 input SampleInput {
@@ -91,7 +86,7 @@ type Sample {
   title: String
   comment: String
   description: JSON
-  measurements: [SampleMeasurement!]!
+  measurements: [Measurement!]!
   attachments: [SampleFile!]!
   parent: Sample
   children: [Sample!]
