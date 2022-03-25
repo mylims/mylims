@@ -80,7 +80,7 @@ export default function WaferDetail() {
               </LinkButton>
             ) : null}
             <LinkButton
-              to={`/sample/singleCreate/sample/${sample.id}`}
+              to={`/sample/create/sample/${sample.id}`}
               className="mb-4"
               color={Color.success}
             >

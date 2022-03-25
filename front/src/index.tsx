@@ -22,8 +22,8 @@ import DyeList from '@/pages/samples/list/Dye';
 import SampleList from '@/pages/samples/list/Sample';
 import WaferList from '@/pages/samples/list/Wafer';
 import { MultiCreate } from '@/pages/samples/multiCreate/Default';
-import SampleCreate from '@/pages/samples/singleCreate/Sample';
-import WaferCreate from '@/pages/samples/singleCreate/Wafer';
+import SampleCreate from '@/pages/samples/create/Sample';
+import WaferCreate from '@/pages/samples/create/Wafer';
 import DeviceUpdate from '@/pages/samples/update/Device';
 import DyeUpdate from '@/pages/samples/update/Dye';
 import SampleUpdate from '@/pages/samples/update/Sample';
@@ -83,7 +83,7 @@ function AppRoutes() {
           ],
         },
         {
-          path: 'singleCreate',
+          path: 'create',
           children: [
             { path: 'wafer', element: <App Component={WaferCreate} /> },
             { path: 'sample/:id', element: <App Component={SampleCreate} /> },
