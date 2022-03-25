@@ -446,7 +446,7 @@ export type Sample = {
   id: Scalars['ID'];
   kind: SampleKind;
   labels: Array<Scalars['String']>;
-  measurements: Array<SampleMeasurement>;
+  measurements: Array<Measurement>;
   meta: Scalars['JSON'];
   parent?: Maybe<Sample>;
   project?: Maybe<Scalars['String']>;
@@ -503,12 +503,6 @@ export type SampleKindInput = {
   id: Scalars['ID'];
   name?: InputMaybe<Scalars['String']>;
   schema: Scalars['JSON'];
-};
-
-export type SampleMeasurement = {
-  date: Scalars['DateTime'];
-  id: Scalars['ID'];
-  type: Scalars['String'];
 };
 
 export type SamplePage = Pagination & {
@@ -1016,7 +1010,14 @@ export type SampleQuery = {
       filename: string;
       size: number;
     }>;
-    measurements: Array<{ id: string; type: string; date: any }>;
+    measurements: Array<{
+      id: string;
+      type: MeasurementTypes;
+      createdAt: any;
+      sampleCode: Array<string>;
+      description?: string | null;
+      file?: { filename: string; size: number; downloadUrl: string } | null;
+    }>;
     children?: Array<{
       id: string;
       sampleCode: Array<string>;
@@ -2326,7 +2327,14 @@ export const SampleDocument = gql`
       measurements {
         id
         type
-        date
+        createdAt
+        sampleCode
+        description
+        file {
+          filename
+          size
+          downloadUrl
+        }
       }
       children {
         ...SampleFields

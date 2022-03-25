@@ -24,9 +24,7 @@ type MeasurementRowType =
 type DestructuredQuery = Unflatten<
   MeasurementFilterInput,
   MeasurementSortInput
-> & {
-  type: MeasurementTypes;
-};
+> & { type: MeasurementTypes };
 export default function MeasurementsList() {
   const { query, setQuery } = useTableQuery({
     page: '1',

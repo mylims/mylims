@@ -67,7 +67,14 @@ query Sample($id: ID!) {
     measurements {
       id
       type
-      date
+      createdAt
+      sampleCode
+      description
+      file {
+        filename
+        size
+        downloadUrl
+      }
     }
     children {
       ...SampleFields
