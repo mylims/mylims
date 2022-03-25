@@ -78,7 +78,7 @@ export default function SampleDetail({
               <div className="mt-2 flex flex-row gap-4">
                 <div className="text-xl font-semibold">Measurements</div>
                 <LinkButton
-                  to={`/measurement/singleCreate/${sample.id}`}
+                  to={`/measurement/create/${sample.id}`}
                   color={Color.success}
                 >
                   + Add measurement

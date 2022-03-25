@@ -92,7 +92,7 @@ export default function WaferList() {
       </div>
       <div>
         <LinkButton
-          to="/sample/singleCreate/wafer"
+          to="/sample/create/wafer"
           className="mb-4"
           color={Color.success}
         >
@@ -158,7 +158,7 @@ export default function WaferList() {
                     </LinkButton>
                   )}
                   <LinkButton
-                    to={`/sample/singleCreate/sample/${state.id}`}
+                    to={`/sample/create/sample/${state.id}`}
                     className="mb-4"
                     color={Color.success}
                   >
