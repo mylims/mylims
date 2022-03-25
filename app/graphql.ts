@@ -234,17 +234,19 @@ export enum GqlFilterTextOperator {
 
 export type GqlMeasurement = {
   __typename?: 'Measurement';
+  comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  createdBy: Scalars['String'];
+  createdBy?: Maybe<Scalars['String']>;
   derived?: Maybe<Scalars['JSON']>;
-  description?: Maybe<Scalars['String']>;
-  eventId: Scalars['String'];
+  description?: Maybe<Scalars['JSON']>;
+  eventId?: Maybe<Scalars['String']>;
   file?: Maybe<GqlMeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: GqlMeasurementTypes;
   user?: Maybe<GqlUser>;
+  username: Scalars['String'];
 };
 
 export type GqlMeasurementFile = {
@@ -261,11 +263,11 @@ export type GqlMeasurementFilterInput = {
 };
 
 export type GqlMeasurementInput = {
-  createdAt: Scalars['DateTime'];
+  comment?: InputMaybe<Scalars['String']>;
   createdBy: Scalars['String'];
   derived?: InputMaybe<Scalars['JSON']>;
-  description?: InputMaybe<Scalars['String']>;
-  eventId: Scalars['String'];
+  description?: InputMaybe<Scalars['JSON']>;
+  eventId?: InputMaybe<Scalars['String']>;
   fileId?: InputMaybe<Scalars['String']>;
   sampleCode: Array<Scalars['String']>;
   userId: Scalars['String'];
@@ -1088,15 +1090,28 @@ export type GqlMeasurementResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['Measurement'] = GqlResolversParentTypes['Measurement'],
 > = ResolversObject<{
-  createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
-  createdBy?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
-  derived?: Resolver<Maybe<GqlResolversTypes['JSON']>, ParentType, ContextType>;
-  description?: Resolver<
+  comment?: Resolver<
     Maybe<GqlResolversTypes['String']>,
     ParentType,
     ContextType
   >;
-  eventId?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  createdBy?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  derived?: Resolver<Maybe<GqlResolversTypes['JSON']>, ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<GqlResolversTypes['JSON']>,
+    ParentType,
+    ContextType
+  >;
+  eventId?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   file?: Resolver<
     Maybe<GqlResolversTypes['MeasurementFile']>,
     ParentType,
@@ -1119,6 +1134,7 @@ export type GqlMeasurementResolvers<
     ContextType
   >;
   user?: Resolver<Maybe<GqlResolversTypes['User']>, ParentType, ContextType>;
+  username?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

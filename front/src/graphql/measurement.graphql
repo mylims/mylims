@@ -1,17 +1,5 @@
 fragment MeasurementFields on Measurement {
   id
-  eventId
-  sampleCode
-  createdBy
-  fileId
-  file {
-    filename
-    size
-    downloadUrl
-  }
-  description
-  createdAt
-  derived
   type
   user {
     id
@@ -20,6 +8,18 @@ fragment MeasurementFields on Measurement {
     emails
     usernames
   }
+  sampleCode
+  createdBy
+  file {
+    filename
+    size
+    downloadUrl
+  }
+  eventId
+  comment
+  description
+  createdAt
+  derived
 }
 
 query MeasurementsFiltered(
