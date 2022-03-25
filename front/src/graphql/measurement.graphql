@@ -48,3 +48,13 @@ query Measurement($id: ID!, $type: MeasurementTypes!) {
     ...MeasurementFields
   }
 }
+
+mutation CreateMeasurement(
+  $type: MeasurementTypes!
+  $sampleId: String!
+  $input: MeasurementInput!
+) {
+  createMeasurement(type: $type, sampleId: $sampleId, input: $input) {
+    ...MeasurementFields
+  }
+}

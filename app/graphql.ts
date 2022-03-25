@@ -260,6 +260,17 @@ export type GqlMeasurementFilterInput = {
   userId?: InputMaybe<Scalars['String']>;
 };
 
+export type GqlMeasurementInput = {
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  derived?: InputMaybe<Scalars['JSON']>;
+  description?: InputMaybe<Scalars['String']>;
+  eventId: Scalars['String'];
+  fileId?: InputMaybe<Scalars['String']>;
+  sampleCode: Array<Scalars['String']>;
+  userId: Scalars['String'];
+};
+
 export type GqlMeasurementPage = GqlPagination & {
   __typename?: 'MeasurementPage';
   list: Array<GqlMeasurement>;
@@ -284,6 +295,7 @@ export enum GqlMeasurementTypes {
 export type GqlMutation = {
   __typename?: 'Mutation';
   createFileSyncOption: GqlFileSyncOption;
+  createMeasurement: GqlMeasurement;
   createSample: GqlSample;
   createSampleKind: GqlSampleKind;
   createSamples: Array<GqlSample>;
@@ -295,6 +307,12 @@ export type GqlMutation = {
 
 export type GqlMutationCreateFileSyncOptionArgs = {
   input: GqlNewFileSyncOptionInput;
+};
+
+export type GqlMutationCreateMeasurementArgs = {
+  input: GqlMeasurementInput;
+  sampleId: Scalars['String'];
+  type: GqlMeasurementTypes;
 };
 
 export type GqlMutationCreateSampleArgs = {
@@ -768,6 +786,7 @@ export type GqlResolversTypes = ResolversObject<{
   Measurement: ResolverTypeWrapper<BaseMeasurement>;
   MeasurementFile: ResolverTypeWrapper<GqlMeasurementFile>;
   MeasurementFilterInput: GqlMeasurementFilterInput;
+  MeasurementInput: GqlMeasurementInput;
   MeasurementPage: ResolverTypeWrapper<
     Omit<GqlMeasurementPage, 'list'> & {
       list: Array<GqlResolversTypes['Measurement']>;
@@ -860,6 +879,7 @@ export type GqlResolversParentTypes = ResolversObject<{
   Measurement: BaseMeasurement;
   MeasurementFile: GqlMeasurementFile;
   MeasurementFilterInput: GqlMeasurementFilterInput;
+  MeasurementInput: GqlMeasurementInput;
   MeasurementPage: Omit<GqlMeasurementPage, 'list'> & {
     list: Array<GqlResolversParentTypes['Measurement']>;
   };
@@ -1134,6 +1154,15 @@ export type GqlMutationResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlMutationCreateFileSyncOptionArgs, 'input'>
+  >;
+  createMeasurement?: Resolver<
+    GqlResolversTypes['Measurement'],
+    ParentType,
+    ContextType,
+    RequireFields<
+      GqlMutationCreateMeasurementArgs,
+      'input' | 'sampleId' | 'type'
+    >
   >;
   createSample?: Resolver<
     GqlResolversTypes['Sample'],
