@@ -9,6 +9,14 @@ type Query {
   measurement(id: ID!, type: MeasurementTypes!): Measurement!
 }
 
+type Mutation {
+  createMeasurement(
+    sampleId: String!
+    type: MeasurementTypes!
+    input: MeasurementInput!
+  ): Measurement!
+}
+
 # Paginated list of measurements
 enum MeasurementSortField {
   username
@@ -32,6 +40,17 @@ type MeasurementFile {
   downloadUrl: String!
   filename: String!
   size: Int!
+}
+
+# Inputs
+input MeasurementInput {
+  eventId: String!
+  userId: String!
+  sampleCode: [String!]!
+  createdBy: String!
+  fileId: String
+  description: String
+  derived: JSON
 }
 
 # Measurement specific data

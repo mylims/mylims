@@ -7,6 +7,7 @@ import { ModelAttributes, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 import File from 'App/Models/File';
 import { BaseMeasurement } from 'App/Models/Measurement/Base';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
+import { Sample } from 'App/Models/Sample';
 import User from 'App/Models/User';
 import {
   GqlMeasurementFilterInput,
@@ -29,6 +30,7 @@ const measurements = {
 
 const resolvers: GqlResolvers = {
   Measurement: {
+    id: (measurement: BaseMeasurement): string => measurement._id.toHexString(),
     async file(parent) {
       const fileId = parent.fileId ?? null;
       if (!fileId) return null;
@@ -80,6 +82,29 @@ const resolvers: GqlResolvers = {
         return { ...rest, type };
       });
       return { list, totalCount };
+    },
+  },
+  Mutation: {
+    async createMeasurement(_, { input, sampleId, type }) {
+      let sample = await Sample.find(new ObjectId(sampleId));
+      if (!sample) {
+        throw new UserInputError('Sample not found', {
+          argumentName: 'sampleId',
+        });
+      }
+      if (!sample.measurements) sample.measurements = [];
+      const measurement = await measurements[type].create({
+        ...input,
+        fileId: input.fileId ?? undefined,
+      });
+      sample.measurements.push({
+        id: measurement.id,
+        date: new Date(),
+        type,
+      });
+      await sample.save();
+      const measurementBase = measurement.toJSON() as BaseMeasurement;
+      return { ...measurementBase, type };
     },
   },
 };

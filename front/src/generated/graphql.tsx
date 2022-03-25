@@ -235,6 +235,16 @@ export type MeasurementFilterInput = {
   userId?: InputMaybe<Scalars['String']>;
 };
 
+export type MeasurementInput = {
+  createdBy: Scalars['String'];
+  derived?: InputMaybe<Scalars['JSON']>;
+  description?: InputMaybe<Scalars['String']>;
+  eventId: Scalars['String'];
+  fileId?: InputMaybe<Scalars['String']>;
+  sampleCode: Array<Scalars['String']>;
+  userId: Scalars['String'];
+};
+
 export type MeasurementPage = Pagination & {
   list: Array<Measurement>;
   totalCount: Scalars['Int'];
@@ -257,6 +267,7 @@ export enum MeasurementTypes {
 
 export type Mutation = {
   createFileSyncOption: FileSyncOption;
+  createMeasurement: Measurement;
   createSample: Sample;
   createSampleKind: SampleKind;
   createSamples: Array<Sample>;
@@ -268,6 +279,12 @@ export type Mutation = {
 
 export type MutationCreateFileSyncOptionArgs = {
   input: NewFileSyncOptionInput;
+};
+
+export type MutationCreateMeasurementArgs = {
+  input: MeasurementInput;
+  sampleId: Scalars['String'];
+  type: MeasurementTypes;
 };
 
 export type MutationCreateSampleArgs = {
@@ -885,6 +902,34 @@ export type MeasurementQueryVariables = Exact<{
 
 export type MeasurementQuery = {
   measurement: {
+    id: string;
+    eventId: string;
+    sampleCode: Array<string>;
+    createdBy: string;
+    fileId?: string | null;
+    description?: string | null;
+    createdAt: any;
+    derived?: any | null;
+    type: MeasurementTypes;
+    file?: { filename: string; size: number; downloadUrl: string } | null;
+    user?: {
+      id: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      emails: Array<string>;
+      usernames: Array<string>;
+    } | null;
+  };
+};
+
+export type CreateMeasurementMutationVariables = Exact<{
+  type: MeasurementTypes;
+  sampleId: Scalars['String'];
+  input: MeasurementInput;
+}>;
+
+export type CreateMeasurementMutation = {
+  createMeasurement: {
     id: string;
     eventId: string;
     sampleCode: Array<string>;
@@ -2223,6 +2268,59 @@ export type MeasurementQueryResult = Apollo.QueryResult<
 export function refetchMeasurementQuery(variables: MeasurementQueryVariables) {
   return { query: MeasurementDocument, variables: variables };
 }
+export const CreateMeasurementDocument = gql`
+  mutation CreateMeasurement(
+    $type: MeasurementTypes!
+    $sampleId: String!
+    $input: MeasurementInput!
+  ) {
+    createMeasurement(type: $type, sampleId: $sampleId, input: $input) {
+      ...MeasurementFields
+    }
+  }
+  ${MeasurementFieldsFragmentDoc}
+`;
+
+/**
+ * __useCreateMeasurementMutation__
+ *
+ * To run a mutation, you first call `useCreateMeasurementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMeasurementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMeasurementMutation, { data, loading, error }] = useCreateMeasurementMutation({
+ *   variables: {
+ *      type: // value for 'type'
+ *      sampleId: // value for 'sampleId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateMeasurementMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateMeasurementMutation,
+    CreateMeasurementMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useMutation<
+    CreateMeasurementMutation,
+    CreateMeasurementMutationVariables
+  >(CreateMeasurementDocument, options);
+}
+export type CreateMeasurementMutationHookResult = ReturnType<
+  typeof useCreateMeasurementMutation
+>;
+export type CreateMeasurementMutationResult =
+  Apollo.MutationResult<CreateMeasurementMutation>;
+export type CreateMeasurementMutationOptions = Apollo.BaseMutationOptions<
+  CreateMeasurementMutation,
+  CreateMeasurementMutationVariables
+>;
 export const SamplesFilteredDocument = gql`
   query SamplesFiltered(
     $kind: String!
