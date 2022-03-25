@@ -1,22 +1,26 @@
 import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 export interface MeasurementParams {
-  eventId: string;
   username: string;
   sampleCode: string[];
-  createdBy: string;
+  createdBy?: string;
   fileId?: string;
+  eventId?: string;
   derived?: string;
-  description?: string | null;
+  comment?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  description?: any[];
 }
 
 export class BaseMeasurement extends BaseModel {
   @field()
   public _id: ObjectId;
-  public eventId: string;
   public username: string;
   public sampleCode: string[];
-  public createdBy: string;
+  public createdBy?: string;
   public fileId?: string;
-  public description?: string | null;
+  public eventId?: string;
+  public comment?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public description?: any[];
 }

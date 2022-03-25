@@ -210,17 +210,19 @@ export enum FilterTextOperator {
 }
 
 export type Measurement = {
+  comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  createdBy: Scalars['String'];
+  createdBy?: Maybe<Scalars['String']>;
   derived?: Maybe<Scalars['JSON']>;
-  description?: Maybe<Scalars['String']>;
-  eventId: Scalars['String'];
+  description?: Maybe<Scalars['JSON']>;
+  eventId?: Maybe<Scalars['String']>;
   file?: Maybe<MeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   sampleCode: Array<Scalars['String']>;
   type: MeasurementTypes;
   user?: Maybe<User>;
+  username: Scalars['String'];
 };
 
 export type MeasurementFile = {
@@ -236,10 +238,11 @@ export type MeasurementFilterInput = {
 };
 
 export type MeasurementInput = {
+  comment?: InputMaybe<Scalars['String']>;
   createdBy: Scalars['String'];
   derived?: InputMaybe<Scalars['JSON']>;
-  description?: InputMaybe<Scalars['String']>;
-  eventId: Scalars['String'];
+  description?: InputMaybe<Scalars['JSON']>;
+  eventId?: InputMaybe<Scalars['String']>;
   fileId?: InputMaybe<Scalars['String']>;
   sampleCode: Array<Scalars['String']>;
   userId: Scalars['String'];
@@ -844,15 +847,14 @@ export type ReadyChecksQuery = {
 
 export type MeasurementFieldsFragment = {
   id: string;
-  eventId: string;
+  type: MeasurementTypes;
   sampleCode: Array<string>;
-  createdBy: string;
-  fileId?: string | null;
-  description?: string | null;
+  createdBy?: string | null;
+  eventId?: string | null;
+  comment?: string | null;
+  description?: any | null;
   createdAt: any;
   derived?: any | null;
-  type: MeasurementTypes;
-  file?: { filename: string; size: number; downloadUrl: string } | null;
   user?: {
     id: string;
     firstName?: string | null;
@@ -860,6 +862,7 @@ export type MeasurementFieldsFragment = {
     emails: Array<string>;
     usernames: Array<string>;
   } | null;
+  file?: { filename: string; size: number; downloadUrl: string } | null;
 };
 
 export type MeasurementsFilteredQueryVariables = Exact<{
@@ -875,15 +878,14 @@ export type MeasurementsFilteredQuery = {
     totalCount: number;
     list: Array<{
       id: string;
-      eventId: string;
+      type: MeasurementTypes;
       sampleCode: Array<string>;
-      createdBy: string;
-      fileId?: string | null;
-      description?: string | null;
+      createdBy?: string | null;
+      eventId?: string | null;
+      comment?: string | null;
+      description?: any | null;
       createdAt: any;
       derived?: any | null;
-      type: MeasurementTypes;
-      file?: { filename: string; size: number; downloadUrl: string } | null;
       user?: {
         id: string;
         firstName?: string | null;
@@ -891,6 +893,7 @@ export type MeasurementsFilteredQuery = {
         emails: Array<string>;
         usernames: Array<string>;
       } | null;
+      file?: { filename: string; size: number; downloadUrl: string } | null;
     }>;
   };
 };
@@ -903,15 +906,14 @@ export type MeasurementQueryVariables = Exact<{
 export type MeasurementQuery = {
   measurement: {
     id: string;
-    eventId: string;
+    type: MeasurementTypes;
     sampleCode: Array<string>;
-    createdBy: string;
-    fileId?: string | null;
-    description?: string | null;
+    createdBy?: string | null;
+    eventId?: string | null;
+    comment?: string | null;
+    description?: any | null;
     createdAt: any;
     derived?: any | null;
-    type: MeasurementTypes;
-    file?: { filename: string; size: number; downloadUrl: string } | null;
     user?: {
       id: string;
       firstName?: string | null;
@@ -919,6 +921,7 @@ export type MeasurementQuery = {
       emails: Array<string>;
       usernames: Array<string>;
     } | null;
+    file?: { filename: string; size: number; downloadUrl: string } | null;
   };
 };
 
@@ -931,15 +934,14 @@ export type CreateMeasurementMutationVariables = Exact<{
 export type CreateMeasurementMutation = {
   createMeasurement: {
     id: string;
-    eventId: string;
+    type: MeasurementTypes;
     sampleCode: Array<string>;
-    createdBy: string;
-    fileId?: string | null;
-    description?: string | null;
+    createdBy?: string | null;
+    eventId?: string | null;
+    comment?: string | null;
+    description?: any | null;
     createdAt: any;
     derived?: any | null;
-    type: MeasurementTypes;
-    file?: { filename: string; size: number; downloadUrl: string } | null;
     user?: {
       id: string;
       firstName?: string | null;
@@ -947,6 +949,7 @@ export type CreateMeasurementMutation = {
       emails: Array<string>;
       usernames: Array<string>;
     } | null;
+    file?: { filename: string; size: number; downloadUrl: string } | null;
   };
 };
 
@@ -1060,7 +1063,7 @@ export type SampleQuery = {
       type: MeasurementTypes;
       createdAt: any;
       sampleCode: Array<string>;
-      description?: string | null;
+      description?: any | null;
       file?: { filename: string; size: number; downloadUrl: string } | null;
     }>;
     children?: Array<{
@@ -1258,18 +1261,6 @@ export const RevisionFieldsFragmentDoc = gql`
 export const MeasurementFieldsFragmentDoc = gql`
   fragment MeasurementFields on Measurement {
     id
-    eventId
-    sampleCode
-    createdBy
-    fileId
-    file {
-      filename
-      size
-      downloadUrl
-    }
-    description
-    createdAt
-    derived
     type
     user {
       id
@@ -1278,6 +1269,18 @@ export const MeasurementFieldsFragmentDoc = gql`
       emails
       usernames
     }
+    sampleCode
+    createdBy
+    file {
+      filename
+      size
+      downloadUrl
+    }
+    eventId
+    comment
+    description
+    createdAt
+    derived
   }
 `;
 export const SampleFieldsFragmentDoc = gql`

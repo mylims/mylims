@@ -44,12 +44,13 @@ type MeasurementFile {
 
 # Inputs
 input MeasurementInput {
-  eventId: String!
+  eventId: String
   userId: String!
   sampleCode: [String!]!
   createdBy: String!
   fileId: String
-  description: String
+  comment: String
+  description: JSON
   derived: JSON
 }
 
@@ -61,13 +62,15 @@ enum MeasurementTypes {
 type Measurement {
   id: ID!
   type: MeasurementTypes!
-  eventId: String!
+  username: String!
   user: User
   sampleCode: [String!]!
-  createdBy: String!
+  createdBy: String
   fileId: String
   file: MeasurementFile
-  description: String
+  eventId: String
+  comment: String
+  description: JSON
   createdAt: DateTime!
   derived: JSON
 }

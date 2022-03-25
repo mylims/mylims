@@ -93,10 +93,9 @@ const resolvers: GqlResolvers = {
         });
       }
       if (!sample.measurements) sample.measurements = [];
-      const measurement = await measurements[type].create({
-        ...input,
-        fileId: input.fileId ?? undefined,
-      });
+      const measurement = await measurements[type].create(
+        removeNullable(input),
+      );
       sample.measurements.push({
         id: measurement.id,
         date: new Date(),
