@@ -6,10 +6,10 @@ import {
 } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
-import { Link } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
+import { LinkButton } from '@/components/LinkButton';
 import { Table as TableQuery } from '@/components/TableQuery';
 import WaferDicing from '@/components/WaferDicing';
 import {
@@ -91,16 +91,13 @@ export default function WaferList() {
         </SamplesList>
       </div>
       <div>
-        <Link to="/sample/singleCreate/wafer">
-          <Button
-            className="mb-4"
-            variant={Variant.secondary}
-            color={Color.success}
-            size={Size.small}
-          >
-            + New wafer
-          </Button>
-        </Link>
+        <LinkButton
+          to="/sample/singleCreate/wafer"
+          className="mb-4"
+          color={Color.success}
+        >
+          + New wafer
+        </LinkButton>
 
         <Card>
           <Card.Header className="flex flex-row justify-between bg-neutral-50 text-neutral-500">
@@ -127,28 +124,24 @@ export default function WaferList() {
                   </ResponsiveChart>
                 </div>
                 <div className="grid grid-cols-2 gap-4 ">
-                  <Link title="detail" to={`/sample/detail/wafer/${state.id}`}>
-                    <Button
-                      className="flex space-x-2"
-                      color={Color.primary}
-                      variant={Variant.secondary}
-                    >
-                      <InformationCircleIcon className="h-5 w-5" />
-                      <span>Detail</span>
-                    </Button>
-                  </Link>
-                  <Link title="update" to={`/sample/update/wafer/${state.id}`}>
-                    <Button
-                      className="flex space-x-2"
-                      color={Color.primary}
-                      variant={Variant.secondary}
-                    >
-                      <PencilIcon className="h-5 w-5" />
-                      <span>Update</span>
-                    </Button>
-                  </Link>
+                  <LinkButton
+                    title="detail"
+                    to={`/sample/detail/wafer/${state.id}`}
+                    className="flex space-x-2"
+                  >
+                    <InformationCircleIcon className="h-5 w-5" />
+                    <span>Detail</span>
+                  </LinkButton>
+                  <LinkButton
+                    title="update"
+                    to={`/sample/update/wafer/${state.id}`}
+                    className="flex space-x-2"
+                  >
+                    <PencilIcon className="h-5 w-5" />
+                    <span>Update</span>
+                  </LinkButton>
                   {state.children && (
-                    <Link
+                    <LinkButton
                       title="detail"
                       to={{
                         pathname: '/sample/list/sample',
@@ -158,27 +151,19 @@ export default function WaferList() {
                           'sampleCode.0.value.operator': 'equals',
                         }).toString(),
                       }}
+                      className="flex space-x-2"
                     >
-                      <Button
-                        className="flex space-x-2"
-                        color={Color.primary}
-                        variant={Variant.secondary}
-                      >
-                        <FolderOpenIcon className="h-5 w-5" />
-                        <span>Samples</span>
-                      </Button>
-                    </Link>
+                      <FolderOpenIcon className="h-5 w-5" />
+                      <span>Samples</span>
+                    </LinkButton>
                   )}
-                  <Link to={`/sample/singleCreate/sample/${state.id}`}>
-                    <Button
-                      className="mb-4"
-                      variant={Variant.secondary}
-                      color={Color.success}
-                      size={Size.small}
-                    >
-                      + Add sample
-                    </Button>
-                  </Link>
+                  <LinkButton
+                    to={`/sample/singleCreate/sample/${state.id}`}
+                    className="mb-4"
+                    color={Color.success}
+                  >
+                    + Add sample
+                  </LinkButton>
                   <FieldDescription title="Name">
                     {state.sampleCode.join('_')}
                   </FieldDescription>

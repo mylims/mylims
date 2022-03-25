@@ -1,20 +1,20 @@
 import { PencilIcon } from '@heroicons/react/outline';
 import React, { ReactNode } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { API_URL } from '@/../env';
 import AttachmentsTable from '@/components/AttachmentsTable';
 import FieldDescription from '@/components/FieldDescription';
 import { FormLayout } from '@/components/FormLayout';
+import { LinkButton } from '@/components/LinkButton';
+import MeasuresTable from '@/components/MeasuresTable';
 import { RichTextSerializer } from '@/components/RichTextSerializer';
 import {
   Alert,
   AlertType,
-  Button,
   Card,
   Color,
   Spinner,
-  Variant,
 } from '@/components/tailwind-ui';
 import { SampleQuery, useSampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
@@ -55,16 +55,14 @@ export default function SampleDetail({
             <FieldDescription title="Created at">
               {formatDate(sample.createdAt)}
             </FieldDescription>
-            <Link title="update" to={`/sample/update/${kind}/${id}`}>
-              <Button
-                className="flex space-x-2"
-                color={Color.primary}
-                variant={Variant.secondary}
-              >
-                <PencilIcon className="h-5 w-5" />
-                <span>Update</span>
-              </Button>
-            </Link>
+            <LinkButton
+              title="update"
+              to={`/sample/update/${kind}/${id}`}
+              className="flex space-x-2"
+            >
+              <PencilIcon className="h-5 w-5" />
+              <span>Update</span>
+            </LinkButton>
           </div>
         </div>
       </Card.Header>
@@ -76,6 +74,18 @@ export default function SampleDetail({
               <div className="text-xl font-semibold">Attachments</div>
               <div className="text-gray-900 mt-1 text-sm sm:col-span-2 sm:mt-0">
                 <AttachmentsTable attachments={sample.attachments} />
+              </div>
+              <div className="mt-2 flex flex-row gap-4">
+                <div className="text-xl font-semibold">Measurements</div>
+                <LinkButton
+                  to={`/measurement/singleCreate/${sample.id}`}
+                  color={Color.success}
+                >
+                  + Add measurement
+                </LinkButton>
+              </div>
+              <div className="text-gray-900 mt-1 text-sm sm:col-span-2 sm:mt-0">
+                <MeasuresTable measurements={sample.measurements} />
               </div>
             </>
           }

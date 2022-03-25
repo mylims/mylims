@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
+import { LinkButton } from '@/components/LinkButton';
 import TableEmpty from '@/components/TableEmpty';
 import TableHeader from '@/components/TableHeader';
-import { Button, Table, Td, Variant } from '@/components/tailwind-ui';
+import { Table, Td } from '@/components/tailwind-ui';
 
 import DirRow from './DirRow';
 import FileRow from './FileRow';
@@ -59,11 +59,9 @@ export default function TableFilesSync({ data, id }: TableFilesSyncProps) {
 
   return (
     <div>
-      <Link to="?page=1">
-        <Button className="mb-2" variant={Variant.secondary}>
-          Filters
-        </Button>
-      </Link>
+      <LinkButton to="?page=1" className="mb-2">
+        Filters
+      </LinkButton>
 
       <TreeContext.Provider value={{ state, setState, id }}>
         <Table

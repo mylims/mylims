@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
+import { LinkButton } from '@/components/LinkButton';
 import WaferDicing from '@/components/WaferDicing';
-import { Button, Variant, Color, Size } from '@/components/tailwind-ui';
+import { Color } from '@/components/tailwind-ui';
 import SampleDetail from '@/pages/samples/detail/Default';
 
 export default function WaferDetail() {
@@ -71,27 +71,21 @@ export default function WaferDetail() {
           <div className="flex flex-row gap-4">
             <div className="text-xl font-semibold">Samples</div>
             {!sample.children || sample.children.length === 0 ? (
-              <Link to={`/sample/multiCreate/sample?parent=${sample.id}`}>
-                <Button
-                  className="mb-4"
-                  variant={Variant.secondary}
-                  color={Color.success}
-                  size={Size.small}
-                >
-                  + Add multiple samples
-                </Button>
-              </Link>
-            ) : null}
-            <Link to={`/sample/singleCreate/sample/${sample.id}`}>
-              <Button
+              <LinkButton
+                to={`/sample/multiCreate/sample?parent=${sample.id}`}
                 className="mb-4"
-                variant={Variant.secondary}
                 color={Color.success}
-                size={Size.small}
               >
-                + Add sample
-              </Button>
-            </Link>
+                + Add multiple samples
+              </LinkButton>
+            ) : null}
+            <LinkButton
+              to={`/sample/singleCreate/sample/${sample.id}`}
+              className="mb-4"
+              color={Color.success}
+            >
+              + Add sample
+            </LinkButton>
           </div>
           {sample.meta.size ? (
             <div className="text-neutral-500">{sample.meta.size} diameter</div>
