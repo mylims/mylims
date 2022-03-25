@@ -5,10 +5,10 @@ import {
   PencilIcon,
 } from '@heroicons/react/outline';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
+import { LinkButton } from '@/components/LinkButton';
 import { Table as TableQuery } from '@/components/TableQuery';
 import {
   Button,
@@ -72,40 +72,31 @@ export default function DyeList() {
             </p>
           ) : (
             <div className="grid grid-cols-2 gap-4">
-              <Link title="detail" to={`/sample/detail/dye/${state.id}`}>
-                <Button
-                  className="flex space-x-2"
-                  color={Color.primary}
-                  variant={Variant.secondary}
-                >
-                  <InformationCircleIcon className="h-5 w-5" />
-                  <span>Detail</span>
-                </Button>
-              </Link>
-              <Link title="update" to={`/sample/update/dye/${state.id}`}>
-                <Button
-                  className="flex space-x-2"
-                  color={Color.primary}
-                  variant={Variant.secondary}
-                >
-                  <PencilIcon className="h-5 w-5" />
-                  <span>Update</span>
-                </Button>
-              </Link>
+              <LinkButton
+                title="detail"
+                to={`/sample/detail/dye/${state.id}`}
+                className="flex space-x-2"
+              >
+                <InformationCircleIcon className="h-5 w-5" />
+                <span>Detail</span>
+              </LinkButton>
+              <LinkButton
+                title="update"
+                to={`/sample/update/dye/${state.id}`}
+                className="flex space-x-2"
+              >
+                <PencilIcon className="h-5 w-5" />
+                <span>Update</span>
+              </LinkButton>
               {state.parent && (
-                <Link
+                <LinkButton
                   title="detail"
                   to={`../../detail/wafer/${state.parent.id}`}
+                  className="flex space-x-2"
                 >
-                  <Button
-                    className="flex space-x-2"
-                    color={Color.primary}
-                    variant={Variant.secondary}
-                  >
-                    <ChipIcon className="h-5 w-5" />
-                    <span>Wafer</span>
-                  </Button>
-                </Link>
+                  <ChipIcon className="h-5 w-5" />
+                  <span>Wafer</span>
+                </LinkButton>
               )}
 
               <FieldDescription title="Wafer name">

@@ -1,10 +1,10 @@
 import { DocumentTextIcon, DownloadIcon } from '@heroicons/react/outline';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
 import AutoSubmitForm from '@/components/AutoSubmitForm';
 import { FileStatusLabel, getTagColor } from '@/components/FileStatusLabel';
+import { LinkButton } from '@/components/LinkButton';
 import TableEmpty from '@/components/TableEmpty';
 import TableHeader from '@/components/TableHeader';
 import {
@@ -170,11 +170,9 @@ export default function TableFilesFiltered({
       onSubmit={(values) => setQuery(values)}
     >
       <div>
-        <Link to={'.'}>
-          <Button variant={Variant.secondary} color={Color.danger}>
-            Remove filters
-          </Button>
-        </Link>
+        <LinkButton to={'.'} color={Color.danger}>
+          Remove filters
+        </LinkButton>
 
         <div className="my-4 grid grid-cols-4 gap-4">
           <InputField
