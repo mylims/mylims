@@ -219,7 +219,8 @@ export type Measurement = {
   file?: Maybe<MeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  sampleCode: Array<Scalars['String']>;
+  sample: Sample;
+  title?: Maybe<Scalars['String']>;
   type: MeasurementTypes;
   user?: Maybe<User>;
   username: Scalars['String'];
@@ -239,12 +240,11 @@ export type MeasurementFilterInput = {
 
 export type MeasurementInput = {
   comment?: InputMaybe<Scalars['String']>;
-  createdBy: Scalars['String'];
   derived?: InputMaybe<Scalars['JSON']>;
   description?: InputMaybe<Scalars['JSON']>;
   eventId?: InputMaybe<Scalars['String']>;
   fileId?: InputMaybe<Scalars['String']>;
-  sampleCode: Array<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
   userId: Scalars['String'];
 };
 
@@ -848,8 +848,9 @@ export type ReadyChecksQuery = {
 export type MeasurementFieldsFragment = {
   id: string;
   type: MeasurementTypes;
-  sampleCode: Array<string>;
   createdBy?: string | null;
+  fileId?: string | null;
+  title?: string | null;
   eventId?: string | null;
   comment?: string | null;
   description?: any | null;
@@ -862,6 +863,7 @@ export type MeasurementFieldsFragment = {
     emails: Array<string>;
     usernames: Array<string>;
   } | null;
+  sample: { id: string; sampleCode: Array<string> };
   file?: { filename: string; size: number; downloadUrl: string } | null;
 };
 
@@ -879,8 +881,9 @@ export type MeasurementsFilteredQuery = {
     list: Array<{
       id: string;
       type: MeasurementTypes;
-      sampleCode: Array<string>;
       createdBy?: string | null;
+      fileId?: string | null;
+      title?: string | null;
       eventId?: string | null;
       comment?: string | null;
       description?: any | null;
@@ -893,6 +896,7 @@ export type MeasurementsFilteredQuery = {
         emails: Array<string>;
         usernames: Array<string>;
       } | null;
+      sample: { id: string; sampleCode: Array<string> };
       file?: { filename: string; size: number; downloadUrl: string } | null;
     }>;
   };
@@ -907,8 +911,9 @@ export type MeasurementQuery = {
   measurement: {
     id: string;
     type: MeasurementTypes;
-    sampleCode: Array<string>;
     createdBy?: string | null;
+    fileId?: string | null;
+    title?: string | null;
     eventId?: string | null;
     comment?: string | null;
     description?: any | null;
@@ -921,6 +926,7 @@ export type MeasurementQuery = {
       emails: Array<string>;
       usernames: Array<string>;
     } | null;
+    sample: { id: string; sampleCode: Array<string> };
     file?: { filename: string; size: number; downloadUrl: string } | null;
   };
 };
@@ -935,8 +941,9 @@ export type CreateMeasurementMutation = {
   createMeasurement: {
     id: string;
     type: MeasurementTypes;
-    sampleCode: Array<string>;
     createdBy?: string | null;
+    fileId?: string | null;
+    title?: string | null;
     eventId?: string | null;
     comment?: string | null;
     description?: any | null;
@@ -949,6 +956,7 @@ export type CreateMeasurementMutation = {
       emails: Array<string>;
       usernames: Array<string>;
     } | null;
+    sample: { id: string; sampleCode: Array<string> };
     file?: { filename: string; size: number; downloadUrl: string } | null;
   };
 };
@@ -1061,8 +1069,8 @@ export type SampleQuery = {
     measurements: Array<{
       id: string;
       type: MeasurementTypes;
+      title?: string | null;
       createdAt: any;
-      sampleCode: Array<string>;
       description?: any | null;
       file?: { filename: string; size: number; downloadUrl: string } | null;
     }>;
@@ -1269,13 +1277,18 @@ export const MeasurementFieldsFragmentDoc = gql`
       emails
       usernames
     }
-    sampleCode
     createdBy
+    sample {
+      id
+      sampleCode
+    }
+    fileId
     file {
       filename
       size
       downloadUrl
     }
+    title
     eventId
     comment
     description
@@ -2428,8 +2441,8 @@ export const SampleDocument = gql`
       measurements {
         id
         type
+        title
         createdAt
-        sampleCode
         description
         file {
           filename

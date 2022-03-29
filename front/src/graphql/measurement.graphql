@@ -8,13 +8,18 @@ fragment MeasurementFields on Measurement {
     emails
     usernames
   }
-  sampleCode
   createdBy
+  sample {
+    id
+    sampleCode
+  }
+  fileId
   file {
     filename
     size
     downloadUrl
   }
+  title
   eventId
   comment
   description

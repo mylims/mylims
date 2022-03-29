@@ -67,8 +67,8 @@ query Sample($id: ID!) {
     measurements {
       id
       type
+      title
       createdAt
-      sampleCode
       description
       file {
         filename
