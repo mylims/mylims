@@ -7,9 +7,14 @@ import HeaderRender from './HeaderRender';
 
 interface ActionsColumnProps {
   index?: number;
+  width?: number;
   children(row: Record<string, unknown>): ReactNode;
 }
-export default function ActionsColumn({ index, children }: ActionsColumnProps) {
+export default function ActionsColumn({
+  index,
+  width,
+  children,
+}: ActionsColumnProps) {
   const { dispatch } = useTableQueryContext();
 
   useEffect(() => {
@@ -20,6 +25,7 @@ export default function ActionsColumn({ index, children }: ActionsColumnProps) {
       type: 'ADD_COLUMN',
       payload: {
         index,
+        width,
         value: { render: children, dataPath: ColumnKind.ACTIONS },
         kind: ColumnKind.ACTIONS,
         title: ColumnKind.ACTIONS,
@@ -31,7 +37,7 @@ export default function ActionsColumn({ index, children }: ActionsColumnProps) {
         type: 'REMOVE_COLUMN',
         payload: { title: ColumnKind.ACTIONS },
       });
-  }, [index, dispatch]);
+  }, [index, width, dispatch]);
 
-  return <HeaderRender title="Actions" path="" />;
+  return <HeaderRender title="Actions" path="" width={width} />;
 }

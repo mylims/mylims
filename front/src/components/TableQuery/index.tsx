@@ -3,11 +3,11 @@ import { InboxIcon } from '@heroicons/react/solid';
 import { produce } from 'immer';
 import React, {
   Reducer,
-  useEffect,
-  useMemo,
-  useReducer,
   useRef,
+  useMemo,
   useState,
+  useEffect,
+  useReducer,
 } from 'react';
 
 import UserColumn from '@/components/TableQuery/components/UserColumn';
@@ -31,9 +31,10 @@ import { TableQueryContext } from './hooks/useTableQueryContext';
 import { reducer } from './reducer';
 import {
   QueryType,
+  ColumnKind,
+  TableState,
   ReducerActions,
   TableQueryProps,
-  TableState,
 } from './types';
 import { PAGE_SIZE, splitChildren } from './utils';
 
@@ -49,8 +50,8 @@ const reducerCurr: Reducer<TableState, ReducerActions> = produce(reducer);
 
 export function Table<T extends Record<string, unknown>>({
   data,
-  loading,
   error,
+  loading,
   query: originalQuery,
   itemsPerPage = PAGE_SIZE,
   onQueryChange: submitQuery,
@@ -78,7 +79,11 @@ export function Table<T extends Record<string, unknown>>({
     );
     let columnsTemplate = '';
     for (let i = 0; i < orderedColumns.length; i++) {
-      columnsTemplate += `${widths[i]}px `;
+      let width = widths[i];
+      if (orderedColumns[i].kind === ColumnKind.ACTIONS) {
+        width = (orderedColumns[i] as any)?.width || width;
+      }
+      columnsTemplate += `${width}px `;
     }
     return columnsTemplate;
   }, [headerRef, orderedColumns]);
@@ -126,9 +131,9 @@ export function Table<T extends Record<string, unknown>>({
 }
 
 function TableBody<T extends Record<string, unknown>>({
+  list,
   error,
   loading,
-  list,
   columns,
   columnsTemplate,
 }: TableBodyProps<T>) {
@@ -166,9 +171,9 @@ function TableBody<T extends Record<string, unknown>>({
     <>
       {list.map((row, index) => (
         <RowRender
-          key={`table-row-${index}`}
           row={row}
           columns={columns}
+          key={`table-row-${index}`}
           columnsTemplate={columnsTemplate}
         />
       ))}
