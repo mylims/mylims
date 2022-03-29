@@ -50,6 +50,15 @@ const resolvers: GqlResolvers = {
       }
       return user;
     },
+    async sample(measurement) {
+      const sample = await Sample.find(measurement.sampleId);
+      if (!sample) {
+        throw new UserInputError('Sample not found', {
+          argumentName: 'sampleId',
+        });
+      }
+      return sample;
+    },
   },
   Query: {
     async measurement(_, { id, type }) {
@@ -95,7 +104,11 @@ const resolvers: GqlResolvers = {
       }
       if (!sample.measurements) sample.measurements = [];
       const measurement = await measurements[type].create(
-        removeNullable(input),
+        removeNullable({
+          ...input,
+          eventId: input.eventId ? new ObjectId(input.eventId) : undefined,
+          createdBy: new ObjectId(input.userId),
+        }),
       );
       sample.measurements.push({
         id: measurement.id,

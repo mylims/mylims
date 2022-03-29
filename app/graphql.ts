@@ -243,7 +243,8 @@ export type GqlMeasurement = {
   file?: Maybe<GqlMeasurementFile>;
   fileId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  sampleCode: Array<Scalars['String']>;
+  sample: GqlSample;
+  title?: Maybe<Scalars['String']>;
   type: GqlMeasurementTypes;
   user?: Maybe<GqlUser>;
   username: Scalars['String'];
@@ -264,12 +265,11 @@ export type GqlMeasurementFilterInput = {
 
 export type GqlMeasurementInput = {
   comment?: InputMaybe<Scalars['String']>;
-  createdBy: Scalars['String'];
   derived?: InputMaybe<Scalars['JSON']>;
   description?: InputMaybe<Scalars['JSON']>;
   eventId?: InputMaybe<Scalars['String']>;
   fileId?: InputMaybe<Scalars['String']>;
-  sampleCode: Array<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
   userId: Scalars['String'];
 };
 
@@ -1123,11 +1123,8 @@ export type GqlMeasurementResolvers<
     ContextType
   >;
   id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
-  sampleCode?: Resolver<
-    Array<GqlResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  sample?: Resolver<GqlResolversTypes['Sample'], ParentType, ContextType>;
+  title?: Resolver<Maybe<GqlResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<
     GqlResolversTypes['MeasurementTypes'],
     ParentType,
