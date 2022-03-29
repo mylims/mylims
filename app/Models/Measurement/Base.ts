@@ -3,12 +3,12 @@ import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 export interface MeasurementParams {
   username: string;
   sampleId: ObjectId;
-  createdBy?: ObjectId;
+  title?: string;
   fileId?: string;
   eventId?: ObjectId;
   derived?: string;
   comment?: string;
-  title?: string;
+  createdBy?: ObjectId;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   description?: any[];
 }
@@ -18,11 +18,11 @@ export class BaseMeasurement extends BaseModel {
   public _id: ObjectId;
   public username: string;
   public sampleId: ObjectId;
-  public createdBy?: ObjectId;
+  public title?: string;
   public fileId?: string;
   public eventId?: ObjectId;
   public comment?: string;
-  public title?: string;
+  public createdBy?: ObjectId;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public description?: any[];
 }

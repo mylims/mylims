@@ -15,9 +15,10 @@ interface B1505TransferProps {
       value: number;
     };
     subthresholdSlope: {
-      medianSlope: number;
+      slope: number;
       toIndex: number;
       fromIndex: number;
+      score: Record<string, number>;
     };
   };
 }
@@ -124,7 +125,7 @@ export default function B1505Transfer({
             title="Subthreshold slope"
             titleStyle={underline('blue')}
           >
-            {(derived.subthresholdSlope.medianSlope * 1000).toFixed(4)} mV/dec
+            {(derived.subthresholdSlope.slope * 1000).toFixed(4)} mV/dec
           </FieldDescription>
         </div>
       </div>
