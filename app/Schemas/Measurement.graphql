@@ -46,9 +46,8 @@ type MeasurementFile {
 input MeasurementInput {
   eventId: String
   userId: String!
-  sampleCode: [String!]!
-  createdBy: String!
   fileId: String
+  title: String
   comment: String
   description: JSON
   derived: JSON
@@ -64,11 +63,12 @@ type Measurement {
   type: MeasurementTypes!
   username: String!
   user: User
-  sampleCode: [String!]!
+  sample: Sample!
   createdBy: String
   fileId: String
   file: MeasurementFile
   eventId: String
+  title: String
   comment: String
   description: JSON
   createdAt: DateTime!

@@ -11,6 +11,7 @@ export default class MeasurementValidator {
     username: schema.string(),
     file: schema.file.optional(),
     derived: schema.string.optional(),
+    title: schema.string.optional(),
     description: schema.string.optional(),
   });
 }

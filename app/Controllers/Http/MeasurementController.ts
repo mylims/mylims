@@ -37,7 +37,6 @@ export default class MeasurementController {
     try {
       const params = await request.validate(MeasurementValidator);
       const {
-        eventId,
         file,
         collection,
         sampleCode,
@@ -45,13 +44,14 @@ export default class MeasurementController {
         description: comment,
         username,
       } = params;
+      const eventId = new ObjectId(params.eventId);
       const sampleCodeList = sampleCode.split(',');
 
       // Create the file
       let fileId: string | undefined;
       if (file) {
         const filename =
-          file.fileName ?? (await this._filenameByEvent(params.eventId));
+          file.fileName ?? (await this._filenameByEvent(eventId));
         const localFile = await this.drive.moveFromMultipart(file, filename);
         const dbFile = await File.create({
           _id: localFile.id,
@@ -64,8 +64,8 @@ export default class MeasurementController {
 
       // Create user relationship
       const user = await this._getUser(username);
-      const userId = user._id.toHexString();
-      const sample = await this._getSample(sampleCodeList);
+      const userId = user._id;
+      const sample = await this._getSample(sampleCodeList, userId);
 
       // Create the measurement
       const derivedJson = derived ? this._deepParse(derived) : undefined;
@@ -76,7 +76,7 @@ export default class MeasurementController {
           eventId,
           fileId,
           comment,
-          sampleCode: sampleCodeList,
+          sampleId: sample._id,
           createdBy: userId,
         },
         derivedJson,
@@ -101,8 +101,8 @@ export default class MeasurementController {
 
   // ---------------------------------------------------------------------------
 
-  private async _filenameByEvent(eventId: string): Promise<string> {
-    const event = await Event.findOrFail(new ObjectId(eventId));
+  private async _filenameByEvent(eventId: ObjectId): Promise<string> {
+    const event = await Event.findOrFail(eventId);
     const file = await SyncFile.findByOrFail(
       'revisions.0.id',
       event.data.fileId,
@@ -122,8 +122,11 @@ export default class MeasurementController {
     }
   }
 
-  private async _getSample(sampleCode: string[]): Promise<Sample> {
-    const cursor = Sample.query({ sampleCode });
+  private async _getSample(
+    sampleCode: string[],
+    userId: ObjectId,
+  ): Promise<Sample> {
+    const cursor = Sample.query({ sampleCode, userId });
     const length = await cursor.count();
     if (length === 0) {
       throw new Error(`Missing sample ${sampleCode.join('_')}`);
