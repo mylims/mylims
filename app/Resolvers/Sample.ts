@@ -5,10 +5,13 @@ import { UserInputError } from '@ioc:Zakodium/Apollo/Errors';
 import { ModelAttributes, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import File from 'App/Models/File';
+import { BaseMeasurement } from 'App/Models/Measurement/Base';
+import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
 import { Sample } from 'App/Models/Sample';
 import { SampleKind } from 'App/Models/SampleKind';
 import User from 'App/Models/User';
 import {
+  GqlMeasurementTypes,
   GqlResolvers,
   GqlSampleFilterInput,
   GqlSampleSortField,
@@ -25,6 +28,9 @@ import {
   removeNullable,
 } from 'App/utils';
 
+const MEASUREMENTS = {
+  [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
+};
 const resolvers: GqlResolvers = {
   Sample: {
     id: (sample: Sample): string => sample._id.toHexString(),
@@ -54,13 +60,31 @@ const resolvers: GqlResolvers = {
             });
           }
           return {
-            date: file.date,
             id: file.id,
-            filename: attachment.filename,
+            date: file.date,
             size: attachment.size,
+            filename: attachment.filename,
             downloadUrl: `${Env.get('BACKEND_URL')}/measurements/file/${
               file.id
             }`,
+          };
+        }),
+      );
+    },
+    measurements(sample: Sample) {
+      return Promise.all(
+        sample.measurements.map(async (measurement) => {
+          const ans = await MEASUREMENTS[
+            measurement.type as GqlMeasurementTypes
+          ].find(measurement.id);
+          if (!ans) {
+            throw new UserInputError('Measurement not found', {
+              argumentName: 'id',
+            });
+          }
+          return {
+            ...(ans.toJSON() as BaseMeasurement),
+            type: measurement.type,
           };
         }),
       );

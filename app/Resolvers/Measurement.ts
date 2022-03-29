@@ -25,7 +25,7 @@ import {
   removeNullable,
 } from 'App/utils';
 
-const measurements = {
+const MEASUREMENTS = {
   [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
 };
 
@@ -38,9 +38,9 @@ const resolvers: GqlResolvers = {
       const urlPath = 'measurements/file';
       const file = await File.findOrFail(fileId);
       return {
-        downloadUrl: `${Env.get('BACKEND_URL')}/${urlPath}/${fileId}`,
-        filename: file.filename,
         size: file.size,
+        filename: file.filename,
+        downloadUrl: `${Env.get('BACKEND_URL')}/${urlPath}/${fileId}`,
       };
     },
     async user(measurement) {
@@ -62,7 +62,7 @@ const resolvers: GqlResolvers = {
   },
   Query: {
     async measurement(_, { id, type }) {
-      const Measurement = measurements[type];
+      const Measurement = MEASUREMENTS[type];
       const ans = await Measurement.find(new ObjectId(id));
       if (ans) {
         const rest = ans.toJSON() as BaseMeasurement;
@@ -80,7 +80,7 @@ const resolvers: GqlResolvers = {
       } = sortBy || {};
 
       const query = await createFilter(filterBy);
-      let measurementCursor = measurements[type]
+      let measurementCursor = MEASUREMENTS[type]
         .query(query)
         .sortBy(field, direction === GqlSortDirection.DESC ? -1 : 1);
       const totalCount = await measurementCursor.count();
@@ -103,7 +103,7 @@ const resolvers: GqlResolvers = {
         });
       }
       if (!sample.measurements) sample.measurements = [];
-      const measurement = await measurements[type].create(
+      const measurement = await MEASUREMENTS[type].create(
         removeNullable({
           ...input,
           eventId: input.eventId ? new ObjectId(input.eventId) : undefined,

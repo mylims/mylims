@@ -75,7 +75,7 @@ export default function MeasurementDetail() {
       <Card.Footer>
         <div className="mb-4 grid grid-cols-3 gap-4">
           <FieldDescription title="Sample code">
-            {measurement.sampleCode.join(',')}
+            {measurement.sample.sampleCode.join('_')}
           </FieldDescription>
           <FieldDescription title="Owner's username">
             {measurement.user?.usernames[0]}

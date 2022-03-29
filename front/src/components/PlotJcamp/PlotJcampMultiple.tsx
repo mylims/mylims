@@ -6,26 +6,24 @@ import type { PlotQuery } from './types';
 import { getPlotJcamp } from './utils';
 
 interface PlotJcampMultipleProps {
-  content: Array<string>;
   query: PlotQuery;
-  size: { width: number; height: number };
+  content: Array<string>;
+  size: Record<'width' | 'height', number>;
 }
 
 export function PlotJcampMultiple({
-  content,
-  query,
   size,
+  query,
+  content,
 }: PlotJcampMultipleProps) {
   const analyses = useMemo(
     () => content.map((jcamp) => fromJcamp(jcamp)),
     [content],
   );
-  const plotContent = useMemo(() => {
-    return getPlotJcamp(query, analyses, {
-      ...size,
-      margin: { bottom: 50, left: 90, top: 5, right: 5 },
-    });
-  }, [analyses, query, size]);
+  const plotContent = useMemo(
+    () => getPlotJcamp(query, analyses, size),
+    [analyses, query, size],
+  );
 
   return <PlotObject plot={plotContent} />;
 }

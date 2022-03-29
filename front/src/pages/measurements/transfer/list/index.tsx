@@ -42,19 +42,12 @@ export default function MeasurementsList() {
     <div>
       <Select
         className="mb-4 w-60"
-        options={[
-          {
-            value: MeasurementTypes.TRANSFER,
-            label: MeasurementTypes.TRANSFER,
-          },
-        ]}
-        selected={{ value: measurementType, label: measurementType }}
-        onSelect={(
-          selected: Record<'value' | 'label', MeasurementTypes> | undefined,
-        ) => {
+        options={[MeasurementTypes.TRANSFER]}
+        selected={measurementType}
+        onSelect={(selected: MeasurementTypes | undefined) => {
           setQuery({
             ...query,
-            type: selected?.value ?? MeasurementTypes.TRANSFER,
+            type: selected ?? MeasurementTypes.TRANSFER,
           });
         }}
         label="Measurement type"
@@ -68,7 +61,7 @@ export default function MeasurementsList() {
           onQueryChange={(query) => setQuery(query)}
         >
           <TableQuery.Queries />
-          <TableQuery.ActionsColumn>
+          <TableQuery.ActionsColumn width={200}>
             {(row) => {
               const { file, id, type } = row as MeasurementRowType;
               const fileUrl = file?.downloadUrl;
@@ -81,7 +74,12 @@ export default function MeasurementsList() {
             title="Sample"
             dataPath="sampleCode"
             disableSort
-          />
+          >
+            {(row) => {
+              const { sample } = row as MeasurementRowType;
+              return sample.sampleCode.join('_');
+            }}
+          </TableQuery.TextColumn>
           <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
           <TableQuery.UserColumn title="User" dataPath="user" />
         </TableQuery>
