@@ -20,6 +20,7 @@ import {
 import {
   filterDate,
   filterTextArray,
+  filterUser,
   NotReadOnly,
   removeNullable,
 } from 'App/utils';
@@ -43,7 +44,7 @@ const resolvers: GqlResolvers = {
       };
     },
     async user(measurement) {
-      const user = await User.find(new ObjectId(measurement.username));
+      const user = await User.findBy('usernames', measurement.username);
       if (!user) {
         throw new UserInputError('User not found', { argumentName: 'userId' });
       }
@@ -116,6 +117,7 @@ async function createFilter(
   let filter: Filter<NotReadOnly<ModelAttributes<BaseMeasurement>>> =
     filterTextArray('sampleCode', filterBy.sampleCode);
   filter.createdAt = filterDate(filterBy.createdAt);
+  filter.userId = filterUser(filterBy.userId);
 
   return removeNullable(filter);
 }

@@ -8,7 +8,6 @@ export default class MeasurementValidator {
     collection: schema.string(),
     eventId: schema.string(),
     sampleCode: schema.string(),
-    sampleKind: schema.string(),
     username: schema.string(),
     file: schema.file.optional(),
     derived: schema.string.optional(),
