@@ -11,6 +11,7 @@ import SortIcon from './SortIcon';
 interface HeaderRenderProps {
   title: string;
   path: string;
+  width?: number;
   queryIndex?: number;
   disableSort?: boolean;
   children?: ReactElement<void, string | JSXElementConstructor<void>>;
@@ -21,6 +22,7 @@ const TITLE_CLASS =
 export default function HeaderRender({
   title,
   path,
+  width,
   queryIndex,
   disableSort,
   children,
@@ -36,13 +38,18 @@ export default function HeaderRender({
     strategy: 'fixed',
   });
 
-  if (!children) return <th className={TITLE_CLASS}>{title}</th>;
+  if (!children)
+    return (
+      <th style={{ width }} className={TITLE_CLASS}>
+        {title}
+      </th>
+    );
   const filtered = Object.keys(query).some((key) =>
     key.startsWith(queryIndex === undefined ? path : `${path}.${queryIndex}`),
   );
 
   return (
-    <th>
+    <th style={{ width }}>
       <div className={TITLE_CLASS}>
         <span>{title}</span>
         <Popover className="relative">

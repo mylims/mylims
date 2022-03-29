@@ -101,6 +101,7 @@ export type RowState =
   | RowStateGeneric<ColumnKind.USER, BaseColumnProps>
   | {
       index: number;
+      width?: number;
       kind: ColumnKind.ACTIONS;
       title: ColumnKind.ACTIONS;
       value: Omit<ActionsColumnProps, 'index'>;

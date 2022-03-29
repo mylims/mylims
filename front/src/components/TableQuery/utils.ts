@@ -62,18 +62,24 @@ export function getVariablesFromQuery<T extends BaseQuery>(query: QueryType) {
     user,
     ...filter
   } = unflatten<QueryType, T>(query);
-  const meta = rawMeta
-    ? Object.entries(rawMeta).map(([key, { value, operator }]) => ({
+  type Filter = typeof filter & { userId?: string; meta?: FilterMetaText[] };
+  let filterBy: Filter = filter;
+  if (rawMeta) {
+    filterBy.meta = Object.entries(rawMeta).map(
+      ([key, { value, operator }]) => ({
         key,
         value,
         operator,
-      }))
-    : undefined;
+      }),
+    );
+  }
+  if (user) filterBy.userId = user.value;
+
   const pageNumber = parseInt(page, 10);
   return {
     skip: (pageNumber - 1) * PAGE_SIZE,
     limit: PAGE_SIZE,
-    filterBy: { ...filter, meta, userId: user?.value },
+    filterBy,
     sortBy,
   };
 }

@@ -13,6 +13,7 @@ import App from '@/pages/App';
 import Login from '@/pages/login';
 import MeasurementDetail from '@/pages/measurements/transfer/detail';
 import MeasurementsList from '@/pages/measurements/transfer/list';
+import MeasurementCreate from '@/pages/measurements/create/Default';
 import DeviceDetail from '@/pages/samples/detail/Device';
 import DyeDetail from '@/pages/samples/detail/Dye';
 import SampleDetail from '@/pages/samples/detail/Sample';
@@ -58,6 +59,10 @@ function AppRoutes() {
         {
           path: 'detail/:type/:id',
           element: <App Component={MeasurementDetail} />,
+        },
+        {
+          path: 'create/:id',
+          element: <App Component={MeasurementCreate} />,
         },
       ],
     },
