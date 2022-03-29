@@ -41,8 +41,9 @@ export default class MeasurementController {
         file,
         collection,
         sampleCode,
-        sampleKind,
-        ...restParams
+        derived,
+        description: comment,
+        username,
       } = params;
       const sampleCodeList = sampleCode.split(',');
 
@@ -62,22 +63,24 @@ export default class MeasurementController {
       }
 
       // Create user relationship
-      const user = await this._getOrCreateUser(restParams.username);
+      const user = await this._getUser(username);
       const userId = user._id.toHexString();
-      const sample = await this._getOrCreateSample(
-        userId,
-        sampleCodeList,
-        sampleKind,
-      );
+      const sample = await this._getSample(sampleCodeList);
 
       // Create the measurement
-      const measurement = await this._createMeasurement(collection, {
-        ...restParams,
-        eventId,
-        fileId,
-        sampleCode: sampleCodeList,
-        createdBy: userId,
-      });
+      const derivedJson = derived ? this._deepParse(derived) : undefined;
+      const measurement = await this._createMeasurement(
+        collection,
+        {
+          username,
+          eventId,
+          fileId,
+          comment,
+          sampleCode: sampleCodeList,
+          createdBy: userId,
+        },
+        derivedJson,
+      );
 
       // Add activity to the sample
       if (fileId) {
@@ -92,7 +95,7 @@ export default class MeasurementController {
 
       return response.ok(measurement);
     } catch (error) {
-      return response.badRequest({ errors: [error] });
+      return response.badRequest(error.messages ?? [error.message]);
     }
   }
 
@@ -107,16 +110,11 @@ export default class MeasurementController {
     return file.filename;
   }
 
-  private async _getOrCreateUser(username: string): Promise<User> {
-    const cursor = User.query({ usernames: { $elemMatch: { $eq: username } } });
+  private async _getUser(username: string): Promise<User> {
+    const cursor = User.query({ usernames: username });
     const length = await cursor.count();
     if (length === 0) {
-      return User.create({
-        usernames: [username],
-        role: 'MEMBER',
-        emails: [],
-        authMethods: {},
-      });
+      throw new Error(`User ${username} not found`);
     } else if (length === 1) {
       return cursor.firstOrFail();
     } else {
@@ -124,22 +122,11 @@ export default class MeasurementController {
     }
   }
 
-  private async _getOrCreateSample(
-    userId: string,
-    sampleCode: string[],
-    kind: string,
-  ): Promise<Sample> {
-    const cursor = Sample.query({ userId: new ObjectId(userId), sampleCode });
+  private async _getSample(sampleCode: string[]): Promise<Sample> {
+    const cursor = Sample.query({ sampleCode });
     const length = await cursor.count();
     if (length === 0) {
-      return Sample.fromInput(new Sample(), {
-        userId,
-        sampleCode,
-        kind,
-        labels: [],
-        meta: {},
-        attachments: [],
-      });
+      throw new Error(`Missing sample ${sampleCode.join('_')}`);
     } else if (length === 1) {
       return cursor.firstOrFail();
     } else {
@@ -150,8 +137,9 @@ export default class MeasurementController {
   private async _createMeasurement(
     collection: string,
     rest: MeasurementParams,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    derived?: any,
   ) {
-    const derived = rest.derived ? this._deepParse(rest.derived) : undefined;
     const measurement = { ...rest, derived };
 
     switch (collection) {
