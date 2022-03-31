@@ -74,8 +74,8 @@ export default function B1505Transfer({
                     <Annotation.Line
                       x1={derived.thresholdVoltage.value}
                       x2={derived.thresholdVoltage.value}
-                      y1={y?.min ?? '0'}
-                      y2={y?.max ?? '500'}
+                      y1={y?.min ?? '0%'}
+                      y2={y?.max ?? '100%'}
                       style={{ stroke: 'green', ...dashedLine }}
                     />
                     <Annotation.Circle
