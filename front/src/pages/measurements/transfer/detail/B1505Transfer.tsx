@@ -4,22 +4,20 @@ import { Annotation } from 'react-plot';
 import FieldDescription from '@/components/FieldDescription';
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
 import { Alert, AlertType, Card } from '@/components/tailwind-ui';
+import { MeasurementQuery } from '@/generated/graphql';
 import { useFetchFile } from '@/hooks/useFetchFile';
+import { formatDate } from '@/utils/formatFields';
 
-interface B1505TransferProps {
-  file: null | { filename: string; downloadUrl: string; size: number };
-  fileId: null | string;
-  derived: {
-    thresholdVoltage: {
-      index: number;
-      value: number;
-    };
-    subthresholdSlope: {
-      slope: number;
-      toIndex: number;
-      fromIndex: number;
-      score: Record<string, number>;
-    };
+interface Derived {
+  thresholdVoltage: {
+    index: number;
+    value: number;
+  };
+  subthresholdSlope: {
+    slope: number;
+    toIndex: number;
+    fromIndex: number;
+    score: Record<string, number>;
   };
 }
 
@@ -31,12 +29,13 @@ const underline = (color: string) => ({
   textDecorationThickness: '2px',
 });
 
-export default function B1505Transfer({
-  file,
-  fileId,
-  derived,
-}: B1505TransferProps) {
-  const { data, error } = useFetchFile(fileId, file?.downloadUrl ?? null);
+export default function B1505Transfer(
+  measurement: MeasurementQuery['measurement'],
+) {
+  const { data, error } = useFetchFile(
+    measurement.fileId ?? null,
+    measurement.file?.downloadUrl ?? null,
+  );
 
   if (error) {
     return (
@@ -50,10 +49,40 @@ export default function B1505Transfer({
       </Card.Body>
     );
   }
+
+  const { thresholdVoltage, subthresholdSlope } =
+    measurement?.derived ?? ({} as Derived);
   return (
     <Card.Body>
-      <div className="flex justify-around">
-        <div>
+      <div className="flex flex-col lg:w-full lg:flex-row lg:gap-4">
+        <div className="lg:w-1/2">
+          <div className="grid-cols-auto mb-4 grid items-end gap-4">
+            <FieldDescription title="Sample code">
+              {measurement.sample.sampleCode.join('_')}
+            </FieldDescription>
+            <FieldDescription title="Owner's username">
+              {measurement.user?.usernames[0]}
+            </FieldDescription>
+            <FieldDescription title="Creation date">
+              {formatDate(measurement.createdAt)}
+            </FieldDescription>
+            {measurement.file && (
+              <div>
+                <div className="font-medium">File name</div>
+                <div
+                  className="truncate text-neutral-500"
+                  title={measurement.file.filename}
+                >
+                  {measurement.file.filename}
+                </div>
+              </div>
+            )}
+            <FieldDescription title="Comment">
+              {measurement.comment ?? '-'}
+            </FieldDescription>
+          </div>
+        </div>
+        <div className="flex flex-col-reverse items-end gap-2 lg:w-1/2">
           <PlotJcampSingle
             content={data}
             initialQuery={{
@@ -72,14 +101,14 @@ export default function B1505Transfer({
                 return (
                   <>
                     <Annotation.Line
-                      x1={derived.thresholdVoltage.value}
-                      x2={derived.thresholdVoltage.value}
+                      x1={thresholdVoltage.value}
+                      x2={thresholdVoltage.value}
                       y1={y?.min ?? '0%'}
                       y2={y?.max ?? '100%'}
                       style={{ stroke: 'green', ...dashedLine }}
                     />
                     <Annotation.Circle
-                      x={derived.thresholdVoltage.value}
+                      x={thresholdVoltage.value}
                       y={1e-6}
                       r="4"
                       style={{ fill: 'green' }}
@@ -87,21 +116,21 @@ export default function B1505Transfer({
                     {x && y && (
                       <>
                         <Annotation.Line
-                          x1={x.data[derived.subthresholdSlope.fromIndex]}
-                          x2={x.data[derived.subthresholdSlope.toIndex]}
-                          y1={y.data[derived.subthresholdSlope.fromIndex]}
-                          y2={y.data[derived.subthresholdSlope.toIndex]}
+                          x1={x.data[subthresholdSlope.fromIndex]}
+                          x2={x.data[subthresholdSlope.toIndex]}
+                          y1={y.data[subthresholdSlope.fromIndex]}
+                          y2={y.data[subthresholdSlope.toIndex]}
                           style={{ stroke: 'blue', ...dashedLine }}
                         />
                         <Annotation.Circle
-                          x={x.data[derived.subthresholdSlope.fromIndex]}
-                          y={y.data[derived.subthresholdSlope.fromIndex]}
+                          x={x.data[subthresholdSlope.fromIndex]}
+                          y={y.data[subthresholdSlope.fromIndex]}
                           r="4"
                           style={{ fill: 'blue' }}
                         />
                         <Annotation.Circle
-                          x={x.data[derived.subthresholdSlope.toIndex]}
-                          y={y.data[derived.subthresholdSlope.toIndex]}
+                          x={x.data[subthresholdSlope.toIndex]}
+                          y={y.data[subthresholdSlope.toIndex]}
                           r="4"
                           style={{ fill: 'blue' }}
                         />
@@ -113,20 +142,20 @@ export default function B1505Transfer({
               return null;
             }}
           </PlotJcampSingle>
-        </div>
-        <div>
-          <FieldDescription
-            title="Threshold voltage"
-            titleStyle={underline('green')}
-          >
-            {derived.thresholdVoltage.value.toFixed(4)} V
-          </FieldDescription>
-          <FieldDescription
-            title="Subthreshold slope"
-            titleStyle={underline('blue')}
-          >
-            {(derived.subthresholdSlope.slope * 1000).toFixed(4)} mV/dec
-          </FieldDescription>
+          <div>
+            <FieldDescription
+              title="Threshold voltage"
+              titleStyle={underline('green')}
+            >
+              {thresholdVoltage.value.toFixed(4)} V
+            </FieldDescription>
+            <FieldDescription
+              title="Subthreshold slope"
+              titleStyle={underline('blue')}
+            >
+              {(subthresholdSlope.slope * 1000).toFixed(4)} mV/dec
+            </FieldDescription>
+          </div>
         </div>
       </div>
     </Card.Body>

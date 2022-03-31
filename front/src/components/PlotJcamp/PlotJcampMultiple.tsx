@@ -1,7 +1,8 @@
-import { ZoomAnnotation } from '@/components/PlotJcamp/ZoomAnnotation';
 import { fromJcamp } from 'base-analysis';
 import React, { useMemo } from 'react';
 import { PlotController, PlotObject } from 'react-plot';
+
+import { ZoomAnnotation } from '@/components/PlotJcamp/ZoomAnnotation';
 
 import type { PlotQuery } from './types';
 import { getPlotJcamp } from './utils';

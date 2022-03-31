@@ -848,23 +848,23 @@ export type ReadyChecksQuery = {
 export type MeasurementFieldsFragment = {
   id: string;
   type: MeasurementTypes;
-  createdBy?: string | null;
-  fileId?: string | null;
   title?: string | null;
+  fileId?: string | null;
   eventId?: string | null;
   comment?: string | null;
-  description?: any | null;
-  createdAt: any;
   derived?: any | null;
+  createdAt: any;
+  createdBy?: string | null;
+  description?: any | null;
   user?: {
     id: string;
-    firstName?: string | null;
-    lastName?: string | null;
     emails: Array<string>;
+    lastName?: string | null;
+    firstName?: string | null;
     usernames: Array<string>;
   } | null;
   sample: { id: string; sampleCode: Array<string> };
-  file?: { filename: string; size: number; downloadUrl: string } | null;
+  file?: { size: number; filename: string; downloadUrl: string } | null;
 };
 
 export type MeasurementsFilteredQueryVariables = Exact<{
@@ -881,23 +881,23 @@ export type MeasurementsFilteredQuery = {
     list: Array<{
       id: string;
       type: MeasurementTypes;
-      createdBy?: string | null;
-      fileId?: string | null;
       title?: string | null;
+      fileId?: string | null;
       eventId?: string | null;
       comment?: string | null;
-      description?: any | null;
-      createdAt: any;
       derived?: any | null;
+      createdAt: any;
+      createdBy?: string | null;
+      description?: any | null;
       user?: {
         id: string;
-        firstName?: string | null;
-        lastName?: string | null;
         emails: Array<string>;
+        lastName?: string | null;
+        firstName?: string | null;
         usernames: Array<string>;
       } | null;
       sample: { id: string; sampleCode: Array<string> };
-      file?: { filename: string; size: number; downloadUrl: string } | null;
+      file?: { size: number; filename: string; downloadUrl: string } | null;
     }>;
   };
 };
@@ -911,23 +911,23 @@ export type MeasurementQuery = {
   measurement: {
     id: string;
     type: MeasurementTypes;
-    createdBy?: string | null;
-    fileId?: string | null;
     title?: string | null;
+    fileId?: string | null;
     eventId?: string | null;
     comment?: string | null;
-    description?: any | null;
-    createdAt: any;
     derived?: any | null;
+    createdAt: any;
+    createdBy?: string | null;
+    description?: any | null;
     user?: {
       id: string;
-      firstName?: string | null;
-      lastName?: string | null;
       emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
       usernames: Array<string>;
     } | null;
     sample: { id: string; sampleCode: Array<string> };
-    file?: { filename: string; size: number; downloadUrl: string } | null;
+    file?: { size: number; filename: string; downloadUrl: string } | null;
   };
 };
 
@@ -941,42 +941,42 @@ export type CreateMeasurementMutation = {
   createMeasurement: {
     id: string;
     type: MeasurementTypes;
-    createdBy?: string | null;
-    fileId?: string | null;
     title?: string | null;
+    fileId?: string | null;
     eventId?: string | null;
     comment?: string | null;
-    description?: any | null;
-    createdAt: any;
     derived?: any | null;
+    createdAt: any;
+    createdBy?: string | null;
+    description?: any | null;
     user?: {
       id: string;
-      firstName?: string | null;
-      lastName?: string | null;
       emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
       usernames: Array<string>;
     } | null;
     sample: { id: string; sampleCode: Array<string> };
-    file?: { filename: string; size: number; downloadUrl: string } | null;
+    file?: { size: number; filename: string; downloadUrl: string } | null;
   };
 };
 
 export type SampleFieldsFragment = {
   id: string;
-  sampleCode: Array<string>;
+  meta: any;
+  title?: string | null;
   uuid10: string;
   labels: Array<string>;
   project?: string | null;
-  title?: string | null;
-  description?: any | null;
   comment?: string | null;
-  meta: any;
   createdAt: any;
+  sampleCode: Array<string>;
+  description?: any | null;
   user?: {
     id: string;
-    firstName?: string | null;
-    lastName?: string | null;
     emails: Array<string>;
+    lastName?: string | null;
+    firstName?: string | null;
     usernames: Array<string>;
   } | null;
 };
@@ -984,9 +984,9 @@ export type SampleFieldsFragment = {
 export type SampleKindFieldsFragment = {
   id: string;
   name?: string | null;
-  description?: string | null;
   color?: string | null;
   schema: any;
+  description?: string | null;
 };
 
 export type SamplesFilteredQueryVariables = Exact<{
@@ -1002,40 +1002,40 @@ export type SamplesFilteredQuery = {
     totalCount: number;
     list: Array<{
       id: string;
-      sampleCode: Array<string>;
+      meta: any;
+      title?: string | null;
       uuid10: string;
       labels: Array<string>;
       project?: string | null;
-      title?: string | null;
-      description?: any | null;
       comment?: string | null;
-      meta: any;
       createdAt: any;
+      sampleCode: Array<string>;
+      description?: any | null;
       children?: Array<{
         id: string;
-        sampleCode: Array<string>;
+        meta: any;
+        title?: string | null;
         uuid10: string;
         labels: Array<string>;
         project?: string | null;
-        title?: string | null;
-        description?: any | null;
         comment?: string | null;
-        meta: any;
         createdAt: any;
+        sampleCode: Array<string>;
+        description?: any | null;
         user?: {
           id: string;
-          firstName?: string | null;
-          lastName?: string | null;
           emails: Array<string>;
+          lastName?: string | null;
+          firstName?: string | null;
           usernames: Array<string>;
         } | null;
       }> | null;
       parent?: { id: string } | null;
       user?: {
         id: string;
-        firstName?: string | null;
-        lastName?: string | null;
         emails: Array<string>;
+        lastName?: string | null;
+        firstName?: string | null;
         usernames: Array<string>;
       } | null;
     }>;
@@ -1050,15 +1050,15 @@ export type SampleQuery = {
   sample: {
     __typename: 'Sample';
     id: string;
-    sampleCode: Array<string>;
+    meta: any;
+    title?: string | null;
     uuid10: string;
     labels: Array<string>;
     project?: string | null;
-    title?: string | null;
-    description?: any | null;
     comment?: string | null;
-    meta: any;
     createdAt: any;
+    sampleCode: Array<string>;
+    description?: any | null;
     attachments: Array<{
       id: string;
       date: any;
@@ -1076,28 +1076,28 @@ export type SampleQuery = {
     }>;
     children?: Array<{
       id: string;
-      sampleCode: Array<string>;
+      meta: any;
+      title?: string | null;
       uuid10: string;
       labels: Array<string>;
       project?: string | null;
-      title?: string | null;
-      description?: any | null;
       comment?: string | null;
-      meta: any;
       createdAt: any;
+      sampleCode: Array<string>;
+      description?: any | null;
       user?: {
         id: string;
-        firstName?: string | null;
-        lastName?: string | null;
         emails: Array<string>;
+        lastName?: string | null;
+        firstName?: string | null;
         usernames: Array<string>;
       } | null;
     }> | null;
     user?: {
       id: string;
-      firstName?: string | null;
-      lastName?: string | null;
       emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
       usernames: Array<string>;
     } | null;
   };
@@ -1111,9 +1111,9 @@ export type SampleKindQuery = {
   sampleKind: {
     id: string;
     name?: string | null;
-    description?: string | null;
     color?: string | null;
     schema: any;
+    description?: string | null;
   };
 };
 
@@ -1124,20 +1124,20 @@ export type CreateSampleMutationVariables = Exact<{
 export type CreateSampleMutation = {
   createSample: {
     id: string;
-    sampleCode: Array<string>;
+    meta: any;
+    title?: string | null;
     uuid10: string;
     labels: Array<string>;
     project?: string | null;
-    title?: string | null;
-    description?: any | null;
     comment?: string | null;
-    meta: any;
     createdAt: any;
+    sampleCode: Array<string>;
+    description?: any | null;
     user?: {
       id: string;
-      firstName?: string | null;
-      lastName?: string | null;
       emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
       usernames: Array<string>;
     } | null;
   };
@@ -1150,20 +1150,20 @@ export type CreateMultipleSamplesMutationVariables = Exact<{
 export type CreateMultipleSamplesMutation = {
   createSamples: Array<{
     id: string;
-    sampleCode: Array<string>;
+    meta: any;
+    title?: string | null;
     uuid10: string;
     labels: Array<string>;
     project?: string | null;
-    title?: string | null;
-    description?: any | null;
     comment?: string | null;
-    meta: any;
     createdAt: any;
+    sampleCode: Array<string>;
+    description?: any | null;
     user?: {
       id: string;
-      firstName?: string | null;
-      lastName?: string | null;
       emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
       usernames: Array<string>;
     } | null;
   }>;
@@ -1177,20 +1177,20 @@ export type UpdateSampleMutationVariables = Exact<{
 export type UpdateSampleMutation = {
   updateSample: {
     id: string;
-    sampleCode: Array<string>;
+    meta: any;
+    title?: string | null;
     uuid10: string;
     labels: Array<string>;
     project?: string | null;
-    title?: string | null;
-    description?: any | null;
     comment?: string | null;
-    meta: any;
     createdAt: any;
+    sampleCode: Array<string>;
+    description?: any | null;
     user?: {
       id: string;
-      firstName?: string | null;
-      lastName?: string | null;
       emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
       usernames: Array<string>;
     } | null;
   };
@@ -1270,49 +1270,49 @@ export const MeasurementFieldsFragmentDoc = gql`
   fragment MeasurementFields on Measurement {
     id
     type
+    title
+    fileId
+    eventId
+    comment
+    derived
+    createdAt
+    createdBy
+    description
     user {
       id
-      firstName
-      lastName
       emails
+      lastName
+      firstName
       usernames
     }
-    createdBy
     sample {
       id
       sampleCode
     }
-    fileId
     file {
-      filename
       size
+      filename
       downloadUrl
     }
-    title
-    eventId
-    comment
-    description
-    createdAt
-    derived
   }
 `;
 export const SampleFieldsFragmentDoc = gql`
   fragment SampleFields on Sample {
     id
-    sampleCode
+    meta
+    title
     uuid10
     labels
     project
-    title
-    description
     comment
-    meta
     createdAt
+    sampleCode
+    description
     user {
       id
-      firstName
-      lastName
       emails
+      lastName
+      firstName
       usernames
     }
   }
@@ -1321,9 +1321,9 @@ export const SampleKindFieldsFragmentDoc = gql`
   fragment SampleKindFields on SampleKind {
     id
     name
-    description
     color
     schema
+    description
   }
 `;
 export const UserFieldsFragmentDoc = gql`

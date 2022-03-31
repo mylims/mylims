@@ -38,12 +38,13 @@ export default function HeaderRender({
     strategy: 'fixed',
   });
 
-  if (!children)
+  if (!children) {
     return (
       <th style={{ width }} className={TITLE_CLASS}>
         {title}
       </th>
     );
+  }
   const filtered = Object.keys(query).some((key) =>
     key.startsWith(queryIndex === undefined ? path : `${path}.${queryIndex}`),
   );
