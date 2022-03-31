@@ -1,6 +1,7 @@
+import { ZoomAnnotation } from '@/components/PlotJcamp/ZoomAnnotation';
 import { fromJcamp } from 'base-analysis';
 import React, { useMemo } from 'react';
-import { PlotObject } from 'react-plot';
+import { PlotController, PlotObject } from 'react-plot';
 
 import type { PlotQuery } from './types';
 import { getPlotJcamp } from './utils';
@@ -25,5 +26,11 @@ export function PlotJcampMultiple({
     [analyses, query, size],
   );
 
-  return <PlotObject plot={plotContent} />;
+  return (
+    <PlotController>
+      <PlotObject plot={plotContent}>
+        <ZoomAnnotation />
+      </PlotObject>
+    </PlotController>
+  );
 }

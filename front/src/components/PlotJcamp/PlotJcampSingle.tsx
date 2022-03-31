@@ -1,6 +1,7 @@
+import { ZoomAnnotation } from '@/components/PlotJcamp/ZoomAnnotation';
 import { Analysis, fromJcamp } from 'base-analysis';
 import React, { ReactNode, useMemo, useState } from 'react';
-import { PlotObject } from 'react-plot';
+import { PlotController, PlotObject } from 'react-plot';
 
 import type { PlotQuery } from './types';
 import { getPlotJcamp } from './utils';
@@ -34,6 +35,11 @@ export function PlotJcampSingle({
   if (!plotContent || !analysis) return null;
 
   return (
-    <PlotObject plot={plotContent}>{children?.(analysis, query)}</PlotObject>
+    <PlotController>
+      <PlotObject plot={plotContent}>
+        {children?.(analysis, query)}
+        <ZoomAnnotation />
+      </PlotObject>
+    </PlotController>
   );
 }
