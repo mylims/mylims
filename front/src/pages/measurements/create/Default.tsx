@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDropzone } from 'react-dropzone';
+import { array } from 'yup';
 
-import {
-  MeasurementInput,
-  MeasurementTypes,
-  useCreateMeasurementMutation,
-} from '@/generated/graphql';
+import ElnLayout from '@/components/ElnLayout';
+import { FormLayout } from '@/components/FormLayout';
+import { RichTextImageFieldRHF } from '@/components/RichTextImageFieldRHF';
 import {
   Spinner,
   Alert,
@@ -19,12 +17,13 @@ import {
   Select,
   InputFieldRHF,
 } from '@/components/tailwind-ui';
+import {
+  MeasurementInput,
+  MeasurementTypes,
+  useCreateMeasurementMutation,
+} from '@/generated/graphql';
 import useAuth from '@/hooks/useAuth';
-import { FormLayout } from '@/components/FormLayout';
-import { RichTextImageFieldRHF } from '@/components/RichTextImageFieldRHF';
-import { array } from 'yup';
 import { useElnMultipartMutation } from '@/hooks/useElnQuery';
-import ElnLayout from '@/components/ElnLayout';
 
 type MeasurementInputForm = Omit<MeasurementInput, 'userId' | 'sampleId'>;
 export default function CreateMeasurement() {
@@ -37,9 +36,7 @@ export default function CreateMeasurement() {
   const [authError, setError] = useState<Error | null>(null);
   const [createMeasurement, { loading, error }] =
     useCreateMeasurementMutation();
-  const initialMeasurement: MeasurementInputForm = {
-    sampleCode: [],
-  };
+  const initialMeasurement: MeasurementInputForm = {};
 
   const measurementSchema = requiredObject({
     sampleCode: array().of(requiredString()),

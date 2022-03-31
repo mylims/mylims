@@ -1,19 +1,19 @@
 fragment SampleFields on Sample {
   id
-  sampleCode
+  meta
+  title
   uuid10
   labels
   project
-  title
-  description
   comment
-  meta
   createdAt
+  sampleCode
+  description
   user {
     id
-    firstName
-    lastName
     emails
+    lastName
+    firstName
     usernames
   }
 }
@@ -21,9 +21,9 @@ fragment SampleFields on Sample {
 fragment SampleKindFields on SampleKind {
   id
   name
-  description
   color
   schema
+  description
 }
 
 query SamplesFiltered(

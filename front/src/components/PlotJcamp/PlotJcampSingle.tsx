@@ -1,7 +1,8 @@
-import { ZoomAnnotation } from '@/components/PlotJcamp/ZoomAnnotation';
 import { Analysis, fromJcamp } from 'base-analysis';
 import React, { ReactNode, useMemo, useState } from 'react';
 import { PlotController, PlotObject } from 'react-plot';
+
+import { ZoomAnnotation } from '@/components/PlotJcamp/ZoomAnnotation';
 
 import type { PlotQuery } from './types';
 import { getPlotJcamp } from './utils';
@@ -25,11 +26,7 @@ export function PlotJcampSingle({
 
   const plotContent = useMemo(() => {
     if (!analysis) return null;
-    return getPlotJcamp(query, [analysis], {
-      width: 600,
-      height: 500,
-      margin: { bottom: 50, left: 90, top: 5, right: 5 },
-    });
+    return getPlotJcamp(query, [analysis], { width: 600, height: 500 });
   }, [analysis, query]);
 
   if (!plotContent || !analysis) return null;

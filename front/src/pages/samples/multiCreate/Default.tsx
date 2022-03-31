@@ -94,7 +94,7 @@ export function MultiCreate() {
         </div>
         <Button
           size={Size.small}
-          onClick={async () => {
+          onClick={() => {
             const samples: SampleInput[] = table.map(
               ({ code, ...item }, index) => ({
                 ...unflatten<Value, SampleInput>(item),
@@ -106,23 +106,24 @@ export function MultiCreate() {
                 userId,
               }),
             );
-            const { errors, data: res } = await createSamples({
-              variables: { samples },
-            });
-            if (errors) {
-              setError(new Error(errors[0].message));
-            } else if (!res) {
-              setError(new Error('Error during sample creation'));
-            } else {
-              navigate({
-                pathname: `/sample/list/sample`,
-                search: new URLSearchParams({
-                  'sampleCode.0.index': '0',
-                  'sampleCode.0.value.value': sampleCode[0],
-                  'sampleCode.0.value.operator': 'equals',
-                }).toString(),
-              });
-            }
+            createSamples({ variables: { samples } })
+              .then(({ errors, data: res }) => {
+                if (errors) {
+                  setError(new Error(errors[0].message));
+                } else if (!res) {
+                  setError(new Error('Error during sample creation'));
+                } else {
+                  navigate({
+                    pathname: `/sample/list/sample`,
+                    search: new URLSearchParams({
+                      'sampleCode.0.index': '0',
+                      'sampleCode.0.value.value': sampleCode[0],
+                      'sampleCode.0.value.operator': 'equals',
+                    }).toString(),
+                  });
+                }
+              })
+              .catch(setError);
           }}
         >
           Send

@@ -129,9 +129,14 @@ function Row(
             color={Color.danger}
             roundness={Roundness.circular}
             className="ml-2"
-            onClick={() =>
-              deleteFileSyncOption({ variables: { input: { id: value.id } } })
-            }
+            onClick={() => {
+              deleteFileSyncOption({
+                variables: { input: { id: value.id } },
+              }).catch(
+                // eslint-disable-next-line no-console
+                console.error,
+              );
+            }}
             title="Delete configuration"
           >
             <TrashIcon className="h-5 w-5" />

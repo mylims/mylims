@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
-import FieldDescription from '@/components/FieldDescription';
+import { LinkButton } from '@/components/LinkButton';
 import {
   Alert,
   AlertType,
@@ -12,9 +12,10 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import { MeasurementTypes, useMeasurementQuery } from '@/generated/graphql';
-import { formatDate } from '@/utils/formatFields';
 
 import B1505Transfer from './B1505Transfer';
+
+const SAMPLE_LEVEL = ['wafer', 'sample', 'dye', 'device'];
 
 export default function MeasurementDetail() {
   const { id = '', type = MeasurementTypes.TRANSFER } =
@@ -23,15 +24,10 @@ export default function MeasurementDetail() {
     variables: { id, type },
   });
   const measurementBody = useMemo(() => {
-    switch (data?.measurement.type) {
+    if (!data) return null;
+    switch (data.measurement.type) {
       case 'transfer': {
-        return (
-          <B1505Transfer
-            fileId={data.measurement.fileId ?? null}
-            file={data.measurement.file ?? null}
-            derived={data.measurement.derived}
-          />
-        );
+        return <B1505Transfer {...data.measurement} />;
       }
       default: {
         return null;
@@ -49,54 +45,45 @@ export default function MeasurementDetail() {
   }
 
   const { measurement } = data;
+  const sampleType = SAMPLE_LEVEL[measurement.sample.sampleCode.length - 1];
   return (
     <Card>
       <Card.Header>
         <div className="flex justify-between">
           <div>
-            <div className="text-xl font-semibold">Measurement</div>
-            <div className="text-neutral-500">{id}</div>
+            <div className="text-xl font-semibold">
+              Measurement {measurement.type}
+            </div>
+            {measurement.title && (
+              <div className="text-neutral-500">{measurement.title}</div>
+            )}
           </div>
 
-          {measurement.file?.downloadUrl && (
-            <div>
-              <a
-                href={measurement.file.downloadUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Button variant={Variant.secondary}>Download file</Button>
-              </a>
-            </div>
-          )}
+          <div className="flex flex-row gap-2">
+            <LinkButton
+              to={`/sample/detail/${sampleType}/${measurement.sample.id}`}
+            >
+              Sample detail
+            </LinkButton>
+            {measurement.file?.downloadUrl && (
+              <div>
+                <a
+                  href={measurement.file.downloadUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Button variant={Variant.secondary}>Download file</Button>
+                </a>
+              </div>
+            )}
+          </div>
         </div>
       </Card.Header>
       {measurementBody}
-      <Card.Footer>
-        <div className="mb-4 grid grid-cols-3 gap-4">
-          <FieldDescription title="Sample code">
-            {measurement.sample.sampleCode.join('_')}
-          </FieldDescription>
-          <FieldDescription title="Owner's username">
-            {measurement.user?.usernames[0]}
-          </FieldDescription>
-          <FieldDescription title="Creation date">
-            {formatDate(measurement.createdAt)}
-          </FieldDescription>
-          <FieldDescription title="Created by">
-            {measurement.createdBy}
-          </FieldDescription>
-          {measurement.file && (
-            <FieldDescription title="File">
-              {measurement.file.filename}
-            </FieldDescription>
-          )}
-        </div>
-      </Card.Footer>
     </Card>
   );
 }
 
-MeasurementDetail.getLayout = (page: React.ReactNode) => {
-  return <ElnLayout pageTitle="Measurement detail">{page}</ElnLayout>;
-};
+MeasurementDetail.getLayout = (page: React.ReactNode) => (
+  <ElnLayout>{page}</ElnLayout>
+);
