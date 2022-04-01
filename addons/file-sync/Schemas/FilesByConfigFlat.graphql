@@ -16,8 +16,6 @@ input FilesFilterInput {
 }
 
 enum FilesSortField {
-  creationDate
-  modificationDate
   date
   size
   filename

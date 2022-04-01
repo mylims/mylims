@@ -6,36 +6,17 @@ import ElnLayout from '@/components/ElnLayout';
 import { Alert, AlertType, Spinner } from '@/components/tailwind-ui';
 import {
   useFilesByConfigQuery,
-  useFilesByConfigFlatQuery,
-  FilesSortField,
-  SortDirection,
-  FileStatus,
   FileSyncOptionDocument,
 } from '@/generated/graphql';
-import { useFilterFilesQuery } from '@/hooks/useFileQuery';
-import filesizeParser from '@/utils/filesize-parser';
+import { useQuery } from '@/hooks/useQuery';
 
-import TableFilesFiltered from './TableFilesFiltered';
+import { FilterTable } from './FilterTable';
 import TableFilesSync from './TableFilesSync';
-
-interface RouterQuery {
-  id: string;
-  page: string;
-  minSize: string | null;
-  maxSize: string | null;
-  minDate: Date | null;
-  maxDate: Date | null;
-  status: Record<'value' | 'label', FileStatus>[] | null;
-  sortField: { value: FilesSortField; label: string } | null;
-  sortDirection: { value: SortDirection; label: string } | null;
-}
-
-const PAGE_SIZE = 10;
 
 export default function ListFiles() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [{ page, ...filters }] = useFilterFilesQuery();
+  const { page } = useQuery();
 
   if (id === undefined) {
     void navigate('../../list');
@@ -43,13 +24,13 @@ export default function ListFiles() {
   }
 
   if (page) {
-    return <FilterTable id={id} page={page} {...filters} />;
+    return <FilterTable id={id} />;
   } else {
     return <NestedTable id={id} />;
   }
 }
 
-function NestedTable({ id }: Pick<RouterQuery, 'id'>) {
+function NestedTable({ id }: { id: string }) {
   const { data, loading, error } = useFilesByConfigQuery({
     variables: { id, path: [] },
   });
@@ -67,55 +48,6 @@ function NestedTable({ id }: Pick<RouterQuery, 'id'>) {
 
   if (loading) return <Spinner className="h-10 w-10 text-danger-500" />;
   return <TableFilesSync data={data} id={id} />;
-}
-
-function FilterTable({
-  id,
-  page,
-  sortField,
-  sortDirection,
-  status,
-  ...filters
-}: RouterQuery) {
-  const pageNum = page !== undefined ? parseInt(page, 10) : 1;
-  const minSize = filters.minSize ? filesizeParser(filters.minSize) : undefined;
-  const maxSize = filters.maxSize ? filesizeParser(filters.maxSize) : undefined;
-  const { data, loading, error } = useFilesByConfigFlatQuery({
-    variables: {
-      id,
-      skip: (pageNum - 1) * PAGE_SIZE,
-      limit: PAGE_SIZE,
-      filterBy: {
-        ...filters,
-        size: { min: minSize, max: maxSize },
-        status: status?.map(({ value }) => value),
-      },
-      sortBy: {
-        field: sortField?.value || FilesSortField.DATE,
-        direction: sortDirection?.value || SortDirection.DESC,
-      },
-    },
-  });
-
-  if (error) {
-    return (
-      <Alert
-        title="Error while fetching file sync option"
-        type={AlertType.ERROR}
-      >
-        Unexpected error {error.message}
-      </Alert>
-    );
-  }
-
-  return (
-    <TableFilesFiltered
-      loading={loading}
-      data={data}
-      page={pageNum}
-      pageSize={PAGE_SIZE}
-    />
-  );
 }
 
 ListFiles.getLayout = (
