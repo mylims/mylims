@@ -21,7 +21,7 @@ export default function HelpButton({
       className={clsx(className)}
       title={description}
     >
-      <QuestionMarkCircleIcon className="h-3 w-3" />
+      <QuestionMarkCircleIcon className="h-4 w-4" />
     </Button>
   );
 }
