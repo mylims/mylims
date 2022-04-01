@@ -82,6 +82,17 @@ export default function MeasurementsList() {
           </TableQuery.TextColumn>
           <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
           <TableQuery.UserColumn title="User" dataPath="user" />
+          <TableQuery.NumberColumn
+            title="Subthreshold slope"
+            dataPath="derived.subthresholdSlope.slope"
+            format="0.0000"
+            disableSort
+          />
+          <TableQuery.NumberColumn
+            title="Threshold voltage"
+            dataPath="derived.thresholdVoltage.value"
+            disableSort
+          />
         </TableQuery>
       </MeasurementPlot>
     </div>
