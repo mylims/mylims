@@ -1,6 +1,7 @@
+import { DownloadIcon, InformationCircleIcon } from '@heroicons/react/outline';
 import React, { useMemo } from 'react';
 
-import { LinkButton } from '@/components/LinkButton';
+import { DownloadButton, LinkIcon } from '@/components/LinkButton';
 import { Color } from '@/components/tailwind-ui';
 import { SampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
@@ -47,37 +48,42 @@ function MeasurementTypeTable({
   measurements,
 }: MeasurementTypeTableProps) {
   return (
-    <div>
-      <div className="text-base font-semibold">{type}</div>
+    <div className="mt-2">
+      <div className="text-base font-semibold uppercase text-neutral-500">
+        {type}
+      </div>
       <ul
         role="list"
         className="divide-y divide-neutral-300 rounded-md border border-neutral-300"
       >
-        {measurements.map(({ id, createdAt, sampleCode, file }) => {
+        {measurements.map(({ id, createdAt, file, title }) => {
+          const header = title || (file && file.filename) || id;
           return (
             <li
               key={id}
               className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
             >
-              <div>{sampleCode}</div>
-              <div>{formatDate(createdAt)}</div>
-              {file ? (
-                <div className="ml-4 flex-shrink-0">
-                  <a
-                    href={file.downloadUrl}
-                    className="font-medium text-primary-600 hover:text-primary-500"
+              <span className="w-1/2 truncate" title={header}>
+                {header}
+              </span>
+              <div className="flex items-center gap-4">
+                <span>{formatDate(createdAt)}</span>
+                {file ? (
+                  <DownloadButton
+                    to={file.downloadUrl}
+                    color={Color.neutral}
+                    title="Download"
                   >
-                    {file.filename}
-                  </a>
-                </div>
-              ) : null}
-              <LinkButton
-                to={`/measurements/detail/${type}/${id}`}
-                className="mb-4"
-                color={Color.success}
-              >
-                Measurement detail
-              </LinkButton>
+                    <DownloadIcon className="h-5 w-5" />
+                  </DownloadButton>
+                ) : null}
+                <LinkIcon
+                  to={`/measurements/detail/${type}/${id}`}
+                  title="Measurement detail"
+                >
+                  <InformationCircleIcon className="h-5 w-5" />
+                </LinkIcon>
+              </div>
             </li>
           );
         })}
