@@ -60,9 +60,10 @@ query Sample($id: ID!) {
     attachments {
       id
       date
-      downloadUrl
-      filename
       size
+      filename
+      collection
+      downloadUrl
     }
     measurements {
       id
@@ -71,8 +72,8 @@ query Sample($id: ID!) {
       createdAt
       description
       file {
-        filename
         size
+        filename
         downloadUrl
       }
     }

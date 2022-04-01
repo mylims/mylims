@@ -477,6 +477,7 @@ export type Sample = {
 };
 
 export type SampleFile = {
+  collection?: Maybe<Scalars['String']>;
   date: Scalars['DateTime'];
   downloadUrl: Scalars['String'];
   filename: Scalars['String'];
@@ -1062,9 +1063,10 @@ export type SampleQuery = {
     attachments: Array<{
       id: string;
       date: any;
-      downloadUrl: string;
-      filename: string;
       size: number;
+      filename: string;
+      collection?: string | null;
+      downloadUrl: string;
     }>;
     measurements: Array<{
       id: string;
@@ -1072,7 +1074,7 @@ export type SampleQuery = {
       title?: string | null;
       createdAt: any;
       description?: any | null;
-      file?: { filename: string; size: number; downloadUrl: string } | null;
+      file?: { size: number; filename: string; downloadUrl: string } | null;
     }>;
     children?: Array<{
       id: string;
@@ -2434,9 +2436,10 @@ export const SampleDocument = gql`
       attachments {
         id
         date
-        downloadUrl
-        filename
         size
+        filename
+        collection
+        downloadUrl
       }
       measurements {
         id
@@ -2445,8 +2448,8 @@ export const SampleDocument = gql`
         createdAt
         description
         file {
-          filename
           size
+          filename
           downloadUrl
         }
       }
