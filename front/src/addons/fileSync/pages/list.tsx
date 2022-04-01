@@ -6,9 +6,9 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
+import { LinkButton, LinkIcon } from '@/components/LinkButton';
 import TableEmpty from '@/components/TableEmpty';
 import TableHeader from '@/components/TableHeader';
 import {
@@ -56,9 +56,9 @@ export default function ConfigList() {
         </Alert>
       )}
 
-      <Link to="../create">
-        <Button className="mb-4">Create</Button>
-      </Link>
+      <LinkButton to="../create" className="mb-4">
+        Create
+      </LinkButton>
       {loading ? (
         <Spinner className="h-10 w-10 text-danger-500" />
       ) : (
@@ -107,24 +107,20 @@ function Row(
         <Td>{value.patterns.length}</Td>
         <Td>{value.readyChecks.length}</Td>
         <Td>
-          <Link to={`../files/${value.id}`}>
-            <Button
-              roundness={Roundness.circular}
-              color={Color.success}
-              title="List of files"
-            >
-              <TableIcon className="h-5 w-5" />
-            </Button>
-          </Link>
-          <Link to={`../edit/${value.id}`}>
-            <Button
-              roundness={Roundness.circular}
-              className="ml-2"
-              title="Configuration"
-            >
-              <CogIcon className="h-5 w-5" />
-            </Button>
-          </Link>
+          <LinkIcon
+            to={`../files/${value.id}`}
+            color={Color.success}
+            title="List of files"
+          >
+            <TableIcon className="h-5 w-5" />
+          </LinkIcon>
+          <LinkIcon
+            to={`../edit/${value.id}`}
+            className="ml-2"
+            title="Configuration"
+          >
+            <CogIcon className="h-5 w-5" />
+          </LinkIcon>
           <Button
             color={Color.danger}
             roundness={Roundness.circular}

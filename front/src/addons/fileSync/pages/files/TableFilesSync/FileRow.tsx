@@ -4,14 +4,9 @@ import { Link } from 'react-router-dom';
 
 import ExpandButton from '@/components/ExpandButton';
 import { FileStatusLabel } from '@/components/FileStatusLabel';
+import { DownloadButton } from '@/components/LinkButton';
 import { StatusLabel } from '@/components/StatusLabel';
-import {
-  Td,
-  Button,
-  Color,
-  Roundness,
-  Variant,
-} from '@/components/tailwind-ui';
+import { Td, Color } from '@/components/tailwind-ui';
 import {
   EventStatus,
   FileStatus,
@@ -103,17 +98,14 @@ export default function FileRow({ value }: { value: FileSync }) {
         </Td>
         <Td>
           {value.status !== FileStatus.IMPORTED ? null : (
-            <a href={value.downloadUrl} target="_blank" rel="noreferrer">
-              <Button
-                color={Color.neutral}
-                roundness={Roundness.circular}
-                variant={Variant.secondary}
-                className="ml-2"
-                title="Download"
-              >
-                <DownloadIcon className="h-3 w-3" />
-              </Button>
-            </a>
+            <DownloadButton
+              to={value.downloadUrl}
+              color={Color.neutral}
+              className="ml-2"
+              title="Download"
+            >
+              <DownloadIcon className="h-3 w-3" />
+            </DownloadButton>
           )}
         </Td>
       </tr>

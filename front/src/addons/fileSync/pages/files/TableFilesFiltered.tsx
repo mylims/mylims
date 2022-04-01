@@ -4,23 +4,20 @@ import * as yup from 'yup';
 
 import AutoSubmitForm from '@/components/AutoSubmitForm';
 import { FileStatusLabel, getTagColor } from '@/components/FileStatusLabel';
-import { LinkButton } from '@/components/LinkButton';
+import { DownloadButton, LinkButton } from '@/components/LinkButton';
 import TableEmpty from '@/components/TableEmpty';
 import TableHeader from '@/components/TableHeader';
 import {
-  Button,
   Color,
   DatePickerField,
   Form,
   InputField,
   MultiSearchSelectField,
-  Roundness,
   SelectField,
   Spinner,
   Table,
   Td,
   useMultiSearchSelect,
-  Variant,
 } from '@/components/tailwind-ui';
 import {
   FilesByConfigFlatQuery,
@@ -233,17 +230,14 @@ function Row({ value }: { value: File }) {
         <FileStatusLabel status={value.status} />
       </Td>
       <Td>
-        <a href={value.downloadUrl} target="_blank" rel="noreferrer">
-          <Button
-            color={Color.neutral}
-            roundness={Roundness.circular}
-            variant={Variant.secondary}
-            className="ml-2"
-            title="Download"
-          >
-            <DownloadIcon className="h-3 w-3" />
-          </Button>
-        </a>
+        <DownloadButton
+          to={value.downloadUrl}
+          color={Color.neutral}
+          className="ml-2"
+          title="Download"
+        >
+          <DownloadIcon className="h-3 w-3" />
+        </DownloadButton>
       </Td>
     </tr>
   );

@@ -1,8 +1,8 @@
 import { InformationCircleIcon, DownloadIcon } from '@heroicons/react/outline';
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 
-import { Button, Color, Roundness, Variant } from '@/components/tailwind-ui';
+import { DownloadButton, LinkIcon } from '@/components/LinkButton';
+import { Button, Color, Variant } from '@/components/tailwind-ui';
 
 import { MeasurementPlotContext } from './MeasurementPlot';
 
@@ -20,27 +20,13 @@ export default function MeasurementActions({
   const { state, setState } = useContext(MeasurementPlotContext);
   return (
     <div className="flex">
-      <Link title="detail" to={`../detail/${type}/${id}`}>
-        <Button
-          color={Color.primary}
-          roundness={Roundness.circular}
-          variant={Variant.secondary}
-          className="ml-2"
-        >
-          <InformationCircleIcon className="h-5 w-5" />
-        </Button>
-      </Link>
+      <LinkIcon title="detail" to={`../detail/${type}/${id}`} className="ml-2">
+        <InformationCircleIcon className="h-5 w-5" />
+      </LinkIcon>
       {fileUrl && (
-        <a href={fileUrl} target="_blank" rel="noreferrer">
-          <Button
-            color={Color.neutral}
-            roundness={Roundness.circular}
-            variant={Variant.secondary}
-            className="ml-2"
-          >
-            <DownloadIcon className="h-5 w-5" />
-          </Button>
-        </a>
+        <DownloadButton to={fileUrl} color={Color.neutral} className="ml-2">
+          <DownloadIcon className="h-5 w-5" />
+        </DownloadButton>
       )}
       {fileUrl && (
         <Button
