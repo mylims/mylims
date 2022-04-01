@@ -49,6 +49,7 @@ type SampleFile {
   downloadUrl: String!
   filename: String!
   size: Int!
+  collection: String
 }
 
 # Inputs

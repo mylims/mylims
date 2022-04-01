@@ -63,6 +63,7 @@ const resolvers: GqlResolvers = {
             id: file.id,
             date: file.date,
             size: attachment.size,
+            collection: attachment.collection,
             filename: attachment.filename,
             downloadUrl: `${Env.get('BACKEND_URL')}/measurements/file/${
               file.id
