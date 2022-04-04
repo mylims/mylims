@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { array } from 'yup';
 
@@ -6,16 +6,17 @@ import ElnLayout from '@/components/ElnLayout';
 import { FormLayout } from '@/components/FormLayout';
 import { RichTextImageFieldRHF } from '@/components/RichTextImageFieldRHF';
 import {
-  Spinner,
   Alert,
-  AlertType,
+  Select,
+  Spinner,
   FormRHF,
-  SubmitButtonRHF,
+  AlertType,
+  InputFieldRHF,
   optionalString,
   requiredObject,
   requiredString,
-  Select,
-  InputFieldRHF,
+  SubmitButtonRHF,
+  DropzoneFieldRHF,
 } from '@/components/tailwind-ui';
 import {
   MeasurementInput,
@@ -25,7 +26,15 @@ import {
 import useAuth from '@/hooks/useAuth';
 import { useElnMultipartMutation } from '@/hooks/useElnQuery';
 
-type MeasurementInputForm = Omit<MeasurementInput, 'userId' | 'sampleId'>;
+import { CreateTransferMeasurement } from './Transfer';
+
+type MeasurementInputForm = Omit<MeasurementInput, 'userId' | 'sampleId'> & {
+  attachments: string[];
+};
+
+const MEASUREMENT_FORM: Record<MeasurementTypes, ReactNode> = {
+  [MeasurementTypes.TRANSFER]: <CreateTransferMeasurement />,
+};
 export default function CreateMeasurement() {
   const navigate = useNavigate();
   const { mutateAsync } = useElnMultipartMutation('/files/create');
@@ -36,7 +45,7 @@ export default function CreateMeasurement() {
   const [authError, setError] = useState<Error | null>(null);
   const [createMeasurement, { loading, error }] =
     useCreateMeasurementMutation();
-  const initialMeasurement: MeasurementInputForm = {};
+  const initialMeasurement: MeasurementInputForm = { attachments: [] };
 
   const measurementSchema = requiredObject({
     sampleCode: array().of(requiredString()),
@@ -48,19 +57,22 @@ export default function CreateMeasurement() {
   if (error || !sampleId || !userId || authError) {
     return (
       <Alert title="Error while fetching sample" type={AlertType.ERROR}>
-        {error && `Unexpected error: ${error.message}`}
-        {authError && `Error: ${authError.message}`}
-        {!sampleId && `Missing sample id`}
         {!userId && `Missing user id`}
+        {!sampleId && `Missing sample id`}
+        {authError && `Error: ${authError.message}`}
+        {error && `Unexpected error: ${error.message}`}
       </Alert>
     );
   }
 
-  async function onSubmit({ fileId, ...data }: MeasurementInputForm) {
+  async function onSubmit({ attachments, ...data }: MeasurementInputForm) {
     try {
       let file: string | undefined;
-      if (fileId) {
-        const res = await mutateAsync({ fileId, collection: 'measurements' });
+      if (attachments) {
+        const res = await mutateAsync({
+          file: attachments[0],
+          collection: type,
+        });
         if (!res._id) throw new Error('Failed to upload file');
         file = res._id;
       }
@@ -85,6 +97,7 @@ export default function CreateMeasurement() {
       setError(error as Error);
     }
   }
+  const form = MEASUREMENT_FORM[type];
 
   return (
     <FormRHF<MeasurementInputForm>
@@ -111,9 +124,17 @@ export default function CreateMeasurement() {
               />
               <InputFieldRHF name="title" label="Title" required />
               <InputFieldRHF name="comment" label="Comment" />
+              {form}
             </>
           }
-          formAttachments={<></>}
+          formAttachments={
+            <DropzoneFieldRHF
+              label="Attachments"
+              name="attachments"
+              maxFiles={1}
+              showList
+            />
+          }
           formEditor={
             <div>
               <RichTextImageFieldRHF name="description" label="Description" />

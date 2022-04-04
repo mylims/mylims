@@ -165,10 +165,8 @@ export type FilesFlatPage = Pagination & {
 };
 
 export enum FilesSortField {
-  CREATIONDATE = 'creationDate',
   DATE = 'date',
   FILENAME = 'filename',
-  MODIFICATIONDATE = 'modificationDate',
   SIZE = 'size',
 }
 

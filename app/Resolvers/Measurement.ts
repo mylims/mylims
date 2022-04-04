@@ -95,26 +95,29 @@ const resolvers: GqlResolvers = {
     },
   },
   Mutation: {
-    async createMeasurement(_, { input, sampleId, type }) {
-      let sample = await Sample.find(new ObjectId(sampleId));
+    async createMeasurement(_, { input, sampleId: sampleCode, type }) {
+      const sampleId = new ObjectId(sampleCode);
+      let sample = await Sample.find(sampleId);
       if (!sample) {
         throw new UserInputError('Sample not found', {
           argumentName: 'sampleId',
         });
       }
       if (!sample.measurements) sample.measurements = [];
+      const user = await User.find(new ObjectId(input.userId));
+      if (!user) {
+        throw new UserInputError('User not found', { argumentName: 'userId' });
+      }
       const measurement = await MEASUREMENTS[type].create(
         removeNullable({
           ...input,
+          username: user.usernames[0],
+          sampleId,
           eventId: input.eventId ? new ObjectId(input.eventId) : undefined,
           createdBy: new ObjectId(input.userId),
         }),
       );
-      sample.measurements.push({
-        id: measurement.id,
-        date: new Date(),
-        type,
-      });
+      sample.measurements.push({ id: measurement.id, date: new Date(), type });
       await sample.save();
       const measurementBase = measurement.toJSON() as BaseMeasurement;
       return { ...measurementBase, type };

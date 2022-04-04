@@ -188,10 +188,8 @@ export type GqlFilesFlatPage = GqlPagination & {
 };
 
 export enum GqlFilesSortField {
-  CREATIONDATE = 'creationDate',
   DATE = 'date',
   FILENAME = 'filename',
-  MODIFICATIONDATE = 'modificationDate',
   SIZE = 'size',
 }
 
@@ -510,6 +508,7 @@ export type GqlSample = {
 
 export type GqlSampleFile = {
   __typename?: 'SampleFile';
+  collection?: Maybe<Scalars['String']>;
   date: Scalars['DateTime'];
   downloadUrl: Scalars['String'];
   filename: Scalars['String'];
@@ -1438,6 +1437,11 @@ export type GqlSampleFileResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['SampleFile'] = GqlResolversParentTypes['SampleFile'],
 > = ResolversObject<{
+  collection?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   date?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
   downloadUrl?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
   filename?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
