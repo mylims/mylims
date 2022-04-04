@@ -25,7 +25,7 @@ import { formatBytes } from '@/utils/formatFields';
 export function FilterTable({ id }: { id: string }) {
   const { query, setQuery } = useTableQuery({
     page: '1',
-    'sortBy.field': FilesSortField.CREATIONDATE,
+    'sortBy.field': FilesSortField.DATE,
     'sortBy.direction': SortDirection.DESC,
   });
   const variables =
