@@ -126,7 +126,10 @@ export default function FileRow({ value }: { value: FileSync }) {
               return (
                 <tr key={processorId + topic + index}>
                   <Td className="flex">
-                    <Link className="pr-2" to={`/event/list?topic=${topic}`}>
+                    <Link
+                      className="pr-2"
+                      to={`/event/list?topic.value=${topic}&topic.operator=equals`}
+                    >
                       <span className="pr-1 font-bold text-alternative-600">
                         Topic:
                       </span>
@@ -135,7 +138,7 @@ export default function FileRow({ value }: { value: FileSync }) {
                     {processorId ? (
                       <Link
                         className="pr-2"
-                        to={`/event/list?processorId=${processorId}`}
+                        to={`/event/list?processorId.value=${processorId}&processorId.operator=equals`}
                       >
                         <span className="pr-1 font-bold text-alternative-600">
                           Processor:

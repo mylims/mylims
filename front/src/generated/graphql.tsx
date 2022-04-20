@@ -82,7 +82,7 @@ export type EventFile = {
 export type EventFilterInput = {
   createdAt?: InputMaybe<FilterDate>;
   fileId?: InputMaybe<Scalars['String']>;
-  processorId?: InputMaybe<Scalars['String']>;
+  processorId?: InputMaybe<FilterText>;
   status?: InputMaybe<Array<EventStatus>>;
   topic?: InputMaybe<FilterText>;
 };
