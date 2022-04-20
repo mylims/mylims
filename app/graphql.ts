@@ -99,7 +99,7 @@ export type GqlEventFile = {
 export type GqlEventFilterInput = {
   createdAt?: InputMaybe<GqlFilterDate>;
   fileId?: InputMaybe<Scalars['String']>;
-  processorId?: InputMaybe<Scalars['String']>;
+  processorId?: InputMaybe<GqlFilterText>;
   status?: InputMaybe<Array<GqlEventStatus>>;
   topic?: InputMaybe<GqlFilterText>;
 };

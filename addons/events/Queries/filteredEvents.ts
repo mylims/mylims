@@ -18,7 +18,9 @@ export default function filteredEvents(
 
   let query: Filter<NotReadOnly<ModelAttributes<Event>>> = {};
 
-  if (processorId) query.processors = { $elemMatch: { processorId } };
+  if (processorId) {
+    query.processors = { $elemMatch: { processorId: filterText(processorId) } };
+  }
 
   if (status && status.length !== 0) {
     query.$or = [

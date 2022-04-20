@@ -63,6 +63,7 @@ export default function EventsList() {
         />
         <TableQuery.TextColumn
           title="Processor id"
+          queryPath="processorId"
           dataPath="processors.0.processorId"
         />
         <TableQuery.TextColumn title="Topic" dataPath="topic" />
