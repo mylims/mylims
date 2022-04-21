@@ -19,13 +19,17 @@ export function PlotJcampSingle({
   children,
 }: PlotJcampProps) {
   const [query] = useState<PlotQuery>(initialQuery);
-  const analysis = useMemo(
-    () => (content !== null ? fromJcamp(content) : null),
-    [content],
-  );
+  const analysis = useMemo(() => {
+    if (!content) return null;
+    try {
+      return fromJcamp(content ?? '');
+    } catch (e) {
+      return null;
+    }
+  }, [content]);
 
   const plotContent = useMemo(() => {
-    if (!analysis) return null;
+    if (!analysis || analysis.measurements.length === 0) return null;
     return getPlotJcamp(query, [analysis], { width: 600, height: 500 });
   }, [analysis, query]);
 

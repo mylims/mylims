@@ -137,9 +137,6 @@ export default function SampleList() {
               <FieldDescription title="EPI structure">
                 {state.meta.heterostructure ?? '-'}
               </FieldDescription>
-              <FieldDescription title="Status">
-                {state.meta.sampleStatus ?? 'Unprocessed'}
-              </FieldDescription>
             </div>
           )}
         </Card.Body>

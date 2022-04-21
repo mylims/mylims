@@ -9,11 +9,13 @@ export function CreateTransferMeasurement() {
         name="derived.thresholdVoltage.value"
         label="Threshold voltage"
         type="number"
+        required
       />
       <InputFieldRHF
         name="derived.subthresholdSlope.slope"
         label="Subthreshold slope"
         type="number"
+        required
       />
     </>
   );
