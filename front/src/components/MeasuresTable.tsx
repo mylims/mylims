@@ -78,7 +78,7 @@ function MeasurementTypeTable({
                   </DownloadButton>
                 ) : null}
                 <LinkIcon
-                  to={`/measurements/detail/${type}/${id}`}
+                  to={`/measurement/detail/${type}/${id}`}
                   title="Measurement detail"
                 >
                   <InformationCircleIcon className="h-5 w-5" />

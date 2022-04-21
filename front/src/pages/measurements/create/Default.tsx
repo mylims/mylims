@@ -91,7 +91,7 @@ export default function CreateMeasurement() {
       } else if (!res) {
         setError(new Error('Error during sample creation'));
       } else {
-        navigate(`/measurement/detail/${res.createMeasurement.id}`);
+        navigate(`/measurement/detail/${type}/${res.createMeasurement.id}`);
       }
     } catch (error) {
       setError(error as Error);
