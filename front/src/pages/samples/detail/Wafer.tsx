@@ -70,6 +70,19 @@ export default function WaferDetail() {
         <>
           <div className="flex flex-row gap-4">
             <div className="text-xl font-semibold">Samples</div>
+            <LinkButton
+              to={{
+                pathname: '/sample/list/sample',
+                search: new URLSearchParams({
+                  'sampleCode.0.index': '0',
+                  'sampleCode.0.value.value': sample.sampleCode[0],
+                  'sampleCode.0.value.operator': 'equals',
+                }).toString(),
+              }}
+              className="mb-4"
+            >
+              List of samples
+            </LinkButton>
             {!sample.children || sample.children.length === 0 ? (
               <LinkButton
                 to={`/sample/multiCreate/sample?parent=${sample.id}`}
@@ -94,6 +107,7 @@ export default function WaferDetail() {
             size={350}
             diameter={sample.meta.size}
             sampleChildren={sample.children}
+            sampleCode={sample.sampleCode[0]}
           />
         </>
       )}
