@@ -119,6 +119,7 @@ export default function WaferList() {
                         size={width}
                         diameter={state.meta.size}
                         sampleChildren={state.children}
+                        sampleCode={state.sampleCode[0]}
                       />
                     )}
                   </ResponsiveChart>
