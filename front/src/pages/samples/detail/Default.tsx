@@ -71,6 +71,21 @@ export default function SampleDetail({
           formGrid={metaGrid(sample)}
           formAttachments={
             <>
+              {sample.description ? (
+                <div className="mt-2">
+                  <div className="text-xl font-semibold">Description</div>
+                  <RichTextSerializer
+                    className="max-h-full max-w-full overflow-auto rounded-md border border-neutral-300 px-3 py-2 shadow-sm ring-1 ring-neutral-300"
+                    value={sample.description}
+                    fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}
+                  />
+                </div>
+              ) : null}
+            </>
+          }
+          formEditor={
+            <>
+              {formEditor?.(sample) ?? null}
               <div className="text-xl font-semibold">Attachments</div>
               <div className="text-gray-900 mt-1 text-sm sm:col-span-2 sm:mt-0">
                 <AttachmentsTable attachments={sample.attachments} />
@@ -87,21 +102,6 @@ export default function SampleDetail({
               <div className="text-gray-900 mt-1 text-sm sm:col-span-2 sm:mt-0">
                 <MeasuresTable measurements={sample.measurements} />
               </div>
-            </>
-          }
-          formEditor={
-            <>
-              {formEditor?.(sample) ?? null}
-              {sample.description ? (
-                <div className="mt-2">
-                  <div className="text-xl font-semibold">Description</div>
-                  <RichTextSerializer
-                    className="max-h-full max-w-full overflow-auto rounded-md border border-neutral-300 px-3 py-2 shadow-sm ring-1 ring-neutral-300 md:max-w-xl"
-                    value={sample.description}
-                    fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}
-                  />
-                </div>
-              ) : null}
             </>
           }
         />
