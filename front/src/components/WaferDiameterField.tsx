@@ -53,6 +53,8 @@ export default function WaferDiameterField({
           <SimpleWaferDicing
             size={250}
             diameter={searchSelect.selected.value}
+            // Empty because is not possible to have extra children
+            sampleCode=""
           />
         </div>
       )}
