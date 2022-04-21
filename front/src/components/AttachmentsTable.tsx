@@ -43,7 +43,7 @@ export default function AttachmentsTable({
               />
               <span className="ml-2 w-0 flex-1 truncate">{filename}</span>
             </div>
-            <div>{formatDate(date)}</div>
+            <div className="ml-2">{formatDate(date)}</div>
             <div className="ml-4 flex-shrink-0">
               <a
                 href={downloadUrl}
