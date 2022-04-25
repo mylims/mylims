@@ -39,5 +39,5 @@ export default function ActionsColumn({
       });
   }, [index, width, dispatch]);
 
-  return <HeaderRender title="Actions" path="" width={width} />;
+  return <HeaderRender title="Actions" path="" width={width} disableSort />;
 }

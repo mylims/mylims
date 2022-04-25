@@ -457,6 +457,7 @@ export type ReadyCheckInput = {
 
 export type Sample = {
   attachments: Array<SampleFile>;
+  availability?: Maybe<Scalars['String']>;
   children?: Maybe<Array<Sample>>;
   comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
@@ -531,6 +532,7 @@ export type SamplePage = Pagination & {
 };
 
 export enum SampleSortField {
+  AVAILABILITY = 'availability',
   CREATEDAT = 'createdAt',
   CREATEDBY = 'createdBy',
   USERNAME = 'username',

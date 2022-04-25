@@ -40,8 +40,11 @@ export default function HeaderRender({
 
   if (!children) {
     return (
-      <th style={{ width }} className={TITLE_CLASS}>
-        {title}
+      <th style={{ width }}>
+        <div className={TITLE_CLASS}>
+          <span>{title}</span>
+          <SortIcon disableSort={!!disableSort} path={path} />
+        </div>
       </th>
     );
   }

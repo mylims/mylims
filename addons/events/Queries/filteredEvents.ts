@@ -1,6 +1,6 @@
 import type { Filter } from 'mongodb';
 
-import { ModelAttributes } from '@ioc:Zakodium/Mongodb/Odm';
+import type { ModelAttributes } from '@ioc:Zakodium/Mongodb/Odm';
 
 import {
   GqlQueryEventsArgs,

@@ -10,6 +10,7 @@ import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
 import { Sample } from 'App/Models/Sample';
 import { SampleKind } from 'App/Models/SampleKind';
 import User from 'App/Models/User';
+import availabilitySample from 'App/Queries/availabilitySample';
 import {
   GqlMeasurementTypes,
   GqlResolvers,
@@ -104,6 +105,32 @@ const resolvers: GqlResolvers = {
     async children(sample: Sample) {
       return Sample.query({ 'parents.0': sample._id }).all();
     },
+    /**
+     * Returns the number of taken samples vs the total of samples
+     *
+     * @param sample - Sample
+     * @returns String with availability ratio
+     */
+    async availability(sample: Sample) {
+      if (sample.meta.availability) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { availability } = sample.meta as any;
+        return `${availability.taken} / ${availability.total}`;
+      }
+      const totalByDiameter: Record<string, number> = {
+        '2': 4,
+        '4': 16,
+        '6': 38,
+        '6 inch': 38,
+      };
+      const defaultTotal = totalByDiameter[sample.meta.size as string] || 1;
+      const total = await Sample.query({ 'parents.0': sample._id }).count();
+      const taken = await Sample.query({
+        'parents.0': sample._id,
+        'meta.reserved': true,
+      }).count();
+      return `${taken} / ${Math.max(total, defaultTotal)}`;
+    },
   },
   SampleKind: {
     id: (sample: SampleKind): string => sample._id,
@@ -129,16 +156,32 @@ const resolvers: GqlResolvers = {
       } = sortBy || {};
 
       const filter = await createFilter(kind, filterBy);
-      let sampleCursor = Sample.query(filter).sortBy(
-        field,
-        direction === GqlSortDirection.DESC ? -1 : 1,
-      );
-      const totalCount = await sampleCursor.count();
-      if (skip) sampleCursor = sampleCursor.skip(skip);
-      if (limit) sampleCursor = sampleCursor.limit(limit);
+      if (field === GqlSampleSortField.AVAILABILITY) {
+        // When the sort field is availability, we need to use an aggregation
+        let sampleCursor = (await availabilitySample(filter)).sort({
+          'meta.availability.sort':
+            direction === GqlSortDirection.DESC ? -1 : 1,
+          'meta.availability.total': -1,
+        });
 
-      const list = await sampleCursor.all();
-      return { list, totalCount, kind: sampleKind };
+        const totalCount = await Sample.query(filter).count();
+        if (skip) sampleCursor = sampleCursor.skip(skip);
+        if (limit) sampleCursor = sampleCursor.limit(limit);
+
+        const list = await sampleCursor.toArray();
+        return { list, totalCount, kind: sampleKind };
+      } else {
+        let sampleCursor = Sample.query(filter).sortBy(
+          field,
+          direction === GqlSortDirection.DESC ? -1 : 1,
+        );
+        const totalCount = await sampleCursor.count();
+        if (skip) sampleCursor = sampleCursor.skip(skip);
+        if (limit) sampleCursor = sampleCursor.limit(limit);
+
+        const list = await sampleCursor.all();
+        return { list, totalCount, kind: sampleKind };
+      }
     },
     async sampleKind(_, { id }) {
       const sampleKind = await SampleKind.find(id);
