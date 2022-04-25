@@ -489,6 +489,7 @@ export type GqlReadyCheckInput = {
 export type GqlSample = {
   __typename?: 'Sample';
   attachments: Array<GqlSampleFile>;
+  availability?: Maybe<Scalars['String']>;
   children?: Maybe<Array<GqlSample>>;
   comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
@@ -566,6 +567,7 @@ export type GqlSamplePage = GqlPagination & {
 };
 
 export enum GqlSampleSortField {
+  AVAILABILITY = 'availability',
   CREATEDAT = 'createdAt',
   CREATEDBY = 'createdBy',
   USERNAME = 'username',
@@ -1380,6 +1382,11 @@ export type GqlSampleResolvers<
 > = ResolversObject<{
   attachments?: Resolver<
     Array<GqlResolversTypes['SampleFile']>,
+    ParentType,
+    ContextType
+  >;
+  availability?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
     ParentType,
     ContextType
   >;

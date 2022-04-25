@@ -64,8 +64,9 @@ export default function WaferList() {
         >
           <TableQuery.TextColumn
             title="Taken samples"
-            dataPath="children"
+            dataPath="availability"
             disableSearch
+            disableSort={false}
           >
             {(row) => {
               const { children } = row as Sample;

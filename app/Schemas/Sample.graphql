@@ -23,6 +23,7 @@ enum SampleSortField {
   username
   createdBy
   createdAt
+  availability
 }
 input SampleFilterInput {
   sampleCode: [FilterList!]
@@ -92,6 +93,7 @@ type Sample {
   parent: Sample
   children: [Sample!]
   createdAt: DateTime!
+  availability: String
 }
 
 # Sample kind
