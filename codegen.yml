@@ -24,3 +24,4 @@ config:
     SampleKind: ./Models/SampleKind#SampleKind
     SyncFile: ../addons/file-sync/Models/SyncFile#SyncFile
     User: ./Models/User#default
+    Notebook: ./Models/Notebook#default

@@ -1,0 +1,109 @@
+import { Filter } from 'mongodb';
+
+import { UserInputError } from '@ioc:Zakodium/Apollo/Errors';
+import { ModelAttributes, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
+
+import Notebook from 'App/Models/Notebook';
+import User from 'App/Models/User';
+import {
+  GqlNotebookFilterInput,
+  GqlNotebookSortField,
+  GqlResolvers,
+  GqlSortDirection,
+  Maybe,
+} from 'App/graphql';
+import {
+  filterDate,
+  filterText,
+  filterUser,
+  NotReadOnly,
+  removeNullable,
+} from 'App/utils';
+
+const resolvers: GqlResolvers = {
+  Notebook: {
+    id: (notebook: Notebook): string => notebook._id.toHexString(),
+    async user(notebook: Notebook) {
+      const user = await User.find(notebook.userId);
+      if (!user) {
+        throw new UserInputError('User not found', { argumentName: 'userId' });
+      }
+      return user;
+    },
+  },
+  Query: {
+    async notebook(_, { id }) {
+      const notebook = await Notebook.find(new ObjectId(id));
+      if (notebook) return notebook;
+
+      throw new UserInputError('Id not found', { argumentName: 'id' });
+    },
+    async notebooks(_, { limit, skip, filterBy, sortBy }) {
+      const {
+        field = GqlNotebookSortField.CREATEDAT,
+        direction = GqlSortDirection.DESC,
+      } = sortBy || {};
+
+      const filter = await createFilter(filterBy);
+
+      let notebookCursor = Notebook.query(filter).sortBy(
+        field,
+        direction === GqlSortDirection.DESC ? -1 : 1,
+      );
+      const totalCount = await notebookCursor.count();
+      if (skip) notebookCursor = notebookCursor.skip(skip);
+      if (limit) notebookCursor = notebookCursor.limit(limit);
+
+      const list = await notebookCursor.all();
+      return { list, totalCount };
+    },
+  },
+  Mutation: {
+    async createNotebook(_, { input }) {
+      const user = await User.find(new ObjectId(input.userId));
+      if (!user) {
+        throw new UserInputError('User not found', { argumentName: 'userId' });
+      }
+
+      return Notebook.create(removeNullable({ ...input, userId: user._id }));
+    },
+    async updateNotebook(_, { id, input }) {
+      const user = await User.find(new ObjectId(input.userId));
+      if (!user) {
+        throw new UserInputError('User not found', { argumentName: 'userId' });
+      }
+
+      const notebook = await Notebook.find(new ObjectId(id));
+      if (!notebook) {
+        throw new UserInputError('Id not found', { argumentName: 'id' });
+      }
+
+      const notebookInput = removeNullable(input);
+      notebook.title = notebookInput.title;
+      notebook.description = notebookInput.description;
+      notebook.labels = notebookInput.labels;
+      notebook.project = notebookInput.project;
+      notebook.content = notebookInput.content;
+      notebook.userId = user._id;
+      await notebook.save();
+      return notebook;
+    },
+  },
+};
+
+async function createFilter(
+  filterBy: Maybe<GqlNotebookFilterInput> | undefined,
+): Promise<Filter<ModelAttributes<Notebook>>> {
+  if (!filterBy) return {};
+
+  let filter: Filter<NotReadOnly<ModelAttributes<Notebook>>> = {};
+  filter.labels = filterText(filterBy.labels);
+  filter.project = filterText(filterBy.project);
+  filter.title = filterText(filterBy.title);
+  filter.createdAt = filterDate(filterBy.createdAt);
+  filter.userId = filterUser(filterBy.userId);
+
+  return removeNullable({ ...filter });
+}
+
+export default resolvers;

@@ -1,0 +1,57 @@
+type Query {
+  notebooks(
+    limit: Int
+    skip: Int
+    filterBy: NotebookFilterInput
+    sortBy: NotebookSortInput
+  ): NotebookPage!
+  notebook(id: ID!): Notebook!
+}
+
+type Mutation {
+  createNotebook(input: NotebookInput!): Notebook!
+  updateNotebook(id: ID!, input: NotebookInput!): Notebook!
+}
+
+# Paginated list of notebooks
+enum NotebookSortField {
+  createdAt
+}
+input NotebookFilterInput {
+  title: FilterText
+  description: FilterText
+  labels: FilterText
+  project: FilterText
+  createdAt: FilterDate
+  userId: String
+}
+input NotebookSortInput {
+  direction: SortDirection!
+  field: NotebookSortField!
+}
+type NotebookPage implements Pagination {
+  list: [Notebook!]!
+  totalCount: Int!
+}
+
+# Inputs
+input NotebookInput {
+  title: String!
+  description: String
+  userId: ID!
+  labels: [String!]!
+  project: String
+  content: JSON!
+}
+
+# Notebook specific data
+type Notebook {
+  id: ID!
+  title: String!
+  description: String
+  user: User!
+  labels: [String!]!
+  project: String
+  content: JSON!
+  createdAt: DateTime!
+}
