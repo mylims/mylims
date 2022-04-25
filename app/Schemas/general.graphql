@@ -3,7 +3,13 @@ enum SortDirection {
   DESC
 }
 
-union PaginationNode = Event | SyncFileRevision | Measurement | Sample | User
+union PaginationNode =
+    Event
+  | SyncFileRevision
+  | Measurement
+  | Sample
+  | User
+  | Notebook
 interface Pagination {
   totalCount: Int!
   list: [PaginationNode!]!

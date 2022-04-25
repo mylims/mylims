@@ -10,6 +10,7 @@ import { Sample } from './Models/Sample';
 import { SampleKind } from './Models/SampleKind';
 import { SyncFile } from '../addons/file-sync/Models/SyncFile';
 import User from './Models/User';
+import Notebook from './Models/Notebook';
 import { ApolloBaseContext } from '@ioc:Zakodium/Apollo/Server';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -296,11 +297,13 @@ export type GqlMutation = {
   __typename?: 'Mutation';
   createFileSyncOption: GqlFileSyncOption;
   createMeasurement: GqlMeasurement;
+  createNotebook: GqlNotebook;
   createSample: GqlSample;
   createSampleKind: GqlSampleKind;
   createSamples: Array<GqlSample>;
   deleteFileSyncOption: Array<GqlFileSyncOption>;
   editFileSyncOption: GqlFileSyncOption;
+  updateNotebook: GqlNotebook;
   updateSample: GqlSample;
   updateSampleKind: GqlSampleKind;
 };
@@ -313,6 +316,10 @@ export type GqlMutationCreateMeasurementArgs = {
   input: GqlMeasurementInput;
   sampleId: Scalars['String'];
   type: GqlMeasurementTypes;
+};
+
+export type GqlMutationCreateNotebookArgs = {
+  input: GqlNotebookInput;
 };
 
 export type GqlMutationCreateSampleArgs = {
@@ -335,6 +342,11 @@ export type GqlMutationEditFileSyncOptionArgs = {
   input: GqlEditFileSyncOptionInput;
 };
 
+export type GqlMutationUpdateNotebookArgs = {
+  id: Scalars['ID'];
+  input: GqlNotebookInput;
+};
+
 export type GqlMutationUpdateSampleArgs = {
   id: Scalars['ID'];
   input: GqlSampleInput;
@@ -354,6 +366,51 @@ export type GqlNewFileSyncOptionInput = {
   topics: Array<Scalars['String']>;
 };
 
+export type GqlNotebook = {
+  __typename?: 'Notebook';
+  content: Scalars['JSON'];
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  labels: Array<Scalars['String']>;
+  project?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  user: GqlUser;
+};
+
+export type GqlNotebookFilterInput = {
+  createdAt?: InputMaybe<GqlFilterDate>;
+  description?: InputMaybe<GqlFilterText>;
+  labels?: InputMaybe<GqlFilterText>;
+  project?: InputMaybe<GqlFilterText>;
+  title?: InputMaybe<GqlFilterText>;
+  userId?: InputMaybe<Scalars['String']>;
+};
+
+export type GqlNotebookInput = {
+  content: Scalars['JSON'];
+  description?: InputMaybe<Scalars['String']>;
+  labels: Array<Scalars['String']>;
+  project?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+export type GqlNotebookPage = GqlPagination & {
+  __typename?: 'NotebookPage';
+  list: Array<GqlNotebook>;
+  totalCount: Scalars['Int'];
+};
+
+export enum GqlNotebookSortField {
+  CREATEDAT = 'createdAt',
+}
+
+export type GqlNotebookSortInput = {
+  direction: GqlSortDirection;
+  field: GqlNotebookSortField;
+};
+
 export type GqlPagination = {
   list: Array<GqlPaginationNode>;
   totalCount: Scalars['Int'];
@@ -362,6 +419,7 @@ export type GqlPagination = {
 export type GqlPaginationNode =
   | GqlEvent
   | GqlMeasurement
+  | GqlNotebook
   | GqlSample
   | GqlSyncFileRevision
   | GqlUser;
@@ -389,6 +447,8 @@ export type GqlQuery = {
   filesByConfigFlat: GqlFilesFlatPage;
   measurement: GqlMeasurement;
   measurements: GqlMeasurementPage;
+  notebook: GqlNotebook;
+  notebooks: GqlNotebookPage;
   readyChecks: Array<GqlReadyCheckDescriptor>;
   sample: GqlSample;
   sampleKind: GqlSampleKind;
@@ -445,6 +505,17 @@ export type GqlQueryMeasurementsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   sortBy?: InputMaybe<GqlMeasurementSortInput>;
   type: GqlMeasurementTypes;
+};
+
+export type GqlQueryNotebookArgs = {
+  id: Scalars['ID'];
+};
+
+export type GqlQueryNotebooksArgs = {
+  filterBy?: InputMaybe<GqlNotebookFilterInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<GqlNotebookSortInput>;
 };
 
 export type GqlQuerySampleArgs = {
@@ -800,15 +871,27 @@ export type GqlResolversTypes = ResolversObject<{
   MeasurementTypes: GqlMeasurementTypes;
   Mutation: ResolverTypeWrapper<{}>;
   NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
+  Notebook: ResolverTypeWrapper<Notebook>;
+  NotebookFilterInput: GqlNotebookFilterInput;
+  NotebookInput: GqlNotebookInput;
+  NotebookPage: ResolverTypeWrapper<
+    Omit<GqlNotebookPage, 'list'> & {
+      list: Array<GqlResolversTypes['Notebook']>;
+    }
+  >;
+  NotebookSortField: GqlNotebookSortField;
+  NotebookSortInput: GqlNotebookSortInput;
   Pagination:
     | GqlResolversTypes['EventPage']
     | GqlResolversTypes['FilesFlatPage']
     | GqlResolversTypes['MeasurementPage']
+    | GqlResolversTypes['NotebookPage']
     | GqlResolversTypes['SamplePage']
     | GqlResolversTypes['UserPage'];
   PaginationNode:
     | GqlResolversTypes['Event']
     | GqlResolversTypes['Measurement']
+    | GqlResolversTypes['Notebook']
     | GqlResolversTypes['Sample']
     | GqlResolversTypes['SyncFileRevision']
     | GqlResolversTypes['User'];
@@ -889,15 +972,24 @@ export type GqlResolversParentTypes = ResolversObject<{
   MeasurementSortInput: GqlMeasurementSortInput;
   Mutation: {};
   NewFileSyncOptionInput: GqlNewFileSyncOptionInput;
+  Notebook: Notebook;
+  NotebookFilterInput: GqlNotebookFilterInput;
+  NotebookInput: GqlNotebookInput;
+  NotebookPage: Omit<GqlNotebookPage, 'list'> & {
+    list: Array<GqlResolversParentTypes['Notebook']>;
+  };
+  NotebookSortInput: GqlNotebookSortInput;
   Pagination:
     | GqlResolversParentTypes['EventPage']
     | GqlResolversParentTypes['FilesFlatPage']
     | GqlResolversParentTypes['MeasurementPage']
+    | GqlResolversParentTypes['NotebookPage']
     | GqlResolversParentTypes['SamplePage']
     | GqlResolversParentTypes['UserPage'];
   PaginationNode:
     | GqlResolversParentTypes['Event']
     | GqlResolversParentTypes['Measurement']
+    | GqlResolversParentTypes['Notebook']
     | GqlResolversParentTypes['Sample']
     | GqlResolversParentTypes['SyncFileRevision']
     | GqlResolversParentTypes['User'];
@@ -1178,6 +1270,12 @@ export type GqlMutationResolvers<
       'input' | 'sampleId' | 'type'
     >
   >;
+  createNotebook?: Resolver<
+    GqlResolversTypes['Notebook'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationCreateNotebookArgs, 'input'>
+  >;
   createSample?: Resolver<
     GqlResolversTypes['Sample'],
     ParentType,
@@ -1208,6 +1306,12 @@ export type GqlMutationResolvers<
     ContextType,
     RequireFields<GqlMutationEditFileSyncOptionArgs, 'input'>
   >;
+  updateNotebook?: Resolver<
+    GqlResolversTypes['Notebook'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlMutationUpdateNotebookArgs, 'id' | 'input'>
+  >;
   updateSample?: Resolver<
     GqlResolversTypes['Sample'],
     ParentType,
@@ -1222,6 +1326,46 @@ export type GqlMutationResolvers<
   >;
 }>;
 
+export type GqlNotebookResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['Notebook'] = GqlResolversParentTypes['Notebook'],
+> = ResolversObject<{
+  content?: Resolver<GqlResolversTypes['JSON'], ParentType, ContextType>;
+  createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  id?: Resolver<GqlResolversTypes['ID'], ParentType, ContextType>;
+  labels?: Resolver<
+    Array<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  project?: Resolver<
+    Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  title?: Resolver<GqlResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<GqlResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GqlNotebookPageResolvers<
+  ContextType = ApolloBaseContext,
+  ParentType extends GqlResolversParentTypes['NotebookPage'] = GqlResolversParentTypes['NotebookPage'],
+> = ResolversObject<{
+  list?: Resolver<
+    Array<GqlResolversTypes['Notebook']>,
+    ParentType,
+    ContextType
+  >;
+  totalCount?: Resolver<GqlResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type GqlPaginationResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['Pagination'] = GqlResolversParentTypes['Pagination'],
@@ -1230,6 +1374,7 @@ export type GqlPaginationResolvers<
     | 'EventPage'
     | 'FilesFlatPage'
     | 'MeasurementPage'
+    | 'NotebookPage'
     | 'SamplePage'
     | 'UserPage',
     ParentType,
@@ -1248,7 +1393,12 @@ export type GqlPaginationNodeResolvers<
   ParentType extends GqlResolversParentTypes['PaginationNode'] = GqlResolversParentTypes['PaginationNode'],
 > = ResolversObject<{
   __resolveType: TypeResolveFn<
-    'Event' | 'Measurement' | 'Sample' | 'SyncFileRevision' | 'User',
+    | 'Event'
+    | 'Measurement'
+    | 'Notebook'
+    | 'Sample'
+    | 'SyncFileRevision'
+    | 'User',
     ParentType,
     ContextType
   >;
@@ -1325,6 +1475,18 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlQueryMeasurementsArgs, 'type'>
+  >;
+  notebook?: Resolver<
+    GqlResolversTypes['Notebook'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryNotebookArgs, 'id'>
+  >;
+  notebooks?: Resolver<
+    GqlResolversTypes['NotebookPage'],
+    ParentType,
+    ContextType,
+    Partial<GqlQueryNotebooksArgs>
   >;
   readyChecks?: Resolver<
     Array<GqlResolversTypes['ReadyCheckDescriptor']>,
@@ -1608,6 +1770,8 @@ export type GqlResolvers<ContextType = ApolloBaseContext> = ResolversObject<{
   MeasurementFile?: GqlMeasurementFileResolvers<ContextType>;
   MeasurementPage?: GqlMeasurementPageResolvers<ContextType>;
   Mutation?: GqlMutationResolvers<ContextType>;
+  Notebook?: GqlNotebookResolvers<ContextType>;
+  NotebookPage?: GqlNotebookPageResolvers<ContextType>;
   Pagination?: GqlPaginationResolvers<ContextType>;
   PaginationNode?: GqlPaginationNodeResolvers<ContextType>;
   Pattern?: GqlPatternResolvers<ContextType>;
