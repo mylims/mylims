@@ -246,6 +246,11 @@ export type MeasurementInput = {
   userId: Scalars['String'];
 };
 
+export type MeasurementLinkInput = {
+  id: Scalars['ID'];
+  type?: InputMaybe<MeasurementTypes>;
+};
+
 export type MeasurementPage = Pagination & {
   list: Array<Measurement>;
   totalCount: Scalars['Int'];
@@ -269,11 +274,13 @@ export enum MeasurementTypes {
 export type Mutation = {
   createFileSyncOption: FileSyncOption;
   createMeasurement: Measurement;
+  createNotebook: Notebook;
   createSample: Sample;
   createSampleKind: SampleKind;
   createSamples: Array<Sample>;
   deleteFileSyncOption: Array<FileSyncOption>;
   editFileSyncOption: FileSyncOption;
+  updateNotebook: Notebook;
   updateSample: Sample;
   updateSampleKind: SampleKind;
 };
@@ -286,6 +293,10 @@ export type MutationCreateMeasurementArgs = {
   input: MeasurementInput;
   sampleId: Scalars['String'];
   type: MeasurementTypes;
+};
+
+export type MutationCreateNotebookArgs = {
+  input: NotebookInput;
 };
 
 export type MutationCreateSampleArgs = {
@@ -308,6 +319,11 @@ export type MutationEditFileSyncOptionArgs = {
   input: EditFileSyncOptionInput;
 };
 
+export type MutationUpdateNotebookArgs = {
+  id: Scalars['ID'];
+  input: NotebookInput;
+};
+
 export type MutationUpdateSampleArgs = {
   id: Scalars['ID'];
   input: SampleInput;
@@ -327,6 +343,53 @@ export type NewFileSyncOptionInput = {
   topics: Array<Scalars['String']>;
 };
 
+export type Notebook = {
+  content: Scalars['JSON'];
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  labels: Array<Scalars['String']>;
+  measurements: Array<Measurement>;
+  project?: Maybe<Scalars['String']>;
+  samples: Array<Sample>;
+  title: Scalars['String'];
+  user: User;
+};
+
+export type NotebookFilterInput = {
+  createdAt?: InputMaybe<FilterDate>;
+  description?: InputMaybe<FilterText>;
+  labels?: InputMaybe<FilterText>;
+  project?: InputMaybe<FilterText>;
+  title?: InputMaybe<FilterText>;
+  userId?: InputMaybe<Scalars['String']>;
+};
+
+export type NotebookInput = {
+  content: Scalars['JSON'];
+  description?: InputMaybe<Scalars['String']>;
+  labels: Array<Scalars['String']>;
+  measurements: Array<MeasurementLinkInput>;
+  project?: InputMaybe<Scalars['String']>;
+  samples: Array<Scalars['ID']>;
+  title: Scalars['String'];
+  userId: Scalars['ID'];
+};
+
+export type NotebookPage = Pagination & {
+  list: Array<Notebook>;
+  totalCount: Scalars['Int'];
+};
+
+export enum NotebookSortField {
+  CREATEDAT = 'createdAt',
+}
+
+export type NotebookSortInput = {
+  direction: SortDirection;
+  field: NotebookSortField;
+};
+
 export type Pagination = {
   list: Array<PaginationNode>;
   totalCount: Scalars['Int'];
@@ -335,6 +398,7 @@ export type Pagination = {
 export type PaginationNode =
   | Event
   | Measurement
+  | Notebook
   | Sample
   | SyncFileRevision
   | User;
@@ -360,6 +424,8 @@ export type Query = {
   filesByConfigFlat: FilesFlatPage;
   measurement: Measurement;
   measurements: MeasurementPage;
+  notebook: Notebook;
+  notebooks: NotebookPage;
   readyChecks: Array<ReadyCheckDescriptor>;
   sample: Sample;
   sampleKind: SampleKind;
@@ -416,6 +482,17 @@ export type QueryMeasurementsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   sortBy?: InputMaybe<MeasurementSortInput>;
   type: MeasurementTypes;
+};
+
+export type QueryNotebookArgs = {
+  id: Scalars['ID'];
+};
+
+export type QueryNotebooksArgs = {
+  filterBy?: InputMaybe<NotebookFilterInput>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<NotebookSortInput>;
 };
 
 export type QuerySampleArgs = {
@@ -962,6 +1039,202 @@ export type CreateMeasurementMutation = {
   };
 };
 
+export type NotebookFieldsFragment = {
+  id: string;
+  title: string;
+  labels: Array<string>;
+  project?: string | null;
+  content: any;
+  createdAt: any;
+  description?: string | null;
+  user: {
+    id: string;
+    emails: Array<string>;
+    lastName?: string | null;
+    firstName?: string | null;
+    usernames: Array<string>;
+  };
+  samples: Array<{
+    id: string;
+    meta: any;
+    title?: string | null;
+    comment?: string | null;
+    createdAt: any;
+    sampleCode: Array<string>;
+  }>;
+  measurements: Array<{
+    id: string;
+    type: MeasurementTypes;
+    title?: string | null;
+    comment?: string | null;
+    createdAt: any;
+    file?: { size: number; filename: string; downloadUrl: string } | null;
+  }>;
+};
+
+export type NotebookListQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  filterBy?: InputMaybe<NotebookFilterInput>;
+  sortBy?: InputMaybe<NotebookSortInput>;
+}>;
+
+export type NotebookListQuery = {
+  notebooks: {
+    totalCount: number;
+    list: Array<{
+      id: string;
+      title: string;
+      labels: Array<string>;
+      project?: string | null;
+      content: any;
+      createdAt: any;
+      description?: string | null;
+      user: {
+        id: string;
+        emails: Array<string>;
+        lastName?: string | null;
+        firstName?: string | null;
+        usernames: Array<string>;
+      };
+      samples: Array<{
+        id: string;
+        meta: any;
+        title?: string | null;
+        comment?: string | null;
+        createdAt: any;
+        sampleCode: Array<string>;
+      }>;
+      measurements: Array<{
+        id: string;
+        type: MeasurementTypes;
+        title?: string | null;
+        comment?: string | null;
+        createdAt: any;
+        file?: { size: number; filename: string; downloadUrl: string } | null;
+      }>;
+    }>;
+  };
+};
+
+export type NotebookQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type NotebookQuery = {
+  notebook: {
+    id: string;
+    title: string;
+    labels: Array<string>;
+    project?: string | null;
+    content: any;
+    createdAt: any;
+    description?: string | null;
+    user: {
+      id: string;
+      emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
+      usernames: Array<string>;
+    };
+    samples: Array<{
+      id: string;
+      meta: any;
+      title?: string | null;
+      comment?: string | null;
+      createdAt: any;
+      sampleCode: Array<string>;
+    }>;
+    measurements: Array<{
+      id: string;
+      type: MeasurementTypes;
+      title?: string | null;
+      comment?: string | null;
+      createdAt: any;
+      file?: { size: number; filename: string; downloadUrl: string } | null;
+    }>;
+  };
+};
+
+export type CreateNotebookMutationVariables = Exact<{
+  input: NotebookInput;
+}>;
+
+export type CreateNotebookMutation = {
+  createNotebook: {
+    id: string;
+    title: string;
+    labels: Array<string>;
+    project?: string | null;
+    content: any;
+    createdAt: any;
+    description?: string | null;
+    user: {
+      id: string;
+      emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
+      usernames: Array<string>;
+    };
+    samples: Array<{
+      id: string;
+      meta: any;
+      title?: string | null;
+      comment?: string | null;
+      createdAt: any;
+      sampleCode: Array<string>;
+    }>;
+    measurements: Array<{
+      id: string;
+      type: MeasurementTypes;
+      title?: string | null;
+      comment?: string | null;
+      createdAt: any;
+      file?: { size: number; filename: string; downloadUrl: string } | null;
+    }>;
+  };
+};
+
+export type UpdateNotebookMutationVariables = Exact<{
+  id: Scalars['ID'];
+  input: NotebookInput;
+}>;
+
+export type UpdateNotebookMutation = {
+  updateNotebook: {
+    id: string;
+    title: string;
+    labels: Array<string>;
+    project?: string | null;
+    content: any;
+    createdAt: any;
+    description?: string | null;
+    user: {
+      id: string;
+      emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
+      usernames: Array<string>;
+    };
+    samples: Array<{
+      id: string;
+      meta: any;
+      title?: string | null;
+      comment?: string | null;
+      createdAt: any;
+      sampleCode: Array<string>;
+    }>;
+    measurements: Array<{
+      id: string;
+      type: MeasurementTypes;
+      title?: string | null;
+      comment?: string | null;
+      createdAt: any;
+      file?: { size: number; filename: string; downloadUrl: string } | null;
+    }>;
+  };
+};
+
 export type SampleFieldsFragment = {
   id: string;
   meta: any;
@@ -1295,6 +1568,44 @@ export const MeasurementFieldsFragmentDoc = gql`
       size
       filename
       downloadUrl
+    }
+  }
+`;
+export const NotebookFieldsFragmentDoc = gql`
+  fragment NotebookFields on Notebook {
+    id
+    title
+    labels
+    project
+    content
+    createdAt
+    description
+    user {
+      id
+      emails
+      lastName
+      firstName
+      usernames
+    }
+    samples {
+      id
+      meta
+      title
+      comment
+      createdAt
+      sampleCode
+    }
+    measurements {
+      id
+      type
+      title
+      comment
+      createdAt
+      file {
+        size
+        filename
+        downloadUrl
+      }
     }
   }
 `;
@@ -2338,6 +2649,241 @@ export type CreateMeasurementMutationResult =
 export type CreateMeasurementMutationOptions = Apollo.BaseMutationOptions<
   CreateMeasurementMutation,
   CreateMeasurementMutationVariables
+>;
+export const NotebookListDocument = gql`
+  query NotebookList(
+    $limit: Int
+    $skip: Int
+    $filterBy: NotebookFilterInput
+    $sortBy: NotebookSortInput
+  ) {
+    notebooks(
+      limit: $limit
+      skip: $skip
+      filterBy: $filterBy
+      sortBy: $sortBy
+    ) {
+      totalCount
+      list {
+        ...NotebookFields
+      }
+    }
+  }
+  ${NotebookFieldsFragmentDoc}
+`;
+
+/**
+ * __useNotebookListQuery__
+ *
+ * To run a query within a React component, call `useNotebookListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNotebookListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNotebookListQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      skip: // value for 'skip'
+ *      filterBy: // value for 'filterBy'
+ *      sortBy: // value for 'sortBy'
+ *   },
+ * });
+ */
+export function useNotebookListQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    NotebookListQuery,
+    NotebookListQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    NotebookListQuery,
+    NotebookListQueryVariables
+  >(NotebookListDocument, options);
+}
+export function useNotebookListLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    NotebookListQuery,
+    NotebookListQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    NotebookListQuery,
+    NotebookListQueryVariables
+  >(NotebookListDocument, options);
+}
+export type NotebookListQueryHookResult = ReturnType<
+  typeof useNotebookListQuery
+>;
+export type NotebookListLazyQueryHookResult = ReturnType<
+  typeof useNotebookListLazyQuery
+>;
+export type NotebookListQueryResult = Apollo.QueryResult<
+  NotebookListQuery,
+  NotebookListQueryVariables
+>;
+export function refetchNotebookListQuery(
+  variables?: NotebookListQueryVariables,
+) {
+  return { query: NotebookListDocument, variables: variables };
+}
+export const NotebookDocument = gql`
+  query Notebook($id: ID!) {
+    notebook(id: $id) {
+      ...NotebookFields
+    }
+  }
+  ${NotebookFieldsFragmentDoc}
+`;
+
+/**
+ * __useNotebookQuery__
+ *
+ * To run a query within a React component, call `useNotebookQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNotebookQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNotebookQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useNotebookQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    NotebookQuery,
+    NotebookQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<NotebookQuery, NotebookQueryVariables>(
+    NotebookDocument,
+    options,
+  );
+}
+export function useNotebookLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    NotebookQuery,
+    NotebookQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<NotebookQuery, NotebookQueryVariables>(
+    NotebookDocument,
+    options,
+  );
+}
+export type NotebookQueryHookResult = ReturnType<typeof useNotebookQuery>;
+export type NotebookLazyQueryHookResult = ReturnType<
+  typeof useNotebookLazyQuery
+>;
+export type NotebookQueryResult = Apollo.QueryResult<
+  NotebookQuery,
+  NotebookQueryVariables
+>;
+export function refetchNotebookQuery(variables: NotebookQueryVariables) {
+  return { query: NotebookDocument, variables: variables };
+}
+export const CreateNotebookDocument = gql`
+  mutation CreateNotebook($input: NotebookInput!) {
+    createNotebook(input: $input) {
+      ...NotebookFields
+    }
+  }
+  ${NotebookFieldsFragmentDoc}
+`;
+
+/**
+ * __useCreateNotebookMutation__
+ *
+ * To run a mutation, you first call `useCreateNotebookMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNotebookMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNotebookMutation, { data, loading, error }] = useCreateNotebookMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateNotebookMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateNotebookMutation,
+    CreateNotebookMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useMutation<
+    CreateNotebookMutation,
+    CreateNotebookMutationVariables
+  >(CreateNotebookDocument, options);
+}
+export type CreateNotebookMutationHookResult = ReturnType<
+  typeof useCreateNotebookMutation
+>;
+export type CreateNotebookMutationResult =
+  Apollo.MutationResult<CreateNotebookMutation>;
+export type CreateNotebookMutationOptions = Apollo.BaseMutationOptions<
+  CreateNotebookMutation,
+  CreateNotebookMutationVariables
+>;
+export const UpdateNotebookDocument = gql`
+  mutation UpdateNotebook($id: ID!, $input: NotebookInput!) {
+    updateNotebook(id: $id, input: $input) {
+      ...NotebookFields
+    }
+  }
+  ${NotebookFieldsFragmentDoc}
+`;
+
+/**
+ * __useUpdateNotebookMutation__
+ *
+ * To run a mutation, you first call `useUpdateNotebookMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateNotebookMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateNotebookMutation, { data, loading, error }] = useUpdateNotebookMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateNotebookMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    UpdateNotebookMutation,
+    UpdateNotebookMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useMutation<
+    UpdateNotebookMutation,
+    UpdateNotebookMutationVariables
+  >(UpdateNotebookDocument, options);
+}
+export type UpdateNotebookMutationHookResult = ReturnType<
+  typeof useUpdateNotebookMutation
+>;
+export type UpdateNotebookMutationResult =
+  Apollo.MutationResult<UpdateNotebookMutation>;
+export type UpdateNotebookMutationOptions = Apollo.BaseMutationOptions<
+  UpdateNotebookMutation,
+  UpdateNotebookMutationVariables
 >;
 export const SamplesFilteredDocument = gql`
   query SamplesFiltered(

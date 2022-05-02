@@ -57,6 +57,13 @@ export function RouteMenu() {
           pathmatch: '/measurement/*',
         }}
       />
+      <RouteLink
+        route={{
+          label: 'Notebooks',
+          pathname: '/notebook/list',
+          pathmatch: '/notebook/*',
+        }}
+      />
       <Menu title="Admin" routes={ADMIN_ROUTES} />
     </>
   );
