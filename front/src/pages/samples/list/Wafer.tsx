@@ -5,12 +5,15 @@ import {
   InformationCircleIcon,
   PencilIcon,
 } from '@heroicons/react/outline';
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
 
+import { API_URL } from '@/../env';
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import { LinkButton } from '@/components/LinkButton';
+import { RichTextSerializer } from '@/components/RichTextSerializer';
 import { Table as TableQuery } from '@/components/TableQuery';
 import WaferDicing from '@/components/WaferDicing';
 import {
@@ -24,9 +27,6 @@ import {
 import { Sample } from '@/generated/graphql';
 
 import SamplesList from './Default';
-import { RichTextSerializer } from '@/components/RichTextSerializer';
-import { API_URL } from '@/../env';
-import clsx from 'clsx';
 
 const tabStyle = ({ selected }: { selected: boolean }) =>
   clsx(
