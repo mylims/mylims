@@ -35,6 +35,10 @@ type NotebookPage implements Pagination {
 }
 
 # Inputs
+input MeasurementLinkInput {
+  id: ID!
+  type: MeasurementTypes
+}
 input NotebookInput {
   title: String!
   description: String
@@ -42,6 +46,8 @@ input NotebookInput {
   labels: [String!]!
   project: String
   content: JSON!
+  samples: [ID!]!
+  measurements: [MeasurementLinkInput!]!
 }
 
 # Notebook specific data
@@ -54,4 +60,6 @@ type Notebook {
   project: String
   content: JSON!
   createdAt: DateTime!
+  samples: [Sample!]!
+  measurements: [Measurement!]!
 }

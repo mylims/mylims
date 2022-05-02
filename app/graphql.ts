@@ -272,6 +272,11 @@ export type GqlMeasurementInput = {
   userId: Scalars['String'];
 };
 
+export type GqlMeasurementLinkInput = {
+  id: Scalars['ID'];
+  type?: InputMaybe<GqlMeasurementTypes>;
+};
+
 export type GqlMeasurementPage = GqlPagination & {
   __typename?: 'MeasurementPage';
   list: Array<GqlMeasurement>;
@@ -373,7 +378,9 @@ export type GqlNotebook = {
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   labels: Array<Scalars['String']>;
+  measurements: Array<GqlMeasurement>;
   project?: Maybe<Scalars['String']>;
+  samples: Array<GqlSample>;
   title: Scalars['String'];
   user: GqlUser;
 };
@@ -391,7 +398,9 @@ export type GqlNotebookInput = {
   content: Scalars['JSON'];
   description?: InputMaybe<Scalars['String']>;
   labels: Array<Scalars['String']>;
+  measurements: Array<GqlMeasurementLinkInput>;
   project?: InputMaybe<Scalars['String']>;
+  samples: Array<Scalars['ID']>;
   title: Scalars['String'];
   userId: Scalars['ID'];
 };
@@ -861,6 +870,7 @@ export type GqlResolversTypes = ResolversObject<{
   MeasurementFile: ResolverTypeWrapper<GqlMeasurementFile>;
   MeasurementFilterInput: GqlMeasurementFilterInput;
   MeasurementInput: GqlMeasurementInput;
+  MeasurementLinkInput: GqlMeasurementLinkInput;
   MeasurementPage: ResolverTypeWrapper<
     Omit<GqlMeasurementPage, 'list'> & {
       list: Array<GqlResolversTypes['Measurement']>;
@@ -966,6 +976,7 @@ export type GqlResolversParentTypes = ResolversObject<{
   MeasurementFile: GqlMeasurementFile;
   MeasurementFilterInput: GqlMeasurementFilterInput;
   MeasurementInput: GqlMeasurementInput;
+  MeasurementLinkInput: GqlMeasurementLinkInput;
   MeasurementPage: Omit<GqlMeasurementPage, 'list'> & {
     list: Array<GqlResolversParentTypes['Measurement']>;
   };
@@ -1343,8 +1354,18 @@ export type GqlNotebookResolvers<
     ParentType,
     ContextType
   >;
+  measurements?: Resolver<
+    Array<GqlResolversTypes['Measurement']>,
+    ParentType,
+    ContextType
+  >;
   project?: Resolver<
     Maybe<GqlResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  samples?: Resolver<
+    Array<GqlResolversTypes['Sample']>,
     ParentType,
     ContextType
   >;

@@ -25,7 +25,7 @@ import {
   removeNullable,
 } from 'App/utils';
 
-const MEASUREMENTS = {
+export const MEASUREMENTS = {
   [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
 };
 

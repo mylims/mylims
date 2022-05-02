@@ -5,7 +5,7 @@ import { BaseModel, field, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 import { GqlSampleInput } from 'App/graphql';
 import { removeNullable } from 'App/utils';
 
-interface SampleMeasurement {
+export interface MeasurementLink {
   id: ObjectId;
   type: string;
   date: Date;
@@ -30,7 +30,7 @@ export class Sample extends BaseModel {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public description?: any[];
   public comment?: string;
-  public measurements: SampleMeasurement[];
+  public measurements: MeasurementLink[];
   public attachments: SampleAttachment[];
   public parents: ObjectId[];
 
