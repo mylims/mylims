@@ -14,6 +14,8 @@ import Login from '@/pages/login';
 import MeasurementCreate from '@/pages/measurements/create/Default';
 import MeasurementDetail from '@/pages/measurements/transfer/detail';
 import MeasurementsList from '@/pages/measurements/transfer/list';
+import NotebookDetail from '@/pages/notebook/detail';
+import NotebookList from '@/pages/notebook/list';
 import SampleCreate from '@/pages/samples/create/Sample';
 import WaferCreate from '@/pages/samples/create/Wafer';
 import DeviceDetail from '@/pages/samples/detail/Device';
@@ -50,20 +52,6 @@ function AppRoutes() {
       children: [
         { path: 'list', element: <App Component={EventsList} /> },
         { path: 'detail/:id', element: <App Component={EventDetail} /> },
-      ],
-    },
-    {
-      path: 'measurement',
-      children: [
-        { path: 'list', element: <App Component={MeasurementsList} /> },
-        {
-          path: 'detail/:type/:id',
-          element: <App Component={MeasurementDetail} />,
-        },
-        {
-          path: 'create/:id',
-          element: <App Component={MeasurementCreate} />,
-        },
       ],
     },
     {
@@ -108,6 +96,30 @@ function AppRoutes() {
             { path: 'dye/:id', element: <App Component={DyeUpdate} /> },
             { path: 'device/:id', element: <App Component={DeviceUpdate} /> },
           ],
+        },
+      ],
+    },
+    {
+      path: 'measurement',
+      children: [
+        { path: 'list', element: <App Component={MeasurementsList} /> },
+        {
+          path: 'detail/:type/:id',
+          element: <App Component={MeasurementDetail} />,
+        },
+        {
+          path: 'create/:id',
+          element: <App Component={MeasurementCreate} />,
+        },
+      ],
+    },
+    {
+      path: 'notebook',
+      children: [
+        { path: 'list', element: <App Component={NotebookList} /> },
+        {
+          path: 'detail/:id',
+          element: <App Component={NotebookDetail} />,
         },
       ],
     },

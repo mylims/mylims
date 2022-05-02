@@ -1,0 +1,68 @@
+fragment NotebookFields on Notebook {
+  id
+  title
+  labels
+  project
+  content
+  createdAt
+  description
+  user {
+    id
+    emails
+    lastName
+    firstName
+    usernames
+  }
+  samples {
+    id
+    meta
+    title
+    comment
+    createdAt
+    sampleCode
+  }
+  measurements {
+    id
+    type
+    title
+    comment
+    createdAt
+    file {
+      size
+      filename
+      downloadUrl
+    }
+  }
+}
+
+query NotebookList(
+  $limit: Int
+  $skip: Int
+  $filterBy: NotebookFilterInput
+  $sortBy: NotebookSortInput
+) {
+  notebooks(limit: $limit, skip: $skip, filterBy: $filterBy, sortBy: $sortBy) {
+    totalCount
+    list {
+      ...NotebookFields
+    }
+  }
+}
+
+query Notebook($id: ID!) {
+  notebook(id: $id) {
+    ...NotebookFields
+  }
+}
+
+mutation CreateNotebook($input: NotebookInput!) {
+  createNotebook(input: $input) {
+    ...NotebookFields
+  }
+}
+
+mutation UpdateNotebook($id: ID!, $input: NotebookInput!) {
+  updateNotebook(id: $id, input: $input) {
+    ...NotebookFields
+  }
+}
