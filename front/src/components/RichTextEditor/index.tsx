@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { isHotkey } from 'is-hotkey';
-import React, { CSSProperties, useCallback, useMemo } from 'react';
+import React, { CSSProperties, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { createEditor, Descendant } from 'slate';
 import { withHistory } from 'slate-history';
@@ -15,6 +15,7 @@ import {
 import ImageButton, {
   insertImage,
 } from '@/components/RichTextEditor/header/ImageButton';
+import { CustomEditor } from '@/components/RichTextEditor/types';
 import {
   Help,
   inputColor,
@@ -68,10 +69,15 @@ export function RichTextEditor({
 }: RichTextEditorProps) {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
-  const editor = useMemo(
-    () => withImages(withHistory(withReact(createEditor())), saveImage),
-    [saveImage],
-  );
+  const editorRef = useRef<CustomEditor>();
+  if (!editorRef.current) {
+    editorRef.current = withImages(
+      withHistory(withReact(createEditor())),
+      saveImage,
+    );
+  }
+  const editor = editorRef.current;
+
   const value: Descendant[] =
     initialValue && initialValue.length > 0
       ? initialValue
