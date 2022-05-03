@@ -4,7 +4,7 @@ import { array } from 'yup';
 
 import ElnLayout from '@/components/ElnLayout';
 import { FormLayout } from '@/components/FormLayout';
-import { RichTextImageFieldRHF } from '@/components/RichTextImageFieldRHF';
+import { RichTextImageFieldRHF } from '@/components/RichTextEditor/components/RichTextImageFieldRHF';
 import {
   Alert,
   Select,

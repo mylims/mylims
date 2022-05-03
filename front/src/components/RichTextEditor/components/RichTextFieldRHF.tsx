@@ -40,9 +40,7 @@ export function RichTextFieldRHF(props: RichTextFieldRHFProps) {
   const handleChange = useCallback(
     (value: Descendant[]) => {
       setValue(name, value, { shouldTouch: true, shouldValidate });
-      if (deps && shouldValidate) {
-        void trigger(deps);
-      }
+      if (deps && shouldValidate) void trigger(deps);
     },
     [setValue, shouldValidate, name, trigger, deps],
   );

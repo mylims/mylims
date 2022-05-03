@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { API_URL } from '@/../env';
-import { RichTextFieldRHF } from '@/components/RichTextFieldRHF';
+import { RichTextFieldRHF } from '@/components/RichTextEditor/components/RichTextFieldRHF';
 
 interface RichTextImageFieldRHFProps {
   name: string;

@@ -13,7 +13,7 @@ import { API_URL } from '@/../env';
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import { LinkButton } from '@/components/LinkButton';
-import { RichTextSerializer } from '@/components/RichTextSerializer';
+import { RichTextSerializer } from '@/components/RichTextEditor/components/RichTextSerializer';
 import { Table as TableQuery } from '@/components/TableQuery';
 import WaferDicing from '@/components/WaferDicing';
 import {

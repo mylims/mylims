@@ -25,13 +25,7 @@ export function RichTextSerializer({
 function serialize(node: Descendant): ReactNode {
   if (Text.isText(node)) {
     return (
-      <Leaf
-        leaf={node}
-        text={node}
-        attributes={{
-          'data-slate-leaf': true,
-        }}
-      >
+      <Leaf leaf={node} text={node} attributes={{ 'data-slate-leaf': true }}>
         {node.text}
       </Leaf>
     );
@@ -42,10 +36,7 @@ function serialize(node: Descendant): ReactNode {
   return (
     <Element
       element={node}
-      attributes={{
-        'data-slate-node': 'element',
-        ref: undefined,
-      }}
+      attributes={{ 'data-slate-node': 'element', ref: undefined }}
     >
       {children}
     </Element>

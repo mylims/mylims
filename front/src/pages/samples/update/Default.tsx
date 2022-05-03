@@ -4,7 +4,7 @@ import { array, BaseSchema } from 'yup';
 
 import AttachmentsTableRHF from '@/components/AttachmentsTableRHF';
 import { FormLayout } from '@/components/FormLayout';
-import { RichTextImageFieldRHF } from '@/components/RichTextImageFieldRHF';
+import { RichTextImageFieldRHF } from '@/components/RichTextEditor/components/RichTextImageFieldRHF';
 import {
   Alert,
   AlertType,

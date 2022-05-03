@@ -4,7 +4,7 @@ import React from 'react';
 import FieldDescription from '@/components/FieldDescription';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import MeasuresTable from '@/components/MeasuresTable';
-import { RichTextImageFieldRHF } from '@/components/RichTextImageFieldRHF';
+import { RichTextImageFieldRHF } from '@/components/RichTextEditor/components/RichTextImageFieldRHF';
 import {
   FormRHF,
   Card,

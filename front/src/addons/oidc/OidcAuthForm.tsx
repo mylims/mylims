@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 
+import { API_URL } from '@/../env';
 import { Button, Card, Select } from '@/components/tailwind-ui';
 import { useElnQuery } from '@/hooks/useElnQuery';
 
-import { API_URL } from '../../../env';
 
 interface ProviderData {
   identifier: string;

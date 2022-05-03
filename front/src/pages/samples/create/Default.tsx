@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { array, BaseSchema } from 'yup';
 
 import { FormLayout } from '@/components/FormLayout';
-import { RichTextImageFieldRHF } from '@/components/RichTextImageFieldRHF';
+import { RichTextImageFieldRHF } from '@/components/RichTextEditor/components/RichTextImageFieldRHF';
 import {
   Alert,
   AlertType,
