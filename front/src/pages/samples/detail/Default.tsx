@@ -8,7 +8,7 @@ import FieldDescription from '@/components/FieldDescription';
 import { FormLayout } from '@/components/FormLayout';
 import { LinkButton } from '@/components/LinkButton';
 import MeasuresTable from '@/components/MeasuresTable';
-import { RichTextSerializer } from '@/components/RichTextEditor/components/RichTextSerializer';
+import { RichTextSerializer } from '@/components/RichTextEditor/RichTextSerializer';
 import {
   Alert,
   AlertType,

@@ -8,7 +8,7 @@ import React from 'react';
 import { Transforms, Editor, Element as SlateElement } from 'slate';
 import { useSlate } from 'slate-react';
 
-import { CustomEditor, CustomFormat as BlockFormat } from '../types';
+import { CustomEditor, CustomFormat as BlockFormat } from '../../types';
 
 import { IconButton } from './IconButton';
 

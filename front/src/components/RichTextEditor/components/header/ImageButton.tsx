@@ -3,7 +3,7 @@ import React from 'react';
 import { Editor, Transforms, Element as SlateElement } from 'slate';
 import { useSlate } from 'slate-react';
 
-import { CustomEditor, ImageElement } from '../types';
+import { CustomEditor, ImageElement } from '../../types';
 
 import { IconButton } from './IconButton';
 

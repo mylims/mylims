@@ -14,7 +14,7 @@ import {
 
 import ImageButton, {
   insertImage,
-} from '@/components/RichTextEditor/header/ImageButton';
+} from '@/components/RichTextEditor/components/header/ImageButton';
 import { CustomEditor } from '@/components/RichTextEditor/types';
 import {
   Help,
@@ -24,9 +24,13 @@ import {
   Label,
 } from '@/components/tailwind-ui/forms/basic/common';
 
-import { Image, ImageContext, withImages } from './Image';
-import { BlockButton } from './header/BlockButton';
-import { MarkButton, MarkFormat, toggleMark } from './header/MarkButton';
+import { Image, ImageContext, withImages } from './components/Image';
+import { BlockButton } from './components/header/BlockButton';
+import {
+  MarkButton,
+  MarkFormat,
+  toggleMark,
+} from './components/header/MarkButton';
 
 const HOTKEYS: Record<string, MarkFormat> = {
   'mod+b': 'bold',

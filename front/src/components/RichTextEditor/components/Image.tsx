@@ -3,7 +3,7 @@ import React, { createContext, ReactNode, useContext, useMemo } from 'react';
 import { RenderElementProps, useFocused, useSelected } from 'slate-react';
 
 import { insertImage } from './header/ImageButton';
-import { CustomEditor } from './types';
+import { CustomEditor } from '../types';
 
 interface ImageContextType {
   fetchImage?: (uuid: string) => string;

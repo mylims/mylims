@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { Descendant, Text } from 'slate';
 
 import { Leaf, Element } from '@/components/RichTextEditor';
-import { ImageContext } from '@/components/RichTextEditor/Image';
+import { ImageContext } from '@/components/RichTextEditor/components/Image';
 
 interface RichTextSerializerProps {
   className?: string;
