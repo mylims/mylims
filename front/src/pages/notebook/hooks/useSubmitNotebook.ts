@@ -7,7 +7,6 @@ import useAuth from '@/hooks/useAuth';
 import { notebookStateToInput } from '../adapters';
 import { StateNotebook } from '../models';
 
-
 interface UseSubmitNotebook<T> {
   onSuccess(data: T): void;
   submissionFunc(
