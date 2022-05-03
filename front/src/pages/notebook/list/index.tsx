@@ -8,8 +8,6 @@ import { Table as TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { getVariablesFromQuery } from '@/components/TableQuery/utils';
 import {
-  Badge,
-  BadgeVariant,
   Button,
   Card,
   Color,
@@ -18,16 +16,18 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import {
-  NotebookListQuery,
   NotebookSortField,
   SortDirection,
   useNotebookListQuery,
 } from '@/generated/graphql';
-
-type NotebookType = NotebookListQuery['notebooks']['list'][number];
+import {
+  LabelsBadge,
+  SampleCodeBadge,
+} from '@/pages/notebook/components/Badges';
+import { NotebookListItem } from '@/pages/notebook/models';
 
 export default function NotebookList() {
-  const [state, setState] = useState<NotebookType | null>(null);
+  const [state, setState] = useState<NotebookListItem | null>(null);
   const { query, setQuery } = useTableQuery({
     page: '1',
     'sortBy.field': NotebookSortField.CREATEDAT,
@@ -58,7 +58,7 @@ export default function NotebookList() {
                 variant={
                   row.id === state?.id ? Variant.primary : Variant.secondary
                 }
-                onClick={() => setState(row as NotebookType)}
+                onClick={() => setState(row as NotebookListItem)}
               >
                 <EyeIcon className="h-5 w-5" />
               </Button>
@@ -69,19 +69,7 @@ export default function NotebookList() {
           <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
           <TableQuery.UserColumn title="User" dataPath="user" />
           <TableQuery.TextColumn title="Labels" dataPath="labels" disableSort>
-            {(row) => {
-              const { labels, id } = row as NotebookType;
-              if (!labels || labels.length === 0) return '-';
-
-              return labels.map((label) => (
-                <Badge
-                  key={`${id}-${label}`}
-                  variant={BadgeVariant.COLORED_BACKGROUND}
-                  label={label}
-                  color={Color.primary}
-                />
-              ));
-            }}
+            {(row) => <LabelsBadge notebook={row as NotebookListItem} />}
           </TableQuery.TextColumn>
           <TableQuery.TextColumn title="Project" dataPath="project" />
           <TableQuery.TextColumn
@@ -89,25 +77,14 @@ export default function NotebookList() {
             dataPath="samples"
             disableSearch
           >
-            {(row) => {
-              const { samples } = row as NotebookType;
-              if (samples.length === 0) return '-';
-              return samples.map((sample) => (
-                <Badge
-                  key={sample.id}
-                  variant={BadgeVariant.COLORED_BACKGROUND}
-                  label={sample.sampleCode.join('_')}
-                  color={Color.primary}
-                />
-              ));
-            }}
+            {(row) => <SampleCodeBadge notebook={row as NotebookListItem} />}
           </TableQuery.TextColumn>
           <TableQuery.TextColumn
             title="Measurements"
             dataPath="measurements"
             disableSearch
           >
-            {(row) => (row as NotebookType).measurements.length}
+            {(row) => (row as NotebookListItem).measurements.length}
           </TableQuery.TextColumn>
         </TableQuery>
       </div>
@@ -153,16 +130,7 @@ export default function NotebookList() {
                   {state.description ?? '-'}
                 </FieldDescription>
                 <FieldDescription title="Samples">
-                  {state.samples.length === 0
-                    ? '-'
-                    : state.samples.map((sample) => (
-                        <Badge
-                          key={sample.id}
-                          variant={BadgeVariant.COLORED_BACKGROUND}
-                          label={sample.sampleCode.join('_')}
-                          color={Color.primary}
-                        />
-                      ))}
+                  <SampleCodeBadge notebook={state} />
                 </FieldDescription>
               </div>
             )}
