@@ -15,6 +15,7 @@ import MeasurementCreate from '@/pages/measurements/create/Default';
 import MeasurementDetail from '@/pages/measurements/transfer/detail';
 import MeasurementsList from '@/pages/measurements/transfer/list';
 import NotebookDetail from '@/pages/notebook/detail';
+import NotebookDetail from '@/pages/notebook/Detail';
 import NotebookList from '@/pages/notebook/list';
 import SampleCreate from '@/pages/samples/create/Sample';
 import WaferCreate from '@/pages/samples/create/Wafer';
