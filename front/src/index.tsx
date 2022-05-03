@@ -14,7 +14,7 @@ import Login from '@/pages/login';
 import MeasurementCreate from '@/pages/measurements/create/Default';
 import MeasurementDetail from '@/pages/measurements/transfer/detail';
 import MeasurementsList from '@/pages/measurements/transfer/list';
-import NotebookDetail from '@/pages/notebook/detail';
+import NotebookCreate from '@/pages/notebook/Create';
 import NotebookDetail from '@/pages/notebook/Detail';
 import NotebookList from '@/pages/notebook/list';
 import SampleCreate from '@/pages/samples/create/Sample';
@@ -121,6 +121,10 @@ function AppRoutes() {
         {
           path: 'detail/:id',
           element: <App Component={NotebookDetail} />,
+        },
+        {
+          path: 'create',
+          element: <App Component={NotebookCreate} />,
         },
       ],
     },
