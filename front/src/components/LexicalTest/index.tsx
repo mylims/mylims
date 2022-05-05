@@ -18,10 +18,13 @@ import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import ExampleTheme from './themes/ExampleTheme';
-import './styles.css';
 
 function Placeholder() {
-  return <div className="editor-placeholder">Enter some rich text...</div>;
+  return (
+    <div className="pointer-events-none absolute top-4 left-4 inline-block select-none overflow-hidden text-ellipsis text-neutral-400">
+      Enter some rich text...
+    </div>
+  );
 }
 
 const editorConfig = {
@@ -50,11 +53,13 @@ const editorConfig = {
 export default function Editor() {
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="editor-container">
+      <div className="relative m-2 rounded-t-md rounded-b-sm font-normal leading-5 text-black">
         <ToolbarPlugin />
-        <div className="editor-inner">
+        <div className="relative bg-white">
           <RichTextPlugin
-            contentEditable={<ContentEditable className="editor-input" />}
+            contentEditable={
+              <ContentEditable className="relative min-h-[150px] resize-none pt-4 pl-4 caret-neutral-500 outline-none" />
+            }
             placeholder={<Placeholder />}
           />
           <HistoryPlugin />

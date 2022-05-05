@@ -3,6 +3,7 @@ import React from 'react';
 
 import FieldDescription from '@/components/FieldDescription';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
+import LexicalTest from '@/components/LexicalTest';
 import MeasuresTable from '@/components/MeasuresTable';
 import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
 import {
@@ -66,6 +67,7 @@ export function NotebookForm({
                   </div>
                 </>
               ) : null}
+              <LexicalTest />
             </div>
             <div className="lg:w-2/3">
               <RichTextImageFieldRHF name="content" label="Content" />

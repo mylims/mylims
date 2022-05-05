@@ -1,3 +1,17 @@
+import {
+  ArrowRedo20Regular,
+  ArrowUndo20Regular,
+  ChevronDown20Regular,
+  Link20Regular,
+  TextAlignCenter20Regular,
+  TextAlignJustify20Regular,
+  TextAlignLeft20Regular,
+  TextAlignRight20Regular,
+  TextBold20Regular,
+  TextItalic20Regular,
+  TextStrikethrough20Regular,
+  TextUnderline20Regular,
+} from '@fluentui/react-icons';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { $isListNode, ListNode } from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
@@ -17,8 +31,8 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { ButtonCommand } from '../components/ButtonCommand';
 import { BlockOptionsDropdownList } from '../components/BlockOptionsDropdownList';
-import { Divider } from '../components/Divider';
 import {
   FloatingLinkEditor,
   getSelectedNode,
@@ -132,35 +146,30 @@ export default function ToolbarPlugin() {
     );
   }, [editor, updateToolbar]);
 
-  const insertLink = useCallback(() => {
-    editor.dispatchCommand(TOGGLE_LINK_COMMAND, !isLink ? 'https://' : null);
-  }, [editor, isLink]);
-
   return (
-    <div className="toolbar" ref={toolbarRef}>
-      <button
-        disabled={!canUndo}
-        onClick={() => {
-          editor.dispatchCommand(UNDO_COMMAND, undefined);
-        }}
-        className="toolbar-item spaced"
-        aria-label="Undo"
-      >
-        Undo
-      </button>
-      <button
-        disabled={!canRedo}
-        onClick={() => {
-          editor.dispatchCommand(REDO_COMMAND, undefined);
-        }}
-        className="toolbar-item"
-        aria-label="Redo"
-      >
-        Redo
-      </button>
-      <Divider />
+    <div
+      className="my-2 flex flex-row gap-2 divide-x divide-neutral-200"
+      ref={toolbarRef}
+    >
+      <div className="flex flex-row gap-2">
+        <ButtonCommand
+          title="Undo"
+          command={[UNDO_COMMAND, undefined]}
+          disabled={!canUndo}
+        >
+          <ArrowUndo20Regular />
+        </ButtonCommand>
+        <ButtonCommand
+          title="Redo"
+          command={[REDO_COMMAND, undefined]}
+          disabled={!canRedo}
+        >
+          <ArrowRedo20Regular />
+        </ButtonCommand>
+      </div>
+
       {supportedBlockTypes.has(blockType) && (
-        <>
+        <div className="pl-2">
           <button
             className="toolbar-item block-controls"
             onClick={() =>
@@ -169,7 +178,7 @@ export default function ToolbarPlugin() {
             aria-label="Formatting Options"
           >
             <span className="text">{blockTypeToBlockName[blockType]}</span>
-            Formatting Options
+            <ChevronDown20Regular />
           </button>
           {showBlockOptionsDropDown &&
             createPortal(
@@ -180,91 +189,73 @@ export default function ToolbarPlugin() {
               />,
               document.body,
             )}
-          <Divider />
-        </>
+        </div>
       )}
 
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
-        }}
-        className={`toolbar-item spaced ${isBold ? 'active' : ''}`}
-        aria-label="Format Bold"
-      >
-        Bold
-      </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
-        }}
-        className={`toolbar-item spaced ${isItalic ? 'active' : ''}`}
-        aria-label="Format Italics"
-      >
-        Italic
-      </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
-        }}
-        className={`toolbar-item spaced ${isUnderline ? 'active' : ''}`}
-        aria-label="Format Underline"
-      >
-        Underline
-      </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
-        }}
-        className={`toolbar-item spaced ${isStrikeThrough ? 'active' : ''}`}
-        aria-label="Format Strike Through"
-      >
-        Strike
-      </button>
-      <button
-        onClick={insertLink}
-        className={`toolbar-item spaced ${isLink ? 'active' : ''}`}
-        aria-label="Insert Link"
-      >
-        Link
-      </button>
-      {isLink && createPortal(<FloatingLinkEditor />, document.body)}
-      <Divider />
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
-        }}
-        className="toolbar-item spaced"
-        aria-label="Left Align"
-      >
-        left align
-      </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
-        }}
-        className="toolbar-item spaced"
-        aria-label="Center Align"
-      >
-        center align
-      </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
-        }}
-        className="toolbar-item spaced"
-        aria-label="Right Align"
-      >
-        right align
-      </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify');
-        }}
-        className="toolbar-item"
-        aria-label="Justify Align"
-      >
-        justify align
-      </button>
+      <div className="flex flex-row gap-2 pl-2">
+        <ButtonCommand
+          title="Format bold"
+          command={[FORMAT_TEXT_COMMAND, 'bold']}
+          active={isBold}
+        >
+          <TextBold20Regular />
+        </ButtonCommand>
+        <ButtonCommand
+          title="Format italic"
+          command={[FORMAT_TEXT_COMMAND, 'italic']}
+          active={isItalic}
+        >
+          <TextItalic20Regular />
+        </ButtonCommand>
+        <ButtonCommand
+          title="Format underline"
+          command={[FORMAT_TEXT_COMMAND, 'underline']}
+          active={isUnderline}
+        >
+          <TextUnderline20Regular />
+        </ButtonCommand>
+        <ButtonCommand
+          title="Format strike through"
+          command={[FORMAT_TEXT_COMMAND, 'strikethrough']}
+          active={isStrikeThrough}
+        >
+          <TextStrikethrough20Regular />
+        </ButtonCommand>
+        <ButtonCommand
+          title="Insert link"
+          command={[TOGGLE_LINK_COMMAND, !isLink ? 'https://' : undefined]}
+          active={isLink}
+        >
+          <Link20Regular />
+        </ButtonCommand>
+        {isLink && createPortal(<FloatingLinkEditor />, document.body)}
+      </div>
+      <div className="flex flex-row gap-2 pl-2">
+        <ButtonCommand
+          title="Left align"
+          command={[FORMAT_ELEMENT_COMMAND, 'left']}
+        >
+          <TextAlignLeft20Regular />
+        </ButtonCommand>
+        <ButtonCommand
+          title="Center align"
+          command={[FORMAT_ELEMENT_COMMAND, 'center']}
+        >
+          <TextAlignCenter20Regular />
+        </ButtonCommand>
+        <ButtonCommand
+          title="Right align"
+          command={[FORMAT_ELEMENT_COMMAND, 'right']}
+        >
+          <TextAlignRight20Regular />
+        </ButtonCommand>
+        <ButtonCommand
+          title="Justify align"
+          command={[FORMAT_ELEMENT_COMMAND, 'justify']}
+        >
+          <TextAlignJustify20Regular />
+        </ButtonCommand>
+      </div>
     </div>
   );
 }
