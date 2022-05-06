@@ -1,7 +1,6 @@
 import {
   ArrowRedo20Regular,
   ArrowUndo20Regular,
-  ChevronDown20Regular,
   Link20Regular,
   TextAlignCenter20Regular,
   TextAlignJustify20Regular,
@@ -32,34 +31,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { ButtonCommand } from '../components/ButtonCommand';
-import { BlockOptionsDropdownList } from '../components/BlockOptionsDropdownList';
 import {
   FloatingLinkEditor,
   getSelectedNode,
 } from '../components/FloatingLinkEditor';
+import { BlockOptionsDropdown } from '../components/BlockOptionsDropdown';
 
 const LowPriority = 1;
-
-const supportedBlockTypes = new Set([
-  'paragraph',
-  'quote',
-  'h1',
-  'h2',
-  'ul',
-  'ol',
-]);
-
-const blockTypeToBlockName: Record<string, string> = {
-  h1: 'Large Heading',
-  h2: 'Small Heading',
-  h3: 'Heading',
-  h4: 'Heading',
-  h5: 'Heading',
-  ol: 'Numbered List',
-  paragraph: 'Normal',
-  quote: 'Quote',
-  ul: 'Bulleted List',
-};
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -68,8 +46,6 @@ export default function ToolbarPlugin() {
   const [canRedo, setCanRedo] = useState(false);
   const [blockType, setBlockType] = useState('paragraph');
 
-  const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] =
-    useState(false);
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
@@ -168,29 +144,9 @@ export default function ToolbarPlugin() {
         </ButtonCommand>
       </div>
 
-      {supportedBlockTypes.has(blockType) && (
-        <div className="pl-2">
-          <button
-            className="toolbar-item block-controls"
-            onClick={() =>
-              setShowBlockOptionsDropDown(!showBlockOptionsDropDown)
-            }
-            aria-label="Formatting Options"
-          >
-            <span className="text">{blockTypeToBlockName[blockType]}</span>
-            <ChevronDown20Regular />
-          </button>
-          {showBlockOptionsDropDown &&
-            createPortal(
-              <BlockOptionsDropdownList
-                blockType={blockType}
-                toolbarRef={toolbarRef}
-                setShowBlockOptionsDropDown={setShowBlockOptionsDropDown}
-              />,
-              document.body,
-            )}
-        </div>
-      )}
+      <div className="pl-2">
+        <BlockOptionsDropdown blockType={blockType} />
+      </div>
 
       <div className="flex flex-row gap-2 pl-2">
         <ButtonCommand

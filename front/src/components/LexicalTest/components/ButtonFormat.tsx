@@ -6,13 +6,11 @@ import React from 'react';
 export interface ButtonFormatProps {
   title: string;
   isActive: boolean;
-  onClick(result: boolean): void;
   createElement(): ElementNode;
 }
 export function ButtonFormat({
   title,
   isActive,
-  onClick,
   createElement,
 }: ButtonFormatProps) {
   const [editor] = useLexicalComposerContext();
@@ -27,13 +25,11 @@ export function ButtonFormat({
         }
       });
     }
-    onClick(false);
   };
 
   return (
-    <button className="item" type="button" onClick={formatBlock}>
-      <span className="text">{title}</span>
-      {isActive && <span className="active" />}
+    <button type="button" onClick={formatBlock} title={title}>
+      {title}
     </button>
   );
 }
