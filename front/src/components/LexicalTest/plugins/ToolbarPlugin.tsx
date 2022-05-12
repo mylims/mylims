@@ -30,12 +30,12 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { BlockOptionsDropdown } from '../components/BlockOptionsDropdown';
 import { ButtonCommand } from '../components/ButtonCommand';
 import {
   FloatingLinkEditor,
   getSelectedNode,
 } from '../components/FloatingLinkEditor';
-import { BlockOptionsDropdown } from '../components/BlockOptionsDropdown';
 
 const LowPriority = 1;
 

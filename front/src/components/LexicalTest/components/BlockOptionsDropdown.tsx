@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
-import { $createParagraphNode, ElementNode, LexicalCommand } from 'lexical';
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
 } from '@lexical/list';
-import { Select } from '@/components/tailwind-ui';
-import { ButtonFormatList } from '@/components/LexicalTest/components/ButtonFormatList';
-import { ButtonFormat } from '@/components/LexicalTest/components/ButtonFormat';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
+import { $createParagraphNode, ElementNode, LexicalCommand } from 'lexical';
+import React, { useState } from 'react';
+
+import { ButtonFormat } from '@/components/LexicalTest/components/ButtonFormat';
+import { ButtonFormatList } from '@/components/LexicalTest/components/ButtonFormatList';
+import { Select } from '@/components/tailwind-ui';
 
 type Options = Record<'value' | 'label', string>;
 type BlockNodeType = Options & { createElement(): ElementNode };
@@ -61,7 +62,7 @@ export function BlockOptionsDropdown({ blockType }: BlockOptionsDropdownProps) {
         setSelect(option ?? BLOCK_NODE_TYPES[0]);
         editor.focus();
       }}
-      // @ts-ignore (A|B)[] != (A[]|B[])
+      // @ts-expect-error (A|B)[] != (A[]|B[])
       options={BLOCK_TYPES}
       selected={select}
       renderOption={(option: BlockType) => {
@@ -78,7 +79,7 @@ export function BlockOptionsDropdown({ blockType }: BlockOptionsDropdownProps) {
           <ButtonFormat
             title={option.label}
             isActive={blockType === option.value}
-            createElement={option.createElement}
+            createElement={() => option.createElement()}
           />
         );
       }}

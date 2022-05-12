@@ -28,8 +28,8 @@ export function ButtonFormat({
   };
 
   return (
-    <button type="button" onClick={formatBlock} title={title}>
+    <div onClick={formatBlock} title={title}>
       {title}
-    </button>
+    </div>
   );
 }

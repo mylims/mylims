@@ -8,14 +8,16 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import LinkPlugin from '@lexical/react/LexicalLinkPlugin';
 import ListPlugin from '@lexical/react/LexicalListPlugin';
 import LexicalMarkdownShortcutPlugin from '@lexical/react/LexicalMarkdownShortcutPlugin';
+import LexicalOnChangePlugin from '@lexical/react/LexicalOnChangePlugin';
 import RichTextPlugin from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
 import React from 'react';
 
+import { SampleLinkNode } from './models/SampleLink';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
-import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
+import SampleLinkPlugin from './plugins/SampleLinkPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import ExampleTheme from './themes/ExampleTheme';
 
@@ -47,6 +49,7 @@ const editorConfig = {
     TableRowNode,
     AutoLinkNode,
     LinkNode,
+    SampleLinkNode,
   ],
 };
 
@@ -64,12 +67,17 @@ export default function Editor() {
           />
           <HistoryPlugin />
           <AutoFocusPlugin />
-          <CodeHighlightPlugin />
           <ListPlugin />
           <LinkPlugin />
           <AutoLinkPlugin />
           <ListMaxIndentLevelPlugin maxDepth={7} />
           <LexicalMarkdownShortcutPlugin />
+          {/* <LexicalOnChangePlugin
+            onChange={(editorState) => console.log(editorState)}
+          /> */}
+
+          {/* Custom plugins */}
+          <SampleLinkPlugin />
         </div>
       </div>
     </LexicalComposer>
