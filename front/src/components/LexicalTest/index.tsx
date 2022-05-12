@@ -1,4 +1,3 @@
-import { CodeHighlightNode, CodeNode } from '@lexical/code';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
 import { ListItemNode, ListNode } from '@lexical/list';
 import AutoFocusPlugin from '@lexical/react/LexicalAutoFocusPlugin';
@@ -7,7 +6,6 @@ import ContentEditable from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import LinkPlugin from '@lexical/react/LexicalLinkPlugin';
 import ListPlugin from '@lexical/react/LexicalListPlugin';
-import LexicalMarkdownShortcutPlugin from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import LexicalOnChangePlugin from '@lexical/react/LexicalOnChangePlugin';
 import RichTextPlugin from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
@@ -42,8 +40,6 @@ const editorConfig = {
     ListNode,
     ListItemNode,
     QuoteNode,
-    CodeNode,
-    CodeHighlightNode,
     TableNode,
     TableCellNode,
     TableRowNode,
@@ -71,7 +67,6 @@ export default function Editor() {
           <LinkPlugin />
           <AutoLinkPlugin />
           <ListMaxIndentLevelPlugin maxDepth={7} />
-          <LexicalMarkdownShortcutPlugin />
           {/* <LexicalOnChangePlugin
             onChange={(editorState) => console.log(editorState)}
           /> */}
