@@ -72,10 +72,10 @@ export function NotebookForm({
                   </div>
                 </>
               ) : null}
-              <LexicalTest />
             </div>
             <div className="lg:w-2/3">
-              <RichTextImageFieldRHF name="content" label="Content" />
+              <LexicalTest />
+              {/* <RichTextImageFieldRHF name="content" label="Content" /> */}
             </div>
           </div>
         </Card.Body>
