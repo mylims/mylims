@@ -15,6 +15,7 @@ import {
 import { formatDate } from '@/utils/formatFields';
 
 import { UpdateNotebook, StateNotebook } from '../models';
+import { SamplesTable } from '@/pages/notebook/components/SamplesTable';
 
 interface NotebookFormProps {
   loading: boolean;
@@ -57,6 +58,10 @@ export function NotebookForm({
                 <MultiSelect name="labels" label="Labels" />
               </div>
               <InputFieldRHF name="description" label="Description" />
+              <SamplesTable
+                samples={initialValue.samples.map((sample) => sample.id)}
+                addSample={console.log}
+              />
               {initialValue.measurements ? (
                 <>
                   <div className="mt-2 flex flex-row gap-4">
