@@ -57,6 +57,9 @@ query Sample($id: ID!) {
   sample(id: $id) {
     __typename
     ...SampleFields
+    kind {
+      id
+    }
     attachments {
       id
       date

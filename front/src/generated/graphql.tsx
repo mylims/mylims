@@ -1333,6 +1333,7 @@ export type SampleQuery = {
     createdAt: any;
     sampleCode: Array<string>;
     description?: any | null;
+    kind: { id: string };
     attachments: Array<{
       id: string;
       date: any;
@@ -2979,6 +2980,9 @@ export const SampleDocument = gql`
     sample(id: $id) {
       __typename
       ...SampleFields
+      kind {
+        id
+      }
       attachments {
         id
         date

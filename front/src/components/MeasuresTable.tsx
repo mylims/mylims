@@ -57,7 +57,7 @@ function MeasurementTypeTable({
         className="divide-y divide-neutral-300 rounded-md border border-neutral-300"
       >
         {measurements.map(({ id, createdAt, file, title }) => {
-          const header = title || (file && file.filename) || id;
+          const header = title || file?.filename || id;
           return (
             <li
               key={id}
