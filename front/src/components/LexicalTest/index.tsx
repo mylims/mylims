@@ -16,7 +16,7 @@ import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import SampleLinkPlugin from './plugins/SampleLinkPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
-import ExampleTheme from './themes/ExampleTheme';
+import TailwindTheme from './themes/TailwindTheme';
 
 function Placeholder() {
   return (
@@ -28,7 +28,7 @@ function Placeholder() {
 
 const editorConfig = {
   // The editor theme
-  theme: ExampleTheme,
+  theme: TailwindTheme,
   // Handling of errors during update
   onError(error: Error) {
     throw error;
