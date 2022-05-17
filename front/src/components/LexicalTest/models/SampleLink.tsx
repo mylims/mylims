@@ -1,10 +1,24 @@
-import { addClassNamesToElement } from '@lexical/utils';
-import { EditorConfig, LexicalNode, NodeKey, TextNode } from 'lexical';
-import React from 'react';
+import {
+  $getNodeByKey,
+  DecoratorNode,
+  LexicalEditor,
+  LexicalNode,
+  NodeKey,
+} from 'lexical';
+import React, { ReactNode } from 'react';
 
-export class SampleLinkNode extends TextNode {
-  public __sampleId: string;
-  public __sampleType: string;
+import { SampleLink } from '../components/SampleLink';
+
+type SampleLinkStatus =
+  | { status: 'idle' }
+  | { status: 'waiting' }
+  | { status: 'success'; type: string; id: string }
+  | { status: 'error'; error: string };
+const SAMPLE_LEVELS = ['wafer', 'sample', 'dye', 'device'];
+
+export class SampleLinkNode extends DecoratorNode<ReactNode> {
+  public __sampleCode: string;
+  private __queryStatus: SampleLinkStatus;
 
   public static getType(): string {
     return 'SampleLink';
@@ -12,45 +26,73 @@ export class SampleLinkNode extends TextNode {
 
   public static clone(node: SampleLinkNode): SampleLinkNode {
     return new SampleLinkNode(
-      node.__sampleId,
-      node.__sampleType,
-      node.__text,
+      node.__sampleCode,
+      node.__queryStatus,
       node.__key,
     );
   }
 
   public constructor(
-    sampleId: string,
-    sampleType: string,
-    text: string,
+    sampleCode: string,
+    queryStatus: SampleLinkStatus,
     key?: NodeKey,
   ) {
-    super(text, key);
-    this.__sampleId = sampleId;
-    this.__sampleType = sampleType;
+    super(key);
+    this.__sampleCode = sampleCode;
+    this.__queryStatus = queryStatus;
   }
 
-  public createDOM(config: EditorConfig) {
-    const element = super.createDOM(config);
-    addClassNamesToElement(element, 'bg-primary-200');
-    return element;
+  public createDOM(): HTMLElement {
+    return document.createElement('span');
   }
 
-  public canInsertTextBefore(): boolean {
+  public updateDOM(): false {
     return false;
   }
 
-  public isTextEntity(): true {
-    return true;
+  public decorate(editor: LexicalEditor): ReactNode {
+    return (
+      <SampleLink
+        keyNode={this.__key}
+        sampleCode={this.__sampleCode}
+        setSampleCode={(sampleCode) =>
+          editor.update(() => this.setSampleCode(sampleCode))
+        }
+      />
+    );
+  }
+
+  public setSampleCode(sampleCode: string) {
+    const self = this.getWritable<SampleLinkNode>();
+    self.__sampleCode = sampleCode;
+  }
+
+  public async queryStatus() {
+    const self = this.getWritable<SampleLinkNode>();
+    const sampleCode = this.__sampleCode.split('_');
+    const level = SAMPLE_LEVELS[sampleCode.length - 1];
+    if (level === undefined) {
+      self.__queryStatus = { status: 'error', error: 'invalid sample code' };
+    } else {
+      self.__queryStatus = { status: 'waiting' };
+      try {
+        const { id, type } = await this._getSampleByCode(sampleCode);
+        self.__queryStatus = { status: 'success', type, id };
+      } catch (error) {
+        self.__queryStatus = { status: 'error', error: 'not found' };
+      }
+    }
+  }
+
+  private async _getSampleByCode(
+    sampleCode: string[],
+  ): Promise<{ id: string; type: string }> {
+    throw new Error('Method not implemented.');
   }
 }
 
-export function $createSampleLinkNode(
-  sampleId: string,
-  sampleType: string,
-  text: string,
-): SampleLinkNode {
-  return new SampleLinkNode(sampleId, sampleType, text);
+export function $createSampleLinkNode(text: string): SampleLinkNode {
+  return new SampleLinkNode(text, { status: 'idle' });
 }
 
 export function $isSampleLinkNode(node?: LexicalNode): boolean {
