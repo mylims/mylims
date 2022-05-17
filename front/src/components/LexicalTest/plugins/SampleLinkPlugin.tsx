@@ -6,8 +6,7 @@ import {
   $createSampleLinkNode,
   SampleLinkNode,
 } from '../models/SampleLinkNode';
-
-const REGEX = /(?<sampleCode>[#\uFF03][A-z0-9_]+)/i;
+import { SAMPLE_REGEX } from '../utils/regex';
 
 export type InsertSampleLinkPayload = Readonly<{
   id: string;
@@ -21,12 +20,14 @@ export default function SampleLinkPlugin() {
 
   useEffect(() => {
     if (!editor.hasNodes([SampleLinkNode])) {
-      throw new Error('HashtagPlugin: SampleLinkNode not registered on editor');
+      throw new Error(
+        'SampleLinkNode: SampleLinkNode not registered on editor',
+      );
     }
   }, [editor]);
 
   const getHashtagMatch = useCallback((text: string) => {
-    const matchArr = REGEX.exec(text);
+    const matchArr = SAMPLE_REGEX.exec(text);
     if (matchArr === null) {
       return null;
     }

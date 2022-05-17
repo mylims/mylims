@@ -1,5 +1,4 @@
 import { CheckIcon, XIcon, ChipIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 
 import {
@@ -9,6 +8,7 @@ import {
   Color,
   useDebounce,
 } from '@/components/tailwind-ui';
+import { SAMPLE_EXACT_REGEX } from '../utils/regex';
 
 enum IconState {
   IDLE = 'IDLE',
@@ -46,11 +46,13 @@ function getColor(state: IconState) {
 interface SampleLinkProps {
   keyNode: string;
   sampleCode: string;
+  setFocusOff(): void;
   setSampleCode(sampleCode: string): void;
 }
 export function SampleLink({
   keyNode,
   sampleCode,
+  setFocusOff,
   setSampleCode,
 }: SampleLinkProps) {
   const id = `sample-link-${keyNode}`;
@@ -84,19 +86,26 @@ export function SampleLink({
       </Button>
       <label
         htmlFor={id}
-        className={clsx(
-          'rounded-r-md border bg-white py-1 px-2 focus-within:ring-1',
-          'relative flex flex-1 flex-row items-center text-base shadow-sm sm:text-sm',
-          'border-neutral-300 placeholder-neutral-400 focus-within:border-primary-500',
-          'focus-within:ring-primary-500 disabled:bg-neutral-50 disabled:text-neutral-500',
-        )}
+        className="relative flex flex-1 flex-row items-center rounded-r-md border border-neutral-300 bg-white py-1 px-2 text-base placeholder-neutral-400 shadow-sm focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500 disabled:bg-neutral-50 disabled:text-neutral-500 sm:text-sm"
       >
         <input
           type="text"
           id={id}
           className="flex-1 border-none p-0 focus:outline-none focus:ring-0 sm:text-sm"
           value={sampleCode}
-          onChange={(e) => setSampleCode(e.target.value)}
+          onKeyDown={(e) => {
+            const events = ['Enter', 'Tab', ',', ' '];
+            if (events.includes(e.key)) {
+              e.preventDefault();
+              setFocusOff();
+            }
+          }}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (SAMPLE_EXACT_REGEX.exec(value) !== null) {
+              setSampleCode(value);
+            }
+          }}
           size={sampleCode.length}
           autoFocus
         />

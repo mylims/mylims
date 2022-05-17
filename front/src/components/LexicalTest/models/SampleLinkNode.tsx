@@ -55,9 +55,12 @@ export class SampleLinkNode extends DecoratorNode<ReactNode> {
       <SampleLink
         keyNode={this.__key}
         sampleCode={this.__sampleCode}
-        setSampleCode={(sampleCode) =>
-          editor.update(() => this.setSampleCode(sampleCode))
-        }
+        setSampleCode={(sampleCode) => {
+          editor.update(() => this.setSampleCode(sampleCode));
+        }}
+        setFocusOff={() => {
+          editor.update(() => this.selectNext());
+        }}
       />
     );
   }
