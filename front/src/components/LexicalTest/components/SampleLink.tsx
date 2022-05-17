@@ -1,3 +1,7 @@
+import { CheckIcon, XIcon, ChipIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
+import React, { useEffect, useState } from 'react';
+
 import {
   Button,
   Spinner,
@@ -5,10 +9,6 @@ import {
   Color,
   useDebounce,
 } from '@/components/tailwind-ui';
-import { CheckIcon, XIcon, ChipIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 enum IconState {
   IDLE = 'IDLE',

@@ -1,7 +1,6 @@
-import React from 'react';
-import { useSampleQuery } from '@/generated/graphql';
-import { formatDate } from '@/utils/formatFields';
 import { InformationCircleIcon } from '@heroicons/react/outline';
+import React from 'react';
+
 import { LinkIcon } from '@/components/LinkButton';
 import {
   Badge,
@@ -13,6 +12,8 @@ import {
   Size,
   Variant,
 } from '@/components/tailwind-ui';
+import { useSampleQuery } from '@/generated/graphql';
+import { formatDate } from '@/utils/formatFields';
 
 interface SamplesTableProps {
   samples: string[];
@@ -70,7 +71,7 @@ function SampleItem({ sample }: SampleItemProps) {
     variables: { id: sample },
   });
   if (error)
-    return <div className="bg-danger-50 text-danger-700">{error.message}</div>;
+    {return <div className="bg-danger-50 text-danger-700">{error.message}</div>;}
   if (loading) return <div>Loading...</div>;
   if (!data) return <div className="bg-danger-50 text-danger-700">No data</div>;
 

@@ -8,7 +8,7 @@ import {
   COMMAND_PRIORITY_HIGH,
   RangeSelection,
 } from 'lexical';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 function getElementNodesInSelection(selection: RangeSelection) {
   const nodesInSelection = selection.getNodes();

@@ -15,7 +15,8 @@ import {
 import { formatDate } from '@/utils/formatFields';
 
 import { UpdateNotebook, StateNotebook } from '../models';
-import { SamplesTable } from '@/pages/notebook/components/SamplesTable';
+
+import { SamplesTable } from './SamplesTable';
 
 interface NotebookFormProps {
   loading: boolean;

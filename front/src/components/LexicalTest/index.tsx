@@ -9,7 +9,6 @@ import ListPlugin from '@lexical/react/LexicalListPlugin';
 import LexicalOnChangePlugin from '@lexical/react/LexicalOnChangePlugin';
 import RichTextPlugin from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
 import React from 'react';
 
 import { SampleLinkNode } from './models/SampleLinkNode';
@@ -40,9 +39,6 @@ const editorConfig = {
     ListNode,
     ListItemNode,
     QuoteNode,
-    TableNode,
-    TableCellNode,
-    TableRowNode,
     AutoLinkNode,
     LinkNode,
     SampleLinkNode,

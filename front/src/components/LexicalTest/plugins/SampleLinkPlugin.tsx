@@ -1,6 +1,6 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { createCommand, LexicalCommand, TextNode } from 'lexical';
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import {
   $createSampleLinkNode,
@@ -69,7 +69,7 @@ export default function SampleLinkPlugin() {
         match = getHashtagMatch(currentNode.getTextContent());
       }
     });
-  }, [editor]);
+  }, [editor, getHashtagMatch]);
 
   return null;
 }
