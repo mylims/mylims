@@ -1,37 +1,13 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import useLexicalTextEntity from '@lexical/react/useLexicalTextEntity';
 import { createCommand, LexicalCommand, TextNode } from 'lexical';
-import React, { useCallback, useEffect, useReducer } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useCallback, useEffect } from 'react';
 
-import { SampleLink } from '@/components/LexicalTest/components/SampleLink';
-
-import { $createSampleLinkNode, SampleLinkNode } from '../models/SampleLink';
+import {
+  $createSampleLinkNode,
+  SampleLinkNode,
+} from '../models/SampleLinkNode';
 
 const REGEX = /(?<sampleCode>[#\uFF03][A-z0-9_]+)/i;
-
-function upsertWrapperToBody(wrapperId: string) {
-  let element = document.getElementById(wrapperId);
-  if (element) return element;
-  const wrapperElement = document.createElement('div');
-  wrapperElement.setAttribute('id', wrapperId);
-  document.body.appendChild(wrapperElement);
-  return wrapperElement;
-}
-
-type ActionType =
-  | { type: 'created'; key: string }
-  | { type: 'destroyed'; key: string };
-function reducer(state: string[], action: ActionType) {
-  switch (action.type) {
-    case 'created':
-      return [...state, action.key];
-    case 'destroyed':
-      return state.filter((key) => key !== action.key);
-    default:
-      return state;
-  }
-}
 
 export type InsertSampleLinkPayload = Readonly<{
   id: string;
@@ -42,19 +18,12 @@ export const INSERT_SAMPLE_LINK_COMMAND: LexicalCommand<InsertSampleLinkPayload>
   createCommand();
 export default function SampleLinkPlugin() {
   const [editor] = useLexicalComposerContext();
-  const [state, dispatch] = useReducer(reducer, []);
 
   useEffect(() => {
     if (!editor.hasNodes([SampleLinkNode])) {
       throw new Error('HashtagPlugin: SampleLinkNode not registered on editor');
     }
   }, [editor]);
-
-  const createSampleLinkNode = useCallback(
-    (textNode: TextNode) =>
-      $createSampleLinkNode('t', 't', textNode.getTextContent()),
-    [],
-  );
 
   const getHashtagMatch = useCallback((text: string) => {
     const matchArr = REGEX.exec(text);
@@ -68,27 +37,39 @@ export default function SampleLinkPlugin() {
     };
   }, []);
 
-  useLexicalTextEntity<SampleLinkNode>(
-    getHashtagMatch,
-    SampleLinkNode,
-    createSampleLinkNode,
-  );
-
-  // createPortal(<SampleLink />, document.body);
   useEffect(() => {
-    return editor.registerMutationListener(SampleLinkNode, (mutatedNodes) => {
-      for (let [key, type] of mutatedNodes) dispatch({ key, type });
-    });
-  }, [editor, dispatch]);
+    return editor.registerNodeTransform(TextNode, (textNode: TextNode) => {
+      let match = getHashtagMatch(textNode.getTextContent());
 
-  return (
-    <>
-      {state.map((nodeKey) => {
-        const element = editor.getElementByKey(nodeKey);
-        if (!element) return null;
-        const wrapper = upsertWrapperToBody(`${nodeKey}-sample-link`);
-        return createPortal(<SampleLink nodeKey={nodeKey} />, wrapper);
-      })}
-    </>
-  );
+      let currentNode = textNode;
+      while (match !== null) {
+        let nodeToReplace: TextNode;
+        currentNode.markDirty();
+
+        if (match.start === 0) {
+          [nodeToReplace, currentNode] = currentNode.splitText(match.end);
+        } else {
+          [, nodeToReplace, currentNode] = currentNode.splitText(
+            match.start,
+            match.end,
+          );
+        }
+        const replacementNode = $createSampleLinkNode(
+          nodeToReplace.getTextContent(),
+        );
+        nodeToReplace.replace(replacementNode);
+
+        // Wait to this be solved https://github.com/facebook/lexical/issues/2161
+        if (!currentNode) {
+          replacementNode.selectNext();
+          return;
+        } else {
+          currentNode.select(0, 0);
+        }
+        match = getHashtagMatch(currentNode.getTextContent());
+      }
+    });
+  }, [editor]);
+
+  return null;
 }

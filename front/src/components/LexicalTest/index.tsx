@@ -12,7 +12,7 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
 import React from 'react';
 
-import { SampleLinkNode } from './models/SampleLink';
+import { SampleLinkNode } from './models/SampleLinkNode';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import SampleLinkPlugin from './plugins/SampleLinkPlugin';
