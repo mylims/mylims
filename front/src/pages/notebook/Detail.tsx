@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
@@ -8,6 +8,7 @@ import {
   useNotebookQuery,
   useUpdateNotebookMutation,
 } from '@/generated/graphql';
+import { notebookInputToState } from '@/pages/notebook/adapters';
 import { useSubmitNotebook } from '@/pages/notebook/hooks/useSubmitNotebook';
 
 import { NotebookForm } from './components/NotebookForm';
@@ -24,6 +25,10 @@ export default function NotebookDetail() {
     error: queryError,
   } = useNotebookQuery({ variables: { id } });
 
+  const notebook = useMemo(() => {
+    return notebookInputToState(data?.notebook);
+  }, [data]);
+
   const { onSubmit, error: authError } =
     useSubmitNotebook<UpdateNotebookMutation>({
       async submissionFunc(input) {
@@ -35,7 +40,7 @@ export default function NotebookDetail() {
     });
 
   if (queryLoading) return <Spinner className="h-10 w-10 text-danger-500" />;
-  if (updateError || queryError || !data) {
+  if (updateError || queryError || !notebook) {
     return (
       <Alert title="Error while fetching notebook" type={AlertType.ERROR}>
         {authError ? `Failed to get auth status : ${authError.message}` : null}
@@ -44,7 +49,6 @@ export default function NotebookDetail() {
       </Alert>
     );
   }
-  const { notebook } = data;
 
   return (
     <NotebookForm

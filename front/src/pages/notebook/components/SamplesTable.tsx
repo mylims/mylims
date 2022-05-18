@@ -2,53 +2,22 @@ import { InformationCircleIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import { LinkIcon } from '@/components/LinkButton';
-import {
-  Badge,
-  BadgeVariant,
-  Button,
-  Color,
-  Input,
-  Select,
-  Size,
-  Variant,
-} from '@/components/tailwind-ui';
+import { Badge, BadgeVariant, Color } from '@/components/tailwind-ui';
 import { useSampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
+
+import SampleSearch from './SampleSearch';
 
 interface SamplesTableProps {
   samples: string[];
   addSample(sample: string): void;
 }
 export function SamplesTable({ samples, addSample }: SamplesTableProps) {
-  const options: string[] = ['wafer', 'sample', 'dye', 'device'];
   return (
     <div>
       <div className="my-2 flex flex-row flex-wrap gap-4">
         <div className="text-xl font-semibold">Inventory</div>
-        <div className="inline-flex">
-          <Select
-            options={options}
-            label="Kind"
-            hiddenLabel
-            selected="wafer"
-            className="w-28"
-          />
-          <Input
-            name="test"
-            label="test"
-            hiddenLabel
-            trailingAddon={
-              <Button
-                color={Color.neutral}
-                variant={Variant.secondary}
-                size={Size.xSmall}
-                onClick={() => console.log('test')}
-              >
-                + Add
-              </Button>
-            }
-          />
-        </div>
+        <SampleSearch addSample={(val) => addSample(val)} />
       </div>
       <div className="divide-y divide-neutral-300 rounded-md border border-neutral-300">
         {samples.length > 0 ? (
@@ -70,8 +39,9 @@ function SampleItem({ sample }: SampleItemProps) {
   const { data, error, loading } = useSampleQuery({
     variables: { id: sample },
   });
-  if (error)
-    {return <div className="bg-danger-50 text-danger-700">{error.message}</div>;}
+  if (error) {
+    return <div className="bg-danger-50 text-danger-700">{error.message}</div>;
+  }
   if (loading) return <div>Loading...</div>;
   if (!data) return <div className="bg-danger-50 text-danger-700">No data</div>;
 

@@ -428,8 +428,10 @@ export type Query = {
   notebooks: NotebookPage;
   readyChecks: Array<ReadyCheckDescriptor>;
   sample: Sample;
+  sampleByCode: Sample;
   sampleKind: SampleKind;
   samples: SamplePage;
+  samplesByCode: Array<Sample>;
   users: Array<User>;
   usersInput: UserPage;
 };
@@ -499,6 +501,10 @@ export type QuerySampleArgs = {
   id: Scalars['ID'];
 };
 
+export type QuerySampleByCodeArgs = {
+  sampleCode: Array<Scalars['String']>;
+};
+
 export type QuerySampleKindArgs = {
   id: Scalars['ID'];
 };
@@ -509,6 +515,12 @@ export type QuerySamplesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   sortBy?: InputMaybe<SampleSortInput>;
+};
+
+export type QuerySamplesByCodeArgs = {
+  kind?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  sampleCode: Scalars['String'];
 };
 
 export type QueryUsersInputArgs = {
@@ -1333,7 +1345,7 @@ export type SampleQuery = {
     createdAt: any;
     sampleCode: Array<string>;
     description?: any | null;
-    kind: { id: string };
+    kind: { __typename: 'SampleKind'; id: string };
     attachments: Array<{
       id: string;
       date: any;
@@ -1391,6 +1403,64 @@ export type SampleKindQuery = {
     schema: any;
     description?: string | null;
   };
+};
+
+export type SampleByCodeQueryVariables = Exact<{
+  sampleCode: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+export type SampleByCodeQuery = {
+  sampleByCode: {
+    __typename: 'Sample';
+    id: string;
+    meta: any;
+    title?: string | null;
+    uuid10: string;
+    labels: Array<string>;
+    project?: string | null;
+    comment?: string | null;
+    createdAt: any;
+    sampleCode: Array<string>;
+    description?: any | null;
+    kind: { __typename: 'SampleKind'; id: string };
+    user?: {
+      id: string;
+      emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
+      usernames: Array<string>;
+    } | null;
+  };
+};
+
+export type SamplesByCodeQueryVariables = Exact<{
+  sampleCode: Scalars['String'];
+  kind?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type SamplesByCodeQuery = {
+  samplesByCode: Array<{
+    __typename: 'Sample';
+    id: string;
+    meta: any;
+    title?: string | null;
+    uuid10: string;
+    labels: Array<string>;
+    project?: string | null;
+    comment?: string | null;
+    createdAt: any;
+    sampleCode: Array<string>;
+    description?: any | null;
+    kind: { __typename: 'SampleKind'; id: string };
+    user?: {
+      id: string;
+      emails: Array<string>;
+      lastName?: string | null;
+      firstName?: string | null;
+      usernames: Array<string>;
+    } | null;
+  }>;
 };
 
 export type CreateSampleMutationVariables = Exact<{
@@ -2981,6 +3051,7 @@ export const SampleDocument = gql`
       __typename
       ...SampleFields
       kind {
+        __typename
         id
       }
       attachments {
@@ -3119,6 +3190,146 @@ export type SampleKindQueryResult = Apollo.QueryResult<
 >;
 export function refetchSampleKindQuery(variables: SampleKindQueryVariables) {
   return { query: SampleKindDocument, variables: variables };
+}
+export const SampleByCodeDocument = gql`
+  query SampleByCode($sampleCode: [String!]!) {
+    sampleByCode(sampleCode: $sampleCode) {
+      __typename
+      ...SampleFields
+      kind {
+        __typename
+        id
+      }
+    }
+  }
+  ${SampleFieldsFragmentDoc}
+`;
+
+/**
+ * __useSampleByCodeQuery__
+ *
+ * To run a query within a React component, call `useSampleByCodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSampleByCodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSampleByCodeQuery({
+ *   variables: {
+ *      sampleCode: // value for 'sampleCode'
+ *   },
+ * });
+ */
+export function useSampleByCodeQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    SampleByCodeQuery,
+    SampleByCodeQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    SampleByCodeQuery,
+    SampleByCodeQueryVariables
+  >(SampleByCodeDocument, options);
+}
+export function useSampleByCodeLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    SampleByCodeQuery,
+    SampleByCodeQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    SampleByCodeQuery,
+    SampleByCodeQueryVariables
+  >(SampleByCodeDocument, options);
+}
+export type SampleByCodeQueryHookResult = ReturnType<
+  typeof useSampleByCodeQuery
+>;
+export type SampleByCodeLazyQueryHookResult = ReturnType<
+  typeof useSampleByCodeLazyQuery
+>;
+export type SampleByCodeQueryResult = Apollo.QueryResult<
+  SampleByCodeQuery,
+  SampleByCodeQueryVariables
+>;
+export function refetchSampleByCodeQuery(
+  variables: SampleByCodeQueryVariables,
+) {
+  return { query: SampleByCodeDocument, variables: variables };
+}
+export const SamplesByCodeDocument = gql`
+  query SamplesByCode($sampleCode: String!, $kind: String, $limit: Int) {
+    samplesByCode(sampleCode: $sampleCode, kind: $kind, limit: $limit) {
+      __typename
+      ...SampleFields
+      kind {
+        __typename
+        id
+      }
+    }
+  }
+  ${SampleFieldsFragmentDoc}
+`;
+
+/**
+ * __useSamplesByCodeQuery__
+ *
+ * To run a query within a React component, call `useSamplesByCodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSamplesByCodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSamplesByCodeQuery({
+ *   variables: {
+ *      sampleCode: // value for 'sampleCode'
+ *      kind: // value for 'kind'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSamplesByCodeQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    SamplesByCodeQuery,
+    SamplesByCodeQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    SamplesByCodeQuery,
+    SamplesByCodeQueryVariables
+  >(SamplesByCodeDocument, options);
+}
+export function useSamplesByCodeLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    SamplesByCodeQuery,
+    SamplesByCodeQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    SamplesByCodeQuery,
+    SamplesByCodeQueryVariables
+  >(SamplesByCodeDocument, options);
+}
+export type SamplesByCodeQueryHookResult = ReturnType<
+  typeof useSamplesByCodeQuery
+>;
+export type SamplesByCodeLazyQueryHookResult = ReturnType<
+  typeof useSamplesByCodeLazyQuery
+>;
+export type SamplesByCodeQueryResult = Apollo.QueryResult<
+  SamplesByCodeQuery,
+  SamplesByCodeQueryVariables
+>;
+export function refetchSamplesByCodeQuery(
+  variables: SamplesByCodeQueryVariables,
+) {
+  return { query: SamplesByCodeDocument, variables: variables };
 }
 export const CreateSampleDocument = gql`
   mutation CreateSample($input: SampleInput!) {

@@ -8,6 +8,7 @@ import {
   Color,
   useDebounce,
 } from '@/components/tailwind-ui';
+
 import { SAMPLE_EXACT_REGEX } from '../utils/regex';
 
 enum IconState {

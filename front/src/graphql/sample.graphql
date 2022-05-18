@@ -58,6 +58,7 @@ query Sample($id: ID!) {
     __typename
     ...SampleFields
     kind {
+      __typename
       id
     }
     attachments {
@@ -89,6 +90,28 @@ query Sample($id: ID!) {
 query SampleKind($id: ID!) {
   sampleKind(id: $id) {
     ...SampleKindFields
+  }
+}
+
+query SampleByCode($sampleCode: [String!]!) {
+  sampleByCode(sampleCode: $sampleCode) {
+    __typename
+    ...SampleFields
+    kind {
+      __typename
+      id
+    }
+  }
+}
+
+query SamplesByCode($sampleCode: String!, $kind: String, $limit: Int) {
+  samplesByCode(sampleCode: $sampleCode, kind: $kind, limit: $limit) {
+    __typename
+    ...SampleFields
+    kind {
+      __typename
+      id
+    }
   }
 }
 
