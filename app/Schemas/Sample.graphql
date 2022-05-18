@@ -8,6 +8,8 @@ type Query {
   ): SamplePage!
   sample(id: ID!): Sample!
   sampleKind(id: ID!): SampleKind!
+  sampleByCode(sampleCode: [String!]!): Sample!
+  samplesByCode(sampleCode: String!, kind: String, limit: Int): [Sample!]!
 }
 
 type Mutation {

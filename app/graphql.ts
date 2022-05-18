@@ -460,8 +460,10 @@ export type GqlQuery = {
   notebooks: GqlNotebookPage;
   readyChecks: Array<GqlReadyCheckDescriptor>;
   sample: GqlSample;
+  sampleByCode: GqlSample;
   sampleKind: GqlSampleKind;
   samples: GqlSamplePage;
+  samplesByCode: Array<GqlSample>;
   users: Array<GqlUser>;
   usersInput: GqlUserPage;
 };
@@ -531,6 +533,10 @@ export type GqlQuerySampleArgs = {
   id: Scalars['ID'];
 };
 
+export type GqlQuerySampleByCodeArgs = {
+  sampleCode: Array<Scalars['String']>;
+};
+
 export type GqlQuerySampleKindArgs = {
   id: Scalars['ID'];
 };
@@ -541,6 +547,12 @@ export type GqlQuerySamplesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   sortBy?: InputMaybe<GqlSampleSortInput>;
+};
+
+export type GqlQuerySamplesByCodeArgs = {
+  kind?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  sampleCode: Scalars['String'];
 };
 
 export type GqlQueryUsersInputArgs = {
@@ -1520,6 +1532,12 @@ export type GqlQueryResolvers<
     ContextType,
     RequireFields<GqlQuerySampleArgs, 'id'>
   >;
+  sampleByCode?: Resolver<
+    GqlResolversTypes['Sample'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQuerySampleByCodeArgs, 'sampleCode'>
+  >;
   sampleKind?: Resolver<
     GqlResolversTypes['SampleKind'],
     ParentType,
@@ -1531,6 +1549,12 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlQuerySamplesArgs, 'kind'>
+  >;
+  samplesByCode?: Resolver<
+    Array<GqlResolversTypes['Sample']>,
+    ParentType,
+    ContextType,
+    RequireFields<GqlQuerySamplesByCodeArgs, 'sampleCode'>
   >;
   users?: Resolver<Array<GqlResolversTypes['User']>, ParentType, ContextType>;
   usersInput?: Resolver<

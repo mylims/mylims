@@ -11,6 +11,7 @@ import { Sample } from 'App/Models/Sample';
 import { SampleKind } from 'App/Models/SampleKind';
 import User from 'App/Models/User';
 import availabilitySample from 'App/Queries/availabilitySample';
+import sampleCodeFlat from 'App/Queries/sampleCodeFlat';
 import {
   GqlMeasurementTypes,
   GqlResolvers,
@@ -188,6 +189,19 @@ const resolvers: GqlResolvers = {
       if (sampleKind) return sampleKind;
 
       throw new UserInputError('Id not found', { argumentName: 'id' });
+    },
+    async sampleByCode(_, { sampleCode }) {
+      const sample = await Sample.findBy('sampleCode', sampleCode);
+      if (sample) return sample;
+
+      throw new UserInputError('Code not found', {
+        argumentName: 'sampleCode',
+      });
+    },
+    async samplesByCode(_, { sampleCode, kind, limit }) {
+      let sampleCursor = await sampleCodeFlat(sampleCode, kind);
+      if (limit) sampleCursor = sampleCursor.limit(limit);
+      return sampleCursor.toArray();
     },
   },
   Mutation: {
