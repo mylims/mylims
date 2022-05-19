@@ -1,5 +1,5 @@
-import { CheckIcon, XIcon, ChipIcon } from '@heroicons/react/outline';
-import React, { useEffect, useState } from 'react';
+import { ChipIcon } from '@heroicons/react/outline';
+import React, { useEffect } from 'react';
 
 import {
   Button,
@@ -10,35 +10,37 @@ import {
 } from '@/components/tailwind-ui';
 
 import { SAMPLE_EXACT_REGEX } from '../utils/regex';
+import { useSampleByCodeLazyQuery } from '@/generated/graphql';
+import { useNavigate } from 'react-router-dom';
 
-enum IconState {
-  IDLE = 'IDLE',
-  WAITING = 'WAITING',
-  SUCCESS = 'SUCCESS',
-  ERROR = 'ERROR',
+export enum SampleStatus {
+  waiting = 'waiting',
+  success = 'success',
+  error = 'error',
 }
 
-function getIcon(state: IconState) {
+export type SampleLinkStatus =
+  | { status: SampleStatus.waiting }
+  | { status: SampleStatus.success; type: string; id: string }
+  | { status: SampleStatus.error; error: string };
+
+function getIcon(state: SampleStatus) {
   switch (state) {
-    case IconState.WAITING:
+    case SampleStatus.waiting:
       return <Spinner className="h-5 w-5" />;
-    case IconState.SUCCESS:
-      return <CheckIcon className="h-5 w-5" />;
-    case IconState.ERROR:
-      return <XIcon className="h-5 w-5" />;
-    case IconState.IDLE:
+    case SampleStatus.error:
+    case SampleStatus.success:
     default:
       return <ChipIcon className="h-5 w-5" />;
   }
 }
-function getColor(state: IconState) {
+function getColor(state: SampleStatus) {
   switch (state) {
-    case IconState.SUCCESS:
+    case SampleStatus.success:
       return Color.success;
-    case IconState.ERROR:
+    case SampleStatus.error:
       return Color.warning;
-    case IconState.WAITING:
-    case IconState.IDLE:
+    case SampleStatus.waiting:
     default:
       return Color.neutral;
   }
@@ -47,43 +49,68 @@ function getColor(state: IconState) {
 interface SampleLinkProps {
   keyNode: string;
   sampleCode: string;
-  setFocusOff(): void;
   setSampleCode(sampleCode: string): void;
+  queryStatus: SampleLinkStatus;
+  setQueryStatus(queryStatus: SampleLinkStatus): void;
+  setFocusOff(): void;
 }
 export function SampleLink({
   keyNode,
   sampleCode,
-  setFocusOff,
   setSampleCode,
+  queryStatus,
+  setQueryStatus,
+  setFocusOff,
 }: SampleLinkProps) {
   const id = `sample-link-${keyNode}`;
-  const [iconState, setIconState] = useState(IconState.IDLE);
   const code = useDebounce(sampleCode, 1000);
+  const [sampleByCode] = useSampleByCodeLazyQuery();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    let timeId: NodeJS.Timeout | null = null;
-
-    if (iconState === IconState.SUCCESS || iconState === IconState.ERROR) {
-      timeId = setTimeout(() => {
-        setIconState(IconState.IDLE);
-      }, 3000);
-    }
-
-    return () => {
-      if (timeId !== null) clearTimeout(timeId);
-    };
-  }, [iconState]);
+    sampleByCode({ variables: { sampleCode: code.split('_') } })
+      .then(({ data }) => {
+        if (data) {
+          setQueryStatus({
+            status: SampleStatus.success,
+            type: data.sampleByCode.kind.id,
+            id: data.sampleByCode.id,
+          });
+        } else {
+          setQueryStatus({
+            status: SampleStatus.error,
+            error: 'Unknown error',
+          });
+        }
+      })
+      .catch((e) => {
+        setQueryStatus({
+          status: SampleStatus.error,
+          error: e.message,
+        });
+      });
+  }, [code]);
 
   return (
     <span className="inline-flex shadow-sm">
       <Button
         className="inline-flex items-center rounded-l-md rounded-r-none border border-r-0 border-neutral-300 bg-neutral-50 text-neutral-500 sm:text-sm"
-        disabled={iconState !== IconState.IDLE}
+        disabled={queryStatus.status !== SampleStatus.success}
         variant={Variant.secondary}
-        color={getColor(iconState)}
+        color={getColor(queryStatus.status)}
         style={{ padding: '0.25rem 0.5rem' }}
+        onClick={() => {
+          if (queryStatus.status === SampleStatus.success) {
+            navigate(`/sample/detail/${queryStatus.type}/${queryStatus.id}`);
+          }
+        }}
+        title={
+          queryStatus.status === SampleStatus.success
+            ? `${queryStatus.type}: ${code}`
+            : 'Element not found'
+        }
       >
-        {getIcon(iconState)}
+        {getIcon(queryStatus.status)}
       </Button>
       <label
         htmlFor={id}
@@ -105,6 +132,7 @@ export function SampleLink({
             const value = e.target.value;
             if (SAMPLE_EXACT_REGEX.exec(value) !== null) {
               setSampleCode(value);
+              setQueryStatus({ status: SampleStatus.waiting });
             }
           }}
           size={sampleCode.length}

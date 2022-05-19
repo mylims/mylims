@@ -1,20 +1,11 @@
-import {
-  $getNodeByKey,
-  DecoratorNode,
-  LexicalEditor,
-  LexicalNode,
-  NodeKey,
-} from 'lexical';
+import { DecoratorNode, LexicalEditor, LexicalNode, NodeKey } from 'lexical';
 import React, { ReactNode } from 'react';
 
-import { SampleLink } from '../components/SampleLink';
-
-type SampleLinkStatus =
-  | { status: 'idle' }
-  | { status: 'waiting' }
-  | { status: 'success'; type: string; id: string }
-  | { status: 'error'; error: string };
-const SAMPLE_LEVELS = ['wafer', 'sample', 'dye', 'device'];
+import {
+  SampleStatus,
+  SampleLink,
+  SampleLinkStatus,
+} from '../components/SampleLink';
 
 export class SampleLinkNode extends DecoratorNode<ReactNode> {
   public __sampleCode: string;
@@ -58,6 +49,10 @@ export class SampleLinkNode extends DecoratorNode<ReactNode> {
         setSampleCode={(sampleCode) => {
           editor.update(() => this.setSampleCode(sampleCode));
         }}
+        queryStatus={this.__queryStatus}
+        setQueryStatus={(queryStatus) => {
+          editor.update(() => this.setQueryStatus(queryStatus));
+        }}
         setFocusOff={() => {
           editor.update(() => this.selectNext());
         }}
@@ -70,32 +65,14 @@ export class SampleLinkNode extends DecoratorNode<ReactNode> {
     self.__sampleCode = sampleCode;
   }
 
-  public async queryStatus() {
+  public setQueryStatus(queryStatus: SampleLinkStatus) {
     const self = this.getWritable<SampleLinkNode>();
-    const sampleCode = this.__sampleCode.split('_');
-    const level = SAMPLE_LEVELS[sampleCode.length - 1];
-    if (level === undefined) {
-      self.__queryStatus = { status: 'error', error: 'invalid sample code' };
-    } else {
-      self.__queryStatus = { status: 'waiting' };
-      try {
-        const { id, type } = await this._getSampleByCode(sampleCode);
-        self.__queryStatus = { status: 'success', type, id };
-      } catch (error) {
-        self.__queryStatus = { status: 'error', error: 'not found' };
-      }
-    }
-  }
-
-  private async _getSampleByCode(
-    sampleCode: string[],
-  ): Promise<{ id: string; type: string }> {
-    throw new Error('Method not implemented.');
+    self.__queryStatus = queryStatus;
   }
 }
 
 export function $createSampleLinkNode(text: string): SampleLinkNode {
-  return new SampleLinkNode(text, { status: 'idle' });
+  return new SampleLinkNode(text, { status: SampleStatus.waiting });
 }
 
 export function $isSampleLinkNode(node?: LexicalNode): boolean {
