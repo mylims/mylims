@@ -63,6 +63,7 @@ export default function SampleSearch({ addSample }: SampleSearchProps) {
       const ans = samplesByCode({
         variables: { sampleCode: query, kind, limit: 3 },
       });
+      // eslint-disable-next-line no-console
       ans.catch(console.error);
     }
   }, [query, kind]);

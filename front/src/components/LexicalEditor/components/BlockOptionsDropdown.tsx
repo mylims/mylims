@@ -7,9 +7,10 @@ import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
 import { $createParagraphNode, ElementNode, LexicalCommand } from 'lexical';
 import React, { useState } from 'react';
 
+import { Select } from '@/components/tailwind-ui';
+
 import { ButtonFormat } from './ButtonFormat';
 import { ButtonFormatList } from './ButtonFormatList';
-import { Select } from '@/components/tailwind-ui';
 
 type Options = Record<'value' | 'label', string>;
 type BlockNodeType = Options & { createElement(): ElementNode };

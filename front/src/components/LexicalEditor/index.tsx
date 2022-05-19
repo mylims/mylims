@@ -6,15 +6,14 @@ import ContentEditable from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import LinkPlugin from '@lexical/react/LexicalLinkPlugin';
 import ListPlugin from '@lexical/react/LexicalListPlugin';
-import LexicalOnChangePlugin from '@lexical/react/LexicalOnChangePlugin';
 import RichTextPlugin from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 import { SampleLinkNode } from './models/SampleLinkNode';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
-import SampleLinkPlugin, { SampleLinkRef } from './plugins/SampleLinkPlugin';
+import SampleLinkPlugin from './plugins/SampleLinkPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import TailwindTheme from './themes/TailwindTheme';
 
@@ -63,9 +62,6 @@ export default function Editor() {
           <LinkPlugin />
           <AutoLinkPlugin />
           <ListMaxIndentLevelPlugin maxDepth={7} />
-          {/* <LexicalOnChangePlugin
-            onChange={(editorState) => console.log(editorState)}
-          /> */}
 
           {/* Custom plugins */}
           <SampleLinkPlugin />

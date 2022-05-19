@@ -4,23 +4,21 @@ import React, { useState } from 'react';
 import FieldDescription from '@/components/FieldDescription';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import LexicalEditor from '@/components/LexicalEditor';
-import MeasuresTable from '@/components/MeasuresTable';
-import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
 import {
   FormRHF,
   Card,
   InputFieldRHF,
   SubmitButtonRHF,
 } from '@/components/tailwind-ui';
+import {
+  sampleLinkContext,
+  SampleLinkState,
+} from '@/pages/notebook/hooks/useSampleLinkContext';
 import { formatDate } from '@/utils/formatFields';
 
 import { UpdateNotebook, StateNotebook } from '../models';
 
 import SamplesTableRHF from './SamplesTableRHF';
-import {
-  sampleLinkContext,
-  SampleLinkState,
-} from '@/pages/notebook/hooks/useSampleLinkContext';
 
 interface NotebookFormProps {
   loading: boolean;
@@ -71,20 +69,9 @@ export function NotebookForm({
                 </div>
                 <InputFieldRHF name="description" label="Description" />
                 <SamplesTableRHF name="samples" />
-                {/* {initialValue.measurements ? (
-                <>
-                  <div className="mt-2 flex flex-row gap-4">
-                    <div className="text-xl font-semibold">Measurements</div>
-                  </div>
-                  <div className="text-gray-900 mt-1 text-sm sm:col-span-2 sm:mt-0">
-                    <MeasuresTable measurements={initialValue.measurements} />
-                  </div>
-                </>
-              ) : null} */}
               </div>
               <div className="lg:w-2/3">
                 <LexicalEditor />
-                {/* <RichTextImageFieldRHF name="content" label="Content" /> */}
               </div>
             </SampleLinkContext.Provider>
           </div>

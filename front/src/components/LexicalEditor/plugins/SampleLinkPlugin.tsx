@@ -1,4 +1,3 @@
-import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   $getRoot,
@@ -8,6 +7,8 @@ import {
   TextNode,
 } from 'lexical';
 import { useCallback, useEffect } from 'react';
+
+import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
 
 import {
   $createSampleLinkNode,

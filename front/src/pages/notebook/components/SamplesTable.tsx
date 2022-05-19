@@ -17,8 +17,9 @@ import {
 import { useSampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
 
+import { useSampleLinkContext } from "../hooks/useSampleLinkContext";
+
 import SampleSearch from './SampleSearch';
-import { useSampleLinkContext } from './../hooks/useSampleLinkContext';
 
 interface SamplesTableProps {
   samples: string[];
