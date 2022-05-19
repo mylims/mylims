@@ -1,9 +1,10 @@
 import { PaperClipIcon } from '@heroicons/react/outline';
-import React from 'react';
+import React, { useRef } from 'react';
 
 import FieldDescription from '@/components/FieldDescription';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import LexicalEditor from '@/components/LexicalEditor';
+import { SampleLinkRef } from '@/components/LexicalEditor/plugins/SampleLinkPlugin';
 import MeasuresTable from '@/components/MeasuresTable';
 import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
 import {
@@ -28,6 +29,8 @@ export function NotebookForm({
   initialValue,
   onSubmit,
 }: NotebookFormProps) {
+  const sampleLinkRef = useRef<SampleLinkRef>(null);
+
   return (
     <FormRHF<StateNotebook> defaultValues={initialValue} onSubmit={onSubmit}>
       <Card>
@@ -59,7 +62,12 @@ export function NotebookForm({
                 <MultiSelect name="labels" label="Labels" />
               </div>
               <InputFieldRHF name="description" label="Description" />
-              <SamplesTableRHF name="samples" />
+              <SamplesTableRHF
+                name="samples"
+                appendToNotebook={(val) =>
+                  sampleLinkRef.current?.appendSampleLink(val)
+                }
+              />
               {/* {initialValue.measurements ? (
                 <>
                   <div className="mt-2 flex flex-row gap-4">
@@ -72,7 +80,7 @@ export function NotebookForm({
               ) : null} */}
             </div>
             <div className="lg:w-2/3">
-              <LexicalEditor />
+              <LexicalEditor sampleLinkRef={sampleLinkRef} />
               {/* <RichTextImageFieldRHF name="content" label="Content" /> */}
             </div>
           </div>

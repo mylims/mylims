@@ -10,11 +10,13 @@ import {
 
 import { SamplesTable } from './SamplesTable';
 
-export type SamplesTableRHFProps = FieldProps &
+export type SamplesTableRHFProps = {
+  appendToNotebook(this: void, sample: string): void;
+} & FieldProps &
   RHFValidationProps &
   RHFControllerProps;
 export default function SamplesTableRHF(props: SamplesTableRHFProps) {
-  const { name, deps, rhfOptions } = props;
+  const { name, deps, rhfOptions, appendToNotebook } = props;
 
   const { setValue, trigger } = useCheckedFormRHFContext();
   const {
@@ -33,5 +35,11 @@ export default function SamplesTableRHF(props: SamplesTableRHFProps) {
     [setValue, shouldValidate, name, trigger, deps],
   );
 
-  return <SamplesTable samples={field.value} addSample={handleChange} />;
+  return (
+    <SamplesTable
+      samples={field.value}
+      addSample={handleChange}
+      appendToNotebook={(val) => appendToNotebook(val)}
+    />
+  );
 }

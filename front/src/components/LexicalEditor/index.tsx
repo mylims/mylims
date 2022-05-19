@@ -9,12 +9,12 @@ import ListPlugin from '@lexical/react/LexicalListPlugin';
 import LexicalOnChangePlugin from '@lexical/react/LexicalOnChangePlugin';
 import RichTextPlugin from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { SampleLinkNode } from './models/SampleLinkNode';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
-import SampleLinkPlugin from './plugins/SampleLinkPlugin';
+import SampleLinkPlugin, { SampleLinkRef } from './plugins/SampleLinkPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import TailwindTheme from './themes/TailwindTheme';
 
@@ -45,7 +45,10 @@ const editorConfig = {
   ],
 };
 
-export default function Editor() {
+interface EditorProps {
+  sampleLinkRef: React.RefObject<SampleLinkRef>;
+}
+export default function Editor({ sampleLinkRef }: EditorProps) {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative m-2 rounded-t-md rounded-b-sm font-normal leading-5 text-black">
@@ -68,7 +71,7 @@ export default function Editor() {
           /> */}
 
           {/* Custom plugins */}
-          <SampleLinkPlugin />
+          <SampleLinkPlugin innerRef={sampleLinkRef} />
         </div>
       </div>
     </LexicalComposer>

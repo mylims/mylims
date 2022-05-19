@@ -1,6 +1,12 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { createCommand, LexicalCommand, TextNode } from 'lexical';
-import { useCallback, useEffect } from 'react';
+import {
+  $getRoot,
+  createCommand,
+  LexicalCommand,
+  ParagraphNode,
+  TextNode,
+} from 'lexical';
+import { useCallback, useEffect, useImperativeHandle } from 'react';
 
 import {
   $createSampleLinkNode,
@@ -15,8 +21,30 @@ export type InsertSampleLinkPayload = Readonly<{
 }>;
 export const INSERT_SAMPLE_LINK_COMMAND: LexicalCommand<InsertSampleLinkPayload> =
   createCommand();
-export default function SampleLinkPlugin() {
+
+export interface SampleLinkRef {
+  appendSampleLink(sampleCode: string): void;
+}
+interface SampleLinkPluginProps {
+  innerRef?: React.Ref<SampleLinkRef>;
+}
+export default function SampleLinkPlugin({ innerRef }: SampleLinkPluginProps) {
   const [editor] = useLexicalComposerContext();
+
+  useImperativeHandle(innerRef, () => ({
+    appendSampleLink(sampleCode) {
+      editor.update(() => {
+        const root = $getRoot();
+        const latest = root.getLastChild();
+        const node = $createSampleLinkNode(sampleCode);
+        if (latest instanceof ParagraphNode) {
+          latest.append(node);
+        } else {
+          root.append(node);
+        }
+      });
+    },
+  }));
 
   useEffect(() => {
     if (!editor.hasNodes([SampleLinkNode])) {
