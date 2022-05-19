@@ -12,6 +12,7 @@ import {
 import { SAMPLE_EXACT_REGEX } from '../utils/regex';
 import { useSampleByCodeLazyQuery } from '@/generated/graphql';
 import { useNavigate } from 'react-router-dom';
+import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
 
 export enum SampleStatus {
   waiting = 'waiting',
@@ -66,6 +67,7 @@ export function SampleLink({
   const code = useDebounce(sampleCode, 1000);
   const [sampleByCode] = useSampleByCodeLazyQuery();
   const navigate = useNavigate();
+  const { dispatch } = useSampleLinkContext();
 
   useEffect(() => {
     sampleByCode({ variables: { sampleCode: code.split('_') } })
@@ -76,6 +78,7 @@ export function SampleLink({
             type: data.sampleByCode.kind.id,
             id: data.sampleByCode.id,
           });
+          dispatch({ type: 'toSave', payload: { id: data.sampleByCode.id } });
         } else {
           setQueryStatus({
             status: SampleStatus.error,

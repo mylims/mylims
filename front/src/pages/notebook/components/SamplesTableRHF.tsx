@@ -10,13 +10,11 @@ import {
 
 import { SamplesTable } from './SamplesTable';
 
-export type SamplesTableRHFProps = {
-  appendToNotebook(this: void, sample: string): void;
-} & FieldProps &
+export type SamplesTableRHFProps = FieldProps &
   RHFValidationProps &
   RHFControllerProps;
 export default function SamplesTableRHF(props: SamplesTableRHFProps) {
-  const { name, deps, rhfOptions, appendToNotebook } = props;
+  const { name, deps, rhfOptions } = props;
 
   const { setValue, trigger } = useCheckedFormRHFContext();
   const {
@@ -24,22 +22,20 @@ export default function SamplesTableRHF(props: SamplesTableRHFProps) {
     formState: { isSubmitted: shouldValidate },
   } = useController({ name, ...rhfOptions });
 
-  const handleChange = useCallback(
+  const addSample = useCallback(
     (value: string) => {
-      setValue(name, [...field.value, value], {
-        shouldTouch: true,
-        shouldValidate,
-      });
+      const set = Array.from(new Set([...field.value, value]));
+      for (let i = 0; i < set.length; i++) {
+        setValue(`${name}[${i}]`, set[i], {
+          shouldTouch: true,
+          shouldValidate,
+        });
+      }
+
       if (deps && shouldValidate) void trigger(deps);
     },
     [setValue, shouldValidate, name, trigger, deps],
   );
 
-  return (
-    <SamplesTable
-      samples={field.value}
-      addSample={handleChange}
-      appendToNotebook={(val) => appendToNotebook(val)}
-    />
-  );
+  return <SamplesTable samples={field.value} addSample={addSample} />;
 }

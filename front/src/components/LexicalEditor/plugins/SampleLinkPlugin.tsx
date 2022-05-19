@@ -1,3 +1,4 @@
+import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   $getRoot,
@@ -6,7 +7,7 @@ import {
   ParagraphNode,
   TextNode,
 } from 'lexical';
-import { useCallback, useEffect, useImperativeHandle } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import {
   $createSampleLinkNode,
@@ -25,26 +26,25 @@ export const INSERT_SAMPLE_LINK_COMMAND: LexicalCommand<InsertSampleLinkPayload>
 export interface SampleLinkRef {
   appendSampleLink(sampleCode: string): void;
 }
-interface SampleLinkPluginProps {
-  innerRef?: React.Ref<SampleLinkRef>;
-}
-export default function SampleLinkPlugin({ innerRef }: SampleLinkPluginProps) {
+export default function SampleLinkPlugin() {
   const [editor] = useLexicalComposerContext();
+  const { state, dispatch } = useSampleLinkContext();
 
-  useImperativeHandle(innerRef, () => ({
-    appendSampleLink(sampleCode) {
+  useEffect(() => {
+    if (state.type === 'toShow') {
       editor.update(() => {
         const root = $getRoot();
         const latest = root.getLastChild();
-        const node = $createSampleLinkNode(sampleCode);
+        const node = $createSampleLinkNode(state.payload.code);
         if (latest instanceof ParagraphNode) {
           latest.append(node);
         } else {
           root.append(node);
         }
+        dispatch({ type: 'idle', payload: null });
       });
-    },
-  }));
+    }
+  }, [state]);
 
   useEffect(() => {
     if (!editor.hasNodes([SampleLinkNode])) {

@@ -45,10 +45,7 @@ const editorConfig = {
   ],
 };
 
-interface EditorProps {
-  sampleLinkRef: React.RefObject<SampleLinkRef>;
-}
-export default function Editor({ sampleLinkRef }: EditorProps) {
+export default function Editor() {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative m-2 rounded-t-md rounded-b-sm font-normal leading-5 text-black">
@@ -71,7 +68,7 @@ export default function Editor({ sampleLinkRef }: EditorProps) {
           /> */}
 
           {/* Custom plugins */}
-          <SampleLinkPlugin innerRef={sampleLinkRef} />
+          <SampleLinkPlugin />
         </div>
       </div>
     </LexicalComposer>

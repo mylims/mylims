@@ -1,10 +1,9 @@
 import { PaperClipIcon } from '@heroicons/react/outline';
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 
 import FieldDescription from '@/components/FieldDescription';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
 import LexicalEditor from '@/components/LexicalEditor';
-import { SampleLinkRef } from '@/components/LexicalEditor/plugins/SampleLinkPlugin';
 import MeasuresTable from '@/components/MeasuresTable';
 import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
 import {
@@ -18,6 +17,10 @@ import { formatDate } from '@/utils/formatFields';
 import { UpdateNotebook, StateNotebook } from '../models';
 
 import SamplesTableRHF from './SamplesTableRHF';
+import {
+  sampleLinkContext,
+  SampleLinkState,
+} from '@/pages/notebook/hooks/useSampleLinkContext';
 
 interface NotebookFormProps {
   loading: boolean;
@@ -29,7 +32,11 @@ export function NotebookForm({
   initialValue,
   onSubmit,
 }: NotebookFormProps) {
-  const sampleLinkRef = useRef<SampleLinkRef>(null);
+  const SampleLinkContext = sampleLinkContext;
+  const [state, dispatch] = useState<SampleLinkState>({
+    type: 'idle',
+    payload: null,
+  });
 
   return (
     <FormRHF<StateNotebook> defaultValues={initialValue} onSubmit={onSubmit}>
@@ -56,19 +63,15 @@ export function NotebookForm({
         </Card.Header>
         <Card.Body>
           <div className="my-4 flex flex-col lg:w-full lg:flex-row lg:gap-4">
-            <div className="lg:w-1/3">
-              <div className="grid-cols-auto mb-4 grid items-end gap-4">
-                <InputFieldRHF name="project" label="Project" />
-                <MultiSelect name="labels" label="Labels" />
-              </div>
-              <InputFieldRHF name="description" label="Description" />
-              <SamplesTableRHF
-                name="samples"
-                appendToNotebook={(val) =>
-                  sampleLinkRef.current?.appendSampleLink(val)
-                }
-              />
-              {/* {initialValue.measurements ? (
+            <SampleLinkContext.Provider value={{ state, dispatch }}>
+              <div className="lg:w-1/3">
+                <div className="grid-cols-auto mb-4 grid items-end gap-4">
+                  <InputFieldRHF name="project" label="Project" />
+                  <MultiSelect name="labels" label="Labels" />
+                </div>
+                <InputFieldRHF name="description" label="Description" />
+                <SamplesTableRHF name="samples" />
+                {/* {initialValue.measurements ? (
                 <>
                   <div className="mt-2 flex flex-row gap-4">
                     <div className="text-xl font-semibold">Measurements</div>
@@ -78,11 +81,12 @@ export function NotebookForm({
                   </div>
                 </>
               ) : null} */}
-            </div>
-            <div className="lg:w-2/3">
-              <LexicalEditor sampleLinkRef={sampleLinkRef} />
-              {/* <RichTextImageFieldRHF name="content" label="Content" /> */}
-            </div>
+              </div>
+              <div className="lg:w-2/3">
+                <LexicalEditor />
+                {/* <RichTextImageFieldRHF name="content" label="Content" /> */}
+              </div>
+            </SampleLinkContext.Provider>
           </div>
         </Card.Body>
       </Card>

@@ -2,7 +2,7 @@ import {
   InformationCircleIcon,
   PlusCircleIcon,
 } from '@heroicons/react/outline';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { LinkIcon } from '@/components/LinkButton';
 import {
@@ -18,17 +18,21 @@ import { useSampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
 
 import SampleSearch from './SampleSearch';
+import { useSampleLinkContext } from './../hooks/useSampleLinkContext';
 
 interface SamplesTableProps {
   samples: string[];
   addSample(sample: string): void;
-  appendToNotebook(sample: string): void;
 }
-export function SamplesTable({
-  samples,
-  addSample,
-  appendToNotebook,
-}: SamplesTableProps) {
+export function SamplesTable({ samples, addSample }: SamplesTableProps) {
+  const { state, dispatch } = useSampleLinkContext();
+  useEffect(() => {
+    if (state.type === 'toSave') {
+      addSample(state.payload.id);
+      dispatch({ type: 'idle', payload: null });
+    }
+  }, [state]);
+
   return (
     <div>
       <div className="mt-4 mb-2 flex flex-row flex-wrap gap-4">
@@ -37,13 +41,7 @@ export function SamplesTable({
       </div>
       <div className="divide-y divide-neutral-300 rounded-md border border-neutral-300">
         {samples.length > 0 ? (
-          samples.map((sample) => (
-            <SampleItem
-              key={sample}
-              sample={sample}
-              appendToNotebook={(val) => appendToNotebook(val)}
-            />
-          ))
+          samples.map((sample) => <SampleItem key={sample} sample={sample} />)
         ) : (
           <div className="flex items-center p-4 text-sm text-neutral-400">
             No elements
@@ -56,9 +54,9 @@ export function SamplesTable({
 
 interface SampleItemProps {
   sample: string;
-  appendToNotebook(sample: string): void;
 }
-function SampleItem({ sample, appendToNotebook }: SampleItemProps) {
+function SampleItem({ sample }: SampleItemProps) {
+  const { dispatch } = useSampleLinkContext();
   const { data, error, loading } = useSampleQuery({
     variables: { id: sample },
   });
@@ -107,7 +105,7 @@ function SampleItem({ sample, appendToNotebook }: SampleItemProps) {
           roundness={Roundness.circular}
           size={Size.small}
           title="Add to notebook"
-          onClick={() => appendToNotebook(code)}
+          onClick={() => dispatch({ type: 'toShow', payload: { code } })}
         >
           <PlusCircleIcon className="h-5 w-5" />
         </Button>
