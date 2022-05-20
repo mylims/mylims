@@ -1,14 +1,10 @@
-import { useField } from 'formik';
-import { useCallback, useMemo, useState } from 'react';
-import { useWatch } from 'react-hook-form';
+import { useMemo, useState } from 'react';
 
 import { SimpleSelectOption } from '../forms/basic/Select';
 import {
   OptionsFilter,
   defaultOptionsFilter,
 } from '../utils/search-select-utils';
-
-import { useCheckedFormRHFContext } from './useCheckedFormRHF';
 
 export type { OptionsFilter };
 
@@ -31,59 +27,9 @@ export interface SimpleSearchSelectHookConfig<OptionType> {
   initialSelected?: OptionType;
 }
 
-export interface SimpleSearchSelectFieldHookConfig<OptionType>
-  extends SimpleSearchSelectHookConfig<OptionType> {
-  name: string;
-}
 export interface SearchSelectHookConfig<OptionType>
   extends SimpleSearchSelectHookConfig<OptionType> {
   filterOptions: OptionsFilter<OptionType>;
-}
-
-export interface SearchSelectFieldHookConfig<OptionType>
-  extends SearchSelectHookConfig<OptionType> {
-  name: string;
-}
-
-export function useSearchSelectField<OptionType>(
-  config: OptionType extends SimpleSelectOption
-    ? SimpleSearchSelectFieldHookConfig<OptionType>
-    : SearchSelectFieldHookConfig<OptionType>,
-): SearchSelectFieldHookResult<OptionType> {
-  const searchSelect = useSearchSelect<OptionType>(config);
-  const [field, , helper] = useField<OptionType | undefined>(config.name);
-
-  return {
-    ...searchSelect,
-    onSelect: helper.setValue,
-    selected: field.value,
-    name: config.name,
-  };
-}
-
-export function useSearchSelectFieldRHF<OptionType>(
-  config: OptionType extends SimpleSelectOption
-    ? SimpleSearchSelectFieldHookConfig<OptionType>
-    : SearchSelectFieldHookConfig<OptionType>,
-): SearchSelectFieldHookResult<OptionType> {
-  const searchSelect = useSearchSelect<OptionType>(config);
-  const { setValue } = useCheckedFormRHFContext();
-  const fieldValue = useWatch({
-    name: config.name,
-  });
-  const onSelectHandle = useCallback(
-    (value: OptionType | undefined) => {
-      setValue(config.name, value);
-    },
-    [setValue, config.name],
-  );
-
-  return {
-    ...searchSelect,
-    onSelect: onSelectHandle,
-    selected: fieldValue,
-    name: config.name,
-  };
 }
 
 export function useSearchSelect<OptionType>(

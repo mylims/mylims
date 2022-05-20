@@ -28,7 +28,7 @@ export function useNotificationCenter(): NotificationContext {
   const context = useContext(notificationContext);
 
   if (context === null) {
-    throw new Error('No context was provided');
+    throw new Error('Missing notification context');
   }
 
   return context;
@@ -132,27 +132,29 @@ export function NotificationProvider(props: {
 export interface ToastNotificationCenterProps {
   position: 'top' | 'bottom';
   className?: string;
+  absolute?: boolean;
 }
 
 export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
   const { deleteNotification, notifications } = useNotificationCenter();
+  const isTop = props.position === 'top';
 
   return (
     <div
       className={clsx(
-        'pointer-events-none fixed inset-x-0 z-40 flex justify-center',
+        'pointer-events-none inset-0 z-40 flex justify-center py-2',
         {
-          'top-0': props.position === 'top',
-          'bottom-0': props.position === 'bottom',
+          'items-end': props.position === 'bottom',
         },
+        props.absolute ? 'absolute' : 'fixed',
         props.className,
       )}
     >
-      <div className="w-full sm:w-96">
+      <div className="max-h-full w-full overflow-y-visible sm:w-96">
         <div
-          className={clsx({
-            'flex flex-col-reverse': props.position === 'bottom',
-            'flex flex-col': props.position === 'top',
+          className={clsx('flex gap-2', {
+            'flex-col': isTop,
+            'flex-col-reverse': !isTop,
           })}
         >
           {notifications
@@ -161,18 +163,12 @@ export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
             )
             .map((notification) => {
               return (
-                <div
-                  key={notification.id}
-                  className={
-                    props.position === 'bottom' ? 'sm:mb-2' : 'sm:mt-2'
-                  }
-                >
-                  <ToastNotification
-                    {...notification}
-                    position={props.position}
-                    onDismiss={() => deleteNotification(notification.id)}
-                  />
-                </div>
+                <ToastNotification
+                  {...notification}
+                  isTop={isTop}
+                  onDismiss={() => deleteNotification(notification.id)}
+                  key={notification.group || notification.id}
+                />
               );
             })}
         </div>
@@ -184,31 +180,33 @@ export function ToastNotificationCenter(props: ToastNotificationCenterProps) {
 export interface NotificationCenterProps {
   position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   className?: string;
+  absolute?: boolean;
 }
 
 export function NotificationCenter(props: NotificationCenterProps) {
   const { deleteNotification, notifications } = useNotificationCenter();
+  const isTop = props.position.startsWith('top');
+  const isLeft = props.position.endsWith('left');
 
   return (
     <div
       className={clsx(
-        'pointer-events-none fixed z-40 m-5 flex',
+        'pointer-events-none inset-0 z-40 flex items-center justify-end p-5',
         {
-          'items-end justify-center sm:items-start sm:justify-end':
-            props.position.endsWith('right'),
-          'top-0': props.position.startsWith('top'),
-          'bottom-0': props.position.startsWith('bottom'),
-          'right-0': props.position.endsWith('right'),
-          'left-0': props.position.endsWith('left'),
+          'sm:items-start': isTop,
+          'sm:items-end': !isTop,
+          'sm:justify-start': isLeft,
+          'sm:justify-end': !isLeft,
         },
+        props.absolute ? 'absolute' : 'fixed',
         props.className,
       )}
     >
-      <div className="w-full sm:w-96">
+      <div className="max-h-full w-full overflow-y-visible sm:w-96">
         <div
-          className={clsx('flex justify-end', {
-            'flex-col-reverse': props.position.startsWith('top'),
-            'flex-col': props.position.startsWith('bottom'),
+          className={clsx('flex justify-end gap-5', {
+            'flex-col': isTop,
+            'flex-col-reverse': !isTop,
           })}
         >
           {notifications
@@ -219,9 +217,9 @@ export function NotificationCenter(props: NotificationCenterProps) {
                   key={notification.id}
                   {...notification}
                   onDismiss={() => deleteNotification(notification.id)}
-                  className="mb-5"
                   type={notification.type}
                   title={notification.title}
+                  isTop={isTop}
                 >
                   {notification.content}
                 </Notification>

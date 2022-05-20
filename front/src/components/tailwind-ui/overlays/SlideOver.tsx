@@ -9,6 +9,7 @@ import React, {
   useRef,
 } from 'react';
 
+import { IconButton } from '../elements/buttons/IconButton';
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import { PropsOf, Size } from '../types';
 
@@ -88,13 +89,13 @@ export function SlideOver<T extends ElementType>(props: SlideOverProps<T>) {
           >
             {onClose && hasCloseButton && (
               <div style={{ gridArea: 'close' }} className="h-7 pr-4 sm:pr-6">
-                <button
-                  type="button"
+                <IconButton
                   onClick={onClose}
+                  icon={<XIcon />}
+                  size="6"
                   className="rounded-full bg-white text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500"
-                >
-                  <XIcon className="h-6 w-6" />
-                </button>
+                  color="none"
+                />
               </div>
             )}
             {children}

@@ -66,11 +66,12 @@ export function VerticalNavigation<T>(
   } = props;
 
   const opts = useMemo(() => {
-    return options.map((element) => {
+    return options.map((element): VerticalNavigationOptions<T> => {
       if (element.type === 'option') {
         return {
           ...element,
-          label: element.label || element.value,
+          // TODO: `element.value` could be anything.
+          label: (element.label || element.value) as ReactNode,
         };
       }
       return element;

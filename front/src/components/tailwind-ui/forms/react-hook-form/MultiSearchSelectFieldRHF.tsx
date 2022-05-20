@@ -2,21 +2,32 @@ import React, { useCallback } from 'react';
 import { useController } from 'react-hook-form';
 
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
-import { MultiSearchSelect } from '../basic/MultiSearchSelect';
+import {
+  MultiSearchSelect,
+  MultiSearchSelectProps,
+  SimpleMultiSearchSelectProps,
+} from '../basic/MultiSearchSelect';
 import { SimpleSelectOption } from '../basic/Select';
 import {
-  MultiSearchSelectFieldProps,
-  SimpleMultiSearchSelectFieldProps,
-} from '../formik/MultiSearchSelectField';
-import {
   defaultErrorSerializer,
-  RHFControllerProps,
+  FieldProps,
   RHFValidationProps,
 } from '../util';
 
+export type MultiSearchSelectFieldProps<OptionType> = Omit<
+  MultiSearchSelectProps<OptionType>,
+  'selected' | 'onSelect' | 'error' | 'onBlur'
+> &
+  FieldProps;
+
+export type SimpleMultiSearchSelectFieldProps<OptionType> = Omit<
+  SimpleMultiSearchSelectProps<OptionType>,
+  'selected' | 'onSelect' | 'error' | 'onBlur'
+> &
+  FieldProps;
+
 export function MultiSearchSelectFieldRHF<OptionType>(
-  props: RHFControllerProps &
-    RHFValidationProps &
+  props: RHFValidationProps &
     (OptionType extends SimpleSelectOption
       ? SimpleMultiSearchSelectFieldProps<OptionType>
       : MultiSearchSelectFieldProps<OptionType>),
@@ -25,7 +36,6 @@ export function MultiSearchSelectFieldRHF<OptionType>(
     name,
     serializeError = defaultErrorSerializer,
     deps,
-    rhfOptions,
     ...otherProps
   } = props;
 
@@ -36,7 +46,6 @@ export function MultiSearchSelectFieldRHF<OptionType>(
     formState: { isSubmitted },
   } = useController({
     name: props.name,
-    ...rhfOptions,
   });
 
   const handleSelect = useCallback(

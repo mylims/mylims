@@ -1,4 +1,4 @@
-import { ControllerProps, RegisterOptions } from 'react-hook-form';
+import { RegisterOptions } from 'react-hook-form';
 
 import type { InputProps } from '..';
 
@@ -26,18 +26,11 @@ export interface RHFValidationProps {
   deps?: string[];
 }
 
-/*
- * Props for components which use react-hook-form's useController
- */
-export interface RHFControllerProps {
-  rhfOptions?: Pick<ControllerProps, 'shouldUnregister'>;
-}
-
 export interface RHFRegisterProps {
   /**
    * forward options to react-hook-form's register function
    */
-  rhfOptions?: Pick<RegisterOptions, 'setValueAs' | 'shouldUnregister'>;
+  rhfOptions?: Pick<RegisterOptions, 'setValueAs'>;
 }
 
 export type EmptyValue = string | number | null | undefined;

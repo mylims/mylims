@@ -3,6 +3,8 @@ import { XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React from 'react';
 
+import { IconButton } from '../elements/buttons/IconButton';
+
 import { NotificationState } from './NotificationContext';
 
 export interface ToastNotificationProps
@@ -16,7 +18,7 @@ export interface ToastNotificationProps
     label: string;
     handle: () => void;
   };
-  position: 'top' | 'bottom';
+  isTop: boolean;
 }
 
 export function ToastNotification(props: ToastNotificationProps) {
@@ -26,7 +28,7 @@ export function ToastNotification(props: ToastNotificationProps) {
       show={props.state === 'SHOWING'}
       enter="transition ease-out duration-300"
       enterFrom={clsx(
-        props.position === 'bottom' ? 'translate-y-16' : '-translate-y-16',
+        props.isTop ? '-translate-y-16' : 'translate-y-16',
         'opacity-0',
       )}
       enterTo="translate-y-0 opacity-100"
@@ -38,7 +40,9 @@ export function ToastNotification(props: ToastNotificationProps) {
       <div className="z-40 overflow-hidden">
         <div className="p-2">
           <div className="flex items-center justify-between">
-            <div className="ml-3 pt-0.5 text-white">{props.label}</div>
+            <div className="ml-3 overflow-hidden text-ellipsis pt-0.5 text-white">
+              {props.label}
+            </div>
 
             <div className="ml-4 flex items-center">
               {props.action && (
@@ -50,13 +54,13 @@ export function ToastNotification(props: ToastNotificationProps) {
                   {props.action.label}
                 </button>
               )}
-              <button
-                type="button"
+              <IconButton
                 onClick={props.onDismiss}
                 className="rounded-full bg-neutral-700 p-1.5 text-neutral-300 hover:bg-neutral-100 hover:text-neutral-700 focus:outline-none focus:ring-2 focus:ring-neutral-100 focus:ring-offset-2 focus:ring-offset-neutral-700 active:bg-neutral-50"
-              >
-                <XIcon className="h-5 w-5" />
-              </button>
+                icon={<XIcon />}
+                color="none"
+                size="5"
+              />
             </div>
           </div>
         </div>

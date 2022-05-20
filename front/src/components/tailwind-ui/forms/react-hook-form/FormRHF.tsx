@@ -78,7 +78,7 @@ function multiYupResolver<TValues extends FieldValues>(
 
 export type FormRHFProps<TValues extends FieldValues> = Omit<
   UseFormProps<TValues>,
-  'resolver' | 'reValidateMode'
+  'resolver' | 'reValidateMode' | 'shouldUnregister'
 > & {
   onSubmit: SubmitHandler<TValues>;
   onInvalidSubmit?: SubmitErrorHandler<TValues>;
@@ -129,11 +129,9 @@ export function FormRHF<TValues extends FieldValues>(
               { 'flex flex-1 flex-col gap-y-4': !noDefaultStyle },
               className,
             )}
-            onSubmit={async (event) => {
+            onSubmit={(event) => {
               const submit = methods.handleSubmit(onSubmit, onInvalidSubmit);
-              try {
-                await submit(event);
-              } catch (err) {
+              submit(event).catch((err) => {
                 if (!(err instanceof Error)) {
                   // eslint-disable-next-line no-console
                   console.error(
@@ -146,7 +144,7 @@ export function FormRHF<TValues extends FieldValues>(
                 });
                 // Make sure RHF counts this submit as unsuccessful
                 throw err;
-              }
+              });
             }}
             noValidate
           >

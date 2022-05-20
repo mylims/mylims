@@ -4,13 +4,16 @@ import clsx from 'clsx';
 import React, { ReactNode } from 'react';
 
 import { Color } from '..';
+import { IconButton } from '../elements/buttons/IconButton';
 
 import { NotificationState } from './NotificationContext';
 
-export interface NotificationProps extends Omit<NotificationState, 'content'> {
+export interface NotificationProps
+  extends Omit<NotificationState, 'content' | 'isToast'> {
   children: ReactNode;
   className?: string;
   onDismiss: () => void;
+  isTop: boolean;
 }
 
 export function Notification(props: NotificationProps) {
@@ -21,8 +24,11 @@ export function Notification(props: NotificationProps) {
       appear
       show={props.state === 'SHOWING'}
       enter="transition ease-out duration-300"
-      enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
-      enterTo="translate-y-0 opacity-100 sm:translate-x-0"
+      enterFrom={clsx(
+        props.isTop ? '-translate-y-2' : 'translate-y-2',
+        'opacity-0',
+      )}
+      enterTo="translate-y-0 opacity-100"
       leave="transition ease-in duration-200"
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
@@ -55,25 +61,31 @@ export function Notification(props: NotificationProps) {
               {props.icon}
             </div>
             <div
-              className={clsx('ml-3 w-0 flex-1 pt-0.5', {
-                'text-neutral-500': type === Color.neutral,
-                'text-danger-500': type === Color.danger,
-                'text-warning-500': type === Color.warning,
-                'text-success-500': type === Color.success,
-                'text-alternative-500': type === Color.alternative,
-                'text-primary-500': type === Color.primary,
-              })}
+              className={clsx(
+                'ml-3 w-0 flex-1 overflow-hidden text-ellipsis pt-0.5',
+                {
+                  'text-neutral-500': type === Color.neutral,
+                  'text-danger-500': type === Color.danger,
+                  'text-warning-500': type === Color.warning,
+                  'text-success-500': type === Color.success,
+                  'text-alternative-500': type === Color.alternative,
+                  'text-primary-500': type === Color.primary,
+                },
+              )}
             >
               {props.title && (
                 <p
-                  className={clsx('text-sm font-semibold', {
-                    'text-neutral-800': type === Color.neutral,
-                    'text-danger-800': type === Color.danger,
-                    'text-warning-800': type === Color.warning,
-                    'text-success-800': type === Color.success,
-                    'text-alternative-800': type === Color.alternative,
-                    'text-primary-800': type === Color.primary,
-                  })}
+                  className={clsx(
+                    'overflow-hidden text-ellipsis text-sm font-semibold',
+                    {
+                      'text-neutral-800': type === Color.neutral,
+                      'text-danger-800': type === Color.danger,
+                      'text-warning-800': type === Color.warning,
+                      'text-success-800': type === Color.success,
+                      'text-alternative-800': type === Color.alternative,
+                      'text-primary-800': type === Color.primary,
+                    },
+                  )}
                 >
                   {props.title}
                 </p>
@@ -82,13 +94,13 @@ export function Notification(props: NotificationProps) {
               {props.children}
             </div>
             <div className="ml-4 flex shrink-0">
-              <button
-                type="button"
-                onClick={props.onDismiss}
+              <IconButton
                 className="inline-flex text-neutral-400 transition duration-150 ease-in-out focus:text-neutral-500 focus:outline-none"
-              >
-                <XIcon className="h-5 w-5" />
-              </button>
+                onClick={props.onDismiss}
+                icon={<XIcon />}
+                size="5"
+                color="none"
+              />
             </div>
           </div>
         </div>

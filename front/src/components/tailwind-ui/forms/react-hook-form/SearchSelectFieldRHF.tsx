@@ -2,21 +2,32 @@ import React, { useCallback } from 'react';
 import { useController } from 'react-hook-form';
 
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
-import { SearchSelect } from '../basic/SearchSelect';
+import {
+  SearchSelect,
+  SearchSelectProps,
+  SimpleSearchSelectProps,
+} from '../basic/SearchSelect';
 import { SimpleSelectOption } from '../basic/Select';
 import {
-  SearchSelectFieldProps,
-  SimpleSearchSelectFieldProps,
-} from '../formik/SearchSelectField';
-import {
   defaultErrorSerializer,
-  RHFControllerProps,
+  FieldProps,
   RHFValidationProps,
 } from '../util';
 
+export type SearchSelectFieldProps<OptionType> = Omit<
+  SearchSelectProps<OptionType>,
+  'selected' | 'onSelect' | 'error'
+> &
+  FieldProps;
+
+export type SimpleSearchSelectFieldProps<OptionType> = Omit<
+  SimpleSearchSelectProps<OptionType>,
+  'selected' | 'onSelect' | 'error' | 'onBlur'
+> &
+  FieldProps;
+
 export function SearchSelectFieldRHF<OptionType>(
-  props: RHFControllerProps &
-    RHFValidationProps &
+  props: RHFValidationProps &
     (OptionType extends SimpleSelectOption
       ? SimpleSearchSelectFieldProps<OptionType>
       : SearchSelectFieldProps<OptionType>),
@@ -25,7 +36,6 @@ export function SearchSelectFieldRHF<OptionType>(
     name,
     serializeError = defaultErrorSerializer,
     deps,
-    rhfOptions,
     ...searchSelectProps
   } = props;
   const { setValue, trigger } = useCheckedFormRHFContext();
@@ -35,7 +45,6 @@ export function SearchSelectFieldRHF<OptionType>(
     formState: { isSubmitted },
   } = useController({
     name: props.name,
-    ...rhfOptions,
   });
 
   const handleSelect = useCallback(

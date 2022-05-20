@@ -2,8 +2,9 @@ import clsx from 'clsx';
 import React from 'react';
 import { useFormState } from 'react-hook-form';
 
-import { Button } from '../../elements/buttons/Button';
-import { SubmitProps } from '../formik/SubmitButton';
+import { Button, ButtonProps } from '../../elements/buttons/Button';
+
+export type SubmitProps = Omit<ButtonProps, 'type'>;
 
 export function SubmitButtonRHF(props: SubmitProps): JSX.Element {
   const { disabled, className, ...otherProps } = props;

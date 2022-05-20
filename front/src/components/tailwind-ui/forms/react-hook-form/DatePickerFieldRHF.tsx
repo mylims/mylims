@@ -6,15 +6,18 @@ import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
 import {
   defaultErrorSerializer,
   FieldProps,
-  RHFControllerProps,
   RHFValidationProps,
 } from '../util';
+
+export type DatePickerFieldProps<Modifiers extends string = never> = Omit<
+  DatePickerProps<Modifiers>,
+  'onChange' | 'value'
+>;
 
 export function DatePickerFieldRHF(
   props: Omit<DatePickerProps, 'value' | 'onChange'> &
     FieldProps &
-    RHFValidationProps &
-    RHFControllerProps,
+    RHFValidationProps,
 ) {
   const {
     name,
@@ -31,6 +34,7 @@ export function DatePickerFieldRHF(
   } = useController({
     name: props.name,
   });
+
   const { value, onBlur, ref } = field;
 
   const setFieldValue = useCallback(

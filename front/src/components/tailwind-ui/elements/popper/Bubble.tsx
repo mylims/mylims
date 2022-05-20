@@ -6,7 +6,7 @@ import { Popper as ReactPopper, Manager, Reference } from 'react-popper';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 
 interface PopperRenderCallbackArgs {
-  scheduleUpdate: () => void;
+  scheduleUpdate: () => Promise<unknown>;
   placement: Placement;
 }
 
@@ -19,7 +19,6 @@ export interface BubbleProps {
   placement?: Placement;
   reference: TypeReference;
   children: ReactNode | ((args: PopperRenderCallbackArgs) => ReactNode);
-  className?: string;
   popperClassName?: string;
   onClickOutside: (event: Event) => void;
 }

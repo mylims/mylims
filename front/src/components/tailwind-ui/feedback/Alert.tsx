@@ -8,6 +8,7 @@ import {
 import clsx from 'clsx';
 import React, { ReactNode } from 'react';
 
+import { IconButton } from '../elements/buttons/IconButton';
 import { Color } from '../types';
 
 const closeButtonColors: Record<Color, string> = {
@@ -92,6 +93,7 @@ function getColorByType(type: AlertType): Color {
 
 export function Alert(props: AlertProps): JSX.Element {
   const type = theme[props.type];
+  const color = getColorByType(props.type);
 
   return (
     <div
@@ -121,16 +123,16 @@ export function Alert(props: AlertProps): JSX.Element {
         {props.onDismiss && (
           <div className="ml-auto pl-3">
             <div className="-mx-1.5 -my-1.5">
-              <button
-                type="button"
+              <IconButton
                 onClick={props.onDismiss}
                 className={clsx(
-                  closeButtonColors[getColorByType(props.type)],
+                  closeButtonColors[color],
                   'rounded-full p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2',
                 )}
-              >
-                <XIcon className="h-5 w-5" />
-              </button>
+                icon={<XIcon />}
+                color={color}
+                size="5"
+              />
             </div>
           </div>
         )}

@@ -1,5 +1,11 @@
 import clsx from 'clsx';
-import React, { forwardRef, Ref } from 'react';
+import React, {
+  forwardRef,
+  Ref,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+} from 'react';
 
 import { Help, labelColor, labelDisabledColor } from './common';
 
@@ -9,11 +15,12 @@ export interface CheckboxProps
   label?: string;
   help?: string;
   error?: string;
+  indeterminate?: boolean;
 }
 
 export const Checkbox = forwardRef(function CheckboxForwardRef(
   props: CheckboxProps,
-  ref: Ref<HTMLInputElement>,
+  ref: Ref<HTMLInputElement | null>,
 ) {
   const {
     name,
@@ -23,8 +30,17 @@ export const Checkbox = forwardRef(function CheckboxForwardRef(
     help,
     className,
     error,
+    indeterminate,
     ...otherProps
   } = props;
+  const inputRef = useRef<HTMLInputElement>(null);
+  useImperativeHandle(ref, () => inputRef.current);
+  useLayoutEffect(() => {
+    if (inputRef.current && indeterminate !== undefined) {
+      inputRef.current.indeterminate = indeterminate;
+    }
+  }, [indeterminate]);
+
   return (
     <div className={clsx('flex items-start', className)}>
       <div className="flex h-5 items-center">
@@ -34,7 +50,7 @@ export const Checkbox = forwardRef(function CheckboxForwardRef(
           name={name}
           value={value}
           type="checkbox"
-          ref={ref}
+          ref={inputRef}
           className={clsx(
             'form-checkbox h-4 w-4 rounded text-primary-600 disabled:text-neutral-300',
             error

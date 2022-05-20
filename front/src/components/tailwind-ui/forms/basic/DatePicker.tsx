@@ -144,6 +144,7 @@ const DatePickerInput = forwardRef(function DatePickerInput(
       <input
         {...otherProps}
         {...inputProps}
+        autoComplete="off"
         ref={innerRef}
         name={name}
         className={clsx(

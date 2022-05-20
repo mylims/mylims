@@ -26,7 +26,8 @@ export function FormRHFModal<TValues extends FieldValues>(
       {...otherProps}
       requestCloseOnBackdrop={requestCloseOnBackdrop}
       requestCloseOnEsc={requestCloseOnEsc}
-      // @ts-expect-error Weird error.
+      // TODO: Remove when we want to force update to React 18.
+      // @ts-ignore Weird error.
       wrapperComponent={FormRHF}
       wrapperProps={otherProps}
     >

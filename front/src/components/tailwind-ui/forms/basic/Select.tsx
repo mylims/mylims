@@ -1,4 +1,4 @@
-import { Listbox, Transition } from '@headlessui/react';
+import { Listbox } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
@@ -259,62 +259,54 @@ export function Select<OptionType>(
                 </Listbox.Button>
               </span>
 
-              {!disabled && (
-                <Transition
-                  show={open}
-                  leave="transition-opacity ease-in duration-300"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                  className="absolute z-20 my-1 rounded-md shadow-lg"
+              {!disabled && open && (
+                <div
+                  ref={setPopperElement}
+                  {...popperProps}
+                  className="absolute z-20 rounded-md shadow-lg"
                 >
-                  <div ref={setPopperElement} {...popperProps}>
-                    <Listbox.Options
-                      static
-                      className="max-h-60 overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                    >
-                      {options.map((option) => {
-                        const value = getValue(option);
-                        return (
-                          <Listbox.Option key={value} value={value}>
-                            {({ selected: isSelected, active }) => (
-                              <div
+                  <Listbox.Options
+                    static
+                    className="max-h-60 overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                  >
+                    {options.map((option) => {
+                      const value = getValue(option);
+                      return (
+                        <Listbox.Option key={value} value={value}>
+                          {({ selected: isSelected, active }) => (
+                            <div
+                              className={clsx(
+                                active
+                                  ? highlightClassName
+                                  : 'text-neutral-900',
+                                'relative cursor-default select-none py-2 pl-8 pr-4',
+                              )}
+                            >
+                              <span
                                 className={clsx(
-                                  active
-                                    ? highlightClassName
-                                    : 'text-neutral-900',
-                                  'relative cursor-default select-none py-2 pl-8 pr-4',
+                                  isSelected ? 'font-semibold' : 'font-normal',
+                                  'block truncate',
                                 )}
                               >
+                                {renderOption(option)}
+                              </span>
+                              {isSelected && (
                                 <span
                                   className={clsx(
-                                    isSelected
-                                      ? 'font-semibold'
-                                      : 'font-normal',
-                                    'block truncate',
+                                    active ? 'text-white' : 'text-primary-600',
+                                    'absolute inset-y-0 left-0 flex items-center pl-1.5',
                                   )}
                                 >
-                                  {renderOption(option)}
+                                  <CheckIcon className="h-5 w-5" />
                                 </span>
-                                {isSelected && (
-                                  <span
-                                    className={clsx(
-                                      active
-                                        ? 'text-white'
-                                        : 'text-primary-600',
-                                      'absolute inset-y-0 left-0 flex items-center pl-1.5',
-                                    )}
-                                  >
-                                    <CheckIcon className="h-5 w-5" />
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                          </Listbox.Option>
-                        );
-                      })}
-                    </Listbox.Options>
-                  </div>
-                </Transition>
+                              )}
+                            </div>
+                          )}
+                        </Listbox.Option>
+                      );
+                    })}
+                  </Listbox.Options>
+                </div>
               )}
             </div>
             <Help error={error} help={help} />

@@ -18,6 +18,7 @@ export interface ToastNotificationAction {
 export interface ToastNotificationConfig {
   label: string;
   action?: ToastNotificationAction;
+  group?: string;
 }
 
 export type AddNotification = (
@@ -73,11 +74,16 @@ export function notificationsReducer(
 ): NotificationsState {
   switch (action.type) {
     case 'ADD_NOTIFICATION': {
-      const copy = previous.notifications.slice();
+      let copy = previous.notifications.slice();
 
       if (!action.payload.isToast) {
         copy.push({ ...action.payload, type: action.payload.type });
       } else {
+        if (action.payload.group) {
+          const group = action.payload.group;
+          copy = copy.filter((el) => el.isToast && el.group !== group);
+        }
+
         copy.push({ ...action.payload });
       }
 

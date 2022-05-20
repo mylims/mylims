@@ -11,6 +11,7 @@ import React, {
 } from 'react';
 import { useKbsDisableGlobal } from 'react-kbs';
 
+import { IconButton } from '../elements/buttons/IconButton';
 import { useLockBodyScroll } from '../hooks/useLockBodyScroll';
 import { Color, PropsOf } from '../types';
 
@@ -46,14 +47,17 @@ export interface ModalProps<T extends ElementType> {
   wrapperComponent?: T;
   // This prop isn't used anymore but kept for backwards-compatibility in case
   // we re-add the functionality in the future.
+  // eslint-disable-next-line react/no-unused-prop-types
   animated?: boolean;
   fluid?: boolean;
   wrapperProps?: Omit<PropsOf<T>, 'children'>;
   dialogStyle?: CSSProperties;
 }
 
-// @ts-expect-error Chrome isn't in the standard
-const isChrome = typeof window !== 'undefined' && window.chrome;
+const isFirefox =
+  typeof navigator !== 'undefined'
+    ? navigator.userAgent.toLowerCase().includes('firefox')
+    : null;
 
 export function Modal<T extends ElementType>(props: ModalProps<T>) {
   const {
@@ -96,12 +100,12 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
   }, []);
 
   useEffect(() => {
-    if (isOpen) {
+    const dialog = dialogRef.current;
+    if (dialog && isOpen) {
       // @ts-ignore
-      dialogRef.current?.showModal();
-    } else if (!isOpen && dialogRef.current?.hasAttribute('open')) {
+      dialog.showModal();
       // @ts-ignore
-      dialogRef.current?.close();
+      return () => dialog.close();
     }
   }, [isOpen]);
 
@@ -122,14 +126,14 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
       </div>
       {onRequestClose && hasCloseButton ? (
         <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
-          <button
-            type="button"
+          <IconButton
+            className="rounded-full text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2"
             onClick={onRequestClose}
-            className="rounded-full bg-white text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2"
             aria-label="Close"
-          >
-            <XIcon className="h-6 w-6" />
-          </button>
+            color="none"
+            icon={<XIcon />}
+            size="6"
+          />
         </div>
       ) : null}
     </div>
@@ -157,13 +161,8 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
         style={Object.assign(
           { maxWidth: fluid ? 'calc(100% - 2rem)' : undefined },
           dialogStyle,
-          !isChrome
+          isFirefox
             ? {
-                top: '50%',
-                // Custom transform is cumulative
-                transform: `translateY(-50%) ${
-                  dialogStyle?.transform ? dialogStyle.transform : ''
-                }`,
                 maxHeight: 'calc((100% - 6px) - 2em)',
               }
             : {},

@@ -57,7 +57,7 @@ function WrapperToggle(props: { children: ReactNode; error?: string }) {
   );
 }
 
-function LargeToggle(props: TogglePropsWithRef): JSX.Element {
+function LargeToggle(props: Omit<TogglePropsWithRef, 'size'>): JSX.Element {
   const { label, activated, onToggle, disabled, name, inputRef, error } = props;
 
   return (
@@ -113,7 +113,7 @@ function LargeToggle(props: TogglePropsWithRef): JSX.Element {
   );
 }
 
-function SmallToggle(props: TogglePropsWithRef) {
+function SmallToggle(props: Omit<TogglePropsWithRef, 'size'>) {
   const { label, activated, onToggle, disabled, name, inputRef, error } = props;
 
   return (

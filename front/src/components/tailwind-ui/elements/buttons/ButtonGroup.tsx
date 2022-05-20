@@ -4,6 +4,7 @@ import React, { Children, createContext, ReactNode, useContext } from 'react';
 import { Roundness, Size } from '../..';
 import { Variant, Color } from '../../types';
 import { Dropdown, DropdownProps } from '../dropdown/Dropdown';
+import { WithTooltip, WithTooltipProps } from '../popper/WithTooltip';
 
 import { Button, ButtonProps } from './Button';
 import { getButtonClassName } from './utils';
@@ -68,7 +69,7 @@ export function ButtonGroup(props: ButtonGroupProps): JSX.Element {
 }
 
 ButtonGroup.Button = function ButtonGroupButton(
-  props: Omit<ButtonProps, 'group'>,
+  props: Omit<ButtonProps, 'group'> & WithTooltipProps,
 ) {
   const ctx = useContext(context);
 
@@ -82,18 +83,30 @@ ButtonGroup.Button = function ButtonGroupButton(
     size = ctx.size,
     roundness = ctx.roundness,
     disabled = ctx.disabled,
+
+    tooltip,
+    tooltipDelay,
+    tooltipPlacement,
+
+    ...rest
   } = props;
 
   return (
-    <Button
-      {...props}
-      group={ctx.group}
-      variant={variant}
-      color={color}
-      size={size}
-      roundness={roundness}
-      disabled={disabled}
-    />
+    <WithTooltip
+      tooltip={tooltip}
+      tooltipDelay={tooltipDelay}
+      tooltipPlacement={tooltipPlacement}
+    >
+      <Button
+        {...rest}
+        group={ctx.group}
+        variant={variant}
+        color={color}
+        size={size}
+        roundness={roundness}
+        disabled={disabled}
+      />
+    </WithTooltip>
   );
 };
 

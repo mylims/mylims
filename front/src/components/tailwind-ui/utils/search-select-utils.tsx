@@ -17,6 +17,11 @@ import React, {
 import { Spinner } from '../elements/spinner/Spinner';
 import { Input } from '../forms/basic/Input';
 import {
+  SearchSelectCanCreateCallback,
+  SearchSelectOnCreateCallback,
+  SearchSelectRenderCreateCallback,
+} from '../forms/basic/SearchSelect';
+import {
   GetValue,
   RenderOption,
   SimpleSelectOption,
@@ -116,7 +121,7 @@ export function buildInternalOptions<OptionType>(
   options: OptionType[],
   getValue: GetValue<OptionType>,
   renderOption: RenderOption<OptionType>,
-  renderCreate: (value: string) => ReactNode,
+  renderCreate: SearchSelectRenderCreateCallback,
   createValue?: string,
 ): InternalOption<OptionType>[] {
   const internalOptions: InternalOption<OptionType>[] = options.map(
@@ -184,11 +189,11 @@ interface UseSearchSelectInternalsConfig<OptionType> {
   renderOption: RenderOption<OptionType>;
   closeListOnSelect: boolean;
   clearSearchOnSelect: boolean;
-  onCreate?: (value: string) => void;
-  canCreate: (value: string) => boolean;
+  onCreate?: SearchSelectOnCreateCallback<OptionType>;
+  canCreate: SearchSelectCanCreateCallback;
+  renderCreate: SearchSelectRenderCreateCallback;
   onBackspace?: () => void;
   formattedSelected?: { value: string | number; label: ReactNode };
-  renderCreate: (value: string) => ReactNode;
 }
 
 export function useSearchSelectInternals<OptionType>(
@@ -258,7 +263,7 @@ export function useSearchSelectInternals<OptionType>(
     if (option.type === 'option') {
       onSelect(option.originalValue);
     } else {
-      onCreate?.(option.originalValue);
+      onCreate?.(option.originalValue, onSelect);
     }
     if (closeListOnSelect) {
       closeList();
@@ -453,6 +458,7 @@ export function InternalSearchSelect<OptionType>(
         size={size}
         error={error}
         help={help}
+        autoComplete="off"
         onBlur={(event) => {
           onBlur?.(event);
           closeList();
@@ -582,6 +588,7 @@ export function InternalMultiSearchSelect<OptionType>(
             size={Math.max(5, placeholder?.length || 0, searchValue.length)}
             disabled={disabled}
             autoFocus={autoFocus}
+            autoComplete="off"
             onBlur={(event) => {
               onBlur?.(event);
               closeList();

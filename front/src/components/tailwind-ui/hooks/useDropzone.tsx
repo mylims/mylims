@@ -1,29 +1,28 @@
-import { FieldHookConfig, useField } from 'formik';
 import { useCallback, useState } from 'react';
-import { DropzoneProps } from 'react-dropzone';
+import { Accept, DropzoneProps } from 'react-dropzone';
 import { useController, useWatch } from 'react-hook-form';
 
-import { RHFControllerProps, RHFValidationProps } from '..';
+import { RHFValidationProps } from '..';
 
 import { useCheckedFormRHFContext } from './useCheckedFormRHF';
 
-export interface DropzoneHookOptions extends Omit<DropzoneProps, 'onDrop'> {
+export interface DropzoneHookOptions
+  extends Omit<DropzoneProps, 'onDrop' | 'accept'> {
   replace?: boolean;
+  accept?: Accept | string[] | string;
 }
 
 export function useDropzoneFieldRHF(
-  dropzoneOptions: DropzoneHookOptions &
-    RHFControllerProps &
-    RHFValidationProps,
+  dropzoneOptions: DropzoneHookOptions & RHFValidationProps,
   name: string,
 ) {
-  const { replace, deps, rhfOptions, ...dropzoneProps } = dropzoneOptions;
+  const { replace, deps, ...dropzoneProps } = dropzoneOptions;
   const { setValue, trigger } = useCheckedFormRHFContext();
   const {
     field,
     fieldState: { error },
     formState: { isSubmitted },
-  } = useController({ name, ...rhfOptions });
+  } = useController({ name });
   const files: File[] = useWatch({ name });
   const onDrop = useCallback(
     (newFiles: File[]) => {
@@ -92,54 +91,6 @@ export function useDropzoneFieldRHF(
     },
     field,
     error,
-  };
-}
-
-export function useDropzoneField(
-  dropzoneOptions: DropzoneHookOptions,
-  fieldConfig: FieldHookConfig<File[]>,
-) {
-  const { replace, ...dropzoneProps } = dropzoneOptions;
-  fieldConfig.type = 'file';
-  const [field, meta, helper] = useField<File[]>(fieldConfig);
-
-  const files = field.value;
-  const onDrop = (newFiles: File[]) => {
-    if (replace) {
-      helper.setValue(newFiles);
-    } else {
-      const doesNotAlreadyExist = (newFile: File) => {
-        return (
-          field.value.filter((file: File) => newFile.name === file.name)
-            .length === 0
-        );
-      };
-      helper.setValue(files.concat(newFiles.filter(doesNotAlreadyExist)));
-    }
-  };
-
-  const removeFile = (fileToRemove: File) => {
-    helper.setValue(files.filter((file) => file.name !== fileToRemove.name));
-  };
-
-  const clearFiles = () => {
-    helper.setValue([]);
-  };
-
-  return {
-    removeFile,
-    clearFiles,
-    dropzoneProps: {
-      ...dropzoneProps,
-      ...field,
-      onDrop,
-    },
-    dropzoneListProps: {
-      files,
-      onRemove: removeFile,
-    },
-    field,
-    meta,
   };
 }
 

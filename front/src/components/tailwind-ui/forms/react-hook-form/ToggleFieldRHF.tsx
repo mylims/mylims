@@ -2,14 +2,19 @@ import React, { useCallback } from 'react';
 import { get, useWatch } from 'react-hook-form';
 
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
-import { Toggle } from '../basic/Toggle';
-import { ToggleFieldProps } from '../formik/ToggleField';
+import { Toggle, ToggleProps } from '../basic/Toggle';
 import {
   defaultErrorSerializer,
   FieldProps,
   RHFRegisterProps,
   RHFValidationProps,
 } from '../util';
+
+export interface ToggleFieldProps
+  extends Omit<ToggleProps, 'activated' | 'onToggle'> {
+  name: string;
+  label: string;
+}
 
 export type ToggleFieldRHFProps = ToggleFieldProps &
   FieldProps &

@@ -3,6 +3,8 @@ import { MenuAlt1Icon, XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import React, { ReactNode, useEffect } from 'react';
 
+import { IconButton } from '../elements/buttons/IconButton';
+
 export interface SidebarLayoutProps {
   header: ReactNode;
   sidebar: ReactNode;
@@ -62,19 +64,19 @@ export function SidebarLayout(props: SidebarLayoutProps) {
             className="relative flex h-full w-full max-w-xs flex-1 flex-col bg-white"
           >
             <div className="absolute top-0 right-0 -mr-14 p-1">
-              <button
-                type="button"
+              <IconButton
                 className={clsx(
-                  'flex h-12 w-12 items-center justify-center rounded-full focus:bg-neutral-600 focus:outline-none',
+                  'flex h-12 w-12 items-center justify-center rounded-full p-3 text-white focus:bg-neutral-600 focus:outline-none',
                   {
                     hidden: !isOpen,
                   },
                 )}
                 aria-label="Close sidebar"
                 onClick={close}
-              >
-                <XIcon className="h-6 w-6 text-white" />
-              </button>
+                color="none"
+                icon={<XIcon />}
+                size="6"
+              />
             </div>
             <div className="h-full overflow-auto">{sidebar}</div>
           </Transition.Child>
@@ -104,6 +106,7 @@ export function SidebarLayout(props: SidebarLayoutProps) {
           >
             <MenuAlt1Icon className="h-6 w-6 transition duration-150 ease-in-out" />
           </button>
+
           <div className="flex flex-1 justify-between">{header}</div>
         </div>
         <main className="relative z-0 flex flex-1 flex-col overflow-y-auto pb-8">

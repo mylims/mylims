@@ -2,14 +2,15 @@ import React from 'react';
 import { get } from 'react-hook-form';
 
 import { useCheckedFormRHFContext } from '../../hooks/useCheckedFormRHF';
-import { Checkbox } from '../basic/Checkbox';
-import { CheckboxFieldProps } from '../formik/CheckboxField';
+import { Checkbox, CheckboxProps } from '../basic/Checkbox';
 import {
   defaultErrorSerializer,
   FieldProps,
   RHFRegisterProps,
   RHFValidationProps,
 } from '../util';
+
+export type CheckboxFieldProps = CheckboxProps;
 
 export type CheckboxFieldRHFProps = Omit<CheckboxFieldProps, 'checked'> &
   FieldProps &

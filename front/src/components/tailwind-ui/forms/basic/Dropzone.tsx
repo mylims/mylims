@@ -1,13 +1,18 @@
 import { UploadIcon } from '@heroicons/react/solid';
 import bytesize from 'byte-size';
 import clsx from 'clsx';
-import { getType, getExtension } from 'mime';
+import { getType } from 'mime';
 import React, { forwardRef, ReactNode, useImperativeHandle } from 'react';
-import { DropzoneProps as DropzoneLibProps, useDropzone } from 'react-dropzone';
+import {
+  Accept,
+  DropzoneProps as DropzoneLibProps,
+  useDropzone,
+} from 'react-dropzone';
 
-export interface DropzoneProps extends DropzoneLibProps {
+export interface DropzoneProps extends Omit<DropzoneLibProps, 'accept'> {
   header?: ReactNode;
   message?: ReactNode;
+  accept?: Accept | string[] | string;
 }
 
 // @ts-expect-error Will be supported in TS 4.6.
@@ -19,27 +24,12 @@ const listFormatter = new Intl.ListFormat('en', {
 export const Dropzone = forwardRef<HTMLInputElement, DropzoneProps>(
   function DropzoneForwardRef(props, ref) {
     const { message, header, accept, ...otherProps } = props;
-    const { mimes, extensions } = getAcceptedFiles(accept || []);
+    const { finalAccept, list } = getAcceptedFiles(accept || {});
 
-    const {
-      getRootProps,
-      getInputProps,
-      isDragActive,
-      fileRejections,
-      draggedFiles,
-      isDragReject,
-      isDragAccept,
-    } = useDropzone({
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
       ...otherProps,
-      accept: mimes,
+      accept: finalAccept,
     });
-
-    const allFilesAccepted = isDragAccept;
-    const someFilesRejected = !isDragAccept && isDragReject;
-    const allFilesRejected =
-      someFilesRejected &&
-      draggedFiles.length === 1 &&
-      draggedFiles[0].type !== '';
 
     const { ref: dropzoneRef, style, ...inputProps } = getInputProps();
     useImperativeHandle(ref, () => dropzoneRef.current);
@@ -48,13 +38,10 @@ export const Dropzone = forwardRef<HTMLInputElement, DropzoneProps>(
       <div
         {...getRootProps()}
         className={clsx(
-          'rounded-md border-2 border-dashed focus-within:border-transparent focus-within:ring focus-within:ring-primary-500 focus:border-transparent focus:outline-none focus:ring',
+          'rounded-md border-2 border-dashed focus-within:border-transparent focus-within:ring focus-within:ring-primary-500 focus:border-transparent focus:outline-none focus:ring focus:ring-primary-500',
           {
-            'border-success-600 focus:ring-success-600': allFilesAccepted,
-            'border-primary-500 focus:ring-primary-500':
-              someFilesRejected && !allFilesRejected,
-            'border-danger-500 focus:ring-danger-500': allFilesRejected,
-            'border-neutral-300 focus:ring-primary-500': !isDragActive,
+            'border-primary-500': isDragActive,
+            'border-neutral-300': !isDragActive,
           },
         )}
       >
@@ -86,29 +73,12 @@ export const Dropzone = forwardRef<HTMLInputElement, DropzoneProps>(
               </div>
               <div className="mt-1 text-xs">
                 <div className="text-neutral-500">
-                  {props.accept ? extensions : null}
+                  {props.accept ? list : null}
                   {props.accept && props.maxSize ? ' ' : null}
                   {props.maxSize
                     ? `(up to ${String(bytesize(props.maxSize))})`
                     : null}
                 </div>
-
-                {!isDragActive && fileRejections.length > 0 && (
-                  <p
-                    title={fileRejections
-                      .map(({ file }) => file.name)
-                      .join(', ')}
-                    className="text-danger-500"
-                  >
-                    {fileRejections.length} file
-                    {fileRejections.length > 1 ? 's were' : ' was'} not
-                    accepted.
-                  </p>
-                )}
-
-                {isDragActive && allFilesRejected && (
-                  <p className="text-danger-500">This file cannot be added</p>
-                )}
               </div>
             </div>
           </div>
@@ -118,49 +88,50 @@ export const Dropzone = forwardRef<HTMLInputElement, DropzoneProps>(
   },
 );
 
-function getAcceptedFiles(accept: string | string[]) {
-  const results =
-    typeof accept !== 'string'
+function getAcceptedFiles(accept: Accept | string | string[]): {
+  finalAccept: Accept;
+  list: string;
+} {
+  const finalAccept =
+    typeof accept === 'string'
+      ? convertAccept(accept.split(','))
+      : Array.isArray(accept)
       ? convertAccept(accept)
-      : convertAccept(accept.split(','));
+      : accept;
+
+  const listArray: string[] = [];
+  for (const key of Object.keys(finalAccept)) {
+    if (finalAccept[key].length === 0) {
+      listArray.push(key);
+    } else {
+      listArray.push(...finalAccept[key]);
+    }
+  }
 
   return {
-    extensions: listFormatter.format(
-      results.map((element) => element.extension),
-    ),
-    mimes: results.map((element) => element.mime).join(','),
+    finalAccept,
+    list: listFormatter.format(listArray),
   };
 }
 
-function convertAccept(array: Array<string>) {
-  const results: Array<{ extension: string; mime: string }> = [];
-
-  let mime: string;
-  let extension: string;
+function convertAccept(array: Array<string>): Accept {
+  array = array.map((value) => value.trim());
+  const result: Accept = {};
 
   for (const element of array) {
+    if (!element.startsWith('.')) {
+      throw new Error(
+        `Invalid extension passed to the \`accept\` prop (${element}). It must start with a dot.`,
+      );
+    }
+
     if (element.includes('/')) {
-      // It's a mime type.
-      mime = element;
-
-      let extension = getExtension(mime);
-      if (extension === null) {
-        if (shouldWarn(mime)) {
-          // eslint-disable-next-line no-console
-          console.warn(
-            `An unknown mime type (${mime}) was passed to the accept prop of the Dropzone component. The type will be displayed to the user as a fallback. You can add it the mime database using "mime.define({'${element}': ['extension']})".`,
-          );
-        }
-        extension = mime.toLowerCase();
-      }
-
-      results.push({
-        extension,
-        mime,
-      });
+      throw new Error(
+        'It is no longer supported to pass an array of mime types to the `accept` prop of the `Dropzone` component. Please use the object form or an array of extensions instead.',
+      );
     } else {
       // If it's not a mime type, then it has to be an extension.
-      extension = element;
+      const extension = element.toLowerCase();
 
       let mime = getType(extension);
       if (mime === null) {
@@ -171,25 +142,21 @@ function convertAccept(array: Array<string>) {
           );
         }
         mime = 'application/octet-stream';
-        extension = extension.toLowerCase();
-      } else {
-        // Normalize the extension that will be showed to the user.
-        extension = getExtension(mime) as string;
       }
 
-      results.push({
-        extension,
-        mime,
-      });
+      if (result[mime]) {
+        result[mime].push(extension);
+      } else {
+        result[mime] = [extension];
+      }
     }
   }
 
-  return results;
+  return result;
 }
 
 const warned = new Set<string>();
 function shouldWarn(value: string) {
-  value = value.toLowerCase();
   if (warned.has(value)) {
     return false;
   }

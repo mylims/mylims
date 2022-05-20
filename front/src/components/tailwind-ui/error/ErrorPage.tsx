@@ -1,13 +1,14 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 export interface ErrorPageProps {
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   code?: string | number;
+  children?: ReactNode;
 }
 
-export const ErrorPage: React.FC<ErrorPageProps> = (props) => {
+export function ErrorPage(props: ErrorPageProps) {
   const { title, subtitle, code, children } = props;
 
   return (
@@ -40,4 +41,4 @@ export const ErrorPage: React.FC<ErrorPageProps> = (props) => {
       </div>
     </div>
   );
-};
+}
