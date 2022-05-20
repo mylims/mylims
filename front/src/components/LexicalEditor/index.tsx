@@ -7,6 +7,7 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import LinkPlugin from '@lexical/react/LexicalLinkPlugin';
 import ListPlugin from '@lexical/react/LexicalListPlugin';
 import RichTextPlugin from '@lexical/react/LexicalRichTextPlugin';
+// import OnChangePlugin from '@lexical/react/LexicalOnChangePlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import React from 'react';
 
@@ -44,7 +45,13 @@ const editorConfig = {
   ],
 };
 
-export default function Editor() {
+// TODO: This only will work on the new release of Lexical
+// export interface LexicalEditorProps {
+//   value: JSONEditorState;
+//   onChange(value: JSONEditorState): void;
+// }
+// export default function LexicalEditor({ value, onChange }: LexicalEditorProps) {
+export default function LexicalEditor() {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative m-2 rounded-t-md rounded-b-sm font-normal leading-5 text-black">
@@ -62,6 +69,11 @@ export default function Editor() {
           <LinkPlugin />
           <AutoLinkPlugin />
           <ListMaxIndentLevelPlugin maxDepth={7} />
+          {/* <OnChangePlugin
+            onChange={(editorState) => {
+              return onChange(editorState.toJSON());
+            }}
+          /> */}
 
           {/* Custom plugins */}
           <SampleLinkPlugin />

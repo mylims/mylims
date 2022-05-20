@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import FieldDescription from '@/components/FieldDescription';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
-import LexicalEditor from '@/components/LexicalEditor';
+import { LexicalEditorRHF } from '@/components/LexicalEditor/LexicalEditorRHF';
 import {
   FormRHF,
   Card,
@@ -71,7 +71,7 @@ export function NotebookForm({
                 <SamplesTableRHF name="samples" />
               </div>
               <div className="lg:w-2/3">
-                <LexicalEditor />
+                <LexicalEditorRHF name="content" label="Content" />
               </div>
             </SampleLinkContext.Provider>
           </div>
