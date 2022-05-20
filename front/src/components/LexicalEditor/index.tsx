@@ -20,7 +20,7 @@ import TailwindTheme from './themes/TailwindTheme';
 
 function Placeholder() {
   return (
-    <div className="pointer-events-none absolute top-4 left-4 inline-block select-none overflow-hidden text-ellipsis text-neutral-400">
+    <div className="pointer-events-none absolute top-4 inline-block select-none overflow-hidden text-ellipsis text-neutral-400">
       Enter some rich text...
     </div>
   );
@@ -59,7 +59,7 @@ export default function LexicalEditor() {
         <div className="relative bg-white">
           <RichTextPlugin
             contentEditable={
-              <ContentEditable className="relative min-h-[150px] resize-none pt-4 pl-4 caret-neutral-500 outline-none" />
+              <ContentEditable className="relative min-h-[150px] resize-none pt-4 caret-neutral-500 outline-none" />
             }
             placeholder={<Placeholder />}
           />
