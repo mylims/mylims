@@ -1,12 +1,11 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useController } from 'react-hook-form';
 
 import {
   defaultErrorSerializer,
   FieldProps,
-  RHFControllerProps,
   RHFValidationProps,
-  useCheckedFormRHFContext,
+  // useCheckedFormRHFContext,
 } from '@/components/tailwind-ui';
 
 import { LexicalFieldProps, LexicalField } from './LexicalField';
@@ -16,39 +15,37 @@ export type RichTextFieldRHFProps = Omit<
   'value' | 'onChange'
 > &
   FieldProps &
-  RHFValidationProps &
-  RHFControllerProps;
+  RHFValidationProps;
 export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
   const {
+    deps,
     name,
     serializeError = defaultErrorSerializer,
-    deps,
-    rhfOptions,
     ...otherProps
   } = props;
 
-  const { setValue, trigger } = useCheckedFormRHFContext();
+  // const { setValue, trigger } = useCheckedFormRHFContext();
   const {
-    field,
+    // field,
     fieldState: { error },
-    formState: { isSubmitted: shouldValidate },
-  } = useController({ name, ...rhfOptions });
+    // formState: { isSubmitted: shouldValidate },
+  } = useController({ name });
 
-  const handleChange = useCallback(
-    (value: LexicalFieldProps['value']) => {
-      setValue(name, value, { shouldTouch: true, shouldValidate });
-      if (deps && shouldValidate) void trigger(deps);
-    },
-    [setValue, shouldValidate, name, trigger, deps],
-  );
+  // const handleChange = useCallback(
+  //   (value: string) => {
+  //     setValue(name, value, { shouldTouch: true, shouldValidate });
+  //     if (deps && shouldValidate) void trigger(deps);
+  //   },
+  //   [setValue, shouldValidate, name, trigger, deps],
+  // );
 
   return (
     <LexicalField
       name={name}
       {...otherProps}
       error={serializeError(error)}
-      value={field.value}
-      onChange={handleChange}
+      // value={field.value}
+      // onChange={handleChange}
     />
   );
 }

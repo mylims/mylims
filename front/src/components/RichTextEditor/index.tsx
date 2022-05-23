@@ -89,7 +89,7 @@ export function RichTextEditor({
 
   const { getRootProps, getInputProps, open, isDragActive, isDragReject } =
     useDropzone({
-      accept: 'image/jpeg,image/png',
+      accept: { 'image/jpeg': [], 'image/png': [] },
       noClick: true,
       noKeyboard: true,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

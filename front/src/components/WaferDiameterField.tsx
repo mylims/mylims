@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { SimpleWaferDicing } from '@/components/WaferDicing';
 import {
   SearchSelectFieldRHF,
+  SearchSelectOnCreateCallback,
   Toggle,
-  useSearchSelectFieldRHF,
+  useSearchSelect,
 } from '@/components/tailwind-ui';
 
 interface WaferDiameterFieldProps {
@@ -24,21 +25,26 @@ export default function WaferDiameterField({
   options: initialOptions,
 }: WaferDiameterFieldProps) {
   const [options, setOptions] = useState(initialOptions);
-  const searchSelect = useSearchSelectFieldRHF({ name, options });
+  const searchSelect = useSearchSelect({ options });
+
+  const handleCreate: SearchSelectOnCreateCallback<
+    Record<'value' | 'label', string>
+  > = (value, select) => {
+    const newOption = { label: value, value };
+    setOptions([...options, newOption]);
+    select(newOption);
+  };
 
   return (
     <div className="flex flex-col md:grid md:grid-flow-col md:grid-rows-2 md:gap-4">
       <SearchSelectFieldRHF
+        name={name}
         label={label}
         required={required}
         canCreate={(val) => {
           return options.find(({ value }) => value === val) === undefined;
         }}
-        onCreate={(value) => {
-          const newOption = { label: value, value };
-          setOptions([...options, newOption]);
-          searchSelect.onSelect(newOption);
-        }}
+        onCreate={handleCreate}
         clearable
         {...searchSelect}
       />

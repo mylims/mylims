@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 
 import {
   SearchSelectFieldRHF,
-  useSearchSelectFieldRHF,
+  SearchSelectOnCreateCallback,
+  useMultiSearchSelect,
 } from '@/components/tailwind-ui';
 
 interface EditableSelectProps {
@@ -18,20 +19,24 @@ export default function EditableSelect({
   options: initialOptions,
 }: EditableSelectProps) {
   const [options, setOptions] = useState(initialOptions);
-  const searchSelect = useSearchSelectFieldRHF({ name, options });
+  const searchSelect = useMultiSearchSelect({ options });
+  const handleCreate: SearchSelectOnCreateCallback<
+    Record<'value' | 'label', string>
+  > = (value, select) => {
+    const newOption = { label: value, value };
+    setOptions([...options, newOption]);
+    select(newOption);
+  };
 
   return (
     <SearchSelectFieldRHF
+      name={name}
       label={label}
       required={required}
       canCreate={(val) => {
         return options.find(({ value }) => value === val) === undefined;
       }}
-      onCreate={(value) => {
-        const newOption = { label: value, value };
-        setOptions([...options, newOption]);
-        searchSelect.onSelect(newOption);
-      }}
+      onCreate={handleCreate}
       clearable
       {...searchSelect}
     />

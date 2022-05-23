@@ -1,10 +1,16 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import {
+  FormRHF,
+  InputFieldRHF,
+  SubmitButtonRHF,
+  FormErrorRHF,
+  Card,
+} from '@/components/tailwind-ui';
+
 import useAuth from '../hooks/useAuth';
 import { useElnMutation } from '../hooks/useElnQuery';
-
-import { Form, InputField, SubmitButton, FormError, Card } from './tailwind-ui';
 
 const initialValues = {
   email: '',
@@ -45,12 +51,15 @@ export default function LocalAuthForm() {
           </h3>
         </Card.Header>
         <div className="p-4">
-          <Form initialValues={initialValues} onSubmit={handleSubmit}>
-            <FormError />
-            <InputField name="email" label="Email" />
-            <InputField name="password" label="Password" type="password" />
-            <SubmitButton>Submit</SubmitButton>
-          </Form>
+          <FormRHF<ILogin>
+            defaultValues={initialValues}
+            onSubmit={handleSubmit}
+          >
+            <FormErrorRHF />
+            <InputFieldRHF name="email" label="Email" />
+            <InputFieldRHF name="password" label="Password" type="password" />
+            <SubmitButtonRHF>Submit</SubmitButtonRHF>
+          </FormRHF>
         </div>
       </Card>
     </div>
