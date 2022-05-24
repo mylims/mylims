@@ -7,6 +7,7 @@ import { ModelAttributes, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 import File from 'App/Models/File';
 import { BaseMeasurement } from 'App/Models/Measurement/Base';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
+import { XRayMeasurement } from 'App/Models/Measurement/XRay';
 import { Sample } from 'App/Models/Sample';
 import User from 'App/Models/User';
 import {
@@ -27,6 +28,7 @@ import {
 
 export const MEASUREMENTS = {
   [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
+  [GqlMeasurementTypes.XRAY]: XRayMeasurement,
 };
 
 const resolvers: GqlResolvers = {

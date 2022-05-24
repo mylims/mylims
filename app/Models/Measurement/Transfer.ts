@@ -6,9 +6,11 @@ export interface TransferType {
   thresholdVoltage: {
     index: number;
     value: number;
+    units: string;
   };
   subthresholdSlope: {
-    medianSlope: number;
+    slope: { value: number; units: string };
+    score: Record<string, number>;
     toIndex: number;
     fromIndex: number;
   };
