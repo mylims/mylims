@@ -296,6 +296,7 @@ export type GqlMeasurementSortInput = {
 
 export enum GqlMeasurementTypes {
   TRANSFER = 'transfer',
+  XRAY = 'xray',
 }
 
 export type GqlMutation = {

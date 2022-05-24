@@ -6,12 +6,12 @@ import { ModelAttributes, ObjectId } from '@ioc:Zakodium/Mongodb/Odm';
 
 import File from 'App/Models/File';
 import { BaseMeasurement } from 'App/Models/Measurement/Base';
-import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
 import { Sample } from 'App/Models/Sample';
 import { SampleKind } from 'App/Models/SampleKind';
 import User from 'App/Models/User';
 import availabilitySample from 'App/Queries/availabilitySample';
 import sampleCodeFlat from 'App/Queries/sampleCodeFlat';
+import { MEASUREMENTS } from 'App/Resolvers/Measurement';
 import {
   GqlMeasurementTypes,
   GqlResolvers,
@@ -30,9 +30,6 @@ import {
   removeNullable,
 } from 'App/utils';
 
-const MEASUREMENTS = {
-  [GqlMeasurementTypes.TRANSFER]: TransferMeasurement,
-};
 const resolvers: GqlResolvers = {
   Sample: {
     id: (sample: Sample): string => sample._id.toHexString(),
