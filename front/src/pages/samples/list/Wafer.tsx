@@ -25,6 +25,7 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import { Sample } from '@/generated/graphql';
+import { sampleLevels } from '@/models/sample';
 
 import SamplesList from './Default';
 
@@ -41,7 +42,7 @@ export default function WaferList() {
       <div className="col-span-3">
         <SamplesList
           kind="wafer"
-          levels={['wafer']}
+          levels={sampleLevels.slice(0, 1)}
           action={
             <TableQuery.ActionsColumn>
               {(row) => (
@@ -114,6 +115,7 @@ export default function WaferList() {
               <Tab.List>
                 <Tab className={tabStyle}>Details</Tab>
                 <Tab className={tabStyle}>Samples</Tab>
+                <Tab className={tabStyle}>X-ray</Tab>
               </Tab.List>
               {state ? (
                 <LinkButton
@@ -136,7 +138,7 @@ export default function WaferList() {
                   <Tab.Panels>
                     {/* Details */}
                     <Tab.Panel>
-                      <div className="grid grid-cols-2 gap-4 ">
+                      <div className="grid grid-cols-2 gap-4">
                         <LinkButton
                           title="update"
                           to={`/sample/update/wafer/${state.id}`}
@@ -219,7 +221,7 @@ export default function WaferList() {
                           )}
                         </ResponsiveChart>
                       </div>
-                      <div className="grid grid-cols-2 gap-4 ">
+                      <div className="grid grid-cols-2 gap-4">
                         <FieldDescription title="Wafer name">
                           {state.sampleCode.join('_')}
                         </FieldDescription>
@@ -256,6 +258,19 @@ export default function WaferList() {
                         >
                           + Add sample
                         </LinkButton>
+                      </div>
+                    </Tab.Panel>
+
+                    {/* X-ray */}
+                    <Tab.Panel>
+                      <div className="mb-2 w-full">
+                        {state.measurements.length > 0 ? (
+                          'list'
+                        ) : (
+                          <p className="text-center text-neutral-500">
+                            No measurements added
+                          </p>
+                        )}
                       </div>
                     </Tab.Panel>
                   </Tab.Panels>

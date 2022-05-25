@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { array } from 'yup';
 
@@ -25,16 +25,14 @@ import {
 } from '@/generated/graphql';
 import useAuth from '@/hooks/useAuth';
 import { useElnMultipartMutation } from '@/hooks/useElnQuery';
+import { measurementTypeList } from '@/models/measurements';
 
-import { CreateTransferMeasurement } from './Transfer';
+import { MeasurementMap } from './models/BaseMeasurement';
 
 type MeasurementInputForm = Omit<MeasurementInput, 'userId' | 'sampleId'> & {
   attachments: string[];
 };
 
-const MEASUREMENT_FORM: Record<MeasurementTypes, ReactNode> = {
-  [MeasurementTypes.TRANSFER]: <CreateTransferMeasurement />,
-};
 export default function CreateMeasurement() {
   const navigate = useNavigate();
   const { mutateAsync } = useElnMultipartMutation('/files/create');
@@ -97,7 +95,7 @@ export default function CreateMeasurement() {
       setError(error as Error);
     }
   }
-  const form = MEASUREMENT_FORM[type];
+  const Measurement = MeasurementMap[type];
 
   return (
     <FormRHF<MeasurementInputForm>
@@ -114,7 +112,8 @@ export default function CreateMeasurement() {
           formGrid={
             <>
               <Select
-                options={[MeasurementTypes.TRANSFER]}
+                // @ts-expect-error (X | Y)[] == X[] | Y[]
+                options={measurementTypeList}
                 selected={type}
                 onSelect={(selected?: MeasurementTypes) => {
                   setType(selected ?? MeasurementTypes.TRANSFER);
@@ -124,7 +123,7 @@ export default function CreateMeasurement() {
               />
               <InputFieldRHF name="title" label="Title" required />
               <InputFieldRHF name="comment" label="Comment" />
-              {form}
+              <Measurement.Form />
             </>
           }
           formAttachments={

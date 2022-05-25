@@ -49,6 +49,16 @@ query SamplesFiltered(
       parent {
         id
       }
+      measurements {
+        id
+        type
+        createdAt
+        file {
+          size
+          filename
+          downloadUrl
+        }
+      }
     }
   }
 }

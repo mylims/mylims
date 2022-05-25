@@ -269,6 +269,7 @@ export type MeasurementSortInput = {
 
 export enum MeasurementTypes {
   TRANSFER = 'transfer',
+  XRAY = 'xray',
 }
 
 export type Mutation = {
@@ -1317,6 +1318,12 @@ export type SamplesFilteredQuery = {
         } | null;
       }> | null;
       parent?: { id: string } | null;
+      measurements: Array<{
+        id: string;
+        type: MeasurementTypes;
+        createdAt: any;
+        file?: { size: number; filename: string; downloadUrl: string } | null;
+      }>;
       user?: {
         id: string;
         emails: Array<string>;
@@ -2979,6 +2986,16 @@ export const SamplesFilteredDocument = gql`
         }
         parent {
           id
+        }
+        measurements {
+          id
+          type
+          createdAt
+          file {
+            size
+            filename
+            downloadUrl
+          }
         }
       }
     }

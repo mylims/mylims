@@ -15,7 +15,7 @@ export function getPlotJcamp(
     yAxis: { label: `${query.yLabel} [${query.yUnits}]`, scale },
     seriesViewportStyle: { stroke: 'black', strokeWidth: '2px' },
     enforceGrowing: true,
-    content: { displayMarker: false },
+    content: { displayMarkers: false },
     dimensions,
   });
 
