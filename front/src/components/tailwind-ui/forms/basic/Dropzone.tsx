@@ -15,7 +15,6 @@ export interface DropzoneProps extends Omit<DropzoneLibProps, 'accept'> {
   accept?: Accept | string[] | string;
 }
 
-// @ts-expect-error Will be supported in TS 4.6.
 const listFormatter = new Intl.ListFormat('en', {
   style: 'short',
   type: 'disjunction',

@@ -23,6 +23,7 @@ export function FormRHFSlideOver<TValues extends FieldValues>(
       // TODO: Remove when we want to force update to React 18.
       // @ts-ignore Weird error.
       wrapperComponent={FormRHF}
+      // @ts-ignore Weird error.
       wrapperProps={otherProps}
     >
       {children}
