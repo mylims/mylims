@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import ElnLayout from '@/components/ElnLayout';
@@ -12,28 +12,18 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import { MeasurementTypes, useMeasurementQuery } from '@/generated/graphql';
+import { sampleLevels } from '@/models/sample';
 
-import B1505Transfer from './B1505Transfer';
-
-const SAMPLE_LEVEL = ['wafer', 'sample', 'dye', 'device'];
+import DetailBody from './DetailBody';
 
 export default function MeasurementDetail() {
-  const { id = '', type = MeasurementTypes.TRANSFER } =
-    useParams<{ id: string; type: MeasurementTypes }>();
+  const { id = '', type = MeasurementTypes.TRANSFER } = useParams<{
+    id: string;
+    type: MeasurementTypes;
+  }>();
   const { data, loading, error } = useMeasurementQuery({
     variables: { id, type },
   });
-  const measurementBody = useMemo(() => {
-    if (!data) return null;
-    switch (data.measurement.type) {
-      case 'transfer': {
-        return <B1505Transfer {...data.measurement} />;
-      }
-      default: {
-        return null;
-      }
-    }
-  }, [data?.measurement]);
 
   if (loading) return <Spinner className="h-10 w-10 text-danger-500" />;
   if (error || !data) {
@@ -45,7 +35,7 @@ export default function MeasurementDetail() {
   }
 
   const { measurement } = data;
-  const sampleType = SAMPLE_LEVEL[measurement.sample.sampleCode.length - 1];
+  const sampleType = sampleLevels[measurement.sample.sampleCode.length - 1];
   return (
     <Card>
       <Card.Header>
@@ -79,7 +69,7 @@ export default function MeasurementDetail() {
           </div>
         </div>
       </Card.Header>
-      {measurementBody}
+      <DetailBody measurement={measurement} />
     </Card>
   );
 }

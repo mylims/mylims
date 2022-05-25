@@ -12,9 +12,9 @@ import {
   useDebounce,
 } from '@/components/tailwind-ui';
 import { useSamplesByCodeLazyQuery } from '@/generated/graphql';
+import { sampleLevelsStrict } from '@/models/sample';
 
 const ICON_CLASS = 'h-4 w-4 text-neutral-500';
-const KINDS = ['wafer', 'sample', 'dye', 'device'] as const;
 
 interface SampleSearchProps {
   addSample(id: string): void;
@@ -23,7 +23,9 @@ export default function SampleSearch({ addSample }: SampleSearchProps) {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [focus, setFocus] = useState(false);
-  const [kind, setKind] = useState<typeof KINDS[number] | null>(null);
+  const [kind, setKind] = useState<typeof sampleLevelsStrict[number] | null>(
+    null,
+  );
   const query = useDebounce(value, 500);
   const [samplesByCode, { loading: queryLoading, data }] =
     useSamplesByCodeLazyQuery();
@@ -116,7 +118,7 @@ export default function SampleSearch({ addSample }: SampleSearchProps) {
         <Listbox.Options className="mt-1 max-h-56 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
           <ListboxOption value={null} label="all" />
 
-          {KINDS.map((kind) => (
+          {sampleLevelsStrict.map((kind) => (
             <ListboxOption key={kind} value={kind} label={kind} />
           ))}
         </Listbox.Options>
