@@ -1,8 +1,9 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { array, BaseSchema } from 'yup';
+import { array } from 'yup';
 
 import AttachmentsTableRHF from '@/components/AttachmentsTableRHF';
+import ElnLayout from '@/components/ElnLayout';
 import { FormLayout } from '@/components/FormLayout';
 import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
 import {
@@ -24,26 +25,17 @@ import {
 } from '@/generated/graphql';
 import useAuth from '@/hooks/useAuth';
 import { useElnMultipartMutation } from '@/hooks/useElnQuery';
+import { SampleParams, SamplesMap } from '@/pages/samples/models/BaseSample';
 
 type SampleInputForm = Omit<SampleInput, 'kind' | 'userId'> & {
   userId?: string;
   prevAttachments: SampleQuery['sample']['attachments'];
 };
-interface DefaultCreationProps {
-  codeLength: number;
-  kind: string;
-  metaSchema: Record<string, BaseSchema>;
-  children: ReactNode;
-}
 
-export default function DefaultUpdate({
-  codeLength,
-  kind,
-  metaSchema,
-  children,
-}: DefaultCreationProps) {
+export default function SamplesUpdate() {
+  const { id = '', kind = 'wafer' } = useParams<SampleParams>();
+  const Sample = useMemo(() => SamplesMap[kind], [kind]);
   const { id: userId } = useAuth();
-  const { id = '' } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { mutateAsync } = useElnMultipartMutation('/files/create');
   const [authError, setError] = useState<Error | null>(null);
@@ -56,18 +48,6 @@ export default function DefaultUpdate({
     loading: queryLoading,
     error: queryError,
   } = useSampleQuery({ variables: { id } });
-
-  const waferCreateSchema = requiredObject({
-    sampleCode: array()
-      .of(requiredString())
-      .min(codeLength, 'Required at least one sample code'),
-    project: optionalString(),
-    title: optionalString(),
-    comment: optionalString(),
-    description: array(),
-    labels: array().of(requiredString()),
-    meta: requiredObject(metaSchema),
-  });
 
   async function onSubmit({
     attachments,
@@ -108,7 +88,7 @@ export default function DefaultUpdate({
 
   if (queryLoading) return <Spinner className="h-10 w-10 text-danger-500" />;
 
-  if (authError || updateError || queryError || !data) {
+  if (authError || updateError || queryError || !data || !Sample) {
     return (
       <Alert title="Error" type={AlertType.ERROR}>
         {authError ? `Failed to get auth status : ${authError.message}` : null}
@@ -116,9 +96,22 @@ export default function DefaultUpdate({
           ? `Failed to get form structure : ${updateError.message}`
           : null}
         {queryError ? `Failed to get sample: ${queryError.message}` : null}
+        {!Sample ? `Unknown sample kind: ${kind}` : null}
       </Alert>
     );
   }
+
+  const waferCreateSchema = requiredObject({
+    sampleCode: array()
+      .of(requiredString())
+      .min(Sample.codeLength, 'Required at least one sample code'),
+    project: optionalString(),
+    title: optionalString(),
+    comment: optionalString(),
+    description: array(),
+    labels: array().of(requiredString()),
+    meta: requiredObject(Sample.updateSchema),
+  });
 
   const defaultValues = parseInputForm(data.sample);
   return (
@@ -132,7 +125,7 @@ export default function DefaultUpdate({
           <SubmitButtonRHF disabled={updateLoading}>Submit</SubmitButtonRHF>
         </div>
         <FormLayout
-          formGrid={children}
+          formGrid={Sample.updateForm}
           formAttachments={
             <>
               <DropzoneFieldRHF
@@ -175,3 +168,7 @@ function parseInputForm(sample: SampleQuery['sample']): SampleInputForm {
     userId: user?.id,
   };
 }
+
+SamplesUpdate.getLayout = (page: React.ReactNode) => (
+  <ElnLayout>{page}</ElnLayout>
+);
