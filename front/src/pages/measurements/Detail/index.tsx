@@ -12,7 +12,7 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import { MeasurementTypes, useMeasurementQuery } from '@/generated/graphql';
-import { sampleLevels } from '@/models/sample';
+import { sampleLevelsList } from '@/models/sample';
 
 import DetailBody from './DetailBody';
 
@@ -35,7 +35,7 @@ export default function MeasurementDetail() {
   }
 
   const { measurement } = data;
-  const sampleType = sampleLevels[measurement.sample.sampleCode.length - 1];
+  const sampleType = sampleLevelsList[measurement.sample.sampleCode.length - 1];
   return (
     <Card>
       <Card.Header>
