@@ -17,12 +17,9 @@ import MeasurementsList from '@/pages/measurements/List';
 import NotebookCreate from '@/pages/notebook/Create';
 import NotebookDetail from '@/pages/notebook/Detail';
 import NotebookList from '@/pages/notebook/list';
+import SampleDetail from '@/pages/samples/Detail';
 import SampleCreate from '@/pages/samples/create/Sample';
 import WaferCreate from '@/pages/samples/create/Wafer';
-import DeviceDetail from '@/pages/samples/detail/Device';
-import DyeDetail from '@/pages/samples/detail/Dye';
-import SampleDetail from '@/pages/samples/detail/Sample';
-import WaferDetail from '@/pages/samples/detail/Wafer';
 import DeviceList from '@/pages/samples/list/Device';
 import DyeList from '@/pages/samples/list/Dye';
 import SampleList from '@/pages/samples/list/Sample';
@@ -67,15 +64,7 @@ function AppRoutes() {
             { path: 'device', element: <App Component={DeviceList} /> },
           ],
         },
-        {
-          path: 'detail',
-          children: [
-            { path: 'wafer/:id', element: <App Component={WaferDetail} /> },
-            { path: 'sample/:id', element: <App Component={SampleDetail} /> },
-            { path: 'dye/:id', element: <App Component={DyeDetail} /> },
-            { path: 'device/:id', element: <App Component={DeviceDetail} /> },
-          ],
-        },
+        { path: 'detail/:kind/:id', element: <App Component={SampleDetail} /> },
         {
           path: 'create',
           children: [
