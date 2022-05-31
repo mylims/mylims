@@ -19,7 +19,7 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import { Sample } from '@/generated/graphql';
-import { sampleLevels } from '@/models/sample';
+import { sampleLevelsList } from '@/models/sample';
 
 import SamplesList from './Default';
 
@@ -31,7 +31,7 @@ export default function DyeList() {
       <div className="col-span-3">
         <SamplesList
           kind="dye"
-          levels={sampleLevels.slice(0, 3)}
+          levels={sampleLevelsList.slice(0, 3)}
           action={
             <TableQuery.ActionsColumn>
               {(row) => (

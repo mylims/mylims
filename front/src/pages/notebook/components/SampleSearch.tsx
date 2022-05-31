@@ -12,7 +12,7 @@ import {
   useDebounce,
 } from '@/components/tailwind-ui';
 import { useSamplesByCodeLazyQuery } from '@/generated/graphql';
-import { sampleLevelsStrict } from '@/models/sample';
+import { sampleLevelsStrict, SampleLevelsTypes } from '@/models/sample';
 
 const ICON_CLASS = 'h-4 w-4 text-neutral-500';
 
@@ -23,9 +23,7 @@ export default function SampleSearch({ addSample }: SampleSearchProps) {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [focus, setFocus] = useState(false);
-  const [kind, setKind] = useState<typeof sampleLevelsStrict[number] | null>(
-    null,
-  );
+  const [kind, setKind] = useState<SampleLevelsTypes | null>(null);
   const query = useDebounce(value, 500);
   const [samplesByCode, { loading: queryLoading, data }] =
     useSamplesByCodeLazyQuery();

@@ -25,7 +25,7 @@ import {
   Variant,
 } from '@/components/tailwind-ui';
 import { Sample } from '@/generated/graphql';
-import { sampleLevels } from '@/models/sample';
+import { sampleLevelsList } from '@/models/sample';
 
 import SamplesList from './Default';
 
@@ -42,7 +42,7 @@ export default function WaferList() {
       <div className="col-span-3">
         <SamplesList
           kind="wafer"
-          levels={sampleLevels.slice(0, 1)}
+          levels={sampleLevelsList.slice(0, 1)}
           action={
             <TableQuery.ActionsColumn>
               {(row) => (

@@ -48,7 +48,7 @@ export default function SampleCreate() {
   return (
     <DefaultCreate
       codeLength={2}
-      kind="wafer"
+      kind="sample"
       metaSchema={waferCreateSchema}
       sampleCode={sample.sampleCode}
       parent={sample.id}
