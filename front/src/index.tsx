@@ -18,6 +18,7 @@ import NotebookCreate from '@/pages/notebook/Create';
 import NotebookDetail from '@/pages/notebook/Detail';
 import NotebookList from '@/pages/notebook/list';
 import SampleDetail from '@/pages/samples/Detail';
+import SampleUpdate from '@/pages/samples/Update';
 import SampleCreate from '@/pages/samples/create/Sample';
 import WaferCreate from '@/pages/samples/create/Wafer';
 import DeviceList from '@/pages/samples/list/Device';
@@ -25,10 +26,6 @@ import DyeList from '@/pages/samples/list/Dye';
 import SampleList from '@/pages/samples/list/Sample';
 import WaferList from '@/pages/samples/list/Wafer';
 import { MultiCreate } from '@/pages/samples/multiCreate/Default';
-import DeviceUpdate from '@/pages/samples/update/Device';
-import DyeUpdate from '@/pages/samples/update/Dye';
-import SampleUpdate from '@/pages/samples/update/Sample';
-import WaferUpdate from '@/pages/samples/update/Wafer';
 import Users from '@/pages/users';
 
 function AppRoutes() {
@@ -78,15 +75,7 @@ function AppRoutes() {
             { path: 'sample', element: <App Component={MultiCreate} /> },
           ],
         },
-        {
-          path: 'update',
-          children: [
-            { path: 'wafer/:id', element: <App Component={WaferUpdate} /> },
-            { path: 'sample/:id', element: <App Component={SampleUpdate} /> },
-            { path: 'dye/:id', element: <App Component={DyeUpdate} /> },
-            { path: 'device/:id', element: <App Component={DeviceUpdate} /> },
-          ],
-        },
+        { path: 'update/:kind/:id', element: <App Component={SampleUpdate} /> },
       ],
     },
     {
@@ -97,24 +86,15 @@ function AppRoutes() {
           path: 'detail/:type/:id',
           element: <App Component={MeasurementDetail} />,
         },
-        {
-          path: 'create/:id',
-          element: <App Component={MeasurementCreate} />,
-        },
+        { path: 'create/:id', element: <App Component={MeasurementCreate} /> },
       ],
     },
     {
       path: 'notebook',
       children: [
         { path: 'list', element: <App Component={NotebookList} /> },
-        {
-          path: 'detail/:id',
-          element: <App Component={NotebookDetail} />,
-        },
-        {
-          path: 'create',
-          element: <App Component={NotebookCreate} />,
-        },
+        { path: 'detail/:id', element: <App Component={NotebookDetail} /> },
+        { path: 'create', element: <App Component={NotebookCreate} /> },
       ],
     },
   ]);
