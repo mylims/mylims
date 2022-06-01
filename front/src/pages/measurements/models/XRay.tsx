@@ -3,6 +3,7 @@ import React from 'react';
 import { Annotation } from 'react-plot';
 
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
+import { Table as TableQuery } from '@/components/TableQuery';
 import { MeasurementTypes } from '@/generated/graphql';
 
 import { BaseMeasurement, PlotDetailProps } from './BaseMeasurement';
@@ -28,8 +29,16 @@ export class XRayModel implements BaseMeasurement {
   public Form() {
     return <></>;
   }
-  public PlotDetail({ measurement, data }: PlotDetailProps): JSX.Element {
+  public PlotDetail({ data }: PlotDetailProps): JSX.Element {
     // const { peaks } = measurement?.derived ?? ({} as XRayDerived);
     return <PlotJcampSingle content={data} initialQuery={this.plotQuery} />;
   }
+  public metaColumns = [
+    <TableQuery.NumberColumn
+      key="peaks"
+      title="Number of peaks"
+      dataPath="derived.peaks.length"
+      disableSort
+    />,
+  ];
 }

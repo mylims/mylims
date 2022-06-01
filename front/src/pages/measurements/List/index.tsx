@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
 import { Table as TableQuery } from '@/components/TableQuery';
@@ -19,6 +19,7 @@ import { measurementTypeList } from '@/models/measurements';
 
 import MeasurementActions from './MeasurementActions';
 import { MeasurementPlot } from './MeasurementPlot';
+import { MeasurementMap } from '@/pages/measurements/models/BaseMeasurement';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['list'][number];
@@ -27,17 +28,24 @@ type DestructuredQuery = Unflatten<
   MeasurementSortInput
 > & { type: MeasurementTypes };
 export default function MeasurementsList() {
-  const { query, setQuery } = useTableQuery({
+  const {
+    query: { type, ...query },
+    setQuery,
+  } = useTableQuery({
     page: '1',
     'sortBy.field': MeasurementSortField.CREATEDAT,
     'sortBy.direction': SortDirection.DESC,
   });
   const variables = getVariablesFromQuery<DestructuredQuery>(query);
-  const measurementType = (query.type ??
+  const measurementType = (type ??
     MeasurementTypes.TRANSFER) as MeasurementTypes;
   const { loading, error, data } = useMeasurementsFilteredQuery({
     variables: { ...variables, type: measurementType },
   });
+  const Measurement = useMemo(
+    () => MeasurementMap[measurementType],
+    [measurementType],
+  );
 
   return (
     <div>
@@ -84,17 +92,7 @@ export default function MeasurementsList() {
           </TableQuery.TextColumn>
           <TableQuery.DateColumn title="Creation date" dataPath="createdAt" />
           <TableQuery.UserColumn title="User" dataPath="user" />
-          <TableQuery.NumberColumn
-            title="Subthreshold slope"
-            dataPath="derived.subthresholdSlope.slope"
-            format="0.0000"
-            disableSort
-          />
-          <TableQuery.NumberColumn
-            title="Threshold voltage"
-            dataPath="derived.thresholdVoltage.value"
-            disableSort
-          />
+          {Measurement ? Measurement.metaColumns : null}
         </TableQuery>
       </MeasurementPlot>
     </div>

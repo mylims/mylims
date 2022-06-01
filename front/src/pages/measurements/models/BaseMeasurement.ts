@@ -10,8 +10,9 @@ export interface PlotDetailProps {
 }
 export interface BaseMeasurement {
   type: MeasurementTypes;
-  Form(): JSX.Element;
   plotQuery: PlotQuery;
+  metaColumns: React.ReactNode[];
+  Form(): JSX.Element;
   PlotDetail(props: PlotDetailProps): JSX.Element;
 }
 
