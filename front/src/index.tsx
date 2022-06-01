@@ -16,7 +16,7 @@ import MeasurementDetail from '@/pages/measurements/Detail';
 import MeasurementsList from '@/pages/measurements/List';
 import NotebookCreate from '@/pages/notebook/Create';
 import NotebookDetail from '@/pages/notebook/Detail';
-import NotebookList from '@/pages/notebook/list';
+import NotebookList from '@/pages/notebook/List';
 import SampleDetail from '@/pages/samples/Detail';
 import SampleUpdate from '@/pages/samples/Update';
 import SampleCreate from '@/pages/samples/create/Sample';
