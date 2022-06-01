@@ -47,12 +47,12 @@ export function MeasurementPlot({
             <Card.Header className="bg-neutral-50 px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-500">
               Preview
             </Card.Header>
-            <Card.Body className="w-3xl">
+            <Card.Body>
               <MeasurementTypeRender type={type} data={data} error={error} />
             </Card.Body>
           </Card>
         </div>
-        <div className="w-3xl">{children}</div>
+        <div className="max-w-3xl xl:max-w-full">{children}</div>
       </div>
     </MeasurementPlotContext.Provider>
   );
