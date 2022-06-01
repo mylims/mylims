@@ -4,6 +4,7 @@ import { Annotation } from 'react-plot';
 
 import FieldDescription from '@/components/FieldDescription';
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
+import { Table as TableQuery } from '@/components/TableQuery';
 import { InputFieldRHF } from '@/components/tailwind-ui';
 import { MeasurementTypes } from '@/generated/graphql';
 
@@ -129,4 +130,19 @@ export class TransferModel implements BaseMeasurement {
       </>
     );
   }
+  public metaColumns = [
+    <TableQuery.NumberColumn
+      key="subthresholdSlope"
+      title="Subthreshold slope"
+      dataPath="derived.subthresholdSlope.slope"
+      format="0.0000"
+      disableSort
+    />,
+    <TableQuery.NumberColumn
+      key="thresholdVoltage"
+      title="Threshold voltage"
+      dataPath="derived.thresholdVoltage.value"
+      disableSort
+    />,
+  ];
 }
