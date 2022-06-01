@@ -1,6 +1,8 @@
 import { PlotQuery } from '@/components/PlotJcamp/types';
 import { MeasurementQuery, MeasurementTypes } from '@/generated/graphql';
-import { TransferModel } from '@/pages/measurements/models/Transfer';
+
+import { TransferModel } from './Transfer';
+import { XRayModel } from './XRay';
 
 export interface PlotDetailProps {
   measurement: MeasurementQuery['measurement'];
@@ -15,5 +17,5 @@ export interface BaseMeasurement {
 
 export const MeasurementMap: Record<MeasurementTypes, BaseMeasurement> = {
   [MeasurementTypes.TRANSFER]: new TransferModel(),
-  [MeasurementTypes.XRAY]: new TransferModel(),
+  [MeasurementTypes.XRAY]: new XRayModel(),
 };
