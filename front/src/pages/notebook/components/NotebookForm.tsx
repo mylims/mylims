@@ -1,5 +1,6 @@
 import { PaperClipIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
+import { KbsProvider } from 'react-kbs';
 
 import FieldDescription from '@/components/FieldDescription';
 import MultiSelect from '@/components/FormSchema/MultiSelect';
@@ -9,6 +10,10 @@ import {
   Card,
   InputFieldRHF,
   SubmitButtonRHF,
+  Toggle,
+  Modal,
+  Button,
+  Color,
 } from '@/components/tailwind-ui';
 import {
   sampleLinkContext,
@@ -31,6 +36,8 @@ export function NotebookForm({
   onSubmit,
 }: NotebookFormProps) {
   const SampleLinkContext = sampleLinkContext;
+  const [activated, setActivated] = useState(false);
+  const [modal, setModal] = useState(false);
   const [state, dispatch] = useState<SampleLinkState>({
     type: 'idle',
     payload: null,
@@ -38,14 +45,24 @@ export function NotebookForm({
 
   return (
     <FormRHF<StateNotebook> defaultValues={initialValue} onSubmit={onSubmit}>
+      <Toggle
+        label="show modal"
+        activated={activated}
+        onToggle={(activated) => setActivated(activated)}
+      />
       <Card>
         <Card.Header>
           <div className="flex flex-row justify-between">
-            <InputFieldRHF
-              name="title"
-              label="Notebook title"
-              className="uppercase"
-            />
+            <div className="flex flex-row gap-4">
+              <InputFieldRHF
+                name="title"
+                label="Notebook title"
+                className="uppercase"
+              />
+              <InputFieldRHF name="project" label="Project" />
+              <MultiSelect name="labels" label="Labels" />
+              <InputFieldRHF name="description" label="Description" />
+            </div>
             <div className="flex flex-row gap-4">
               {(initialValue as UpdateNotebook).createdAt ? (
                 <FieldDescription title="Created at">
@@ -60,20 +77,36 @@ export function NotebookForm({
           </div>
         </Card.Header>
         <Card.Body>
-          <div className="my-4 flex flex-col lg:w-full lg:flex-row lg:gap-4">
-            <SampleLinkContext.Provider value={{ state, dispatch }}>
-              <div className="lg:w-1/3">
-                <div className="grid-cols-auto mb-4 grid items-end gap-4">
-                  <InputFieldRHF name="project" label="Project" />
-                  <MultiSelect name="labels" label="Labels" />
+          <div className="flex flex-col lg:w-full lg:flex-row lg:gap-4">
+            <KbsProvider>
+              <SampleLinkContext.Provider
+                value={{
+                  state,
+                  dispatch,
+                  openModal: activated ? () => setModal(true) : undefined,
+                }}
+              >
+                <div className={activated ? 'hidden' : 'lg:w-1/3'}>
+                  <SamplesTableRHF name="samples" />
                 </div>
-                <InputFieldRHF name="description" label="Description" />
-                <SamplesTableRHF name="samples" />
-              </div>
-              <div className="lg:w-2/3">
-                <LexicalEditorRHF name="content" label="Content" />
-              </div>
-            </SampleLinkContext.Provider>
+                <Modal isOpen={modal} onRequestClose={() => setModal(false)}>
+                  <Modal.Body>
+                    <SamplesTableRHF name="samples" />
+                  </Modal.Body>
+                  <Modal.Footer align="left">
+                    <Button
+                      color={Color.danger}
+                      onClick={() => setModal(false)}
+                    >
+                      Cancel
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+                <div className={activated ? 'w-full' : 'lg:w-2/3'}>
+                  <LexicalEditorRHF name="content" label="Content" />
+                </div>
+              </SampleLinkContext.Provider>
+            </KbsProvider>
           </div>
         </Card.Body>
       </Card>
