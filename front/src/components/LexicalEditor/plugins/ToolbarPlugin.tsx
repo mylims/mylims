@@ -30,6 +30,9 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { Button, Variant } from '@/components/tailwind-ui';
+import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
+
 import { BlockOptionsDropdown } from '../components/BlockOptionsDropdown';
 import { ButtonCommand } from '../components/ButtonCommand';
 import {
@@ -41,6 +44,7 @@ const LowPriority = 1;
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
+  const { openModal } = useSampleLinkContext();
   const toolbarRef = useRef(null);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
@@ -211,6 +215,11 @@ export default function ToolbarPlugin() {
         >
           <TextAlignJustify20Regular />
         </ButtonCommand>
+        {openModal ? (
+          <Button variant={Variant.secondary} onClick={openModal}>
+            Inventory
+          </Button>
+        ) : null}
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ export type SampleLinkState =
 interface SampleLinkActions {
   state: SampleLinkState;
   dispatch: (action: SampleLinkState) => void;
+  openModal?: () => void;
 }
 export const sampleLinkContext = createContext<SampleLinkActions>({
   state: { type: 'idle', payload: null },

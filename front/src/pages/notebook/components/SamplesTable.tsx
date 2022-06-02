@@ -17,7 +17,7 @@ import {
 import { useSampleQuery } from '@/generated/graphql';
 import { formatDate } from '@/utils/formatFields';
 
-import { useSampleLinkContext } from "../hooks/useSampleLinkContext";
+import { useSampleLinkContext } from '../hooks/useSampleLinkContext';
 
 import SampleSearch from './SampleSearch';
 
@@ -36,7 +36,7 @@ export function SamplesTable({ samples, addSample }: SamplesTableProps) {
 
   return (
     <div>
-      <div className="mt-4 mb-2 flex flex-row flex-wrap gap-4">
+      <div className="mb-2 flex flex-row flex-wrap gap-4">
         <div className="text-xl font-semibold">Inventory</div>
         <SampleSearch addSample={(val) => addSample(val)} />
       </div>
