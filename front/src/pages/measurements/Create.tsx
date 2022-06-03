@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { array } from 'yup';
 
 import ElnLayout from '@/components/ElnLayout';
-import { FormLayout } from '@/components/FormLayout';
+import { PlotJcampSingleRHF } from '@/components/PlotJcamp/PlotJcampSingleRHF';
 import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
 import {
   Alert,
@@ -107,39 +107,42 @@ export default function CreateMeasurement() {
         <div className="hidden md:flex md:flex-row md:justify-end">
           <SubmitButtonRHF disabled={loading}>Submit</SubmitButtonRHF>
         </div>
-
-        <FormLayout
-          formGrid={
-            <>
+        <div className="my-4 flex flex-col lg:w-full lg:flex-row lg:gap-4">
+          <div className="lg:w-1/3">
+            <div className="grid-cols-auto mb-4 grid items-end gap-4">
               <Select
                 // @ts-expect-error (X | Y)[] == X[] | Y[]
                 options={measurementTypeList}
                 selected={type}
+                label="Measurement type"
+                required
                 onSelect={(selected?: MeasurementTypes) => {
                   setType(selected ?? MeasurementTypes.TRANSFER);
                 }}
-                label="Measurement type"
-                required
               />
               <InputFieldRHF name="title" label="Title" required />
               <InputFieldRHF name="comment" label="Comment" />
               <Measurement.Form />
-            </>
-          }
-          formAttachments={
-            <DropzoneFieldRHF
-              label="Attachments"
-              name="attachments"
-              maxFiles={1}
-              showList
-            />
-          }
-          formEditor={
-            <div>
-              <RichTextImageFieldRHF name="description" label="Description" />
             </div>
-          }
-        />
+            <div>
+              <DropzoneFieldRHF
+                label="Attachments"
+                name="attachments"
+                maxFiles={1}
+                showList
+              />
+            </div>
+          </div>
+          <div className="rounded-md border border-neutral-300 shadow-sm lg:w-1/3">
+            <PlotJcampSingleRHF
+              name="attachments"
+              initialQuery={{ xLabel: 'x', yLabel: 'y' }}
+            />
+          </div>
+          <div className="lg:w-1/3">
+            <RichTextImageFieldRHF name="description" label="Description" />
+          </div>
+        </div>
         <div className="mt-2 flex flex-row justify-end md:hidden">
           <SubmitButtonRHF disabled={loading}>Submit</SubmitButtonRHF>
         </div>
