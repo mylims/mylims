@@ -16,10 +16,10 @@ import {
   useMeasurementsFilteredQuery,
 } from '@/generated/graphql';
 import { measurementTypeList } from '@/models/measurements';
+import { MeasurementMap } from '@/pages/measurements/models/BaseMeasurement';
 
 import MeasurementActions from './MeasurementActions';
 import { MeasurementPlot } from './MeasurementPlot';
-import { MeasurementMap } from '@/pages/measurements/models/BaseMeasurement';
 
 type MeasurementRowType =
   MeasurementsFilteredQuery['measurements']['list'][number];

@@ -7,7 +7,7 @@ import { ZoomAnnotation } from '@/components/PlotJcamp/ZoomAnnotation';
 import type { PlotQuery } from './types';
 import { getPlotJcamp } from './utils';
 
-interface PlotJcampProps {
+export interface PlotJcampProps {
   content: string | null;
   initialQuery: PlotQuery;
   children?: (analysis: Analysis, query: PlotQuery) => ReactNode;
