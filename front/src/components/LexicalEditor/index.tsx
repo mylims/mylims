@@ -1,17 +1,18 @@
 import { AutoLinkNode, LinkNode } from '@lexical/link';
 import { ListItemNode, ListNode } from '@lexical/list';
-import AutoFocusPlugin from '@lexical/react/LexicalAutoFocusPlugin';
-import LexicalComposer from '@lexical/react/LexicalComposer';
-import ContentEditable from '@lexical/react/LexicalContentEditable';
+import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import LinkPlugin from '@lexical/react/LexicalLinkPlugin';
-import ListPlugin from '@lexical/react/LexicalListPlugin';
-import RichTextPlugin from '@lexical/react/LexicalRichTextPlugin';
-// import OnChangePlugin from '@lexical/react/LexicalOnChangePlugin';
+import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { ListPlugin } from '@lexical/react/LexicalListPlugin';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import React from 'react';
 
 import { SampleLinkNode } from './models/SampleLinkNode';
+import { SampleLinkNode } from './nodes/SampleLinkNode';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import SampleLinkPlugin from './plugins/SampleLinkPlugin';
@@ -45,13 +46,11 @@ const editorConfig = {
   ],
 };
 
-// TODO: This only will work on the new release of Lexical
-// export interface LexicalEditorProps {
-//   value: JSONEditorState;
-//   onChange(value: JSONEditorState): void;
-// }
-// export default function LexicalEditor({ value, onChange }: LexicalEditorProps) {
-export default function LexicalEditor() {
+export interface LexicalEditorProps {
+  value: string;
+  onChange(value: string): void;
+}
+export default function LexicalEditor({ value, onChange }: LexicalEditorProps) {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative m-2 rounded-t-md rounded-b-sm font-normal leading-5 text-black">
@@ -62,6 +61,7 @@ export default function LexicalEditor() {
               <ContentEditable className="relative min-h-[150px] resize-none pt-4 caret-neutral-500 outline-none" />
             }
             placeholder={<Placeholder />}
+            initialEditorState={value}
           />
           <HistoryPlugin />
           <AutoFocusPlugin />
@@ -69,10 +69,11 @@ export default function LexicalEditor() {
           <LinkPlugin />
           <AutoLinkPlugin />
           <ListMaxIndentLevelPlugin maxDepth={7} />
-          {/* <OnChangePlugin
+          <OnChangePlugin
             onChange={(editorState) => {
-              return onChange(editorState.toJSON());
+              onChange(JSON.stringify(editorState));
             }}
+          />
           /> */}
 
           {/* Custom plugins */}

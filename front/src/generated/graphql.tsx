@@ -345,7 +345,7 @@ export type NewFileSyncOptionInput = {
 };
 
 export type Notebook = {
-  content: Scalars['JSON'];
+  content?: Maybe<Scalars['JSON']>;
   createdAt: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -367,7 +367,7 @@ export type NotebookFilterInput = {
 };
 
 export type NotebookInput = {
-  content: Scalars['JSON'];
+  content?: InputMaybe<Scalars['JSON']>;
   description?: InputMaybe<Scalars['String']>;
   labels: Array<Scalars['String']>;
   measurements: Array<MeasurementLinkInput>;
@@ -1057,7 +1057,7 @@ export type NotebookFieldsFragment = {
   title: string;
   labels: Array<string>;
   project?: string | null;
-  content: any;
+  content?: any | null;
   createdAt: any;
   description?: string | null;
   user: {
@@ -1100,7 +1100,7 @@ export type NotebookListQuery = {
       title: string;
       labels: Array<string>;
       project?: string | null;
-      content: any;
+      content?: any | null;
       createdAt: any;
       description?: string | null;
       user: {
@@ -1140,7 +1140,7 @@ export type NotebookQuery = {
     title: string;
     labels: Array<string>;
     project?: string | null;
-    content: any;
+    content?: any | null;
     createdAt: any;
     description?: string | null;
     user: {
@@ -1179,7 +1179,7 @@ export type CreateNotebookMutation = {
     title: string;
     labels: Array<string>;
     project?: string | null;
-    content: any;
+    content?: any | null;
     createdAt: any;
     description?: string | null;
     user: {
@@ -1219,7 +1219,7 @@ export type UpdateNotebookMutation = {
     title: string;
     labels: Array<string>;
     project?: string | null;
-    content: any;
+    content?: any | null;
     createdAt: any;
     description?: string | null;
     user: {

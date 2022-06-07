@@ -1,4 +1,5 @@
-import LexicalAutoLinkPlugin, {
+import {
+  AutoLinkPlugin,
   LinkMatcher,
 } from '@lexical/react/LexicalAutoLinkPlugin';
 import React from 'react';
@@ -36,6 +37,6 @@ const MATCHERS: LinkMatcher[] = [
   },
 ];
 
-export default function AutoLinkPlugin() {
-  return <LexicalAutoLinkPlugin matchers={MATCHERS} />;
+export default function LexicalAutoLinkPlugin(): JSX.Element {
+  return <AutoLinkPlugin matchers={MATCHERS} />;
 }

@@ -374,7 +374,7 @@ export type GqlNewFileSyncOptionInput = {
 
 export type GqlNotebook = {
   __typename?: 'Notebook';
-  content: Scalars['JSON'];
+  content?: Maybe<Scalars['JSON']>;
   createdAt: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -396,7 +396,7 @@ export type GqlNotebookFilterInput = {
 };
 
 export type GqlNotebookInput = {
-  content: Scalars['JSON'];
+  content?: InputMaybe<Scalars['JSON']>;
   description?: InputMaybe<Scalars['String']>;
   labels: Array<Scalars['String']>;
   measurements: Array<GqlMeasurementLinkInput>;
@@ -1354,7 +1354,7 @@ export type GqlNotebookResolvers<
   ContextType = ApolloBaseContext,
   ParentType extends GqlResolversParentTypes['Notebook'] = GqlResolversParentTypes['Notebook'],
 > = ResolversObject<{
-  content?: Resolver<GqlResolversTypes['JSON'], ParentType, ContextType>;
+  content?: Resolver<Maybe<GqlResolversTypes['JSON']>, ParentType, ContextType>;
   createdAt?: Resolver<GqlResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<
     Maybe<GqlResolversTypes['String']>,

@@ -6,7 +6,7 @@ import { Button, Color, Size, Variant } from '@/components/tailwind-ui';
 
 interface ButtonCommandProps {
   title: string;
-  command: [LexicalCommand<void>, string | undefined];
+  command: [LexicalCommand<void>, unknown];
   active?: boolean;
   disabled?: boolean;
   children: React.ReactNode;

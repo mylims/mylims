@@ -1,4 +1,12 @@
-import { DecoratorNode, LexicalEditor, LexicalNode, NodeKey } from 'lexical';
+import {
+  DecoratorNode,
+  DOMConversionMap,
+  DOMConversionOutput,
+  LexicalEditor,
+  LexicalNode,
+  NodeKey,
+  SerializedElementNode,
+} from 'lexical';
 import React, { ReactNode } from 'react';
 
 import {
@@ -7,6 +15,11 @@ import {
   SampleLinkStatus,
 } from '../components/SampleLink';
 
+interface SerializedSampleLinkNode extends SerializedElementNode {
+  sampleCode: string;
+  type: 'sampleLink';
+  version: 1;
+}
 export class SampleLinkNode extends DecoratorNode<ReactNode> {
   public __sampleCode: string;
   private __queryStatus: SampleLinkStatus;
@@ -61,14 +74,49 @@ export class SampleLinkNode extends DecoratorNode<ReactNode> {
   }
 
   public setSampleCode(sampleCode: string) {
-    const self = this.getWritable<SampleLinkNode>();
+    const self = this.getWritable();
     self.__sampleCode = sampleCode;
   }
 
   public setQueryStatus(queryStatus: SampleLinkStatus) {
-    const self = this.getWritable<SampleLinkNode>();
+    const self = this.getWritable();
     self.__queryStatus = queryStatus;
   }
+
+  public static importJSON(
+    serializedNode: SerializedSampleLinkNode,
+  ): SampleLinkNode {
+    return $createSampleLinkNode(serializedNode.sampleCode);
+  }
+
+  public exportJSON(): SerializedSampleLinkNode {
+    return {
+      ...super.exportJSON(),
+      sampleCode: this.__sampleCode,
+      type: 'sampleLink',
+      version: 1,
+    };
+  }
+
+  public static importDOM(): DOMConversionMap | null {
+    return {
+      span() {
+        return {
+          conversion(domNode: Node): DOMConversionOutput {
+            const span = domNode as HTMLSpanElement;
+            return {
+              node: isSampleLink(span) ? $createSampleLinkNode('') : null,
+            };
+          },
+          priority: 1,
+        };
+      },
+    };
+  }
+}
+
+function isSampleLink(span: HTMLSpanElement): boolean {
+  return /SampleLink/.exec(span.className) !== null;
 }
 
 export function $createSampleLinkNode(text: string): SampleLinkNode {

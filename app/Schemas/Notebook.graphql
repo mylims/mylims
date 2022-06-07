@@ -45,7 +45,7 @@ input NotebookInput {
   userId: ID!
   labels: [String!]!
   project: String
-  content: JSON!
+  content: JSON
   samples: [ID!]!
   measurements: [MeasurementLinkInput!]!
 }
@@ -58,7 +58,7 @@ type Notebook {
   user: User!
   labels: [String!]!
   project: String
-  content: JSON!
+  content: JSON
   createdAt: DateTime!
   samples: [Sample!]!
   measurements: [Measurement!]!
