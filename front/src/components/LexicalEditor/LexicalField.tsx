@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { CSSProperties } from 'react';
 
-import LexicalEditor from '@/components/LexicalEditor';
+import LexicalEditor, { LexicalEditorProps } from '@/components/LexicalEditor';
 import {
   Help,
   inputColor,
@@ -10,7 +10,7 @@ import {
   Label,
 } from '@/components/tailwind-ui/forms/basic/common';
 
-export interface LexicalFieldProps {
+export interface LexicalFieldProps extends LexicalEditorProps {
   className?: string;
   style?: CSSProperties;
   id?: string;
@@ -23,8 +23,8 @@ export interface LexicalFieldProps {
   valid?: boolean | string;
 }
 export function LexicalField({
-  // value,
-  // onChange,
+  value,
+  onChange,
   className,
   style,
   name,
@@ -51,7 +51,7 @@ export function LexicalField({
           },
         )}
       >
-        <LexicalEditor />
+        <LexicalEditor value={value} onChange={onChange} />
       </div>
       <Help error={error} valid={valid} help={help} />
     </div>

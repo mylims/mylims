@@ -13,5 +13,5 @@ export default class Notebook extends BaseModel {
   public measurements: MeasurementLink[];
   public project?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public content: any[];
+  public content?: any;
 }

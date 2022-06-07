@@ -18,7 +18,7 @@ export type StateNotebook = UpdateNotebook | CreateNotebook;
 export const defaultNotebook: CreateNotebook = {
   title: '',
   labels: [],
-  content: [],
+  content: undefined,
   samples: [],
   measurements: [],
 };
