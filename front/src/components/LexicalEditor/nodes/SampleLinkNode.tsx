@@ -1,7 +1,5 @@
 import {
   DecoratorNode,
-  DOMConversionMap,
-  DOMConversionOutput,
   LexicalEditor,
   LexicalNode,
   NodeKey,
@@ -17,7 +15,7 @@ import {
 
 interface SerializedSampleLinkNode extends SerializedElementNode {
   sampleCode: string;
-  type: 'sampleLink';
+  type: 'SampleLink';
   version: 1;
 }
 export class SampleLinkNode extends DecoratorNode<ReactNode> {
@@ -78,6 +76,10 @@ export class SampleLinkNode extends DecoratorNode<ReactNode> {
     self.__sampleCode = sampleCode;
   }
 
+  public getSampleCode(): string {
+    return this.__sampleCode;
+  }
+
   public setQueryStatus(queryStatus: SampleLinkStatus) {
     const self = this.getWritable();
     self.__queryStatus = queryStatus;
@@ -91,32 +93,11 @@ export class SampleLinkNode extends DecoratorNode<ReactNode> {
 
   public exportJSON(): SerializedSampleLinkNode {
     return {
-      ...super.exportJSON(),
-      sampleCode: this.__sampleCode,
-      type: 'sampleLink',
+      sampleCode: this.getSampleCode(),
+      type: 'SampleLink',
       version: 1,
     };
   }
-
-  public static importDOM(): DOMConversionMap | null {
-    return {
-      span() {
-        return {
-          conversion(domNode: Node): DOMConversionOutput {
-            const span = domNode as HTMLSpanElement;
-            return {
-              node: isSampleLink(span) ? $createSampleLinkNode('') : null,
-            };
-          },
-          priority: 1,
-        };
-      },
-    };
-  }
-}
-
-function isSampleLink(span: HTMLSpanElement): boolean {
-  return /SampleLink/.exec(span.className) !== null;
 }
 
 export function $createSampleLinkNode(text: string): SampleLinkNode {

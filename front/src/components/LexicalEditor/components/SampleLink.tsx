@@ -92,7 +92,7 @@ export function SampleLink({
           error: e.message,
         });
       });
-  }, [code]);
+  }, [code, dispatch, sampleByCode, setQueryStatus]);
 
   return (
     <span className="inline-flex shadow-sm">
