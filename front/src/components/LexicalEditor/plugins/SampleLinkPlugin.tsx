@@ -10,10 +10,7 @@ import { useCallback, useEffect } from 'react';
 
 import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
 
-import {
-  $createSampleLinkNode,
-  SampleLinkNode,
-} from '../models/SampleLinkNode';
+import { $createSampleLinkNode, SampleLinkNode } from '../nodes/SampleLinkNode';
 import { SAMPLE_REGEX } from '../utils/regex';
 
 export type InsertSampleLinkPayload = Readonly<{
@@ -45,7 +42,7 @@ export default function SampleLinkPlugin() {
         dispatch({ type: 'idle', payload: null });
       });
     }
-  }, [state]);
+  }, [state, dispatch, editor]);
 
   useEffect(() => {
     if (!editor.hasNodes([SampleLinkNode])) {

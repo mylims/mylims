@@ -11,7 +11,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import React from 'react';
 
-import { SampleLinkNode } from './models/SampleLinkNode';
+import { EquationNode } from './nodes/EquationNode';
 import { SampleLinkNode } from './nodes/SampleLinkNode';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
