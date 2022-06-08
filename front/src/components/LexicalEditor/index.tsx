@@ -70,8 +70,11 @@ export default function LexicalEditor({ value, onChange }: LexicalEditorProps) {
           <AutoLinkPlugin />
           <ListMaxIndentLevelPlugin maxDepth={7} />
           <OnChangePlugin
+            ignoreInitialChange
+            ignoreSelectionChange
             onChange={(editorState) => {
-              onChange(JSON.stringify(editorState));
+              const content = JSON.stringify(editorState);
+              if (content !== value) onChange(content);
             }}
           />
           /> */}
