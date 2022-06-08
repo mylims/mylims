@@ -54,6 +54,7 @@ export function BlockOptionsDropdown({ blockType }: BlockOptionsDropdownProps) {
 
   return (
     <Select<BlockType>
+      className="w-36"
       highlightClassName="text-white bg-primary-600"
       label="Formatting options"
       aria-label="Formatting options"

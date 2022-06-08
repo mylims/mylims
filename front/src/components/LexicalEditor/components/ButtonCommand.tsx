@@ -35,3 +35,19 @@ export function ButtonCommand({
     </Button>
   );
 }
+
+export function DivButtonCommand({
+  command,
+  children,
+}: Omit<ButtonCommandProps, 'title' | 'active' | 'disabled'>) {
+  const [editor] = useLexicalComposerContext();
+  return (
+    <div
+      onClick={() => {
+        editor.dispatchCommand(...command);
+      }}
+    >
+      {children}
+    </div>
+  );
+}
