@@ -2,10 +2,6 @@ import {
   ArrowRedo20Regular,
   ArrowUndo20Regular,
   Link20Regular,
-  TextAlignCenter20Regular,
-  TextAlignJustify20Regular,
-  TextAlignLeft20Regular,
-  TextAlignRight20Regular,
   TextBold20Regular,
   TextItalic20Regular,
   TextStrikethrough20Regular,
@@ -23,9 +19,9 @@ import {
   UNDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   FORMAT_TEXT_COMMAND,
-  FORMAT_ELEMENT_COMMAND,
   $getSelection,
   $isRangeSelection,
+  $isTextNode,
 } from 'lexical';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -33,6 +29,7 @@ import { createPortal } from 'react-dom';
 import { Button, Variant } from '@/components/tailwind-ui';
 import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
 
+import { AlignOptionsDropdown } from '../components/AlignOptionsDropdown';
 import { BlockOptionsDropdown } from '../components/BlockOptionsDropdown';
 import { ButtonCommand } from '../components/ButtonCommand';
 import {
@@ -49,6 +46,7 @@ export default function ToolbarPlugin() {
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [blockType, setBlockType] = useState('paragraph');
+  const [alignType, setAlignType] = useState('left');
 
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -91,6 +89,11 @@ export default function ToolbarPlugin() {
       const node = getSelectedNode(selection);
       const parent = node.getParent();
       setIsLink($isLinkNode(parent) || $isLinkNode(node));
+      setAlignType(
+        parent?.getFormatType() ||
+          (!$isTextNode(node) && node.getFormatType()) ||
+          'left',
+      );
     }
   }, [editor]);
 
@@ -190,35 +193,15 @@ export default function ToolbarPlugin() {
         </ButtonCommand>
         {isLink && createPortal(<FloatingLinkEditor />, document.body)}
       </div>
-      <div className="flex flex-row gap-2 pl-2">
-        <ButtonCommand
-          title="Left align"
-          command={[FORMAT_ELEMENT_COMMAND, 'left']}
-        >
-          <TextAlignLeft20Regular />
-        </ButtonCommand>
-        <ButtonCommand
-          title="Center align"
-          command={[FORMAT_ELEMENT_COMMAND, 'center']}
-        >
-          <TextAlignCenter20Regular />
-        </ButtonCommand>
-        <ButtonCommand
-          title="Right align"
-          command={[FORMAT_ELEMENT_COMMAND, 'right']}
-        >
-          <TextAlignRight20Regular />
-        </ButtonCommand>
-        <ButtonCommand
-          title="Justify align"
-          command={[FORMAT_ELEMENT_COMMAND, 'justify']}
-        >
-          <TextAlignJustify20Regular />
-        </ButtonCommand>
+      <div className="pl-2">
+        <AlignOptionsDropdown alignType={alignType} />
+      </div>
         {openModal ? (
+        <div className="pl-2">
           <Button variant={Variant.secondary} onClick={openModal}>
             Inventory
           </Button>
+        </div>
         ) : null}
       </div>
     </div>
