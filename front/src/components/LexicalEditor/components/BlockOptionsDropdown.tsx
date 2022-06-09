@@ -5,7 +5,7 @@ import {
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
 import { $createParagraphNode, ElementNode, LexicalCommand } from 'lexical';
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Select } from '@/components/tailwind-ui';
 
@@ -49,8 +49,11 @@ interface BlockOptionsDropdownProps {
   blockType: string;
 }
 export function BlockOptionsDropdown({ blockType }: BlockOptionsDropdownProps) {
-  const [select, setSelect] = useState<BlockType>(BLOCK_NODE_TYPES[0]);
   const [editor] = useLexicalComposerContext();
+  const select = useMemo(
+    () => BLOCK_TYPES.find(({ value }) => value === blockType),
+    [blockType],
+  );
 
   return (
     <Select<BlockType>
@@ -60,10 +63,7 @@ export function BlockOptionsDropdown({ blockType }: BlockOptionsDropdownProps) {
       aria-label="Formatting options"
       placeholder="Formatting options"
       hiddenLabel
-      onSelect={(option: BlockType | undefined) => {
-        setSelect(option ?? BLOCK_NODE_TYPES[0]);
-        editor.focus();
-      }}
+      onSelect={() => editor.focus()}
       // @ts-expect-error (A|B)[] != (A[]|B[])
       options={BLOCK_TYPES}
       selected={select}
