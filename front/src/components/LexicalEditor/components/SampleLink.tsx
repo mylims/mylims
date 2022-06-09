@@ -115,10 +115,10 @@ export function SampleLink({
       >
         {getIcon(queryStatus.status)}
       </Button>
-      <label
-        htmlFor={id}
-        className="relative flex flex-1 flex-row items-center rounded-r-md border border-neutral-300 bg-white py-1 px-2 text-base placeholder-neutral-400 shadow-sm focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500 disabled:bg-neutral-50 disabled:text-neutral-500 sm:text-sm"
-      >
+      <div className="relative flex flex-1 flex-row items-center rounded-r-md border border-neutral-300 bg-white py-1 px-2 text-base placeholder-neutral-400 shadow-sm focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500 disabled:bg-neutral-50 disabled:text-neutral-500 sm:text-sm">
+        <label htmlFor={id} className="hidden">
+          Sample link node
+        </label>
         <input
           type="text"
           id={id}
@@ -141,7 +141,7 @@ export function SampleLink({
           size={sampleCode.length}
           autoFocus
         />
-      </label>
+      </div>
     </span>
   );
 }

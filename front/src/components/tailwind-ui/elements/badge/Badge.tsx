@@ -145,6 +145,7 @@ export function Badge(props: VariantBadgeProps | ColoredBadgeProps) {
             'ml-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full focus:text-white focus:outline-none',
             removeColors['color' in props ? props.color : Color.neutral],
           )}
+          aria-label="Dismiss"
         >
           <svg
             className="h-2 w-2"

@@ -73,6 +73,8 @@ export function Dropdown<T>(props: DropdownProps<T>): React.ReactElement {
                     buttonClassName,
                   )
             }
+            arial-label={title}
+            title={title}
           >
             {children ? (
               children
