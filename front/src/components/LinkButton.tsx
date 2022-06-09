@@ -30,6 +30,7 @@ export function LinkButton({
         variant={Variant.secondary}
         color={color ?? Color.primary}
         size={Size.small}
+        aria-label={title}
       >
         {children}
       </Button>
@@ -52,6 +53,7 @@ export function LinkIcon({
         roundness={Roundness.circular}
         color={color ?? Color.primary}
         size={Size.small}
+        aria-label={title}
       >
         {children}
       </Button>
@@ -75,6 +77,7 @@ export function DownloadButton({
         roundness={Roundness.circular}
         color={color ?? Color.primary}
         size={Size.small}
+        aria-label={title}
       >
         {children}
       </Button>

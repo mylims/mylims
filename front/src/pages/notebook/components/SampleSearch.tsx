@@ -66,7 +66,7 @@ export default function SampleSearch({ addSample }: SampleSearchProps) {
       // eslint-disable-next-line no-console
       ans.catch(console.error);
     }
-  }, [query, kind]);
+  }, [query, kind, samplesByCode]);
 
   return (
     <Listbox value={kind} onChange={setKind}>
@@ -84,10 +84,10 @@ export default function SampleSearch({ addSample }: SampleSearchProps) {
           </span>
         </Listbox.Button>
 
-        <label
-          htmlFor="sample-search"
-          className="relative flex flex-1 flex-row items-center rounded-r-md border border-neutral-300 bg-white py-1 px-2 text-base placeholder-neutral-400 shadow-sm focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500 disabled:bg-neutral-50 disabled:text-neutral-500 sm:text-sm"
-        >
+        <div className="relative flex flex-1 flex-row items-center rounded-r-md border border-neutral-300 bg-white py-1 px-2 text-base placeholder-neutral-400 shadow-sm focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500 disabled:bg-neutral-50 disabled:text-neutral-500 sm:text-sm">
+          <label className="hidden" htmlFor="sample-search">
+            Search samples
+          </label>
           <input
             type="text"
             id="sample-search"
@@ -106,7 +106,7 @@ export default function SampleSearch({ addSample }: SampleSearchProps) {
           ) : (
             <SearchIcon className={ICON_CLASS} />
           )}
-        </label>
+        </div>
       </div>
       <div
         ref={setRefListOptions}
