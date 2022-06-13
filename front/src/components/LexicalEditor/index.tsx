@@ -14,6 +14,7 @@ import React from 'react';
 import { EquationNode } from './nodes/EquationNode';
 import { SampleLinkNode } from './nodes/SampleLinkNode';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
+import EquationsPlugin from './plugins/EquationsPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import SampleLinkPlugin from './plugins/SampleLinkPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
@@ -43,6 +44,7 @@ const editorConfig = {
     AutoLinkNode,
     LinkNode,
     SampleLinkNode,
+    EquationNode,
   ],
 };
 
@@ -58,7 +60,10 @@ export default function LexicalEditor({ value, onChange }: LexicalEditorProps) {
         <div className="relative bg-white">
           <RichTextPlugin
             contentEditable={
-              <ContentEditable className="relative min-h-[150px] resize-none pt-4 caret-neutral-500 outline-none" />
+              <ContentEditable
+                ariaLabel="Rich text editor"
+                className="relative min-h-[150px] resize-none pt-4 caret-neutral-500 outline-none"
+              />
             }
             placeholder={<Placeholder />}
             initialEditorState={value}
@@ -77,7 +82,7 @@ export default function LexicalEditor({ value, onChange }: LexicalEditorProps) {
               if (content !== value) onChange(content);
             }}
           />
-          /> */}
+          <EquationsPlugin />
 
           {/* Custom plugins */}
           <SampleLinkPlugin />

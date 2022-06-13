@@ -36,6 +36,7 @@ import {
   FloatingLinkEditor,
   getSelectedNode,
 } from '../components/FloatingLinkEditor';
+import { InsertOptionsMenu } from '../components/InsertOptionsMenu';
 
 const LowPriority = 1;
 
@@ -196,13 +197,16 @@ export default function ToolbarPlugin() {
       <div className="pl-2">
         <AlignOptionsDropdown alignType={alignType} />
       </div>
-        {openModal ? (
+      {openModal ? (
         <div className="pl-2">
           <Button variant={Variant.secondary} onClick={openModal}>
             Inventory
           </Button>
         </div>
-        ) : null}
+      ) : null}
+
+      <div className="pl-2">
+        <InsertOptionsMenu />
       </div>
     </div>
   );
