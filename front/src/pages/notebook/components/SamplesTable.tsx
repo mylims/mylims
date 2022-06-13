@@ -32,7 +32,7 @@ export function SamplesTable({ samples, addSample }: SamplesTableProps) {
       addSample(state.payload.id);
       dispatch({ type: 'idle', payload: null });
     }
-  }, [state]);
+  }, [state, addSample, dispatch]);
 
   return (
     <div>
