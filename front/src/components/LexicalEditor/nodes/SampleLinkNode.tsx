@@ -3,7 +3,7 @@ import {
   LexicalEditor,
   LexicalNode,
   NodeKey,
-  SerializedElementNode,
+  SerializedLexicalNode,
 } from 'lexical';
 import React, { ReactNode } from 'react';
 
@@ -13,7 +13,7 @@ import {
   SampleLinkStatus,
 } from '../components/SampleLink';
 
-interface SerializedSampleLinkNode extends SerializedElementNode {
+interface SerializedSampleLinkNode extends SerializedLexicalNode {
   sampleCode: string;
   type: 'SampleLink';
   version: 1;
