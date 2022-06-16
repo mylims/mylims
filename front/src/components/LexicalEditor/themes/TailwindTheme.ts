@@ -27,6 +27,7 @@ const exampleTheme = {
     strikethrough: 'line-through',
     underlineStrikethrough: 'underline line-through',
   },
+  image: 'inline-block relative',
 };
 
 export default exampleTheme;

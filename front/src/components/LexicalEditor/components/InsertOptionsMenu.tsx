@@ -8,8 +8,10 @@ import { KbsProvider } from 'react-kbs';
 import { Button, Color, Modal, Variant } from '@/components/tailwind-ui';
 
 import { INSERT_EQUATION_COMMAND } from '../plugins/EquationsPlugin';
+import { INSERT_IMAGE_COMMAND } from '../plugins/ImagesPlugin';
 
 import { EquationModal } from './EquationModal';
+import { ImageModal } from './ImageModal';
 
 interface InsertModalState {
   state: unknown | null;
@@ -44,10 +46,19 @@ export function InsertOptionsMenu() {
     {
       label: 'Equation',
       modal: <EquationModal />,
-      command: (val) => [
-        INSERT_EQUATION_COMMAND,
-        { equation: val ?? '', inline: false },
-      ],
+      command(val) {
+        return [
+          INSERT_EQUATION_COMMAND,
+          { equation: val ?? '', inline: false },
+        ];
+      },
+    },
+    {
+      label: 'Image',
+      modal: <ImageModal />,
+      command(val) {
+        return [INSERT_IMAGE_COMMAND, val];
+      },
     },
   ];
 
@@ -67,7 +78,7 @@ export function InsertOptionsMenu() {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute z-10 mt-2 w-36 max-h-60 overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Menu.Items className="absolute z-10 mt-2 max-h-60 w-36 overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {INSERT_OPTIONS.map((option) => (
                 <Menu.Item key={option.label}>
                   {({ active }) => (

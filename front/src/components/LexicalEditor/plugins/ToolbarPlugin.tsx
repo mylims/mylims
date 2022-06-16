@@ -132,7 +132,7 @@ export default function ToolbarPlugin() {
 
   return (
     <div
-      className="my-2 flex flex-row gap-2 divide-x divide-neutral-200"
+      className="my-2 flex flex-row flex-wrap gap-2 divide-x divide-neutral-200"
       ref={toolbarRef}
     >
       <div className="flex flex-row gap-2">
