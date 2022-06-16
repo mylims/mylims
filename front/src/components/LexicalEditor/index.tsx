@@ -11,10 +11,15 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import React from 'react';
 
+// import { ExcalidrawNode } from '@/components/LexicalEditor/nodes/ExcalidrawNode';
+// import ExcalidrawPlugin from '@/components/LexicalEditor/plugins/ExcalidrawPlugin';
+
 import { EquationNode } from './nodes/EquationNode';
+import { ImageNode } from './nodes/ImageNode';
 import { SampleLinkNode } from './nodes/SampleLinkNode';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import EquationsPlugin from './plugins/EquationsPlugin';
+import ImagesPlugin from './plugins/ImagesPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import SampleLinkPlugin from './plugins/SampleLinkPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
@@ -29,6 +34,7 @@ function Placeholder() {
 }
 
 const editorConfig = {
+  namespace: 'lexical',
   // The editor theme
   theme: TailwindTheme,
   // Handling of errors during update
@@ -43,8 +49,9 @@ const editorConfig = {
     QuoteNode,
     AutoLinkNode,
     LinkNode,
-    SampleLinkNode,
     EquationNode,
+    ImageNode,
+    SampleLinkNode,
   ],
 };
 
@@ -83,6 +90,7 @@ export default function LexicalEditor({ value, onChange }: LexicalEditorProps) {
             }}
           />
           <EquationsPlugin />
+          <ImagesPlugin />
 
           {/* Custom plugins */}
           <SampleLinkPlugin />
