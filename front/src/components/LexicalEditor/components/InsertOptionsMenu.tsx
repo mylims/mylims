@@ -1,5 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { INSERT_TABLE_COMMAND } from '@lexical/table';
 import clsx from 'clsx';
 import { LexicalCommand } from 'lexical';
 import React, { createContext, Fragment, useContext, useState } from 'react';
@@ -12,10 +13,11 @@ import { INSERT_IMAGE_COMMAND } from '../plugins/ImagesPlugin';
 
 import { EquationModal } from './EquationModal';
 import { ImageModal } from './ImageModal';
+import { TableModal } from './TableModal';
 
 interface InsertModalState {
   state: unknown | null;
-  setState: (action: unknown) => void;
+  setState(action: unknown): void;
 }
 interface InsertOption {
   label: string;
@@ -24,7 +26,7 @@ interface InsertOption {
 }
 const InsertModalContext = createContext<InsertModalState>({
   state: null,
-  setState: () => {
+  setState() {
     throw new Error('Function not implemented');
   },
 });
@@ -58,6 +60,13 @@ export function InsertOptionsMenu() {
       modal: <ImageModal />,
       command(val) {
         return [INSERT_IMAGE_COMMAND, val];
+      },
+    },
+    {
+      label: 'Table',
+      modal: <TableModal />,
+      command(val) {
+        return [INSERT_TABLE_COMMAND, val];
       },
     },
   ];
