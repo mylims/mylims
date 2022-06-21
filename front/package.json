@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@apollo/client": "^3.6.8",
-    "@excalidraw/excalidraw": "^0.11.0",
     "@fluentui/react-icons": "^2.0.173-rc.9",
     "@griffel/react": "^1.0.5",
     "@headlessui/react": "^1.6.4",

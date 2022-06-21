@@ -8,11 +8,10 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
+import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
 import React from 'react';
-
-// import { ExcalidrawNode } from '@/components/LexicalEditor/nodes/ExcalidrawNode';
-// import ExcalidrawPlugin from '@/components/LexicalEditor/plugins/ExcalidrawPlugin';
 
 import { EquationNode } from './nodes/EquationNode';
 import { ImageNode } from './nodes/ImageNode';
@@ -22,6 +21,8 @@ import EquationsPlugin from './plugins/EquationsPlugin';
 import ImagesPlugin from './plugins/ImagesPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import SampleLinkPlugin from './plugins/SampleLinkPlugin';
+import TableCellActionMenuPlugin from './plugins/TableActionMenuPlugin';
+import TableCellResizer from './plugins/TableCellResizer';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import TailwindTheme from './themes/TailwindTheme';
 
@@ -52,6 +53,9 @@ const editorConfig = {
     EquationNode,
     ImageNode,
     SampleLinkNode,
+    TableNode,
+    TableCellNode,
+    TableRowNode,
   ],
 };
 
@@ -91,6 +95,9 @@ export default function LexicalEditor({ value, onChange }: LexicalEditorProps) {
           />
           <EquationsPlugin />
           <ImagesPlugin />
+          <TablePlugin />
+          <TableCellActionMenuPlugin />
+          <TableCellResizer />
 
           {/* Custom plugins */}
           <SampleLinkPlugin />

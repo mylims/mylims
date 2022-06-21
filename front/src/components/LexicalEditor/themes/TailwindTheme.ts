@@ -20,6 +20,11 @@ const exampleTheme = {
     listitem: 'my-2',
   },
   link: 'text-primary-500',
+  table:
+    'border-collapse border-spacing-0 max-w-full overflow-y-scroll table-fixed w-full',
+  tableCell:
+    'border border-solid border-black py-1.5 px-2 min-w-[75px] align-top text-start',
+  tableCellHeader: 'text-start bg-neutral-200',
   text: {
     bold: 'font-bold',
     italic: 'italic',
