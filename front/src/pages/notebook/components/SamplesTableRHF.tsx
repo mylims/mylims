@@ -31,7 +31,7 @@ export default function SamplesTableRHF(props: SamplesTableRHFProps) {
 
       if (deps && shouldValidate) void trigger(deps);
     },
-    [setValue, shouldValidate, name, trigger, deps],
+    [setValue, shouldValidate, name, trigger, deps, field.value],
   );
 
   return <SamplesTable samples={field.value} addSample={addSample} />;

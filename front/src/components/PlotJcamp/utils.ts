@@ -11,8 +11,8 @@ export function getPlotJcamp(
   const { scale, logFilter, ...restQuery } = query;
 
   let data = getReactPlotJSON(analyses, restQuery, {
-    xAxis: { label: `${query.xLabel} [${query.xUnits}]` },
-    yAxis: { label: `${query.yLabel} [${query.yUnits}]`, scale },
+    xAxis: { label: formatLabels(query.xLabel, query.xUnits) },
+    yAxis: { label: formatLabels(query.yLabel, query.yUnits), scale },
     seriesViewportStyle: { stroke: 'black', strokeWidth: '2px' },
     enforceGrowing: true,
     content: { displayMarkers: false },
@@ -45,4 +45,9 @@ export function getPlotJcamp(
   }
 
   return data;
+}
+
+function formatLabels(label: string, units?: string) {
+  if (units) return `${label} [${units}]`;
+  return label;
 }

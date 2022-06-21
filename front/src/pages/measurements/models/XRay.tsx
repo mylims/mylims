@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import React from 'react';
-import { Annotation } from 'react-plot';
 
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
 import { Table as TableQuery } from '@/components/TableQuery';
@@ -20,8 +19,6 @@ interface Peak {
 export interface XRayDerived {
   peaks: Peak[];
 }
-
-const dashedLine = { strokeWidth: 2, opacity: 0.75, strokeDasharray: '5,5' };
 
 export class XRayModel implements BaseMeasurement {
   public type = MeasurementTypes.XRAY;
