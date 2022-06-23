@@ -76,6 +76,7 @@
     "@graphql-codegen/typescript": "^2.4.11",
     "@graphql-codegen/typescript-operations": "^2.3.7",
     "@graphql-codegen/typescript-react-apollo": "^3.2.16",
+    "@simbathesailor/use-what-changed": "^2.0.0",
     "@types/apollo-upload-client": "^17.0.0",
     "@types/flat": "^5.0.2",
     "@types/json-schema": "^7.0.11",
