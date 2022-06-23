@@ -2,13 +2,13 @@ import React from 'react';
 
 import { Input } from '@/components/tailwind-ui';
 
-import { useInsertModalContext } from './InsertOptionsMenu';
-import KatexRenderer from './KatexRenderer';
+import { useInsertModalContext } from '../InsertOptionsMenu';
+import KatexRenderer from '../KatexRenderer';
 
 export function EquationModal() {
   const { state, setState } = useInsertModalContext();
   return (
-    <div className="m-2 min-w-1/4">
+    <div className="min-w-1/4 m-2 min-h-[200px]">
       <Input
         label="Equation"
         name="Equation"

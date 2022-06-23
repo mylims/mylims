@@ -6,7 +6,7 @@ import {
   useSingleFileDropzone,
 } from '@/components/tailwind-ui';
 
-import { useInsertModalContext } from './InsertOptionsMenu';
+import { useInsertModalContext } from '../InsertOptionsMenu';
 
 interface ImageState {
   src: string;
@@ -35,7 +35,7 @@ export function ImageModal() {
   }, [dropzoneListProps.files, altText, setState]);
 
   return (
-    <div className="min-w-1/4 m-2">
+    <div className="min-w-1/4 m-2 min-h-[200px]">
       <Dropzone {...dropzoneProps} />
       {src && (
         <img
