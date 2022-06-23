@@ -10,8 +10,8 @@ import {
   useDebounce,
 } from '@/components/tailwind-ui';
 import { useSampleByCodeLazyQuery } from '@/generated/graphql';
-import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
 
+import { useSampleLinkContext } from '../hooks/useSampleLinkContext';
 import { SAMPLE_EXACT_REGEX } from '../utils/regex';
 
 export enum SampleStatus {
@@ -67,7 +67,7 @@ export function SampleLink({
   const code = useDebounce(sampleCode, 1000);
   const [sampleByCode] = useSampleByCodeLazyQuery();
   const navigate = useNavigate();
-  const { dispatch } = useSampleLinkContext();
+  const { addSample } = useSampleLinkContext();
 
   useEffect(() => {
     sampleByCode({ variables: { sampleCode: code.split('_') } })
@@ -78,7 +78,7 @@ export function SampleLink({
             type: data.sampleByCode.kind.id,
             id: data.sampleByCode.id,
           });
-          dispatch({ type: 'toSave', payload: { id: data.sampleByCode.id } });
+          addSample(data.sampleByCode.id);
         } else {
           setQueryStatus({
             status: SampleStatus.error,
@@ -92,7 +92,7 @@ export function SampleLink({
           error: e.message,
         });
       });
-  }, [code, dispatch, sampleByCode, setQueryStatus]);
+  }, [code, addSample, sampleByCode, setQueryStatus]);
 
   return (
     <span className="inline-flex shadow-sm">

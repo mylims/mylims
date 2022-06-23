@@ -1,14 +1,10 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
-  $getRoot,
   createCommand,
   LexicalCommand,
-  ParagraphNode,
   TextNode,
 } from 'lexical';
 import { useCallback, useEffect } from 'react';
-
-import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
 
 import { $createSampleLinkNode, SampleLinkNode } from '../nodes/SampleLinkNode';
 import { SAMPLE_REGEX } from '../utils/regex';
@@ -26,23 +22,6 @@ export interface SampleLinkRef {
 }
 export default function SampleLinkPlugin() {
   const [editor] = useLexicalComposerContext();
-  const { state, dispatch } = useSampleLinkContext();
-
-  useEffect(() => {
-    if (state.type === 'toShow') {
-      editor.update(() => {
-        const root = $getRoot();
-        const latest = root.getLastChild();
-        const node = $createSampleLinkNode(state.payload.code);
-        if (latest instanceof ParagraphNode) {
-          latest.append(node);
-        } else {
-          root.append(node);
-        }
-        dispatch({ type: 'idle', payload: null });
-      });
-    }
-  }, [state, dispatch, editor]);
 
   useEffect(() => {
     if (!editor.hasNodes([SampleLinkNode])) {
@@ -86,13 +65,6 @@ export default function SampleLinkPlugin() {
         );
         nodeToReplace.replace(replacementNode);
 
-        // Wait to this be solved https://github.com/facebook/lexical/issues/2161
-        if (!currentNode) {
-          replacementNode.selectNext();
-          return;
-        } else {
-          currentNode.select(0, 0);
-        }
         match = getHashtagMatch(currentNode.getTextContent());
       }
     });

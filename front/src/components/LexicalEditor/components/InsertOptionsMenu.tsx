@@ -2,17 +2,19 @@ import { Menu, Transition } from '@headlessui/react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { INSERT_TABLE_COMMAND } from '@lexical/table';
 import clsx from 'clsx';
-import { LexicalCommand } from 'lexical';
+import { $getRoot, LexicalCommand, ParagraphNode } from 'lexical';
 import React, { createContext, Fragment, useContext, useState } from 'react';
 import { KbsProvider } from 'react-kbs';
 
 import { Button, Color, Modal, Variant } from '@/components/tailwind-ui';
 
+import { $createSampleLinkNode } from '../nodes/SampleLinkNode';
 import { INSERT_EQUATION_COMMAND } from '../plugins/EquationsPlugin';
 import { INSERT_IMAGE_COMMAND } from '../plugins/ImagesPlugin';
 
 import { EquationModal } from './modals/EquationModal';
 import { ImageModal } from './modals/ImageModal';
+import { SampleLinkModal } from './modals/SampleLinkModal';
 import { TableModal } from './modals/TableModal';
 
 interface InsertModalState {
@@ -69,6 +71,27 @@ export function InsertOptionsMenu() {
         return [INSERT_TABLE_COMMAND, val];
       },
     },
+    {
+      label: 'Inventory',
+      modal: (
+        <SampleLinkModal
+          appendSample={(id: string) => {
+            editor.update(() => {
+              const root = $getRoot();
+              const latest = root.getLastChild();
+              const node = $createSampleLinkNode(id);
+              if (latest instanceof ParagraphNode) {
+                latest.append(node);
+              } else {
+                root.append(node);
+              }
+            });
+            setModal(null);
+          }}
+        />
+      ),
+      command: null,
+    },
   ];
 
   return (
@@ -112,32 +135,34 @@ export function InsertOptionsMenu() {
         </Menu>
         <Modal isOpen={modal !== null} onRequestClose={() => setModal(null)}>
           <Modal.Body>{modal?.modal}</Modal.Body>
-          <Modal.Footer align="right">
-            <Button
-              color={Color.danger}
-              variant={Variant.secondary}
-              onClick={() => {
-                setState(null);
-                setModal(null);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              color={Color.success}
-              variant={Variant.secondary}
-              disabled={!modal}
-              onClick={() => {
-                if (modal) {
-                  editor.focus();
-                  editor.dispatchCommand(...modal.command(state));
+          {modal?.command && (
+            <Modal.Footer align="right">
+              <Button
+                color={Color.danger}
+                variant={Variant.secondary}
+                onClick={() => {
+                  setState(null);
                   setModal(null);
-                }
-              }}
-            >
-              Insert
-            </Button>
-          </Modal.Footer>
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                color={Color.success}
+                variant={Variant.secondary}
+                disabled={!modal}
+                onClick={() => {
+                  if (modal?.command) {
+                    editor.focus();
+                    editor.dispatchCommand(...modal.command(state));
+                    setModal(null);
+                  }
+                }}
+              >
+                Insert
+              </Button>
+            </Modal.Footer>
+          )}
         </Modal>
       </KbsProvider>
     </InsertModalContext.Provider>

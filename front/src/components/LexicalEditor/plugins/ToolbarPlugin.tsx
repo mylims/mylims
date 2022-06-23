@@ -26,9 +26,6 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Button, Variant } from '@/components/tailwind-ui';
-import { useSampleLinkContext } from '@/pages/notebook/hooks/useSampleLinkContext';
-
 import { AlignOptionsDropdown } from '../components/AlignOptionsDropdown';
 import { BlockOptionsDropdown } from '../components/BlockOptionsDropdown';
 import { ButtonCommand } from '../components/ButtonCommand';
@@ -42,7 +39,6 @@ const LowPriority = 1;
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
-  const { openModal } = useSampleLinkContext();
   const toolbarRef = useRef(null);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
@@ -197,14 +193,6 @@ export default function ToolbarPlugin() {
       <div className="pl-2">
         <AlignOptionsDropdown alignType={alignType} />
       </div>
-      {openModal ? (
-        <div className="pl-2">
-          <Button variant={Variant.secondary} onClick={openModal}>
-            Inventory
-          </Button>
-        </div>
-      ) : null}
-
       <div className="pl-2">
         <InsertOptionsMenu />
       </div>
