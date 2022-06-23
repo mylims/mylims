@@ -10,9 +10,11 @@ import {
 
 import { LexicalFieldProps, LexicalField } from './LexicalField';
 
+const SAMPLES_NAME = 'samples';
+
 export type RichTextFieldRHFProps = Omit<
   LexicalFieldProps,
-  'value' | 'onChange'
+  'value' | 'onChange' | 'samples' | 'onSamplesChange'
 > &
   FieldProps &
   RHFValidationProps;
@@ -30,6 +32,7 @@ export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
     fieldState: { error },
     formState: { isSubmitted: shouldValidate },
   } = useController({ name });
+  const { field: samples } = useController({ name: SAMPLES_NAME });
 
   const handleChange = useCallback(
     (value: string) => {
@@ -37,6 +40,13 @@ export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
       if (deps && shouldValidate) void trigger(deps);
     },
     [setValue, shouldValidate, name, trigger, deps],
+  );
+  const onSamplesChange = useCallback(
+    (value: string[]) => {
+      setValue(SAMPLES_NAME, value, { shouldTouch: true, shouldValidate });
+      if (deps && shouldValidate) void trigger(deps);
+    },
+    [setValue, shouldValidate, trigger, deps],
   );
 
   return (
@@ -46,6 +56,8 @@ export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
       error={serializeError(error)}
       value={field.value}
       onChange={handleChange}
+      samples={samples.value}
+      onSamplesChange={onSamplesChange}
     />
   );
 }

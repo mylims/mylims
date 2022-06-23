@@ -13,6 +13,7 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
 import React from 'react';
 
+import { sampleLinkContext } from './hooks/useSampleLinkContext';
 import { EquationNode } from './nodes/EquationNode';
 import { ImageNode } from './nodes/ImageNode';
 import { SampleLinkNode } from './nodes/SampleLinkNode';
@@ -62,47 +63,60 @@ const editorConfig = {
 export interface LexicalEditorProps {
   value: string;
   onChange(value: string): void;
+  samples: string[];
+  onSamplesChange(samples: string[]): void;
 }
-export default function LexicalEditor({ value, onChange }: LexicalEditorProps) {
+export default function LexicalEditor({
+  value,
+  onChange,
+  samples,
+  onSamplesChange,
+}: LexicalEditorProps) {
+  const SampleLinkContext = sampleLinkContext;
+  function addSample(id: string) {
+    if (!samples.includes(id)) onSamplesChange([...samples, id]);
+  }
   return (
-    <LexicalComposer initialConfig={editorConfig}>
-      <div className="relative m-2 rounded-t-md rounded-b-sm font-normal leading-5 text-black">
-        <ToolbarPlugin />
-        <div className="relative bg-white">
-          <RichTextPlugin
-            contentEditable={
-              <ContentEditable
-                ariaLabel="Rich text editor"
-                className="relative min-h-[150px] resize-none pt-4 caret-neutral-500 outline-none"
-              />
-            }
-            placeholder={<Placeholder />}
-            initialEditorState={value}
-          />
-          <HistoryPlugin />
-          <AutoFocusPlugin />
-          <ListPlugin />
-          <LinkPlugin />
-          <AutoLinkPlugin />
-          <ListMaxIndentLevelPlugin maxDepth={7} />
-          <OnChangePlugin
-            ignoreInitialChange
-            ignoreSelectionChange
-            onChange={(editorState) => {
-              const content = JSON.stringify(editorState);
-              if (content !== value) onChange(content);
-            }}
-          />
-          <EquationsPlugin />
-          <ImagesPlugin />
-          <TablePlugin />
-          <TableCellActionMenuPlugin />
-          <TableCellResizer />
+    <SampleLinkContext.Provider value={{ samples, addSample }}>
+      <LexicalComposer initialConfig={editorConfig}>
+        <div className="relative m-2 rounded-b-sm rounded-t-md font-normal leading-5 text-black">
+          <ToolbarPlugin />
+          <div className="relative bg-white">
+            <RichTextPlugin
+              contentEditable={
+                <ContentEditable
+                  ariaLabel="Rich text editor"
+                  className="relative min-h-[150px] resize-none pt-4 caret-neutral-500 outline-none"
+                />
+              }
+              placeholder={<Placeholder />}
+              initialEditorState={value}
+            />
+            <HistoryPlugin />
+            <AutoFocusPlugin />
+            <ListPlugin />
+            <LinkPlugin />
+            <AutoLinkPlugin />
+            <ListMaxIndentLevelPlugin maxDepth={7} />
+            <OnChangePlugin
+              ignoreInitialChange
+              ignoreSelectionChange
+              onChange={(editorState) => {
+                const content = JSON.stringify(editorState);
+                if (content !== value) onChange(content);
+              }}
+            />
+            <EquationsPlugin />
+            <ImagesPlugin />
+            <TablePlugin />
+            <TableCellActionMenuPlugin />
+            <TableCellResizer />
 
-          {/* Custom plugins */}
-          <SampleLinkPlugin />
+            {/* Custom plugins */}
+            <SampleLinkPlugin />
+          </div>
         </div>
-      </div>
-    </LexicalComposer>
+      </LexicalComposer>
+    </SampleLinkContext.Provider>
   );
 }

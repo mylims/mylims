@@ -14,17 +14,17 @@ import {
 import { useSamplesByCodeLazyQuery } from '@/generated/graphql';
 import { sampleLevelsStrict, SampleLevelsTypes } from '@/models/sample';
 
+import { useSampleLinkContext } from '../hooks/useSampleLinkContext';
+
 const ICON_CLASS = 'h-4 w-4 text-neutral-500';
 
-interface SampleSearchProps {
-  addSample(id: string): void;
-}
-export default function SampleSearch({ addSample }: SampleSearchProps) {
+export default function SampleSearch() {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [focus, setFocus] = useState(false);
   const [kind, setKind] = useState<SampleLevelsTypes | null>(null);
   const query = useDebounce(value, 500);
+  const { addSample } = useSampleLinkContext();
   const [samplesByCode, { loading: queryLoading, data }] =
     useSamplesByCodeLazyQuery();
 

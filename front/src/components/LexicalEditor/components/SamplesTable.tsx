@@ -2,7 +2,7 @@ import {
   InformationCircleIcon,
   PlusCircleIcon,
 } from '@heroicons/react/outline';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { LinkIcon } from '@/components/LinkButton';
 import {
@@ -22,27 +22,25 @@ import { useSampleLinkContext } from '../hooks/useSampleLinkContext';
 import SampleSearch from './SampleSearch';
 
 interface SamplesTableProps {
-  samples: string[];
-  addSample(sample: string): void;
+  appendSample: (id: string) => void;
 }
-export function SamplesTable({ samples, addSample }: SamplesTableProps) {
-  const { state, dispatch } = useSampleLinkContext();
-  useEffect(() => {
-    if (state.type === 'toSave') {
-      addSample(state.payload.id);
-      dispatch({ type: 'idle', payload: null });
-    }
-  }, [state, addSample, dispatch]);
-
+export function SamplesTable({ appendSample }: SamplesTableProps) {
+  const { samples } = useSampleLinkContext();
   return (
     <div>
       <div className="mb-2 flex flex-row flex-wrap gap-4">
         <div className="text-xl font-semibold">Inventory</div>
-        <SampleSearch addSample={(val) => addSample(val)} />
+        <SampleSearch />
       </div>
       <div className="divide-y divide-neutral-300 rounded-md border border-neutral-300">
         {samples.length > 0 ? (
-          samples.map((sample) => <SampleItem key={sample} sample={sample} />)
+          samples.map((sample) => (
+            <SampleItem
+              key={sample}
+              sample={sample}
+              appendSample={appendSample}
+            />
+          ))
         ) : (
           <div className="flex items-center p-4 text-sm text-neutral-400">
             No elements
@@ -55,9 +53,9 @@ export function SamplesTable({ samples, addSample }: SamplesTableProps) {
 
 interface SampleItemProps {
   sample: string;
+  appendSample: (id: string) => void;
 }
-function SampleItem({ sample }: SampleItemProps) {
-  const { dispatch } = useSampleLinkContext();
+function SampleItem({ sample, appendSample }: SampleItemProps) {
   const { data, error, loading } = useSampleQuery({
     variables: { id: sample },
   });
@@ -77,7 +75,7 @@ function SampleItem({ sample }: SampleItemProps) {
   const code = sampleCode.join('_');
   return (
     <div
-      className="flex cursor-move items-center justify-between py-3 pl-3 pr-4 text-sm"
+      className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
       draggable
       onDragStart={(e) => {
         e.dataTransfer.setData('text/plain', code);
@@ -106,7 +104,7 @@ function SampleItem({ sample }: SampleItemProps) {
           roundness={Roundness.circular}
           size={Size.small}
           title="Add to notebook"
-          onClick={() => dispatch({ type: 'toShow', payload: { code } })}
+          onClick={() => appendSample(code)}
         >
           <PlusCircleIcon className="h-5 w-5" />
         </Button>

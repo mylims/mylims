@@ -13,7 +13,6 @@ import {
 export interface LexicalFieldProps extends LexicalEditorProps {
   className?: string;
   style?: CSSProperties;
-  id?: string;
   name: string;
   label: string;
   hiddenLabel?: boolean;
@@ -25,10 +24,11 @@ export interface LexicalFieldProps extends LexicalEditorProps {
 export function LexicalField({
   value,
   onChange,
+  samples,
+  onSamplesChange,
   className,
   style,
   name,
-  id = name,
   hiddenLabel,
   label,
   required,
@@ -39,7 +39,12 @@ export function LexicalField({
   return (
     <div className={className} style={style}>
       <div className="flex items-baseline justify-between gap-2">
-        <Label id={id} text={label} hidden={hiddenLabel} required={required} />
+        <Label
+          id={name}
+          text={label}
+          hidden={hiddenLabel}
+          required={required}
+        />
       </div>
       <div
         className={clsx(
@@ -51,7 +56,12 @@ export function LexicalField({
           },
         )}
       >
-        <LexicalEditor value={value} onChange={onChange} />
+        <LexicalEditor
+          value={value}
+          onChange={onChange}
+          samples={samples}
+          onSamplesChange={onSamplesChange}
+        />
       </div>
       <Help error={error} valid={valid} help={help} />
     </div>
