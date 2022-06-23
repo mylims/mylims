@@ -11,18 +11,18 @@ import { Button, Color, Modal, Variant } from '@/components/tailwind-ui';
 import { INSERT_EQUATION_COMMAND } from '../plugins/EquationsPlugin';
 import { INSERT_IMAGE_COMMAND } from '../plugins/ImagesPlugin';
 
-import { EquationModal } from './EquationModal';
-import { ImageModal } from './ImageModal';
-import { TableModal } from './TableModal';
+import { EquationModal } from './modals/EquationModal';
+import { ImageModal } from './modals/ImageModal';
+import { TableModal } from './modals/TableModal';
 
 interface InsertModalState {
   state: unknown | null;
-  setState(action: unknown): void;
+  setState: (action: unknown) => void;
 }
 interface InsertOption {
   label: string;
   modal: React.ReactNode;
-  command(val: unknown | null): [LexicalCommand<void>, unknown];
+  command: ((val: unknown | null) => [LexicalCommand<void>, unknown]) | null;
 }
 const InsertModalContext = createContext<InsertModalState>({
   state: null,
@@ -95,7 +95,7 @@ export function InsertOptionsMenu() {
                       type="button"
                       onClick={() => setModal(option)}
                       className={clsx(
-                        'group flex w-full items-center px-2 py-2 text-sm',
+                        'group flex w-full items-center px-4 py-2 text-sm',
                         {
                           'bg-primary-500 text-white': active,
                           'text-neutral-900': !active,
