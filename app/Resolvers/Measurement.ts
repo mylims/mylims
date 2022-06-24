@@ -68,10 +68,7 @@ const resolvers: GqlResolvers = {
       const ans = await Measurement.find(new ObjectId(id));
       if (ans) {
         const rest = ans.toJSON() as BaseMeasurement;
-        return {
-          ...rest,
-          type: type as GqlMeasurementTypes,
-        };
+        return { ...rest, type };
       }
       throw new UserInputError('Id not found', { argumentName: 'id' });
     },
