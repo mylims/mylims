@@ -1,9 +1,5 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import {
-  createCommand,
-  LexicalCommand,
-  TextNode,
-} from 'lexical';
+import { createCommand, LexicalCommand, TextNode } from 'lexical';
 import { useCallback, useEffect } from 'react';
 
 import { $createSampleLinkNode, SampleLinkNode } from '../nodes/SampleLinkNode';
