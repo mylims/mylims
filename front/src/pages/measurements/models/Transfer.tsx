@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+import { fromTransfer } from 'iv-analysis';
 import React from 'react';
+import { UseFormSetValue } from 'react-hook-form';
 import { Annotation } from 'react-plot';
 
 import FieldDescription from '@/components/FieldDescription';
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
 import { Table as TableQuery } from '@/components/TableQuery';
-import { InputFieldRHF } from '@/components/tailwind-ui';
 import { MeasurementTypes } from '@/generated/graphql';
 
 import { BaseMeasurement, PlotDetailProps } from './BaseMeasurement';
@@ -31,40 +31,39 @@ const underline = (color: string) => ({
   textDecorationThickness: '2px',
 });
 
-export class TransferModel implements BaseMeasurement {
-  public type = MeasurementTypes.TRANSFER;
-  public plotQuery = {
+export const TransferModel: BaseMeasurement = {
+  type: MeasurementTypes.TRANSFER,
+  plotQuery: {
     xLabel: 'Vg',
     xUnits: 'V',
     yLabel: 'Id_dens',
     yUnits: 'A/mm',
     scale: 'log' as const,
     logFilter: 'remove' as const,
-  };
-  public Form() {
-    return (
-      <>
-        <InputFieldRHF
-          name="derived.thresholdVoltage.value"
-          label="Threshold voltage"
-          type="number"
-          required
-        />
-        <InputFieldRHF
-          name="derived.subthresholdSlope.slope"
-          label="Subthreshold slope"
-          type="number"
-          required
-        />
-      </>
+  },
+  setMetadata(
+    meta: Record<string, string>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setValue: UseFormSetValue<Record<string, any>>,
+  ) {
+    const { thresholdVoltage, subthresholdSlope } = meta;
+    setValue(
+      'derived.thresholdVoltage.value',
+      JSON.parse(thresholdVoltage).value,
+      { shouldTouch: true, shouldValidate: false },
     );
-  }
-  public PlotDetail({ measurement, data }: PlotDetailProps): JSX.Element {
+    setValue(
+      'derived.subthresholdSlope.slope',
+      JSON.parse(subthresholdSlope).slope.value,
+      { shouldTouch: true, shouldValidate: false },
+    );
+  },
+  PlotDetail({ measurement, data }: PlotDetailProps): JSX.Element {
     const { thresholdVoltage, subthresholdSlope } =
       measurement?.derived ?? ({} as TransferDerived);
     return (
       <>
-        <PlotJcampSingle content={data} initialQuery={this.plotQuery}>
+        <PlotJcampSingle content={data} initialQuery={TransferModel.plotQuery}>
           {(analysis, query) => {
             if (query.xLabel === 'Vg' && query.yLabel === 'Id_dens') {
               const spectrum = analysis.getMeasurementXY(query);
@@ -129,8 +128,8 @@ export class TransferModel implements BaseMeasurement {
         </div>
       </>
     );
-  }
-  public metaColumns = [
+  },
+  metaColumns: [
     <TableQuery.NumberColumn
       key="subthresholdSlope"
       title="Subthreshold slope"
@@ -144,5 +143,8 @@ export class TransferModel implements BaseMeasurement {
       dataPath="derived.thresholdVoltage.value"
       disableSort
     />,
-  ];
-}
+  ],
+  toAnalysis(data: string) {
+    return fromTransfer(data);
+  },
+};

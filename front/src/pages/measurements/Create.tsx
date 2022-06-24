@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { array } from 'yup';
 
 import ElnLayout from '@/components/ElnLayout';
-import { PlotJcampSingleRHF } from '@/components/PlotJcamp/PlotJcampSingleRHF';
+import { PlotSingleRHF } from '@/components/PlotSingleRHF';
 import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
 import {
   Alert,
@@ -27,10 +27,9 @@ import useAuth from '@/hooks/useAuth';
 import { useElnMultipartMutation } from '@/hooks/useElnQuery';
 import { measurementTypeList } from '@/models/measurements';
 
-import { MeasurementMap } from './models/BaseMeasurement';
-
 type MeasurementInputForm = Omit<MeasurementInput, 'userId' | 'sampleId'> & {
   attachments: string[];
+  jcamp?: string;
 };
 
 export default function CreateMeasurement() {
@@ -63,14 +62,16 @@ export default function CreateMeasurement() {
     );
   }
 
-  async function onSubmit({ attachments, ...data }: MeasurementInputForm) {
+  async function onSubmit({
+    attachments,
+    jcamp,
+    ...data
+  }: MeasurementInputForm) {
     try {
       let file: string | undefined;
-      if (attachments) {
-        const res = await mutateAsync({
-          file: attachments[0],
-          collection: type,
-        });
+      if (jcamp) {
+        const blob = new Blob([jcamp], { type: 'text/plain' });
+        const res = await mutateAsync({ file: blob, collection: type });
         if (!res._id) throw new Error('Failed to upload file');
         file = res._id;
       }
@@ -95,7 +96,6 @@ export default function CreateMeasurement() {
       setError(error as Error);
     }
   }
-  const Measurement = MeasurementMap[type];
 
   return (
     <FormRHF<MeasurementInputForm>
@@ -122,7 +122,6 @@ export default function CreateMeasurement() {
               />
               <InputFieldRHF name="title" label="Title" required />
               <InputFieldRHF name="comment" label="Comment" />
-              <Measurement.Form />
             </div>
             <div>
               <DropzoneFieldRHF
@@ -133,11 +132,8 @@ export default function CreateMeasurement() {
               />
             </div>
           </div>
-          <div className="rounded-md border border-neutral-300 shadow-sm lg:w-1/3">
-            <PlotJcampSingleRHF
-              name="attachments"
-              initialQuery={{ xLabel: 'x', yLabel: 'y' }}
-            />
+          <div className="rounded-md border border-neutral-300 p-4 shadow-sm lg:w-1/3">
+            <PlotSingleRHF name="attachments" type={type} />
           </div>
           <div className="lg:w-1/3">
             <RichTextImageFieldRHF name="description" label="Description" />
