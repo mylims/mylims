@@ -1,3 +1,9 @@
+import {
+  Beaker20Regular,
+  BracesVariable20Regular,
+  Image20Regular,
+  Table20Regular,
+} from '@fluentui/react-icons';
 import { Menu, Transition } from '@headlessui/react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { INSERT_TABLE_COMMAND } from '@lexical/table';
@@ -22,6 +28,7 @@ interface InsertModalState {
   setState: (action: unknown) => void;
 }
 interface InsertOption {
+  icon: React.ReactNode;
   label: string;
   modal: React.ReactNode;
   command: ((val: unknown | null) => [LexicalCommand<void>, unknown]) | null;
@@ -48,6 +55,7 @@ export function InsertOptionsMenu() {
   const [editor] = useLexicalComposerContext();
   const INSERT_OPTIONS: InsertOption[] = [
     {
+      icon: <BracesVariable20Regular />,
       label: 'Equation',
       modal: <EquationModal />,
       command(val) {
@@ -58,6 +66,7 @@ export function InsertOptionsMenu() {
       },
     },
     {
+      icon: <Image20Regular />,
       label: 'Image',
       modal: <ImageModal />,
       command(val) {
@@ -65,6 +74,7 @@ export function InsertOptionsMenu() {
       },
     },
     {
+      icon: <Table20Regular />,
       label: 'Table',
       modal: <TableModal />,
       command(val) {
@@ -72,6 +82,7 @@ export function InsertOptionsMenu() {
       },
     },
     {
+      icon: <Beaker20Regular />,
       label: 'Inventory',
       modal: (
         <SampleLinkModal
@@ -110,7 +121,7 @@ export function InsertOptionsMenu() {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute z-10 mt-2 max-h-60 w-36 overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Menu.Items className="absolute z-10 mt-2 max-h-60 w-44 overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {INSERT_OPTIONS.map((option) => (
                 <Menu.Item key={option.label}>
                   {({ active }) => (
@@ -125,7 +136,8 @@ export function InsertOptionsMenu() {
                         },
                       )}
                     >
-                      {option.label}
+                      {option.icon}
+                      <span className="ml-2">{option.label}</span>
                     </button>
                   )}
                 </Menu.Item>
