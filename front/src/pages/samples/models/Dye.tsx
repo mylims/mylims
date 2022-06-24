@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 import { optionalString, InputFieldRHF } from '@/components/tailwind-ui';
 import { SampleQuery } from '@/generated/graphql';

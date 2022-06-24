@@ -310,7 +310,7 @@ function TableActionMenu({
 
   return createPortal(
     <div
-      className="z-10 block fixed min-w-[100px] min-h-[40px] bg-neutral-100 shadow-lg rounded-lg"
+      className="fixed z-10 block min-h-[40px] min-w-[100px] rounded-lg bg-neutral-100 shadow-lg"
       ref={dropDownRef}
       onClick={(e) => {
         e.stopPropagation();
@@ -379,10 +379,10 @@ function ActionButton({ onClick, children }: ActionButtonProps) {
   return (
     <button
       type="button"
-      className="my-0 mx-2 shrink-0 p-2 cursor-pointer flex align-center flex-row justify-between radius-sm border-0 max-w-[250px]"
+      className="align-center radius-sm my-0 mx-2 flex max-w-[250px] shrink-0 cursor-pointer flex-row justify-between border-0 p-2"
       onClick={onClick}
     >
-      <span className="flex grow min-w-[150px]">{children}</span>
+      <span className="flex min-w-[150px] grow">{children}</span>
     </button>
   );
 }
@@ -492,7 +492,7 @@ function TableCellActionMenuContainer(): JSX.Element {
         <>
           <button
             type="button"
-            className="bg-transparent justify-center items-center border-0 relative radius-sm text-neutral-500 inline-block pointer"
+            className="radius-sm pointer relative inline-block items-center justify-center border-0 bg-transparent text-neutral-500"
             onClick={(e) => {
               e.stopPropagation();
               setIsMenuOpen(!isMenuOpen);

@@ -3,7 +3,6 @@ import React from 'react';
 import { API_URL } from '@/../env';
 import { Button, Card } from '@/components/tailwind-ui';
 
-
 export default function TequilaAuthForm() {
   const onConnect = () => {
     // ssr workaround

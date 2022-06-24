@@ -50,7 +50,7 @@ function InlineEquationEditor({
     <span className="bg-neutral-100 p-2">
       <span className="text-left text-neutral-500">$</span>
       <input
-        className="text-alternative-700 resize-none bg-inherit outline-none"
+        className="resize-none bg-inherit text-alternative-700 outline-none"
         value={equation}
         onChange={onChange}
         autoFocus
@@ -76,7 +76,7 @@ function BlockEquationEditor({
     <div className="bg-neutral-100 p-2">
       <span className="text-left text-neutral-500">{'$$\n'}</span>
       <textarea
-        className="text-alternative-700 resize-none w-full bg-inherit outline-none"
+        className="w-full resize-none bg-inherit text-alternative-700 outline-none"
         value={equation}
         onChange={onChange}
         ref={inputRef}
