@@ -6,17 +6,20 @@ import {
   PencilIcon,
 } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
 
 import { API_URL } from '@/../env';
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import { LinkButton } from '@/components/LinkButton';
+import { PlotJcampMultiple } from '@/components/PlotJcamp/PlotJcampMultiple';
 import { RichTextSerializer } from '@/components/RichTextEditor/RichTextSerializer';
 import { Table as TableQuery } from '@/components/TableQuery';
 import WaferDicing from '@/components/WaferDicing';
 import {
+  Alert,
+  AlertType,
   Button,
   Card,
   Color,
@@ -24,11 +27,14 @@ import {
   Size,
   Variant,
 } from '@/components/tailwind-ui';
-import { Sample } from '@/generated/graphql';
+import { MeasurementTypes, Sample } from '@/generated/graphql';
+import { useFetchFileDict } from '@/hooks/useFetchFile';
 import { sampleLevelsList } from '@/models/sample';
+import { XRayModel } from '@/pages/measurements/models/XRay';
 
 import SamplesList from './Default';
 
+const size = { width: 300, height: 250 };
 const tabStyle = ({ selected }: { selected: boolean }) =>
   clsx(
     'mr-2 rounded-md px-3 py-2 text-xs font-semibold uppercase tracking-wider',
@@ -36,6 +42,22 @@ const tabStyle = ({ selected }: { selected: boolean }) =>
   );
 export default function WaferList() {
   const [state, setState] = useState<Sample | null>(null);
+  const { plotQuery } = XRayModel;
+  const filesDict = useMemo(() => {
+    let filesDict: Record<string, string> = {};
+    if (!state) return filesDict;
+    for (const { type, file } of state.measurements) {
+      if (type === MeasurementTypes.XRAY && file) {
+        filesDict[file.filename] = file.downloadUrl;
+      }
+    }
+    return filesDict;
+  }, [state]);
+  const { data, error } = useFetchFileDict(filesDict);
+  const measurements = useMemo(
+    () => Object.values(data).filter((val): val is string => val !== null),
+    [data],
+  );
 
   return (
     <div className="grid grid-cols-4 gap-4">
@@ -264,8 +286,19 @@ export default function WaferList() {
                     {/* X-ray */}
                     <Tab.Panel>
                       <div className="mb-2 w-full">
-                        {state.measurements.length > 0 ? (
-                          'list'
+                        {error.length > 0 ? (
+                          <Alert title={'Error'} type={AlertType.ERROR}>
+                            <p>Unexpected errors:</p>
+                            {error.map((err) => (
+                              <p key={err.name}>{err.message}</p>
+                            ))}
+                          </Alert>
+                        ) : state.measurements.length > 0 ? (
+                          <PlotJcampMultiple
+                            content={measurements}
+                            query={plotQuery}
+                            size={size}
+                          />
                         ) : (
                           <p className="text-center text-neutral-500">
                             No measurements added

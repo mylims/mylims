@@ -26,8 +26,8 @@ export default function MeasurementTypeRender({
     return (
       <Alert title={'Error'} type={AlertType.ERROR}>
         <p>Unexpected errors:</p>
-        {error.map((err, i) => (
-          <p key={i}>{err.message}</p>
+        {error.map((err) => (
+          <p key={err.name}>{err.message}</p>
         ))}
       </Alert>
     );
