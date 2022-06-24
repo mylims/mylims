@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import React from 'react';
+import { fromXRC } from 'xray-analysis';
 
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
 import { Table as TableQuery } from '@/components/TableQuery';
@@ -20,22 +20,26 @@ export interface XRayDerived {
   peaks: Peak[];
 }
 
-export class XRayModel implements BaseMeasurement {
-  public type = MeasurementTypes.XRAY;
-  public plotQuery = { xLabel: 'x', yLabel: 'y' };
-  public Form() {
-    return <></>;
-  }
-  public PlotDetail({ data }: PlotDetailProps): JSX.Element {
-    // const { peaks } = measurement?.derived ?? ({} as XRayDerived);
-    return <PlotJcampSingle content={data} initialQuery={this.plotQuery} />;
-  }
-  public metaColumns = [
+export const XRayModel: BaseMeasurement = {
+  type: MeasurementTypes.XRAY,
+  plotQuery: { xLabel: 'x', yLabel: 'y' },
+  setMetadata() {
+    // No metadata to set
+  },
+  PlotDetail({ data }: PlotDetailProps): JSX.Element {
+    return (
+      <PlotJcampSingle content={data} initialQuery={XRayModel.plotQuery} />
+    );
+  },
+  metaColumns: [
     <TableQuery.NumberColumn
       key="peaks"
       title="Number of peaks"
       dataPath="derived.peaks.length"
       disableSort
     />,
-  ];
-}
+  ],
+  toAnalysis(data: string) {
+    return [fromXRC(data)];
+  },
+};
