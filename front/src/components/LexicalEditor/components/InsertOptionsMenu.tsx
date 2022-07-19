@@ -1,13 +1,14 @@
 import {
   Beaker20Regular,
   BracesVariable20Regular,
+  DataTrending20Regular,
   Image20Regular,
   Table20Regular,
 } from '@fluentui/react-icons';
 import { Menu, Transition } from '@headlessui/react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { INSERT_TABLE_COMMAND } from '@lexical/table';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { $getRoot, LexicalCommand, ParagraphNode } from 'lexical';
 import React, { createContext, Fragment, useContext, useState } from 'react';
 import { KbsProvider } from 'react-kbs';
@@ -20,6 +21,7 @@ import { INSERT_IMAGE_COMMAND } from '../plugins/ImagesPlugin';
 
 import { EquationModal } from './modals/EquationModal';
 import { ImageModal } from './modals/ImageModal';
+import { MeasurementLinkModal } from './modals/MeasurementLinkModal';
 import { SampleLinkModal } from './modals/SampleLinkModal';
 import { TableModal } from './modals/TableModal';
 
@@ -97,6 +99,19 @@ export function InsertOptionsMenu() {
                 root.append(node);
               }
             });
+            setModal(null);
+          }}
+        />
+      ),
+      command: null,
+    },
+    {
+      icon: <DataTrending20Regular />,
+      label: 'Measurements',
+      modal: (
+        <MeasurementLinkModal
+          appendMeasurement={() => {
+            // Append the plot to the editor
             setModal(null);
           }}
         />

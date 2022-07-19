@@ -1,5 +1,5 @@
 import { PaperClipIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { useMemo } from 'react';
 
 import { SampleQuery } from '@/generated/graphql';
