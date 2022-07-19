@@ -1,6 +1,6 @@
 import { Listbox } from '@headlessui/react';
 import { CheckIcon, SearchIcon, SelectorIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { usePopper } from 'react-popper';
 

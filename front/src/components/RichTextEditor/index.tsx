@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { isHotkey } from 'is-hotkey';
 import React, { CSSProperties, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';

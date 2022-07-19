@@ -5,7 +5,7 @@ import {
   InformationCircleIcon,
   PencilIcon,
 } from '@heroicons/react/outline';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
 
