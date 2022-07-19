@@ -1,6 +1,6 @@
 import { Popover } from '@headlessui/react';
 import { DocumentSearchIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { JSXElementConstructor, ReactElement, useState } from 'react';
 import { usePopper } from 'react-popper';
 

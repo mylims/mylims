@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { createContext, ReactNode, useContext, useMemo } from 'react';
 import { RenderElementProps, useFocused, useSelected } from 'slate-react';
 

@@ -1,6 +1,6 @@
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { Fragment } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
 
