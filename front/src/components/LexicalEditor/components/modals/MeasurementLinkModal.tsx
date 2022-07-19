@@ -8,37 +8,37 @@ import { LinkIcon } from '@/components/LinkButton';
 import {
   Badge,
   BadgeVariant,
-  Button,
   Color,
+  Button,
+  Variant,
   Roundness,
   Size,
-  Variant,
 } from '@/components/tailwind-ui';
-import { useSampleQuery } from '@/generated/graphql';
+import { useMeasurementQuery } from '@/generated/graphql';
+import { MeasurementNotebook } from '@/pages/notebook/models';
 import { formatDate } from '@/utils/formatFields';
 
-import { useSampleLinkContext } from '../hooks/useSampleLinkContext';
+import { useSampleLinkContext } from '../../hooks/useSampleLinkContext';
 
-import SampleSearch from './SampleSearch';
-
-interface SamplesTableProps {
-  appendSample: (id: string) => void;
+interface SampleLinkModalProps {
+  appendMeasurement: (id: MeasurementNotebook) => void;
 }
-export function SamplesTable({ appendSample }: SamplesTableProps) {
-  const { samples } = useSampleLinkContext();
+export function MeasurementLinkModal({
+  appendMeasurement,
+}: SampleLinkModalProps) {
+  const { measurements } = useSampleLinkContext();
   return (
-    <div>
+    <div className="min-w-1/4 m-2 min-h-[200px]">
       <div className="mb-2 flex flex-row flex-wrap gap-4">
-        <div className="text-xl font-semibold">Inventory</div>
-        <SampleSearch />
+        <div className="text-xl font-semibold">Measurements</div>
       </div>
       <div className="divide-y divide-neutral-300 rounded-md border border-neutral-300">
-        {samples.length > 0 ? (
-          samples.map((sample) => (
-            <SampleItem
-              key={sample}
-              sample={sample}
-              appendSample={appendSample}
+        {measurements.length > 0 ? (
+          measurements.map((measurement) => (
+            <MeasurementItem
+              key={measurement.id}
+              measurement={measurement}
+              appendMeasurement={appendMeasurement}
             />
           ))
         ) : (
@@ -51,13 +51,16 @@ export function SamplesTable({ appendSample }: SamplesTableProps) {
   );
 }
 
-interface SampleItemProps {
-  sample: string;
-  appendSample: (id: string) => void;
+interface MeasurementItemProps {
+  measurement: MeasurementNotebook;
+  appendMeasurement: (id: MeasurementNotebook) => void;
 }
-function SampleItem({ sample, appendSample }: SampleItemProps) {
-  const { data, error, loading } = useSampleQuery({
-    variables: { id: sample },
+function MeasurementItem({
+  measurement,
+  appendMeasurement,
+}: MeasurementItemProps) {
+  const { data, error, loading } = useMeasurementQuery({
+    variables: measurement,
   });
   if (error) {
     return <div className="bg-danger-50 text-danger-700">{error.message}</div>;
@@ -66,20 +69,22 @@ function SampleItem({ sample, appendSample }: SampleItemProps) {
   if (!data) return <div className="bg-danger-50 text-danger-700">No data</div>;
 
   const {
-    sample: {
-      sampleCode,
+    measurement: {
       createdAt,
-      kind: { id: kind },
+      sample: { sampleCode },
+      file,
     },
   } = data;
-  const code = sampleCode.join('_');
+  const title = file?.filename ?? sampleCode.join('_');
   return (
     <div className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
       <div className="flex flex-row gap-4">
-        <div className="text-sm">{code}</div>
+        <div className="text-sm max-w-xs truncate" title={title}>
+          {title}
+        </div>
         <Badge
           variant={BadgeVariant.COLORED_BACKGROUND}
-          label={kind}
+          label={measurement.type}
           color={Color.primary}
         />
         <div className="text-xs text-neutral-400">{formatDate(createdAt)}</div>
@@ -87,8 +92,8 @@ function SampleItem({ sample, appendSample }: SampleItemProps) {
       <div>
         <LinkIcon
           className="mx-4"
-          to={`/sample/detail/${kind}/${sample}`}
-          title={`Detail of ${code}`}
+          to={`/measurement/detail/${measurement.type}/${measurement.id}`}
+          title={`Detail of ${title}`}
         >
           <InformationCircleIcon className="h-5 w-5" />
         </LinkIcon>
@@ -98,7 +103,7 @@ function SampleItem({ sample, appendSample }: SampleItemProps) {
           roundness={Roundness.circular}
           size={Size.small}
           title="Add to notebook"
-          onClick={() => appendSample(code)}
+          onClick={() => appendMeasurement(measurement)}
         >
           <PlusCircleIcon className="h-5 w-5" />
         </Button>

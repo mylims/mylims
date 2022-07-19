@@ -1,28 +1,35 @@
-export interface PossibleTypesResultData {
-  possibleTypes: {
-    [key: string]: string[];
-  };
-}
-const result: PossibleTypesResultData = {
-  possibleTypes: {
-    EventData: ['EventDataFile'],
-    Pagination: [
-      'EventPage',
-      'FilesFlatPage',
-      'MeasurementPage',
-      'NotebookPage',
-      'SamplePage',
-      'UserPage',
+
+      export interface PossibleTypesResultData {
+        possibleTypes: {
+          [key: string]: string[]
+        }
+      }
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {
+    "EventData": [
+      "EventDataFile"
     ],
-    PaginationNode: [
-      'Event',
-      'Measurement',
-      'Notebook',
-      'Sample',
-      'SyncFileRevision',
-      'User',
+    "Pagination": [
+      "EventPage",
+      "FilesFlatPage",
+      "MeasurementPage",
+      "NotebookPage",
+      "SamplePage",
+      "UserPage"
     ],
-    SyncElementRevision: ['SyncDirRevision', 'SyncFileRevision'],
-  },
+    "PaginationNode": [
+      "Event",
+      "Measurement",
+      "Notebook",
+      "Sample",
+      "SyncFileRevision",
+      "User"
+    ],
+    "SyncElementRevision": [
+      "SyncDirRevision",
+      "SyncFileRevision"
+    ]
+  }
 };
-export default result;
+      export default result;
+    

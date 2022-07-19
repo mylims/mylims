@@ -4,12 +4,16 @@ import {
   NotebookQuery,
 } from '@/generated/graphql';
 
+export interface MeasurementNotebook {
+  id: string;
+  type: MeasurementTypes;
+}
 type BaseNotebook = Omit<
   NotebookQuery['notebook'],
   'samples' | 'measurements'
 > & {
   samples: string[];
-  measurements: { id: string; type: MeasurementTypes }[];
+  measurements: MeasurementNotebook[];
 };
 export type UpdateNotebook = BaseNotebook;
 export type CreateNotebook = Omit<BaseNotebook, 'user' | 'createdAt' | 'id'>;

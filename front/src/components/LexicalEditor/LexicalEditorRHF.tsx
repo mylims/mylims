@@ -7,14 +7,21 @@ import {
   RHFValidationProps,
   useCheckedFormRHFContext,
 } from '@/components/tailwind-ui';
+import { MeasurementNotebook } from '@/pages/notebook/models';
 
 import { LexicalFieldProps, LexicalField } from './LexicalField';
 
 const SAMPLES_NAME = 'samples';
+const MEASUREMENTS_NAME = 'measurements';
 
 export type RichTextFieldRHFProps = Omit<
   LexicalFieldProps,
-  'value' | 'onChange' | 'samples' | 'onSamplesChange'
+  | 'value'
+  | 'onChange'
+  | 'samples'
+  | 'onSamplesChange'
+  | 'measurements'
+  | 'onMeasurementsChange'
 > &
   FieldProps &
   RHFValidationProps;
@@ -33,6 +40,7 @@ export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
     formState: { isSubmitted: shouldValidate },
   } = useController({ name });
   const { field: samples } = useController({ name: SAMPLES_NAME });
+  const { field: measurements } = useController({ name: MEASUREMENTS_NAME });
 
   const handleChange = useCallback(
     (value: string) => {
@@ -48,6 +56,13 @@ export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
     },
     [setValue, shouldValidate, trigger, deps],
   );
+  const onMeasurementsChange = useCallback(
+    (value: MeasurementNotebook[]) => {
+      setValue(MEASUREMENTS_NAME, value, { shouldTouch: true, shouldValidate });
+      if (deps && shouldValidate) void trigger(deps);
+    },
+    [setValue, shouldValidate, trigger, deps],
+  );
 
   return (
     <LexicalField
@@ -58,6 +73,8 @@ export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
       onChange={handleChange}
       samples={samples.value}
       onSamplesChange={onSamplesChange}
+      measurements={measurements.value}
+      onMeasurementsChange={onMeasurementsChange}
     />
   );
 }

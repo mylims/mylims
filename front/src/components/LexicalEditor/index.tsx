@@ -13,6 +13,8 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
 import React from 'react';
 
+import { MeasurementNotebook } from '@/pages/notebook/models';
+
 import { sampleLinkContext } from './hooks/useSampleLinkContext';
 import { EquationNode } from './nodes/EquationNode';
 import { ImageNode } from './nodes/ImageNode';
@@ -65,19 +67,28 @@ export interface LexicalEditorProps {
   onChange(value: string): void;
   samples: string[];
   onSamplesChange(samples: string[]): void;
+  measurements: MeasurementNotebook[];
+  onMeasurementsChange(measurements: MeasurementNotebook[]): void;
 }
 export default function LexicalEditor({
   value,
   onChange,
   samples,
   onSamplesChange,
+  measurements,
+  onMeasurementsChange,
 }: LexicalEditorProps) {
   const SampleLinkContext = sampleLinkContext;
   function addSample(id: string) {
     if (!samples.includes(id)) onSamplesChange([...samples, id]);
   }
+  function addMeasurement(id: MeasurementNotebook) {
+    if (!measurements.includes(id)) onMeasurementsChange([...measurements, id]);
+  }
   return (
-    <SampleLinkContext.Provider value={{ samples, addSample }}>
+    <SampleLinkContext.Provider
+      value={{ samples, addSample, measurements, addMeasurement }}
+    >
       <LexicalComposer initialConfig={editorConfig}>
         <div className="relative m-2 rounded-b-sm rounded-t-md font-normal leading-5 text-black">
           <ToolbarPlugin />

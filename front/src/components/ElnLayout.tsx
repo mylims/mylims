@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 

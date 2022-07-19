@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React, { CSSProperties } from 'react';
 
 import LexicalEditor, { LexicalEditorProps } from '@/components/LexicalEditor';
@@ -26,6 +26,8 @@ export function LexicalField({
   onChange,
   samples,
   onSamplesChange,
+  measurements,
+  onMeasurementsChange,
   className,
   style,
   name,
@@ -61,6 +63,8 @@ export function LexicalField({
           onChange={onChange}
           samples={samples}
           onSamplesChange={onSamplesChange}
+          measurements={measurements}
+          onMeasurementsChange={onMeasurementsChange}
         />
       </div>
       <Help error={error} valid={valid} help={help} />
