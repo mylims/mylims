@@ -19,11 +19,13 @@ import { sampleLinkContext } from './hooks/useSampleLinkContext';
 import { EquationNode } from './nodes/EquationNode';
 import { ImageNode } from './nodes/ImageNode';
 import { SampleLinkNode } from './nodes/SampleLinkNode';
+import { PlotNode } from './nodes/PlotNode';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import EquationsPlugin from './plugins/EquationsPlugin';
 import ImagesPlugin from './plugins/ImagesPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import SampleLinkPlugin from './plugins/SampleLinkPlugin';
+import PlotPlugin from './plugins/PlotPlugin';
 import TableCellActionMenuPlugin from './plugins/TableActionMenuPlugin';
 import TableCellResizer from './plugins/TableCellResizer';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
@@ -31,7 +33,7 @@ import TailwindTheme from './themes/TailwindTheme';
 
 function Placeholder() {
   return (
-    <div className="pointer-events-none absolute top-4 inline-block select-none overflow-hidden text-ellipsis text-neutral-400">
+    <div className="absolute inline-block overflow-hidden pointer-events-none select-none top-4 text-ellipsis text-neutral-400">
       Enter some rich text...
     </div>
   );
@@ -56,6 +58,7 @@ const editorConfig = {
     EquationNode,
     ImageNode,
     SampleLinkNode,
+    PlotNode,
     TableNode,
     TableCellNode,
     TableRowNode,
@@ -90,7 +93,7 @@ export default function LexicalEditor({
       value={{ samples, addSample, measurements, addMeasurement }}
     >
       <LexicalComposer initialConfig={editorConfig}>
-        <div className="relative m-2 rounded-b-sm rounded-t-md font-normal leading-5 text-black">
+        <div className="relative m-2 font-normal text-black rounded-b-sm rounded-t-md leading-5">
           <ToolbarPlugin />
           <div className="relative bg-white">
             <RichTextPlugin
@@ -125,6 +128,7 @@ export default function LexicalEditor({
 
             {/* Custom plugins */}
             <SampleLinkPlugin />
+            <PlotPlugin />
           </div>
         </div>
       </LexicalComposer>
