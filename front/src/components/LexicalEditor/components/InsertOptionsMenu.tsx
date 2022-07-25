@@ -15,6 +15,7 @@ import { KbsProvider } from 'react-kbs';
 
 import { Button, Color, Modal, Variant } from '@/components/tailwind-ui';
 
+import { $createPlotNode } from '../nodes/PlotNode';
 import { $createSampleLinkNode } from '../nodes/SampleLinkNode';
 import { INSERT_EQUATION_COMMAND } from '../plugins/EquationsPlugin';
 import { INSERT_IMAGE_COMMAND } from '../plugins/ImagesPlugin';
@@ -110,8 +111,18 @@ export function InsertOptionsMenu() {
       label: 'Measurements',
       modal: (
         <MeasurementLinkModal
-          appendMeasurement={() => {
+          appendMeasurement={(fileId: string, fileUrl: string) => {
             // Append the plot to the editor
+            editor.update(() => {
+              const root = $getRoot();
+              const latest = root.getLastChild();
+              const node = $createPlotNode(fileId, fileUrl);
+              if (latest instanceof ParagraphNode) {
+                latest.append(node);
+              } else {
+                root.append(node);
+              }
+            });
             setModal(null);
           }}
         />
