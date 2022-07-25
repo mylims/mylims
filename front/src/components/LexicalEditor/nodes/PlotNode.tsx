@@ -1,12 +1,12 @@
-import {PlotFromURL} from '@/components/PlotJcamp/PlotFromURL';
 import {
   DecoratorNode,
-  LexicalEditor,
   LexicalNode,
   NodeKey,
   SerializedLexicalNode,
 } from 'lexical';
 import React, { ReactNode } from 'react';
+
+import { PlotFromURL } from '@/components/PlotJcamp/PlotFromURL';
 
 interface SerializedPlotNode extends SerializedLexicalNode {
   fileId: string;
@@ -23,21 +23,13 @@ export class PlotNode extends DecoratorNode<ReactNode> {
   }
 
   public static clone(node: PlotNode): PlotNode {
-    return new PlotNode(
-      node.__fileId,
-      node.__fileUrl,
-      node.__key,
-    );
+    return new PlotNode(node.__fileId, node.__fileUrl, node.__key);
   }
 
-  public constructor(
-    fileId: string,
-    fileUrl: string,
-    key?: NodeKey,
-  ) {
+  public constructor(fileId: string, fileUrl: string, key?: NodeKey) {
     super(key);
     this.__fileId = fileId;
-    this.__fileUrl = fileUrl
+    this.__fileUrl = fileUrl;
   }
 
   public createDOM(): HTMLElement {
@@ -49,17 +41,10 @@ export class PlotNode extends DecoratorNode<ReactNode> {
   }
 
   public decorate(): ReactNode {
-    return (
-      <PlotFromURL
-        fileId={this.__fileId}
-        fileUrl={this.__fileUrl}
-      />
-    );
+    return <PlotFromURL fileId={this.__fileId} fileUrl={this.__fileUrl} />;
   }
 
-  public static importJSON(
-    serializedNode: SerializedPlotNode,
-  ): PlotNode {
+  public static importJSON(serializedNode: SerializedPlotNode): PlotNode {
     return $createPlotNode(serializedNode.fileId, serializedNode.fileUrl);
   }
 

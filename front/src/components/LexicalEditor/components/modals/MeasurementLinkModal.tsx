@@ -21,7 +21,7 @@ import { formatDate } from '@/utils/formatFields';
 import { useSampleLinkContext } from '../../hooks/useSampleLinkContext';
 
 interface SampleLinkModalProps {
-  appendMeasurement: (id: MeasurementNotebook) => void;
+  appendMeasurement: (fileId: string, fileUrl: string) => void;
 }
 export function MeasurementLinkModal({
   appendMeasurement,
@@ -53,7 +53,7 @@ export function MeasurementLinkModal({
 
 interface MeasurementItemProps {
   measurement: MeasurementNotebook;
-  appendMeasurement: (id: MeasurementNotebook) => void;
+  appendMeasurement: (fileId: string, fileUrl: string) => void;
 }
 function MeasurementItem({
   measurement,
@@ -71,6 +71,7 @@ function MeasurementItem({
   const {
     measurement: {
       createdAt,
+      fileId,
       sample: { sampleCode },
       file,
     },
@@ -103,7 +104,9 @@ function MeasurementItem({
           roundness={Roundness.circular}
           size={Size.small}
           title="Add to notebook"
-          onClick={() => appendMeasurement(measurement)}
+          onClick={() => {
+            if (fileId && file) appendMeasurement(fileId, file.downloadUrl);
+          }}
         >
           <PlusCircleIcon className="h-5 w-5" />
         </Button>
