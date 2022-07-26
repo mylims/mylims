@@ -7,6 +7,12 @@ type Query {
     sortBy: MeasurementSortInput
   ): MeasurementPage!
   measurement(id: ID!, type: MeasurementTypes!): Measurement!
+  measurementsByNotebook(
+    notebookId: ID!
+    fileName: String
+    project: String
+    limit: Int
+  ): MeasurementPage!
 }
 
 type Mutation {
