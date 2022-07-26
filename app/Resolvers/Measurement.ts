@@ -8,6 +8,7 @@ import File from 'App/Models/File';
 import { BaseMeasurement } from 'App/Models/Measurement/Base';
 import { TransferMeasurement } from 'App/Models/Measurement/Transfer';
 import { XRayMeasurement } from 'App/Models/Measurement/XRay';
+import Notebook from 'App/Models/Notebook';
 import { Sample } from 'App/Models/Sample';
 import User from 'App/Models/User';
 import {
@@ -91,6 +92,54 @@ const resolvers: GqlResolvers = {
         return { ...rest, type };
       });
       return { list, totalCount };
+    },
+    async measurementsByNotebook(_, { notebookId, fileName, project, limit }) {
+      const notebook = await Notebook.find(new ObjectId(notebookId));
+      if (!notebook) {
+        throw new UserInputError('Notebook not found', { argumentName: 'id' });
+      }
+
+      let measurements: BaseMeasurement[] = [];
+      for (const sampleId of notebook.samples) {
+        const sample = await Sample.find(new ObjectId(sampleId));
+        // Check if the sample exists and contains the project
+        if (
+          sample &&
+          (project
+            ? sample.project && new RegExp(project).exec(sample.project)
+            : true)
+        ) {
+          const sampleMeasurements = await Promise.all(
+            sample.measurements.map(({ type, id }) =>
+              MEASUREMENTS[type as GqlMeasurementTypes].findOrFail(id),
+            ),
+          );
+          measurements = measurements.concat(sampleMeasurements);
+        }
+      }
+
+      if (fileName) {
+        const fileNames = await Promise.all(
+          measurements.map(({ fileId }) => {
+            if (!fileId) return Promise.resolve(null);
+            return File.findOrFail(fileId);
+          }),
+        );
+        let filteredByFile: BaseMeasurement[] = [];
+        for (let i = 0; i < measurements.length; i++) {
+          const file = fileNames[i];
+          if (file && new RegExp(fileName).exec(file.filename)) {
+            filteredByFile.push(measurements[i]);
+          }
+        }
+        measurements = filteredByFile;
+      }
+
+      if (limit && measurements.length > limit) {
+        measurements.length = limit;
+      }
+
+      return { list: measurements, totalCount: measurements.length };
     },
   },
   Mutation: {

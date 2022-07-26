@@ -422,6 +422,7 @@ export type Query = {
   filesByConfigFlat: FilesFlatPage;
   measurement: Measurement;
   measurements: MeasurementPage;
+  measurementsByNotebook: MeasurementPage;
   notebook: Notebook;
   notebooks: NotebookPage;
   readyChecks: Array<ReadyCheckDescriptor>;
@@ -482,6 +483,13 @@ export type QueryMeasurementsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   sortBy?: InputMaybe<MeasurementSortInput>;
   type: MeasurementTypes;
+};
+
+export type QueryMeasurementsByNotebookArgs = {
+  fileName?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  notebookId: Scalars['ID'];
+  project?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryNotebookArgs = {

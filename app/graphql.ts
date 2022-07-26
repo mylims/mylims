@@ -457,6 +457,7 @@ export type GqlQuery = {
   filesByConfigFlat: GqlFilesFlatPage;
   measurement: GqlMeasurement;
   measurements: GqlMeasurementPage;
+  measurementsByNotebook: GqlMeasurementPage;
   notebook: GqlNotebook;
   notebooks: GqlNotebookPage;
   readyChecks: Array<GqlReadyCheckDescriptor>;
@@ -517,6 +518,13 @@ export type GqlQueryMeasurementsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   sortBy?: InputMaybe<GqlMeasurementSortInput>;
   type: GqlMeasurementTypes;
+};
+
+export type GqlQueryMeasurementsByNotebookArgs = {
+  fileName?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  notebookId: Scalars['ID'];
+  project?: InputMaybe<Scalars['String']>;
 };
 
 export type GqlQueryNotebookArgs = {
@@ -1509,6 +1517,12 @@ export type GqlQueryResolvers<
     ParentType,
     ContextType,
     RequireFields<GqlQueryMeasurementsArgs, 'type'>
+  >;
+  measurementsByNotebook?: Resolver<
+    GqlResolversTypes['MeasurementPage'],
+    ParentType,
+    ContextType,
+    RequireFields<GqlQueryMeasurementsByNotebookArgs, 'notebookId'>
   >;
   notebook?: Resolver<
     GqlResolversTypes['Notebook'],
