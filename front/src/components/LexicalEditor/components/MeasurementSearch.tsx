@@ -1,10 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import {
-  MeasurementTypes,
-  useMeasurementsByNotebookLazyQuery,
-} from '@/generated/graphql';
+import { useMeasurementsByNotebookLazyQuery } from '@/generated/graphql';
 
 import { useSampleLinkContext } from '../hooks/useSampleLinkContext';
 
@@ -35,14 +32,14 @@ export default function MeasurementSearch() {
         variables: { notebookId: id, limit: 5, [key]: query },
       });
     },
-    [measurementByNotebook],
+    [measurementByNotebook, id],
   );
 
   const onSelect = useCallback(
     (id: string) => {
       const result = measurements.find((s) => s.id === id);
       if (result) {
-        addMeasurement({ id, type: result.kind as MeasurementTypes });
+        addMeasurement({ id, type: result.kind });
       }
     },
     [addMeasurement, measurements],

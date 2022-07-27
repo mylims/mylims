@@ -13,6 +13,7 @@ import {
   $isTableRowNode,
   $removeTableRowAtIndex,
   getTableSelectionFromTableElement,
+  HTMLTableElementWithWithTableSelectionState,
   TableCellHeaderStates,
   TableCellNode,
 } from '@lexical/table';
@@ -120,8 +121,10 @@ function TableActionMenu({
           throw new Error('Expected to find tableElement in DOM');
         }
 
-        const tableSelection = getTableSelectionFromTableElement(tableElement);
-        tableSelection.clearHighlight();
+        const tableSelection = getTableSelectionFromTableElement(
+          tableElement as HTMLTableElementWithWithTableSelectionState,
+        );
+        tableSelection?.clearHighlight();
 
         tableNode.markDirty();
         updateTableCellNode(tableCellNode.getLatest());

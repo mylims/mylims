@@ -20,9 +20,7 @@ export default function PlotPlugin() {
 
   useEffect(() => {
     if (!editor.hasNodes([PlotNode])) {
-      throw new Error(
-        'PlotNode: PlotNode not registered on editor',
-      );
+      throw new Error('PlotNode: PlotNode not registered on editor');
     }
   }, [editor]);
 
