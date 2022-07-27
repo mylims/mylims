@@ -202,7 +202,7 @@ function ImageComponent({
           draggable={draggable}
           className={
             isFocused
-              ? 'select-none outline outline-2 outline-primary-500'
+              ? 'select-none outline outline-2 outline-primary-500 mx-0.5'
               : undefined
           }
         >

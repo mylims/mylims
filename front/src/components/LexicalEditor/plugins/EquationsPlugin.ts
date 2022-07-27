@@ -1,8 +1,7 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import type { LexicalCommand } from 'lexical';
 import {
-  $getSelection,
-  $isRangeSelection,
+  $getRoot,
+  LexicalCommand,
   COMMAND_PRIORITY_EDITOR,
   createCommand,
 } from 'lexical';
@@ -33,12 +32,8 @@ export default function EquationsPlugin(): JSX.Element | null {
       INSERT_EQUATION_COMMAND,
       (payload) => {
         const { equation, inline } = payload;
-        const selection = $getSelection();
-
-        if ($isRangeSelection(selection)) {
-          const equationNode = $createEquationNode(equation, inline);
-          selection.insertNodes([equationNode]);
-        }
+        const root = $getRoot();
+        root.append($createEquationNode(equation, inline));
 
         return true;
       },

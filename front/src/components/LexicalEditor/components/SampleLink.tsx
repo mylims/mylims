@@ -95,7 +95,7 @@ export function SampleLink({
   }, [code, addSample, sampleByCode, setQueryStatus]);
 
   return (
-    <span className="inline-flex shadow-sm">
+    <span className="inline-flex shadow-sm mx-0.5">
       <Button
         className="inline-flex items-center rounded-l-md rounded-r-none border border-r-0 border-neutral-300 bg-neutral-50 text-neutral-500 sm:text-sm"
         disabled={queryStatus.status !== SampleStatus.success}
