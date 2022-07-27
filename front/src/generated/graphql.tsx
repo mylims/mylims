@@ -998,6 +998,40 @@ export type MeasurementsFilteredQuery = {
   };
 };
 
+export type MeasurementsByNotebookQueryVariables = Exact<{
+  notebookId: Scalars['ID'];
+  fileName?: InputMaybe<Scalars['String']>;
+  project?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type MeasurementsByNotebookQuery = {
+  measurementsByNotebook: {
+    totalCount: number;
+    list: Array<{
+      id: string;
+      type: MeasurementTypes;
+      title?: string | null;
+      fileId?: string | null;
+      eventId?: string | null;
+      comment?: string | null;
+      derived?: any | null;
+      createdAt: any;
+      createdBy?: string | null;
+      description?: any | null;
+      user?: {
+        id: string;
+        emails: Array<string>;
+        lastName?: string | null;
+        firstName?: string | null;
+        usernames: Array<string>;
+      } | null;
+      sample: { id: string; sampleCode: Array<string> };
+      file?: { size: number; filename: string; downloadUrl: string } | null;
+    }>;
+  };
+};
+
 export type MeasurementQueryVariables = Exact<{
   id: Scalars['ID'];
   type: MeasurementTypes;
@@ -2618,6 +2652,86 @@ export function refetchMeasurementsFilteredQuery(
   variables: MeasurementsFilteredQueryVariables,
 ) {
   return { query: MeasurementsFilteredDocument, variables: variables };
+}
+export const MeasurementsByNotebookDocument = gql`
+  query MeasurementsByNotebook(
+    $notebookId: ID!
+    $fileName: String
+    $project: String
+    $limit: Int
+  ) {
+    measurementsByNotebook(
+      notebookId: $notebookId
+      fileName: $fileName
+      project: $project
+      limit: $limit
+    ) {
+      totalCount
+      list {
+        ...MeasurementFields
+      }
+    }
+  }
+  ${MeasurementFieldsFragmentDoc}
+`;
+
+/**
+ * __useMeasurementsByNotebookQuery__
+ *
+ * To run a query within a React component, call `useMeasurementsByNotebookQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeasurementsByNotebookQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeasurementsByNotebookQuery({
+ *   variables: {
+ *      notebookId: // value for 'notebookId'
+ *      fileName: // value for 'fileName'
+ *      project: // value for 'project'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useMeasurementsByNotebookQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    MeasurementsByNotebookQuery,
+    MeasurementsByNotebookQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<
+    MeasurementsByNotebookQuery,
+    MeasurementsByNotebookQueryVariables
+  >(MeasurementsByNotebookDocument, options);
+}
+export function useMeasurementsByNotebookLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    MeasurementsByNotebookQuery,
+    MeasurementsByNotebookQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<
+    MeasurementsByNotebookQuery,
+    MeasurementsByNotebookQueryVariables
+  >(MeasurementsByNotebookDocument, options);
+}
+export type MeasurementsByNotebookQueryHookResult = ReturnType<
+  typeof useMeasurementsByNotebookQuery
+>;
+export type MeasurementsByNotebookLazyQueryHookResult = ReturnType<
+  typeof useMeasurementsByNotebookLazyQuery
+>;
+export type MeasurementsByNotebookQueryResult = Apollo.QueryResult<
+  MeasurementsByNotebookQuery,
+  MeasurementsByNotebookQueryVariables
+>;
+export function refetchMeasurementsByNotebookQuery(
+  variables: MeasurementsByNotebookQueryVariables,
+) {
+  return { query: MeasurementsByNotebookDocument, variables: variables };
 }
 export const MeasurementDocument = gql`
   query Measurement($id: ID!, $type: MeasurementTypes!) {

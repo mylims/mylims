@@ -110,9 +110,13 @@ const resolvers: GqlResolvers = {
             : true)
         ) {
           const sampleMeasurements = await Promise.all(
-            sample.measurements.map(({ type, id }) =>
-              MEASUREMENTS[type as GqlMeasurementTypes].findOrFail(id),
-            ),
+            sample.measurements.map(async ({ type, id }) => {
+              const ans = await MEASUREMENTS[
+                type as GqlMeasurementTypes
+              ].findOrFail(id);
+              const rest = ans.toJSON() as BaseMeasurement;
+              return { ...rest, type };
+            }),
           );
           measurements = measurements.concat(sampleMeasurements);
         }
