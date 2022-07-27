@@ -48,6 +48,25 @@ query MeasurementsFiltered(
   }
 }
 
+query MeasurementsByNotebook(
+  $notebookId: ID!
+  $fileName: String
+  $project: String
+  $limit: Int
+) {
+  measurementsByNotebook(
+    notebookId: $notebookId
+    fileName: $fileName
+    project: $project
+    limit: $limit
+  ) {
+    totalCount
+    list {
+      ...MeasurementFields
+    }
+  }
+}
+
 query Measurement($id: ID!, $type: MeasurementTypes!) {
   measurement(id: $id, type: $type) {
     ...MeasurementFields
