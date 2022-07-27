@@ -82,7 +82,7 @@ function MeasurementItem({
   return (
     <div className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
       <div className="flex flex-row gap-4">
-        <div className="text-sm max-w-xs truncate" title={title}>
+        <div className="max-w-xs truncate text-sm" title={title}>
           {title}
         </div>
         <Badge

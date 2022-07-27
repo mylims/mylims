@@ -33,7 +33,7 @@ import TailwindTheme from './themes/TailwindTheme';
 
 function Placeholder() {
   return (
-    <div className="absolute inline-block overflow-hidden pointer-events-none select-none top-4 text-ellipsis text-neutral-400">
+    <div className="pointer-events-none absolute top-4 inline-block select-none overflow-hidden text-ellipsis text-neutral-400">
       Enter some rich text...
     </div>
   );
@@ -93,7 +93,7 @@ export default function LexicalEditor({
       value={{ samples, addSample, measurements, addMeasurement }}
     >
       <LexicalComposer initialConfig={editorConfig}>
-        <div className="relative m-2 font-normal text-black rounded-b-sm rounded-t-md leading-5">
+        <div className="relative m-2 rounded-b-sm rounded-t-md font-normal leading-5 text-black">
           <ToolbarPlugin />
           <div className="relative bg-white">
             <RichTextPlugin

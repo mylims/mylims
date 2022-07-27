@@ -192,7 +192,7 @@ function ListboxOption({
           <span
             className={clsx(
               selected ? 'font-semibold' : 'font-normal',
-              'ml-3 block truncate max-w-xs',
+              'ml-3 block max-w-xs truncate',
             )}
           >
             {label}
