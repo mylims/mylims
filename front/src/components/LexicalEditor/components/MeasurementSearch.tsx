@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 
 import {
   MeasurementTypes,
-  useMeasurementsFilteredLazyQuery,
+  useMeasurementsByNotebookLazyQuery,
 } from '@/generated/graphql';
 
 import { useSampleLinkContext } from '../hooks/useSampleLinkContext';
@@ -11,12 +12,13 @@ import { SearchCategories } from './SearchCategories';
 
 export default function MeasurementSearch() {
   const { addMeasurement } = useSampleLinkContext();
-  const [measurementsFiltered, { loading, data }] =
-    useMeasurementsFilteredLazyQuery();
+  const { id = '' } = useParams<{ id: string }>();
+  const [measurementByNotebook, { loading, data }] =
+    useMeasurementsByNotebookLazyQuery();
 
   const measurements = useMemo(() => {
     return (
-      data?.measurements.list.map((measurement) => ({
+      data?.measurementsByNotebook.list.map((measurement) => ({
         id: measurement.id,
         kind: measurement.type,
         title:
@@ -27,11 +29,13 @@ export default function MeasurementSearch() {
 
   const filterResults = useCallback(
     (query: string, kind: string | null) => {
-      return measurementsFiltered({
-        // variables: { sampleCode: query, kind, limit: 3 },
+      const key: 'fileName' | 'project' =
+        kind === 'project' ? 'project' : 'fileName';
+      return measurementByNotebook({
+        variables: { notebookId: id, limit: 5, [key]: query },
       });
     },
-    [measurementsFiltered],
+    [measurementByNotebook],
   );
 
   const onSelect = useCallback(
@@ -49,7 +53,7 @@ export default function MeasurementSearch() {
       loading={loading}
       onSelect={onSelect}
       results={measurements}
-      options={['project', 'sample']}
+      options={['file', 'project']}
       filterResults={filterResults}
     />
   );
