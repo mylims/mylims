@@ -24,6 +24,7 @@ interface SearchCategoriesProps {
   onSelect(id: string): void;
   results: SearchCategoryItem[];
   options: string[];
+  defaultOption?: string;
   filterResults(query: string, kind: string | null): Promise<unknown>;
 }
 export function SearchCategories({
@@ -31,6 +32,7 @@ export function SearchCategories({
   onSelect,
   results,
   options,
+  defaultOption,
   filterResults,
 }: SearchCategoriesProps) {
   const [value, setValue] = useState('');
@@ -68,15 +70,16 @@ export function SearchCategories({
       filterResults(query, kind).catch(console.error);
     }
   }, [query, kind, filterResults]);
+  const defaultKind = kind ?? defaultOption ?? options[0];
 
   return (
-    <Listbox value={kind} onChange={setKind}>
+    <Listbox value={defaultKind} onChange={setKind}>
       <div className="inline-flex">
         <Listbox.Button
           ref={setRefListButton}
           className="inline-flex w-20 items-center justify-between rounded-l-md rounded-r-none border border-r-0 border-neutral-300 bg-neutral-50 px-2 text-neutral-500 sm:text-sm"
         >
-          {kind ?? 'all'}
+          {defaultKind}
           <span className="pointer-events-none pr-2">
             <SelectorIcon
               className="h-5 w-5 text-neutral-400"
@@ -115,7 +118,9 @@ export function SearchCategories({
         {...listPopper.attributes.popper}
       >
         <Listbox.Options className="mt-1 max-h-56 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-          <ListboxOption value={null} label="all" />
+          {defaultOption ? (
+            <ListboxOption value={null} label={defaultKind} />
+          ) : null}
 
           {options.map((kind) => (
             <ListboxOption key={kind} value={kind} label={kind} />
@@ -139,8 +144,11 @@ export function SearchCategories({
                     onSelect(result.id);
                     refComboInput?.blur();
                   }}
+                  title={result.title}
                 >
-                  <span>{result.title}</span>
+                  <span className="inline-block max-w-xs truncate">
+                    {result.title}
+                  </span>
                   <Badge
                     className="ml-2"
                     variant={BadgeVariant.COLORED_BACKGROUND}
@@ -171,6 +179,7 @@ function ListboxOption({
   return (
     <Listbox.Option
       value={value}
+      title={label}
       className={({ active }) =>
         clsx(
           active ? 'bg-primary-600 text-white' : 'text-neutral-900',
@@ -183,7 +192,7 @@ function ListboxOption({
           <span
             className={clsx(
               selected ? 'font-semibold' : 'font-normal',
-              'ml-3 block truncate',
+              'ml-3 block truncate max-w-xs',
             )}
           >
             {label}

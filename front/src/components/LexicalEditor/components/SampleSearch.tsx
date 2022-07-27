@@ -32,6 +32,7 @@ export default function SampleSearch() {
       onSelect={addSample}
       results={samples}
       options={sampleLevelsList}
+      defaultOption="all"
       filterResults={filterResults}
     />
   );

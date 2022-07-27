@@ -19,6 +19,7 @@ import { MeasurementNotebook } from '@/pages/notebook/models';
 import { formatDate } from '@/utils/formatFields';
 
 import { useSampleLinkContext } from '../../hooks/useSampleLinkContext';
+import MeasurementSearch from '../MeasurementSearch';
 
 interface SampleLinkModalProps {
   appendMeasurement: (fileId: string, fileUrl: string) => void;
@@ -31,6 +32,7 @@ export function MeasurementLinkModal({
     <div className="min-w-1/4 m-2 min-h-[200px]">
       <div className="mb-2 flex flex-row flex-wrap gap-4">
         <div className="text-xl font-semibold">Measurements</div>
+        <MeasurementSearch />
       </div>
       <div className="divide-y divide-neutral-300 rounded-md border border-neutral-300">
         {measurements.length > 0 ? (
