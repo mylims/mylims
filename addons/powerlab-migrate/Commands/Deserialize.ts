@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BaseCommand } from '@adonisjs/core/build/standalone';
 
+import type EditorImageModel from '../../../app/Models/EditorImage';
 import { Sample as SampleModel } from '../../../app/Models/Sample';
-import type SlateImageModel from '../../../app/Models/SlateImage';
 import { toSlate } from '../deserialize';
 
 export default class Deserialize extends BaseCommand {
@@ -13,16 +13,16 @@ export default class Deserialize extends BaseCommand {
 
   private deps: {
     Sample: typeof SampleModel;
-    SlateImage: typeof SlateImageModel;
+    EditorImage: typeof EditorImageModel;
   };
 
   public async run() {
     const { Sample } = await import('../../../app/Models/Sample');
-    const { default: SlateImage } = await import(
-      '../../../app/Models/SlateImage'
+    const { default: EditorImage } = await import(
+      '../../../app/Models/EditorImage'
     );
 
-    this.deps = { Sample, SlateImage };
+    this.deps = { Sample, EditorImage };
 
     await this.executeParsing();
   }

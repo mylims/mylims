@@ -9,9 +9,9 @@ import type DataDrive from '@ioc:Zakodium/DataDrive';
 
 import { GqlSampleInput } from 'App/graphql';
 
+import type EditorImageModel from '../../../app/Models/EditorImage';
 import type FileModel from '../../../app/Models/File';
 import { Sample as SampleModel } from '../../../app/Models/Sample';
-import type SlateImageModel from '../../../app/Models/SlateImage';
 import UserModel from '../../../app/Models/User';
 import { toSlate } from '../deserialize';
 
@@ -60,7 +60,7 @@ export default class Migrate extends BaseCommand {
 
   private deps: {
     Sample: typeof SampleModel;
-    SlateImage: typeof SlateImageModel;
+    EditorImage: typeof EditorImageModel;
     File: typeof FileModel;
     User: typeof UserModel;
     DataDrive: typeof DataDrive;
@@ -69,13 +69,13 @@ export default class Migrate extends BaseCommand {
   public async run() {
     const { Sample } = await import('../../../app/Models/Sample');
     const { default: File } = await import('../../../app/Models/File');
-    const { default: SlateImage } = await import(
-      '../../../app/Models/SlateImage'
+    const { default: EditorImage } = await import(
+      '../../../app/Models/EditorImage'
     );
     const { default: User } = await import('../../../app/Models/User');
     const { default: DataDrive } = await import('@ioc:Zakodium/DataDrive');
 
-    this.deps = { Sample, File, User, SlateImage, DataDrive };
+    this.deps = { Sample, File, User, EditorImage, DataDrive };
 
     await this.executeImporter();
   }
@@ -286,7 +286,7 @@ export default class Migrate extends BaseCommand {
                 hasEmbeddedImages &&
                 (fileName.endsWith('.png') || fileName.endsWith('.jpg'));
               const Collection = isSlateImage
-                ? this.deps.SlateImage
+                ? this.deps.EditorImage
                 : this.deps.File;
               const { id } = await Collection.create({
                 _id: driveFile.id,

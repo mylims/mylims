@@ -2,7 +2,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import DataDrive from '@ioc:Zakodium/DataDrive';
 
 import File from 'App/Models/File';
-import SlateImage from 'App/Models/SlateImage';
+import EditorImage from 'App/Models/EditorImage';
 import FileValidator from 'App/Validators/FileValidator';
 import SimpleFileValidator from 'App/Validators/SimpleFileValidator';
 
@@ -32,7 +32,7 @@ export default class SampleController {
     if (uuid === null) {
       return response.badRequest({ errors: ['Missing field uuid'] });
     }
-    const file = await SlateImage.findBy('_id', uuid);
+    const file = await EditorImage.findBy('_id', uuid);
     if (file === null) {
       return response.notFound({ errors: [{ message: 'File not found' }] });
     }
@@ -72,7 +72,7 @@ export default class SampleController {
         file,
         file.fileName || file.clientName,
       );
-      const dbFile = await SlateImage.create({
+      const dbFile = await EditorImage.create({
         _id: localFile.id,
         size: localFile.size,
         filename: localFile.filename,
