@@ -192,7 +192,9 @@ export function InsertOptionsMenu() {
                 onClick={() => {
                   if (modal?.command) {
                     editor.focus();
-                    editor.dispatchCommand(...modal.command(state));
+                    editor.dispatchCommand<LexicalCommand<unknown>, unknown>(
+                      ...modal.command(state),
+                    );
                     setModal(null);
                   }
                 }}
