@@ -1,8 +1,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import DataDrive from '@ioc:Zakodium/DataDrive';
 
-import File from 'App/Models/File';
 import EditorImage from 'App/Models/EditorImage';
+import File from 'App/Models/File';
 import FileValidator from 'App/Validators/FileValidator';
 import SimpleFileValidator from 'App/Validators/SimpleFileValidator';
 
