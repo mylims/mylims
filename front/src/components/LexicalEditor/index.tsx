@@ -13,6 +13,7 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
 import React from 'react';
 
+import { API_URL } from '@/../env';
 import { MeasurementNotebook } from '@/pages/notebook/models';
 
 import { sampleLinkContext } from './hooks/useSampleLinkContext';
@@ -92,7 +93,7 @@ export default function LexicalEditor({
     <SampleLinkContext.Provider
       value={{ samples, addSample, measurements, addMeasurement }}
     >
-      <LexicalComposer initialConfig={editorConfig}>
+      <LexicalComposer initialConfig={{ ...editorConfig, editorState: value }}>
         <div className="relative m-2 rounded-b-sm rounded-t-md font-normal leading-5 text-black">
           <ToolbarPlugin />
           <div className="relative bg-white">
@@ -104,7 +105,6 @@ export default function LexicalEditor({
                 />
               }
               placeholder={<Placeholder />}
-              initialEditorState={value}
             />
             <HistoryPlugin />
             <AutoFocusPlugin />
@@ -121,13 +121,26 @@ export default function LexicalEditor({
               }}
             />
             <EquationsPlugin />
-            <ImagesPlugin />
             <TablePlugin />
             <TableCellActionMenuPlugin />
             <TableCellResizer />
 
             {/* Custom plugins */}
             <SampleLinkPlugin />
+            <ImagesPlugin
+              saveImage={async (file) => {
+                let body = new FormData();
+                body.append('file', file);
+                const res = await fetch(`${API_URL}/files/createImage`, {
+                  method: 'POST',
+                  headers: { Accept: 'application/json' },
+                  body,
+                });
+                const [ok, result] = [res.ok, await res.json()];
+                if (ok) return result._id;
+                else throw new Error(result.errors[0].message);
+              }}
+            />
             <PlotPlugin />
           </div>
         </div>

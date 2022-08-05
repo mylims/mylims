@@ -8,13 +8,14 @@ import {
 
 import { useInsertModalContext } from '../InsertOptionsMenu';
 
-interface ImageState {
+export interface ImageState {
   src: string;
   altText: string;
+  file: File;
 }
 export function ImageModal() {
   const { state, setState } = useInsertModalContext();
-  const { src, altText } = (state as ImageState | null) ?? {};
+  const { src, altText, file } = (state as ImageState | null) ?? {};
   const { dropzoneProps, dropzoneListProps } = useSingleFileDropzone({
     maxSize: 1e7,
     accept: { 'image/png': [], 'image/jpeg': ['.jpg'] },
@@ -23,11 +24,12 @@ export function ImageModal() {
   useEffect(() => {
     if (dropzoneListProps.files.length > 0) {
       const reader = new FileReader();
-      reader.readAsDataURL(dropzoneListProps.files[0]);
+      const file = dropzoneListProps.files[0];
+      reader.readAsDataURL(file);
       reader.addEventListener(
         'load',
         () => {
-          setState({ src: reader.result as string, altText });
+          setState({ src: reader.result as string, file, altText });
         },
         false,
       );
@@ -49,7 +51,9 @@ export function ImageModal() {
         label="Description"
         name="Description"
         value={altText ?? ''}
-        onChange={(event) => setState({ src, altText: event.target.value })}
+        onChange={(event) =>
+          setState({ src, file, altText: event.target.value })
+        }
       />
     </div>
   );

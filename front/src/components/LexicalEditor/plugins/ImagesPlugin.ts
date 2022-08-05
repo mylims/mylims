@@ -18,6 +18,8 @@ import {
 } from 'lexical';
 import { useEffect } from 'react';
 
+import { IMAGE_URL } from '@/../env';
+
 import {
   $createImageNode,
   $isImageNode,
@@ -33,12 +35,20 @@ export type InsertImagePayload = Readonly<ImagePayload>;
 
 export const INSERT_IMAGE_COMMAND: LexicalCommand<InsertImagePayload> =
   createCommand();
-export default function ImagesPlugin(): JSX.Element | null {
+interface ImagesPluginProps {
+  saveImage: (file: File) => Promise<string>;
+}
+export default function ImagesPlugin({
+  saveImage,
+}: ImagesPluginProps): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
     if (!editor.hasNodes([ImageNode])) {
       throw new Error('ImagesPlugin: ImageNode not registered on editor');
+    }
+    if (!IMAGE_URL) {
+      throw new Error('ImagesPlugin: Image URL is required');
     }
 
     return mergeRegister(
@@ -50,8 +60,21 @@ export default function ImagesPlugin(): JSX.Element | null {
             if ($isRootNode(selection.anchor.getNode())) {
               selection.insertParagraph();
             }
-            const imageNode = $createImageNode(payload);
-            selection.insertNodes([imageNode]);
+            let { src, ...rest } = payload;
+            if (typeof src !== 'string') {
+              saveImage(src)
+                .then((uuid) => {
+                  editor.update(() => {
+                    const imageNode = $createImageNode({ src: uuid, ...rest });
+                    selection.insertNodes([imageNode]);
+                  });
+                })
+                // eslint-disable-next-line no-console
+                .catch(console.error);
+            } else {
+              const imageNode = $createImageNode({ src, ...rest });
+              selection.insertNodes([imageNode]);
+            }
           }
           return true;
         },
@@ -59,27 +82,21 @@ export default function ImagesPlugin(): JSX.Element | null {
       ),
       editor.registerCommand<DragEvent>(
         DRAGSTART_COMMAND,
-        (event) => {
-          return onDragStart(event);
-        },
+        (event) => onDragStart(event),
         COMMAND_PRIORITY_HIGH,
       ),
       editor.registerCommand<DragEvent>(
         DRAGOVER_COMMAND,
-        (event) => {
-          return onDragover(event);
-        },
+        (event) => onDragover(event),
         COMMAND_PRIORITY_LOW,
       ),
       editor.registerCommand<DragEvent>(
         DROP_COMMAND,
-        (event) => {
-          return onDrop(event, editor);
-        },
+        (event) => onDrop(event, editor),
         COMMAND_PRIORITY_HIGH,
       ),
     );
-  }, [editor]);
+  }, [editor, saveImage]);
 
   return null;
 }
@@ -91,13 +108,11 @@ img.src = TRANSPARENT_IMAGE;
 
 function onDragStart(event: DragEvent): boolean {
   const node = getImageNodeInSelection();
-  if (!node) {
-    return false;
-  }
+  if (!node) return false;
+
   const dataTransfer = event.dataTransfer;
-  if (!dataTransfer) {
-    return false;
-  }
+  if (!dataTransfer) return false;
+
   dataTransfer.setData('text/plain', '_');
   dataTransfer.setDragImage(img, 0, 0);
   dataTransfer.setData(
@@ -122,24 +137,20 @@ function onDragStart(event: DragEvent): boolean {
 
 function onDragover(event: DragEvent): boolean {
   const node = getImageNodeInSelection();
-  if (!node) {
-    return false;
-  }
-  if (!canDropImage(event)) {
-    event.preventDefault();
-  }
+  if (!node) return false;
+
+  if (!canDropImage(event)) event.preventDefault();
+
   return true;
 }
 
 function onDrop(event: DragEvent, editor: LexicalEditor): boolean {
   const node = getImageNodeInSelection();
-  if (!node) {
-    return false;
-  }
+  if (!node) return false;
+
   const data = getDragImageData(event);
-  if (!data) {
-    return false;
-  }
+  if (!data) return false;
+
   event.preventDefault();
   if (canDropImage(event)) {
     const range = getDragSelection(event);
@@ -157,9 +168,8 @@ function onDrop(event: DragEvent, editor: LexicalEditor): boolean {
 
 function getImageNodeInSelection(): ImageNode | null {
   const selection = $getSelection();
-  if (!$isNodeSelection(selection)) {
-    return null;
-  }
+  if (!$isNodeSelection(selection)) return null;
+
   const nodes = selection.getNodes();
   const node = nodes[0];
   return $isImageNode(node) ? node : null;
@@ -167,13 +177,10 @@ function getImageNodeInSelection(): ImageNode | null {
 
 function getDragImageData(event: DragEvent): null | InsertImagePayload {
   const dragData = event.dataTransfer?.getData('application/x-lexical-drag');
-  if (!dragData) {
-    return null;
-  }
+  if (!dragData) return null;
+
   const { type, data } = JSON.parse(dragData);
-  if (type !== 'image') {
-    return null;
-  }
+  if (type !== 'image') return null;
 
   return data;
 }
