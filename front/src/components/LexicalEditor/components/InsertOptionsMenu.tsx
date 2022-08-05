@@ -21,7 +21,7 @@ import { INSERT_EQUATION_COMMAND } from '../plugins/EquationsPlugin';
 import { INSERT_IMAGE_COMMAND } from '../plugins/ImagesPlugin';
 
 import { EquationModal } from './modals/EquationModal';
-import { ImageModal } from './modals/ImageModal';
+import { ImageModal, ImageState } from './modals/ImageModal';
 import { MeasurementLinkModal } from './modals/MeasurementLinkModal';
 import { SampleLinkModal } from './modals/SampleLinkModal';
 import { TableModal } from './modals/TableModal';
@@ -72,8 +72,8 @@ export function InsertOptionsMenu() {
       icon: <Image20Regular />,
       label: 'Image',
       modal: <ImageModal />,
-      command(val) {
-        return [INSERT_IMAGE_COMMAND, val];
+      command(val: ImageState) {
+        return [INSERT_IMAGE_COMMAND, { src: val.file, altText: val.altText }];
       },
     },
     {

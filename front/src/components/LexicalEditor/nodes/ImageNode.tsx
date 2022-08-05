@@ -29,6 +29,8 @@ import React, {
   useState,
 } from 'react';
 
+import { API_URL, IMAGE_URL } from '@/../env';
+
 import ImageResizer from '../components/ImageResizer';
 
 export interface ImagePayload {
@@ -37,7 +39,7 @@ export interface ImagePayload {
   height?: number;
   key?: NodeKey;
   maxWidth?: number;
-  src: string;
+  src: string | File;
   width?: number;
 }
 
@@ -247,20 +249,20 @@ function ImageComponent({
 
 export type SerializedImageNode = Spread<
   {
+    uuid: string;
     altText: string;
     caption?: string;
     height?: number;
     maxWidth: number;
-    src: string;
     width?: number;
     type: 'image';
-    version: 1;
+    version: 2;
   },
   SerializedLexicalNode
 >;
 
 export class ImageNode extends DecoratorNode<JSX.Element> {
-  public __src: string;
+  public __uuid: string;
   public __altText: string;
   public __width: 'inherit' | number;
   public __height: 'inherit' | number;
@@ -273,7 +275,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 
   public static clone(node: ImageNode): ImageNode {
     return new ImageNode(
-      node.__src,
+      node.__uuid,
       node.__altText,
       node.__maxWidth,
       node.__width,
@@ -284,19 +286,19 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   public static importJSON(serializedNode: SerializedImageNode): ImageNode {
-    const { altText, height, width, maxWidth, caption, src } = serializedNode;
+    const { altText, height, width, maxWidth, caption, uuid } = serializedNode;
     return $createImageNode({
+      src: uuid,
       altText,
       height,
       maxWidth,
-      src,
       width,
       caption,
     });
   }
 
   public constructor(
-    src: string,
+    uuid: string,
     altText: string,
     maxWidth: number,
     width?: 'inherit' | number,
@@ -305,7 +307,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     key?: NodeKey,
   ) {
     super(key);
-    this.__src = src;
+    this.__uuid = uuid;
     this.__altText = altText;
     this.__maxWidth = maxWidth;
     this.__width = width || 'inherit';
@@ -315,13 +317,13 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 
   public exportJSON(): SerializedImageNode {
     return {
+      uuid: this.getUUID(),
       altText: this.getAltText(),
       caption: this.__caption,
       height: this.__height === 'inherit' ? 0 : this.__height,
       maxWidth: this.__maxWidth,
-      src: this.getSrc(),
       type: 'image',
-      version: 1,
+      version: 2,
       width: this.__width === 'inherit' ? 0 : this.__width,
     };
   }
@@ -354,8 +356,8 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     return false;
   }
 
-  public getSrc(): string {
-    return this.__src;
+  public getUUID(): string {
+    return this.__uuid;
   }
 
   public getAltText(): string {
@@ -363,9 +365,10 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   public decorate(): JSX.Element {
+    const src = `${API_URL}/${IMAGE_URL}/${this.getUUID()}`;
     return (
       <ImageComponent
-        src={this.__src}
+        src={src}
         altText={this.__altText}
         width={this.__width}
         height={this.__height}
@@ -387,6 +390,7 @@ export function $createImageNode({
   caption,
   key,
 }: ImagePayload): ImageNode {
+  if (typeof src !== 'string') throw new Error('missing parsed src string');
   return new ImageNode(
     src,
     altText,
