@@ -55,7 +55,7 @@ export function NotebookForm({
         <Card.Body>
           <div className="flex flex-col lg:w-full lg:flex-row lg:gap-4">
             <div className="w-full">
-              <LexicalEditorRHF name="content" label="Content" />
+              <LexicalEditorRHF name="content" label="Content" extended />
             </div>
           </div>
         </Card.Body>

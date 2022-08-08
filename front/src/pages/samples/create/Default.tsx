@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { array, BaseSchema } from 'yup';
 
 import { FormLayout } from '@/components/FormLayout';
-import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
+import { LexicalEditorRHF } from '@/components/LexicalEditor/LexicalEditorRHF';
 import {
   Alert,
   AlertType,
@@ -131,7 +131,7 @@ export default function DefaultCreate({
           formEditor={
             <>
               {formEditor}
-              <RichTextImageFieldRHF name="description" label="Description" />
+              <LexicalEditorRHF name="description" label="Description" />
             </>
           }
         />

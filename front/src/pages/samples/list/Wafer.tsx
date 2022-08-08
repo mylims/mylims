@@ -9,12 +9,11 @@ import { clsx } from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { ResponsiveChart } from 'react-d3-utils';
 
-import { API_URL } from '@/../env';
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
+import LexicalEditor from '@/components/LexicalEditor';
 import { LinkButton } from '@/components/LinkButton';
 import { PlotJcampMultiple } from '@/components/PlotJcamp/PlotJcampMultiple';
-import { RichTextSerializer } from '@/components/RichTextEditor/RichTextSerializer';
 import { Table as TableQuery } from '@/components/TableQuery';
 import WaferDicing from '@/components/WaferDicing';
 import {
@@ -214,12 +213,19 @@ export default function WaferList() {
                           <div className="text-xl font-semibold">
                             Description
                           </div>
-                          <RichTextSerializer
-                            className="max-h-96 max-w-full overflow-auto rounded-md border border-neutral-300 px-3 py-2 shadow-sm ring-1 ring-neutral-300 md:max-w-xl"
+                          <LexicalEditor
                             value={state.description}
-                            fetchImage={(uuid) =>
-                              `${API_URL}/files/fetchImage/${uuid}`
-                            }
+                            onChange={() => {
+                              // empty
+                            }}
+                            samples={[]}
+                            onSamplesChange={() => {
+                              // empty
+                            }}
+                            measurements={[]}
+                            onMeasurementsChange={() => {
+                              // empty
+                            }}
                           />
                         </div>
                       ) : (

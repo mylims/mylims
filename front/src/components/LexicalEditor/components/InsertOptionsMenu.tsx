@@ -10,7 +10,13 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { INSERT_TABLE_COMMAND } from '@lexical/table';
 import { clsx } from 'clsx';
 import { $getRoot, LexicalCommand, ParagraphNode } from 'lexical';
-import React, { createContext, Fragment, useContext, useState } from 'react';
+import React, {
+  createContext,
+  Fragment,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import { KbsProvider } from 'react-kbs';
 
 import { Button, Color, Modal, Variant } from '@/components/tailwind-ui';
@@ -35,6 +41,7 @@ interface InsertOption {
   label: string;
   modal: React.ReactNode;
   command: ((val: unknown | null) => [LexicalCommand<void>, unknown]) | null;
+  extension?: boolean;
 }
 const InsertModalContext = createContext<InsertModalState>({
   state: null,
@@ -52,84 +59,97 @@ export function useInsertModalContext() {
   return context;
 }
 
-export function InsertOptionsMenu() {
+export function InsertOptionsMenu({ extended }: { extended: boolean }) {
   const [modal, setModal] = useState<InsertOption | null>(null);
   const [state, setState] = useState<unknown | null>(null);
   const [editor] = useLexicalComposerContext();
-  const INSERT_OPTIONS: InsertOption[] = [
-    {
-      icon: <BracesVariable20Regular />,
-      label: 'Equation',
-      modal: <EquationModal />,
-      command(val) {
-        return [
-          INSERT_EQUATION_COMMAND,
-          { equation: val ?? '', inline: false },
-        ];
+  const INSERT_OPTIONS: InsertOption[] = useMemo(
+    () => [
+      {
+        icon: <BracesVariable20Regular />,
+        label: 'Equation',
+        modal: <EquationModal />,
+        command(val) {
+          return [
+            INSERT_EQUATION_COMMAND,
+            { equation: val ?? '', inline: false },
+          ];
+        },
       },
-    },
-    {
-      icon: <Image20Regular />,
-      label: 'Image',
-      modal: <ImageModal />,
-      command(val: ImageState) {
-        return [INSERT_IMAGE_COMMAND, { src: val.file, altText: val.altText }];
+      {
+        icon: <Image20Regular />,
+        label: 'Image',
+        modal: <ImageModal />,
+        command(val: ImageState) {
+          return [
+            INSERT_IMAGE_COMMAND,
+            { src: val.file, altText: val.altText },
+          ];
+        },
       },
-    },
-    {
-      icon: <Table20Regular />,
-      label: 'Table',
-      modal: <TableModal />,
-      command(val) {
-        return [INSERT_TABLE_COMMAND, val];
+      {
+        icon: <Table20Regular />,
+        label: 'Table',
+        modal: <TableModal />,
+        command(val) {
+          return [INSERT_TABLE_COMMAND, val];
+        },
       },
-    },
-    {
-      icon: <Beaker20Regular />,
-      label: 'Inventory',
-      modal: (
-        <SampleLinkModal
-          appendSample={(id: string) => {
-            editor.update(() => {
-              const root = $getRoot();
-              const latest = root.getLastChild();
-              const node = $createSampleLinkNode(id);
-              if (latest instanceof ParagraphNode) {
-                latest.append(node);
-              } else {
-                root.append(node);
-              }
-            });
-            setModal(null);
-          }}
-        />
-      ),
-      command: null,
-    },
-    {
-      icon: <DataTrending20Regular />,
-      label: 'Measurements',
-      modal: (
-        <MeasurementLinkModal
-          appendMeasurement={(fileId: string, fileUrl: string) => {
-            // Append the plot to the editor
-            editor.update(() => {
-              const root = $getRoot();
-              const latest = root.getLastChild();
-              const node = $createPlotNode(fileId, fileUrl);
-              if (latest instanceof ParagraphNode) {
-                latest.append(node);
-              } else {
-                root.append(node);
-              }
-            });
-            setModal(null);
-          }}
-        />
-      ),
-      command: null,
-    },
-  ];
+      {
+        icon: <Beaker20Regular />,
+        label: 'Inventory',
+        modal: (
+          <SampleLinkModal
+            appendSample={(id: string) => {
+              editor.update(() => {
+                const root = $getRoot();
+                const latest = root.getLastChild();
+                const node = $createSampleLinkNode(id);
+                if (latest instanceof ParagraphNode) {
+                  latest.append(node);
+                } else {
+                  root.append(node);
+                }
+              });
+              setModal(null);
+            }}
+          />
+        ),
+        command: null,
+        extension: true,
+      },
+      {
+        icon: <DataTrending20Regular />,
+        label: 'Measurements',
+        modal: (
+          <MeasurementLinkModal
+            appendMeasurement={(fileId: string, fileUrl: string) => {
+              // Append the plot to the editor
+              editor.update(() => {
+                const root = $getRoot();
+                const latest = root.getLastChild();
+                const node = $createPlotNode(fileId, fileUrl);
+                if (latest instanceof ParagraphNode) {
+                  latest.append(node);
+                } else {
+                  root.append(node);
+                }
+              });
+              setModal(null);
+            }}
+          />
+        ),
+        command: null,
+        extension: true,
+      },
+    ],
+    [editor],
+  );
+
+  const insertOptions = useMemo(() => {
+    if (extended) return INSERT_OPTIONS;
+    return INSERT_OPTIONS.filter((option) => !option.extension);
+  }, [INSERT_OPTIONS, extended]);
 
   return (
     <InsertModalContext.Provider value={{ state, setState }}>
@@ -148,7 +168,7 @@ export function InsertOptionsMenu() {
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items className="absolute z-10 mt-2 max-h-60 w-44 overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {INSERT_OPTIONS.map((option) => (
+              {insertOptions.map((option) => (
                 <Menu.Item key={option.label}>
                   {({ active }) => (
                     <button

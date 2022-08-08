@@ -14,6 +14,12 @@ import { LexicalFieldProps, LexicalField } from './LexicalField';
 const SAMPLES_NAME = 'samples';
 const MEASUREMENTS_NAME = 'measurements';
 
+function useConstController(name: string, extended?: boolean) {
+  const { field } = useController({ name });
+  if (extended) return { value: [] };
+  return field;
+}
+
 export type RichTextFieldRHFProps = Omit<
   LexicalFieldProps,
   | 'value'
@@ -30,6 +36,7 @@ export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
     deps,
     name,
     serializeError = defaultErrorSerializer,
+    extended,
     ...otherProps
   } = props;
 
@@ -39,8 +46,8 @@ export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
     fieldState: { error },
     formState: { isSubmitted: shouldValidate },
   } = useController({ name });
-  const { field: samples } = useController({ name: SAMPLES_NAME });
-  const { field: measurements } = useController({ name: MEASUREMENTS_NAME });
+  const samples = useConstController(SAMPLES_NAME, extended);
+  const measurements = useConstController(MEASUREMENTS_NAME, extended);
 
   const handleChange = useCallback(
     (value: string) => {
@@ -51,22 +58,25 @@ export function LexicalEditorRHF(props: RichTextFieldRHFProps) {
   );
   const onSamplesChange = useCallback(
     (value: string[]) => {
+      if (!extended) return;
       setValue(SAMPLES_NAME, value, { shouldTouch: true, shouldValidate });
       if (deps && shouldValidate) void trigger(deps);
     },
-    [setValue, shouldValidate, trigger, deps],
+    [extended, setValue, shouldValidate, trigger, deps],
   );
   const onMeasurementsChange = useCallback(
     (value: MeasurementNotebook[]) => {
+      if (!extended) return;
       setValue(MEASUREMENTS_NAME, value, { shouldTouch: true, shouldValidate });
       if (deps && shouldValidate) void trigger(deps);
     },
-    [setValue, shouldValidate, trigger, deps],
+    [extended, setValue, shouldValidate, trigger, deps],
   );
 
   return (
     <LexicalField
       name={name}
+      extended={extended}
       {...otherProps}
       error={serializeError(error)}
       value={field.value}

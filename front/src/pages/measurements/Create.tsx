@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { array } from 'yup';
 
 import ElnLayout from '@/components/ElnLayout';
+import { LexicalEditorRHF } from '@/components/LexicalEditor/LexicalEditorRHF';
 import { PlotSingleRHF } from '@/components/PlotSingleRHF';
-import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
 import {
   Alert,
   Select,
@@ -136,7 +136,7 @@ export default function CreateMeasurement() {
             <PlotSingleRHF name="attachments" type={type} />
           </div>
           <div className="lg:w-1/3">
-            <RichTextImageFieldRHF name="description" label="Description" />
+            <LexicalEditorRHF name="description" label="Description" />
           </div>
         </div>
         <div className="mt-2 flex flex-row justify-end md:hidden">

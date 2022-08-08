@@ -5,7 +5,7 @@ import { array } from 'yup';
 import AttachmentsTableRHF from '@/components/AttachmentsTableRHF';
 import ElnLayout from '@/components/ElnLayout';
 import { FormLayout } from '@/components/FormLayout';
-import { RichTextImageFieldRHF } from '@/components/RichTextEditor/RichTextImageFieldRHF';
+import { LexicalEditorRHF } from '@/components/LexicalEditor/LexicalEditorRHF';
 import {
   Alert,
   AlertType,
@@ -137,7 +137,7 @@ export default function SamplesUpdate() {
             </>
           }
           formEditor={
-            <RichTextImageFieldRHF name="description" label="Description" />
+            <LexicalEditorRHF name="description" label="Description" />
           }
         />
         <div className="mt-2 flex flex-row justify-end md:hidden">

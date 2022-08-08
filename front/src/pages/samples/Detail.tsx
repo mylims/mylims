@@ -2,14 +2,13 @@ import { PencilIcon } from '@heroicons/react/outline';
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { API_URL } from '@/../env';
 import AttachmentsTable from '@/components/AttachmentsTable';
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import { FormLayout } from '@/components/FormLayout';
+import LexicalEditor from '@/components/LexicalEditor';
 import { LinkButton } from '@/components/LinkButton';
 import MeasuresTable from '@/components/MeasuresTable';
-import { RichTextSerializer } from '@/components/RichTextEditor/RichTextSerializer';
 import {
   Alert,
   AlertType,
@@ -100,10 +99,19 @@ export default function SampleDetail() {
               {sample.description ? (
                 <div className="mt-2">
                   <div className="text-xl font-semibold">Description</div>
-                  <RichTextSerializer
-                    className="max-h-full max-w-full overflow-auto rounded-md border border-neutral-300 px-3 py-2 shadow-sm ring-1 ring-neutral-300"
+                  <LexicalEditor
                     value={sample.description}
-                    fetchImage={(uuid) => `${API_URL}/files/fetchImage/${uuid}`}
+                    onChange={() => {
+                      // empty
+                    }}
+                    samples={[]}
+                    onSamplesChange={() => {
+                      // empty
+                    }}
+                    measurements={[]}
+                    onMeasurementsChange={() => {
+                      // empty
+                    }}
                   />
                 </div>
               ) : null}
