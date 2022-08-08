@@ -37,7 +37,7 @@ import { InsertOptionsMenu } from '../components/InsertOptionsMenu';
 
 const LowPriority = 1;
 
-export default function ToolbarPlugin() {
+export default function ToolbarPlugin({ extended }: { extended: boolean }) {
   const [editor] = useLexicalComposerContext();
   const toolbarRef = useRef(null);
   const [canUndo, setCanUndo] = useState(false);
@@ -194,7 +194,7 @@ export default function ToolbarPlugin() {
         <AlignOptionsDropdown alignType={alignType} />
       </div>
       <div className="pl-2">
-        <InsertOptionsMenu />
+        <InsertOptionsMenu extended={extended} />
       </div>
     </div>
   );

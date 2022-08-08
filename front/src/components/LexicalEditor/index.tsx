@@ -67,6 +67,7 @@ const editorConfig = {
 };
 
 export interface LexicalEditorProps {
+  extended?: boolean;
   value: string;
   onChange(value: string): void;
   samples: string[];
@@ -75,6 +76,7 @@ export interface LexicalEditorProps {
   onMeasurementsChange(measurements: MeasurementNotebook[]): void;
 }
 export default function LexicalEditor({
+  extended = false,
   value,
   onChange,
   samples,
@@ -95,7 +97,7 @@ export default function LexicalEditor({
     >
       <LexicalComposer initialConfig={{ ...editorConfig, editorState: value }}>
         <div className="relative m-2 rounded-b-sm rounded-t-md font-normal leading-5 text-black">
-          <ToolbarPlugin />
+          <ToolbarPlugin extended={extended} />
           <div className="relative bg-white">
             <RichTextPlugin
               contentEditable={
@@ -126,7 +128,6 @@ export default function LexicalEditor({
             <TableCellResizer />
 
             {/* Custom plugins */}
-            <SampleLinkPlugin />
             <ImagesPlugin
               saveImage={async (file) => {
                 let body = new FormData();
@@ -141,7 +142,12 @@ export default function LexicalEditor({
                 else throw new Error(result.errors[0].message);
               }}
             />
-            <PlotPlugin />
+            {extended ? (
+              <>
+                <SampleLinkPlugin />
+                <PlotPlugin />
+              </>
+            ) : null}
           </div>
         </div>
       </LexicalComposer>

@@ -22,6 +22,7 @@ export interface LexicalFieldProps extends LexicalEditorProps {
   valid?: boolean | string;
 }
 export function LexicalField({
+  extended,
   value,
   onChange,
   samples,
@@ -59,6 +60,7 @@ export function LexicalField({
         )}
       >
         <LexicalEditor
+          extended={extended}
           value={value}
           onChange={onChange}
           samples={samples}
