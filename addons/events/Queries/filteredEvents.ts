@@ -27,6 +27,7 @@ export default function filteredEvents(
       { processors: { $elemMatch: { 'history.0.status': { $in: status } } } },
     ];
 
+    // If the status is pending, is possible that processors are empty
     if (status.includes(GqlEventStatus.PENDING)) {
       query.$or?.push({ processors: { $size: 0 } });
       query.$or?.push({ processors: { history: { $size: 0 } } });
