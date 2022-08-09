@@ -10,7 +10,9 @@ export enum EventStatus {
 }
 
 interface EventProcessor {
+  /** Internal processor identifier (send by the processor) */
   processorId: string;
+  /** List of interactions from processors */
   history: EventHistory[];
 }
 
@@ -18,6 +20,7 @@ interface EventHistory {
   processId: string;
   status: GqlEventStatus;
   date: Date;
+  /** Mainly used on errors notification */
   message?: string;
 }
 
@@ -26,6 +29,11 @@ interface EventData {
   fileId: string;
 }
 
+/**
+ * @property topic - The name of the specific pipeline or topic to be listened to.
+ * @property data - The data to that is sent when the processor request the event.
+ * @property processors - The list of interactions grouped by the processor id.
+ */
 export class Event extends BaseModel {
   @field()
   public _id: ObjectId;
