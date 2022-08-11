@@ -56,6 +56,7 @@ export default class Sync extends BaseCommand {
   private async executeSynchronizer() {
     const fileSyncOptionsToProcess: FileSyncOption[] = [];
 
+    // The fileSyncOptionId was specified in the CLI
     if (this.fileSyncOptionId) {
       this.logger.info(`processing file sync option: ${this.fileSyncOptionId}`);
       if (!ObjectId.isValid(this.fileSyncOptionId)) {
@@ -72,6 +73,8 @@ export default class Sync extends BaseCommand {
         );
         return;
       }
+
+      // Confirms to the user if the file sync option is enabled
       if (!fileSyncOption.enabled) {
         this.logger.warning('specified file sync option is disabled');
         const confirmed = await this.prompt.confirm('continue anyway?');
@@ -79,7 +82,10 @@ export default class Sync extends BaseCommand {
       }
 
       fileSyncOptionsToProcess.push(fileSyncOption);
-    } else {
+    }
+
+    // Searches for the available options to be synchronized
+    else {
       const fileSyncOptions = await this.deps.FileSyncOption.query({
         enabled: true,
       }).all();
@@ -103,6 +109,7 @@ export default class Sync extends BaseCommand {
       this.logger.debug('file lookup ended', this.fileSyncOptionId);
     });
 
+    // Search on the filesystem for each file and checks if it's already in the database
     try {
       await sync.walk();
     } catch (err) {
@@ -123,8 +130,11 @@ export default class Sync extends BaseCommand {
     const { filename } = fileInfo;
     const file = await this.deps.SyncFile.findBy('filename', filename);
     if (file === null) {
+      // Adds a revision to the corresponding file
       return this.handleUnknownFile(fileInfo, fileSyncOption);
     }
+
+    // Creates a new sync file
     return this.handleKnownFile(fileInfo, file);
   }
 
@@ -169,6 +179,7 @@ export default class Sync extends BaseCommand {
     const { creationDate, modificationDate, size, filename } = fileInfo;
     const lastRevision = file.revisions[0];
 
+    // Ignores sync files with same modificationDate and size
     if (
       modificationDate.getTime() === lastRevision.modificationDate.getTime() &&
       size === lastRevision.size
@@ -180,13 +191,13 @@ export default class Sync extends BaseCommand {
       );
       return;
     }
-
     this.logger.debug(
       'stats have changed, proceed',
       this.fileSyncOptionId,
       filename,
     );
 
+    // If the last revision is pending, then update the metadata to the revision
     if (lastRevision.status === this.deps.SyncState.PENDING) {
       this.logger.debug(
         'latest revision is still pending, update',
@@ -205,6 +216,7 @@ export default class Sync extends BaseCommand {
       filename,
     );
 
+    // Create new revision
     const fileId = randomUUID();
     file.revisions.unshift({
       id: fileId,
