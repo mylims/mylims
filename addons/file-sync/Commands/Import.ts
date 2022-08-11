@@ -83,6 +83,8 @@ export default class Import extends BaseCommand {
 
   private async executeImporter() {
     const fileSyncOptionsToProcess: FileSyncOption[] = [];
+
+    // Adds the fileSyncOption to the process queue
     if (this.fileSyncOptionId) {
       this.logger.debug('file sync option id found');
       if (!ObjectId.isValid(this.fileSyncOptionId)) {
@@ -101,7 +103,10 @@ export default class Import extends BaseCommand {
         return;
       }
       fileSyncOptionsToProcess.push(fileSyncOption);
-    } else {
+    }
+
+    // No fileSyncOption specified, add available options to queue
+    else {
       this.logger.debug('no file sync option id found');
       const fileSyncOptions = await this.deps.FileSyncOption.query({
         enabled: true,
@@ -123,6 +128,8 @@ export default class Import extends BaseCommand {
     const fileSyncOptionId = fileSyncOption.id.toHexString();
     const root = fileSyncOption.root;
     this.logger.info('handling file sync option', fileSyncOptionId);
+
+    // Get the synchronized files that are pending or failed from the given configuration
     const syncFiles = this.deps.SyncFile.query({
       '_id.configId': fileSyncOption.id,
       'revisions.0.status': {
@@ -137,6 +144,7 @@ export default class Import extends BaseCommand {
     }
     this.logger.info(`${count} files to sync`);
 
+    // For each file try to imported and save it if it matches the ready criteria
     let importCount = 0;
     for await (const syncFile of syncFiles) {
       try {
