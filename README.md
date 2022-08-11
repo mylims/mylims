@@ -79,3 +79,113 @@ Addons can provide functionalities to the platform by exposing the following com
 - Migrations `migrations/*`
 
 An addons should be stored as a subfolder in the `addons` folder. It can be named as anything valid for the filesystem.
+
+### Models
+
+```mermaid
+classDiagram
+  class User {
+    +ObjectId _id
+    +String firstName
+    +String lastName
+    +String[] usernames
+    +String[] emails
+    +String role
+    +AuthMethods authMethods
+  }
+
+  class File {
+    +String _id
+    +String filename
+    +Number size
+    +String collection
+  }
+
+  class SampleKind {
+    +String _id
+    +String name
+    +String description
+    +String color
+    +JSON schema
+
+    +fromInput(sampleKind ,input)
+  }
+
+  class Sample {
+    +ObjectId _id
+    +String[] sampleCode
+    +String uuid10
+    +ObjectId userId
+    +String kind
+    +String[] labels
+    +String project
+    +JSON meta
+    +String title
+    +String description
+    +String comment
+    +MeasurementLink[] measurements
+    +SampleAttachment[] attachments
+    +ObjectId[] parents
+
+    +fromInput(sample, input)
+  }
+  Sample "1" --> "*" Sample
+  Sample "*" --> "1" SampleKind
+  Sample "*" --> "1" File
+
+  class Measurement {
+    +ObjectId _id
+    +String username
+    +ObjectId sampleId
+    +String title
+    +String fileId
+    +ObjectId eventId
+    +String comment
+    +ObjectId createdBy
+    +String description
+  }
+  Measurement "*" --> "*" User
+  Measurement "*" --> "1" Sample
+  Measurement "*" --> "1" Event
+
+  class Notebook {
+    +ObjectId _id
+    +String title
+    +String description
+    +ObjectId userId
+    +String[] labels
+    +ObjectId[] samples
+    +MeasurementLink[] measurements
+    +String project
+    +String content
+  }
+  Notebook "*" --> "*" Measurement
+  Notebook "*" --> "*" Sample
+  Notebook "*" --> "1" User
+  Sample "*" --> "1" User
+
+  class Event {
+    +ObjectId _id
+    +String topic
+    +EventData data
+    +EventProcessor[] processors
+  }
+  class EventProcessor {
+    +String processorId
+    +EventHistory[] history
+  }
+  class EventHistory {
+    +String processId
+    +String status
+    +Date date
+    +String message
+  }
+  class EventData {
+    +String type
+    +String fileId
+  }
+  Event --* EventData
+  Event --* EventProcessor
+  EventProcessor --* EventHistory
+  EventData --> File
+```
