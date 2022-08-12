@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 
 import {
@@ -16,8 +16,7 @@ const MEASUREMENTS_NAME = 'measurements';
 
 function useConstController(name: string, extended?: boolean) {
   const { field } = useController({ name });
-  if (extended) return { value: [] };
-  return field;
+  return useMemo(() => (extended ? field : { value: [] }), [field, extended]);
 }
 
 export type RichTextFieldRHFProps = Omit<
