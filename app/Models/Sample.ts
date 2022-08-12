@@ -27,8 +27,7 @@ export class Sample extends BaseModel {
   public project?: string;
   public meta: Record<string, string | boolean | number | string[]>;
   public title?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public description?: any[];
+  public description?: string;
   public comment?: string;
   public measurements: MeasurementLink[];
   public attachments: SampleAttachment[];

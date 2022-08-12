@@ -13,7 +13,7 @@ import type EditorImageModel from '../../../app/Models/EditorImage';
 import type FileModel from '../../../app/Models/File';
 import { Sample as SampleModel } from '../../../app/Models/Sample';
 import UserModel from '../../../app/Models/User';
-import { toSlate } from '../deserialize';
+import { toLexical } from '../deserialize';
 
 type SlimsForeignKey = Record<
   'displayValue' | 'value' | 'foreignTable',
@@ -332,7 +332,7 @@ export default class Migrate extends BaseCommand {
         },
         comment: comment as string,
         description: epiStructure
-          ? toSlate(epiStructure as string, slateImage)
+          ? toLexical(epiStructure as string, slateImage)
           : undefined,
         attachments,
       };
