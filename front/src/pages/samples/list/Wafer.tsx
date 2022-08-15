@@ -214,6 +214,7 @@ export default function WaferList() {
                             Description
                           </div>
                           <LexicalEditor
+                            readOnly
                             value={state.description}
                             onChange={() => {
                               // empty

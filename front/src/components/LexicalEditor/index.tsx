@@ -2,6 +2,7 @@ import { AutoLinkNode, LinkNode } from '@lexical/link';
 import { ListItemNode, ListNode } from '@lexical/list';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
@@ -68,6 +69,7 @@ const editorConfig = {
 
 export interface LexicalEditorProps {
   extended?: boolean;
+  readOnly?: boolean;
   value: string;
   onChange(value: string): void;
   samples: string[];
@@ -77,6 +79,7 @@ export interface LexicalEditorProps {
 }
 export default function LexicalEditor({
   extended = false,
+  readOnly = false,
   value,
   onChange,
   samples,
@@ -95,9 +98,12 @@ export default function LexicalEditor({
     <SampleLinkContext.Provider
       value={{ samples, addSample, measurements, addMeasurement }}
     >
-      <LexicalComposer initialConfig={{ ...editorConfig, editorState: value }}>
+      <LexicalComposer
+        key={value}
+        initialConfig={{ ...editorConfig, editorState: value, readOnly }}
+      >
         <div className="relative m-2 rounded-b-sm rounded-t-md font-normal leading-5 text-black">
-          <ToolbarPlugin extended={extended} />
+          {readOnly ? null : <ToolbarPlugin extended={extended} />}
           <div className="relative bg-white">
             <RichTextPlugin
               contentEditable={
@@ -126,6 +132,7 @@ export default function LexicalEditor({
             <TablePlugin />
             <TableCellActionMenuPlugin />
             <TableCellResizer />
+            <ClearEditorPlugin />
 
             {/* Custom plugins */}
             <ImagesPlugin
