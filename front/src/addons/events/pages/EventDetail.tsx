@@ -27,6 +27,7 @@ export default function EventDetail() {
         <Card.Body>
           <SimpleListContainer>
             {history.map(({ processId, status, date, message }, i) => (
+              // eslint-disable-next-line react/no-array-index-key
               <SimpleListContainer.Item key={processId + i}>
                 <div>Process</div>
                 <div className="text-neutral-400">{processId}</div>

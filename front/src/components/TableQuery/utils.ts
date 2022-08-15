@@ -50,6 +50,7 @@ export function splitChildren(children: ReactNode) {
 export const PAGE_SIZE = 10;
 interface BaseQuery {
   page: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sortBy: Record<'direction' | 'field', any>;
   meta?: Record<string, Omit<FilterMetaText, 'key'>>;
   user?: Record<'label' | 'value', string>;

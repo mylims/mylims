@@ -89,6 +89,7 @@ interface RowStateGeneric<K, V> {
   index: number;
   kind: K;
   title: string;
+  width?: number;
   value: Omit<Required<V>, 'index' | 'title' | 'children'> & {
     render: ActionsColumnProps['render'];
   };

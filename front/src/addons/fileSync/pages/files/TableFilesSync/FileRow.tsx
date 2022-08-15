@@ -124,6 +124,7 @@ export default function FileRow({ value }: { value: FileSync }) {
             ) => {
               const color = getTagColor(status);
               return (
+                // eslint-disable-next-line react/no-array-index-key
                 <tr key={processorId + topic + index}>
                   <Td className="flex">
                     <Link

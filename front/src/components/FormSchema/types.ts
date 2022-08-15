@@ -1,5 +1,6 @@
 import type { JSONSchema7 } from 'json-schema';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FormData = Record<string, any>;
 export interface FormSchemaProps {
   schema: JSONSchema7;
