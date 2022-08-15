@@ -81,7 +81,7 @@ export function Table<T extends Record<string, unknown>>({
     for (let i = 0; i < orderedColumns.length; i++) {
       let width = widths[i];
       if (orderedColumns[i].kind === ColumnKind.ACTIONS) {
-        width = (orderedColumns[i] as any)?.width || width;
+        width = orderedColumns[i]?.width || width;
       }
       columnsTemplate += `${width}px `;
     }
@@ -173,6 +173,7 @@ function TableBody<T extends Record<string, unknown>>({
         <RowRender
           row={row}
           columns={columns}
+          // eslint-disable-next-line react/no-array-index-key
           key={`table-row-${index}`}
           columnsTemplate={columnsTemplate}
         />

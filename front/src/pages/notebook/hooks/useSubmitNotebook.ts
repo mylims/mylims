@@ -7,11 +7,11 @@ import useAuth from '@/hooks/useAuth';
 import { notebookStateToInput } from '../adapters';
 import { StateNotebook } from '../models';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Json = Record<string, any>;
 interface UseSubmitNotebook<T> {
   onSuccess(data: T): void;
-  submissionFunc(
-    input: NotebookInput,
-  ): Promise<FetchResult<T, Record<string, any>, Record<string, any>>>;
+  submissionFunc(input: NotebookInput): Promise<FetchResult<T, Json, Json>>;
 }
 export function useSubmitNotebook<T>({
   submissionFunc,

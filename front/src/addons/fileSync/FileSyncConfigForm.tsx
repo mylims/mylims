@@ -120,6 +120,7 @@ export default function FileSyncConfigForm({
                       <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                         {values.patterns.map((_, index) => (
                           <PatternEdit
+                            // eslint-disable-next-line react/no-array-index-key
                             key={index}
                             remove={remove}
                             index={index}
@@ -180,9 +181,10 @@ export default function FileSyncConfigForm({
                         </Button>
                       </h3>
                       <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                        {values.topics.map((_, index) => (
+                        {values.topics.map((topic, index) => (
                           <TopicsEdit
-                            key={`topic-${index}`}
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={`topic-${topic}-${index}`}
                             remove={remove}
                             index={index}
                           />
