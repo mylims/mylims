@@ -3,15 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@lexical/clipboard": "^0.3.9",
-    "@lexical/headless": "^0.3.9",
-    "@lexical/html": "^0.3.9",
-    "@lexical/list": "^0.3.9",
-    "@lexical/rich-text": "^0.3.9",
-    "@lexical/table": "^0.3.9",
-    "got": "^11.8.3",
+    "@lexical/clipboard": "^0.3.11",
+    "@lexical/headless": "^0.3.11",
+    "@lexical/html": "^0.3.11",
+    "@lexical/list": "^0.3.11",
+    "@lexical/rich-text": "^0.3.11",
+    "@lexical/table": "^0.3.11",
+    "got": "^11.8.5",
     "jsdom": "^20.0.0",
-    "lexical": "^0.3.8"
+    "lexical": "^0.3.11"
   },
   "devDependencies": {
     "@types/jsdom": "^20.0.0"

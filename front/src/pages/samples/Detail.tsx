@@ -100,6 +100,7 @@ export default function SampleDetail() {
                 <div className="mt-2">
                   <div className="text-xl font-semibold">Description</div>
                   <LexicalEditor
+                    readOnly
                     value={sample.description}
                     onChange={() => {
                       // empty
