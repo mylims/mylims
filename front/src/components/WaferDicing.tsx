@@ -76,6 +76,7 @@ export function SimpleWaferDicing({
         break;
       }
     }
+
     return (
       <OverflowIndex index={overflow} sampleCode={sampleCode}>
         <Wafer
