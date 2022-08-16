@@ -16,6 +16,7 @@ import { formatDate } from '@/utils/formatFields';
 export default function EventDetail() {
   const { id = '' } = useParams<{ id: string }>();
   const { data, loading, error } = useEventQuery({ variables: { id } });
+
   const processors = useMemo(() => {
     const processors = data?.event?.processors ?? [];
     return processors.map(({ processorId, history }) => (
@@ -43,6 +44,7 @@ export default function EventDetail() {
       </Card>
     ));
   }, [data?.event?.processors]);
+
   if (loading) return <Spinner className="h-10 w-10 text-danger-500" />;
   if (error || !data) {
     return (
@@ -80,10 +82,7 @@ export default function EventDetail() {
 function EventField({
   title,
   description,
-}: {
-  title: string;
-  description: string;
-}) {
+}: Record<'title' | 'description', string>) {
   return (
     <div>
       <div className="font-medium">{title}</div>

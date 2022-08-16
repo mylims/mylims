@@ -17,6 +17,7 @@ export default function AttachmentsTable({
     () => attachments.filter(({ collection }) => !collection),
     [attachments],
   );
+
   return (
     <ul
       role="list"

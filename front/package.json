@@ -12,7 +12,8 @@
     "tailwind:build": "tailwindcss build tailwind.css -o ./styles/tailwind.out.css",
     "components:update": "components-update -o src/components/tailwind-ui",
     "codegen-watch": "graphql-codegen --config codegen.yml --watch",
-    "jscpd": "jscpd -l 10 -i \"**/__tests__/**\" -t 1 src"
+    "jscpd": "jscpd -l 10 -i \"**/__tests__/**\" -t 1 src",
+    "playwright": "playwright test -c playwright.config.ts"
   },
   "volta": {
     "extends": "../package.json"
@@ -77,6 +78,8 @@
     "@graphql-codegen/typescript": "^2.7.1",
     "@graphql-codegen/typescript-operations": "^2.5.1",
     "@graphql-codegen/typescript-react-apollo": "^3.3.1",
+    "@playwright/experimental-ct-react": "^1.25.0",
+    "@playwright/test": "^1.25.0",
     "@simbathesailor/use-what-changed": "^2.0.0",
     "@types/apollo-upload-client": "^17.0.1",
     "@types/flat": "^5.0.2",
