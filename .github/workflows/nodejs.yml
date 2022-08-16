@@ -2,8 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: master
+    branches: [main, master]
   pull_request:
+    branches: [main, master]
 
 env:
   NODE_VERSION: 16.x
