@@ -64,9 +64,12 @@ export const TransferModel: BaseMeasurement = {
     return (
       <>
         <PlotJcampSingle content={data} initialQuery={TransferModel.plotQuery}>
-          {(analysis, query) => {
-            if (query.xLabel === 'Vg' && query.yLabel === 'Id_dens') {
-              const spectrum = analysis.getMeasurementXY(query);
+          {(analysis, { xLabel, xUnits, yLabel, yUnits }) => {
+            if (xLabel === 'Vg' && yLabel === 'Id_dens') {
+              const spectrum = analysis.getMeasurementXY({
+                x: { label: xLabel, units: xUnits },
+                y: { label: yLabel, units: yUnits },
+              });
               const { x, y } = spectrum?.variables || {};
               return (
                 <>

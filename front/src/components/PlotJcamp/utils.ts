@@ -8,16 +8,23 @@ export function getPlotJcamp(
   analyses: Analysis[],
   dimensions: Pick<PlotProps, 'width' | 'height' | 'margin'>,
 ) {
-  const { scale, logFilter, ...restQuery } = query;
+  const { scale, logFilter, xLabel, xUnits, yLabel, yUnits } = query;
 
-  let data = getReactPlotJSON(analyses, restQuery, {
-    xAxis: { label: formatLabels(query.xLabel, query.xUnits) },
-    yAxis: { label: formatLabels(query.yLabel, query.yUnits), scale },
-    seriesViewportStyle: { stroke: 'black', strokeWidth: '2px' },
-    enforceGrowing: true,
-    content: { displayMarkers: false },
-    dimensions,
-  });
+  let data = getReactPlotJSON(
+    analyses,
+    {
+      x: { label: xLabel, units: xUnits },
+      y: { label: yLabel, units: yUnits },
+    },
+    {
+      xAxis: { label: formatLabels(xLabel, xUnits) },
+      yAxis: { label: formatLabels(yLabel, yUnits), scale },
+      seriesViewportStyle: { stroke: 'black', strokeWidth: '2px' },
+      enforceGrowing: true,
+      content: { displayMarkers: false },
+      dimensions,
+    },
+  );
 
   if (scale === 'log') {
     switch (logFilter) {
