@@ -13,7 +13,8 @@
     "components:update": "components-update -o src/components/tailwind-ui",
     "codegen-watch": "graphql-codegen --config codegen.yml --watch",
     "jscpd": "jscpd -l 10 -i \"**/__tests__/**\" -t 1 src",
-    "playwright": "playwright test -c playwright.config.ts"
+    "playwright": "playwright test -c playwright.config.ts",
+    "playwright-dev": "npm run playwright -- --debug --project=chromium"
   },
   "volta": {
     "extends": "../package.json"

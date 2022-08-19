@@ -1,5 +1,6 @@
 import type { PlaywrightTestConfig } from '@playwright/experimental-ct-react';
 import { devices } from '@playwright/experimental-ct-react';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -26,7 +27,7 @@ const config: PlaywrightTestConfig = {
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? 'github' : [['list'], ['html']],
+  reporter: 'list',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
@@ -37,6 +38,8 @@ const config: PlaywrightTestConfig = {
     actionTimeout: 0,
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://localhost:3000',
+    /* Allow ts-paths */
+    ctViteConfig: { plugins: [tsconfigPaths()] },
 
     headless: true,
     ignoreHTTPSErrors: true,
