@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { SimpleWaferDicing } from '../src/components/WaferDicing';
+import { SimpleWaferDicing } from '@/components/WaferDicing';
 
 test.describe('SimpleWaferDicing', () => {
   test('Known diameter', async ({ mount }) => {
