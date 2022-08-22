@@ -5,9 +5,9 @@ import { FilterMetaText } from '@/generated/graphql';
 
 export interface QueryType {
   page: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   'sortBy.field': string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   'sortBy.direction': string;
   [key: string]: string | null;
 }
