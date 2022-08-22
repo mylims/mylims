@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
+
 import { test, expect } from '@playwright/experimental-ct-react';
 
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
