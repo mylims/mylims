@@ -3,7 +3,7 @@ import { BaseCommand } from '@adonisjs/core/build/standalone';
 
 import type EditorImageModel from '../../../app/Models/EditorImage';
 import { Sample as SampleModel } from '../../../app/Models/Sample';
-import { replaceImage, toLexical } from '../deserialize';
+import { toLexical } from '../deserialize';
 
 export default class Deserialize extends BaseCommand {
   public static commandName = 'powerlab:deserialize';
@@ -45,11 +45,11 @@ export default class Deserialize extends BaseCommand {
     for (const sample of migratedSamples) {
       try {
         const { legacyContent, slimsImage } = sample.meta;
-        const editorContent = await toLexical(legacyContent as string);
-        sample.description =
-          typeof slimsImage === 'string'
-            ? replaceImage(editorContent, slimsImage)
-            : editorContent;
+        const editorContent = await toLexical(
+          legacyContent as string,
+          slimsImage as string,
+        );
+        sample.description = editorContent;
         await sample.save();
       } catch (error) {
         this.logger.error(error);
