@@ -3,15 +3,15 @@ import { Children, cloneElement, isValidElement, ReactNode } from 'react';
 
 import { FilterMetaText } from '@/generated/graphql';
 
-import ActionsColumn from './components/ActionsColumn';
-import DateColumn from './components/DateColumn';
-import MultiSelectColumn from './components/MultiSelectColumn';
-import NumberColumn from './components/NumberColumn';
+import ActionsColumn from './columns/ActionsColumn';
+import DateColumn from './columns/DateColumn';
+import MultiSelectColumn from './columns/MultiSelectColumn';
+import NumberColumn from './columns/NumberColumn';
+import TextColumn from './columns/TextColumn';
+import TextListColumn from './columns/TextListColumn';
+import TextMetaColumn from './columns/TextMetaColumn';
+import UserColumn from './columns/UserColumn';
 import Queries from './components/QueryPreview';
-import TextColumn from './components/TextColumn';
-import TextListColumn from './components/TextListColumn';
-import TextMetaColumn from './components/TextMetaColumn';
-import UserColumn from './components/UserColumn';
 import { QueryType } from './types';
 
 const invalidError = 'Invalid column child';

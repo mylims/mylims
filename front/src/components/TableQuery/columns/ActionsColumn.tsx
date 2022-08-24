@@ -1,9 +1,8 @@
 import React, { ReactNode, useEffect } from 'react';
 
+import HeaderRender from '../components/HeaderRender';
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind } from '../types';
-
-import HeaderRender from './HeaderRender';
 
 interface ActionsColumnProps {
   index?: number;

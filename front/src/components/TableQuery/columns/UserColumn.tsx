@@ -4,10 +4,9 @@ import React, { useEffect } from 'react';
 import { SearchSelect, useSearchSelect } from '@/components/tailwind-ui';
 import { UsersInputQuery, useUsersInputQuery } from '@/generated/graphql';
 
+import HeaderRender from '../components/HeaderRender';
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { BaseColumnProps, ColumnKind } from '../types';
-
-import HeaderRender from './HeaderRender';
 
 type UsersInput = UsersInputQuery['usersInput']['list']['0'];
 interface UserSelection {

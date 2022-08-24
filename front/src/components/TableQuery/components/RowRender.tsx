@@ -23,6 +23,7 @@ export default function RowRender<T extends Record<string, unknown>>({
 
         return (
           <td
+            // eslint-disable-next-line react/no-array-index-key
             key={`${column.value.dataPath}-${index}`}
             className={clsx(
               'self-center whitespace-nowrap px-4 py-3 text-sm font-semibold text-neutral-900',
