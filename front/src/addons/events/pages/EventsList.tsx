@@ -21,6 +21,7 @@ import {
 type EventFilter = Exclude<EventFilterInput, 'status'> & {
   status: string | null;
 };
+type EventsFilterType = Unflatten<EventFilter, EventSortInput>;
 export default function EventsList() {
   const { query, setQuery } = useTableQuery({
     page: '1',
@@ -31,7 +32,7 @@ export default function EventsList() {
   const {
     filterBy: { status, ...filter },
     ...variables
-  } = getVariablesFromQuery<Unflatten<EventFilter, EventSortInput>>(query);
+  } = getVariablesFromQuery<EventsFilterType>(query);
   const { loading, error, data } = useEventsFilteredQuery({
     variables: {
       ...variables,

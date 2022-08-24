@@ -27,6 +27,7 @@ type DestructuredQuery = Unflatten<
   MeasurementFilterInput,
   MeasurementSortInput
 > & { type: MeasurementTypes };
+
 export default function MeasurementsList() {
   const {
     query: { type, ...query },

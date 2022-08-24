@@ -40,7 +40,7 @@ export function EditableTable({
       }
       setData(newData);
     },
-    // Don't add column modifiers to the dependency list to avoid overwriting single values
+    // Don't add columnModifiers to the dependency list to avoid overwriting single values
     [rows],
   );
 
@@ -88,6 +88,7 @@ export function EditableTable({
           </thead>
           <tbody className="divide-y divide-neutral-200 bg-white">
             {data.map((row, rowIndex) => (
+              // eslint-disable-next-line react/no-array-index-key
               <tr key={rowIndex}>
                 <td className="max-w-max px-4 py-2">{`${generalPrepend}${prepend}${
                   rowIndex + 1
