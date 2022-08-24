@@ -121,6 +121,7 @@ export default function DateColumn({
     nullable,
     index,
     format,
+    children,
     dispatch,
   ]);
 

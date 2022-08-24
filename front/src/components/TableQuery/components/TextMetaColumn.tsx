@@ -66,6 +66,7 @@ export default function TextMetaColumn({
     disableSort,
     nullable,
     index,
+    children,
     dispatch,
   ]);
 

@@ -110,6 +110,7 @@ export default function TextColumn({
     disableSort,
     nullable,
     index,
+    children,
     dispatch,
   ]);
 
