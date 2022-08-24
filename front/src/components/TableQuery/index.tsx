@@ -10,7 +10,6 @@ import React, {
   useReducer,
 } from 'react';
 
-import UserColumn from '@/components/TableQuery/components/UserColumn';
 import {
   Alert,
   AlertType,
@@ -18,15 +17,16 @@ import {
   Spinner,
 } from '@/components/tailwind-ui';
 
-import ActionsColumn from './components/ActionsColumn';
-import DateColumn from './components/DateColumn';
-import MultiSelectColumn from './components/MultiSelectColumn';
-import NumberColumn from './components/NumberColumn';
+import ActionsColumn from './columns/ActionsColumn';
+import DateColumn from './columns/DateColumn';
+import MultiSelectColumn from './columns/MultiSelectColumn';
+import NumberColumn from './columns/NumberColumn';
+import TextColumn from './columns/TextColumn';
+import TextListColumn from './columns/TextListColumn';
+import TextMetaColumn from './columns/TextMetaColumn';
+import UserColumn from './columns/UserColumn';
 import Queries from './components/QueryPreview';
 import RowRender from './components/RowRender';
-import TextColumn from './components/TextColumn';
-import TextListColumn from './components/TextListColumn';
-import TextMetaColumn from './components/TextMetaColumn';
 import { TableQueryContext } from './hooks/useTableQueryContext';
 import { reducer } from './reducer';
 import {

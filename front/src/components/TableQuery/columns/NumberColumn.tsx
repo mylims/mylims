@@ -4,10 +4,10 @@ import React, { useEffect } from 'react';
 
 import { Input } from '@/components/tailwind-ui';
 
+import HeaderRender from '../components/HeaderRender';
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, NumberColumnProps } from '../types';
 
-import HeaderRender from './HeaderRender';
 
 export default function NumberColumn({
   title,
