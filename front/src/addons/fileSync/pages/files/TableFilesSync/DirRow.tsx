@@ -1,11 +1,11 @@
 import { FolderOpenIcon } from '@heroicons/react/solid';
 import React, { useContext, useEffect } from 'react';
 
-import ExpandButton from '@/components/ExpandButton';
 import { Td } from '@/components/tailwind-ui';
 import { useFilesByConfigLazyQuery } from '@/generated/graphql';
 import { formatBytes, formatDate } from '@/utils/formatFields';
 
+import { ExpandCell } from './ExpandCell';
 import { TreeContext, changeNodeValue } from './TreeContext';
 import { DirSync, TreeType } from './types';
 
@@ -59,30 +59,13 @@ export default function DirRow({ value }: { value: DirSync }) {
   return (
     <>
       <tr>
-        <Td
+        <ExpandCell
           title={value.name}
-          className="flex items-center truncate"
-          style={{ paddingLeft: `${1.5 + 1.5 * value.path.length}rem` }}
-        >
-          <ExpandButton
-            onExpand={() => {
-              context.setState(
-                changeNodeValue(context.state, value.path, value.id, (node) => {
-                  if (node.type !== TreeType.limit) {
-                    node.expanded = !node.expanded;
-                  }
-                  return node;
-                }),
-              );
-              // eslint-disable-next-line no-console
-              if (!called && !value.children) fetchChild().catch(console.error);
-            }}
-            expanded={value.expanded}
-          />
-
-          <FolderOpenIcon className="mr-1 h-5 w-5" />
-          {value.name}
-        </Td>
+          value={value}
+          called={called}
+          fetchChild={fetchChild}
+          icon={<FolderOpenIcon className="mr-1 h-5 w-5" />}
+        />
         <Td>{formatBytes(value.size)}</Td>
         <Td>{formatDate(value.date)}</Td>
         <Td />
