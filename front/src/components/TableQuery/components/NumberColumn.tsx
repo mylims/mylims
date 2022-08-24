@@ -68,6 +68,7 @@ export default function NumberColumn({
     nullable,
     index,
     format,
+    children,
     dispatch,
   ]);
 

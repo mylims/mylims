@@ -37,7 +37,7 @@ export default function ActionsColumn({
         type: 'REMOVE_COLUMN',
         payload: { title: ColumnKind.ACTIONS },
       });
-  }, [index, width, dispatch]);
+  }, [index, width, children, dispatch]);
 
   return <HeaderRender title="Actions" path="" width={width} disableSort />;
 }

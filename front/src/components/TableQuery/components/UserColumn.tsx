@@ -95,6 +95,7 @@ export default function UserColumn({
     disableSort,
     nullable,
     index,
+    children,
     dispatch,
   ]);
 

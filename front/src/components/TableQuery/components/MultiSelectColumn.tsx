@@ -80,6 +80,7 @@ export default function MultiSelectColumn({
     disableSort,
     nullable,
     index,
+    children,
     dispatch,
   ]);
 
