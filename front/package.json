@@ -12,7 +12,7 @@
     "tailwind:build": "tailwindcss build tailwind.css -o ./styles/tailwind.out.css",
     "components:update": "components-update -o src/components/tailwind-ui",
     "codegen-watch": "graphql-codegen --config codegen.yml --watch",
-    "jscpd": "jscpd -l 10 -i \"**/__tests__/**\" -t 1 src",
+    "jscpd": "jscpd -l 10 -i \"src/components/tailwind-ui/**,src/pages/samples/list/**\" -t 1 src",
     "playwright": "playwright test -c playwright.config.ts",
     "playwright-dev": "npm run playwright -- --debug --project=chromium"
   },
