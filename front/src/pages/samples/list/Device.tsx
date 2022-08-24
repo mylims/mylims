@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import ElnLayout from '@/components/ElnLayout';
 import FieldDescription from '@/components/FieldDescription';
 import { LinkButton } from '@/components/LinkButton';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import {
   Button,
   Card,

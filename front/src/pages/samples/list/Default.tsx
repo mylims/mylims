@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Unflatten } from '@/components/TableQuery/types';
 import {

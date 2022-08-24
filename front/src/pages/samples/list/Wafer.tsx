@@ -14,7 +14,7 @@ import FieldDescription from '@/components/FieldDescription';
 import LexicalEditor from '@/components/LexicalEditor';
 import { LinkButton } from '@/components/LinkButton';
 import { PlotJcampMultiple } from '@/components/PlotJcamp/PlotJcampMultiple';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import WaferDicing from '@/components/WaferDicing';
 import {
   Alert,

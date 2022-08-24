@@ -5,7 +5,7 @@ import React from 'react';
 import ElnLayout from '@/components/ElnLayout';
 import { EventStatusLabel } from '@/components/EventStatusLabel';
 import { LinkIcon } from '@/components/LinkButton';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Unflatten } from '@/components/TableQuery/types';
 import { getVariablesFromQuery } from '@/components/TableQuery/utils';

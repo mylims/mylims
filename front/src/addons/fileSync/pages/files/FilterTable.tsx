@@ -3,7 +3,7 @@ import React from 'react';
 
 import { FileStatusLabel } from '@/components/FileStatusLabel';
 import { DownloadButton, LinkButton } from '@/components/LinkButton';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Unflatten } from '@/components/TableQuery/types';
 import {

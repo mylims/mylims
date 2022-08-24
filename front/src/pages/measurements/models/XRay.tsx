@@ -2,7 +2,7 @@ import React from 'react';
 import { fromXRC } from 'xray-analysis';
 
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import { MeasurementTypes } from '@/generated/graphql';
 
 import { BaseMeasurement, PlotDetailProps } from './BaseMeasurement';
