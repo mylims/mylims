@@ -5,7 +5,7 @@ import React from 'react';
 import ElnLayout from '@/components/ElnLayout';
 import { EventStatusLabel } from '@/components/EventStatusLabel';
 import { LinkIcon } from '@/components/LinkButton';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Unflatten } from '@/components/TableQuery/types';
 import { getVariablesFromQuery } from '@/components/TableQuery/utils';
@@ -21,6 +21,7 @@ import {
 type EventFilter = Exclude<EventFilterInput, 'status'> & {
   status: string | null;
 };
+type EventsFilterType = Unflatten<EventFilter, EventSortInput>;
 export default function EventsList() {
   const { query, setQuery } = useTableQuery({
     page: '1',
@@ -31,7 +32,7 @@ export default function EventsList() {
   const {
     filterBy: { status, ...filter },
     ...variables
-  } = getVariablesFromQuery<Unflatten<EventFilter, EventSortInput>>(query);
+  } = getVariablesFromQuery<EventsFilterType>(query);
   const { loading, error, data } = useEventsFilteredQuery({
     variables: {
       ...variables,

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import ElnLayout from '@/components/ElnLayout';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Unflatten } from '@/components/TableQuery/types';
 import { getVariablesFromQuery } from '@/components/TableQuery/utils';
@@ -27,6 +27,7 @@ type DestructuredQuery = Unflatten<
   MeasurementFilterInput,
   MeasurementSortInput
 > & { type: MeasurementTypes };
+
 export default function MeasurementsList() {
   const {
     query: { type, ...query },

@@ -48,7 +48,7 @@ interface TableBodyProps<T> {
 
 const reducerCurr: Reducer<TableState, ReducerActions> = produce(reducer);
 
-export function Table<T extends Record<string, unknown>>({
+export function TableQuery<T extends Record<string, unknown>>({
   data,
   error,
   loading,
@@ -182,12 +182,12 @@ function TableBody<T extends Record<string, unknown>>({
   );
 }
 
-Table.Queries = Queries;
-Table.DateColumn = DateColumn;
-Table.NumberColumn = NumberColumn;
-Table.TextColumn = TextColumn;
-Table.TextListColumn = TextListColumn;
-Table.TextMetaColumn = TextMetaColumn;
-Table.MultiSelectColumn = MultiSelectColumn;
-Table.UserColumn = UserColumn;
-Table.ActionsColumn = ActionsColumn;
+TableQuery.Queries = Queries;
+TableQuery.DateColumn = DateColumn;
+TableQuery.NumberColumn = NumberColumn;
+TableQuery.TextColumn = TextColumn;
+TableQuery.TextListColumn = TextListColumn;
+TableQuery.TextMetaColumn = TextMetaColumn;
+TableQuery.MultiSelectColumn = MultiSelectColumn;
+TableQuery.UserColumn = UserColumn;
+TableQuery.ActionsColumn = ActionsColumn;
