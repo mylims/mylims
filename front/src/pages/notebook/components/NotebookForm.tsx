@@ -2,8 +2,8 @@ import { PaperClipIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import FieldDescription from '@/components/FieldDescription';
-import MultiSelect from '@/components/FormSchema/MultiSelect';
 import { LexicalEditorRHF } from '@/components/LexicalEditor/LexicalEditorRHF';
+import MultiSelect from '@/components/MultiSelect';
 import {
   FormRHF,
   Card,
