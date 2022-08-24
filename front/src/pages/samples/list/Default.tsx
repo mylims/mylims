@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Unflatten } from '@/components/TableQuery/types';
 import {
@@ -26,6 +26,12 @@ interface SamplesListProps {
   action: ReactNode;
   children: ReactNode;
 }
+type SampleQuery = Unflatten<
+  SampleFilterInput,
+  SampleSortInput,
+  FilterMetaText
+>;
+
 export default function SamplesList({
   kind,
   levels,
@@ -40,10 +46,7 @@ export default function SamplesList({
   const {
     filterBy: { sampleCode, ...filter },
     ...variables
-  } =
-    getVariablesFromQuery<
-      Unflatten<SampleFilterInput, SampleSortInput, FilterMetaText>
-    >(query);
+  } = getVariablesFromQuery<SampleQuery>(query);
   const { loading, error, data } = useSamplesFilteredQuery({
     variables: {
       kind,

@@ -45,6 +45,7 @@ export default function DateColumn({
     if (fromValue && !toValue) return DateOperators.GREATER;
     return DateOperators.BETWEEN;
   }, [fromValue, toValue]);
+
   const value = fromValue
     ? new Date(fromValue)
     : toValue

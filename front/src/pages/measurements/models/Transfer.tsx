@@ -5,7 +5,7 @@ import { Annotation } from 'react-plot';
 
 import FieldDescription from '@/components/FieldDescription';
 import { PlotJcampSingle } from '@/components/PlotJcamp/PlotJcampSingle';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import { MeasurementTypes } from '@/generated/graphql';
 
 import { BaseMeasurement, PlotDetailProps } from './BaseMeasurement';

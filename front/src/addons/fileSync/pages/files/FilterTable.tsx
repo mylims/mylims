@@ -3,7 +3,7 @@ import React from 'react';
 
 import { FileStatusLabel } from '@/components/FileStatusLabel';
 import { DownloadButton, LinkButton } from '@/components/LinkButton';
-import { Table as TableQuery } from '@/components/TableQuery';
+import { TableQuery } from '@/components/TableQuery';
 import { useTableQuery } from '@/components/TableQuery/hooks/useTableQuery';
 import { Unflatten } from '@/components/TableQuery/types';
 import {
@@ -22,14 +22,15 @@ import {
 } from '@/generated/graphql';
 import { formatBytes } from '@/utils/formatFields';
 
+type FilterType = Unflatten<FilesFilterInput, FilesSortInput>;
+
 export function FilterTable({ id }: { id: string }) {
   const { query, setQuery } = useTableQuery({
     page: '1',
     'sortBy.field': FilesSortField.DATE,
     'sortBy.direction': SortDirection.DESC,
   });
-  const variables =
-    getVariablesFromQuery<Unflatten<FilesFilterInput, FilesSortInput>>(query);
+  const variables = getVariablesFromQuery<FilterType>(query);
   const { loading, error, data } = useFilesByConfigFlatQuery({
     variables: { ...variables, id },
   });

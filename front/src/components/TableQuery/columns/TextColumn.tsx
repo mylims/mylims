@@ -13,7 +13,6 @@ import HeaderRender from '../components/HeaderRender';
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { BaseColumnProps, ColumnKind } from '../types';
 
-
 interface IconFilterProps {
   operator: FilterTextOperator;
   className?: string;
@@ -144,6 +143,7 @@ export default function TextColumn({
               if (data) {
                 submitQuery({
                   ...query,
+                  page: '1',
                   [`${path}.value`]: value,
                   [`${path}.operator`]: data,
                 });
