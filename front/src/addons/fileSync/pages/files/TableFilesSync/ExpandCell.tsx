@@ -6,7 +6,6 @@ import { Td } from '@/components/tailwind-ui';
 import { TreeContext, changeNodeValue } from './TreeContext';
 import { DirSync, FileSync, TreeType } from './types';
 
-
 interface ExpandCellProps {
   value: FileSync | DirSync;
   title: string;

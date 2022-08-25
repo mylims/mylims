@@ -10,7 +10,6 @@ import HeaderRender from '../components/HeaderRender';
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { SelectColumnProps, ColumnKind, SelectionValue } from '../types';
 
-
 function parseOptions(options: SelectColumnProps['options']): SelectionValue[] {
   return options.map((value) => {
     if (typeof value === 'string') return { value, label: value };
