@@ -64,9 +64,13 @@ export default function Queries() {
           if (column.kind === ColumnKind.ACTIONS) return false;
           return key === column.value.queryPath ?? column.value.dataPath;
         });
-        let content;
+        let content: string;
         let operator;
         switch (columnValue?.kind) {
+          case ColumnKind.NUMBER: {
+            content = (value.min as string) || (value.max as string) || '0';
+            break;
+          }
           case ColumnKind.DATE: {
             content = [value.from, value.to]
               .filter((val) => !!val)
