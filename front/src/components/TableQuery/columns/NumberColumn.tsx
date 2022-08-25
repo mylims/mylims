@@ -8,7 +8,6 @@ import HeaderRender from '../components/HeaderRender';
 import { useTableQueryContext } from '../hooks/useTableQueryContext';
 import { ColumnKind, NumberColumnProps } from '../types';
 
-
 export default function NumberColumn({
   title,
   dataPath,
