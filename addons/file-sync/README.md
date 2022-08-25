@@ -1,6 +1,10 @@
 # file-sync
 
-- [Configuration](#configuration)
+- [Usage](#usage)
+- [Process description](#process_description)
+- [File "ready criteria"](#file_ready_criteria)
+- [File status](#file_status)
+- [Models](#models)
 
 ## Usage
 
